@@ -31,7 +31,7 @@ describe('GET /suggestions', function() {
 
     before(function (done) {
       request
-        .get('/suggestions?q=Montreal')
+        .get('/suggestions?q=London')
         .end(function (err, res) {
           response = res;
           response.json = JSON.parse(res.text);
@@ -51,9 +51,11 @@ describe('GET /suggestions', function() {
     it('contains a match', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.some(function (suggestion) {
-          return suggestion.name.test(/montreal/i);
+          // Here, the RegExp use was incorrect and there was a problem in the pattern to handle accent (in Montréal).
+          var pattern = new RegExp('london.*', 'i');
+          return pattern.test(suggestion.name);
         });
-      })
+      });
     });
 
     it('contains latitudes and longitudes', function () {
@@ -61,15 +63,15 @@ describe('GET /suggestions', function() {
         return suggestions.every(function (suggestion) {
           return suggestion.latitude && suggestion.longitude;
         });
-      })
+      });
     });
 
     it('contains scores', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.every(function (suggestion) {
-          return suggestion.latitude && suggestion.longitude;
+          return suggestion.score;
         });
-      })
+      });
     });
   });
 });
