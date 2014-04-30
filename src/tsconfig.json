@@ -1,0 +1,23 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+        "sourceMap": true,
+        "declaration": true,
+        "experimentalDecorators": true,
+        "outDir": "../dist",
+        "rootDir": "./",
+        "module": "commonjs",
+        "noImplicitReturns": true,
+        "noImplicitAny": true,
+        "noUnusedParameters": true,
+        "target": "esnext",
+        "moduleResolution": "node",
+        "baseUrl": "./",
+    },
+    "include": [
+        "../src/"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}
