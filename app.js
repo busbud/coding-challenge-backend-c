@@ -33,15 +33,41 @@ var lookup = function(query) {
 }
 
 var score = function(cities,query) {
+    var res = [];
     cities.forEach(function(element) {
         var len = element.ascii.length;
         var qLen = query.q.length;
         var score = qLen/len;
 
+        var long = (query.long || query.longitude);
+        if(long)
+        {
+            var longScore = (360 - Math.abs(element.long - long)) / 360;
+            score += longScore;
+            score /= 2;
+        }
+
+        var lat = (query.lat || query.latitude);
+        if(lat)
+        {
+            var latScore = (180 - Math.abs(element.lat - lat)) / 180;
+            score += latScore;
+            score /= 2;
+        }
+
         element.score = score;
+
+        var city = {};
+        city.name = element.name;
+        city.score = score;
+        city.long = element.long;
+        city.lat = element.lat;
+
+        res.push(city);
     });
 
-    return cities;
+    //return cities;
+    return res;
 }
 
 var port = process.env.PORT || 2345;
@@ -56,17 +82,17 @@ var server = http.createServer(function (req, res) {
   res.writeHead(404, {'Content-Type': 'text/plain'});
 
   if (req.url.indexOf('/suggestions') === 0) {
-    res.writeHead(200, {'Content-Type': 'text/plain'});
+    res.writeHead(200, {'Content-Type': 'application/json; charset=utf-8'});
     var query = parseQuery(req.url);
-    var suggestions = [];
+    var result = {};
+    result.suggestions = [];
     if(query.q != undefined)
     {
         var cities = lookup(query);
-        console.log(cities);
-        suggestions = score(cities,query);
+        result.suggestions = score(cities,query);
     }
     //console.log(suggestions);
-    res.end(JSON.stringify(suggestions));
+    res.end(JSON.stringify(result,null," "));
   } else {
     res.end();
   }
