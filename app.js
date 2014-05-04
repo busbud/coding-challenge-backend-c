@@ -15,8 +15,7 @@ var readTable = function() {
 }
 
 var lookup = function(query) {
-    var q = query.toLowerCase();
-    console.log(q)
+    var q = query.q.toLowerCase();
     var res = [];
     table.forEach(function(element,index) {
         if(element.ascii != undefined &&
@@ -31,6 +30,18 @@ var lookup = function(query) {
         }
     });
     return res;
+}
+
+var score = function(cities,query) {
+    cities.forEach(function(element) {
+        var len = element.ascii.length;
+        var qLen = query.q.length;
+        var score = qLen/len;
+
+        element.score = score;
+    });
+
+    return cities;
 }
 
 var port = process.env.PORT || 2345;
@@ -50,9 +61,11 @@ var server = http.createServer(function (req, res) {
     var suggestions = [];
     if(query.q != undefined)
     {
-        suggestions = lookup(query.q);
+        var cities = lookup(query);
+        console.log(cities);
+        suggestions = score(cities,query);
     }
-    console.log(suggestions);
+    //console.log(suggestions);
     res.end(JSON.stringify(suggestions));
   } else {
     res.end();
