@@ -1,4 +1,5 @@
 var http = require('http');
+
 var url = require('url');
 var fs = require('fs');
 var tsv = require('tsv');
@@ -13,13 +14,13 @@ var readTable = function() {
     return tsv.parse(tableText);
 }
 
-var search = function(query) {
+var lookup = function(query) {
     var q = query.toLowerCase();
     console.log(q)
     var res = [];
-    tableIndex.forEach(function(element,index) {
-        console.log(element.name);
-        if(element.name.indexOf(q) != -1) {
+    table.forEach(function(element,index) {
+        if(element.ascii != undefined &&
+            element.ascii.toLowerCase().indexOf(q) != -1) {
             res.push(element);
         }
     });
@@ -29,14 +30,8 @@ var search = function(query) {
 var port = process.env.PORT || 2345;
 
 var table = readTable();
-var tableIndex = [];
 
-table.forEach(function(element, index) {
-    if(element.ascii != undefined)
-        tableIndex.push({name: element.ascii.toLowerCase(), index: index});
-});
-
-var result = search("Montreal");
+var result = search("new y");
 
 console.log(JSON.stringify(result));
 
