@@ -21,6 +21,12 @@ var lookup = function(query) {
     table.forEach(function(element,index) {
         if(element.ascii != undefined &&
             element.ascii.toLowerCase().indexOf(q) != -1) {
+            /*var city = {
+                name: element.name,
+                ascii: element.ascii,
+                lat: element.lat,
+                long: element.long
+            }*/
             res.push(element);
         }
     });
@@ -31,16 +37,21 @@ var port = process.env.PORT || 2345;
 
 var table = readTable();
 
-var result = search("new y");
+/*var result = lookup("new y");
 
-console.log(JSON.stringify(result));
+console.log(JSON.stringify(result));*/
 
-module.exports = http.createServer(function (req, res) {
+var server = http.createServer(function (req, res) {
   res.writeHead(404, {'Content-Type': 'text/plain'});
 
   if (req.url.indexOf('/suggestions') === 0) {
     res.writeHead(200, {'Content-Type': 'text/plain'});
-    var suggestions = parseQuery(req.url);
+    var query = parseQuery(req.url);
+    var suggestions = [];
+    if(query.q != undefined)
+    {
+        suggestions = lookup(query.q);
+    }
     console.log(suggestions);
     res.end(JSON.stringify(suggestions));
   } else {
