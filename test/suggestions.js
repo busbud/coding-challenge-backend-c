@@ -51,7 +51,10 @@ describe('GET /suggestions', function() {
     it('contains a match', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.some(function (suggestion) {
-          return suggestion.name.test(/montreal/i);
+          //return suggestion.name.test(/montreal/i);
+          // Had to rewrite this test because test() is not a method of string - Jonathan Llewellyn
+          var regexp = /montreal/i;
+          return regexp.test(suggestion.name);
         });
       })
     });

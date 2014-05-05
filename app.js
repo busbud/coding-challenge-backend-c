@@ -36,12 +36,6 @@ var lookup = function(query) {
     table.forEach(function(element,index) {
         if(element.ascii != undefined &&
             element.ascii.toLowerCase().indexOf(q) != -1) {
-            /*var city = {
-                name: element.name,
-                ascii: element.ascii,
-                lat: element.lat,
-                long: element.long
-            }*/
             res.push(element);
         }
     });
@@ -102,7 +96,7 @@ var format = function(city) {
         countryName = "USA";
     }
 
-    formatted.name = city.name + ", " + stateProvince + ", " + countryName;
+    formatted.name = city.ascii + ", " + stateProvince + ", " + countryName;
     formatted.latitude = city.lat;
     formatted.longitude = city.long;
     formatted.score = city.score;
@@ -118,7 +112,7 @@ var table = loadCityData();
 
 console.log(JSON.stringify(result));*/
 
-var server = http.createServer(function (req, res) {
+module.exports = http.createServer(function (req, res) {
   res.writeHead(404, {'Content-Type': 'text/plain'});
 
   if (req.url.indexOf('/suggestions') === 0) {
@@ -131,7 +125,9 @@ var server = http.createServer(function (req, res) {
         var cities = lookup(query);
         result.suggestions = score(cities,query);
     }
-    //console.log(suggestions);
+    if(result.suggestions.length == 0) {
+        res.writeHead(404, {'Content-Type': 'application/json; charset=utf-8'});
+    }
     res.end(JSON.stringify(result,null," "));
   } else {
     res.end();
