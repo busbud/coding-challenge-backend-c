@@ -9,9 +9,25 @@ var parseQuery = function(requestUrl) {
     return parsedUrl.query;
 }
 
-var readTable = function() {
+var loadCityData = function() {
     var tableText = fs.readFileSync('data/cities_canada-usa.tsv','utf-8');
     return tsv.parse(tableText);
+}
+
+var admin1ConversionCA = {
+    "01" : "AB",
+    "02" : "BC",
+    "03" : "MB",
+    "04" : "NB",
+    "05" : "NL",
+    "07" : "NS",
+    "08" : "ON",
+    "09" : "PE",
+    "10" : "QC",
+    "11" : "SK",
+    "12" : "YT",
+    "13" : "NT",
+    "14" : "NU"
 }
 
 var lookup = function(query) {
@@ -57,11 +73,7 @@ var score = function(cities,query) {
 
         element.score = score;
 
-        var city = {};
-        city.name = element.name;
-        city.score = score;
-        city.long = element.long;
-        city.lat = element.lat;
+        var city = format(element);
 
         res.push(city);
     });
@@ -70,9 +82,37 @@ var score = function(cities,query) {
     return res;
 }
 
+var format = function(city) {
+    var formatted = {};
+
+    var stateProvince = city.admin1;
+    var countryName = city.country;
+
+    if(city.country == "CA")
+    {
+        // Fix for turning the numerical admin region back into a string.
+        var code = "" + city.admin1;
+        if(code.length < 2) code = "0" + code;
+
+        stateProvince = admin1ConversionCA[code];
+        countryName = "Canada";
+    }
+    else if(city.country == "US")
+    {
+        countryName = "USA";
+    }
+
+    formatted.name = city.name + ", " + stateProvince + ", " + countryName;
+    formatted.latitude = city.lat;
+    formatted.longitude = city.long;
+    formatted.score = city.score;
+
+    return formatted;
+}
+
 var port = process.env.PORT || 2345;
 
-var table = readTable();
+var table = loadCityData();
 
 /*var result = lookup("new y");
 
