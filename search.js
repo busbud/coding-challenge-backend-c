@@ -57,7 +57,8 @@ var lookup = function(query) {
     var res = [];
     cityData.forEach(function(element,index) {
         if(element.ascii != undefined &&
-            element.ascii.toLowerCase().indexOf(q) != -1) {
+            element.ascii.toLowerCase().indexOf(q) != -1 &&
+            element.population > 5000) {
             res.push(element);
         }
     });
