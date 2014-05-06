@@ -72,7 +72,6 @@ var score = function(cities,query) {
         res.push(city);
     });
 
-    //return cities;
     return res;
 }
 
@@ -104,6 +103,10 @@ var format = function(city) {
     return formatted;
 }
 
+var sortByScore = function (a,b) {
+    return b.score - a.score;
+}
+
 var port = process.env.PORT || 2345;
 
 var table = loadCityData();
@@ -132,6 +135,6 @@ module.exports = http.createServer(function (req, res) {
   } else {
     res.end();
   }
-}).listen(port, '127.0.0.1');
+}).listen(port);
 
-console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+//console.log('Server running at http://127.0.0.1:%d/suggestions', port);
