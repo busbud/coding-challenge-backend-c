@@ -1,4 +1,19 @@
-# Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
+# Busbud Coding Challenge
+<!---
+[![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
+-->
+
+## Jonathan's Changes
+
+I created a single function that returns the desired result. I also had to
+change one of the tests because it was using a regular expression method on a
+string (hence the absence of the build status image).  I decided to just read the TSV file into memory since it was small
+enough, however normally I would use a database for that kind of data and use
+the database's internal search functions. It also appears that geonames has an
+API, which would be the other option but since the results are limited to the
+US and Canada the TSV file is sufficient.
+
+The app is up at [http://cryptic-fortress-6280.herokuapp.com/suggestions](http://cryptic-fortress-6280.herokuapp.com/suggestions).
 
 ## Requirements
 
