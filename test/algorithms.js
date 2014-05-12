@@ -32,6 +32,9 @@ describe("Javascript", function () {
     _a[0].e = "z";
     expect(_b[0].e).to.be.equal("z");
   });
+  it("must show that a character is a string", function () {
+    expect(_.isString("a")).to.be.true;
+  });
 });
 
 
@@ -66,12 +69,12 @@ describe("Algorithm", function () {
     it("should have statistics", function() {
       var _rankingBasic = Ranking.BasicRanking(_data.getDataList());
       expect(_rankingBasic).to.be.instanceOf(Object);
-      console.log("Statistics: ");
-      console.log(_rankingBasic.statistics);
-      console.log("Rank of biggest city: ");
-      console.log(_rankingBasic.dataListOrdSize[0]);
-      console.log("Rank of smallest city: ");
-      console.log(_rankingBasic.dataListOrdSize[_rankingBasic.dataListOrdSize.length-1]);
+      //console.log("Statistics: ");
+      //console.log(_rankingBasic.statistics);
+      //console.log("Rank of biggest city: ");
+      //console.log(_rankingBasic.dataListOrdSize[0]);
+      //console.log("Rank of smallest city: ");
+      //console.log(_rankingBasic.dataListOrdSize[_rankingBasic.dataListOrdSize.length-1]);
     });
   });
 });

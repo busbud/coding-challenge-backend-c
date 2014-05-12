@@ -42,10 +42,11 @@ var Node = Classy.extend({
     this.cache = [];
   },
 
-  // Number of objects to keep inside the cache
+  // Number of objects to keep inside the cache per each node
+  // objects that go inside the cache are objects deeper in the trie but after this token
   cacheSize: 10,
 
-  // Rank constants
+  // Rank constants if object came from the objects list or cache
   rankWord: 1.0,
   rankCache: 0.5,
 
@@ -54,9 +55,9 @@ var Node = Classy.extend({
     return 0;
   },
 
-  // Ranking function to be overloaded
-  computeRank: function (object) {
-    return 1.0;
+  // Ranking function to be overloaded, it has all the results just before they are returned
+  computeRank: function (objects) {
+    return objects;
   },
 
   // Format data to be added to return
@@ -64,14 +65,7 @@ var Node = Classy.extend({
     return _.cloneDeep(object);
   },
 
-  // Get next node if it exists
-  existsToken: function (token) {
-    if (this.children || _.isString(token)) {
-      return _.isObject(this.children[token]);
-    } else {
-      return false;
-    }
-  },
+  // Add object into Trie for reverse lookup
   _addObject: function (tokensConsumed, tokensRemaining, object) {
     // Check parameters
     if (!(_.isArray(tokensConsumed) && _.isArray(tokensRemaining)) || !_.isObject(object)) {
@@ -79,23 +73,32 @@ var Node = Classy.extend({
     }
 
     // Check if tokensRemaining has tokens
-    if (tokensRemaining.size > 0) {
+    if (tokensRemaining.length > 0) {
+      //console.log("Node Add - Remaining tokens: " + tokensRemaining.length + ".");
       // Consume token
       var _token = tokensRemaining.shift();
       tokensConsumed.push(_token);
 
       // Check if token is not already in children
       if (!_.isObject(this.children[_token])) {
-        this.children[_token] = new this._trie.nodeClass();
+        this.children[_token] = new this._trie.nodeClass(this._trie);
       }
 
       // Add object to cache if he's cool enough
+      // Since it is in reverse order, one can check for duplicates before inserting
       var _insertedCache = false;
       for (var c = 0; c < this.cache.length; c++) {
+        // Check if this object already exists for the same string
+        if (object === this.cache[c]) {
+          _insertedCache = true;
+          break;
+        }
         // Check if this object is bigger so it can be inserted
         if (this.objectComparison(object, this.cache[c]) > 0) {
+          //console.log("Node Add - Spliting!!");
           this.cache.splice(c, 0, object);
           _insertedCache = true;
+          break;
         }
       }
       if (this.cache.length < this.cacheSize) {
@@ -115,10 +118,16 @@ var Node = Classy.extend({
       // Search inside array the index to insert object so that objects is sorted
       var _inserted = false;
       for (var i = 0; i < this.objects.length; i++) {
+        // Check if object already exists for same string
+        if (object === this.objects[i]) {
+          _inserted = true;
+          break
+        }
         // Check if this object is bigger so it can be inserted
         if (this.objectComparison(object, this.objects[i]) > 0) {
           this.objects.splice(i, 0, object);
           _inserted = true;
+          break;
         }
       }
 
@@ -135,6 +144,7 @@ var Node = Classy.extend({
   _traverse: function (tokensConsumed, tokensLeft) {
     // Check parameters
     if (!_.isArray(tokensConsumed)) {
+      //console.log("Node Traverse - Returning from tokens consumed.");
       return [];
     }
 
@@ -159,7 +169,10 @@ var Node = Classy.extend({
 
       // Loop through cache if any and add them to result
       for (var c = 0; c < this.cache.length; c++) { // hehe c++, see what I did there?
-        var _obj = this.formatData(this.objects[c]);
+        //console.log("Node retrieve - Object from cache: " + this.cache[c] + ".");
+        var _obj = this.formatData(this.cache[c]);
+
+        //console.log("Node retrieve - Getting object out: " + _obj + ".");
 
         // Add rank
         if (!_.isObject(_obj.rank)) {
@@ -171,17 +184,19 @@ var Node = Classy.extend({
         _result.push(_obj);
       }
 
-      return _result
+      return this.computeRank(_result);
     } else {
       // Consume token
       var _token = tokensLeft.shift();
       tokensConsumed.push(_token);
+      //console.log("Node Traverse - Consumed token \"" + _token + "\".");
 
       // Check if child node can be accessed with token
       if (_.isObject(this.children[_token])) {
         // Go to child
         return this.children[_token]._traverse(tokensConsumed, tokensLeft);
       } else { // If not it means we found nothing
+        //console.log("Node Traverse - returned since nothing :(");
         return [];
         // TODO: Should still return something iff 3 or more tokens have been consumed
       }
@@ -219,6 +234,7 @@ var Trie = Classy.extend({
    * @param object: to be added for the string
    */
   addObject: function (string, object) {
+    //console.log("Adding objects: \"" + string + "\"");
     // Chech parameters
     if (!(_.isString(string) && _.isObject(object))) {
       return false;
@@ -236,9 +252,11 @@ var Trie = Classy.extend({
    */
   traverse: function (string) {
     // Check parameters
-    if (!(_.isString(string))) {
+    if (_.isString(string)) {
+      //console.log("Trie - Called traverse with: \"" + string + "\".");
       // Split in tokens and traverse nodes in search of treasure
       var _tokens = string.split("");
+      //console.log("Trie - Tokenized into: \"" + _tokens.join("|") + "\"");
       return this.parentNode._traverse([], _tokens);
     }
 

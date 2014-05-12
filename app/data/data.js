@@ -19,7 +19,7 @@ var Classy = require("../structures/classy.js");
 var Data = Classy.extend({
   constructor: function (elementsList, idName) {
     // Set up id logic; it can be given or by default will take id; it should be the same name as on the DB column
-    this._idName = idName || "id";
+    this._idName = this._idName || idName || "id";
     this._columnsList = _.clone(elementsList);
     this._formatHash = {};
     for (var i = 0; i < this._columnsList.length; i++) {
@@ -32,6 +32,7 @@ var Data = Classy.extend({
   },
 
   // Row validator to be overriden
+  // If changes in the data is necessary, just overwrite
   validate: function (row) {
     return row;
   },
@@ -157,6 +158,7 @@ function BusbudGeonamesValidator(row) {
   _data = {};
   _data.id = row.id;
   _data.name = row.name;
+  _data.name_alt = row.alt_name;
   _data.population = parseInt(row.population);
   _data.geo = {};
   _data.geo.lat = parseInt(row.lat);

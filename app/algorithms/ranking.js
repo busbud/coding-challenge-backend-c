@@ -68,6 +68,7 @@ function BasicRanking(dataList) {
   });
 
   _result.dataListOrdSize = _dataListOrdSize;
+  console.log("Data List Ordered By Size length: " + _dataListOrdSize.length + ".");
 
   // Statistics
   _statistics.medianCitySize = _dataListOrdSize[Math.floor(_dataListOrdSize.length / 2)].population;

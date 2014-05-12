@@ -92,20 +92,20 @@ describe("Classy class", function () {
 describe("Trie Class", function () {
   // Data for trie
   var _strings = ["allo", "this", "hello", "hi", "hemmington", "heroku"],
-    _objects = [{ rankError: 1.0 }, { rank: 0.1 }, { rank: 0.2 },
-      { rank: 0.3 }, { rank: 0.5 }, { rank: 10.0 }];
+    _objects = [{ rankError: 1.0 }, { ranky: 0.1 }, { ranky: 0.2 },
+      { ranky: 0.3 }, { ranky: 0.5 }, { ranky: 10.0 }];
 
   // Extend for test
   var ENode = Trie.Node.extend({
-    cacheSize: 3,
+    cacheSize: 5,
     rankWord: 0.75,
     rankCache: 0.6,
     objectComparison: function (a, b) {
-      return this.computeRank(a) - this.computeRank(b);
+      return this.ranky(a) - this.ranky(b);
     },
-    computeRank: function (obj) {
-      if (obj.rank) {
-        return obj.rank;
+    ranky: function (obj) {
+      if (obj.ranky) {
+        return obj.ranky;
       } else {
         return 0.0;
       }
@@ -118,15 +118,21 @@ describe("Trie Class", function () {
   var _trie = new ETrie();
 
   it("must be able to populate", function () {
-    for (var i = 0; i < _strings; i++) {
+    for (var i = 0; i < _strings.length; i++) {
       var _result = _trie.addObject(_strings[i], _objects[i]);
       expect(_result).to.be.true;
     }
   });
-  it("must be able to get the data back", function () {
+  it("must be able to get the data back, in this case cache", function () {
     var _result = _trie.traverse("h");
-    expect(_result).to.be.insanceOf(Array);
-    expect(_result.length).to.equal()
+    expect(_result).to.be.instanceOf(Array);
+    expect(_result.length).to.equal(4)
+  });
+  it("must be able to get a specific data back", function () {
+    var _result = _trie.traverse("hello");
+    expect(_result).to.be.instanceOf(Array);
+    expect(_result.length).to.equal(1);
+    expect(_result[0].ranky).to.equal(0.2);
   });
 
 });
