@@ -141,7 +141,7 @@ var Node = Classy.extend({
     }
   },
 
-  _traverse: function (tokensConsumed, tokensLeft) {
+  _traverse: function (tokensConsumed, tokensLeft, latitude, longitude) {
     // Check parameters
     if (!_.isArray(tokensConsumed)) {
       //console.log("Node Traverse - Returning from tokens consumed.");
@@ -185,7 +185,14 @@ var Node = Classy.extend({
         _result.push(_obj);
       }
 
-      return this.computeRank(_result);
+      // Check arguments to pass to compute rank
+      if (arguments.length > 2) {
+        var _argumentsComputeRank = [].push(_result); // First is alwasy _result
+        _argumentsComputeRank = _argumentsComputeRank.concat(arguments.slice(2));
+        this.computeRank.apply(this, _argumentsComputeRank);
+      } else {
+        return this.computeRank(_result);
+      }
     } else {
       // Consume token
       var _token = tokensLeft.shift();
@@ -251,14 +258,14 @@ var Trie = Classy.extend({
    *
    * @param string to be split into tokens and search for all collisions
    */
-  traverse: function (string) {
+  traverse: function (string, latitude, longitude) {
     // Check parameters
     if (_.isString(string)) {
       //console.log("Trie - Called traverse with: \"" + string + "\".");
       // Split in tokens and traverse nodes in search of treasure
       var _tokens = string.split("");
       //console.log("Trie - Tokenized into: \"" + _tokens.join("|") + "\"");
-      return this.parentNode._traverse([], _tokens);
+      return this.parentNode._traverse([], _tokens, latitude, longitude);
     }
 
     // No string, no gain

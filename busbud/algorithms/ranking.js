@@ -101,21 +101,68 @@ function BasicRanking(dataList) {
  * Trie Rank
  *******************/
 
-function WordCacheGeoRanking(dataList) {
+function WordCacheGeoRanking(dataList, latitude, longitude) {
   // Check input
   if (_.isArray(dataList)) {
+    // Constants for scoring geolocation rank
+    var _lambda = 1.4,
+      _minX = 0.3,
+      _maxX = 2.0;
+
+    // Geolocation variables
+    var _minDistance = 1000000.0, _maxDistance = 0.0;
+
     // Loop through dataList
     for (var i = 0; i < dataList.length; i++) {
       // Get reference
       var _obj = dataList[i];
 
-      // Calculate score and delete _obj.rank
-      _obj.score = _obj.rank.basic + _obj.rank.word;
-      delete _obj.rank;
+      // Check if latitude and longitude are given
+      if (_.isNumber(latitude) && _.isNumber(longitude)) {
+        // Deg to rad
+        var degToRad = (Math.PI / 180);
+        var R = 6371;
 
-      // Normalize score
-      if (_obj.score > 1.0) {
-        _obj.score = 1.0
+        // Radians
+        var _radLat = latitude * degToRad,
+          _radLon = longitude * degToRad,
+          _radLatCity = _obj.geo.lat * degToRad,
+          _radLonCity = _obj.geo.lon * degToRad;
+
+        // Haversine formula
+        var _deltaLat = _radLatCity - _radLat,
+          _deltaLon = _radLonCity - _radLon;
+        var a = Math.sin(_deltaLat/2) * Math.sin(_deltaLat/2) +
+          Math.cos(_radLon) * Math.cos(_radLonCity) *
+          Math.cos(_deltaLon) * Math.cos(_deltaLon);
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        _obj.geo.distance = R * c;
+
+        // Check distances
+        if (_obj.geo.distance < _minDistance) {
+          _minDistance = _obj.geo.distance;
+        }
+        if (_obj.geo.distance > _maxDistance) {
+          _maxDistance = _obj.geo.distance;
+        }
+      }
+    }
+
+    // Debug information
+    console.log("Ranking calculated min distance: " + _minDistance +
+      " and max distance: " + _maxDistance + ".");
+
+    // Check if latitude and longitude are given
+    if (_.isNumber(latitude) && _.isNumber(longitude)) {
+      // Loop again if geo to normalize rank
+      for (var i = 0; i < dataList.length; i++) {
+        // Get reference
+        var _obj = dataList[i];
+
+        // Calculate Geo rank
+        var _x = (_obj.geo.distance / _maxDistance); // 0 distance x 0, max distance x 1
+        _x = _x * (_maxX - _minX) + _minX;
+        _obj.rank.geo = _lambda * Math.pow(Math.E, -1 * _lambda * _x);
       }
     }
 
@@ -127,7 +174,27 @@ function WordCacheGeoRanking(dataList) {
 
 
 function ReduceRanking(dataLists, limit) {
+  // Limit is the maximum number of output
+  var _result = [];
 
+  // Loop through lists
+  for (var l = 0; l < dataLists.length; l++) {
+    // Loop in the list
+    for (var i = 0; i < dataLists[l].length; i++) {
+      // Take object reference
+      var _obj = dataLists[l][i];
+
+      // Check if already in result
+      for (var r = 0; r < _result.length; r++) {
+        if (_result[r].name === _obj.name) {
+          // Since already in result, add word ranking
+          _result[r].rank.word += _obj.rank.word;
+        }
+      }
+    }
+  }
+
+  return _result;
 }
 
 

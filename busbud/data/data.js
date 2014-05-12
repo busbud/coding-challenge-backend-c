@@ -161,12 +161,13 @@ function BusbudGeonamesValidator(row) {
   _data.name_alt = row.alt_name;
   _data.population = parseInt(row.population);
   _data.geo = {};
-  _data.geo.lat = parseInt(row.lat);
-  _data.geo.lon = parseInt(row.long);
-  _data.geo.elevation = parseInt(row.elevation);
-  _data.geo.dem = parseInt(row.dem);
-  _data.country = row.country;
+  _data.geo.lat = parseFloat(row.lat);
+  _data.geo.lon = parseFloat(row.long);
+  _data.geo.elevation = parseFloat(row.elevation);
+  _data.geo.dem = parseFloat(row.dem);
   _data.tz = row.tz;
+
+  _data.country = row.country;
 
   // Admin 1 codes
   if (row.country === "CA") {
