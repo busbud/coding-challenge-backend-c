@@ -27,13 +27,17 @@ var TSVImporter = Classy.extend({
       if (dataClass instanceof Function) {
         callback = dataClass;
         dataClass = null;
+
+        if ((this.dataClass === null) || (this.dataClass === undefined)) {
+          throw new Error("Busbud C - TSVImporter: No Data class has been passed.");
+        }
       }
     }
 
     // Setup
-    this.result = null;
+    this.data = null;
     this.lineNumber = 0;
-    this._dataClass = dataClass;
+    this.dataClass = this.dataClass || dataClass;
 
     this.pipeProcessLine = _.bind(this._pipeProcessLine, this);
     this.streamOnFinish = _.bind(this._streamOnFinish, this, callback);
@@ -58,6 +62,10 @@ var TSVImporter = Classy.extend({
     }
   },
 
+  // Function to be overloaded if necessary to do something with the data
+  processData: function (data) {},
+
+
   // Process each line
   _pipeProcessLine: function (row, callback) {
     // Check that row is not empty
@@ -71,15 +79,15 @@ var TSVImporter = Classy.extend({
     // Check The line we are currently at
     if (this.lineNumber === 0) { // First line of TSV is meta info
       // Create the data object
-      if (this._dataClass) {
-        this.result = new this._dataClass(_rowElements);
+      if (this.dataClass) {
+        this.data = new this.dataClass(_rowElements);
       } else {
-        this.result = new Data(_rowElements);
+        this.data = new Data(_rowElements);
       }
     } else {
       // Add elements to data
-      if (this.result) {
-        this.result.addRow(_rowElements);
+      if (this.data) {
+        this.data.addRow(_rowElements);
       } else {
         return callback("Busbud C - TSVImporter: Data object does not exist on row importing.");
       }
@@ -92,7 +100,8 @@ var TSVImporter = Classy.extend({
 
   // Finish end stream event
   _streamOnFinish: function (callback) {
-    return callback(null, this.result);
+    this.processData(this.data);
+    return callback(null, this.data);
   },
 
   // Error event

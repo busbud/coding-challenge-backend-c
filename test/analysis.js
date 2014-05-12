@@ -5,9 +5,9 @@
 
 var expect = require("chai").expect;
 
-var Analyzer = require(__dirname + "/../app/analysis/analyzer.js"),
-  TokenizerBasic = require(__dirname + "/../app/analysis/tokenizer-basic.js"),
-  TokenFilters = require(__dirname + "/../app/analysis/tokenfilters.js");
+var Analyzer = require(__dirname + "/../busbud/analysis/analyzer.js"),
+  TokenizerBasic = require(__dirname + "/../busbud/analysis/tokenizer-basic.js"),
+  TokenFilters = require(__dirname + "/../busbud/analysis/tokenfilters.js");
 
 
 
@@ -18,22 +18,33 @@ var Analyzer = require(__dirname + "/../app/analysis/analyzer.js"),
  *******************/
 
 describe("Tokenizer Basic", function () {
-  it("must return the words of a space separated string", function () {
-    var _string = "hello this is a test";
-    var _tokens = TokenizerBasic(_string);
-    //console.log(_tokens.join(","));
-    expect(_tokens.length).to.equal(5);
+  describe("Unicode", function () {
+    it("must return the words of a space separated string", function () {
+      var _string = "hello this is a test";
+      var _tokens = TokenizerBasic.Unicode(_string);
+      //console.log(_tokens.join(","));
+      expect(_tokens.length).to.equal(5);
+    });
+    it("must return the words containing ' and -", function () {
+      var _string = "L'Aubaine-Folle";
+      var _tokens = TokenizerBasic.Unicode(_string);
+      expect(_tokens.length).to.equal(1);
+    });
+    it("must take out the words from everything", function () {
+      var _string = "somethin, (somethind) why?amen";
+      var _tokens = TokenizerBasic.Unicode(_string);
+      expect(_tokens.length).to.equal(4);
+    });
   });
-  it("must return the words containing ' and -", function () {
-    var _string = "L'Aubaine-Folle";
-    var _tokens = TokenizerBasic(_string);
-    expect(_tokens.length).to.equal(1);
+  describe("European Name", function () {
+    it("must take out only words from between separators", function () {
+      var _string = "name, Name, n{}tname,NAMEZ";
+      var _tokens = TokenizerBasic.EuropeanName(_string);
+      //console.log(_tokens);
+      expect(_tokens.length).to.equal(3);
+    });
   });
-  it("must take out the words from everything", function () {
-    var _string = "somethin, (somethind) why?amen";
-    var _tokens = TokenizerBasic(_string);
-    expect(_tokens.length).to.equal(4);
-  })
+
 });
 
 
@@ -63,10 +74,10 @@ describe("Token Filter", function () {
 
   describe("Separator expander", function () {
     it("must expand", function () {
-      var _strings1 = ["ha'ha L'Aubaine-Folle"],
-        _strings2 = ["h-h L-Aubaine'Folle"];
-      var _result1 = TokenFilters.ExpandSeparators(_strings1);
-      var _result2 = TokenFilters.ExpandSeparators(_strings2);
+      var _strings1 = ["ha'haz L'Aubaine-Folle"],
+        _strings2 = ["h-ha L-Aubaine'Folle"];
+      var _result1 = TokenFilters.UniExpandSeparators(_strings1);
+      var _result2 = TokenFilters.UniExpandSeparators(_strings2);
       //console.log(_result1);
       //console.log(_result2);
       expect(_result1.length).to.equal(9);
@@ -86,7 +97,7 @@ describe("Token Filter", function () {
 describe("Analyzer", function () {
   describe("with basic tokenizer and all token filters", function () {
     var StandardAnalyzer = Analyzer.extend({
-      tokenizer: TokenizerBasic,
+      tokenizer: TokenizerBasic.Unicode,
       tokenFilters: [TokenFilters.LowerCase,
         TokenFilters.AsciiFolding, TokenFilters.ExpandSeparators]
     });
@@ -98,5 +109,19 @@ describe("Analyzer", function () {
     //console.log(_tokens);
     expect(_tokens).to.be.instanceOf(Array); // This a really good unit test
     expect(_tokens.length).to.equal(14);
+  });
+
+  describe("with name tokenizer and general filters", function () {
+    var NameAnalyzer = Analyzer.extend({
+      tokenizer: TokenizerBasic.EuropeanName,
+      tokenFilters: [TokenFilters.LowerCase, TokenFilters.ExpandSeparators]
+    });
+
+    var _analyzer = new NameAnalyzer();
+    var _string = "name, name2, {}notname,néà";
+    var _tokens = _analyzer.analyze(_string);
+    //console.log(_tokens);
+    expect(_tokens).to.be.instanceOf(Array);
+    expect(_tokens.length).to.equal(3);
   });
 });

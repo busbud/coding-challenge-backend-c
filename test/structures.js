@@ -5,8 +5,8 @@
 
 var expect = require("chai").expect;
 
-var Classy = require(__dirname + "/../app/structures/classy.js"),
-  Trie = require(__dirname + "/../app/structures/trie.js");
+var Classy = require(__dirname + "/../busbud/structures/classy.js"),
+  Trie = require(__dirname + "/../busbud/structures/trie.js");
 
 
 

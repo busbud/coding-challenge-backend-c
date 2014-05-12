@@ -3,6 +3,8 @@
  * Import Modules
  *******************/
 
+var _ = require("lodash");
+
 var Classy = require(__dirname + "/../structures/classy.js");
 
 
@@ -10,7 +12,7 @@ var Classy = require(__dirname + "/../structures/classy.js");
 
 
 /********************
- * Basic Rank Algorithm
+ * Basic Rank
  *******************/
 
 // Basic Ranking Exponential Distribution
@@ -68,7 +70,7 @@ function BasicRanking(dataList) {
   });
 
   _result.dataListOrdSize = _dataListOrdSize;
-  console.log("Data List Ordered By Size length: " + _dataListOrdSize.length + ".");
+  //console.log("Data List Ordered By Size length: " + _dataListOrdSize.length + ".");
 
   // Statistics
   _statistics.medianCitySize = _dataListOrdSize[Math.floor(_dataListOrdSize.length / 2)].population;
@@ -96,12 +98,50 @@ function BasicRanking(dataList) {
 
 
 /********************
+ * Trie Rank
+ *******************/
+
+function WordCacheGeoRanking(dataList) {
+  // Check input
+  if (_.isArray(dataList)) {
+    // Loop through dataList
+    for (var i = 0; i < dataList.length; i++) {
+      // Get reference
+      var _obj = dataList[i];
+
+      // Calculate score and delete _obj.rank
+      _obj.score = _obj.rank.basic + _obj.rank.word;
+      delete _obj.rank;
+
+      // Normalize score
+      if (_obj.score > 1.0) {
+        _obj.score = 1.0
+      }
+    }
+
+    return dataList
+  } else {
+    return [];
+  }
+}
+
+
+function ReduceRanking(dataLists, limit) {
+
+}
+
+
+
+
+/********************
  * Ranking Static Class
  *******************/
 
 // Class for the ranking of a city depending of its properties
 var Ranking = Classy.extend({}, {
-  BasicRanking: BasicRanking
+  BasicRanking: BasicRanking,
+  WordCacheGeoRanking: WordCacheGeoRanking,
+  ReduceRanking: ReduceRanking
 });
 
 

@@ -5,8 +5,8 @@
 
 var expect = require("chai").expect;
 
-var Data = require(__dirname + "/../app/data/data.js"),
-  TSVImporter = require(__dirname + "/../app/data/tsvimporter.js");
+var Data = require(__dirname + "/../busbud/data/data.js"),
+  TSVImporter = require(__dirname + "/../busbud/data/tsvimporter.js");
 
 
 
@@ -149,7 +149,7 @@ describe("TSVImporter class", function () {
 
   // Load asynchronously the data, must finish first before tests
   before(function (done) {
-    _tsvTest = new TSVImporter(__dirname + "/test-data.tsv", function (err, data) {
+    _tsvTest = new TSVImporter(__dirname + "/test-data.tsv", Data, function (err, data) {
       // Check if error
       if (err) {
         _importingSuccess = false;

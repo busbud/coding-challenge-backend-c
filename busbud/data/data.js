@@ -162,7 +162,7 @@ function BusbudGeonamesValidator(row) {
   _data.population = parseInt(row.population);
   _data.geo = {};
   _data.geo.lat = parseInt(row.lat);
-  _data.geo.long = parseInt(row.long);
+  _data.geo.lon = parseInt(row.long);
   _data.geo.elevation = parseInt(row.elevation);
   _data.geo.dem = parseInt(row.dem);
   _data.country = row.country;

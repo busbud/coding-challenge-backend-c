@@ -156,6 +156,8 @@ var Node = Classy.extend({
       // Loop trough objects if any and add them to _result
       for (var o = 0; o < this.objects.length; o++) {
         var _obj = this.formatData(this.objects[o]);
+        //console.log("Node Retrieve - Getting object out " + _obj + ".");
+        //console.log(_obj);
 
         // Add rank
         if (!_.isObject(_obj.rank)) {
@@ -171,8 +173,7 @@ var Node = Classy.extend({
       for (var c = 0; c < this.cache.length; c++) { // hehe c++, see what I did there?
         //console.log("Node retrieve - Object from cache: " + this.cache[c] + ".");
         var _obj = this.formatData(this.cache[c]);
-
-        //console.log("Node retrieve - Getting object out: " + _obj + ".");
+        //console.log("Node retrieve - Getting object from cache out: " + _obj + ".");
 
         // Add rank
         if (!_.isObject(_obj.rank)) {

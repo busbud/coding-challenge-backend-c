@@ -39,7 +39,7 @@ function TokenFilterLoop(tokens, filter) {
     }
 
     // Return result
-    return _result;
+    return _.uniq(_result);
   } else {
     return [];
   }
@@ -63,7 +63,7 @@ var RegExpUniWords = RegExp.cache("\\p{L}+", "gi"),
   RegExpUniApostrophe = RegExp.cache("\\p{L}+'\\p{L}+", "gi"),
   RegExpUniDash = RegExp.cache("\\p{L}+\\-\\p{L}+", "gi");
 
-function TokenFilterExpandSeparators(tokens) {
+function TokenFilterUnicodeExpandSeparators(tokens) {
   return TokenFilterLoop(tokens, function (token) {
     /*var _tokensWord = token.match(/[\w]+/ig),
       _tokensApostrophe = token.match(/\w+'\w+/ig),
@@ -103,6 +103,31 @@ function TokenFilterExpandSeparators(tokens) {
   });
 }
 
+function TokenFilterExpandSeparators(tokens) {
+  return TokenFilterLoop(tokens, function (token) {
+    var _tokensWord = token.match(/[\w]+/ig),
+      _tokensApostrophe = token.match(/\w+'\w+/ig),
+      _tokensDash = token.match(/\w+\-\w+/ig),
+      _result = [].concat(token);
+
+    var _result = [].concat(token);
+
+    // Since mathing the regex can be null, I want to return only valid
+    if (_tokensWord) {
+      _result = _result.concat(_tokensWord);
+    }
+    if (_tokensApostrophe) {
+      _result = _result.concat(_tokensApostrophe);
+    }
+    if (_tokensDash) {
+      _result = _result.concat(_tokensDash);
+    }
+
+    return _result;
+  });
+}
+
+
 
 
 /********************
@@ -114,3 +139,4 @@ module.exports = {};
 module.exports.LowerCase = TokenFilterLowerCase;
 module.exports.AsciiFolding = TokenFilterAsciiFolding;
 module.exports.ExpandSeparators = TokenFilterExpandSeparators;
+module.exports.UniExpandSeparators = TokenFilterUnicodeExpandSeparators;

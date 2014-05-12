@@ -8,10 +8,10 @@ var expect = require("chai").expect;
 var _ = require("lodash");
 
 
-var Data = require(__dirname + "/../app/data/data.js"),
-  TSVImporter = require(__dirname + "/../app/data/tsvimporter.js");
+var Data = require(__dirname + "/../busbud/data/data.js"),
+  TSVImporter = require(__dirname + "/../busbud/data/tsvimporter.js");
 
-var Ranking = require(__dirname + "/../app/algorithms/ranking.js");
+var Ranking = require(__dirname + "/../busbud/algorithms/ranking.js");
 
 
 
