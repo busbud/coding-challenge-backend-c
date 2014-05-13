@@ -3,8 +3,9 @@
 
 ## Important Notes
 
-In order for all the prerequisites to install, here the problem being `toobusy`, `g++` on the machine is required.
-TL;DR; - No kitties were harmed in the creation of this program.
+- Deployed at [Wow you really deploy in only just a push](http://salty-island-8779.herokuapp.com/)
+- In order for all the prerequisites to install, here the problem being `toobusy`, `g++` on the machine is required.
+- TL;DR; - No kitties were harmed in the creation of this program.
 
 ## Steps of the program, or why is it so fast?
 
