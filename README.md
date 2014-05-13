@@ -67,7 +67,7 @@ That is why there are still commented out `console.log` and some non-insightful 
 ## How to improve this
 
 - This program only finds results for exact string searches (even though a string can expand).
-To implement "fuzzy search" a BK-Tree structure could be used. All strings could have a Levenshtein automata precomputed so that it the Levenshtein algoritm is not O(mn) anymore.
+To implement "fuzzy search" a BK-Tree structure could be used. All strings could have a Levenshtein automata precomputed so that the Levenshtein distance is not O(mn) anymore.
 Also, I have read a cool article about how ElasticSearch uses an FSA approach to this.
 - My implementation only uses geolocation for relative ranking. A geohash tree could be used (although I did not research much into it).
 With that a list of closest cities could be retrieved and used in the ranking.
