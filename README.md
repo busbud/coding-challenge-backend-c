@@ -1,4 +1,79 @@
-# Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
+# Busbud Coding Challenge [![Build Status](https://circleci.com/gh/AlexandruBusila/coding-challenge-backend-c/tree/master.png?circle-token=38c6b52dbb048dae2164265540e5d4833547ca1e)](https://circleci.com/gh/AlexandruBusila/coding-challenge-backend-c)
+
+
+## Important Notes
+
+- Deployed at [Wow you really deploy in only just a push](http://salty-island-8779.herokuapp.com/suggestions?q=montr%C3%A9%C3%A0l)
+- In order for all the prerequisites to install, here the problem being `toobusy`, `g++` on the machine is required.
+- TL;DR; - No kitties were harmed in the creation of this program.
+- If only this could be `CoffeeScript` ........
+
+## Steps of the program, or why is it so fast?
+
+### Step 0: Data loading
+
+- The data is loaded inside a Data class to keep the rows of the database.
+This class can be easily overloaded for any row based database.
+- All of this is supervised by the `TSVImporter` class which loads any TSV file, with any columns format.
+- After all of the loading is done the `Data` class holds the data in memory and `TSVImporter` calls the done callback.
+
+### Step 1: String process
+
+- All the data is given to a script to load the data reverse indexed.
+Here "name" and "alt_name" columns from the tsv are used.
+- A custom `Analyzer` class is used, a bit in the ElasticSearch mentality.
+This analyzer is programmable with a `Tokenizer` and multiple `TokenFilters`.
+At first `XRegExp` library was used for their unicode tokens but the scanning of all cities took hours.
+- Now the `Tokenizer` first transforms the names related to a city into ascii strings and then tokenizes it.
+- The first `TokenFilter` is a simple one, it transforms all tokens to lowercase.
+- The second `TokenFilter` expands all strings containing ' or - into multiple combinations of them.
+That is the reason why searching for `Hastings` yields `Hastings-on-Hudson` in the results (same thing with Hudson).
+- The same analyzer is used on all strings coming into the query search as well.
+
+### Step 1: Data storing
+
+- For word search to be as fast as possible, a reverse indexing for cities is created based on the names outputed by the analyzer.
+Since we want partial words to yield answers, a Trie is used to store all the different names.
+- Inside the `Trie`, every `Node` consumes a token from the string of the word to reverse index the object.
+- Each `Node` instance in the `Trie` contains two buckets:
+	- Object bucket containing the list of words that are finished at this token.
+	- Cache bucket containing the cities (up to a certain number) down the Nodes connected to this Node.
+- The cache bucket contains the highest populated cities in order.
+
+### Step 2: Retrieval
+
+- A Trie acts almost like a HashTable except it is O(log(n)), but in our case n is very small.
+- Even if somebody would do a query with a huge string, since no more nodes can be accessed if no prerecorded words passed through then it resuls empty.
+This brings a problem that I will talk later in the "to improve section" (fuzzy search).
+- The trie does not take too much space since tokens are reused and it is a reverse index to the data already loaded in memory.
+
+### Step 3: Ranking
+
+- A first rank is computed based on the population size of a city.
+- I thought the distribution would follow a normal distribution, but it actually follows an exponential one instead.
+- The rank is computed based on that distribution, where cities with over a couple million population size get about 0.9 score and the others 0.02.
+These numbers might change as I play with the ranking and change constants.
+- The second rank comes from geolocation which is only present when latitude and longitude are given.
+Of course this is relative to the cities returned by the trie, therefore if searching for a name, it cannot output another just because it is close.
+It follows the same exponential distribution for ranking. The Haversine formula is used with a special check if positions are too close so that Haversine does not return `NaN`.
+- The last rank comes from the number of duplicate objects and either they come from the Trie object pool or from the cache pool.
+
+
+## Things Left
+
+- Since I spent most of the time coding the logic and unit tests (almost as many unit tests as logic), I didn't have time to do a maintenance revision of the code.
+That is why there are still commented out `console.log` and some non-insightful comments.
+
+## How to improve this
+
+- This program only finds results for exact string searches (even though a string can expand).
+To implement "fuzzy search" a BK-Tree structure could be used. All strings could have a Levenshtein automata precomputed so that the Levenshtein distance is not O(mn) anymore.
+Also, I have read a cool article about how ElasticSearch uses an FSA approach to this.
+- My implementation only uses geolocation for relative ranking. A geohash tree could be used (although I did not research much into it).
+With that a list of closest cities could be retrieved and used in the ranking.
+
+
+# Initial README section
 
 ## Requirements
 
