@@ -186,10 +186,8 @@ var Node = Classy.extend({
       }
 
       // Check arguments to pass to compute rank
-      if (arguments.length > 2) {
-        var _argumentsComputeRank = [].push(_result); // First is alwasy _result
-        _argumentsComputeRank = _argumentsComputeRank.concat(arguments.slice(2));
-        this.computeRank.apply(this, _argumentsComputeRank);
+      if (_.isNumber(latitude) && _.isNumber(longitude)) {
+        return this.computeRank(_result, latitude, longitude);
       } else {
         return this.computeRank(_result);
       }
@@ -202,7 +200,7 @@ var Node = Classy.extend({
       // Check if child node can be accessed with token
       if (_.isObject(this.children[_token])) {
         // Go to child
-        return this.children[_token]._traverse(tokensConsumed, tokensLeft);
+        return this.children[_token]._traverse(tokensConsumed, tokensLeft, latitude, longitude);
       } else { // If not it means we found nothing
         //console.log("Node Traverse - returned since nothing :(");
         return [];

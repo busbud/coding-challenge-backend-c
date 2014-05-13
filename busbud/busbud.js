@@ -27,7 +27,7 @@ var BusbudTrieNode = Trie.Node.extend({
   cacheSize: 10,
 
   rankWord: 1.0,
-  rankCache: 0.7,
+  rankCache: 0.2,
 
   objectComparison: function (a, b) {
     if (_.isNumber(a.population) && _.isNumber(b.population)) {
@@ -38,7 +38,7 @@ var BusbudTrieNode = Trie.Node.extend({
   },
   computeRank: Ranking.WordCacheGeoRanking,
   formatData: function (object) {
-    console.log("Formating Data.");
+    //console.log("Formating Data.");
     // Result to be returned
     var _result = {};
 
@@ -51,8 +51,9 @@ var BusbudTrieNode = Trie.Node.extend({
 
     // Other info
     _result.rank = _.cloneDeep(object.rank); // dont want references
-    _result.latitude = object.geo.lat;
-    _result.longitude = object.geo.lon;
+    _result.geo = {};
+    _result.geo.lat = object.geo.lat;
+    _result.geo.lon = object.geo.lon;
 
     return _result;
   }
@@ -91,6 +92,7 @@ var BusbudData = Data.extend({
 });
 
 var BusbudTSVImporter = TSVImporter.extend({
+  analyzer: analyzer,
   dataClass: BusbudData,
   processData:  function (data) {
     // Attach Data and Trie on this object
@@ -104,9 +106,9 @@ var BusbudTSVImporter = TSVImporter.extend({
     var _elements = data.getDataList();
     for (var i = 0; i < _elements.length; i++) {
       // For curiosity purposes
-      if (i % 1000 === 0) {
-        console.log("1000 Cities added!!");
-      }
+      //if (i % 1000 === 0) {
+      //  console.log("1000 Cities added!!");
+      //}
 
       // Element to be added to trie
       var _element = _elements[i];
@@ -166,4 +168,3 @@ var tsvBusbudDataImporter = new TSVImporter(__dirname + "/data/cities_canada-usa
  *******************/
 
 module.exports = BusbudTSVImporter;
-module.exports.analyze = analyzer.analyze;

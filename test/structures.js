@@ -134,5 +134,11 @@ describe("Trie Class", function () {
     expect(_result.length).to.equal(1);
     expect(_result[0].ranky).to.equal(0.2);
   });
-
+  it("must return empty if string corresponds to nothing", function () {
+    var _result = _trie.traverse("adasdasdasda");
+    //console.log("Result");
+    //console.log(_result);
+    expect(_result).to.be.instanceOf(Array);
+    expect(_result.length).to.equal(0);
+  });
 });

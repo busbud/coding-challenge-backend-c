@@ -18,10 +18,10 @@ var Classy = require(__dirname + "/../structures/classy.js");
 // Basic Ranking Exponential Distribution
 // Make it so large cities have a exponentially larger ranking than smaller
 var BREDLambda = 1.5,
-  BREDHighPopulation = 5000000,
+  BREDHighPopulation = 1000000,
   BREDLowPopulation = 5000,
   BREDHighX = 0.3,
-  BREDLowX = 2;
+  BREDLowX = 2.0;
 
 function ComputeRankPopulation(population) {
   // First create linear scale from 0 to 1 such that 0 is lowpopulation and 1 is high
@@ -105,9 +105,9 @@ function WordCacheGeoRanking(dataList, latitude, longitude) {
   // Check input
   if (_.isArray(dataList)) {
     // Constants for scoring geolocation rank
-    var _lambda = 1.4,
-      _minX = 0.3,
-      _maxX = 2.0;
+    var _lambda = 1.5,
+      _minX = 0.4,
+      _maxX = 3.0;
 
     // Geolocation variables
     var _minDistance = 1000000.0, _maxDistance = 0.0;
@@ -119,24 +119,35 @@ function WordCacheGeoRanking(dataList, latitude, longitude) {
 
       // Check if latitude and longitude are given
       if (_.isNumber(latitude) && _.isNumber(longitude)) {
-        // Deg to rad
-        var degToRad = (Math.PI / 180);
-        var R = 6371;
+        // Special check if latitude and longitude are too close, since Haversine diverges
+        var _dLat = _obj.geo.lat - latitude,
+          _dLon = _obj.geo.lon - longitude;
+        if (Math.sqrt(_dLat*_dLat + _dLon*_dLon) < 0.005) {
+          //console.log("Divergence");
+          _obj.geo.distance = 0;
+        } else {
+          // Deg to rad
+          var degToRad = (Math.PI / 180);
+          var R = 6371;
 
-        // Radians
-        var _radLat = latitude * degToRad,
-          _radLon = longitude * degToRad,
-          _radLatCity = _obj.geo.lat * degToRad,
-          _radLonCity = _obj.geo.lon * degToRad;
+          // Radians
+          var _radLat = latitude * degToRad,
+            _radLon = longitude * degToRad,
+            _radLatCity = _obj.geo.lat * degToRad,
+            _radLonCity = _obj.geo.lon * degToRad;
 
-        // Haversine formula
-        var _deltaLat = _radLatCity - _radLat,
-          _deltaLon = _radLonCity - _radLon;
-        var a = Math.sin(_deltaLat/2) * Math.sin(_deltaLat/2) +
-          Math.cos(_radLon) * Math.cos(_radLonCity) *
-          Math.cos(_deltaLon) * Math.cos(_deltaLon);
-        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        _obj.geo.distance = R * c;
+          // Haversine formula
+          var _deltaLat = _radLatCity - _radLat,
+            _deltaLon = _radLonCity - _radLon;
+          var a = Math.sin(_deltaLat/2) * Math.sin(_deltaLat/2) +
+            Math.cos(_radLatCity) * Math.cos(_radLat) *
+            Math.sin(_deltaLon/2) * Math.sin(_deltaLon/2);
+          var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+          _obj.geo.distance = R * c;
+          //console.log("Geodistance calculated: " + _obj.geo.distance +
+          //  "for latitude " + _obj.geo.lat + " and longitude " + _obj.geo.lon + ". " +
+          //  "latitude longitude given: " + latitude + " " + longitude + " for " + _obj.name);
+        }
 
         // Check distances
         if (_obj.geo.distance < _minDistance) {
@@ -149,8 +160,8 @@ function WordCacheGeoRanking(dataList, latitude, longitude) {
     }
 
     // Debug information
-    console.log("Ranking calculated min distance: " + _minDistance +
-      " and max distance: " + _maxDistance + ".");
+    //console.log("Ranking calculated min distance: " + _minDistance +
+    //  " and max distance: " + _maxDistance + ".");
 
     // Check if latitude and longitude are given
     if (_.isNumber(latitude) && _.isNumber(longitude)) {
@@ -163,6 +174,7 @@ function WordCacheGeoRanking(dataList, latitude, longitude) {
         var _x = (_obj.geo.distance / _maxDistance); // 0 distance x 0, max distance x 1
         _x = _x * (_maxX - _minX) + _minX;
         _obj.rank.geo = _lambda * Math.pow(Math.E, -1 * _lambda * _x);
+        //console.log("Geo rank calculated: " + _obj.rank.geo + ". For: " + _obj.name + ".");
       }
     }
 
@@ -175,23 +187,74 @@ function WordCacheGeoRanking(dataList, latitude, longitude) {
 
 function ReduceRanking(dataLists, limit) {
   // Limit is the maximum number of output
-  var _result = [];
+  var _result = [],
+    _limit = limit || 10;
 
   // Loop through lists
   for (var l = 0; l < dataLists.length; l++) {
+    // Check if array
+    if (!_.isArray(dataLists[l])) {
+      console.log("Data list at index " + l + " is not an array in Reduce ranking.");
+      console.log(dataLists[l]);
+      break;
+    }
     // Loop in the list
     for (var i = 0; i < dataLists[l].length; i++) {
       // Take object reference
       var _obj = dataLists[l][i];
 
       // Check if already in result
+      var _existed = false;
       for (var r = 0; r < _result.length; r++) {
         if (_result[r].name === _obj.name) {
           // Since already in result, add word ranking
+          // All other rankings are there
           _result[r].rank.word += _obj.rank.word;
+          _existed = true;
+          break;
         }
       }
+
+      // If does not exist
+      if (_existed === false) {
+        _result.push(_obj);
+      }
     }
+  }
+
+  // Loop through result to compute final ranking
+  for (var i = 0; i < _result.length; i++) {
+    var _rankGeo = 0;
+    if (_result[i].rank.geo) {
+      _rankGeo = _result[i].rank.geo;
+    }
+
+    _result[i].score = _result[i].rank.basic / 2 + _rankGeo * 3  + _result[i].rank.word;
+    delete _result[i].rank;
+  }
+
+  // Sort
+  _result.sort(function (a, b) {
+    return b.score - a.score;
+  });
+
+  // Get only the limit specified results
+  if (_result.length > _limit) {
+    _result = _result.slice(0, _limit);
+  }
+
+  // Normalize score to top at 1 and start at 0
+  var _normal = null;
+  if (_result.length > 0) {
+    _normal = _result[0].score;
+  }
+  for (var i = 0; i < _result.length; i++) {
+    _result[i].score = _result[i].score / _normal;
+
+    var _geo = _result[i].geo;
+    _result[i].latitude = _geo.lat;
+    _result[i].longitude = _geo.lon;
+    delete _result[i].geo;
   }
 
   return _result;
