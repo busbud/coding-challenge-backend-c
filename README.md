@@ -6,6 +6,7 @@
 - Deployed at [Wow you really deploy in only just a push](http://salty-island-8779.herokuapp.com/suggestions?q=montr%C3%A9%C3%A0l)
 - In order for all the prerequisites to install, here the problem being `toobusy`, `g++` on the machine is required.
 - TL;DR; - No kitties were harmed in the creation of this program.
+- If only this could be CoffeeScript ........
 
 ## Steps of the program, or why is it so fast?
 
