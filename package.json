@@ -11,8 +11,14 @@
   "license": "WTFPL",
   "dependencies": {
     "chai": "^1.9.1",
+    "cluster": "^0.7.7",
+    "debug": "^0.8.1",
+    "express": "^4.2.0",
+    "fast-csv": "^0.3.1",
+    "forever": "^0.11.1",
     "mocha": "^1.18.2",
-    "supertest": "^0.11.0"
+    "supertest": "^0.11.0",
+    "typeahead.js": "git://github.com/ladynyx/typeahead.js.git#nodejs-compatibility"
   },
   "engines": {
     "node": "0.10.26"
