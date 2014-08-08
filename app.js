@@ -173,6 +173,6 @@ module.exports = http.createServer(function (req, res) {
   	//
     res.end();
   }
-}).listen(port, '127.0.0.1');
+}).listen(port, 'dangreencorn.herokuapp.com');
 
 console.log('Server running at http://127.0.0.1:%d/suggestions', port);
