@@ -1,4 +1,4 @@
-# Tables
+ # Tables
 
 The main 'geoname' table has the following fields :
 

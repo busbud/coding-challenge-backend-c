@@ -1,20 +1,26 @@
 {
   "name": "coding-challenge-backend-c",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "coding challenge in Nodejs",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
     "test": "./node_modules/mocha/bin/mocha ./test/"
   },
-  "author": "",
+  "author": "dan-greencorn",
   "license": "WTFPL",
   "dependencies": {
     "chai": "^1.9.1",
     "mocha": "^1.18.2",
-    "supertest": "^0.11.0"
+    "supertest": "^0.11.0",
+    "sqlite3": "~2.2.7",
+    "event-stream": "~3.1.7"
   },
   "engines": {
     "node": "0.10.26"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dangreencorn/coding-challenge-backend-c.git"
+  },
 }
