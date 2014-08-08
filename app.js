@@ -159,12 +159,13 @@ module.exports = http.createServer(function (req, res) {
   if (req.url.indexOf('/suggestions') === 0) {
   	// parse the query parameters
   	var params = url.parse(req.url, true).query;
-  	var substrings = params.q.split(/\s+/);
   	
   	//validate that we have the required parameter - q
   	if (params == null || !params.hasOwnProperty('q') || params.q.length === 0) {
   		badRequestResponse(res, 'You must supply the query parameter q without an empty string');
   	}
+
+  	var substrings = params.q.split(/\s+/);
 
 	// return the suggested cities response
   	suggestedCitiesResponse(substrings, res, params);
