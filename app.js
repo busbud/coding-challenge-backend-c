@@ -163,6 +163,7 @@ module.exports = http.createServer(function (req, res) {
   	//validate that we have the required parameter - q
   	if (params == null || !params.hasOwnProperty('q') || params.q.length === 0) {
   		badRequestResponse(res, 'You must supply the query parameter q without an empty string');
+  		return;
   	}
 
   	var substrings = params.q.split(/\s+/);
