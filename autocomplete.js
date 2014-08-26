@@ -1,9 +1,16 @@
-var r = require('redis').createClient();
+var url = require('url');
+var redis = require('redis')
 var converter = require('./utils/tsvConverter');
 var strings = require('./utils/strings');
 
 const AUTOCOMPLETE_DATA  = 'cityautocomplete:data';
 const AUTOCOMPLETE_INDEX = 'cityautocomplete:index';
+
+var redisURL = url.parse(process.env.REDISCLOUD_URL || 'redis://127.0.0.1:6379');
+r = redis.createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
+if(redisURL.auth) {
+  r.auth(redisURL.auth.split(":")[1]);  
+}
 
 exports.populate = function() {
   converter.toJson('data/cities_canada-usa.tsv', function(json) {

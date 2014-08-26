@@ -43,12 +43,49 @@ app.get('/suggestions', function(req, res) {
 		// Give score
 
 		// Format result json
-		
+
 		res.json({
 			suggestions: cities
 		});
 	});
 });
+
+// The private key is used as a really basic security system and is mostly used for debugging.
+// This is not production ready but this way people hitting the URL without the
+// key won't be able to delete the database.
+const privateKey = 'bb4af96c181317bed81ee6c61a70c23e';
+
+app.post('/suggestions/populate', function(req, res) {
+	req.assert('key', 'Permission denied').notEmpty().equals(privateKey);
+	var errors = req.validationErrors(true);
+	if (errors) {
+		res.status(403).json({
+			errors: errors,
+		});
+		return;
+	}
+
+	autocomplete.populate();
+	res.json({
+		message: 'Populated database successfully'
+	})
+})
+
+app.post('/suggestions/clear', function(req, res) {
+	req.assert('key', 'Permission denied').notEmpty().equals(privateKey);
+	var errors = req.validationErrors(true);
+	if (errors) {
+		res.status(403).json({
+			errors: errors,
+		});
+		return;
+	}
+	
+	autocomplete.clear();
+	res.json({
+		message: 'Flushed database successfully'
+	})
+})
 
 // Run app
 app.listen(port);
