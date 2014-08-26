@@ -1,5 +1,6 @@
 // Setup app
 var express = require('express');
+var autocomplete = require('./autocomplete');
 var app = express();
 
 var port = process.env.PORT || 2345;

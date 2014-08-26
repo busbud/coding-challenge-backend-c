@@ -28,7 +28,7 @@ exports.toJson = function(file, callback) {
   var input = fs.createReadStream(file);
 
   var parser = csv.parse({columns: true, delimiter: '\t', quote: '\"\"', escape: '\\'});
-  var transformer = csv.transform(function(data){
+  var transformer = csv.transform(function(data) {
     if(data['admin1'] != undefined && data['country'] == 'CA') {
       data['admin1'] = canadaStateCodes[data['admin1']];
     }
@@ -40,30 +40,30 @@ exports.toJson = function(file, callback) {
       country: data['country'],
       latitude: data['lat'],
       longitude: data['long'],
-    }
+    };
   });
 
-  parser.on('readable', function(){
-    while(data = parser.read()){
+  parser.on('readable', function() {
+    while(data = parser.read()) {
       transformer.write(data);
     }
   });
 
-  parser.on('error', function(err){
+  parser.on('error', function(err) {
     console.log(err.message);
   });
 
-  transformer.on('readable', function(){
-    while(data = transformer.read()){
+  transformer.on('readable', function() {
+    while(data = transformer.read()) {
       output.push(data)
     }
   });
 
   // Execute
-  input.pipe(parser)
+  input.pipe(parser);
 
   // Call callback function
-  parser.on('finish', function(){
-    callback(output)
-  })
+  parser.on('finish', function() {
+    callback(output);
+  });
 }

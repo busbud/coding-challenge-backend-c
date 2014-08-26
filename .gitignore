@@ -1,1 +1,8 @@
 node_modules
+
+# Redis dump
+dump.rdb
+
+# For testing
+runner.js
+data/cities_test.tsv
