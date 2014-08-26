@@ -17,7 +17,11 @@ exports.populate = function() {
 exports.search = function(prefix, callback) {
   r.zrange(AUTOCOMPLETE_INDEX + ':' + prefix, 0, -1, function(err, ids) {
     r.hmget(AUTOCOMPLETE_DATA, ids, function(err, cities) {
-      callback(cities);
+      var citiesJson = []
+      if(cities != undefined) {
+        citiesJson = JSON.parse('[' + cities + ']')
+      }
+      callback(citiesJson);
     });
   });
 }

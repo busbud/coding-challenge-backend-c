@@ -15,7 +15,8 @@
     "supertest": "^0.11.0",
     "express": "4.x",
     "redis": "^0.12",
-    "csv": "^0.4.0"
+    "csv": "^0.4.0",
+    "express-validator": "^2.3.0"
   },
   "engines": {
     "node": "0.10.31"
