@@ -1,16 +1,25 @@
-var http = require('http');
+// Setup app
+var express = require('express');
+var app = express();
+
 var port = process.env.PORT || 2345;
 
-module.exports = http.createServer(function (req, res) {
-  res.writeHead(404, {'Content-Type': 'text/plain'});
+// Home
+app.get('/', function(req, res) {
+	res.json({
+    app: 'Busbud Autocomplete',
+    author: 'Christophe Naud-Dulude'
+  });
+});
 
-  if (req.url.indexOf('/suggestions') === 0) {
-    res.end(JSON.stringify({
-      suggestions: []
-    }));
-  } else {
-    res.end();
-  }
-}).listen(port, '127.0.0.1');
+// Suggestions API
+app.get('/suggestions', function(req, res) {
+	res.json({
+    suggestions: []
+  });
+});
+
+// Run app
+app.listen(port);
 
 console.log('Server running at http://127.0.0.1:%d/suggestions', port);
