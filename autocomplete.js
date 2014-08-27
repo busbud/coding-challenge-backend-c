@@ -9,7 +9,7 @@ const AUTOCOMPLETE_INDEX = 'cityautocomplete:index';
 var redisURL = url.parse(process.env.REDISCLOUD_URL || 'redis://127.0.0.1:6379');
 r = redis.createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
 if(redisURL.auth) {
-  r.auth(redisURL.auth.split(":")[1]);  
+  r.auth(redisURL.auth.split(":")[1]);
 }
 
 exports.populate = function() {

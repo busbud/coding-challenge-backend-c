@@ -8,14 +8,14 @@ var canadaStateCodes = {
   3: 'MB',
   4: 'NB',
   13: 'NT',
-  07: 'NS',
+  7: 'NS',
   14: 'NU,',
-  08: 'ON',
-  09: 'PE',
+  8: 'ON',
+  9: 'PE',
   10: 'QC',
   11: 'SK',
   12: 'YT',
-  05: 'NL'
+  5: 'NL'
 };
 
 exports.toJson = function(file, callback) {
@@ -29,17 +29,17 @@ exports.toJson = function(file, callback) {
 
   var parser = csv.parse({columns: true, delimiter: '\t', quote: '\"\"', escape: '\\'});
   var transformer = csv.transform(function(data) {
-    if(data['admin1'] != undefined && data['country'] == 'CA') {
-      data['admin1'] = canadaStateCodes[data['admin1']];
+    if(data.admin1 !== undefined && data.country === 'CA') {
+      data.admin1 = canadaStateCodes[parseInt(data.admin1)];
     }
 
     return {
-      id: data['id'],
-      name: data['name'],
-      state: data['admin1'],
-      country: data['country'],
-      latitude: data['lat'],
-      longitude: data['long'],
+      id: data.id,
+      name: data.ascii,
+      state: data.admin1,
+      country: data.country,
+      lat: data.lat,
+      long: data.long,
     };
   });
 
