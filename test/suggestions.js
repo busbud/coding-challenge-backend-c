@@ -1,6 +1,11 @@
 var expect  = require('chai').expect;
 var app     = require('../app');
 var request = require('supertest')(app);
+var autocomplete = require('../autocomplete');
+
+// Fresh seed for Redis
+autocomplete.clear();
+autocomplete.populate();
 
 describe('GET /suggestions', function() {
   describe('with a non-existent city', function () {

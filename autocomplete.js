@@ -14,7 +14,6 @@ if(redisURL.auth) {
 
 exports.populate = function() {
   converter.toJson('data/cities_canada-usa.tsv', function(json) {
-    //console.log(json)
     json.forEach(function(city) {
       addCity(city)
     });
@@ -40,6 +39,9 @@ exports.clear = function() {
 }
 
 var addCity = function(city) {
+  // We need a score for autocomplete so add it here
+  city.score = 1;
+  
   var prefixes = strings.prefixesFor(city['name']);
 
   // Add every prefix to the ordered set with the city ID as the value

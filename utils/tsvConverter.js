@@ -38,6 +38,7 @@ exports.toJson = function(file, callback) {
       name: data.ascii,
       state: data.admin1,
       country: data.country,
+      popu: data.population,
       lat: data.lat,
       long: data.long,
     };
