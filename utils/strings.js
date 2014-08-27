@@ -4,7 +4,9 @@ String utilities
 
 exports.prefixesFor = function(string) {
   var prefixes = [];
-  var words = string.toLowerCase().split(' ');
+  string = string.toLowerCase();
+  var words = string.split(' ');
+  words.push(string);
 
   words.forEach(function(word) {
     for (var i = 2; i < word.length+1; i++)

@@ -25,15 +25,15 @@ exports.scoreGeo = function(cities, baseLat, baseLong) {
 }
 
 // Basic score based on the given prefix and actual name of the city
-// Maximum decrease is -0.15
-// 2 or less missing letters doesn't decrease score.
+// Maximum decrease is -0.10
+// 3 or less missing letters doesn't decrease score.
 // 10 missing letters gives the max decrease.
 exports.scoreName = function(cities, prefix) {
   cities.forEach(function(city) {
     var missingLetters = city.name.length - prefix.length;
-    if(missingLetters > 2) {
-      var penalty = (missingLetters * 0.15) / 10;
-      penalty = (penalty > 0.15) ? 0.15 : penalty;
+    if(missingLetters > 3) {
+      var penalty = (missingLetters * 0.10) / 10;
+      penalty = (penalty > 0.10) ? 0.10 : penalty;
       city.score = +(city.score - penalty).toFixed(4);
     }
   });
