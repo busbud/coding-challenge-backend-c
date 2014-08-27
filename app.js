@@ -8,13 +8,13 @@ var app = express();
 var port = process.env.PORT || 2345;
 
 app.use(validator());
+app.use(express.static(__dirname + '/public'));
+app.set('views', __dirname + '/views');
+app.engine('html', require('ejs').renderFile);
 
 // Home
 app.get('/', function(req, res) {
-  res.json({
-    app: 'Busbud Autocomplete',
-    author: 'Christophe Naud-Dulude'
-  });
+  res.render('index.html');
 });
 
 // Suggestions API

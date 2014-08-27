@@ -1,0 +1,60 @@
+<!--
+Author: W3layouts
+Author URL: http://w3layouts.com
+License: Creative Commons Attribution 3.0 Unported
+License URL: http://creativecommons.org/licenses/by/3.0/
+-->
+<!DOCTYPE HTML>
+  <head>
+    <title>Busbud Autocomplete Challenge</title>
+    <link href="css/style.css" rel="stylesheet" type="text/css"  media="all" />
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
+  </head>
+
+  <body>
+    <div class="container1">
+      <div class="wrap">
+      <div class="content">
+          <div class="content-header">
+          <h1><pre>Busbud    Autocomplete    Challenge<pre></h1>
+          <p>Christophe Naud-Dulude</p>
+        </div>
+        <div class="notify" class="main clearfix column">
+          <input id="autocomplete" type="text" class="textbox" placeholder="Search City">
+        </div>
+        <div class="github" align="center">
+          <a href="https://github.com/Chris911/coding-challenge-backend-c">
+            <img src="images/github.png" alt="Check on Github!" height="150" width="150">
+            <p><pre>View on Github<pre></p>
+          </a>
+        </div>
+        <div class="travis">
+          <a href="https://travis-ci.org/Chris911/coding-challenge-backend-c" alt="Travis CI">
+            <img src="https://travis-ci.org/Chris911/coding-challenge-backend-c.svg?branch=master">
+          </a>
+        </div>
+        </div>
+      </div>
+    </div>
+  </body>
+
+  <script>
+    $(function() {
+      $('#autocomplete').autocomplete({
+        source: function(request, response) {
+          $.getJSON("/suggestions?q=" + request.term, function(data) {
+            response($.map(data.suggestions, function(city) {
+              return {
+                label: city.name,
+              };
+            }));
+          });
+        },
+        minLength: 2,
+        delay: 100
+      });
+    });
+  </script>
+</html>
