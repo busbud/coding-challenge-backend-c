@@ -77,4 +77,51 @@ describe('GET /suggestions', function() {
       })
     });
   });
+
+  describe('without a query parameter', function () {
+    var response;
+
+    before(function (done) {
+      request
+        .get('/suggestions')
+        .end(function (err, res) {
+          response = res;
+          response.json = JSON.parse(res.text);
+          done(err);
+        });
+    });
+
+    it('returns a 400', function () {
+      expect(response.statusCode).to.equal(400);
+    });
+
+    it('returns an error message', function () {
+      expect(response.json.errors.q).to.not.be.undefined;
+
+      expect(response.json.suggestions).to.be.instanceof(Array);
+      expect(response.json.suggestions).to.have.length(0);
+    });
+  });
+
+  describe('clear without valid key', function () {
+    var response;
+
+    before(function (done) {
+      request
+        .post('/suggestions/clear?key=WrongKey')
+        .end(function (err, res) {
+          response = res;
+          response.json = JSON.parse(res.text);
+          done(err);
+        });
+    });
+
+    it('returns a 403', function () {
+      expect(response.statusCode).to.equal(403);
+    });
+
+    it('returns an unauthorized message', function () {
+      expect(response.json.errors.key).to.not.be.undefined;
+    });
+  });
 });
