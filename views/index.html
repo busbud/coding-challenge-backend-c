@@ -44,7 +44,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
     $(function() {
       $('#autocomplete').autocomplete({
         source: function(request, response) {
-          $.getJSON("/suggestions?q=" + request.term, function(data) {
+          $.getJSON("/suggestions?limit=8&q=" + request.term, function(data) {
             response($.map(data.suggestions, function(city) {
               return {
                 label: city.name,

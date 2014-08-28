@@ -21,11 +21,14 @@ app.get('/', function(req, res) {
 // Suggestions API
 app.get('/suggestions', function(req, res) {
   req.assert('q', 'q parameter is required and must be a string').notEmpty().matches(/([A-Za-z\-]+)/);
-  if (req.query.latitude != undefined) {
+  if(req.query.latitude != undefined) {
     req.assert('latitude', 'latitude parameter must be numeric').isFloat();
   }
-  if (req.query.longitude != undefined) {
+  if(req.query.longitude != undefined) {
     req.assert('longitude', 'longitude parameter must be numeric').isFloat();
+  }
+  if(req.query.limit != undefined) {
+    req.assert('limit', 'limit must be an integer').isInt();
   }
 
   var errors = req.validationErrors(true);
@@ -40,6 +43,7 @@ app.get('/suggestions', function(req, res) {
   var q = urlify(req.query.q.toLowerCase());
   var long = req.query.longitude;
   var lat = req.query.latitude;
+  var limit = req.query.limit;
   var calcScore = req.query.score || true;
   calcScore = !(calcScore === 'false');
 
@@ -60,6 +64,11 @@ app.get('/suggestions', function(req, res) {
     cities.sort(function(a, b) {
       return b.score < a.score ? -1 : b.score > a.score ? 1 : 0;
     });
+
+    // If limit is set only used the top X results
+    if(limit != undefined && limit < cities.length) {
+      cities = cities.slice(0, limit);
+    }
 
     // Format result json
     cities = cities.map(function(city) {
