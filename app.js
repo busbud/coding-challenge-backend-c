@@ -3,6 +3,7 @@ var express = require('express');
 var validator = require('express-validator');
 var autocomplete = require('./autocomplete');
 var scorer = require('./scorer');
+var urlify = require('urlify').create({ spaces:' ' });
 
 var app = express();
 var port = process.env.PORT || 2345;
@@ -36,7 +37,7 @@ app.get('/suggestions', function(req, res) {
     return;
   }
 
-  var q = req.query.q.toLowerCase();
+  var q = urlify(req.query.q.toLowerCase());
   var long = req.query.longitude;
   var lat = req.query.latitude;
   var calcScore = req.query.score || true;

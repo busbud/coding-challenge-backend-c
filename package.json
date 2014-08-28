@@ -17,7 +17,8 @@
     "redis": "^0.12",
     "csv": "^0.4.0",
     "express-validator": "^2.3.0",
-    "ejs": "^1.0.0"
+    "ejs": "^1.0.0",
+    "urlify": "^0.3.5"
   },
   "engines": {
     "node": "0.10.31"
