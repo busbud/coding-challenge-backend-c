@@ -44,6 +44,7 @@ exports.scoreName = function(cities, prefix) {
 // Maximum decrease is -0.10
 // No penalty for cities with over 100 000 people
 // Max penalty if city has less than 7500 people
+// A city with over 1 000 000 people will get a 0.05 bonus
 exports.scorePopulation = function(cities) {
   cities.forEach(function(city) {
     if(city.popu < 100000) {
@@ -55,6 +56,10 @@ exports.scorePopulation = function(cities) {
       }
       penalty = (penalty > 0.10) ? 0.10 : penalty;
       city.score = +(city.score - penalty).toFixed(4);
+    }
+    if(city.popu > 1000000) {
+      city.score += 0.05;
+      city.score = (city.score > 1) ? 1 : city.score;
     }
   });
   return cities;
