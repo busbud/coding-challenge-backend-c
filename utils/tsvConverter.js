@@ -18,6 +18,7 @@ var canadaStateCodes = {
   5: 'NL'
 };
 
+// Convert the tsv file to json only keeping the data we need
 exports.toJson = function(file, callback) {
   var output = [];
 

@@ -103,6 +103,58 @@ describe('GET /suggestions', function() {
     });
   });
 
+  describe('with a limit', function () {
+    var response;
+
+    before(function (done) {
+      request
+        .get('/suggestions?q=mon&limit=2')
+        .end(function (err, res) {
+          response = res;
+          response.json = JSON.parse(res.text);
+          done(err);
+        });
+    });
+
+    it('returns a 200', function () {
+      expect(response.statusCode).to.equal(200);
+    });
+
+    it('returns an array of size 2', function () {
+      expect(response.json.suggestions).to.be.instanceof(Array);
+      expect(response.json.suggestions).to.have.length(2);
+    });
+  });
+
+  describe('with scoring off', function () {
+    var response;
+
+    before(function (done) {
+      request
+        .get('/suggestions?q=mon&score=false')
+        .end(function (err, res) {
+          response = res;
+          response.json = JSON.parse(res.text);
+          done(err);
+        });
+    });
+
+    it('returns a 200', function () {
+      expect(response.statusCode).to.equal(200);
+    });
+
+    it('returns a score of 1 for every city', function () {
+      expect(response.json.suggestions).to.be.instanceof(Array);
+      expect(response.json.suggestions).to.satisfy(function (suggestions) {
+        return suggestions.every(function (suggestion) {
+          return suggestion.score === 1;
+        });
+      })
+    });
+  });
+});
+
+describe('POST /suggestions', function() {
   describe('clear without valid key', function () {
     var response;
 

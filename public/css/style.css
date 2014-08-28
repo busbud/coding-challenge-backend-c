@@ -81,33 +81,6 @@ body:after {
 	width:80%;
 	margin:0 auto;
 }
-/* ---------- TIMER ---------- */
-ul#countdown{text-align:center;padding-top: 15px;}
-ul#countdown span {
-	color: #FFF;
-	font-size: 4em;
-	font-weight: bold;
-	width: 80px;
-	height: 94px;
-	text-align: center;
-	display: inline-block;
-}
-ul#countdown h3{
-	color:#fff;
-}
-ul#countdown li{
-	display:inline-block;
-	width: 10%;
-}
-ul#countdown li p.timeRefDays,
-ul#countdown li p.timeRefHours,
-ul#countdown li p.timeRefMinutes,
-ul#countdown li p.timeRefSeconds {
-	color: rgb(255, 255, 255);
-	text-transform: uppercase;
-	font-size: 1.2em;
-	191919
-}
 /*---start-content-header----*/
 .content-header h1{
 	color: #fff;
@@ -173,62 +146,7 @@ ul#countdown li p.timeRefSeconds {
 	background:#fff;
 	color:#000;
 }
-/*---start-socail-icons----*/
-.social-icons h3{
-	color: #FFF;
-	font-size: 1em;
-	margin: 1em 1em 0.5em 1em;
-	word-spacing: 4px;
-}
-.social-icons ul li{
-	display:inline-block;
-}
-.social-iconsl ul li a{
-	display:block;
-}
-.social-icons ul li img{
-	display:block;
-}
-.social-icons ul li a{
-	background: #FFF;
-	padding: 10px;
-	border-radius: 30em;
-	margin: 5px;
-	display: block;
-	-webkit-transition: all 0.3s ease-out;
-	-moz-transition: all 0.3s ease-out;
-	-ms-transition: all 0.3s ease-out;
-	-o-transition: all 0.3s ease-out;
-	transition: all 0.3s ease-out;
-}
-.social-icons ul li a:hover{
-	background:#000;
-}
-.social-icons {
-	text-align: center;
-}
-/*----start-copy-right-----*/
-.copy-right{
-	text-align:center;
-	padding-top:1em;
-}
-.copy-right p{
-	color: #fff;
-	font-size: 1em;
-	font-weight: inherit;
-	word-spacing: 0.2em;
-}
-.copy-right p a{
-	color: #fff;
-	-webkit-transition: all 0.3s ease-out;
-	-moz-transition: all 0.3s ease-out;
-	-ms-transition: all 0.3s ease-out;
-	-o-transition: all 0.3s ease-out;
-	transition: all 0.3s ease-out;
-}
-.copy-right p a:hover{
-	color:#000;
-}
+
 /*-----start-responsive-design------*/
 @media only screen and (max-width: 1366px) and (min-width: 1280px) {
 	.wrap{

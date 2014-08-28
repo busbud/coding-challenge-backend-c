@@ -1,23 +1,22 @@
-/*
-This module contains functions to score a results set against different criteria
-Currenty supports:
-  - Geographical distance (Haversine formula)
-  - Name vs prefix (name score)
-  - Population score (higher the better)
-*/
+// This module contains functions to score a results set against different criteria
+// Currenty supports:
+//  - Geographical distance (Haversine formula)
+//  - Name vs prefix (name score)
+//  - Population score (higher the /better)
 
 // Decrease score up to -0.7
 // We set the treshold at 2000km meaning anything above this will receive the
 // max decrease of 0.7. Then we work progressively down to 15km where no decrease
 // is applied.
 exports.scoreGeo = function(cities, baseLat, baseLong) {
+  var maxPenalty = 0.7;
   cities.forEach(function(city) {
     var dist = haversine(baseLat, baseLong, city.lat, city.long);
     // Only apply a negative score if the distance is above 15
     if(dist > 15) {
-      var penalty = (dist * 0.7) / 2000;
+      var penalty = (dist * maxPenalty) / 2000;
       // Make sure penalty isn't above 0.7
-      penalty = (penalty > 0.7) ? 0.7 : penalty;
+      penalty = (penalty > maxPenalty) ? maxPenalty : penalty;
       city.score = +(city.score - penalty).toFixed(4);
     }
   });
@@ -29,11 +28,12 @@ exports.scoreGeo = function(cities, baseLat, baseLong) {
 // 3 or less missing letters doesn't decrease score.
 // 10 missing letters gives the max decrease.
 exports.scoreName = function(cities, prefix) {
+  var maxPenalty = 0.10;
   cities.forEach(function(city) {
     var missingLetters = city.name.length - prefix.length;
     if(missingLetters > 3) {
-      var penalty = (missingLetters * 0.10) / 10;
-      penalty = (penalty > 0.10) ? 0.10 : penalty;
+      var penalty = (missingLetters * maxPenalty) / 10;
+      penalty = (penalty > maxPenalty) ? maxPenalty : penalty;
       city.score = +(city.score - penalty).toFixed(4);
     }
   });
@@ -44,22 +44,23 @@ exports.scoreName = function(cities, prefix) {
 // Maximum decrease is -0.10
 // No penalty for cities with over 100 000 people
 // Max penalty if city has less than 7500 people
-// A city with over 1 000 000 people will get a 0.05 bonus
+// A city with over 500 000 people will get a 0.05 bonus
 exports.scorePopulation = function(cities) {
+  var maxPenalty = 0.10;
   cities.forEach(function(city) {
     if(city.popu < 100000) {
       var penalty = 0;
       if(city.popu < 7500) {
-        penalty = 0.10;
+        penalty = maxPenalty;
       } else {
-        penalty = 0.10 - ((city.popu * 0.10) / 100000);
+        penalty = maxPenalty - ((city.popu * maxPenalty) / 100000);
       }
-      penalty = (penalty > 0.10) ? 0.10 : penalty;
+      penalty = (penalty > maxPenalty) ? maxPenalty : penalty;
       city.score = +(city.score - penalty).toFixed(4);
     }
-    if(city.popu > 1000000) {
+    if(city.popu > 500000) {
       city.score += 0.05;
-      city.score = (city.score > 1) ? 1 : city.score;
+      city.score = (city.score > 1) ? 1 : +city.score.toFixed(4);
     }
   });
   return cities;

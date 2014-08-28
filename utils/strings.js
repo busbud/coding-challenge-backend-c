@@ -1,6 +1,4 @@
-/*
-String utilities
-*/
+// String utilities
 
 exports.prefixesFor = function(string) {
   var prefixes = [];
