@@ -75,6 +75,15 @@ function populationDistance(pop) {
     // before Clova, QC...
     return 1 - Math.min(pop / 1000000, 1);
 }
+/**
+ * Lookup a partial (or complete) city name and return name suggestions.
+ *
+ * @param {String} s string to lookup
+ * @param {Number} latitude optional latitude of the city fo find
+ * @param {Number} longitude optional longitude of the city to find
+ * @return {Array} Array of { name: "", latitude: "", longitude: "", score: 1 } objects.
+ * @api public
+ */
 function suggestions(s, latitude, longitude) {
     s = s || '';
     // in practice, if we don't have a latitude

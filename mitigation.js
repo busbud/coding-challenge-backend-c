@@ -31,6 +31,13 @@ the proper http response.
 */
 var MITIGATION_TIMEOUT = 700;
 
+/**
+ * Returns a handler that will return 503s if the server overheats, bypassing the normal processing, and hopefully keeping things quieter.
+ *
+ * @param {Function} handler the function that should be called if the server is still responsive.
+ * @return {Function} the handler that will do the mitigation
+ * @api public
+ */
 function mitigate(handler) {
     return function (req, res) {
         var now = Date.now();
