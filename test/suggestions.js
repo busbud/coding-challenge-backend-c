@@ -48,10 +48,19 @@ describe('GET /suggestions', function() {
       expect(response.json.suggestions).to.have.length.above(0);
     });
 
+    // the test is maybe a bit broken.
+    // The returned texts should probably not
+    // be ascii but the normal version
+    // (Montréal and not Montreal). I left
+    // it this way and changed the code accordingly
+    // assuming that this is what we want but I am
+    // not certain
     it('contains a match', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.some(function (suggestion) {
-          return suggestion.name.test(/montreal/i);
+          // this was broken. test is not a string
+          // method but a regexp method
+          return /montreal/i.test(suggestion.name);
         });
       })
     });
