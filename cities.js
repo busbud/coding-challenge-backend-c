@@ -31,6 +31,19 @@ function startup() {
         }
     });
     /*jslint stupid: false*/
+    // just for the fun of it measure and trace
+    // the lookup speed of the trie for partial
+    // string lookups
+    function bench() {
+        var i, now = Date.now();
+        for (i = 0; i < 10000; i += 1) {
+            names.lookup('mo', undefined, undefined, true);
+        }
+        console.log('10000 partial name lookups in ' + (Date.now() - now) + ' ms');
+    }
+    // startup done, display some info
+    console.log('Index ready');
+    bench();
 }
 // computes the distance between two strings
 function stringDistance(s1, s2) {

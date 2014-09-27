@@ -2,9 +2,10 @@
 var http = require('http'),
     querystring = require('querystring'),
     port = process.env.PORT || 2345,
-    cities = require('./cities');
+    cities = require('./cities'),
+    mitigate = require('./mitigation').mitigate;
 
-module.exports = http.createServer(function (req, res) {
+module.exports = http.createServer(mitigate(function (req, res) {
     var query = querystring.parse(req.url.split('?')[1]),
         results;
     if (req.url.indexOf('/suggestions') === 0) {
@@ -17,6 +18,6 @@ module.exports = http.createServer(function (req, res) {
         res.writeHead(404, {'Content-Type': 'text/plain'});
         res.end();
     }
-}).listen(port, '127.0.0.1');
+})).listen(port, '127.0.0.1');
 
 console.log('Server running at http://127.0.0.1:%d/suggestions', port);
