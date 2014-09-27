@@ -9,8 +9,11 @@ module.exports = http.createServer(mitigate(function (req, res) {
     var query = querystring.parse(req.url.split('?')[1]),
         results;
     if (req.url.indexOf('/suggestions') === 0) {
-        results = cities.suggestions(query.q, query.longitude, query.latitude);
-        res.writeHead(results.length > 0 ? 200 : 404, {'Content-Type': 'application/json; charset=utf-8'});
+        results = cities.suggestions(query.q, query.latitude, query.longitude);
+        res.writeHead(
+            results.length > 0 ? 200 : 404,
+            {'Content-Type': 'application/json; charset=utf-8'}
+        );
         res.end(JSON.stringify({
             suggestions: results
         }));

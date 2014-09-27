@@ -5,7 +5,15 @@ var fs = require('fs'),
     nameindex = require('./nameindex'),
     citiesPath = path.join(__dirname, 'data', 'cities_canada-usa.tsv'),
     names = new nameindex.NameIndex(),
-    MAX_GEO_DIST = 360 + 180;
+    MAX_GEO_DIST = 360 + 180,
+    // determine what is more important for giving scores to search results
+    // this is still not perfect, but clearly geo is super important when
+    // it is provided
+    WEIGHT_GEO = 80,
+    WEIGHT_NAME = 1,
+    WEIGHT_POPULATION = 0.5,
+    WEIGHT_TOTAL = (WEIGHT_GEO + WEIGHT_NAME + WEIGHT_POPULATION);
+
 
 function startup() {
     // startup code optimized for code simplicity and definitely not
@@ -86,13 +94,6 @@ function populationDistance(pop) {
  */
 function suggestions(s, latitude, longitude) {
     s = s || '';
-    // in practice, if we don't have a latitude
-    // and a longitude, we could look it up
-    // from the ip address of the request...
-    // most probably, people will search around them
-    // But even more probably a UI would take care
-    // of this...
-
     // if we have a very short string it would
     // be preferable to search by latitude and
     // longitude first (and then score by string
@@ -112,11 +113,11 @@ function suggestions(s, latitude, longitude) {
     // now that we have our candidates,
     // we will score them
     return candidates.map(function (c) {
-        var sd = stringDistance(c.searchableName, lookup),
-            gd = useGeo ? geoDistance(c.latitude, c.longitude, latitude, longitude) : 0,
-            pd = populationDistance(c.population),
+        var ss = 1 - stringDistance(c.searchableName, lookup),
+            gs = 1 - (useGeo ? geoDistance(c.latitude, c.longitude, latitude, longitude) : 0),
+            ps = 1 - populationDistance(c.population),
             // we could weight things differently
-            score = 1 - ((sd + gd + pd) / 3);
+            score = ((WEIGHT_NAME * ss + WEIGHT_GEO * gs + WEIGHT_POPULATION * ps) / WEIGHT_TOTAL);
         return {
             name: c.name,
             latitude: String(c.latitude),
