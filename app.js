@@ -59,7 +59,7 @@ module.exports = http.createServer(function (req, res) {
         db.get("select max(population) from  cities where name like '"+query.q+"%' collate nocase or ascii like '"+query.q+"%' collate nocase",
             function(err,row){
                 max_pop = row['max(population)'];
-                console.log("Max population is: "+ max_pop);  
+                console.log("Max population is: "+ max_pop);
             }
         );
         db.each("select name,admin1 as state,country,lat,long as lon, population from cities where name like '"+query.q+"%' collate nocase or ascii like '"+query.q+"%' collate nocase", 
@@ -79,19 +79,21 @@ module.exports = http.createServer(function (req, res) {
                     if(geolocation){
                     
                     }else{
-                        // applying the square root to 
+                        // applying the square root to lessen score gap between small and large cities (roughly linearizes it) 
                         city.score = Math.sqrt(city.population/max_pop);
                     }
                 }
-               // SORT SUGGESTED_CITIES BASED ON SCORE 
-               suggested_cities.sort(compare);
-               //suggested_cities.sort(suggested_cities,
-                //       delegate(City a, City b) { return a.score.CompareTo(b.score);} 
-                 //      ); 
-                 
+                // SORT SUGGESTED_CITIES BASED ON SCORE 
+                suggested_cities.sort(compare);
+                
                 //console.log(suggested_cities);
-                res.end(JSON.stringify({suggestions:suggested_cities},null,4));
-                suggested_cities.length=0;
+                
+                //OUTPUT AS JSON 
+                res.end('{\n  "suggestions": '+JSON.stringify(suggested_cities,["name","latitude","longitude","score"],2)+'\n}');
+                
+                suggested_cities.length=0;// empty suggestion array
+                min_dist = 300; //reset min_dist to higher than possible value. max_pop doens't need to be reset since it is obtained directly from database max() query.
+
             }
         );
     });
