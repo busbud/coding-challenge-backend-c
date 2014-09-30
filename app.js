@@ -12,9 +12,7 @@ function city(name,latitude,longitude,score){
     this.score = score;
 }
 
-var london = new city("London, ON", "42,000","-2389",0.5);
-var london_bis = new city("London, NH", "42,000","-2389",0.4);
-var suggested_cities = [london,london_bis]
+var suggested_cities = []
 
 // database substitutions
 provinces={"01":"AB","02":"BC","03":"MB","04":"NB","05":"NL","07":"NS","13":"NT","14":"NU","08":"ON","09":"PE","10":"QC","11":"SK","12":"YT"};
@@ -45,18 +43,22 @@ module.exports = http.createServer(function (req, res) {
         geolocation = true;
     } 
     console.log("geolocation: "+ geolocation); // DEBUG
-
-    var db = new sqlite3.Database(file);
+    var db = new sqlite3.Database(file,sqlite3);
     db.serialize(function(){
-        db.each("select name,admin1 as state,country,lat,long as lon from cities where name like '"+query.q+"%' collate nocase or ascii like '"+query.q+"%' collate nocase", function(err,row){
-            row.country = countries[row.country];
-            console.log(row.name+" "+row.state+" "+row.country+" "+row.lat+" "+row.lon);
-        });
+        db.each("select name,admin1 as state,country,lat,long as lon from cities where name like '"+query.q+"%' collate nocase or ascii like '"+query.q+"%' collate nocase", 
+            function(err,row){
+                row.country = countries[row.country];
+                //console.log(row.name+" "+row.state+" "+row.country+" "+row.lat+" "+row.lon);
+                suggested_cities.push(new city(row.name+", "+row.state+", "+row.country,row.lat.toString(),row.lon.toString(),0.5)); 
+            },
+            function(err,found){
+                db.close();
+                //console.log(suggested_cities);
+                res.end(JSON.stringify({suggestions:suggested_cities},null,4));
+                suggested_cities.length=0;
+            }
+        );
     });
-    db.close();
-    
-    res.end(JSON.stringify({suggestions:suggested_cities},null,4));
-
   } else {
     res.end();
   }
