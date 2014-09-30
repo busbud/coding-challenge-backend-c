@@ -8,13 +8,21 @@ provinces={"01":"AB","02":"BC","03":"MB","04":"NB","05":"NL","07":"NS","13":"NT"
 countries={"US":"USA","CA":"Canada"};
 
 // city object constructor
-function city(name,population,latitude,longitude,score){
+function City(name,population,latitude,longitude,score){
     this.name = name;
     this.population = population;
     this.latitude = latitude;
     this.longitude = longitude;
     this.score = score;
 }
+// comparison function for sorting the array containing suggestions based on score 
+function compare(a, b) {
+    if (a.score < b.score)
+        return 1;
+    if (a.score > b.score)
+        return -1;
+    return 0;
+} 
 
 var geolocation = false; 
 var suggested_cities = [];
@@ -58,12 +66,29 @@ module.exports = http.createServer(function (req, res) {
             function(err,row){
                 row.country = countries[row.country];
                 //console.log(row.name+" "+row.state+" "+row.country+" "+row.lat+" "+row.lon);
-                suggested_cities.push(new city(row.name+", "+row.state+", "+row.country,row.population,row.lat.toString(),row.lon.toString(),-1)); 
+                suggested_cities.push(new City(row.name+", "+row.state+", "+row.country,row.population,row.lat.toString(),row.lon.toString(),-1)); 
             
             // Not applying the square root when computing distance would disproportionately reduce the score of far locations.  
             },
             function(err,found){
                 db.close();
+
+                // COMPUTE CONFIDENCE SCORES
+                for(var i =0; i<suggested_cities.length;i++){
+                    var city = suggested_cities[i];
+                    if(geolocation){
+                    
+                    }else{
+                        // applying the square root to 
+                        city.score = Math.sqrt(city.population/max_pop);
+                    }
+                }
+               // SORT SUGGESTED_CITIES BASED ON SCORE 
+               suggested_cities.sort(compare);
+               //suggested_cities.sort(suggested_cities,
+                //       delegate(City a, City b) { return a.score.CompareTo(b.score);} 
+                 //      ); 
+                 
                 //console.log(suggested_cities);
                 res.end(JSON.stringify({suggestions:suggested_cities},null,4));
                 suggested_cities.length=0;
