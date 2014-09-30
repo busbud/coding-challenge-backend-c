@@ -3,20 +3,23 @@ var port = process.env.PORT || 2345;
 var file = "data/geonames.db";
 var sqlite3 = require("sqlite3").verbose();
 
-var geolocation = false; 
+// database substitutions
+provinces={"01":"AB","02":"BC","03":"MB","04":"NB","05":"NL","07":"NS","13":"NT","14":"NU","08":"ON","09":"PE","10":"QC","11":"SK","12":"YT"};
+countries={"US":"USA","CA":"Canada"};
 
-function city(name,latitude,longitude,score){
+// city object constructor
+function city(name,population,latitude,longitude,score){
     this.name = name;
+    this.population = population;
     this.latitude = latitude;
     this.longitude = longitude;
     this.score = score;
 }
 
-var suggested_cities = []
-
-// database substitutions
-provinces={"01":"AB","02":"BC","03":"MB","04":"NB","05":"NL","07":"NS","13":"NT","14":"NU","08":"ON","09":"PE","10":"QC","11":"SK","12":"YT"};
-countries={"US":"USA","CA":"Canada"};
+var geolocation = false; 
+var suggested_cities = [];
+var max_pop = 0;
+var min_dist = 300; //max_dist = sqrt(180ˆ2+180ˆ2) = ~255.
 
 // Replace Canadian FIPS codes in the geoname database with their corresponding province or territory abbreviation
 var db = new sqlite3.Database(file);
@@ -45,11 +48,19 @@ module.exports = http.createServer(function (req, res) {
     console.log("geolocation: "+ geolocation); // DEBUG
     var db = new sqlite3.Database(file,sqlite3);
     db.serialize(function(){
-        db.each("select name,admin1 as state,country,lat,long as lon from cities where name like '"+query.q+"%' collate nocase or ascii like '"+query.q+"%' collate nocase", 
+        db.get("select max(population) from  cities where name like '"+query.q+"%' collate nocase or ascii like '"+query.q+"%' collate nocase",
+            function(err,row){
+                max_pop = row['max(population)'];
+                console.log("Max population is: "+ max_pop);  
+            }
+        );
+        db.each("select name,admin1 as state,country,lat,long as lon, population from cities where name like '"+query.q+"%' collate nocase or ascii like '"+query.q+"%' collate nocase", 
             function(err,row){
                 row.country = countries[row.country];
                 //console.log(row.name+" "+row.state+" "+row.country+" "+row.lat+" "+row.lon);
-                suggested_cities.push(new city(row.name+", "+row.state+", "+row.country,row.lat.toString(),row.lon.toString(),0.5)); 
+                suggested_cities.push(new city(row.name+", "+row.state+", "+row.country,row.population,row.lat.toString(),row.lon.toString(),-1)); 
+            
+            // Not applying the square root when computing distance would disproportionately reduce the score of far locations.  
             },
             function(err,found){
                 db.close();
