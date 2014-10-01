@@ -4,7 +4,7 @@ var MAX_SUGGESTIONS = 5; // maximum number of suggestions being sent back to use
 var DISTANCE_WEIGHT = 4; // the weight of distance in the scoring algorithm, OUT OF 10. POPULATION_WEIGHT = 10 - DISTANCE_WEIGHT.
 var SMOOTHING_DIST = 0.5; // power applied to the min_dist/city_dist ratio of scoring algo. SET < 1  to limit score amplitude between close and far cities.
 var SMOOTHING_POP = 0.5;  // power applied to the city_pop/max_pop ratio of scoring algo. SET <1  to limit score amplitude between big and small cities.
-var RESPONSE_TIMEOUT = 1000; // response timeout in ms. If it takes more than RESPONSE_OUT time to create suggestion array, send back JSON without suggestions 
+var RESPONSE_TIMEOUT = 2000; // response timeout in ms. If it takes more than RESPONSE_OUT time to create suggestion array, send back JSON without suggestions 
 
 // database substitutions
 var PROVINCES={"01":"AB","02":"BC","03":"MB","04":"NB","05":"NL","07":"NS","13":"NT","14":"NU","08":"ON","09":"PE","10":"QC","11":"SK","12":"YT"};
