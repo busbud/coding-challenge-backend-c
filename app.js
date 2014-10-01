@@ -1,7 +1,10 @@
 // CONSTANTS
 // parameters
-var DISTANCE_WEIGHT = 4; // the weight of distance in the scoring algorithm, out of 10. POPULATION_WEIGHT = 10 - DISTANCE_WEIGHT.
-var MAX_SUGGESTIONS = 5; // maximum number of suggestions being sent back to user.
+var MAX_SUGGESTIONS = 5; // maximum number of suggestions being sent back to user in JSON format.
+var DISTANCE_WEIGHT = 4; // the weight of distance in the scoring algorithm, OUT OF 10. POPULATION_WEIGHT = 10 - DISTANCE_WEIGHT.
+var SMOOTHING_DIST = 0.5; // power applied to the min_dist/city_dist ratio of scoring algo. SET < 1  to limit score amplitude between close and far cities.
+var SMOOTHING_POP = 0.5;  // power applied to the city_pop/max_pop ratio of scoring algo. SET <1  to limit score amplitude between big and small cities.
+
 
 // database substitutions
 var PROVINCES={"01":"AB","02":"BC","03":"MB","04":"NB","05":"NL","07":"NS","13":"NT","14":"NU","08":"ON","09":"PE","10":"QC","11":"SK","12":"YT"};
@@ -89,10 +92,10 @@ module.exports = http.createServer(function (req, res) {
                     // compute score using two different algorithms depending on whether user location is known. Score is out of 10. 
                     // applying the square root to lessen score gap between small/large cities or close/far cities (rough linearization) 
                     if(geolocation){
-                        score = (10 - DISTANCE_WEIGHT) * (Math.sqrt(city.population/max_pop)) + DISTANCE_WEIGHT * Math.sqrt((min_dist/city.distance));
+                        score = (10 - DISTANCE_WEIGHT) * Math.pow(city.population/max_pop,SMOOTHING_POP) + DISTANCE_WEIGHT * Math.pow(min_dist/city.distance,SMOOTHING_DIST);
                         //score =  10 * Math.sqrt(min_dist/city.distance); // TESTING distance score alone for testing scoring system
                     }else{
-                        score = 10 * (Math.sqrt(city.population/max_pop));
+                        score = 10 * Math.pow(city.population/max_pop,SMOOTHING_POP);
                     }
                     city.score = Math.round(score)/10; // round score and convert to desired [0;1] interval.
                 }
