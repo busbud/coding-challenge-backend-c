@@ -1,6 +1,7 @@
 // CONSTANTS
 // parameters
 var DISTANCE_WEIGHT = 4; // the weight of distance in the scoring algorithm, out of 10. POPULATION_WEIGHT = 10 - DISTANCE_WEIGHT.
+var MAX_SUGGESTIONS = 5; // maximum number of suggestions being sent back to user.
 
 // database substitutions
 var PROVINCES={"01":"AB","02":"BC","03":"MB","04":"NB","05":"NL","07":"NS","13":"NT","14":"NU","08":"ON","09":"PE","10":"QC","11":"SK","12":"YT"};
@@ -96,13 +97,12 @@ module.exports = http.createServer(function (req, res) {
                     city.score = Math.round(score)/10; // round score and convert to desired [0;1] interval.
                 }
                 
-                // SORT SUGGESTIONS  BASED ON SCORE 
+                // SORT SUGGESTIONS BASED ON SCORE 
                 suggested_cities.sort(compare);
                 
-                //console.log(suggested_cities);
-                
+                 
                 //OUTPUT AS JSON 
-                res.end('{\n  "suggestions": '+JSON.stringify(suggested_cities,["name","latitude","longitude","score"],2)+'\n}');
+                res.end('{\n  "suggestions": '+JSON.stringify(suggested_cities.slice(0,MAX_SUGGESTIONS),["name","latitude","longitude","score"],2)+'\n}');
                 
                 // reset variables
                 suggested_cities.length=0;// empty suggestion array
