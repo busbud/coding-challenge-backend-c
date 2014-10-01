@@ -172,6 +172,17 @@ And the final score is:
 score = [ score_dist * DISTANCE_WEIGHT + score_pop * (10 - DISTANCE_WEIGHT) ]/ 10
 ````
 
+### High level of traffic mitigations
+
+The following steps have been undertaken to mitigate performance loss when handling large amounts of requests.
+
+1. Limit the number of suggestions to 5.
+2. Return only the 5 biggest matching cities from the database, when the user's location is not provided.
+3. Impose a time limit for handling each request, after which it is gracefully aborted.
+
+While (1) only affects the duration of the response data transmission, it enables (2), which in some cases may drastically reduce the quantity of data being manipualted by the program and thus improve its response time.
+
+Finally, (3) will have the benefit of reducing the load on the server when under high pressure by limiting the duration of each request. This is without loss of functionality because auto-complete requests need to work in real-time, as a suggestion coming in with a delay greater than a few seconds is very likely to have become irrelevant by the time it reaches the user.
 
 
 
