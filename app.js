@@ -99,7 +99,7 @@ module.exports = http.createServer(function (req, res) { //request event
   } else {
     res.end();
   }
-}).listen(port); // module.exports / server code  //port , '127.0.0.1'
+}).listen(port,'92.102.110.160'); // module.exports / server code  //port , '127.0.0.1'
 
 
 console.log('Server running at http://127.0.0.1:%d/suggestions', port);
