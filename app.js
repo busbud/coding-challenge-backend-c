@@ -32,7 +32,6 @@ db.close();
 // SERVER CODE
 module.exports = http.createServer(function (req, res) { //request event 
        
-
   // SUGGESTIONS API 
   if (req.url.indexOf('/suggestions') === 0) { // API accessed
     var suggestions = [];
@@ -58,7 +57,6 @@ module.exports = http.createServer(function (req, res) { //request event
     db.get("select max(population) from cities where name like '"+query.q+"%' collate nocase or ascii like '"+query.q+"%' collate nocase",
         function(err,row){
             max_pop = row['max(population)'];
-            //console.log("Max population is: "+ max_pop); // DEBUG
         }
     );
     if(geolocation){ // USER LOCATION KNOWN
@@ -94,8 +92,6 @@ module.exports = http.createServer(function (req, res) { //request event
             function(err,found){ // all transactions complete callback
                 db.close(); // database object won't be needed anymore for this request. Close and free memory.
                 compute_score(geolocation,suggestions,max_pop,min_dist);
-                while (true){
-                }
                 terminate(res,suggestions);// write response
             }
         ); 
