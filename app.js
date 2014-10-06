@@ -53,53 +53,56 @@ module.exports = http.createServer(function (req, res) { //request event
 
     // QUERY DATABASE TO POPULATE SUGGESTIONS ARRAY    
     var db = new sqlite3.Database(file,sqlite3);
-    
-    db.get("select max(population) from cities where name like '"+query.q+"%' collate nocase or ascii like '"+query.q+"%' collate nocase",
-        function(err,row){
-            max_pop = row['max(population)'];
+
+db.serialize(function(){
+
+        db.get("select max(population) from cities where name like '"+query.q+"%' collate nocase or ascii like '"+query.q+"%' collate nocase",
+            function(err,row){
+                max_pop = row['max(population)'];
+            }
+        );
+        if(geolocation){ // USER LOCATION KNOWN
+            db.each("select name,admin1 as state,country,lat,long as lon, population from cities where name like '"+query.q+"%' collate nocase or ascii like '"+query.q+"%' collate nocase", 
+                function(err,row){ // individual query callback, for each matching city...
+                    row.country = COUNTRIES[row.country]; // translate country abbreviation code to full name
+                    
+                    var distance = 7000;
+                    // when userlocation is provided, calculate actual distance of city from user
+                    distance = Math.pow(row.lat-parseFloat(query.latitude),2) + Math.pow(row.lon-parseFloat(query.longitude),2);
+                    if (distance <= 1) distance = 1; // handles case distance is 0. Also smoothes out distance scoring.
+                    if (distance < min_dist ) min_dist = distance; // update minimum distance value, required in scoring algorithm.
+                    
+                    // create a city object and add to an array of suggestions
+                    suggestions.push(new City(row.name+", "+row.state+", "+row.country,row.population,row.lat.toString(),row.lon.toString(),distance,-1)); 
+                },
+                function(err,found){ // all transactions complete callback
+                    db.close(); // database object won't be needed anymore for this request. Close and free memory.
+                    compute_score(geolocation,suggestions,max_pop,min_dist);
+                    suggestions.sort(compare);// sort suggestions based on score 
+                    terminate(res,suggestions);//write response
+                }
+            ); 
+        }else{ // WITHOUT USER LOCATION
+            // when user location is not provided, this db query returns the 5 matching cities with the biggest populations (thus already sorted by score value)..
+            db.each("select name,admin1 as state,country,lat,long as lon, population from cities where name like '"+query.q+"%' collate nocase or ascii like '"+query.q+"%' collate nocase order by population desc limit "+MAX_SUGGESTIONS+"", 
+                function(err,row){ // individual query callback, for each matching city...
+                    row.country = COUNTRIES[row.country]; // translate country abbreviation code to full name
+                    
+                    // create a city object and add to an array of suggestions. 70000 and -1 are dummy values for distance and score properties.
+                    suggestions.push(new City(row.name+", "+row.state+", "+row.country,row.population,row.lat.toString(),row.lon.toString(),7000,-1)); 
+                },
+                function(err,found){ // all transactions complete callback
+                    db.close(); // database object won't be needed anymore for this request. Close and free memory.
+                    compute_score(geolocation,suggestions,max_pop,min_dist);
+                    terminate(res,suggestions);// write response
+                }
+            ); 
         }
-    );
-    if(geolocation){ // USER LOCATION KNOWN
-        db.each("select name,admin1 as state,country,lat,long as lon, population from cities where name like '"+query.q+"%' collate nocase or ascii like '"+query.q+"%' collate nocase", 
-            function(err,row){ // individual query callback, for each matching city...
-                row.country = COUNTRIES[row.country]; // translate country abbreviation code to full name
-                
-                var distance = 7000;
-                // when userlocation is provided, calculate actual distance of city from user
-                distance = Math.pow(row.lat-parseFloat(query.latitude),2) + Math.pow(row.lon-parseFloat(query.longitude),2);
-                if (distance <= 1) distance = 1; // handles case distance is 0. Also smoothes out distance scoring.
-                if (distance < min_dist ) min_dist = distance; // update minimum distance value, required in scoring algorithm.
-                
-                // create a city object and add to an array of suggestions
-                suggestions.push(new City(row.name+", "+row.state+", "+row.country,row.population,row.lat.toString(),row.lon.toString(),distance,-1)); 
-            },
-            function(err,found){ // all transactions complete callback
-                db.close(); // database object won't be needed anymore for this request. Close and free memory.
-                compute_score(geolocation,suggestions,max_pop,min_dist);
-                suggestions.sort(compare);// sort suggestions based on score 
-                terminate(res,suggestions);//write response
-            }
-        ); 
-    }else{ // WITHOUT USER LOCATION
-        // when user location is not provided, this db query returns the 5 matching cities with the biggest populations (thus already sorted by score value)..
-        db.each("select name,admin1 as state,country,lat,long as lon, population from cities where name like '"+query.q+"%' collate nocase or ascii like '"+query.q+"%' collate nocase order by population desc limit "+MAX_SUGGESTIONS+"", 
-            function(err,row){ // individual query callback, for each matching city...
-                row.country = COUNTRIES[row.country]; // translate country abbreviation code to full name
-                
-                // create a city object and add to an array of suggestions. 70000 and -1 are dummy values for distance and score properties.
-                suggestions.push(new City(row.name+", "+row.state+", "+row.country,row.population,row.lat.toString(),row.lon.toString(),7000,-1)); 
-            },
-            function(err,found){ // all transactions complete callback
-                db.close(); // database object won't be needed anymore for this request. Close and free memory.
-                compute_score(geolocation,suggestions,max_pop,min_dist);
-                terminate(res,suggestions);// write response
-            }
-        ); 
-    }
+    });//db.serialize
   } else {
     res.end();
   }
-}).listen(port,'92.102.110.160'); // module.exports / server code  //port , '127.0.0.1'
+}).listen(port, '127.0.0.1'); // module.exports / server code
 
 
 console.log('Server running at http://127.0.0.1:%d/suggestions', port);
@@ -120,7 +123,6 @@ function compute_score(geolocation,suggestions,max_pop,min_dist){
         }
         city.score = Math.round(score)/10; // round score and convert to desired [0;1] interval.
     }
-    min_dist = 7000; //reset min_dist to higher than possible value. max_pop doens't need to be reset since it is obtained directly from database max() query.
 }    
 function terminate(res,suggestions){
     
