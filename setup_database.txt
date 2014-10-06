@@ -1,0 +1,3 @@
+create table cities (id int, name varchar(200), ascii varchar(200), alt_name varchar(8000), lat decimal, long decimal, feat_class char(1), feat_code varchar(10), country char(2), cc2 varchar(60), admin1 varchar(20), admin2 varchar(80), admin3 varchar(20), admin4 varchar(20), population bigint, elevation int, dem varchar, tz varchar(40), modified_at datetime);
+.separator "\t"
+.import data/cities_canada-usa.tsv cities
