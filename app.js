@@ -4,16 +4,6 @@ var port = process.env.PORT || 2345;
 var env = process.env.NODE_ENV || "development";
 var MongoClient = require('mongodb').MongoClient;
 
-var isNumeric = function (obj) {
-    obj = typeof(obj) === "string" ? obj.replace(",", ".") : obj;
-    return !isNaN(parseFloat(obj)) && isFinite(obj) && Object.prototype.toString.call(obj).toLowerCase() !== "[object array]";
-};
-
-//convenience method
-function log(str) {
-	if (env == 'development') console.log(str);
-}
-
 try {
 	module.exports = http.createServer(function(req, resp) {
 		var arrResults = [];
@@ -54,10 +44,10 @@ try {
 				    var popLimit = 5000;
 				    var regex = new RegExp(q, 'i')
 				    collection.find({
-				    	alt_name:regex,
+				    	alt_name:regex, // search with alt_name so can handle variations, eg. Montreal vs. Montréal
 				    	population:{$gt: popLimit}
 				    }
-				    ,{ name:1, country:1, admin1:1, lat:1, long:1, _id:0 }	
+				    ,{ name:1, alt_name:1, country:1, admin1:1, lat:1, long:1, _id:0 }	
 				    ).sort({name:1}).toArray(function(err, results) {
 				    	if (err != null) {
 				    		console.error('find error: ' + err);
@@ -71,16 +61,22 @@ try {
 				                log(results.length + " results returned for '" + q + "'");
 				                results.forEach(function(entry) {
 				                	var fullCountryName = (entry['country'] == 'US' ? "USA" : "Canada");
-				                	var fullcity = entry['name'] + " - " + entry['admin1'] + " - " + fullCountryName;
+				                	var fullcity = entry['name'] + ", " + entry['admin1'] + ", " + fullCountryName;
+				                	var score = getScore(q, entry);
+				                	log('score for ' + entry['name'] + ' = ' + score);
 				                	arrItem={"name":fullcity,
+				                			"alt_name":entry['alt_name'],
 				                			"latitude":entry['lat'],
 				                			"longitude":entry['long'],
-				                			"score":0.0
+				                			"score":score
 				                		};
 				                	arrResults.push(arrItem);
 				                });
+				                // TODO: sort results by score
+				                var sortedResults = arrResults.sort(compare);
+				                // present sorted results
 								resp.writeHead(200, {'Content-Type':'application/json'});
-								resp.end(JSON.stringify({"suggestions":arrResults}) + '\n');
+								resp.end(JSON.stringify({"suggestions":sortedResults}) + '\n');
 				                db.close(); // will exit the process
 				            }
 				    	}
@@ -93,9 +89,38 @@ try {
 				});
 			resp.end();
 		}
-	}).listen(port, '127.0.0.1');
+	}).listen(port, '0.0.0.0');
 } catch (e) {
 	log("oops");
 }
 
+var isNumeric = function (obj) {
+    obj = typeof(obj) === "string" ? obj.replace(",", ".") : obj;
+    return !isNaN(parseFloat(obj)) && isFinite(obj) && Object.prototype.toString.call(obj).toLowerCase() !== "[object array]";
+};
+
+//convenience method
+function log(str) {
+	if (env == 'development') console.log(str);
+}
+
+function compare(a,b) {
+  if (a.score < b.score)
+     return 1;
+  if (a.score > b.score)
+    return -1;
+  return 0;
+}
+
+function getScore(qSearchString, entry) {
+	var score = 0;
+	// RULE: if name only appears as an alternate, give a low score
+	log('||')
+	if (qSearchString.trim().toLowerCase() == entry['name'].trim().toLowerCase()) {
+		score += .5;
+	} else {
+		score += .1;
+	}
+	return score;
+}
 log('Server running at http://127.0.0.1:' + port + '/suggestions');
