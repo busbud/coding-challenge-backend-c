@@ -8,6 +8,7 @@ dotenv.load();
 
 var port = process.env.PORT || 2345;
 var env = process.env.NODE_ENV || "development";
+var debugMode = process.env.DEBUG_MODE || false;
 
 var myLat = 45.468462;
 var myLong = -73.620843;
@@ -91,7 +92,7 @@ function isNumeric(obj) {
 };
 
 function log(str) {
-	if (env == 'development') console.log(str);
+	if (debugMode) console.log(str);
 }
 
 function compare(a,b) {
