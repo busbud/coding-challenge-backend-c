@@ -1,6 +1,7 @@
 var http = require('http');
 var url = require('url');
 var geolib = require('geolib'); 
+var fs = require('fs');
 var MongoClient = require('mongodb').MongoClient;
 
 var dotenv = require('dotenv');
@@ -76,10 +77,8 @@ try {
 				});
 			}
 		} else {
-			resp.writeHead(302, {
-				'Location': '/suggestions?q=&latitude=&longitude=&city='
-				});
-			resp.end();
+			resp.writeHead(200, {'Content-Type': 'text/html'});
+			resp.end(fs.readFileSync('index.html'));
 		}
 	}).listen(port, '0.0.0.0');
 } catch (e) {
@@ -182,4 +181,4 @@ function getScore(qSearchString, entry) {
 	return score;
 }
 
-log('Server running at http://127.0.0.1:' + port + '/suggestions');
+log('Server running at http://127.0.0.1:' + port);
