@@ -3,6 +3,9 @@ var url = require('url');
 var geolib = require('geolib'); 
 var MongoClient = require('mongodb').MongoClient;
 
+var dotenv = require('dotenv');
+dotenv.load();
+
 var port = process.env.PORT || 2345;
 var env = process.env.NODE_ENV || "development";
 
@@ -23,7 +26,7 @@ try {
 			} else {
 				var q = parts.query['q'];
 				// check if we have any results
-				MongoClient.connect("mongodb://localhost:27017/busbud", function(err, db) {
+				MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
 					if(err) { 
 						console.error('connection error: ' + err);
 						process.exit(1);
@@ -73,7 +76,7 @@ try {
 			}
 		} else {
 			resp.writeHead(302, {
-				'Location': '/suggestions?q=&latitude=&longitude='
+				'Location': '/suggestions?q=&latitude=&longitude=&city='
 				});
 			resp.end();
 		}
@@ -140,10 +143,10 @@ function getFullCity(entry) {
 
 function getDistance(parts, lat2, long2) {
 	// convenience arguments for testing
-	var city = parts.query['city'].toLowerCase();
-	if (city != undefined && city.trim() != '' && testCities[city]) {
-		myLat = testCities[city]['latitude'];
-		myLong = testCities[city]['longitude'];
+	var city = parts.query['city'];
+	if (city != undefined && city.trim() != '' && testCities[city.toLowerCase()]) {
+		myLat = testCities[city.toLowerCase()]['latitude'];
+		myLong = testCities[city.toLowerCase()]['longitude'];
 	} else {
 		myLat = parts.query['latitude'];
 		myLong = parts.query['longitude'];
