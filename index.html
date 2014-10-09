@@ -1,13 +1,93 @@
 <html>
 <head>
+<meta charset="UTF-8">
 <title>API endpoint tester</title>
+<style>
+#location {
+	font-size: 75%;
+}
+#suggestions {
+	background-color: #FFFFFF;
+}
+</style>
+<script type="text/javascript" src="scripts/jquery-1.11.1.js"></script>
+<script type="text/javascript" src="scripts/json2html.js"></script>
+<script type="text/javascript" src="scripts/jquery.json2html.js"></script>
+<script type="text/javascript">
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else { 
+        document.getElementById("location").innerText = "Geolocation is not supported by this browser.";
+    }
+}
+
+function showPosition(position) {
+    document.getElementById("location").innerText="Latitude: " + position.coords.latitude + "; Longitude: " + position.coords.longitude;
+    $("#latitude").val(position.coords.latitude);
+    $("#longitude").val(position.coords.longitude);
+}
+
+var transform = {'tag':'li','html':'${name} (latitude=${latitude}, longitude=${longitude}, score=${score}, distance=${distance})'};
+function loadSuggestions() {
+	var url = "/suggestions?q=" + $("#city").val() + '&latitude=' + $("#latitude").val() + '&longitude=' + $("#longitude").val();
+	var myJsonObj = getJson(url);
+	var json = json2html.transform(myJsonObj.suggestions,transform);
+	document.getElementById('suggestions').innerHTML = json;
+}
+
+function getJson(url) {
+ return JSON.parse($.ajax({
+     type: 'GET',
+     url: url,
+     dataType: 'json',
+     global: false,
+     async:false,
+     success: function(data) {
+         return data;
+     }
+ }).responseText);
+}
+
+$(document).ready(function() {
+	getLocation();
+	$("#butt").click(function(){
+		loadSuggestions();
+	});
+	$('#city').on("keypress", function (e) {
+	    if (e.keyCode == 13) {
+		loadSuggestions();
+	    }
+	});
+	$('#city').each(function() {
+		var elem = $(this);
+		// Save current value of element
+		elem.data('oldVal', elem.val());
+		// Look for changes in the value
+		elem.bind("propertychange keyup input paste", function(event){
+			// If value has changed...
+			if (elem.data('oldVal') != elem.val()) {
+				// Updated stored value
+				elem.data('oldVal', elem.val());
+				loadSuggestions();
+			}
+		});
+	});
+});
+</script>
 </head>
 <body>
-<form name="myForm" id="myForm" action="/suggestions" method="post">
-City name: <input type="text" name="q" id="q" autofocus/>
-<input type="submit" name="Search for city" id="submit"/>
-<input type="hidden" name="latitude" id="latitude"/>
-<input type="hidden" name="longitude" id="longitude"/>
-<input type="hidden" name="city" id="city"/>
+<div id="form">
+	City name: <input type="text" name="city" id="city" autofocus/>
+	<input type="hidden" name="latitude" id="latitude" value=""/>
+	<input type="hidden" name="longitude" id="longitude" value=""/>
+	<input type="hidden" name="city" id="city"/>
+	<input type="button" name="butt" id="butt" value="search"/>
+</div>
+<p>
+<div id="location"></div>
+<ol>
+<div id="suggestions"></div>
+</ol>
 </form>
 </body>

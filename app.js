@@ -2,88 +2,120 @@ var http = require('http');
 var url = require('url');
 var geolib = require('geolib'); 
 var fs = require('fs');
+var path = require('path');
 var MongoClient = require('mongodb').MongoClient;
 
 var dotenv = require('dotenv');
 dotenv.load();
 
-var port = process.env.PORT || 2345;
-var env = process.env.NODE_ENV || "development";
-var debugMode = process.env.DEBUG_MODE || false;
+var PORT = process.env.PORT || 2345;
+var HOST = process.env.HOST || '0.0.0.0';
+var NODE_ENV = process.env.NODE_ENV || "development";
+var DEBUG_MODE = process.env.DEBUG_MODE || false;
 
 var myLat = 45.468462;
 var myLong = -73.620843;
 
-try {
-	module.exports = http.createServer(function(req, resp) {
-		var arrResults = [];
-		if (req.url.indexOf('/suggestions') === 0) {
-			// decode querystring
-			var parts = url.parse(req.url, true);
-			// ensure we have search text in the q argument
-			if (parts.query['q'] == undefined || parts.query['q'].trim() == "") {
-				// log('invalid q passed in');
-				resp.writeHead(404, {'Content-Type':'application/json'});
-				resp.end(JSON.stringify({"suggestions":arrResults}) + '\n');
-			} else {
-				var q = parts.query['q'];
-				// check if we have any results
-				MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
-					if(err) { 
-						console.error('connection error: ' + err);
-						process.exit(1);
-					}
-				    var collection = db.collection('cities');
-				    var popLimit = 5000;
-				    var regex = new RegExp(q, 'i')
-				    collection.find({
-				    	alt_name:regex, // search with alt_name so can handle variations, eg. Montreal vs. Montréal
-				    	population:{$gt: popLimit}
-				    }
-				    ,{ name:1, alt_name:1, country:1, admin1:1, lat:1, long:1, _id:0 }	
-				    ).sort({name:1}).toArray(function(err, results) {
-				    	if (err != null) {
-				    		console.error('find error: ' + err);
-				    		process.exit(2);
-				    	} else {
-				            if (results == undefined || results.length == 0) {
-				                log("0 results returned for '" + q + "'");
-								resp.writeHead(404, {'Content-Type':'application/json'});
-				            	resp.end(JSON.stringify({"suggestions":arrResults}) + '\n');
-				            } else {
-				                log(results.length + " results returned for '" + q + "'");
-				                results.forEach(function(entry) {
-				                	var fullcity = getFullCity(entry);
-				                	var score = getScore(q, entry);
-							var distance = getDistance(parts, entry['lat'], entry['long']);
-				                	arrItem={"name":fullcity,
-				                			"alt_name":entry['alt_name'],
-				                			"latitude":entry['lat'],
-				                			"longitude":entry['long'],
-									"distance":distance,
-				                			"score":score
-				                		};
-				                	arrResults.push(arrItem);
-				                });
-				                // TODO: sort results by score
-				                var sortedResults = arrResults.sort(compare);
-				                // present sorted results
-								resp.writeHead(200, {'Content-Type':'application/json'});
-								resp.end(JSON.stringify({"suggestions":sortedResults}) + '\n');
-				                db.close(); // will exit the process
-				            }
-				    	}
-				    });
-				});
-			}
+var server = http.createServer(function(req, resp) {
+	var arrResults = [];
+	if (req.url.indexOf('/suggestions') === 0) {
+		// decode querystring
+		log(req.url);
+		var parts = url.parse(req.url, true);
+		// ensure we have search text in the q argument
+		if (parts.query['q'] == undefined || parts.query['q'].trim() == "") {
+			// log('invalid q passed in');
+			resp.writeHead(404, {'Content-Type':'application/json'});
+			resp.end(JSON.stringify({"suggestions":arrResults}) + '\n');
 		} else {
-			resp.writeHead(200, {'Content-Type': 'text/html'});
-			resp.end(fs.readFileSync('index.html'));
+			var q = parts.query['q'];
+			// check if we have any results
+			MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
+				if(err) { 
+					console.error('connection error: ' + err);
+					process.exit(1);
+				}
+			    var collection = db.collection('cities');
+			    var popLimit = 5000;
+			    var regex = new RegExp('^'+q, 'i')
+			    collection.find({
+			    	$or: [ { ascii:regex }, { name:regex } ] ,population:{$gt: popLimit}
+			    }
+			    // ,{ name:1, alt_name:1, country:1, admin1:1, lat:1, long:1, population:1, _id:0 }	
+			    ).sort({name:1}).toArray(function(err, results) {
+			    	if (err != null) {
+			    		console.error('find error: ' + err);
+			    		process.exit(2);
+			    	} else {
+			            if (results == undefined || results.length == 0) {
+			                log("0 results returned for '" + q + "'");
+					resp.writeHead(404, {'Content-Type':'application/json'});
+			            	resp.end(JSON.stringify({"suggestions":arrResults}) + '\n');
+			            } else {
+			                log(results.length + " results returned for '" + q + "'");
+			                results.forEach(function(entry) {
+			                	var fullcity = getFullCity(entry);
+						var distance = getDistance(parts, entry['lat'], entry['long']);
+			                	var score = getScore(distance);
+						var distance = getDistance(parts, entry['lat'], entry['long']);
+			                	arrItem={"name":fullcity,
+			                			// "realname":entry['name'],
+			                			//"ascii":entry['ascii'],
+			                			//"alt_name":entry['alt_name'],
+			                			"latitude":entry['lat'],
+			                			"longitude":entry['long'],
+								"distance":distance,
+								//"population":entry['population'],
+								//"feat_class":entry['feat_class'],
+								//"feat_code":entry['feat_code'],
+			                			"score":score
+			                		};
+			                	arrResults.push(arrItem);
+			                });
+			                // TODO: sort results by score
+			                var sortedResults = arrResults.sort(compare);
+			                // present sorted results
+							resp.writeHead(200, {'Content-Type':'application/json'});
+							resp.end(JSON.stringify({"suggestions":sortedResults}) + '\n');
+			                db.close(); // will exit the process
+			            }
+			    	}
+			    });
+			});
 		}
-	}).listen(port, '0.0.0.0');
-} catch (e) {
-	log("oops");
-}
+	} else {
+		var uri = url.parse(req.url).pathname;
+		var filename = path.join(__dirname, uri);
+		fs.exists(filename, function (exists) {
+		  if (exists) {
+			var contentTypes = {
+			    '.html': 'text/html',
+			    '.css': "text/css",
+			    '.js': 'application/javascript'
+			};
+			var contentType = contentTypes[path.extname(filename)];
+			resp.writeHead(200, {'Content-Type':contentType});
+			resp.end(fs.readFileSync(filename));
+		  } else {
+			log("Could not find requested file " + uri);
+			resp.writeHead(404, {'Content-Type':'plain'});
+			resp.end();
+		  }
+		});
+	}
+	}).listen(PORT, HOST);
+	// handle errors with server
+	server.on('error', function (e) {
+	  if (e.code == 'EADDRINUSE') {
+	    log('Port ' + PORT + ' already in use. Retrying in 5 seconds...');
+	    setTimeout(function () {
+	      server.close();
+	      server.listen(PORT, HOST);
+	    }, 5000);
+	  } else {
+		console.logerror(e.code);
+	  }
+});
 
 function isNumeric(obj) {
     obj = typeof(obj) === "string" ? obj.replace(",", ".") : obj;
@@ -91,7 +123,7 @@ function isNumeric(obj) {
 };
 
 function log(str) {
-	if (debugMode) console.log(str);
+	if (DEBUG_MODE) console.log(str);
 }
 
 function compare(a,b) {
@@ -126,7 +158,7 @@ var provinces = {
 }
 
 var testCities = {
-	'montreal': {'latitude':'-74.00597', 'longitude':'-73.64918'},
+	'montreal': {'latitude':'45.50884', 'longitude':'-73.58781'},
 	'new york': {'latitude':'40.71427', 'longitude':'-74.00597'},
 	'los angeles': {'latitude':'34.05223', 'longitude':'-118.24368'},
 	'vancouver': {'latitude':'49.24966', 'longitude':'-123.11934'},
@@ -157,28 +189,21 @@ function getDistance(parts, lat2, long2) {
 		isNumeric(myLat) == false || isNumeric(myLong) == false) {
 		return NaN;
 	} else {
-		var x = geolib.getDistance(
+		var distance = geolib.getDistance(
 		    {latitude: myLat, longitude: myLong}, 
 		    {latitude: lat2, longitude: long2}
-		);
-		return x/1000;
+		)/1000; // divide by 1000 to convert meters to kilometers
+		return Math.floor(distance);
 	}
 }
 
-function getScore(qSearchString, entry) {
+function getScore(distance) {
 	var score = 0;
-	var regex = new RegExp(qSearchString, 'gi')
-	// RULE: add .5 if the searched city is an exact match for the name
-	if (qSearchString.trim().toLowerCase() == entry['name'].trim().toLowerCase()) {
-		score += .5;
-	// TODO: add .2 or .3 if the name is a partial match, i.e. York from New York
-	} else if (Array.isArray(entry['name'].match(regex))) {
-		score += .3;
-	// RULE: add .1 if the searched city is only included in the alt_name field
-	} else {
-		score += .1;
-	}
-	return score;
+	var maxCircumference = 20039; // max kilometers along equator
+	score = distance/maxCircumference;
+	// closer results will have lowest difference, i.e. closer to 0, but the score = a confidence
+	// level where 1 not 0 is high, so we need to reverse the figure by subtracting it from 1
+	return (1-score);
 }
 
-log('Server running at http://127.0.0.1:' + port);
+log('Server running at http://127.0.0.1:' + PORT);
