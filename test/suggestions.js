@@ -3,6 +3,7 @@ var app     = require('../app');
 var request = require('supertest')(app);
 
 describe('GET /suggestions', function() {
+  // section 1: with a non-existent city
   describe('with a non-existent city', function () {
     var response;
 
@@ -25,7 +26,8 @@ describe('GET /suggestions', function() {
       expect(response.json.suggestions).to.have.length(0);
     });
   });
-
+  
+  // section 2: with a valid city
   describe('with a valid city', function () {
     var response;
 
@@ -71,5 +73,16 @@ describe('GET /suggestions', function() {
         });
       })
     });
+    
+
   });
+  
+	// section 3: my additional tests
+	// TODO test for lower-case London
+	// TODO test for city with pop < 5000
+	// TODO test for quebec city (entry is only in alt_name, not name)
+	// TODO test for St. John's
+	// TODO ensure the 2-letter province code appears for Canada
+	// TODO East New York should have score of .3
+
 });

@@ -1,8 +1,13 @@
 var http = require('http');
 var url = require('url');
+var geolib = require('geolib'); 
+var MongoClient = require('mongodb').MongoClient;
+
 var port = process.env.PORT || 2345;
 var env = process.env.NODE_ENV || "development";
-var MongoClient = require('mongodb').MongoClient;
+
+var myLat = 45.468462;
+var myLong = -73.620843;
 
 try {
 	module.exports = http.createServer(function(req, resp) {
@@ -17,23 +22,6 @@ try {
 				resp.end(JSON.stringify({"suggestions":arrResults}) + '\n');
 			} else {
 				var q = parts.query['q'];
-				var lat, long;
-				// error check for latitude
-				if (parts.query['latitude'] != undefined && parts.query['latitude'].trim() != "") {
-					if (!isNumeric(parts.query['latitude'])) {
-						log("latitude argument must be numeric.");
-					} else {
-						lat = parts.query['latitude'];
-					}
-				}
-				// error check for longitude
-				if (parts.query['longitude'] != undefined && parts.query['longitude'].trim() != "") {
-					if (!isNumeric(parts.query['longitude'])) {
-						log("longitude argument must be numeric.");
-					} else {
-						long = parts.query['longitude'];
-					}
-				}
 				// check if we have any results
 				MongoClient.connect("mongodb://localhost:27017/busbud", function(err, db) {
 					if(err) { 
@@ -60,14 +48,14 @@ try {
 				            } else {
 				                log(results.length + " results returned for '" + q + "'");
 				                results.forEach(function(entry) {
-				                	var fullCountryName = (entry['country'] == 'US' ? "USA" : "Canada");
-				                	var fullcity = entry['name'] + ", " + entry['admin1'] + ", " + fullCountryName;
+				                	var fullcity = getFullCity(entry);
 				                	var score = getScore(q, entry);
-				                	log('score for ' + entry['name'] + ' = ' + score);
+							var distance = getDistance(parts, entry['lat'], entry['long']);
 				                	arrItem={"name":fullcity,
 				                			"alt_name":entry['alt_name'],
 				                			"latitude":entry['lat'],
 				                			"longitude":entry['long'],
+									"distance":distance,
 				                			"score":score
 				                		};
 				                	arrResults.push(arrItem);
@@ -94,33 +82,100 @@ try {
 	log("oops");
 }
 
-var isNumeric = function (obj) {
+function isNumeric(obj) {
     obj = typeof(obj) === "string" ? obj.replace(",", ".") : obj;
     return !isNaN(parseFloat(obj)) && isFinite(obj) && Object.prototype.toString.call(obj).toLowerCase() !== "[object array]";
 };
 
-//convenience method
 function log(str) {
 	if (env == 'development') console.log(str);
 }
 
 function compare(a,b) {
-  if (a.score < b.score)
-     return 1;
-  if (a.score > b.score)
-    return -1;
-  return 0;
+	if (a.score < b.score)
+		return 1;
+	if (a.score > b.score)
+		return -1;
+	if (a.score = b.score) {
+		if (a.distance > b.distance)
+			return 1;
+		if (a.distance < b.distance)
+			return -1;
+	}
+	return 0;
+}
+
+var provinces = {
+	1:'AB',
+	2:'BC',
+	3:'MB',
+	4:'NB',
+	5:'NL',
+	6:'',
+	7:'NS',
+	8:'ON',
+	9:'PE',
+	10:'QC',
+	11:'SK',
+	12:'YT',
+	13:'NT',
+	14:'NU'
+}
+
+var testCities = {
+	'montreal': {'latitude':'-74.00597', 'longitude':'-73.64918'},
+	'new york': {'latitude':'40.71427', 'longitude':'-74.00597'},
+	'los angeles': {'latitude':'34.05223', 'longitude':'-118.24368'},
+	'vancouver': {'latitude':'49.24966', 'longitude':'-123.11934'},
+	'miami': {'latitude':'25.77427', 'longitude':'-80.19366'}
+}
+
+function getFullCity(entry) {
+	if (entry['country'] == 'US') {
+		return entry['name'] + ", " + entry['admin1'] + ", USA";
+	} else {
+		return entry['name'] + ", " + provinces[entry['admin1']] + ", Canada";
+	}
+}
+
+function getDistance(parts, lat2, long2) {
+	// convenience arguments for testing
+	var city = parts.query['city'].toLowerCase();
+	if (city != undefined && city.trim() != '' && testCities[city]) {
+		myLat = testCities[city]['latitude'];
+		myLong = testCities[city]['longitude'];
+	} else {
+		myLat = parts.query['latitude'];
+		myLong = parts.query['longitude'];
+	}
+	// only compute distance if we were passed in valid numeric arguments
+	if (myLat == undefined || myLat.trim() == '' || 
+		myLong == undefined || myLong.trim() == '' ||
+		isNumeric(myLat) == false || isNumeric(myLong) == false) {
+		return NaN;
+	} else {
+		var x = geolib.getDistance(
+		    {latitude: myLat, longitude: myLong}, 
+		    {latitude: lat2, longitude: long2}
+		);
+		return x/1000;
+	}
 }
 
 function getScore(qSearchString, entry) {
 	var score = 0;
-	// RULE: if name only appears as an alternate, give a low score
-	log('||')
+	var regex = new RegExp(qSearchString, 'gi')
+	// RULE: add .5 if the searched city is an exact match for the name
 	if (qSearchString.trim().toLowerCase() == entry['name'].trim().toLowerCase()) {
 		score += .5;
+	// TODO: add .2 or .3 if the name is a partial match, i.e. York from New York
+	} else if (Array.isArray(entry['name'].match(regex))) {
+		score += .3;
+	// RULE: add .1 if the searched city is only included in the alt_name field
 	} else {
 		score += .1;
 	}
 	return score;
 }
+
 log('Server running at http://127.0.0.1:' + port + '/suggestions');
