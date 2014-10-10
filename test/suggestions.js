@@ -73,12 +73,5 @@ describe('GET /suggestions', function() {
     });
     
     // my extra tests with a valid city
-    it('does not contain city with population < 5000', function () {
-        expect(response.json.suggestions).to.satisfy(function (suggestions) {
-          return suggestions.every(function (suggestion) {
-            return false;
-          });
-        })
-      });    
   });
 });

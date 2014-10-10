@@ -4,7 +4,7 @@ var util = require('util');
 var MongoClient = require('mongodb').MongoClient;
 
 var DEBUG_MODE = process.env.DEBUG_MODE || true;
-var MONGO_URI = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/busbud' // mongodb://dbuser:dbpass@host:port/dbname
+var MONGO_URI = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/busbud' // mongodb://dbuser:dbpassword@host:port/dbname
 
 function handleRequest(req,res) {
 	var parts = url.parse(req.url, true);
@@ -36,7 +36,6 @@ function handleRequest(req,res) {
 	    	} else {
 	            if (results == undefined || results.length == 0) {
 	                log('0 results returned for %s', q);
-	                res.writeHead(404, {'Content-Type':'application/json','Access-Control-Allow-Origin':'*'});
 	            	res.end(JSON.stringify({'suggestions':arrResults}) + '\n');
 	            } else {
 	                log('%d results returned for %s', results.length, q);
@@ -57,7 +56,7 @@ function handleRequest(req,res) {
 	                var sortedResults = arrResults.sort(compare);
 					res.writeHead(200, {'Content-Type':'application/json','Access-Control-Allow-Origin':'*'});
 					res.end(JSON.stringify({'suggestions':sortedResults}) + '\n');
-	                db.close(); // will exit the process
+	                db.close();
 	            }
 	    	}
 	    });
