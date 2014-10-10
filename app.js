@@ -34,5 +34,5 @@ app.get('/apitest', function(req, res) {
 });
 
 var server = app.listen(PORT, function() {
-	util.log(util.format('Server running at http://%s', API_HOST));
+	util.log(util.format('Server running at http://%s', API_URL));
 });
