@@ -20,7 +20,7 @@ var server = http.createServer(function(req, resp) {
 	var arrResults = [];
 	if (req.url.indexOf('/suggestions') === 0) {
 		// decode querystring
-		log(req.url);
+		// log(req.url);
 		var parts = url.parse(req.url, true);
 		// ensure we have search text in the q argument
 		if (parts.query['q'] == undefined || parts.query['q'].trim() == "") {
@@ -48,11 +48,11 @@ var server = http.createServer(function(req, resp) {
 			    		process.exit(2);
 			    	} else {
 			            if (results == undefined || results.length == 0) {
-			                log("0 results returned for '" + q + "'");
+			                // log("0 results returned for '" + q + "'");
 					resp.writeHead(404, {'Content-Type':'application/json'});
 			            	resp.end(JSON.stringify({"suggestions":arrResults}) + '\n');
 			            } else {
-			                log(results.length + " results returned for '" + q + "'");
+			                // log(results.length + " results returned for '" + q + "'");
 			                results.forEach(function(entry) {
 			                	var fullcity = getFullCity(entry);
 						var distance = getDistance(parts, entry['lat'], entry['long']);
@@ -108,14 +108,17 @@ var server = http.createServer(function(req, resp) {
 	server.on('error', function (e) {
 	  if (e.code == 'EADDRINUSE') {
 	    log('Port ' + PORT + ' already in use. Retrying in 5 seconds...');
-	    setTimeout(function () {
-	      server.close();
-	      server.listen(PORT, HOST);
-	    }, 5000);
+	    //setTimeout(function () {
+	    //  server.close();
+	     // server.listen(PORT, HOST);
+	    //}, 5000);
 	  } else {
 		console.logerror(e.code);
 	  }
-});
+	}
+);
+
+module.exports = server;
 
 function isNumeric(obj) {
     obj = typeof(obj) === "string" ? obj.replace(",", ".") : obj;
@@ -167,7 +170,7 @@ var testCities = {
 
 function getFullCity(entry) {
 	if (entry['country'] == 'US') {
-		return entry['name'] + ", " + entry['admin1'] + ", USA";
+		return entry['ascii'] + ", " + entry['admin1'] + ", USA";
 	} else {
 		return entry['name'] + ", " + provinces[entry['admin1']] + ", Canada";
 	}
