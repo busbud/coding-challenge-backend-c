@@ -2,7 +2,10 @@ html
   head
     meta(name='charset', content='UTF-8')
     title!= title
-    style(src="/public/styles/style.css",type="text/css")
+    style(type="text/css").
+      #location {font-size: 75%;}
+      #suggestions {background-color: #FFFFFF;}
+      #loading {color: red;}
     script(type='text/javascript').
       var API_URL = "#{API_URL}";
     script(type='text/javascript', src='/public/scripts/jquery-1.11.1.js')
@@ -20,6 +23,7 @@ html
       input(type='hidden',name='longitude',id='longitude',value='')
     #location Latitude: Unknown; Longitude: Unknown
     h2 Parsed JSON Response
+    #loading
     ol
       #suggestions
     

@@ -18,9 +18,11 @@ function loadSuggestions() {
 		document.getElementById('suggestions').innerHTML = "";
 	} else {
 		var url = API_URL + "/suggestions?q=" + $("#city").val() + '&latitude=' + $("#latitude").val() + '&longitude=' + $("#longitude").val();
+		document.getElementById('loading').innerHTML = 'Loading...';
 		var myJsonObj = getJson(url);
 		var json = json2html.transform(myJsonObj.suggestions,transform);
 		document.getElementById('suggestions').innerHTML = json;
+		document.getElementById('loading').innerHTML = '';
 	}
 }
 
