@@ -11,16 +11,17 @@ app.locals.pretty = true;
 var dotenv = require('dotenv');
 dotenv.load();
 // then load the environment
-var PORT = process.env.PORT || 2345;
+var API_PORT = process.env.PORT || 2345;
+var API_HOST = process.env.API_HOST || 'localhost';
 
-app.get('/', function(req, res){
+app.get('/', function(req, res) {
     res.render('index', { 
-    	API_URL: 'http://localhost:' + PORT, 
+    	API_URL: 'http://' + API_HOST + ':' + API_PORT, 
     	title: 'API endpoint test page', 
     	message: 'API endpoint test page'
     });
 });
 
 var server = app.listen(3000, function() {
-    util.log('Listening on port %d', server.address().port);
+    util.log(util.format('Listening on port %d', server.address().port));
 });
