@@ -11,8 +11,7 @@ function handleRequest(req,res) {
 	log(parts.query);
 	// ensure we have search text in the q argument
 	if (parts.query['q'] == undefined || parts.query['q'].trim() == '') {
-		res.writeHead(404, {'Content-Type':'application/json','Access-Control-Allow-Origin':'*'});
-		res.end(JSON.stringify({'suggestions':arrResults}) + '\n');
+		res.status(404).end(JSON.stringify({'suggestions':arrResults}) + '\n');
 	}
 	var q = parts.query['q'];
 	var arrResults = [];
@@ -36,7 +35,7 @@ function handleRequest(req,res) {
 	    	} else {
 	            if (results == undefined || results.length == 0) {
 	                log('0 results returned for %s', q);
-	            	res.end(JSON.stringify({'suggestions':arrResults}) + '\n');
+	            	res.status(404).end(JSON.stringify({'suggestions':arrResults}) + '\n');
 	            } else {
 	                log('%d results returned for %s', results.length, q);
 	                results.forEach(function(entry) {
@@ -54,7 +53,7 @@ function handleRequest(req,res) {
 	                });
 	                // present sorted results
 	                var sortedResults = arrResults.sort(compare);
-					res.end(JSON.stringify({'suggestions':sortedResults}) + '\n');
+					res.status(200).end(JSON.stringify({'suggestions':sortedResults}) + '\n');
 	                db.close();
 	            }
 	    	}

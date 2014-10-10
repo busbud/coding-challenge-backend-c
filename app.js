@@ -30,11 +30,13 @@ app.get('/suggestions', function(req, res) {
 app.get('/apitest', function(req, res) {
     res.render('index', { 
     	API_URL: 'http://' + API_URL, 
-    	title: 'API endpoint test page', 
-    	message: 'API endpoint test page'
+    	title: 'API Endpoint Test Page', 
+    	message: 'API Endpoint Test Page'
     });
 });
 
 var server = app.listen(PORT, function() {
 	util.log(util.format('Server running at http://%s', API_URL));
 });
+
+module.exports = server; // needed to run mocha tests
