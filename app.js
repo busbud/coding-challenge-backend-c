@@ -22,6 +22,8 @@ var PORT = process.env.PORT || 2345;
 var API_URL = process.env.API_URL || 'localhost';
 
 app.get('/suggestions', function(req, res) {
+	res.setHeader('Content-Type','application/json');
+	res.setHeader('Access-Control-Allow-Origin','*');
 	api.handleRequest(req,res);
 });
 

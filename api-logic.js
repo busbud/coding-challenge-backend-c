@@ -54,7 +54,6 @@ function handleRequest(req,res) {
 	                });
 	                // present sorted results
 	                var sortedResults = arrResults.sort(compare);
-					res.writeHead(200, {'Content-Type':'application/json','Access-Control-Allow-Origin':'*'});
 					res.end(JSON.stringify({'suggestions':sortedResults}) + '\n');
 	                db.close();
 	            }

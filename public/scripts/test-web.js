@@ -14,10 +14,14 @@ function showPosition(position) {
 
 var transform = {'tag':'li','html':'${name} (latitude=${latitude}, longitude=${longitude}, score=${score}, distance=${distance})'};
 function loadSuggestions() {
-	var url = API_URL + "/suggestions?q=" + $("#city").val() + '&latitude=' + $("#latitude").val() + '&longitude=' + $("#longitude").val();
-	var myJsonObj = getJson(url);
-	var json = json2html.transform(myJsonObj.suggestions,transform);
-	document.getElementById('suggestions').innerHTML = json;
+	if ($("#city").val().trim() == '') {
+		document.getElementById('suggestions').innerHTML = "";
+	} else {
+		var url = API_URL + "/suggestions?q=" + $("#city").val() + '&latitude=' + $("#latitude").val() + '&longitude=' + $("#longitude").val();
+		var myJsonObj = getJson(url);
+		var json = json2html.transform(myJsonObj.suggestions,transform);
+		document.getElementById('suggestions').innerHTML = json;
+	}
 }
 
 function getJson(url) {
