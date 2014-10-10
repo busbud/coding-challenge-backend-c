@@ -59,6 +59,7 @@ $(document).ready(function() {
 			if (elem.data('oldVal') != elem.val()) {
 				// Updated stored value
 				elem.data('oldVal', elem.val());
+				setTimeout(undefined,5);
 				loadSuggestions();
 			}
 		});
