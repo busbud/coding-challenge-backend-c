@@ -1,6 +1,5 @@
 # City Search API for Busbud Coding Challenge
 
-## Summary
 My solution contains two approaches:
 - The first configuration loads the dataset into memory via a file stream when the app initializes. API requests will search via the JavaScript object in memory. The file system is only read once.
 - The second configuration will retrieve the data from MongoDB for every API request. Nothing is stored in memory.
