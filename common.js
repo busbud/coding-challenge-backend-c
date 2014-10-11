@@ -61,7 +61,7 @@ function getScore(distance) {
 }
 
 function getDistance(parts, lat2, long2) {
-	// convenience arguments for testing
+	// handle geo-location convenience arguments for testing
 	var city = parts.query['city'];
 	if (city != undefined && city.trim() != '' && testCities[city.toLowerCase()]) {
 		myLat = testCities[city.toLowerCase()]['latitude'];
@@ -84,18 +84,11 @@ function getDistance(parts, lat2, long2) {
 	}
 }
 
-function compare(a,b) {
-	if (a.score < b.score)
+function compare(cityA,cityB) {
+	if (cityA.score < cityB.score)
 		return 1;
-	if (a.score > b.score)
+	if (cityA.score > cityB.score)
 		return -1;
-	if (a.score = b.score) {
-		if (a.distance > b.distance)
-			return 1;
-		if (a.distance < b.distance)
-			return -1;
-	}
-	return 0;
 }
 
 function isNumeric(obj) {
@@ -107,3 +100,4 @@ module.exports.log = log;
 module.exports.getDisplayName = getDisplayName;
 module.exports.getDistance = getDistance;
 module.exports.getScore = getScore;
+module.exports.compare = compare;

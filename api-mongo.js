@@ -9,7 +9,7 @@ function handleRequest(req, res, parts) {
 	var q = parts.query['q'];
 	MongoClient.connect(MONGO_URI, function(err, db) {
 		if(err) { 
-			console.error('Connection error to ' + MONGO_URI + ': ' + err);
+			log('Connection error to %s:%s', MONGO_URI, err);
 		}
 	    var collection = db.collection('cities');
 	    var popLimit = 5000;
@@ -23,7 +23,7 @@ function handleRequest(req, res, parts) {
 	    ,{ name:1, alt_name:1, ascii:1, country:1, admin1:1, lat:1, long:1, _id:0 }	// filter for required fields
 	    ).sort({name:1}).toArray(function(err, results) {
 	    	if (err != null) {
-	    		console.error('Error finding result: ' + err);
+	    		log('Error finding result: %s', err);
 	    	} else {
 	            if (results == undefined || results.length == 0) {
 	                log('0 results returned for %s', q);

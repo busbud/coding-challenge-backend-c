@@ -52,7 +52,7 @@ function searchCities(str, arrSuggestedCities) {
 			}
 	    }
     } else{
-    	console.error('Data not yet loaded to perform search.');
+    	log('Data not yet loaded to perform search.');
     }
 }
 
@@ -118,9 +118,9 @@ function handleRequest(req, res, parts) {
 	// copy matched items into our array
 	searchCities(qCity, suggestedCities);
     log('%d results returned for %s', suggestedCities.length, qCity);
-	// modify the city data for presentation
+	// modify the city data for presentation, adding scored results
     prepareCityData(suggestedCities, parts);
-    // sort the results
+    // sort the results by score
     var sortedResults = suggestedCities.sort(common.compare);
     // send JSON response
 	res.status(404).end(JSON.stringify({'suggestions':sortedResults}) + '\n');
@@ -130,8 +130,6 @@ function prepareCityData(arr, parts) {
 	// need to re-map the fields to match those of the API
     for (x=0; x<arr.length; x++) {
 		var city = arr[x];
-		// add score
-		city.score = 0;
 		// add distance
 		city.distance = common.getDistance(parts, city.latitude, city.longitude);
 		// add score based on distance
