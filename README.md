@@ -20,12 +20,12 @@ DEBUG_MODE=true node app
 ## API Test Page
 I wrote a web page which consumes the API, and presents the output after each letter has been entered. When the app is started it will open up a route to the page at `/apitest`, i.e. [localhost:2345/apitest](http://localhost:2345/apitest). 
 
+![Screenshot](/docs/images/bos.png?raw=true "Screenshot")
+
 When you access the page for the first time, your browser should ask for permission to use your location. After you click Allow, your latitude and longitude should be displayed. Your results will now be scored and sorted based on proximity to your location.
 ![Permission](/docs/images/geolocation_permission.png?raw=true "Permission")
 
 ![With Geo-location](/docs/images/with-latitude.png?raw=true "With Geo-location")
-
-![Screenshot](/docs/images/bos.png?raw=true "Screenshot")
 
 ## Geo-location Shortcuts
 I have made it easier to test the API by embedding coordinates for 5 North American cities: Montreal, New York, Miami, Vancouver, and Los Angeles. To test, add the querystring argument `city` with the city name, i.e. `city=Miami`.
