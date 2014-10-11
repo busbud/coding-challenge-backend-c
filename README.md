@@ -25,7 +25,7 @@ When you access the page for the first time, your browser should ask for permiss
 
 ![With Geo-location](/docs/images/with-latitude.png?raw=true "With Geo-location")
 
-![Screenshot](/docs/images/API-Screenshot-Z.png?raw=true "Screenshot")
+![Screenshot](/docs/images/bos.png?raw=true "Screenshot")
 
 ## Geo-location Shortcuts
 I have made it easier to test the API by embedding coordinates for 5 North American cities: Montreal, New York, Miami, Vancouver, and Los Angeles. To test, add the querystring argument `city` with the city name, i.e. `city=Miami`.
