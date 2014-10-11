@@ -12,7 +12,7 @@ function showPosition(position) {
     $("#longitude").val(position.coords.longitude);
 }
 
-var transform = {'tag':'li','html':'${name} (latitude=${latitude}, longitude=${longitude}, score=${score}, distance=${distance})'};
+var transform = {'tag':'li','html':'<b>${name}</b> (<span>latitude</span>: ${latitude}, <span>longitude</span>: ${longitude}, <span>score</span>: ${score}, <span>distance</span>: ${distance})'};
 function loadSuggestions() {
 	if ($("#city").val().trim() == '') {
 		document.getElementById('loading').innerHTML = 'No results.';
