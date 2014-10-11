@@ -9,13 +9,6 @@ The default approach is the first one. To switch to using the database, set the 
 ```
 USE_MONGO=true node app
 ```
-
-## Debugging
-Debugging is disabled by default. To enable it set the environment variable DEBUG_MODE to true.
-```
-DEBUG_MODE=true node app
-```
-
 ## API Test Page
 I wrote a web page which consumes the API, and presents the output after each letter has been entered. When the app is started it will open up a route to the page at `/apitest`, i.e. [localhost:2345/apitest](http://localhost:2345/apitest). 
 
@@ -36,6 +29,11 @@ You can try the app now on Heroku.
 - [API Endpoint](http://mighty-wildwood-7373.herokuapp.com/suggestions?q=Montreal)
 - [API Endpoint Test Page](http://mighty-wildwood-7373.herokuapp.com/apitest)
 
+## Debugging
+Debugging is disabled by default. To enable it set the environment variable DEBUG_MODE to true.
+```
+DEBUG_MODE=true node app
+```
 ## MongoDB setup
 If you don't have a local MongoDB installation, you can find the full instructions at [docs.mongodb.org/manual/installation](http://docs.mongodb.org/manual/installation) for your OS.
 
