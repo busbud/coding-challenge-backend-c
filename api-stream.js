@@ -11,6 +11,7 @@ var objCities = {};
 numCities = 0;
 
 function loadData() {
+	var startTime = new Date().getTime();
 	log('Opening stream to file %s', filePath);
 	var stream = fs.createReadStream(filePath, {flags: 'r', encoding: 'utf-8'});
 	stream.on('data', function(d) {
@@ -19,7 +20,9 @@ function loadData() {
 	});
 	stream.on('close', function(d) {
 		dataIsReady = true;
-		log('Stream closed. %d cities in memory.', numCities);
+		var endTime = new Date().getTime();
+		var executionTime = endTime - startTime;
+		log('Stream closed. %d cities loaded into memory after %d milliseconds.', numCities, executionTime);
 	});
 }
 
@@ -111,6 +114,7 @@ function log(str, p1, p2) {
 }
 
 function handleRequest(req, res, parts) {
+	var startTime = new Date().getTime();
 	log(parts.query);
 	var qCity = parts.query['q'];
 	// create temp array for this request
@@ -122,6 +126,10 @@ function handleRequest(req, res, parts) {
     prepareCityData(suggestedCities, parts);
     // sort the results by score
     var sortedResults = suggestedCities.sort(common.compare);
+    // compute time to handle request
+	var endTime = new Date().getTime();
+	var executionTime = endTime - startTime;
+	log('Response execution time: %d milliseconds.', executionTime);
     // send JSON response
 	res.status(404).end(JSON.stringify({'suggestions':sortedResults}) + '\n');
 }

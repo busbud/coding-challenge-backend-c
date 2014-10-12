@@ -4,6 +4,7 @@ var common = require('./common');
 var MONGO_URI = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/busbud' // mongodb://dbuser:dbpassword@host:port/dbname
 
 function handleRequest(req, res, parts) {
+	var startTime = new Date().getTime();
 	var arrResults = [];
 	log(parts.query);
 	var q = parts.query['q'];
@@ -43,9 +44,12 @@ function handleRequest(req, res, parts) {
 		                };
 		                arrResults.push(arrItem);
 	                });
+	                // compute time to handle request
+	            	var endTime = new Date().getTime();
+	            	var executionTime = endTime - startTime;
+	            	log('Response execution time: %d milliseconds.', executionTime);
 	                // present sorted results
-	                var sortedResults = arrResults.sort(common.compare);
-					res.status(200).end(JSON.stringify({'suggestions':sortedResults}) + '\n');
+					res.status(200).end(JSON.stringify({'suggestions':arrResults.sort(common.compare)}) + '\n');
 	                db.close();
 	            }
 	    	}
