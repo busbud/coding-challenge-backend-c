@@ -24,10 +24,12 @@ function loadSuggestions() {
 		if (myJsonObj.suggestions.length == 0) {
 			document.getElementById('loading').innerHTML = 'No results for ' + $("#city").val();
 			document.getElementById('suggestions').innerHTML = '';
+		    document.getElementById("numresults").innerText="Number of Results = 0";
 		} else {
 			var json = json2html.transform(myJsonObj.suggestions,transform);
 			document.getElementById('suggestions').innerHTML = json;
 			document.getElementById('loading').innerHTML = '';
+		    document.getElementById("numresults").innerText="Number of Results = " + myJsonObj.suggestions.length;
 		}
 	}
 }

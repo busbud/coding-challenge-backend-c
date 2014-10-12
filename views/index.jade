@@ -4,6 +4,7 @@ html
     title!= title
     style(type="text/css").
       #location {font-size: 75%;}
+      #numresults {font-size: 75%;}
       #loading {color: red;}
       span {color:green;}
     script(type='text/javascript').
@@ -22,6 +23,7 @@ html
       input(type='hidden',name='latitude',id='latitude',value='')
       input(type='hidden',name='longitude',id='longitude',value='')
     #location Your Latitude: Unknown; Longitude: Unknown
+    #numresults Number of Results = 0
     h2 Parsed JSON Response
     #loading
     ol
