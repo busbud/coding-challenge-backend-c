@@ -1,20 +1,32 @@
 {
   "name": "coding-challenge-backend-c",
-  "version": "0.0.0",
-  "description": "coding challenge in Nodejs",
+  "version": "0.0.1",
+  "description": "A fork of the BusBud coding challenge backend C.",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
     "test": "./node_modules/mocha/bin/mocha ./test/"
   },
-  "author": "",
+  "author": "Russell Saint Cyr",
   "license": "WTFPL",
   "dependencies": {
     "chai": "^1.9.1",
+    "csv-streamify": "^1.0.0",
+    "dotenv": "0.4.0",
+    "express": "^4.9.6",
+    "geolib": "^2.0.14",
+    "jade": "^1.7.0",
     "mocha": "^1.18.2",
+    "mongodb": "^1.4.18",
+    "routes": "^1.2.0",
+    "sleep": "^1.1.8",
     "supertest": "^0.11.0"
   },
   "engines": {
     "node": "0.10.26"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/1111x/coding-challenge-backend-c.git"
   }
 }

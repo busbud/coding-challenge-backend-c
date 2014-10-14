@@ -1,0 +1,31 @@
+html
+  head
+    meta(name='charset', content='UTF-8')
+    title!= title
+    style(type="text/css").
+      #location {font-size: 75%;}
+      #numresults {font-size: 75%;}
+      #loading {color: red;}
+      span {color:green;}
+    script(type='text/javascript').
+      var API_URL = "#{API_URL}";
+    script(type='text/javascript', src='/public/scripts/jquery-1.11.1.js')
+    script(type='text/javascript', src='/public/scripts/json2html.js')
+    script(type='text/javascript', src='/public/scripts/jquery.json2html.js')
+    script(type='text/javascript', src='/public/scripts/test-web.js')
+    script(type='text/javascript').
+      $('#city').focus();
+  body
+    h1!= message
+    #form City name:
+      input(type='text',name='city',id='city',autofocus)
+      input(type='button',name='butt',id='butt',value='Search')
+      input(type='hidden',name='latitude',id='latitude',value='')
+      input(type='hidden',name='longitude',id='longitude',value='')
+    #location Your Latitude: Unknown; Longitude: Unknown
+    #numresults Number of Results = 0
+    h2 Parsed JSON Response
+    #loading
+    ol
+      #suggestions
+    

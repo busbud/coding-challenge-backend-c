@@ -1,129 +1,110 @@
-# Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
+# City Search API for Busbud Coding Challenge
 
-## Requirements
+My solution contains two approaches:
+- The first configuration loads the dataset into memory via a file stream when the app initializes. API requests will search via the JavaScript object in memory. The file system is only read once.
+- The second configuration will retrieve the data from MongoDB for every API request. Nothing is stored in memory.
 
-Design an API endpoint that provides auto-complete suggestions for large cities.
-The suggestions should be restricted to cities in the USA and Canada with a population above 5000 people.
-
-- the endpoint is exposed at `/suggestions`
-- the partial (or complete) search term is passed as a querystring parameter `q`
-- the caller's location can optionally be supplied via querystring parameters `latitude` and `longitude` to help improve relative scores
-- the endpoint returns a JSON response with an array of scored suggested matches
-    - the suggestions are sorted by descending score
-    - each suggestion has a score between 0 and 1 (inclusive) indicating confidence in the suggestion (1 is most confident)
-    - each suggestion has a name which can be used to disambiguate between similarly named locations
-    - each suggestion has a latitude and longitude
-- all functional tests should pass (additional tests may be implemented as necessary).
-- the final application should be [deployed to Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs).
-- feel free to add more features if you like!
-
-#### Sample responses
-
-These responses are meant to provide guidance. The exact values can vary based on the data source and scoring algorithm
-
-**Near match**
-
-    GET /suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
-
-```json
-{
-  "suggestions": [
-    {
-      "name": "London, ON, Canada",
-      "latitude": "42.98339",
-      "longitude": "-81.23304",
-      "score": 0.9
-    },
-    {
-      "name": "London, OH, USA",
-      "latitude": "39.88645",
-      "longitude": "-83.44825",
-      "score": 0.5
-    },
-    {
-      "name": "London, KY, USA",
-      "latitude": "37.12898",
-      "longitude": "-84.08326",
-      "score": 0.5
-    },
-    {
-      "name": "Londontowne, MD, USA",
-      "latitude": "38.93345",
-      "longitude": "-76.54941",
-      "score": 0.3
-    }
-  ]
-}
-```
-
-**No match**
-
-    GET /suggestions?q=SomeRandomCityInTheMiddleOfNowhere
-
-```json
-{
-  "suggestions": []
-}
-```
-
-
-### Non-functional
-
-- All code should be written in Javascript
-- Mitigations to handle high levels of traffic should be implemented
-- Work should be submitted as a pull-request to this repo
-- Documentation and maintainability is a plus
-
-### References
-
-- Geonames provides city lists Canada and the USA http://download.geonames.org/export/dump/readme.txt
-- http://www.nodejs.org/
-- http://ejohn.org/blog/node-js-stream-playground/
-
-
-## Getting Started
-
-Begin by forking this repo and cloning your fork. GitHub has apps for [Mac](http://mac.github.com/) and
-[Windows](http://windows.github.com/) that make this easier.
-
-### Setting up a Nodejs environment
-
-Get started by installing [nodejs](http://www.nodejs.org).
-
-For OS X users, use [Homebrew](http://brew.sh) and `brew install nvm`
-
-Once that's done, from the project directory, run
+The default approach is the first one. To switch to using the database, set the environment variable USE_MONGO to false. You can do this at runtime:
 
 ```
-nvm use
+USE_MONGO=true node app
+```
+## Performance Differences Between Approaches
+I used two approaches because I wanted to test which one produced better performance to handle high levels of traffic. Was it more efficient to load everything into memory once, or to query a database with each request? Below is a performance chart based on the current configuration.
+
+![Response Times](/docs/images/response-times.png?raw=true "Response Times")
+
+The search-by-object-in-memory approach is 31% faster than the search-by-database approach. The cost of this is 385 milliseconds while the file stream loads 7237 cities into an object array (you can see this if you set `DEBUG_MODE=true USE_MONGO=false`). Of course these results would differ based on the type of database or its optimization, as well as how I'm searching the JS object. Performance would also change based on server load at the time. Thus, it is possible that a database search would be faster, especially for huge datasets or searches requiring joins of multiple datasets. A conclusive result would be out of scope of this coding challenge, but is worth pursuing.
+
+Unfortunately, although the load-data-at-app-startup approach is faster in this limited dataset, those extra 386 milliseconds cause the initial mocha tests to fail while the data is still loading. The tests, from what I could determine, do not allow for an "app warmup" period. The assumption is that the app starts immediately and that URL requests will work. I would need to either reduce my startup time, or somehow make the app startup synchronous based on a "data is ready" callback.
+
+Note that `USE_MONGO=true npm test` should work fine and produce successful results for all tests.
+```
+  GET /suggestions
+    non-existent city
+      ✓ returns a 404 
+      ✓ returns an empty array of suggestions 
+    valid city
+      ✓ returns a 200 
+      ✓ returns an array of suggestions 
+      ✓ contains a match 
+      ✓ contains latitudes and longitudes 
+      ✓ contains scores 
+    valid city with non-ASCII characters (Québec)
+      ✓ returns a 200 
+      ✓ returns an array with 1 suggestion 
+    Cities scored by location to user
+      ✓ returns a 200 
+      ✓ returns an array with 37 suggestions 
+      ✓ first array element is Montréal 
+
+
+  12 passing (258ms)
 ```
 
-### Setting up the project
+## API Test Page
+I wrote a web page which consumes the API, and presents the output after each letter has been entered. When the app is started it will open up a route to the page at `/apitest`, i.e. [localhost:2345/apitest](http://localhost:2345/apitest). 
 
-In the project directory run
+![Screenshot](/docs/images/bos.png?raw=true "Screenshot")
 
+When you access the page for the first time, your browser should ask for permission to use your location. After you click Allow, your latitude and longitude should be displayed. Your results will now be scored and sorted based on proximity to your location.
+![Permission](/docs/images/geolocation_permission.png?raw=true "Permission")
+
+![With Geo-location](/docs/images/with-latitude.png?raw=true "With Geo-location")
+
+## Geo-location Shortcuts
+I have made it easier to test the API by embedding coordinates for 5 North American cities: Montreal, New York, Miami, Vancouver, and Los Angeles. To test, add the querystring argument `city` with the city name, i.e. `city=Miami`.
+
+![Miami-Abing](/docs/images/miami-abing.png?raw=true "Miami-Abing")
+
+## Demo
+You can try the app now on Heroku.
+- [API Endpoint](http://mighty-wildwood-7373.herokuapp.com/suggestions?q=Montreal)
+- [API Endpoint Test Page](http://mighty-wildwood-7373.herokuapp.com/apitest)
+
+## Debugging
+Debugging is disabled by default. To enable it set the environment variable DEBUG_MODE to true.
 ```
-npm install
+DEBUG_MODE=true node app
+```
+## MongoDB setup
+If you don't have a local MongoDB installation, you can find the full instructions at [docs.mongodb.org/manual/installation](http://docs.mongodb.org/manual/installation) for your OS.
+
+Once you have Mongo, you can import the TSV file into a collection with the command below.
+``` 
+mongoimport -d busbud -c cities --file data/cities_canada-usa.tsv --type tsv --headerline
+```
+This should produce the output below
+```
+connected to: 127.0.0.1
+Fri Oct 10 15:18:22.951 check 9 7238
+Fri Oct 10 15:18:23.943 imported 7237 objects
 ```
 
-### Running the tests
-
-The test suite can be run with
-
+You can confirm the collection by logging into Mongo. Run the commands below to ensure the database setup is correct.
 ```
-npm test
+> show dbs
+busbud	0.0625GB
+> use busbud
+switched to db busbud
+> show collections
+cities
+system.indexes
+> db.cities.find().count()
+7237
 ```
+## Additional Tests
+I added some additional tests. The first section tests for a valid city with non-ASCII characters, i.e. Québec. Searches for Québec/Québec or Montréal/Montréal should return the same results. The other test confirms that cities will be scored by the user's location, closest cities presented first with the score approaching 1. 
 
-### Starting the application
+Without geo-location, results will be sorted alphabetially and not scored. In a future version, I could try to use other ways to get location such as via the user's IP address.
 
-To start a local server run
-
+Below are the results of `npm test` for the new items. 
 ```
-PORT=3456 npm start
-```
-
-which should produce output similar to
-
-```
-Server running at http://127.0.0.1:2345/suggestions
+    valid city with non-ASCII characters (Québec)
+      ✓ returns a 200 
+      ✓ returns an array with 1 suggestion 
+    Cities scored by location to user
+      ✓ returns a 200 
+      ✓ returns an array with 37 suggestions 
+      ✓ first array element is Montréal 
 ```
