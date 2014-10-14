@@ -9,6 +9,39 @@ The default approach is the first one. To switch to using the database, set the 
 ```
 USE_MONGO=true node app
 ```
+## Performance Differences Between Approaches
+I used two approaches because I wanted to test which one produced better performance to handle high levels of traffic. Was it more efficient to load everything into memory once, or to query a database with each request? Below is a performance chart based on the current configuration.
+
+![Response Times](/docs/images/response-times.png?raw=true "Response Times")
+
+The search-by-object-in-memory approach is 31% faster than the search-by-database approach. The cost of this is 385 milliseconds while the file stream loads 7237 cities into an object array (you can see this if you set `DEBUG_MODE=true USE_MONGO=false`). Of course these results would differ based on the type of database or its optimization, as well as how I'm searching the JS object. Performance would also change based on server load at the time. Thus, it is possible that a database search would be faster, especially for huge datasets or searches requiring joins of multiple datasets. A conclusive result would be out of scope of this coding challenge, but is worth pursuing.
+
+Unfortunately, although the load-data-at-app-startup approach is faster in this limited dataset, those extra 386 milliseconds cause the initial mocha tests to fail while the data is still loading. The tests, from what I could determine, do not allow for an "app warmup" period. The assumption is that the app starts immediately and that URL requests will work. I would need to either reduce my startup time, or somehow make the app startup synchronous based on a "data is ready" callback.
+
+Note that `USE_MONGO=true npm test` should work fine and produce successful results for all tests.
+```
+  GET /suggestions
+    non-existent city
+      ✓ returns a 404 
+      ✓ returns an empty array of suggestions 
+    valid city
+      ✓ returns a 200 
+      ✓ returns an array of suggestions 
+      ✓ contains a match 
+      ✓ contains latitudes and longitudes 
+      ✓ contains scores 
+    valid city with non-ASCII characters (Québec)
+      ✓ returns a 200 
+      ✓ returns an array with 1 suggestion 
+    Cities scored by location to user
+      ✓ returns a 200 
+      ✓ returns an array with 37 suggestions 
+      ✓ first array element is Montréal 
+
+
+  12 passing (258ms)
+```
+
 ## API Test Page
 I wrote a web page which consumes the API, and presents the output after each letter has been entered. When the app is started it will open up a route to the page at `/apitest`, i.e. [localhost:2345/apitest](http://localhost:2345/apitest). 
 
