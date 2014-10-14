@@ -1,5 +1,6 @@
 var util = require('util');
 var geolib = require('geolib'); 
+var dotenv = require('dotenv').load();
 var DEBUG_MODE = process.env.DEBUG_MODE || 'false';
 
 String.prototype.startsWith = function startsWith(pattern) {
@@ -85,10 +86,18 @@ function getDistance(parts, lat2, long2) {
 }
 
 function compare(cityA,cityB) {
-	if (cityA.score < cityB.score)
-		return 1;
-	if (cityA.score > cityB.score)
-		return -1;
+	if (cityA.score) {
+		if (cityA.score < cityB.score)
+			return 1;
+		if (cityA.score > cityB.score)
+			return -1;
+	// sort alphabetically if there is no score
+	} else {
+		if (cityA.name > cityB.name)
+			return 1;
+		if (cityA.name < cityB.name)
+			return -1;
+	}
 }
 
 function isNumeric(obj) {

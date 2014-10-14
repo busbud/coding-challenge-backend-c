@@ -122,6 +122,10 @@ function handleRequest(req, res, parts) {
 	// copy matched items into our array
 	searchCities(qCity, suggestedCities);
     log('%d results returned for %s', suggestedCities.length, qCity);
+    // if no results, return 404
+    if (suggestedCities.length == 0) {
+    	res.status(404).end(JSON.stringify({'suggestions':suggestedCities}) + '\n');
+    }
 	// modify the city data for presentation, adding scored results
     prepareCityData(suggestedCities, parts);
     // sort the results by score
@@ -131,7 +135,7 @@ function handleRequest(req, res, parts) {
 	var executionTime = endTime - startTime;
 	log('Response execution time: %d milliseconds.', executionTime);
     // send JSON response
-	res.status(404).end(JSON.stringify({'suggestions':sortedResults}) + '\n');
+	res.status(200).end(JSON.stringify({'suggestions':sortedResults}) + '\n');
 }
 
 function prepareCityData(arr, parts) {
