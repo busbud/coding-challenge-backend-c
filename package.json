@@ -10,13 +10,16 @@
   "author": "",
   "license": "WTFPL",
   "dependencies": {
+    "async": "^0.9.0",
+    "btree": "^1.0.1",
     "lodash": "^2.4.1",
     "ya-csv": "^0.9.4"
   },
   "devDependencies": {
-    "supertest": "^0.14.0",
+    "benchmark": "^1.0.0",
+    "chai": "^1.9.1",
     "mocha": "^2.0.1",
-    "chai": "^1.9.1"
+    "supertest": "^0.14.0"
   },
   "engines": {
     "node": "0.11.14"
