@@ -1,20 +1,28 @@
-var expect  = require('chai').expect;
-var app     = require('../app');
-var request = require('supertest')(app);
+var _        = require('lodash');
+var expect   = require('chai').expect;
+var startApp = require('../app');
+var request  = require('supertest');
 
-describe('GET /suggestions', function() {
-  describe('with a non-existent city', function () {
-    var response;
-
-    before(function (done) {
-      request
-        .get('/suggestions?q=SomeRandomCityInTheMiddleOfNowhere')
+function startServerAndRequest(response, url) {
+  return function beforeHook(done) {
+    startApp(function(app) {
+      request(app)
+        .get(url)
         .end(function (err, res) {
-          response = res;
+          //_.assign(response, res);
+          response.statusCode = res.statusCode;
           response.json = JSON.parse(res.text);
           done(err);
         });
     });
+  }
+}
+
+describe('GET /suggestions', function() {
+  describe('with a non-existent city', function () {
+    var response = {};
+
+    before(startServerAndRequest(response, '/suggestions?q=SomeRandomCityInTheMiddleOfNowhere'));
 
     it('returns a 404', function () {
       expect(response.statusCode).to.equal(404);
@@ -27,17 +35,9 @@ describe('GET /suggestions', function() {
   });
 
   describe('with a valid city', function () {
-    var response;
+    var response = {};
 
-    before(function (done) {
-      request
-        .get('/suggestions?q=Montreal')
-        .end(function (err, res) {
-          response = res;
-          response.json = JSON.parse(res.text);
-          done(err);
-        });
-    });
+    before(startServerAndRequest(response, '/suggestions?q=Montreal'));
 
     it('returns a 200', function () {
       expect(response.statusCode).to.equal(200);
@@ -51,7 +51,7 @@ describe('GET /suggestions', function() {
     it('contains a match', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.some(function (suggestion) {
-          return suggestion.name.test(/montreal/i);
+          return /montreal/i.test(suggestion.name);
         });
       })
     });

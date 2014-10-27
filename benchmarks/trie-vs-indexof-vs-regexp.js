@@ -1,7 +1,7 @@
 var _           = require('lodash');
 var path        = require('path');
 var Benchmark   = require('benchmark');
-var SearchIndex = require('./search_index');
+var SearchIndex = require('../vendor/search_index');
 var Reader      = require('../lib/reader');
 
 var cities_file_path = path.join(__dirname, '..', 'data', 'cities.tsv');
