@@ -2,6 +2,7 @@
  * High-level module to access cities
  */
 var fs = require('fs');
+var url = require('url');
 var util = require('util');
 
 var es = require('event-stream');
