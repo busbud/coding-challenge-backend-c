@@ -70,7 +70,7 @@ function startServer(callback) {
             sendResponse(res, {}, 404);
 
           }
-        }).listen(port, '127.0.0.1');
+        }).listen(port, '0.0.0.0');
 
         console.log('Server running at http://127.0.0.1:%d/suggestions', port);
         done(null, server);
@@ -88,5 +88,3 @@ if (!module.parent) {
 
 // Like that we can use our server in tests
 module.exports = startServer;
-
-
