@@ -51,7 +51,8 @@ describe('GET /suggestions', function() {
     it('contains a match', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.some(function (suggestion) {
-          return suggestion.name.test(/montreal/i);
+          var r = new RegExp(/montreal/i);
+          return r.test(suggestion.name);
         });
       })
     });
@@ -67,7 +68,7 @@ describe('GET /suggestions', function() {
     it('contains scores', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.every(function (suggestion) {
-          return suggestion.latitude && suggestion.longitude;
+          return typeof suggestion.score != "undefined";
         });
       })
     });
