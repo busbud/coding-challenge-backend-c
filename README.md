@@ -1,4 +1,21 @@
-# Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
+# Busbud Coding Challenge [![Build Status](https://circleci.com/gh/kiasaki/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
+
+## Getting started
+
+```bash
+# Install dependencies
+npm install
+# Run tests using npm
+npm test
+# Start app directly
+node app.js
+# Or using npm
+npm start
+```
+
+The app is curently deployed to heroku under the following name: [na-city-suggestions](https://na-city-suggestions.herokuapp.com/)
+
+---
 
 ## Requirements
 
