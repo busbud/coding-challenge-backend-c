@@ -5,7 +5,10 @@ var _      = require('lodash');
 var async = require('async');
 var Reader = require('./lib/reader');
 var Search = require('./lib/search');
+var Cache = require('./lib/cache');
 
+var MEMCACHED_PORT = process.env.MEMCACHED_PORT || 11211;
+var MEMCACHED_HOST = process.env.MEMCACHED_HOST || 'localhost';
 var port = process.env.PORT || 2345;
 var cities_file_path = path.join(__dirname, 'data', 'cities.tsv');
 
@@ -34,9 +37,18 @@ function startServer(callback) {
         done(null, cities, search);
       },
 
-      // Tell the search index to use memcache
+      // Setup the search index so it uses memcached
       function(cities, search, done) {
-        // TODO: Comming up!
+
+        // Contants defined at the top using ENV vars with fallback
+        search.cache = new Cache(MEMCACHED_PORT, MEMCACHED_HOST);
+        search.cache.connect();
+
+        // Be sure to close connection to memcache on exit
+        process.on('exit', function(code) {
+          search.cache.close();
+        });
+
         done(null, cities, search);
       },
 
@@ -48,12 +60,13 @@ function startServer(callback) {
 
             // Send suggestions
             var params = url.parse(req.url, true).query;
-            var results = search.search(params);
-            var status = results.length > 0 ? 200 : 404;
+            search.search(params, function(results) {
+              var status = results.length > 0 ? 200 : 404;
 
-            sendResponse(res, {
-              suggestions: results
-            }, status);
+              sendResponse(res, {
+                suggestions: results
+              }, status);
+            });
 
           } else {
 

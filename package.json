@@ -13,6 +13,8 @@
     "async": "^0.9.0",
     "btree": "^1.0.1",
     "lodash": "^2.4.1",
+    "memcache": "^0.3.0",
+    "sha1": "^1.1.0",
     "ya-csv": "^0.9.4"
   },
   "devDependencies": {
