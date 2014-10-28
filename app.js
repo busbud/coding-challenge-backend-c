@@ -32,8 +32,10 @@ function startServer(callback) {
 
       // Initialize search index with cities
       function(cities, done) {
+
         var search = new Search();
         search.add(cities);
+
         done(null, cities, search);
       },
 
@@ -41,13 +43,7 @@ function startServer(callback) {
       function(cities, search, done) {
 
         // Contants defined at the top using ENV vars with fallback
-        search.cache = new Cache(MEMCACHED_PORT, MEMCACHED_HOST);
-        search.cache.connect();
-
-        // Be sure to close connection to memcache on exit
-        process.on('exit', function(code) {
-          search.cache.close();
-        });
+        search.cache = new Cache();
 
         done(null, cities, search);
       },
