@@ -64,12 +64,59 @@ describe('GET /suggestions', function() {
       })
     });
 
-    it('contains scores', function () {
+    it('contains locations', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.every(function (suggestion) {
           return suggestion.latitude && suggestion.longitude;
         });
       })
     });
+
+    it('contains scores', function () {
+      expect(response.json.suggestions).to.satisfy(function (suggestions) {
+        return suggestions.every(function (suggestion) {
+          return suggestion.score;
+        });
+      })
+    });
   });
+
+
+  describe('with a broad search', function () {
+    var response = {};
+
+    before(startServerAndRequest(response, '/suggestions?q=mon'));
+
+    it('returns an array capped to 10 results', function () {
+      expect(response.json.suggestions).to.be.instanceof(Array);
+      expect(response.json.suggestions).to.have.length(10);
+    });
+  });
+
+
+  describe('with a valid city and a limit', function () {
+    var response = {};
+
+    before(startServerAndRequest(response, '/suggestions?q=mon&limit=2'));
+
+    it('returns a 200', function () {
+      expect(response.statusCode).to.equal(200);
+    });
+
+    it('returns an array of suggestions the right length', function () {
+      expect(response.json.suggestions).to.be.instanceof(Array);
+      expect(response.json.suggestions).to.have.length(2);
+    });
+  });
+
+  describe('with a specific location', function () {
+    var response = {};
+
+    before(startServerAndRequest(response, '/suggestions?q=lat&latitude=30.53&longitude=-88.86'));
+
+    it('returns a city closer to me first', function() {
+      expect(response.json.suggestions[0].name).to.equal('Latimer, MS, USA');
+    });
+  });
+
 });

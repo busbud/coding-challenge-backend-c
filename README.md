@@ -15,6 +15,8 @@ npm start
 
 The app is curently deployed to heroku under the following name: [na-city-suggestions](https://na-city-suggestions.herokuapp.com/)
 
+Exemple request: [http://na-city-suggestions.herokuapp.com/suggestions?q=moine&latitude=47.40177&longitude=-122&limit=2](http://na-city-suggestions.herokuapp.com/suggestions?q=moine&latitude=47.40177&longitude=-122&limit=2)
+
 ---
 
 ## Requirements
