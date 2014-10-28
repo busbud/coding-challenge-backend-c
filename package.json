@@ -2,6 +2,7 @@
   "name": "coding-challenge-backend-c",
   "version": "0.0.0",
   "description": "coding challenge in Nodejs",
+  "repository": "git@github.com:kiasaki/coding-challenge-backend-c.git",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
@@ -10,11 +11,20 @@
   "author": "",
   "license": "WTFPL",
   "dependencies": {
+    "async": "^0.9.0",
+    "lodash": "^2.4.1",
+    "memjs": "^0.8.5",
+    "sha1": "^1.1.0",
+    "ya-csv": "^0.9.4"
+  },
+  "devDependencies": {
+    "benchmark": "^1.0.0",
     "chai": "^1.9.1",
-    "mocha": "^1.18.2",
-    "supertest": "^0.11.0"
+    "mocha": "^2.0.1",
+    "btree": "^1.0.1",
+    "supertest": "^0.14.0"
   },
   "engines": {
-    "node": "0.10.26"
+    "node": "0.11.14"
   }
 }
