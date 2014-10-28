@@ -20,14 +20,14 @@ All module use asynchronous operations, as much as possible, to maximize it's ca
 [Redis](http://redis.io/) was selected for persisting the list of cities for several reasons:
 
 * IO throughput: The solution is expected to serve a high level of traffic and Redis offers exceptional IO throughput.
-The existence of an optimized binary client for Node ([hiredis](https://github.com/redis/hiredis-node) should provide 
+The existence of an optimized binary client for Node ([hiredis](https://github.com/redis/hiredis-node)) should provide 
 additional performance benefits.
 
 * Ease of deployment: Since the solution is targeted towards deployment on Heroku, Redis is easily made available 
 through an Heroku add-on ([RedisToGo](https://devcenter.heroku.com/articles/redistogo)), which makes for an easy 
 deployment.
 
-* Possibility of loading from snapshot: Compared to purely volatile in-memory caches (like memcached), Redis can be 
+* Possibility of loading from snapshot: As opposed to purely volatile in-memory caches (like memcached), Redis can be 
 loaded with a snapshot of data on startup, meaning other instances could be spun up with the existing data. This might
 come in handy if moving away from Heroku, in order to minimize disruption.
 
@@ -68,7 +68,7 @@ This criteria is based on the expectation that larger cities are more popular an
 This criteria in only used when a latitude and longitude is provided in the request. The city closest to that location
 scores 100%, while cities farther away score a lower percentage, proportional to their distance.
 
-This criteria is based on the expectation that the user will look for cities near them.
+This criteria is based on the expectation that the user will look for cities near the location provided.
 
 
 ## Limitations
@@ -98,6 +98,7 @@ This would slow down the request, but might provide a better list of results.
 ##### Improve speed by setting a minimum length of query
 
 The solution does not require a minimum length to the query parameter. Enforcing a two or three characters minimum
+would lower the load and provide a smaller list of better suggestions.
 
 ##### Improve speed by caching location-less searches
 
