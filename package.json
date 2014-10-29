@@ -1,20 +1,30 @@
 {
   "name": "coding-challenge-backend-c",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "coding challenge in Nodejs",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
     "test": "./node_modules/mocha/bin/mocha ./test/"
   },
-  "author": "",
+  "author": "Julien St-Laurent <julien.stlaurent@gmail.com>",
   "license": "WTFPL",
   "dependencies": {
     "chai": "^1.9.1",
     "mocha": "^1.18.2",
-    "supertest": "^0.11.0"
+    "supertest": "^0.11.0",
+    "redis": "^0.12.1",
+    "hiredis": "^0.1.17",
+    "express": "^4.10.0",
+    "event-stream": "^3.1.7",
+    "string": "^2.2.0",
+    "haversine": "^1.0.0"
   },
   "engines": {
     "node": "0.10.26"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jstlaurent/coding-challenge-backend-c.git"
   }
 }
