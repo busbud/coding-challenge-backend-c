@@ -82,7 +82,7 @@ app.get('/suggestions', function (req, res) {
             score = utils.distance(req.query.q,rec.name)
           }
 
-          results.push({"name":rec.ascii +", "+ (caCodes[rec.admin1] || rec.admin1)  +", " + (rec.country == "CA"?"Canada":"USA"),"latitude":rec.lat,"longitude":rec.lat,"score":score.toFixed(2)})
+          results.push({"name":rec.ascii +", "+ (caCodes[rec.admin1] || rec.admin1)  +", " + (rec.country == "CA"?"Canada":"USA"),"latitude":rec.lat,"longitude":rec.long,"score":score.toFixed(2)})
         });
 
         if (results.length > 0) {
