@@ -1,0 +1,34 @@
+SCORING
+
+For the scoring I split it between two values equally.
+
+Firstly I used the length of the search query and divided it by the 
+length of the city name. For example with the search term 'Londo', 
+'London' will have a higher decimal score than 'Londonderry'.
+
+Secondly I found the length difference in meters between the client 
+and the city. I decided to use the figure 4,800,000 meters which is roughly 
+the length of the US as the furthest distance which after would return a score of zero.
+Looking for any city over this length would be international and seems 
+pointless to sort by. The smaller figure of 4,800,000 also makes for a more 
+logical spread of scoring, which then weighs evenly against the search query.
+
+With the two values I divided them both by 2 and then added them together for 
+the final scoring.
+
+STREAMING
+
+I streamed the TSV file in to avoid loading the whole file into memory for every request.
+
+GEOLIB
+
+I used the geolib module to handle processing the distances. I could of used a 
+single method but I assume such a module would get utilised in other areas of the app.
+
+REGEX ESCAPE
+
+I escaped the regex to ensure we receive more reliable input 
+
+IMPROVEMENTS
+
+I could run a script to 
