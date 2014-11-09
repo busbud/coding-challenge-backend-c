@@ -15,7 +15,8 @@
     "supertest": "^0.11.0",
     "express": "~4.0.0",
     "mongodb": "*",
-    "monk": "*"
+    "monk": "*",
+    "csv-streamify": "*"
   },
   "engines": {
     "node": "0.10.26"
