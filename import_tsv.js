@@ -20,7 +20,7 @@ parser.on('readable', function () {
     citiesDb.insert({
       name: city.name,
       lat: city.lat,
-      lon: city.lon,
+      long: city.long,
       country: city.country,
       province: city.admin1
     }, function(err, doc) {
