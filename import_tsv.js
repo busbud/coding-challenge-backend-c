@@ -19,6 +19,7 @@ parser.on('readable', function () {
     addedCount++;
     citiesDb.insert({
       name: city.name,
+      alt_name: city.alt_name,
       lat: city.lat,
       long: city.long,
       country: city.country,
