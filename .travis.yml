@@ -4,5 +4,5 @@ node_js:
 services:
   - mongodb
 script:
-  - mongoimport -d cities -c cities --file data/cities_canada-usa.tsv --jsonArray --type tsv --headerline
+  - mongoimport -d cities -c cities --file data/cities_canada-usa.tsv --type tsv --headerline
   - npm test
