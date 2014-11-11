@@ -19,58 +19,6 @@ var _ = require('lodash'),
       12: "YT",
       13: "NT",
       14: "NU"
-      // 1: {
-      //   short: "AB",
-      //   long: "Alberta"
-      // },
-      // 2: {
-      //   short: "BC",
-      //   long: "British Columbia"
-      // },
-      // 3: {
-      //   short: "MB",
-      //   long: "Manitoba"
-      // },
-      // 4: {
-      //   short: "NB",
-      //   long: "New Brunswick"
-      // },
-      // 5: {
-      //   short: "NF",
-      //   long: "Newfoundland & Labrador"
-      // },
-      // 7: {
-      //   short: "NS",
-      //   long: "Nova Scotia"
-      // },
-      // 8: {
-      //   short: "ON",
-      //   long: "Ontario"
-      // },
-      // 9: {
-      //   short: "PE",
-      //   long: "Prince Edward Island"
-      // },
-      // 10: {
-      //   short: "QC",
-      //   long: "Quebec"
-      // },
-      // 11: {
-      //   short: "SK",
-      //   long: "Saskatchewan"
-      // },
-      // 12: {
-      //   short: "YT",
-      //   long: "Yukon"
-      // },
-      // 13: {
-      //   short: "NT",
-      //   long: "Northwest Territories"
-      // },
-      // 14: {
-      //   short: "NU",
-      //   long: "Nunavut"
-      // }
     };
 
 app.get('/suggestions', function(req, res) {
@@ -83,7 +31,6 @@ app.get('/suggestions', function(req, res) {
       // querystring
         $or: [
           { ascii: cityRegex },
-          { name: cityRegex},
           { alt_name: cityRegex }
         ]},
         function(err, docs) {
@@ -126,6 +73,31 @@ app.get('/suggestions', function(req, res) {
     });
 
     return formattedSuggestions;
+  }
+
+  function scoreSuggestions(suggestions, querystring, coordinates) {
+    // 3 criterion:
+    // 1. population
+    // 2. exact match
+    // 3. distance
+    // score = average
+
+    // A city with a population above this will score 100% for the population
+    // criteria
+    var criterionWeight = {
+      exactitude: 0.7,
+      population: 0.3
+    },
+        POPULATION_THRESHOLD = 300000, // That's 300,000
+        score = {};
+
+    _.each(suggestions, function(suggestion) {
+    // score based on the querystring's exactitude
+    // i.e. number of chars in querystring vs number of chars in ascii name
+      score.exactitude = querystring.length / suggestion.ascii.length;
+      score.population = Math.min(suggestion.population / POPULATION_THRESHOLD, 1);
+      suggestion.score = score.exactitude * criterionWeigth.exactitude + score.population * criterionWeight.population;
+    });
   }
 
   getSuggestions(req);

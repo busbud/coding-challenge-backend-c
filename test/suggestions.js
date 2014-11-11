@@ -3,6 +3,28 @@ var app     = require('../app');
 var request = require('supertest')(app);
 
 describe('GET /suggestions', function() {
+  describe('with a missing query string', function() {
+    var response;
+
+    before(function(done) {
+      request
+        .get('/suggestions?q=')
+        .end(function(err, res) {
+          response = res;
+          response.json = JSON.parse(res.text);
+          done(err);
+        });
+    });
+
+    it('returns a 400', function() {
+      expect(response.statusCode).to.equal(400);
+    });
+
+    it('gives an error message', function() {
+      expect(response.json.suggestions.error).to.equal('query parameter missing')
+    });
+  });
+
   describe('with a non-existent city', function () {
     var response;
 
@@ -53,7 +75,7 @@ describe('GET /suggestions', function() {
         return suggestions.some(function (suggestion) {
           return /montreal/i.test(suggestion.name);
         });
-      })
+      });
     });
 
     it('contains latitudes and longitudes', function () {
@@ -61,7 +83,7 @@ describe('GET /suggestions', function() {
         return suggestions.every(function (suggestion) {
           return suggestion.latitude && suggestion.longitude;
         });
-      })
+      });
     });
 
     it('contains scores', function () {
@@ -69,7 +91,30 @@ describe('GET /suggestions', function() {
         return suggestions.every(function (suggestion) {
           return suggestion.score;
         });
-      })
+      });
+    });
+
+    context('with coordinates in the query', function() {
+      var response;
+
+      context('when searching for a nearby city', function() {
+        before(function (done) {
+          request
+            .get('/suggestions?q=Montreal&latitude=45.56995&longitude=-73.692')
+            .end(function (err, res) {
+              response = res;
+              response.json = JSON.parse(res.text);
+              done(err);
+            });
+        });
+
+        it('gives the nearby city the highest score', function() {
+          expect(response.json.suggestions).to.satisfy(function(suggestions) {
+            return suggestions[0].score > suggestions[1].score;
+          });
+        });
+      });
     });
   });
+
 });
