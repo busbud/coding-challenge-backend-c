@@ -7,26 +7,33 @@ resolving the challenge using the described technologies.
 
 *Geo data parsing*
 
-.   Understand how the data is formatted and where it is located.
-.   Build a simple data parser with output: JSON object to work with.
-.   Complete comments and unit tests for this parsing activity.
+1.   Understand how the data is formatted and where it is located.
+
+2.   Build a simple data parser with output: JSON object to work with.
+
+3.   Complete comments and unit tests for this parsing activity.
 Small clean-up...
 
 
 *Request query parsing*
 
-.  Lay down the details for the input query: edge cases, etc.
-.  Design algorithm for score.
-.  Build a simple query parser with output: JSON object to work with.
+1.  Lay down the details for the input query: edge cases, etc.
+
+2.  Design algorithm for score.
+
+3.  Build a simple query parser with output: JSON object to work with.
 (note: probably given with req)
-.  Build a simple algorithm.
-.  Build specific test cases with the data provided to try edge cases.
-.  Complete comments and unit tests for this part. Small clean-up...
+
+4.  Build a simple algorithm.
+
+5.  Build specific test cases with the data provided to try edge cases.
+
+6.  Complete comments and unit tests for this part. Small clean-up...
 
 
 *Final*
 
-. Review solution.
+1. Review solution.
 
 
 ## Notes
@@ -37,7 +44,9 @@ TSV file can change over time. For example, the population can change.
 
 ###Questions:
 
-1. Can Geonames change fields? Since no version number in files, I 
+1. Can Geonames change fields?
+
+Since no version number in files, I 
 guess it might, unless when you query these files you specify some
 version. Let us assume no modification for this exercise.
 
@@ -67,6 +76,7 @@ Almost three hours for parsing the TSV and getting familiar with the
 problem.
 
 I estimate three hours to do the queryString and the algorithm logic.
+
 
 
 *Tue Nov 11 16:42*
