@@ -5,7 +5,7 @@ var express = require('express'),
     haversine = require('haversine'),
     mongo = require('mongodb'),
     monk = require('monk'),
-    db = monk(process.env.MONGOLAB_URI + '/cities' || 'localhost:27017/cities'),
+    db = monk((process.env.MONGOLAB_URI || 'localhost:27017') + '/cities'),
     cities = db.get('cities'),
     ID_TO_PROVINCE = {
       1: "AB",
