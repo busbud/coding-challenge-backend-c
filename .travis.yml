@@ -4,4 +4,5 @@ node_js:
 services:
   - mongodb
 before_script:
+  - sleep 15
   - mongoimport -d cities -c cities --file data/cities_canada-usa.tsv --jsonArray --type tsv --headerline
