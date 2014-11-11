@@ -100,7 +100,7 @@ function parseGeoNamesGazetteerTsvFile(options, callback) {
     });
 
     readStream.on('end', function () {
-        callback(output);
+        callback(null, output);
     });
 };
 
