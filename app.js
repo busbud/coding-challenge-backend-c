@@ -1,5 +1,6 @@
 var express = require('express'),
     app = express(),
+    port = process.env.PORT || 2345,
     _ = require('lodash'),
     haversine = require('haversine'),
     mongo = require('mongodb'),
@@ -23,7 +24,7 @@ var express = require('express'),
     };
 
 /*
-Handle HTTP GET requests to the /suggestions endpoint 
+Handle HTTP GET requests to the /suggestions endpoint
 */
 app.get('/suggestions', function(req, res) {
   getSuggestions(req);
@@ -220,7 +221,7 @@ app.get('/suggestions', function(req, res) {
 /*
 Boilerplate expressJS webserver code
 */
-var server = app.listen(3000, function() {
+var server = app.listen(port, function() {
   var host = server.address().address;
   var port = server.address().port;
 
