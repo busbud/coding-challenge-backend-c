@@ -3,6 +3,6 @@ node_js:
   - "0.10"
 services:
   - mongodb
-before_script:
-  - sleep 15
+script:
   - mongoimport -d cities -c cities --file data/cities_canada-usa.tsv --jsonArray --type tsv --headerline
+  - npm test
