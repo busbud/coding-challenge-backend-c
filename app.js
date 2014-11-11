@@ -5,9 +5,11 @@ module.exports = http.createServer(function (req, res) {
   res.writeHead(404, {'Content-Type': 'text/plain'});
 
   if (req.url.indexOf('/suggestions') === 0) {
-    res.end(JSON.stringify({
-      suggestions: []
-    }));
+    require('./src/parse.js').parse(function () {
+        res.end(JSON.stringify({
+          suggestions: []
+        }));
+    });
   } else {
     res.end();
   }
