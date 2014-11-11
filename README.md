@@ -1,129 +1,159 @@
-# Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
+# Busbud Coding Challenge city suggestion API
+## Overview
+The app is live here: https://busbud-suggestions.herokuapp.com/suggestions
+### Framework and database choices
+The API runs in an expressJS server and the cities data live in MongoDB.
 
-## Requirements
+I picked expressJS because it is a widely used framework, it has an extensive documentation and chances are that other web services at Busbud also use express.
 
-Design an API endpoint that provides auto-complete suggestions for large cities.
-The suggestions should be restricted to cities in the USA and Canada with a population above 5000 people.
+For the cities, I initially went with ElasticSearch because it is very scalable and the cities are not likely to be updated regularly. With the right settings for the index, ElasticSearch is a very powerful engine that could nicely back the API.
 
-- the endpoint is exposed at `/suggestions`
-- the partial (or complete) search term is passed as a querystring parameter `q`
-- the caller's location can optionally be supplied via querystring parameters `latitude` and `longitude` to help improve relative scores
-- the endpoint returns a JSON response with an array of scored suggested matches
-    - the suggestions are sorted by descending score
-    - each suggestion has a score between 0 and 1 (inclusive) indicating confidence in the suggestion (1 is most confident)
-    - each suggestion has a name which can be used to disambiguate between similarly named locations
-    - each suggestion has a latitude and longitude
-- all functional tests should pass (additional tests may be implemented as necessary).
-- the final application should be [deployed to Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs).
-- feel free to add more features if you like!
+However, setting up ElasticSearch was a larger task than I anticipated and after spending 2 days on it, I decided to go another route and use MongoDB instead.
 
-#### Sample responses
+MongoDB is very well documented, uses JSON documents like ElasticSearch but is much easier to setup and readily available on Heroku's free tier. It can also be scaled up, should need be.
 
-These responses are meant to provide guidance. The exact values can vary based on the data source and scoring algorithm
+The app is live here: https://busbud-suggestions.herokuapp.com/suggestions
+### About the code
+I am a beginner with NodeJS and this was a fun opportunity to learn more about the platform. Async programming is a very interesting approach to network operations and I want to learn how to use it better and better.
 
-**Near match**
+I meant to split the various components into modules so it doesn't clutter the expressJS app but I couldn't get it done because of scoping problems. The objects `res`, `req` and `app` couldn't be accessed from the modules and I had to abandon the idea because time was running out.
 
-    GET /suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
+As a middle-ground, I divided the various parts of the app into named functions to help with readability and to avoid callback hell.
 
+### Things that could be improved
+- The scoring algorithm could be improved by using dynamic maximum values instead of absolute ones. I think iterating over every suggestion, finding what the largest population count is and using this as the denominator would give better relative scores. Same thing goes for the distance and exactitude. I didn't implement it because I was running out of time and the current scoring algorithm gave sane results.
+- The code could be refactored and split into modules, maybe simplified too. This is one of the major areas I would like to improve myself on: spotting where and how to refactor further.
+- Reduce the amount of data the app is searching through by discarding the columns we don't need (feat_class, feat_code, cc2, admin2, admin3...)
+- I'm pretty sure it is possible to achieve this app without resorting to expressJS and using the http module only. expressJS provided an easier to use framework but ultimately, http would be more barebones.
+- MongoDB might not be the absolute best choice for speed and Redis might be an even better alternative to ElasticSearch. I chose MongoDB knowing it wasn't as suited as Redis because I didn't want to run out of time figuring it out while I could get a working API with MongoDB. If I had more time, I would have definitely looked into Redis.
+
+## Reference
+The API has only got one endpoint.
+### Endpoint `/suggestions`
+When supplied a partial or full city name, it will return a list of suggestions matching the search term. Note that it will also search into alternative names for a city so it is possible to find Los Angeles with the query "LAX" or Toronto with the query "YTO".
+
+
+To receive suggestions, `GET /suggestions` with the following parameters:
+
+Name | Description
+--- | ---
+`q` | The partial or complete search term (mandatory)
+`latitude` | The caller's latitude to improve relative scores (optional__*__)
+`longitude` | The caller's longitude to improve relative scores (optional__*__)
+_*Note that you should supply both or none at all. _
+
+The returned data will be a JSON object containing an array of suggestions with the following properties:
+
+Property | Value
+--- | ---
+`name` | The ASCII name of the city with the province and the country
+`latitude` | The city's latitude
+`longitude` | The city's longitude
+`score` | The confidence in the suggestion (See suggestions scoring for more details)
+
+- A successful search (i.e. a search that yielded at least one result) will return with a HTTP status code 200.  
+- A search without a `q` parameter will return a 400 status code and an error.  
+- A search yielding no results will return an empty array with a 404 status code.
+
+The suggestions are ordered by score, from the highest to the lowest.
+
+#### Sample queries and answers
+`GET /suggestions?q=nyc` returns:
 ```json
 {
-  "suggestions": [
-    {
-      "name": "London, ON, Canada",
-      "latitude": "42.98339",
-      "longitude": "-81.23304",
-      "score": 0.9
-    },
-    {
-      "name": "London, OH, USA",
-      "latitude": "39.88645",
-      "longitude": "-83.44825",
-      "score": 0.5
-    },
-    {
-      "name": "London, KY, USA",
-      "latitude": "37.12898",
-      "longitude": "-84.08326",
-      "score": 0.5
-    },
-    {
-      "name": "Londontowne, MD, USA",
-      "latitude": "38.93345",
-      "longitude": "-76.54941",
-      "score": 0.3
-    }
-  ]
+    suggestions:
+    [
+        {
+            name: "New York City, NY, USA",
+            latitude: 40.71427,
+            longitude: -74.00597,
+            score: "0.4615"
+        }
+    ]
 }
 ```
 
-**No match**
-
-    GET /suggestions?q=SomeRandomCityInTheMiddleOfNowhere
-
+`GET /suggestions?q=mont&latitude=45.56995&longitude=-73.692` returns (truncated):
 ```json
 {
-  "suggestions": []
+    "suggestions": [
+        {
+            "name": "Montreal, QC, Canada",
+            "latitude": 45.50884,
+            "longitude": -73.58781,
+            "score": "0.9000"
+        },
+        {
+            "name": "Mont-Royal, QC, Canada",
+            "latitude": 45.51675,
+            "longitude": -73.64918,
+            "score": "0.7819"
+        },
+        {
+            "name": "Deux-Montagnes, QC, Canada",
+            "latitude": 45.53455,
+            "longitude": -73.90168,
+            "score": "0.7589"
+        },
+        {
+            "name": "Montreal-Ouest, QC, Canada",
+            "latitude": 45.45286,
+            "longitude": -73.64918,
+            "score": "0.7577"
+        },
+        {
+            "name": "Mont-Saint-Hilaire, QC, Canada",
+            "latitude": 45.56678,
+            "longitude": -73.19915,
+            "score": "0.7460"
+        },
+        {
+            "name": "Saint-Bruno-de-Montarville, QC, Canada",
+            "latitude": 45.53341,
+            "longitude": -73.34916,
+            "score": "0.7332"
+        },
+        {
+            "name": "Bromont, QC, Canada",
+            "latitude": 45.31678,
+            "longitude": -72.64912,
+            "score": "0.6049"
+        },
+        [...]
+    ]
 }
 ```
 
-
-### Non-functional
-
-- All code should be written in Javascript
-- Mitigations to handle high levels of traffic should be implemented
-- Work should be submitted as a pull-request to this repo
-- Documentation and maintainability is a plus
-
-### References
-
-- Geonames provides city lists Canada and the USA http://download.geonames.org/export/dump/readme.txt
-- http://www.nodejs.org/
-- http://ejohn.org/blog/node-js-stream-playground/
+### Suggestions scoring
+Cities are scored based on the confidence this is the result the user was after and depends on 3 criterions:
+- The city's size by population _(larger means a higher score)_
+- How much the city's name matches the search query (_closer means a higher score_)
+- How close it is to the user (_closer means a higher score_)
 
 
-## Getting Started
+The weighted average of these criterion is the final suggestion score.
 
-Begin by forking this repo and cloning your fork. GitHub has apps for [Mac](http://mac.github.com/) and
-[Windows](http://windows.github.com/) that make this easier.
+#### Population
+The `POPULATION_THRESHOLD` is set to 1,000,000 habitants. A city with a million habitants or more will score full points on this criteria and a city with less will score proportionally.  
+1,000,000 habitants  is an arbitrary value but it seemed to be reasonable enough to assume it makes the city a major one where a significant number of people want to travel to/from.
 
-### Setting up a Nodejs environment
+#### Query exactitude
+The length of the query is compared to the length of the city's ASCII name. The resulting ratio gives the score for the exactitude criteria.  
+**Caveat**: this works well when searching for the city's name but gives an anormally low score when searching for the alternative name. For example, searching for "NYC" returns only one result but the score is low when it should be very close to 1. This is because it compares the length of "NYC" (3) to the length of "New York City" (13). 3/13 ≈ 0.23
 
-Get started by installing [nodejs](http://www.nodejs.org).
+#### Distance
+This score is only calculated if `latitude` and `longitude` were supplied in the query.
+This measures how far away the city is, on the assumption that users are more likely to search for  cities closer to them rather than further ones. The suggestion gets full points when it is less than 50 km away. It gets less points the further away it is, dropping to 0 points if it is further than 1,000 km away.
 
-For OS X users, use [Homebrew](http://brew.sh) and `brew install nvm`
+## Testing
 
-Once that's done, from the project directory, run
+The tests are located in `test/suggestions.js` and can be run with `npm test`.
 
-```
-nvm use
-```
+I made a few additions to the test suite and fixed two tests that seemed to have mistakes in them.
 
-### Setting up the project
-
-In the project directory run
-
-```
-npm install
-```
-
-### Running the tests
-
-The test suite can be run with
-
-```
-npm test
-```
-
-### Starting the application
-
-To start a local server run
-
-```
-PORT=3456 npm start
-```
-
-which should produce output similar to
-
-```
-Server running at http://127.0.0.1:2345/suggestions
-```
+## Resources that helped me tremendously
+- The good people of #node.js on freenode
+- callbackhell.com
+- https://github.com/maxogden/art-of-node
+- http://msdn.microsoft.com/en-us/magazine/gg309172.aspx for documenting the API
+- Wikipedia for the Haversine formula's uses
