@@ -38,12 +38,12 @@ When supplied a partial or full city name, it will return a list of suggestions 
 
 To receive suggestions, `GET /suggestions` with the following parameters:
 
-Name | Description
---- | ---
-`q` | The partial or complete search term (mandatory)
-`latitude` | The caller's latitude to improve relative scores (optional__*__)
-`longitude` | The caller's longitude to improve relative scores (optional__*__)
-`limit` | Limits the number of results (optional, defaults to 8)
+Name | Type | Default value | Description
+--- | --- | :---: | ---
+`q` | String | undefined | The partial or complete search term (mandatory)
+`latitude` | Number (float) | undefined | The caller's latitude to improve relative scores (optional__*__)
+`longitude` | Number (float) | undefined | The caller's longitude to improve relative scores (optional__*__)
+`limit` | Number (integer) | 8 | Limits the number of results (optional)
 _*Note that you should supply both or none at all. _
 
 The returned data will be a JSON object containing an array of suggestions with the following properties:
@@ -53,7 +53,7 @@ Property | Value
 `name` | The ASCII name of the city with the province and the country
 `latitude` | The city's latitude
 `longitude` | The city's longitude
-`score` | The confidence in the suggestion (See suggestions scoring for more details)
+`score` | The confidence in the suggestion (See [suggestions scoring](#suggestions-scoring) for more details)
 
 - A successful search (i.e. a search that yielded at least one result) will return with a HTTP status code 200.  
 - A search without a `q` parameter will return a 400 status code and an error.  
@@ -65,13 +65,13 @@ The suggestions are ordered by score, from the highest to the lowest.
 `GET /suggestions?q=nyc` returns:
 ```json
 {
-    suggestions:
+    "suggestions":
     [
         {
-            name: "New York City, NY, USA",
-            latitude: 40.71427,
-            longitude: -74.00597,
-            score: "0.4615"
+            "name": "New York City, NY, USA",
+            "latitude": 40.71427,
+            "longitude": -74.00597,
+            "score": "0.4615"
         }
     ]
 }
