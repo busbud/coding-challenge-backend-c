@@ -3,6 +3,42 @@ var app     = require('../app');
 var request = require('supertest')(app);
 
 describe('GET /suggestions', function() {
+  describe('without a limit parameter', function() {
+    var response;
+
+    before(function(done) {
+      request
+        .get('/suggestions?q=mont')
+        .end(function(err, res) {
+          response = res;
+          response.json = JSON.parse(res.text);
+          done(err);
+        });
+    });
+
+    it('returns 8 suggestions', function() {
+      expect(response.json.suggestions.length).to.equal(8);
+    });
+  });
+
+  describe('with a limit parameter of 11', function() {
+    var response;
+
+    before(function(done) {
+      request
+        .get('/suggestions?q=mont&limit=11')
+        .end(function(err, res) {
+          response = res;
+          response.json = JSON.parse(res.text);
+          done(err);
+        });
+    });
+
+    it('returns 11 suggestions', function() {
+      expect(response.json.suggestions.length).to.equal(11);
+    });
+  });
+
   describe('with a missing query string', function() {
     var response;
 

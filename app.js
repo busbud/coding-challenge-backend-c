@@ -5,6 +5,7 @@ var express = require('express'),
     haversine = require('haversine'),
     mongo = require('mongodb'),
     monk = require('monk'),
+    // This is for Heroku
     db = monk((process.env.MONGOLAB_URI || 'localhost:27017') + '/cities'),
     cities = db.get('cities'),
     ID_TO_PROVINCE = {
@@ -38,16 +39,22 @@ app.get('/suggestions', function(req, res) {
     // If a query string was submitted, hit mongo
     if (req.query.q) {
       var cityRegex = new RegExp(req.query.q, 'i');
-      var response = cities.find({
+      var limit = req.query.limit || 8;
+      var response = cities.find(
       /*
       Look for the cities which ascii name's or alt_name's begin with the
       queryString. Searching alt_name allows to use airport codes, nicknames
       like 'NYC' etc. Searching ascii avoids dealing with diacritics.
       */
-        $or: [
-          { ascii: cityRegex },
-          { alt_name: cityRegex }
-        ]},
+        {
+          $or: [
+            { ascii: cityRegex },
+            { alt_name: cityRegex }
+          ]
+        },
+        {
+          limit: limit
+        },
         function callback(err, docs) {
           // If we have results, format them
           if (docs.length > 0) {

@@ -43,6 +43,7 @@ Name | Description
 `q` | The partial or complete search term (mandatory)
 `latitude` | The caller's latitude to improve relative scores (optional__*__)
 `longitude` | The caller's longitude to improve relative scores (optional__*__)
+`limit` | Limits the number of results (optional, defaults to 8)
 _*Note that you should supply both or none at all. _
 
 The returned data will be a JSON object containing an array of suggestions with the following properties:
@@ -76,7 +77,7 @@ The suggestions are ordered by score, from the highest to the lowest.
 }
 ```
 
-`GET /suggestions?q=mont&latitude=45.56995&longitude=-73.692` returns (truncated):
+`GET /suggestions?q=mont&latitude=45.56995&longitude=-73.692&limit=7` returns:
 ```json
 {
     "suggestions": [
@@ -122,7 +123,6 @@ The suggestions are ordered by score, from the highest to the lowest.
             "longitude": -72.64912,
             "score": "0.6049"
         },
-        [...]
     ]
 }
 ```
