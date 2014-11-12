@@ -58,14 +58,16 @@ Error mgmt
 
 *Tue Nov 11*
 
-9:00 - 11:42 (pause de 5min) Parse TSV function completed.
+9:00 - 11:42 (5min pause) Parse TSV function completed.
 
-13:09 - 16:41 (trois pauses de 5min) Finished parsing core 
+13:09 - 16:41 (3x5min pauses) Finished parsing core 
 functionalities...remains clean-up and fixing comparison.
 
 I thought I would have finished the challenge in the morning. The
 problems with string-matching on city names and the calculation of the
 score took more time than I estimated.
+
+18:45 - 20:47 (45min pause) Learn Heroku and deploy app, url: https://coding-challenge-backend-c.herokuapp.com/suggestions?q=sthilaire&latitude=45.56678&longitude=-73.19915
 
 
 ##Estimation:
