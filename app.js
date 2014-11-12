@@ -3,7 +3,7 @@ var express = require('express'),
     port = process.env.PORT || 2345,
     _ = require('lodash'),
     haversine = require('haversine'),
-    mongo = require('mongodb'),
+    // mongo = require('mongodb'),
     monk = require('monk'),
     // This is for Heroku
     db = monk((process.env.MONGOLAB_URI || 'localhost:27017') + '/cities'),
@@ -40,7 +40,7 @@ app.get('/suggestions', function(req, res) {
     if (req.query.q) {
       var cityRegex = new RegExp(req.query.q, 'i');
       var limit = req.query.limit || 8;
-      var response = cities.find(
+      cities.find(
       /*
       Look for the cities which ascii name's or alt_name's begin with the
       queryString. Searching alt_name allows to use airport codes, nicknames
@@ -81,13 +81,13 @@ app.get('/suggestions', function(req, res) {
       Translate the province ID to its short name if we are dealing with a
       Canadian city
       */
-      if (suggestion.country == 'CA') {
+      if (suggestion.country === 'CA') {
         suggestion.admin1 = ID_TO_PROVINCE[suggestion.admin1];
       }
 
       // Translate the country name
-      if (suggestion.country == 'CA') suggestion.country = 'Canada';
-      if (suggestion.country == 'US') suggestion.country = 'USA';
+      if (suggestion.country === 'CA') suggestion.country = 'Canada';
+      if (suggestion.country === 'US') suggestion.country = 'USA';
 
       // Score the suggestion
       scoreSuggestions(suggestion, req.query);
@@ -160,7 +160,7 @@ app.get('/suggestions', function(req, res) {
       longitudes, cf http://en.wikipedia.org/wiki/Haversine_formula.
       The lower the score, the further the city is from the supplied lat/long.
       */
-      distance = haversine(cityCoordinates, queryCoordinates);
+      var distance = haversine(cityCoordinates, queryCoordinates);
       if (distance <= 50) {
         score.distance = 1;
       } else if (distance >  50 && distance <=  150) {
@@ -211,7 +211,7 @@ app.get('/suggestions', function(req, res) {
   Reorders the suggestions by the `by` argument.
   */
   function orderSuggestions(suggestions, by) {
-    orderedSuggestions = _.sortBy(suggestions, by).reverse();
+    var orderedSuggestions = _.sortBy(suggestions, by).reverse();
     sendResponse(orderedSuggestions, '200');
   }
 
