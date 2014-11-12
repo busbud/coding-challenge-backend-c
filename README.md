@@ -41,10 +41,10 @@ To receive suggestions, `GET /suggestions` with the following parameters:
 Name | Type | Default value | Description
 --- | --- | :---: | ---
 `q` | String | undefined | The partial or complete search term (mandatory)
-`latitude` | Number (float) | undefined | The caller's latitude to improve relative scores (optional__*__)
-`longitude` | Number (float) | undefined | The caller's longitude to improve relative scores (optional__*__)
+`latitude` | Number (float) | undefined | The caller's latitude to improve relative scores (optional*)
+`longitude` | Number (float) | undefined | The caller's longitude to improve relative scores (optional*)
 `limit` | Number (integer) | 8 | Limits the number of results (optional)
-_*Note that you should supply both or none at all. _
+*Note that you should supply both or none at all.
 
 The returned data will be a JSON object containing an array of suggestions with the following properties:
 
