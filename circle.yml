@@ -1,0 +1,8 @@
+database:
+  override:
+    - mongoimport -d cities -c cities --file ./data/cities_canada-usa.tsv --type tsv --headerline
+deployment:
+  staging:
+    branch: master
+    heroku:
+      appname: busbud-suggestions
