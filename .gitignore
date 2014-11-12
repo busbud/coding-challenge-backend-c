@@ -1,0 +1,5 @@
+# Ignore the node_modules dir
+node_modules/
+
+# mongodb's datadir
+data/db

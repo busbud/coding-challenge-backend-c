@@ -1,0 +1,7 @@
+language: node_js
+node_js:
+- '0.10'
+services:
+- mongodb
+before_script:
+- mongoimport -d cities -c cities --file ./data/cities_canada-usa.tsv --type tsv --headerline
