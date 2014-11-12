@@ -1,6 +1,9 @@
 # Busbud Coding Challenge city suggestion API
+[![Code Climate](https://codeclimate.com/github/stealth-coaxial/coding-challenge-backend-c/badges/gpa.svg)](https://codeclimate.com/github/stealth-coaxial/coding-challenge-backend-c) [![Build Status](https://travis-ci.org/stealth-coaxial/coding-challenge-backend-c.svg?branch=master)](https://travis-ci.org/stealth-coaxial/coding-challenge-backend-c)
 ## Overview
 The app is live here: https://busbud-suggestions.herokuapp.com/suggestions
+
+
 ### Framework and database choices
 The API runs in an expressJS server and the cities data live in MongoDB.
 
