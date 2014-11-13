@@ -1,5 +1,8 @@
 /**
  * @class City
+ *
+ * This class holds the city information and the logic for calculating  the 
+ * the distance with a reference latitude and longitude.
  */
 
 /**
@@ -20,7 +23,7 @@ function City(options) {
 }
 
 /**
- * Computes distance with reference latitude and longitude.
+ * Computes distance with a reference latitude and longitude.
  * @param {number} refLatitude in degrees
  * @param {number} refLongitude in degrees
  */

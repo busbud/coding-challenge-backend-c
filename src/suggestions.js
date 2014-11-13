@@ -48,7 +48,6 @@ function parseQueryStringOptions(options) {
         try {
             parseCoordinate(latitude);
         } catch (e) {
-            // 
             throw "Bad latitude. " + e;
         }
     } else {

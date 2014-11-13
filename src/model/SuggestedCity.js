@@ -2,6 +2,9 @@ var City = require('./City.js');
 
 /**
  * @class SuggestedCity
+ *
+ * This class holds a City, as well as the criteria and score logic used 
+ * for suggestions.
  */
 
 /**
@@ -39,9 +42,8 @@ var CRITERIA_CNTRY_USA = "US";
 
 
 /**
- * Used to filter parsed strings.
  * @param {string} cityNameSearchString
- * @return {boolean}
+ * @return {boolean} True if the city fits the search criteria for suggestions, false otherwise.
  */
 SuggestedCity.prototype.fitsCriteria = function(cityNameSearchString) {
 	// Population criteria.
@@ -80,14 +82,15 @@ function isPotentialCityNameMatch(normalizedCityName, searchString) {
 function createRegExpFromQueryStringInput(searchString) {
 	var newSearchString = normalizeCityNameString(searchString);
 
-	// Special RegExp characters...
+	// Special RegExp characters to escape...
 	newSearchString = newSearchString.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
 
 	return new RegExp(newSearchString);
 }
 
 /**
- * E.g. "Montréal" becomes "montreal"
+ * E.g. "Montréal" becomes "montreal".
+ *
  * @param {string} cityName
  * @return {string}
  * @private
@@ -133,6 +136,7 @@ SuggestedCity.prototype.setScore = function(queryLatitude, queryLongitude) {
 
 /**
  * @param {number|null} highestScore
+ * @param {number|null} nScores
  * @return {Object}
  */
 SuggestedCity.prototype.output = function(highestScore, nScores) {
@@ -149,7 +153,9 @@ SuggestedCity.prototype.output = function(highestScore, nScores) {
 /**
  * @param {number} score
  * @param {number} highestScore
+ * @param {number} nScores
  * @return {number}
+ * @private
  */
 function computeFinalScore(score, highestScore, nScores) {
 	if (highestScore !== null && score !== null) {
