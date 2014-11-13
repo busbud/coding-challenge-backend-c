@@ -1,9 +1,14 @@
 var fs = require('fs');
+var path = require('path');
+
+var Suggestions = require("./model/Suggestions.js");
+
+// GeoNames Gazetteer constants.
+var GEONAMES_SOURCE_FILE_PATH = path.resolve(__dirname, '../data/cities_canada-usa.tsv');
+var GEONAMES_FIELDS_ARRAY = [ "population", "name", "country", "lat", "long" ];
 
 /**
- * Parses a GeoNames Gazetteer extract TSV file using a criteria
- * function to determine entries of interest and an output function to
- * translate a TSV line into the wanted output.
+ * Parses a GeoNames Gazetteer extract TSV file using SuggestedCity model.
  * 
  * @param {Object} options
  * @param {string} options.filePath
@@ -17,16 +22,16 @@ var fs = require('fs');
  * @param {string|null} callback.err
  * @param {Array.<Object>} callback.output
  */
-exports.parseGeoNamesGazetteerTsvFile = function(options, callback) {
+exports.parseGeoNamesGazetteerTsvFile = function(queryOptions, callback) {
     // Streaming chunks of the input file to parse lines out of it.
-    var readStream = fs.createReadStream(options.filePath, {
+    var readStream = fs.createReadStream(GEONAMES_SOURCE_FILE_PATH, {
         encoding: 'utf8' // according to geonames export dump readme.
     });
 
     var runningBuffer = ''; // keeps truncated lines.
-    var columnHeaders = null; // keeping the first line of TSV file.
-    var columnsOfInterest;
-    var output = [];
+    var columnHeaders = null; // keeping the header (first) line of TSV file.
+    var columnIndices;
+    var suggestions = new Suggestions();
     readStream.on('data', function(chunk) {
         var newData = chunk.toString('utf8');
 
@@ -38,8 +43,7 @@ exports.parseGeoNamesGazetteerTsvFile = function(options, callback) {
 
         var lines = newData.split('\n');
 
-        lines[0] = runningBuffer + lines[0]; // Append last truncated
-            // line.
+        lines[0] = runningBuffer + lines[0]; // Append last truncated line.
         
         var endsWithNewLine = (newData.lastIndexOf('\n') === newData.length);
         if (!endsWithNewLine) {
@@ -48,61 +52,40 @@ exports.parseGeoNamesGazetteerTsvFile = function(options, callback) {
         }
 
         if (lines.length === 0) {
-            return; // No (complete) lines to parse. Wait for next
-                // chunk...
+            return; // No (complete) lines to parse. Wait for next chunk...
         }
 
         if (!columnHeaders) {
-            // Record first line of TSV file.
+            // Record header (first) line of TSV file.
             columnHeaders = lines.shift().split('\t');
-            columnsOfInterest = translateColumnIndices(columnHeaders, options.fields);
+            columnIndices = getFieldIndices(columnHeaders, GEONAMES_FIELDS_ARRAY); // for matching 
+                // column values later.
         }
 
         lines.forEach(function (line) {
             var columnValues = line.split('\t');
-            var fieldValues = translateFieldValues(columnsOfInterest, columnHeaders, columnValues);
-            var isValid = options.criteriaFn(fieldValues);
-            var score;
-            if (isValid) {
-                score = options.scoreFn(fieldValues);
-                fieldValues.score = score;
-                output.push(fieldValues);
-            }
+            var suggOptions = translateFieldValues(columnIndices, columnHeaders, columnValues);
+            suggestions.add(suggOptions, queryOptions);
         });
     });
 
     readStream.on('end', function () {
-        if (output.length === 0) {
+        if (suggestions.isEmpty()) {
             callback("No cities found.", []);
             return;
         }
 
-        var finalOutput = [];
-
-        var newOutput = output.sort(function (cityA, cityB) {
-            return (cityA.score - cityB.score);
-        });
-
-        var maxScore = newOutput[0].score < 0 ? null : newOutput[newOutput.length - 1].score;
-
-        newOutput.forEach(function (city) {
-            finalOutput.push(options.outputFn(city, maxScore));
-        });
-
-        callback(null, finalOutput);
+        var suggestionsResult = suggestions.get();
+        callback(null, suggestionsResult);
     });
 };
 
-// TODO Fix hack to make the tests pass with similar characters...
-// ...not sure how to account for all possible replacements in 
-// ...every language...maybe can asssume French and English since 
-// ...in Canada and U.S....what about autochton-indian city names...
-function translateInternationalChars(cityName) {
-    var newName = cityName.replace("é", "e");
-    return newName;
-}
-
-function translateColumnIndices(columnHeaders, fieldsOfInterest) {
+/**
+ * @param {string[]} columnHeaders
+ * @param {string[]} fieldsOfInterest
+ * @return {number[]}
+ */
+function getFieldIndices(columnHeaders, fieldsOfInterest) {
     var columnHeaderIndices = [];
     fieldsOfInterest.forEach(function (fieldName) {
         columnHeaderIndices.push(columnHeaders.indexOf(fieldName));
@@ -110,11 +93,19 @@ function translateColumnIndices(columnHeaders, fieldsOfInterest) {
     return columnHeaderIndices;
 }
 
+/**
+ * @param {number[]} columnIndices
+ * @param {string[]} columnHeaders
+ * @param {string[]} columnValues
+ * @return {SuggestedCity}
+ */
 function translateFieldValues(columnIndices, columnHeaders, columnValues) {
     var fieldValues = {};
     columnIndices.forEach(function (index) {
-        var newValue = translateInternationalChars(columnValues[index]);
-        fieldValues[columnHeaders[index]] = newValue;
+        var newValue = columnValues[index];
+        var newKey = columnHeaders[index];
+
+        fieldValues[newKey] = newValue;
     });
     return fieldValues;
 }

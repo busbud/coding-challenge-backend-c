@@ -69,6 +69,13 @@ score took more time than I estimated.
 
 18:45 - 20:47 (45min pause) Learn Heroku and deploy app, url: https://coding-challenge-backend-c.herokuapp.com/suggestions?q=sthilaire&latitude=45.56678&longitude=-73.19915
 
+*Thu Nov 13*
+
+9:00 - 12:05 (2x5min pauses) Finished refactoring into model classes. Attacking more unit tests.
+12:30 - 2:15 (10min pause) Finished unit tests. Added TODO in code for further enhancements.
+
+Total: 2h 40m + 3h 15m + 1h 15m + 2h 45m + 1h 45m + 30m = 12h 15m
+
 
 ##Estimation:
 
