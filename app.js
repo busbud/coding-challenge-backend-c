@@ -27,29 +27,25 @@ module.exports = http.createServer(function (req, res) {
   		cities = cities.map(function(line) {
   			return line.split('\t');
   		}).filter(function(city) {
-  			return parseInt(city[14]) >= 5000 && city[1].indexOf(q) === 0;
+  			return city[14] >= 5000 && city[1].indexOf(q) === 0;
   		});
   		
   		// Make suggestions
+  		// Sort them by score
   		suggestions = cities.map(function(city) {
   			return {
-  				name: city[1],
+  				name: city[1]+", "+city[8],
   				longitude: city[4],
   				latitude: city[5],
   				score: bh.getScore(city[1], city[4], city[5], q, lon, lat)
   			};
-  		});
-
-  		// Sort suggestions by score
-  		suggestions = suggestions.sort(function(a,b) {
+  		}).sort(function(a,b) {
   			return b.score - a.score;
   		});
 
   		if(suggestions.length > 0)
   			res.writeHead(200);
-  		res.end(JSON.stringify({
-  			suggestions: suggestions
-  		}));
+  		res.end(JSON.stringify({suggestions: suggestions}, null, 2));
   	});
   	// var stream = fs.createReadStream(DATA_FILE_PATH);
   	// stream.pipe(res, {end : false});
