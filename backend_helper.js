@@ -7,9 +7,9 @@ exports.getScore = function(name, longitude, latitude, q, lon, lat) {
 	var longitude_score = 1;
 	var latitude_score = 1; 
 	if(lon && !isNaN(lon))
-		longitude_score = 1 - Math.abs(longitude-lon)/longitude;
+		longitude_score = 1 - Math.abs(longitude-(lon%180))/180;
 	if(lat && !isNaN(lat))
-		latitude_score = 1 - Math.abs(latitude-lat)/latitude;
+		latitude_score = 1 - Math.abs(latitude-(lat%180))/180;
 	return Math.min(1,((name_score + longitude_score + latitude_score)/3).toFixed(3));
 };
 

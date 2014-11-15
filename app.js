@@ -33,8 +33,7 @@ module.exports = http.createServer(function (req, res) {
   		}, null, 2));
   	});
   } else {
-    res.end("You are probably looking for the Busbud suggestions endpoint. Try appending '/suggestions' to the base url.");
+    res.end("You are probably looking for the Busbud suggestions endpoint. "
+    	+ "Try appending '/suggestions' to the base url, and provide a parameter 'q' in the query.");
   }
-}).listen(port, '127.0.0.1');
-
-console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+}).listen(port);
