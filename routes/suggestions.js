@@ -74,8 +74,8 @@ router.get('/suggestions', function(req, res, next) {
       // build dto
       var dto = {
         name: fullName,
-        latitude: city[City.LATITUDE_FIELD],
-        longitude: city[City.LONGITUDE_FIELD],
+        latitude: '' + city[City.LATITUDE_FIELD],
+        longitude: '' + city[City.LONGITUDE_FIELD],
         score: 1337 // TODO
       };
       dtos.push(dto);
