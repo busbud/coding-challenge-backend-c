@@ -11,7 +11,7 @@ var routes = require('./routes/suggestions');
 
 var port = process.env.PORT || 2345;
 
-// setting up the express server
+/* setting up the express server */
 var app = express();
 
 // middleware add-ons
@@ -44,6 +44,16 @@ app.use(routes);
 if (process.env.NODE_ENV !== 'production') {
   app.use(errorHandler());
 }
+
+
+/* when application is shutdown */
+process.on('SIGINT', function() {
+  console.warn('Server shutdown...');
+  dbConnection.close();
+  server.close();
+  toobusy.shutdown();
+  process.exit();
+});
 
 // start server
 var server = app.listen(port, function() {
