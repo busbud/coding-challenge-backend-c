@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 var dbURI =
   process.env.MONGODB_URI ||
   process.env.MONGOHQ_URL ||
+  process.env.MONGOLAB_URI ||
   'mongodb://localhost/geolocationapi';
 
 mongoose.connect(dbURI, function(err) {
