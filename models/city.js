@@ -42,8 +42,20 @@ try {
   console.warn('Could not load YAML file. Abort.');
   throw err;
 }
-// merge with City
+// merge fields with City
 _.merge(City, admin1);
 _.merge(City, country);
+
+/**
+ * @param city city record
+ */
+City.lookupAdmin1 = function(city) {
+  var admin1 = city[City.ADMIN1_FIELD];
+  var country = city[City.COUNTRY_FIELD];
+
+  if (country === 'CA') return City.admin1[country][admin1];
+  // default
+  return admin1;
+};
 
 module.exports = City;
