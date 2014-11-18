@@ -9,6 +9,7 @@ var mongoose = require('mongoose');
 var dbConnection = require('./cfg/mongoose');
 var routes = require('./routes/suggestions');
 
+var env = process.env.NODE_ENV || 'development';
 var port = process.env.PORT || 2345;
 
 /* setting up the express server */
@@ -41,8 +42,14 @@ app.use(function(req, res, next) {
 
 app.use(routes);
 
-if (process.env.NODE_ENV !== 'production') {
+if (env === 'production') {
+  
+}
+else if (env === 'development') {
   app.use(errorHandler());
+}
+else {
+  throw new Error('Unhandled NODE_ENV value: \'' + env + '\'');
 }
 
 // dead-end
