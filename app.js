@@ -1,5 +1,6 @@
 var express = require('express');
 var morgan = require('morgan');
+var compression = require('compression');
 var toobusy = require('toobusy');
 var errorHandler = require('errorhandler');
 
@@ -13,6 +14,7 @@ var app = express();
 
 // middleware add-ons
 app.use(morgan('dev'));
+app.use(compression());
 app.use(function(req, res, next) {
   // 503 if server overloaded
   // https://www.npmjs.org/package/toobusy

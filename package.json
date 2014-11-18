@@ -10,6 +10,7 @@
   "author": "",
   "license": "WTFPL",
   "dependencies": {
+    "compression": "1.2.0",
     "diacritics": "1.2.1",
     "express": "4.10.2",
     "geolib": "2.0.14",
