@@ -1,16 +1,16 @@
+var env = process.env.NODE_ENV || 'development';
+var port = process.env.PORT || 2345;
+
 var express = require('express');
 var morgan = require('morgan');
 var compression = require('compression');
 var toobusy = require('toobusy');
 var _ = require('lodash');
-var errorHandler = require('errorhandler');
+var errorHandler = env === 'development' ? require('errorhandler') : null;
 var mongoose = require('mongoose');
 
 var dbConnection = require('./cfg/mongoose');
 var routes = require('./routes/suggestions');
-
-var env = process.env.NODE_ENV || 'development';
-var port = process.env.PORT || 2345;
 
 /* setting up the express server */
 var app = express();
@@ -19,6 +19,7 @@ var app = express();
 app.use(morgan('dev'));
 app.use(compression());
 app.use(function(req, res, next) {
+      console.log(dbConnection.readyState);
   if (
       // 503 if server overloaded
       // https://www.npmjs.org/package/toobusy
