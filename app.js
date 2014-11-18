@@ -1,5 +1,6 @@
 var express = require('express');
 var morgan = require('morgan');
+var toobusy = require('toobusy');
 var errorHandler = require('errorhandler');
 
 var mongoose = require('./cfg/mongoose');
@@ -12,6 +13,17 @@ var app = express();
 
 // middleware add-ons
 app.use(morgan('dev'));
+app.use(function(req, res, next) {
+  // 503 if server overloaded
+  // https://www.npmjs.org/package/toobusy
+  if (toobusy()) {
+    res
+      .status(503)
+      .json({ suggestions: [] });
+    return;
+  }
+  next();
+});
 
 app.use(routes);
 

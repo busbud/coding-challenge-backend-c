@@ -15,7 +15,8 @@
     "geolib": "2.0.14",
     "lodash": "2.4.1",
     "mongoose": "3.8.19",
-    "morgan": "1.5.0"
+    "morgan": "1.5.0",
+    "toobusy": "0.2.4"
   },
   "engines": {
     "node": "0.10.26"
