@@ -1,16 +1,27 @@
-var http = require('http');
+var express = require('express');
+var morgan = require('morgan');
+var errorHandler = require('errorhandler');
+
+var mongoose = require('./cfg/mongoose');
+var routes = require('./routes/suggestions');
+
 var port = process.env.PORT || 2345;
 
-module.exports = http.createServer(function (req, res) {
-  res.writeHead(404, {'Content-Type': 'text/plain'});
+// setting up the express server
+var app = express();
 
-  if (req.url.indexOf('/suggestions') === 0) {
-    res.end(JSON.stringify({
-      suggestions: []
-    }));
-  } else {
-    res.end();
-  }
-}).listen(port, '127.0.0.1');
+// middleware add-ons
+app.use(morgan('dev'));
 
-console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+app.use(routes);
+
+if (process.env.NODE_ENV !== 'production') {
+  app.use(errorHandler());
+}
+
+// start server
+var server = app.listen(port, function() {
+  console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+});
+
+module.exports = server;

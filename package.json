@@ -10,11 +10,20 @@
   "author": "",
   "license": "WTFPL",
   "dependencies": {
-    "chai": "^1.9.1",
-    "mocha": "^1.18.2",
-    "supertest": "^0.11.0"
+    "diacritics": "1.2.1",
+    "express": "4.10.2",
+    "geolib": "2.0.14",
+    "lodash": "2.4.1",
+    "mongoose": "3.8.19",
+    "morgan": "1.5.0"
   },
   "engines": {
     "node": "0.10.26"
+  },
+  "devDependencies": {
+    "chai": "^1.9.1",
+    "mocha": "^1.18.2",
+    "supertest": "^0.11.0",
+    "errorhandler": "^1.2.2"
   }
 }
