@@ -45,6 +45,13 @@ if (process.env.NODE_ENV !== 'production') {
   app.use(errorHandler());
 }
 
+// dead-end
+app.use(function(req, res, next) {
+  res
+    .status(404)
+    .end();
+})
+
 
 /* when application is shutdown */
 process.on('SIGINT', function() {
