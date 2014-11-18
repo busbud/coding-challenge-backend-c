@@ -2,9 +2,11 @@ var express = require('express');
 var morgan = require('morgan');
 var compression = require('compression');
 var toobusy = require('toobusy');
+var _ = require('lodash');
 var errorHandler = require('errorhandler');
+var mongoose = require('mongoose');
 
-var mongoose = require('./cfg/mongoose');
+var dbConnection = require('./cfg/mongoose');
 var routes = require('./routes/suggestions');
 
 var port = process.env.PORT || 2345;
@@ -16,9 +18,19 @@ var app = express();
 app.use(morgan('dev'));
 app.use(compression());
 app.use(function(req, res, next) {
-  // 503 if server overloaded
-  // https://www.npmjs.org/package/toobusy
-  if (toobusy()) {
+  if (
+      // 503 if server overloaded
+      // https://www.npmjs.org/package/toobusy
+      toobusy()
+      ||
+      // 503 if database not accessible
+      // http://mongoosejs.com/docs/api.html#connection_Connection-readyState
+      // https://github.com/LearnBoost/mongoose/blob/master/lib/connectionstate.js
+      _.contains([
+          mongoose.Connection.STATES.disconnected,
+          mongoose.Connection.STATES.connecting,
+          mongoose.Connection.STATES.disconnecting,
+          mongoose.Connection.STATES.uninitialized], dbConnection.readyState)) {
     res
       .status(503)
       .json({ suggestions: [] });
