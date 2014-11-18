@@ -1,0 +1,16 @@
+# http://download.geonames.org/export/dump/admin1CodesASCII.txt
+admin1:
+  CA:
+    '01': 'AB'
+    '02': 'BC'
+    '03': 'MB'
+    '04': 'NB'
+    '13': 'NT'
+    '07': 'NS'
+    '14': 'NU'
+    '08': 'ON'
+    '09': 'PE'
+    '10': 'QC'
+    '11': 'SK'
+    '12': 'YT'
+    '05': 'NL'

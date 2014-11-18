@@ -1,4 +1,7 @@
 var mongoose = require('mongoose');
+var yaml = require('js-yaml');
+var fs = require('fs');
+var _ = require('lodash');
 
 var city_schema = mongoose.Schema({
   name: String,
@@ -27,7 +30,20 @@ City.ASCII_FIELD = 'ascii';
 City.COUNTRY_FIELD = 'country';
 City.ADMIN1_FIELD = 'admin1';
 
-City.US = 'USA';
-City.CA = 'Canada';
+// Look-up tables
+var admin1;
+var country;
+try {
+  // For Canada's provinces and territories
+  admin1 = yaml.safeLoad(fs.readFileSync('./data/admin1.yml', 'UTF-8'));
+  // For countries
+  country = yaml.safeLoad(fs.readFileSync('./data/country.yml', 'UTF-8'));
+} catch (err) {
+  console.warn('Could not load YAML file. Abort.');
+  throw err;
+}
+// merge with City
+_.merge(City, admin1);
+_.merge(City, country);
 
 module.exports = City;

@@ -14,6 +14,7 @@
     "diacritics": "1.2.1",
     "express": "4.10.2",
     "geolib": "2.0.14",
+    "js-yaml": "3.2.3",
     "lodash": "2.4.1",
     "mongoose": "3.8.19",
     "morgan": "1.5.0",
@@ -24,8 +25,8 @@
   },
   "devDependencies": {
     "chai": "^1.9.1",
+    "errorhandler": "^1.2.2",
     "mocha": "^1.18.2",
-    "supertest": "^0.11.0",
-    "errorhandler": "^1.2.2"
+    "supertest": "^0.11.0"
   }
 }

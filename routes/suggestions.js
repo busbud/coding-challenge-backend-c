@@ -61,12 +61,23 @@ router.get('/suggestions', function(req, res, next) {
     // [entity] -> [dto]
     var dtos = [];
     _.forEach(cities, function(city) {
+      var name = city[City.NAME_FIELD];
+      var admin1 = city[City.ADMIN1_FIELD];
+      var country = city[City.COUNTRY_FIELD];
+
+      // build name field
+      var fullName = name + ', ';
+      if (country === 'CA') {
+        fullName += admin1;
+      }
+      else {
+        fullName += admin1;
+      }
+      fullName += ', ' + City.country[country];
+
+      // build dto
       var dto = {
-        name: [
-          city[City.NAME_FIELD], // name
-          city[City.ADMIN1_FIELD], // TODO convert admin1 for CA cities
-          City[city[City.COUNTRY_FIELD]] // look-up country
-          ].join(', '),
+        name: fullName,
         latitude: city[City.LATITUDE_FIELD],
         longitude: city[City.LONGITUDE_FIELD],
         score: 1337 // TODO
