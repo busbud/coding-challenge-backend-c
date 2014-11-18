@@ -1,18 +1,22 @@
-var expect  = require('chai').expect;
-var app     = require('../app');
-var request = require('supertest')(app);
+var expect        = require('chai').expect;
+var app           = require('../app');
+var mongoose      = require('mongoose');
+var dbConnection  = require('../cfg/mongoose');
+var request       = require('supertest')(app);
 
 describe('GET /suggestions', function() {
   describe('with a non-existent city', function () {
     var response;
 
     before(function (done) {
-      request
-        .get('/suggestions?q=SomeRandomCityInTheMiddleOfNowhere')
-        .end(function (err, res) {
-          response = res;
-          response.json = JSON.parse(res.text);
-          done(err);
+      mongoose.connection.once('connected', function() {
+        request
+          .get('/suggestions?q=SomeRandomCityInTheMiddleOfNowhere')
+          .end(function (err, res) {
+            response = res;
+            response.json = JSON.parse(res.text);
+            done(err);
+          });
         });
     });
 
