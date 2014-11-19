@@ -19,7 +19,6 @@ var app = express();
 app.use(morgan('dev'));
 app.use(compression());
 app.use(function(req, res, next) {
-      console.log(dbConnection.readyState);
   if (
       // 503 if server overloaded
       // https://www.npmjs.org/package/toobusy
