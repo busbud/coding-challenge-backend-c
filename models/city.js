@@ -15,7 +15,6 @@ var city_schema = mongoose.Schema({
 city_schema.statics.cityBeLike = function(args, callback) {
   this
     .find(args.conditions)
-    .sort(args.sort)
     .select(['-_id', City.NAME_FIELD, City.LATITUDE_FIELD, City.LONGITUDE_FIELD, City.COUNTRY_FIELD, City.ADMIN1_FIELD, City.ASCII_FIELD].join(' '))
     .limit(args.limit)
     .exec(callback);

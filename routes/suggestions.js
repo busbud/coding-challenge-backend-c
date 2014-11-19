@@ -25,7 +25,6 @@ router.get('/suggestions', function(req, res, next) {
   // args for query
   var params = {
     conditions: {},
-    sort: '-score ' + City.NAME_FIELD,
     limit: 1000
   };
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#Using_Special_Characters
