@@ -4,11 +4,13 @@ var _ = require('lodash');
 var geolib = require('geolib');
 
 var City = require('../models/city');
+var SuggestionService = require('../services/suggestion_service');
 
 var router = express.Router();
 
 router.get('/suggestions', function(req, res, next) {
   var q = req.query.q || '';
+  q = decodeURIComponent(q).trim();
   var latitude = req.query.latitude || '';
   var longitude = req.query.longitude || '';
 
@@ -45,18 +47,13 @@ router.get('/suggestions', function(req, res, next) {
       return;
     }
 
-    // records found
-    // optional step: longitude/latitudes, both must be numeric values
-    if (!isNaN(latitude) && !isNaN(longitude)) {
-      // sort by geolocation distance asc
-      cities = _.sortBy(cities, function(city) {
-        // https://www.npmjs.org/package/geolib
-        return geolib.getDistance(
-          { latitude: city[City.LATITUDE_FIELD], longitude: city[City.LONGITUDE_FIELD] },
-          { latitude: Number(latitude), longitude: Number(longitude) }
-        );
-      })
-    }
+    // records found: compute scores
+    var criteriaScoreMap = SuggestionService.computeAbsoluteScoreMap(
+      {q:q, longitude: longitude, latitude: latitude},
+      cities);
+
+    // get highest score
+    var highestScore = SuggestionService.getHighestScore(criteriaScoreMap);
 
     // [entity] -> [dto]
     var dtos = [];
@@ -71,14 +68,22 @@ router.get('/suggestions', function(req, res, next) {
         .concat(', ')
         .concat(City.country[country]);
 
+      // normalize its score
+      var score = (criteriaScoreMap[city]/highestScore).toFixed(3);
+
       // build dto
       var dto = {
         name: fullName,
         latitude: '' + city[City.LATITUDE_FIELD],
         longitude: '' + city[City.LONGITUDE_FIELD],
-        score: 1337 // TODO
+        score: score
       };
       dtos.push(dto);
+    });
+
+    // sort by score DESC
+    dtos = _.sortBy(dtos, function(dto) {
+      return -dto.score;
     });
 
     // end
