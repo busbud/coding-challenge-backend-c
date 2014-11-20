@@ -10,7 +10,7 @@ var errorHandler = env === 'development' ? require('errorhandler') : null;
 var mongoose = require('mongoose');
 
 var dbConnection = require('./cfg/mongoose');
-var routes = require('./routes/suggestions');
+var routes = require('./routes/index');
 
 /* setting up the express server */
 var app = express();
@@ -40,7 +40,10 @@ app.use(function(req, res, next) {
   next();
 });
 
-app.use(routes);
+app.engine('html', require('ejs').renderFile);
+_.forEach(routes, function(route) {
+  app.use(route);
+})
 
 if (env === 'production') {
   
