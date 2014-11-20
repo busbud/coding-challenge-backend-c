@@ -16,16 +16,13 @@ var city_schema = mongoose.Schema({
  * Executes a query against the database to retrieve City records.
  * 
  * @method cityBeLike
- * @param {Object} args an object used by the query
- * @param {Object} args.conditions criterias, see http://mongoosejs.com/docs/api.html#query_Query-find
- * @param {Number} args.limit max records
+ * @param {String} args.conditions criterias, see http://mongoosejs.com/docs/api.html#query_Query-find
  * @param {Function} callback A function, passing a collection of cities. Can be empty.
  */
 city_schema.statics.cityBeLike = function(args, callback) {
   this
     .find(args.conditions)
     .select(['-_id', City.NAME_FIELD, City.LATITUDE_FIELD, City.LONGITUDE_FIELD, City.COUNTRY_FIELD, City.ADMIN1_FIELD, City.ASCII_FIELD].join(' '))
-    .limit(args.limit)
     .exec(callback);
 };
 

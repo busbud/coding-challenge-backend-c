@@ -20,6 +20,7 @@ router.get('/suggestions', function(req, res, next) {
   q = decodeURIComponent(q).trim();
   var latitude = req.query.latitude || '';
   var longitude = req.query.longitude || '';
+  var limit = req.query.limit || 20;
 
   // empty query string
   if (q === '') {
@@ -31,8 +32,7 @@ router.get('/suggestions', function(req, res, next) {
 
   // args for query
   var params = {
-    conditions: {},
-    limit: 1000
+    conditions: {}
   };
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#Using_Special_Characters
   var sanitizedQ = q.replace(/([.*+?^${}()|\[\]\/\\])/g, "\\$1");
@@ -91,6 +91,15 @@ router.get('/suggestions', function(req, res, next) {
     dtos = _.sortBy(dtos, function(dto) {
       return -dto.score;
     });
+
+    // sanitize limit
+    if (isNaN(limit)) {
+      limit = 20;
+    }
+    // no negative values
+    limit = Math.max(0, limit);
+    // slice the cake!
+    dtos = dtos.slice(0, Math.min(limit, dtos.length))
 
     // end
     res
