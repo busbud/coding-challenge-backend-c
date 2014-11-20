@@ -21,9 +21,25 @@ var WEIGHTS = {
   LESS_THAN_10_KM: 75
 };
 
+/**
+* SuggestionService
+*
+* @class SuggestionService
+* @constructor
+*/
 var SuggestionService = {};
 SuggestionService.WEIGHTS = WEIGHTS;
 
+/**
+ * Some fuzzy scoring logic for the coding challenge!
+ * 
+ * @method computeAbsoluteScoreMap
+ * @param {Object} args an object
+ * @param {String} args.q sanitized input query
+ * @param {Number} args.latitude latitude (optional)
+ * @param {Number} args.longitude longitude (optional)
+ * @return {Array} Returns a hashtable, where the key is a city, and the value is its score.
+ */
 SuggestionService.computeAbsoluteScoreMap = function(args, cities) {
   var criteriaScoreMap = {};
   _.forEach(cities, function(city) {
@@ -58,16 +74,13 @@ SuggestionService.computeAbsoluteScoreMap = function(args, cities) {
   return criteriaScoreMap;
 };
 
-SuggestionService.getHighestScore = function(criteriaScoreMap) {
-    // get all score values in an array
-    var scores = [];
-    for (var key in criteriaScoreMap) {
-      scores.push(criteriaScoreMap[key]);
-    }
-    // get highest score
-    return _.max(scores);
-}
-
+/**
+ * Converts a binary score into an effective score (not normalized).
+ * 
+ * @method computeScore
+ * @param {Number} binaryScore a binary score
+ * @return {Number} Returns a computed score (not normalized)
+ */
 SuggestionService.computeScore = function(binaryScore) {
   var score = 0;
 
@@ -81,6 +94,23 @@ SuggestionService.computeScore = function(binaryScore) {
   if (binaryScore & LESS_THAN_10_KM) score += WEIGHTS.LESS_THAN_10_KM;
 
   return score;
+}
+
+/**
+ * Returns the highest score of the dictionary.
+ * 
+ * @method getHighestScore
+ * @param {Array} criteriaScoreMap an dictionary: key a city, value a score
+ * @return {Number} Returns the highest score of the dictionary
+ */
+SuggestionService.getHighestScore = function(criteriaScoreMap) {
+    // get all score values in an array
+    var scores = [];
+    for (var key in criteriaScoreMap) {
+      scores.push(criteriaScoreMap[key]);
+    }
+    // get highest score
+    return _.max(scores);
 }
 
 module.exports = SuggestionService;

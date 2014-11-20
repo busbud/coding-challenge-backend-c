@@ -8,6 +8,13 @@ var SuggestionService = require('../services/suggestion_service');
 
 var router = express.Router();
 
+/**
+ * GET /suggestion?q=XXX(&latitude=YYY&longitude=ZZZ)
+ * 
+ * @param {String} q searching query from the user
+ * @param {Number} latitude latitude (optional)
+ * @param {Number} latitude longitude (optional)
+ */
 router.get('/suggestions', function(req, res, next) {
   var q = req.query.q || '';
   q = decodeURIComponent(q).trim();

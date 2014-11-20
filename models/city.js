@@ -12,6 +12,15 @@ var city_schema = mongoose.Schema({
   admin1: String
 });
 
+/**
+ * Executes a query against the database to retrieve City records.
+ * 
+ * @method cityBeLike
+ * @param {Object} args an object used by the query
+ * @param {Object} args.conditions criterias, see http://mongoosejs.com/docs/api.html#query_Query-find
+ * @param {Number} args.limit max records
+ * @param {Function} callback A function, passing a collection of cities. Can be empty.
+ */
 city_schema.statics.cityBeLike = function(args, callback) {
   this
     .find(args.conditions)
@@ -46,7 +55,11 @@ _.merge(City, admin1);
 _.merge(City, country);
 
 /**
- * @param city city record
+ * Looking-up the value for the given 'admin1' value, if applicable.
+ * 
+ * @method lookupAdmin1
+ * @param {Object} city a City record
+ * @return {String} Returns the associated value
  */
 City.lookupAdmin1 = function(city) {
   var admin1 = city[City.ADMIN1_FIELD];
