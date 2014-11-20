@@ -9,7 +9,8 @@ var city_schema = mongoose.Schema({
   lat: Number,
   country: String,
   long: Number,
-  admin1: String
+  admin1: String,
+  population: Number
 });
 
 /**
@@ -22,7 +23,16 @@ var city_schema = mongoose.Schema({
 city_schema.statics.cityBeLike = function(args, callback) {
   this
     .find(args.conditions)
-    .select(['-_id', City.NAME_FIELD, City.LATITUDE_FIELD, City.LONGITUDE_FIELD, City.COUNTRY_FIELD, City.ADMIN1_FIELD, City.ASCII_FIELD].join(' '))
+    .select([
+        '-_id',
+        City.NAME_FIELD,
+        City.LATITUDE_FIELD,
+        City.LONGITUDE_FIELD,
+        City.COUNTRY_FIELD,
+        City.ADMIN1_FIELD,
+        City.ASCII_FIELD,
+        City.POPULATION_FIELD
+        ].join(' '))
     .exec(callback);
 };
 
@@ -34,6 +44,7 @@ City.LONGITUDE_FIELD = 'long';
 City.ASCII_FIELD = 'ascii';
 City.COUNTRY_FIELD = 'country';
 City.ADMIN1_FIELD = 'admin1';
+City.POPULATION_FIELD = 'population';
 
 // Look-up tables
 var admin1;

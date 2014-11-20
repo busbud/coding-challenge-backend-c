@@ -4,57 +4,74 @@ var geolib = require('geolib');
 
 var City = require('../models/city');
 
-var B1              = parseInt(1, 2);
+var SuggestionService = {};
+SuggestionService.DEFAULT_DECIMALS = 3;
 
-// Flags
-var EXACT_MATCH     = B1;
-var STARTS_WITH     = B1 << B1;
-var LESS_THAN_1_KM  = B1 << parseInt(2, 2);
-var LESS_THAN_5_KM  = B1 << parseInt(3, 2);
-var LESS_THAN_10_KM = B1 << parseInt(4, 2);
-// Weight
-var WEIGHTS = {
-  EXACT_MATCH: 1000,
-  STARTS_WITH: 500,
-  LESS_THAN_1_KM: 250,
-  LESS_THAN_5_KM: 125,
-  LESS_THAN_10_KM: 75
-};
+const NOT_PERFECT_MATCH_WEIGHT = .1;
+
+const MISSING_LETTERS_MATCH_WEIGHT = .4;
+const NAME_MISSING_LETTERS_MIN_THRESHOLD = 3;
+const NAME_MISSING_LETTERS_MAX_THRESHOLD = 7;
+
+const DISTANCE_WEIGHT = .25;
+const DISTANCE_MIN_THRESHOLD = 1000;
+const DISTANCE_MAX_THRESHOLD = 5000;
+
+const POPULATION_WEIGHT = .1;
+const POPULATION_MIN_THRESHOLD = 25000;
+const POPULATION_MAX_THRESHOLD = 250000;
 
 /**
-* SuggestionService
-*
-* @class SuggestionService
-* @constructor
-*/
-var SuggestionService = {};
-SuggestionService.WEIGHTS = WEIGHTS;
+ * Computes an adaptive score offset to be substracted from total score.
+ *
+ * @method computeAdaptiveWeight
+ * @param {Number} value value of the candidate's score
+ * @param {Number} weight the reference weight for this criteria, i.e. this will be also the maximum possible weight to be substracted from the candidate's score
+ * @param {Number} threshold if the computed weight does beyond this threshold, the reference weight will be applied instead
+ * @param {Function} minOrMax Math.min or Math.max
+ * @return {Number} positive value to be substracted to target score, to lower its confidence
+ */
+var computeAdaptiveWeight = function(value, weight, threshold, minOrMax) {
+  var currentWeight = (value * weight) / threshold;
+  currentWeight = minOrMax(weight, currentWeight);
+  return Math.abs(weight);
+}
 
 /**
  * Some fuzzy scoring logic for the coding challenge!
+ * Score (or confidence) is altered according to (from strongest to weakest):
+ * - Query text vs. city name: if there is less letters;
+ * - (Optional) Distance from provided coordinates;
+ * - Population.
  * 
- * @method computeAbsoluteScoreMap
+ * @method computeScores
  * @param {Object} args an object
  * @param {String} args.q sanitized input query
  * @param {Number} args.latitude latitude (optional)
  * @param {Number} args.longitude longitude (optional)
  * @return {Array} Returns a hashtable, where the key is a city, and the value is its score.
  */
-SuggestionService.computeAbsoluteScoreMap = function(args, cities) {
+SuggestionService.computeScores = function(args, cities) {
   var criteriaScoreMap = {};
   _.forEach(cities, function(city) {
-    var score = 0;
+    var score = 1.0;
 
+    // deal with name
     var query = args.q.toLowerCase();
-    var cityName = city.ascii.toLowerCase();
+    var cityName = city[City.ASCII_FIELD].toLowerCase();
 
-    // if city name matches exactly
-    if (query === cityName) score |= EXACT_MATCH;
+    // Deal with city name
+    var missingLetters = cityName.length - query.length;
+    // if not perfect match
+    if (missingLetters !== 0) {
+      score -= NOT_PERFECT_MATCH_WEIGHT;
+      // if it exceeds the threshold
+      if (missingLetters >= NAME_MISSING_LETTERS_MIN_THRESHOLD) {
+        score -= computeAdaptiveWeight(missingLetters, MISSING_LETTERS_MATCH_WEIGHT, NAME_MISSING_LETTERS_MAX_THRESHOLD, Math.min)
+      }
+    }
 
-    // if city name starts with
-    if (cityName.indexOf(query) === 0) score |= STARTS_WITH;
-
-    // distance from provided coordinates (optional)
+    // (Optional) Deal with distance
     var latitude = args.latitude;
     var longitude = args.longitude;
     if (!isNaN(latitude) && !isNaN(longitude)) {
@@ -63,54 +80,23 @@ SuggestionService.computeAbsoluteScoreMap = function(args, cities) {
         { latitude: city[City.LATITUDE_FIELD], longitude: city[City.LONGITUDE_FIELD] },
         { latitude: Number(latitude), longitude: Number(longitude) }
       );
-      if (d < 1000) score |= LESS_THAN_1_KM;
-      if (d < 5000) score |= LESS_THAN_5_KM;
-      if (d < 10000) score |= LESS_THAN_10_KM;
+      // Under 1km, we do not bother
+      // But over:
+      if (d > DISTANCE_MIN_THRESHOLD) {
+        score -= computeAdaptiveWeight(d, DISTANCE_WEIGHT, DISTANCE_MAX_THRESHOLD, Math.min)
+      }
     }
 
-    criteriaScoreMap[city] = SuggestionService.computeScore(score);
+    // population
+    var population = city[City.POPULATION_FIELD];
+    if (population < POPULATION_MAX_THRESHOLD) {
+      score -= computeAdaptiveWeight(population, POPULATION_WEIGHT, POPULATION_MIN_THRESHOLD, Math.max);
+    }
+
+    criteriaScoreMap[city] = Math.max(0, score);
   });
 
   return criteriaScoreMap;
 };
-
-/**
- * Converts a binary score into an effective score (not normalized).
- * 
- * @method computeScore
- * @param {Number} binaryScore a binary score
- * @return {Number} Returns a computed score (not normalized)
- */
-SuggestionService.computeScore = function(binaryScore) {
-  var score = 0;
-
-  if (binaryScore & EXACT_MATCH) score += WEIGHTS.EXACT_MATCH;
-  else {
-    if (binaryScore & STARTS_WITH) score += WEIGHTS.STARTS_WITH;
-  }
-
-  if (binaryScore & LESS_THAN_1_KM) score += WEIGHTS.LESS_THAN_1_KM;
-  if (binaryScore & LESS_THAN_5_KM) score += WEIGHTS.LESS_THAN_5_KM;
-  if (binaryScore & LESS_THAN_10_KM) score += WEIGHTS.LESS_THAN_10_KM;
-
-  return score;
-}
-
-/**
- * Returns the highest score of the dictionary.
- * 
- * @method getHighestScore
- * @param {Array} criteriaScoreMap an dictionary: key a city, value a score
- * @return {Number} Returns the highest score of the dictionary
- */
-SuggestionService.getHighestScore = function(criteriaScoreMap) {
-    // get all score values in an array
-    var scores = [];
-    for (var key in criteriaScoreMap) {
-      scores.push(criteriaScoreMap[key]);
-    }
-    // get highest score
-    return _.max(scores);
-}
 
 module.exports = SuggestionService;

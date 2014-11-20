@@ -18,8 +18,8 @@ var router = express.Router();
 router.get('/suggestions', function(req, res, next) {
   var q = req.query.q || '';
   q = decodeURIComponent(q).trim();
-  var latitude = req.query.latitude || '';
-  var longitude = req.query.longitude || '';
+  var latitude = parseFloat(req.query.latitude || '');
+  var longitude = parseFloat(req.query.longitude || '');
   var limit = req.query.limit || 20;
 
   // empty query string
@@ -54,12 +54,9 @@ router.get('/suggestions', function(req, res, next) {
     }
 
     // records found: compute scores
-    var criteriaScoreMap = SuggestionService.computeAbsoluteScoreMap(
+    var criteriaScoreMap = SuggestionService.computeScores(
       {q:q, longitude: longitude, latitude: latitude},
       cities);
-
-    // get highest score
-    var highestScore = SuggestionService.getHighestScore(criteriaScoreMap);
 
     // [entity] -> [dto]
     var dtos = [];
@@ -68,21 +65,18 @@ router.get('/suggestions', function(req, res, next) {
       var country = city[City.COUNTRY_FIELD];
 
       // build name field
-      var fullName = name
-        .concat(', ')
-        .concat(City.lookupAdmin1(city))
-        .concat(', ')
-        .concat(City.country[country]);
-
-      // normalize its score
-      var score = (criteriaScoreMap[city]/highestScore).toFixed(3);
+      var fullName = [
+        name,
+        City.lookupAdmin1(city),
+        City.country[country]
+        ].join(', ');
 
       // build dto
       var dto = {
         name: fullName,
         latitude: '' + city[City.LATITUDE_FIELD],
         longitude: '' + city[City.LONGITUDE_FIELD],
-        score: score
+        score: criteriaScoreMap[city].toFixed(3)
       };
       dtos.push(dto);
     });
