@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>City Search!</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="//oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="//oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style>
+    section#search {
+
+    }
+    section#results {
+
+    }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-1">
+                <section id="search">
+                    <input id="input" type="text" title="Write at least 3 characters" class="textbox" placeholder="e.g.: Montreal">
+                </section>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <section id="results">
+                    
+                </section>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<script>
+$('#input').bind('input propertychange', function(e) {
+    // If it's the propertychange event, make sure it's the value that changed.
+    if (window.event && event.type == 'propertychange' && event.propertyName != 'value')
+        return;
+
+    // Clear any previously set timer before setting a fresh one
+    window.clearTimeout($(this).data('timeout'));
+    var q = $('#input').val().trim();
+    $(this).data('timeout', setTimeout(function() {
+        if (q.length <= 2) return;
+        $.getJSON('/suggestions?&q=' + q, function(json) {
+                $('#results').empty();
+
+                // got results
+                for (var i = 0; i < json.suggestions.length; i++) {
+                    var suggestion = json.suggestions[i];
+
+                    var content = '<div class=\'col-md-4\'><p>' +
+                        (i + 1) + '. ' + suggestion.name + '<br />' +
+                        'Longitude: ' + suggestion.longitude +
+                        ', Latitude: ' + suggestion.latitude + '<br />' +
+                        'Score: ' + suggestion.score +
+                        '</p></div>';
+                    $('#results').append(content);
+                }
+            })
+            .fail(function(jqXHR) {
+                // no results
+                if (jqXHR.status === 404) {
+                    $('#results').empty();
+
+                    var content = '<div class=\'col-md-4\'><p>' +
+                        'No results.</p></div>';
+                    $('#results').append(content);
+                }
+            });
+    }, 250));
+});
+</script>
+
+
+
+</html>

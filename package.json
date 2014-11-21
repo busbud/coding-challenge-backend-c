@@ -10,11 +10,24 @@
   "author": "",
   "license": "WTFPL",
   "dependencies": {
-    "chai": "^1.9.1",
-    "mocha": "^1.18.2",
-    "supertest": "^0.11.0"
+    "compression": "1.2.0",
+    "diacritics": "1.2.1",
+    "ejs": "1.0.0",
+    "express": "4.10.2",
+    "geolib": "2.0.14",
+    "js-yaml": "3.2.3",
+    "lodash": "2.4.1",
+    "mongoose": "3.8.19",
+    "morgan": "1.5.0",
+    "toobusy": "0.2.4"
   },
   "engines": {
     "node": "0.10.26"
+  },
+  "devDependencies": {
+    "chai": "^1.9.1",
+    "errorhandler": "^1.2.2",
+    "mocha": "^1.18.2",
+    "supertest": "^0.11.0"
   }
 }
