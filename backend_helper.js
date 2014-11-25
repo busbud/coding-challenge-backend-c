@@ -27,14 +27,16 @@ exports.getMatches = function(data, q) {
 // Format the suggestions, compute their score based on given inputs
 // Then sort them by score
 exports.makeSuggestions = function(cities, q, longitude, latitude) {
-	return cities.map(function(city) {
+	return cities
+	.map(function(city) {
 		return {
 			name: city[1]+", "+city[8],
   			longitude: city[4],
   			latitude: city[5],
   			score: exports.getScore(city[1], city[4], city[5], q, longitude, latitude)
   		};
-  	}).sort(function(a,b) {
+  	})
+  	.sort(function(a,b) {
   		return b.score - a.score;
   	});
 }
