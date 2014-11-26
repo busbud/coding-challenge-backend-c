@@ -10,11 +10,11 @@ You can access the API remotely at `http://busbud-backend.herokuapp.com/suggesti
 
 If you want to run it locally:
 
-  git clone git@github.com:mac-adam-chaieb/coding-challenge-frontend-a.git
-  cd coding-challenge-frontend-a
-  nvm use
-  npm install
-  npm start
+    git clone git@github.com:mac-adam-chaieb/coding-challenge-frontend-a.git
+    cd coding-challenge-frontend-a
+    nvm use
+    npm install
+    npm start
 
 Make sure your environment is set up, as described below.
 
