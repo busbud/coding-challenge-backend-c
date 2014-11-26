@@ -17,8 +17,6 @@ module.exports = http.createServer(function (req, res) {
     var success = false;
     var args = querystring.parse(req.url.substring(13));
 
-    //console.log(new Date()+": new query for '%s'", args.q)
-
     suggestions = bh.makeSuggestions(data.cities, args.q, args.longitude, args.latitude);
 
     if(suggestions.length > 0) {
@@ -33,3 +31,5 @@ module.exports = http.createServer(function (req, res) {
     	+ "Try appending '/suggestions' to the base url, and provide a parameter 'q' in the query.");
   }
 }).listen(port);
+
+console.log("Server now running at port " + port);

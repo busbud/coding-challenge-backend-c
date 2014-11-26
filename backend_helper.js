@@ -23,17 +23,18 @@ exports.makeSuggestions = function(data, q, longitude, latitude) {
 	var regexp = new RegExp(q, 'i');
 	var results = [];
 	var lines = data.split('\n');
-	var i;
 	var city;
-	for(i=0; i<lines.length; i++) {
+	for(var i=0; i<lines.length; i++) {
 		if(regexp.test(lines[i])) {
 			city = lines[i].split('\t');
-			results.push({
-				name: city[1]+", "+city[8],
-  				longitude: city[4],
-  				latitude: city[5],
-  				score: getScore(regexp, city[1], city[4], city[5], q, longitude, latitude)
-			});
+			if(city[14] >= MIN_POPULATION) {
+				results.push({
+					name: city[1]+", "+city[8],
+	  				longitude: city[4],
+	  				latitude: city[5],
+	  				score: getScore(regexp, city[1], city[4], city[5], q, longitude, latitude)
+				});
+			}
 		}
 	}
 	return results.sort(function(a,b) {
