@@ -1,96 +1,37 @@
-# Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
+# Busbud Back-end Coding Challenge
 
-## Requirements
+The BusBud back-end programming challenge
 
-Design an API endpoint that provides auto-complete suggestions for large cities.
-The suggestions should be restricted to cities in the USA and Canada with a population above 5000 people.
+This app is a simple back-end endpoint that serves a list of suggested cities based on a query string. The computed result is a success flag and a list of cities, with their latitudes, longitudes and a score to determine the level of certainty of the match. The app can be accessed at the following url: `http://busbud-backend.herokuapp.com/suggestions?q=`. Optionally the URL accepts `longitude` and `latitude` parameters to refine the search, increasing the scores of cities closer to the desired coordinates. The application passes all given functional tests.
 
-- the endpoint is exposed at `/suggestions`
-- the partial (or complete) search term is passed as a querystring parameter `q`
-- the caller's location can optionally be supplied via querystring parameters `latitude` and `longitude` to help improve relative scores
-- the endpoint returns a JSON response with an array of scored suggested matches
-    - the suggestions are sorted by descending score
-    - each suggestion has a score between 0 and 1 (inclusive) indicating confidence in the suggestion (1 is most confident)
-    - each suggestion has a name which can be used to disambiguate between similarly named locations
-    - each suggestion has a latitude and longitude
-- all functional tests should pass (additional tests may be implemented as necessary).
-- the final application should be [deployed to Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs).
-- feel free to add more features if you like!
+### Update: speed up
 
-#### Sample responses
+Some modifications were made to the initial code in order to speed up the search significantly:
 
-These responses are meant to provide guidance. The exact values can vary based on the data source and scoring algorithm
+- The search logic was simplified to not use higher order functions such as `filter` and `map` (the last version used 2 `map` calls and a `filter` call, all chained together).
+- The use of a regular expression to find matches
+- The use of a script to load the data as a string variable on the server side when the server is launched. By loading the data only once at server-launch time, we avoid the overhead incurred when opening and closing the file stream at every search. 
 
-**Near match**
+These cahnges achieve a speedup by at least a factor of at least 15, according to benchmark testing performed with the Apache Benchmark tool.
 
-    GET /suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
+## Getting Started, locally
 
-```json
-{
-  "suggestions": [
-    {
-      "name": "London, ON, Canada",
-      "latitude": "42.98339",
-      "longitude": "-81.23304",
-      "score": 0.9
-    },
-    {
-      "name": "London, OH, USA",
-      "latitude": "39.88645",
-      "longitude": "-83.44825",
-      "score": 0.5
-    },
-    {
-      "name": "London, KY, USA",
-      "latitude": "37.12898",
-      "longitude": "-84.08326",
-      "score": 0.5
-    },
-    {
-      "name": "Londontowne, MD, USA",
-      "latitude": "38.93345",
-      "longitude": "-76.54941",
-      "score": 0.3
-    }
-  ]
-}
-```
+You can access the API remotely at `http://busbud-backend.herokuapp.com/suggestions?q=`.
 
-**No match**
+If you want to run it locally:
 
-    GET /suggestions?q=SomeRandomCityInTheMiddleOfNowhere
+    git clone git@github.com:mac-adam-chaieb/coding-challenge-frontend-a.git
+    cd coding-challenge-frontend-a
+    nvm use
+    npm install
+    npm start
 
-```json
-{
-  "suggestions": []
-}
-```
+Make sure your environment is set up, as described below.
 
-
-### Non-functional
-
-- All code should be written in Javascript
-- Mitigations to handle high levels of traffic should be implemented
-- Work should be submitted as a pull-request to this repo
-- Documentation and maintainability is a plus
-
-### References
-
-- Geonames provides city lists Canada and the USA http://download.geonames.org/export/dump/readme.txt
-- http://www.nodejs.org/
-- http://ejohn.org/blog/node-js-stream-playground/
-
-
-## Getting Started
-
-Begin by forking this repo and cloning your fork. GitHub has apps for [Mac](http://mac.github.com/) and
-[Windows](http://windows.github.com/) that make this easier.
 
 ### Setting up a Nodejs environment
 
-Get started by installing [nodejs](http://www.nodejs.org).
-
-For OS X users, use [Homebrew](http://brew.sh) and `brew install nvm`
+Get started by installing [nodejs](http://www.nodejs.org) and [nvm](https://github.com/creationix/nvm).
 
 Once that's done, from the project directory, run
 
@@ -112,18 +53,4 @@ The test suite can be run with
 
 ```
 npm test
-```
-
-### Starting the application
-
-To start a local server run
-
-```
-PORT=3456 npm start
-```
-
-which should produce output similar to
-
-```
-Server running at http://127.0.0.1:2345/suggestions
 ```
