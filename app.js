@@ -17,13 +17,13 @@ module.exports = http.createServer(function (req, res) {
     var success = false;
     var args = querystring.parse(req.url.substring(13));
 
+    //console.log(new Date()+": new query for '%s'", args.q)
+
     suggestions = bh.makeSuggestions(data.cities, args.q, args.longitude, args.latitude);
 
     if(suggestions.length > 0) {
       res.writeHead(200);
       success = true;
-    } else {
-      res.writeHead(404);
     }
 
     res.end(JSON.stringify({ success: success, suggestions: suggestions }, null, 2));

@@ -7,14 +7,14 @@ var getScore = function(regexp, name, longitude, latitude, q, lon, lat) {
 	var name_score = 0.0;
 	if(match)
 		name_score = q.length/match[0].length;
-	// var longitude_score = 1;
-	// var latitude_score = 1; 
-	// if(lon && !isNaN(lon))
-	// 	longitude_score = 1 - Math.abs(longitude-(lon%180))/180;
-	// if(lat && !isNaN(lat))
-	// 	latitude_score = 1 - Math.abs(latitude-(lat%180))/180;
+	var longitude_score = 1;
+	var latitude_score = 1; 
+	if(lon && !isNaN(lon))
+		longitude_score = 1 - Math.abs(longitude-(lon%180))/180;
+	if(lat && !isNaN(lat))
+		latitude_score = 1 - Math.abs(latitude-(lat%180))/180;
 	return name_score;
-	// return Math.min(1,((name_score + longitude_score + latitude_score)/3).toFixed(2));
+	return Math.min(1,((name_score + longitude_score + latitude_score)/3).toFixed(2));
 };
 
 // Format the suggestions, compute their score based on given inputs
