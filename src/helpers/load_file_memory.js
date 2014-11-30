@@ -5,10 +5,11 @@ var fs = require('fs'),
 
 module.exports = (function() {
   'use strict';
-  function LoadInMemory(fileName, modelName) {
-    this.fileName = fileName;
-    this.modelName = modelName;
 
+  // @constructor
+  // @param {string} fileName
+  function LoadInMemory(fileName) {
+    this.fileName = fileName;
     this.buf = '';
     this.columnHeaders = null;
     this.datas = [];
@@ -20,6 +21,7 @@ module.exports = (function() {
     this.loadFromTsv = __bind(this.loadFromTsv, this);
   }
 
+  // Pump each line of the file and memorize
   LoadInMemory.prototype.pump = function() {
     var pos;
     var items = [];
@@ -42,11 +44,14 @@ module.exports = (function() {
   };
 
 
+  // Set the Header column of the file
+  // @param {string} line
   LoadInMemory.prototype.setHeader = function(line) {
     line = line.split('\n');
     this.columnHeaders = line.shift().split('\t');
   }
 
+  // Set each value to the good header/field name
   LoadInMemory.prototype.associateHeaderValues = function(data) {
     var r = {};
     this.columnHeaders.forEach(function(value, index){
@@ -55,6 +60,8 @@ module.exports = (function() {
     return r;
   }
 
+  // translate line string to json
+  // @param {string} line
   LoadInMemory.prototype.jsonize = function(line) {
     var item = null;
     if (line[line.length-1] == '\r') line = line.substr(0,line.length-1);
@@ -64,6 +71,8 @@ module.exports = (function() {
     return item;
   };
 
+  // Save in memory all items
+  // @param {Array} items
   LoadInMemory.prototype.memorize = function(items) {
     var self = this;
     items.forEach(function(item, index){
@@ -71,6 +80,8 @@ module.exports = (function() {
     });
   };
 
+  // Load a json file
+  // @param {Function} callback
   LoadInMemory.prototype.loadFromJson = function(callback) {
     try {
       var items = require(this.fileName);
@@ -85,6 +96,8 @@ module.exports = (function() {
     }
   };
 
+  // Load a tsv file
+  // @param {Function} callback
   LoadInMemory.prototype.loadFromTsv = function(callback) {
     var self = this;
     var stream = fs.createReadStream(this.fileName);
@@ -102,6 +115,10 @@ module.exports = (function() {
     });
   };
 
+  // Primary method for load the file
+  // this method test the extence of the file and use the good
+  // handler (loadFromJson or loadFromTsv)
+  // @param {Function} callback
   LoadInMemory.prototype.load = function(callback) {
     this.log('Stream file: %s', this.fileName);
     callback = callback || function(){};

@@ -95,7 +95,7 @@ module.exports = function suggestions(req, res, cities, cacheStore) {
         log("Error when retrieve data in cache", err);
       } else if(datas) {
         log('Result loaded from cache');
-        helpersSendOK(res, {"suggestionss": datas});
+        helpersSendOK(res, {"suggestions": datas});
         return;
       }
       withNoCache();
