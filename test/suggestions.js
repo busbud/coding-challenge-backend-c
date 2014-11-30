@@ -25,7 +25,7 @@ describe('Suggestions suite tests', function() {
     it('Datas is loaded', function () {
       expect(application.inMemoryDatabase.length).to.not.equal(0);
     });
-    it('Options memcached is correctlu setup', function () {
+    it('Options memcached is correctly setup', function () {
       expect(application.memcached).to.equal(MEMCACHED);
     });
   });
