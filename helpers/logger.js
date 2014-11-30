@@ -3,9 +3,8 @@
 // @param {string} title
 // @return {function}
 //
-var debug = require('debug');
-var util = require('util');
-var DEBUG_MODE = process.env.DEBUG_MODE || 'false';
+var debug = require('debug'),
+    util = require('util');
 
 module.exports = function logger(space) {
   var log = debug('suggestions:'+space);
