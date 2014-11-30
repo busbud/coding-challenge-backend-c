@@ -6,7 +6,7 @@ var logger = require('../helpers/logger'),
     cluster = require('cluster'),
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     os = require('os'),
-    DEBUG_MODE = process.env.DEBUG_MODE || 'false';
+    DEBUG_MODE = process.env.DEBUG || false;
 
 var Master = require('./master'),
     Worker = require('./worker');
@@ -14,15 +14,16 @@ var Master = require('./master'),
 module.exports = (function() {
   'use strict';
 
-  function Cluster(name, port, cpus, address, autoRestart, reportMemoryUsageInterval) {
+  function Cluster(name, options) {
     this.log = logger('cluster:'+name);
     this.name = name;
-    this.port = port;
-    this.address = address || '127.0.0.1';
+    this.port = options.port;
+    this.address = options.address || '127.0.0.1';
+    this.memcached = options.memcached || null;
     
-    this.cpus = cpus || os.cpus().length;
-    this.autoRestart = autoRestart || true;
-    this.reportMemoryUsageInterval = reportMemoryUsageInterval || 5;
+    this.cpus = options.cpus || os.cpus().length;
+    this.autoRestart = options.autoRestart || true;
+    this.reportMemoryUsageInterval = options.reportMemoryUsageInterval || 5;
 
     this.master = __bind(this.master, this);
     this.worker = __bind(this.worker, this);
@@ -31,7 +32,7 @@ module.exports = (function() {
 
   Cluster.prototype.initialize = function() {
     var self = this;
-    if (DEBUG_MODE) this.setUpLogWorkEvents();
+    if (DEBUG_MODE != false) this.setUpLogWorkEvents();
 
     if (cluster.isMaster) {
       this.master();
@@ -61,7 +62,8 @@ module.exports = (function() {
   Cluster.prototype.worker = function() {
     var w = new Worker(this.name, {
       'port':this.port,
-      'address':this.address
+      'address':this.address,
+      'memcached':this.memcached
     });
   }
 
