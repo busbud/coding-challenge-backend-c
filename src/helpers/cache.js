@@ -2,10 +2,13 @@ var hash = require('object-hash'),
     memjs = require('memjs'),
     logger = require('../helpers/logger');
 
-var AN_HOUR = 60 * 60;
-
 module.exports = (function() {
   'use strict';
+
+  // @constructor
+  // @param {object} servers
+  // @param {number} ttl
+  // @param {function} callback
   function Cache(servers, ttl, callback) {
     var self = this;
     this.log = logger('cache');
@@ -27,12 +30,14 @@ module.exports = (function() {
 
     this.client.stats(function(err, server, stats){
        if(err) self.log(err);
-       console.log(stats);
        if(stats != null ) self.isConnected = true;
        callback(self.isConnected);
     });
   }  
 
+  // get a value by params
+  // @param {object} params
+  // @param {function} callback
   Cache.prototype.get = function(params, callback) {
     var key = hash(params);
     var self = this;
@@ -44,6 +49,10 @@ module.exports = (function() {
     });
   };
 
+  // save a result, calculate the hash from params
+  // @param {object} params
+  // @param {object} results
+  // @param {function} callback
   Cache.prototype.set = function(params, results, callback) {
     var key = hash(params);
     var data = JSON.stringify(results);
