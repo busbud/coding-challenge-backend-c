@@ -5,7 +5,7 @@ var logger = require('../helpers/logger'),
     helpersSendOK = require('../helpers/responses/sendOK'),
     helpersNotFound = require('../helpers/responses/notFound'),
     parseQueryString = require('../helpers/parse_query_string'),
-    calculateScore = require('../helpers/calculate');
+    calculateScore = require('../helpers/calculate_score');
 
 // suggestions Handler
 //
