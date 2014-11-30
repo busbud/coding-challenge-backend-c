@@ -1,3 +1,5 @@
+'use strict';
+
 // logger function
 //
 // @param {string} title

@@ -1,6 +1,4 @@
 // @class city
-// This class holds the city information and the logic for calculating  the 
-// the distance with a reference latitude and longitude.
 
 var logger = require('../helpers/logger'),
 __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
