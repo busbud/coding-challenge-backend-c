@@ -15,7 +15,7 @@ var logger = require('../helpers/logger'),
 //
 // Usage:
 // return suggestions(req, res);
-module.exports = function suggestions(req, res, cities) {
+module.exports = function suggestions(req, res, cities, cacheStore) {
   var log = logger('suggestions');
 
   var queryString = url.parse(req.url, true).query;
@@ -29,48 +29,74 @@ module.exports = function suggestions(req, res, cities) {
       return;
   }
 
-  //TODO: cache in memcache
+  var result = [];
 
-  var suggested = [],
-      result = [],
-      maxDistance = null,
-      maxPopulation = null;
-  for (var index in cities) {
-    var city = cities[index];
-    if (city.name.indexOf(query.q) === 0 || city.ascii.indexOf(query.q) === 0 ) {
-      var name = [];
-      if(city.name) name.push(city.name);
-      if(city.province) name.push(city.province.toUpperCase());
-      if(city.country) name.push(city.country);
+  // function for generate the suggestion in case without memcache
+  var withNoCache = function(){
+    var suggested = [],
+        maxDistance = null,
+        maxPopulation = null;
 
-      var i = {
-        "name": name.join(', '),
-        "rawName": city.name,
-        "latitude": city.lat,
-        "longitude": city.long,
-        "population": city.population,
-      };
-      if(query.lat != null && query.long != null) {
-        i.distance = city.distance(query.lat, query.long);
-        if(maxDistance === null || i.distance >= maxDistance) maxDistance = i.distance;
+    for (var index in cities) {
+      var city = cities[index];
+      if (city.name.indexOf(query.q) === 0 || city.ascii.indexOf(query.q) === 0 ) {
+        var name = [];
+        if(city.name) name.push(city.name);
+        if(city.province) name.push(city.province.toUpperCase());
+        if(city.country) name.push(city.country);
+
+        var i = {
+          "name": name.join(', '),
+          "rawName": city.name,
+          "latitude": city.lat,
+          "longitude": city.long,
+          "population": city.population,
+        };
+        if(query.lat != null && query.long != null) {
+          i.distance = city.distance(query.lat, query.long);
+          if(maxDistance === null || i.distance >= maxDistance) maxDistance = i.distance;
+        }
+        if(maxPopulation === null || i.population >= maxPopulation) maxPopulation = i.population;
+        suggested.push(i);
       }
-      if(maxPopulation === null || i.population >= maxPopulation) maxPopulation = i.population;
-      suggested.push(i);
     }
+
+    suggested.forEach(function (city) {
+      city.score = calculateScore(city, maxPopulation, maxDistance, query.q);
+      delete city.distance;
+      delete city.population;
+      delete city.rawName;
+      result.push(city);
+    });
+
+    result = result.sort(function (itemA, itemB) {
+        return (itemA.score - itemB.score);
+    });
+
+    //cache datas
+    if(cacheStore.isConnected === true) {
+      cacheStore.set(query, result, function(err, datas){
+        helpersSendOK(res, result.reverse());
+      });
+    } else {
+      helpersSendOK(res, result.reverse());
+    }
+    
   }
 
-  suggested.forEach(function (city) {
-    city.score = calculateScore(city, maxPopulation, maxDistance, query.q);
-    delete city.distance;
-    delete city.population;
-    delete city.rawName;
-    result.push(city);
-  });
-
-  var result = result.sort(function (itemA, itemB) {
-      return (itemA.score - itemB.score);
-  });
-
-  helpersSendOK(res, result.reverse());
+  if(cacheStore.isConnected === true) {
+    cacheStore.get(query, function(err, datas){
+      if(err) {
+        log("Error when retrieve data in cacne", err);
+      } else if(datas) {
+        log('Result loaded from cache');
+        helpersSendOK(res, datas);
+        return;
+      }
+      withNoCache();
+    });
+  } else {
+    withNoCache();
+  }
   return;
 };
