@@ -4,9 +4,11 @@
 
 var logger = require('../helpers/logger'),
     path = require('path'),
-    http = require('http'),
+    http = require('http')
+    async = require('async'),
+    Cache = require('../helpers/cache'),
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    DEBUG_MODE = process.env.DEBUG_MODE || 'false';
+    DEBUG_MODE = process.env.DEBUG || false;
 
 var LoadFileInMemory = require('../helpers/load_file_memory'),
     routesSuggestions = require('../routes/suggestions'),
@@ -24,8 +26,12 @@ module.exports = (function() {
     this.log = logger('Application');
     this.port = options.port || 2345;
     this.address = options.address || '127.0.0.1';
+    this.memcached = options.memcached || null;
     this.inMemoryDatabase = [];
     this.loadDatas = __bind(this.loadDatas, this);
+    this.cache = {
+      'haveCache':false
+    };
 
     this.filters = {
       'population':5000,
@@ -35,8 +41,28 @@ module.exports = (function() {
 
   Application.prototype.initialize = function(callback) {
     callback = callback || function(){};
-    this.loadDatas(function(err){
-      callback(err);
+    var self = this;
+    var tasks = [];
+
+    //see if need to add task for connectoion to memcache
+    if(this.memcached != null) {
+      tasks.push(function(callback){
+        self.cache = new Cache(self.memcached, function(connected){
+          callback(null, self.cache.connected);
+        });
+      });
+    }
+
+    //Add task for load data in memory
+    tasks.push(function(callback){
+      self.loadDatas(function(err){
+        callback(err, null);
+      });      
+    })
+
+    //run task on parallel
+    async.parallel(tasks, function (err, result) {
+       callback(err);    
     });
   }
 
@@ -67,12 +93,12 @@ module.exports = (function() {
     var self = this;
     http.createServer(function (request, response) {
       if (request.url.indexOf('/suggestions') === 0) {
-        routesSuggestions(request, response, self.inMemoryDatabase);
+        routesSuggestions(request, response, self.inMemoryDatabase, self.cache);
       } else {
         routesWildcard(request, response);
       }
     }).listen(self.port, self.address, function() {
-      self.log('server running at http://%s on %s/suggestions',self.address, self.port);
+      console.log('server running at http://%s on %d (pid: %d)',self.address, self.port, process.pid);
     });
   }
 
