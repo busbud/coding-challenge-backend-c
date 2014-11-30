@@ -27,6 +27,7 @@ module.exports = (function() {
     this.port = options.port || 2345;
     this.address = options.address || '127.0.0.1';
     this.memcached = options.memcached || null;
+    this.httpServer = null;
     this.inMemoryDatabase = [];
     this.loadDatas = __bind(this.loadDatas, this);
     this.cache = {
@@ -91,7 +92,7 @@ module.exports = (function() {
 
   Application.prototype.run = function() {
     var self = this;
-    http.createServer(function (request, response) {
+    this.httpServer = http.createServer(function (request, response) {
       if (request.url.indexOf('/suggestions') === 0) {
         routesSuggestions(request, response, self.inMemoryDatabase, self.cache);
       } else {
