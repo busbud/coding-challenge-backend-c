@@ -10,5 +10,5 @@
 var helpersNotFound = require('../helpers/responses/notFound');
 
 module.exports = function wildcard(req, res) {
-  return helpersNotFound(res);
+  return helpersNotFound(res, {"suggestions": []});
 };
