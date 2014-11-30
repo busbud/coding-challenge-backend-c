@@ -28,6 +28,7 @@ module.exports = (function() {
     this.master = __bind(this.master, this);
     this.worker = __bind(this.worker, this);
     this.setUpWorkEvents = __bind(this.setUpWorkEvents, this);
+    this._workers = [];
   }
 
   Cluster.prototype.initialize = function() {
@@ -53,6 +54,8 @@ module.exports = (function() {
       self.log('Server has shutdown - Server was running for %s seconds', Math.round(process.uptime()));
       process.exit(0);
     });
+
+    return this;
   }
 
   Cluster.prototype.master = function() {
@@ -60,11 +63,11 @@ module.exports = (function() {
   }
 
   Cluster.prototype.worker = function() {
-    var w = new Worker(this.name, {
+    this._workers.push(new Worker(this.name, {
       'port':this.port,
       'address':this.address,
       'memcached':this.memcached
-    });
+    }));
   }
 
   Cluster.prototype.setUpLogWorkEvents = function(){
@@ -85,6 +88,7 @@ module.exports = (function() {
       self.log('Worker %s died. Restarting...', worker.process.pid);
     });
   }
+
 
   Cluster.prototype.watchMemory = function() {
     var self = this;
