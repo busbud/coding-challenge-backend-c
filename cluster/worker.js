@@ -12,7 +12,8 @@ module.exports = (function() {
   //@constructor
   function Worker(name, options) {
     var self = this;
-    this.log = logger('cluster:' + name + ':worker:'+process.pid);
+    this.pid = process.pid;
+    this.log = logger('cluster:' + name + ':worker:'+this.pid);
     this.options = options || {};
     this.application = new Application(this.options);
 
