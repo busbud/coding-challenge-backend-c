@@ -18,7 +18,7 @@ module.exports = (function() {
     this.log = logger('cluster:'+name);
     this.name = name;
     this.port = options.port;
-    this.address = options.address || '127.0.0.1';
+    this.address = options.address;
     this.memcached = options.memcached || null;
     
     this.cpus = options.cpus || os.cpus().length;
