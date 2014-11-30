@@ -25,7 +25,7 @@ module.exports = (function() {
   function Application(options) {
     this.log = logger('Application');
     this.port = options.port || 2345;
-    this.address = options.address || '127.0.0.1';
+    this.address = options.address || '0.0.0.0';
     this.memcached = options.memcached || null;
     this.httpServer = null;
     this.inMemoryDatabase = [];
