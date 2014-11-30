@@ -4,7 +4,9 @@
 // Usage:
 // return notFound(res);
  
-module.exports = function notFound (res) {
+module.exports = function notFound (res, datas) {
   res.writeHead(404, {'Content-Type': 'application/json'});
-  return res.end();
+  var json = '';
+  if(datas) json = JSON.stringify(datas);
+  return res.end(json);
 };
