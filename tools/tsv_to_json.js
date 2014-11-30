@@ -8,7 +8,6 @@ var program = require('commander'),
     fs = require('fs'),
     path = require('path'),
     tsv = require("node-tsv-json");
-    //mkdirp = require('mkdirp');
 
 program
   .version('0.0.1')
