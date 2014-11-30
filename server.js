@@ -2,11 +2,11 @@
 
 module.exports = (function(){
   var environment = process.env.NODE_ENV || 'development',
-        logger = require('./helpers/logger'),
+        logger = require('./src/helpers/logger'),
         PORT = process.env.PORT || 2345,
         MEMCACHED = process.env.MEMCACHED || null,
         DEBUG_MODE = process.env.DEBUG || false,
-        Cluster = require('./cluster');
+        Cluster = require('./src/cluster');
 
   var cluster = new Cluster('suggestions',{
     'port':PORT,

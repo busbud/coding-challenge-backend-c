@@ -2,7 +2,7 @@
 
 var logger = require('../helpers/logger'),
     cluster = require('cluster'),
-    Application = require('./application'),
+    Application = require('../application'),
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     DEBUG_MODE = process.env.DEBUG || false;
 

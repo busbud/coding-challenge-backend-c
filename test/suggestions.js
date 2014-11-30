@@ -2,7 +2,7 @@
 process.env.NODE_ENV = 'test';
 
 var expect  = require('chai').expect,
-    server  = require('../cluster/application'),
+    server  = require('../src/application'),
     PORT = process.env.PORT || 2345,
     MEMCACHED = process.env.MEMCACHED || null,
     DEBUG_MODE = process.env.DEBUG || false;

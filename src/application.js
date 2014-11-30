@@ -2,19 +2,19 @@
 // This class holds the city information and the logic for calculating  the 
 // the distance with a reference latitude and longitude.
 
-var logger = require('../helpers/logger'),
+var logger = require('./helpers/logger'),
     path = require('path'),
     http = require('http')
     async = require('async'),
-    Cache = require('../helpers/cache'),
+    Cache = require('./helpers/cache'),
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     DEBUG_MODE = process.env.DEBUG || false;
 
-var LoadFileInMemory = require('../helpers/load_file_memory'),
-    routesSuggestions = require('../routes/suggestions'),
-    routesWildcard = require('../routes/wildcard');
+var LoadFileInMemory = require('./helpers/load_file_memory'),
+    routesSuggestions = require('./routes/suggestions'),
+    routesWildcard = require('./routes/wildcard');
 
-var modelsCity = require('../models/city'),
+var modelsCity = require('./models/city'),
     cities = [];
 
 module.exports = (function() {
