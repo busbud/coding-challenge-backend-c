@@ -71,7 +71,7 @@ module.exports = function suggestions(req, res, cities, cacheStore) {
     });
 
     result = result.sort(function (itemA, itemB) {
-        return (itemA.score - itemB.score);
+        return (itemB.score - itemA.score);
     });
 
     //cache datas if available
@@ -84,7 +84,7 @@ module.exports = function suggestions(req, res, cities, cacheStore) {
     if(result.length === 0) {
       helpersNotFound(res, {"suggestions": []});
     } else {
-      helpersSendOK(res, {"suggestions": result.reverse()});
+      helpersSendOK(res, {"suggestions": result});
     }
     return;
   }
@@ -95,7 +95,7 @@ module.exports = function suggestions(req, res, cities, cacheStore) {
         log("Error when retrieve data in cache", err);
       } else if(datas) {
         log('Result loaded from cache');
-        helpersSendOK(res, {"suggestions": datas});
+        helpersSendOK(res, {"suggestionss": datas});
         return;
       }
       withNoCache();
