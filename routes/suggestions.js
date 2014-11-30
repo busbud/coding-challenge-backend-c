@@ -1,6 +1,7 @@
 'use strict';
 
-var url = require('url');
+var url = require('url'),
+    latinize = require('latinize');
 var logger = require('../helpers/logger'),
     helpersSendOK = require('../helpers/responses/sendOK'),
     helpersNotFound = require('../helpers/responses/notFound'),
@@ -25,7 +26,7 @@ module.exports = function suggestions(req, res, cities, cacheStore) {
       query = parseQueryString(queryString);
   } catch (e) {
       log("Error when parsing query %s", e);
-      helpersNotFound(res);
+      helpersNotFound(res, {"suggestions": []});
       return;
   }
 
@@ -46,7 +47,7 @@ module.exports = function suggestions(req, res, cities, cacheStore) {
         if(city.country) name.push(city.country);
 
         var i = {
-          "name": name.join(', '),
+          "name": latinize(name.join(', ')),
           "rawName": city.name,
           "latitude": city.lat,
           "longitude": city.long,
@@ -73,24 +74,28 @@ module.exports = function suggestions(req, res, cities, cacheStore) {
         return (itemA.score - itemB.score);
     });
 
-    //cache datas
+    //cache datas if available
     if(cacheStore.isConnected === true) {
       cacheStore.set(query, result, function(err, datas){
-        helpersSendOK(res, result.reverse());
+        if(err) log("Error when set data in cache", err);
       });
-    } else {
-      helpersSendOK(res, result.reverse());
     }
-    
+
+    if(result.length === 0) {
+      helpersNotFound(res, {"suggestions": []});
+    } else {
+      helpersSendOK(res, {"suggestions": result.reverse()});
+    }
+    return;
   }
 
   if(cacheStore.isConnected === true) {
     cacheStore.get(query, function(err, datas){
       if(err) {
-        log("Error when retrieve data in cacne", err);
+        log("Error when retrieve data in cache", err);
       } else if(datas) {
         log('Result loaded from cache');
-        helpersSendOK(res, datas);
+        helpersSendOK(res, {"suggestions": datas});
         return;
       }
       withNoCache();
