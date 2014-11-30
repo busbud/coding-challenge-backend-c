@@ -1,6 +1,4 @@
-// @class app
-// This class holds the city information and the logic for calculating  the 
-// the distance with a reference latitude and longitude.
+// @class applications
 
 var logger = require('./helpers/logger'),
     path = require('path'),
