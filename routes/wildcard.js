@@ -7,7 +7,7 @@
 // Usage:
 // return wildcard(req, res);
 
-var helpersNotFound = require('../helpers/responses/notFound')
+var helpersNotFound = require('../helpers/responses/notFound');
 
 module.exports = function wildcard(req, res) {
   return helpersNotFound(res);
