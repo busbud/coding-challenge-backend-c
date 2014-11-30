@@ -4,12 +4,13 @@
   "description": "coding challenge in Nodejs",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "node server.js",
     "test": "./node_modules/mocha/bin/mocha ./test/"
   },
   "author": "",
   "license": "WTFPL",
   "dependencies": {
+    "async": "^0.9.0",
     "chai": "^1.9.1",
     "debug": "^2.1.0",
     "mocha": "^1.18.2",
@@ -17,5 +18,9 @@
   },
   "engines": {
     "node": "0.10.26"
+  },
+  "devDependencies": {
+    "node-tsv-json": "^0.2.1",
+    "commander": "^2.5.0"
   }
 }
