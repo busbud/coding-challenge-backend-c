@@ -9,7 +9,9 @@ var logger = require('../helpers/logger'),
 module.exports = (function() {
   'use strict';
 
-  //@constructor
+  // @constructor
+  // @param {string} name
+  // @param {object} options
   function Worker(name, options) {
     var self = this;
     this.pid = process.pid;
@@ -27,6 +29,7 @@ module.exports = (function() {
     });
   }
 
+  //This methode run the application htpp server
   Worker.prototype.run = function(){
     this.log('run application...');
     this.application.run();

@@ -9,7 +9,9 @@ var logger = require('../helpers/logger'),
 module.exports = (function() {
   'use strict';
 
-  //@constructor
+  // @constructor
+  // @param {string} name
+  // @param {number} cpus
   function Master(name, cpus) {
     var self = this;
     this.log = logger('cluster:' + name + ':master');
@@ -24,9 +26,11 @@ module.exports = (function() {
 
   }
 
+  //@return {Array} workers list
   Master.prototype.workers = function() {
     return this._workers;
   }
+
   return Master;
 
 })();

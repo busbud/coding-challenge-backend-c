@@ -14,6 +14,9 @@ var Master = require('./master'),
 module.exports = (function() {
   'use strict';
 
+  //@constructor
+  // @param {string} name
+  // @param {object} options
   function Cluster(name, options) {
     this.log = logger('cluster:'+name);
     this.name = name;
@@ -31,6 +34,8 @@ module.exports = (function() {
     this._workers = [];
   }
 
+
+  // initialize the cluster
   Cluster.prototype.initialize = function() {
     var self = this;
     if (DEBUG_MODE != false) this.setUpLogWorkEvents();
@@ -58,10 +63,12 @@ module.exports = (function() {
     return this;
   }
 
+  ///method for launch master worker
   Cluster.prototype.master = function() {
     var m = new Master(this.name, this.cpus);
   }
 
+  ///method for launch workers
   Cluster.prototype.worker = function() {
     this._workers.push(new Worker(this.name, {
       'port':this.port,
@@ -70,6 +77,7 @@ module.exports = (function() {
     }));
   }
 
+  ///This method active the logging of all worker events
   Cluster.prototype.setUpLogWorkEvents = function(){
     var self = this;
     cluster.on('fork', function(worker) {
@@ -90,6 +98,7 @@ module.exports = (function() {
   }
 
 
+  ///This method monitor by interval the cluster memory usage
   Cluster.prototype.watchMemory = function() {
     var self = this;
     setInterval(function () {

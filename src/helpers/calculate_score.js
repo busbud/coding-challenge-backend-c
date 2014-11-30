@@ -1,12 +1,10 @@
 'use strict';
 
 var GEO_WEIGHT = 5,
-    POP_WEIGHT = 1,
+    POP_WEIGHT = 3,
     NAME_WEIGHT = 2,
     NAME_MAX_PENALITY = 0.10,
-    TOTAL_WEIGHT = POP_WEIGHT + GEO_WEIGHT + NAME_WEIGHT,
-    FURTHEST_DISTANCE = 19200;
-            
+    TOTAL_WEIGHT = POP_WEIGHT + GEO_WEIGHT + NAME_WEIGHT;
 
 // @param {string} name
 // @param {string} prefix
