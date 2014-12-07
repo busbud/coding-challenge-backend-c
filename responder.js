@@ -21,6 +21,6 @@ exports.getResponseString = function (url_obj,search_structure) {
 	var formattedResponse=exports.getResponse(url_obj,search_structure);
 	formattedResponse.suggestions=_(formattedResponse.suggestions).map(function(response_hit) {
 		return formatter.getFormattedObj(response_hit);
-	});
+	}).value();
 	return JSON.stringify(formattedResponse);
 };
