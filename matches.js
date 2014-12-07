@@ -5,6 +5,7 @@ exports.getMatches = function(city_container, search_term) {//Returns an array o
     matches = [];
     for (key in city_container) {
         var city = city_container[key];
+        //TODO: Filter out small cities (even though all entries in current database seem to be >5k pop.)
         if (isPotentialMatch(city.primary_name, search_term)) {
             matches.push(city);
         }

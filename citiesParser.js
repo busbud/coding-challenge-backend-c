@@ -13,7 +13,7 @@ function parse(file_to_parse) {//Parses file_to_parse and returns Parser object,
     var parser = csv.parse({ delimiter: '\t', quote: '', escape: '' });
     file_stream.pipe(parser);
     return parser;
-};
+}
 
 exports.getCities = function (file_to_parse, done) {//Builds a collection of city objects from entire file, indexed by id; passes it as cities to done(err,cities)
     var output = {};
@@ -27,22 +27,17 @@ exports.getCities = function (file_to_parse, done) {//Builds a collection of cit
         }
         var city = parseCity(chunk, headerKey);
         output[city.id] = city;
-        //if (!dummy) {
-        //    console.log(city);
-        //    dummy = true;
-        //}
     });
     parser.on('error', function (err) {
         done(err);
     });
     parser.on('end', function () {
         done(null, output);
-        //console.log(headerKey);
     });
 };
 function constructHeaderKey(headerLine) {//Returns object with indices corresponding to desired headers
     var output= {};
-    for (prop in DESIRED_HEADERS) {
+    for (var prop in DESIRED_HEADERS) {
         output[prop] = _.findIndex(headerLine, function (h) {
             return h === DESIRED_HEADERS[prop];
         });
@@ -54,14 +49,18 @@ function parseCity(cityLine, headerKey) {//Extracts city object from array of in
         throw new Error('No valid headerKey supplied.');
     }
     var city = {};
-    for (prop in headerKey) {
+    for (var prop in headerKey) {
         city[prop] = cityLine[headerKey[prop]];
     }
     return convertCity(city);
 }
 function convertCity(city) {//Clean up selected fields
-    //Convert alt_names to array
-    //Convert state to CA province if numeric
-    //Make numeric entries numeric
+    //TODO: Convert alt_names to array
+    //TODO: Convert state to CA province if numeric
+    var numeric_fields=['id','lat','long','population'];
+    for (var key in numeric_fields) {
+        var field=numeric_fields[key];
+        city[field]=Number(city[field]);
+    }
     return city;
 }
