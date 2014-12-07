@@ -12,6 +12,9 @@ exports.getScore = function (city_hit, search_term, input_geo_coord) {//Calculat
 };
 
 function normScoreOnCoord(input_geo_coord, city_geo_coord) {//Returns score from 0 to 1
+	if (!input_geo_coord||!input_geo_coord.latitude||!input_geo_coord.longitude) {
+		return 1; //I guess? //Could also 'sanity-test' lat & long
+	}
     var distance = geo.getDistance(input_geo_coord, city_geo_coord);//m
     var score = clamp((MAX_DISTANCE - distance) / MAX_DISTANCE); //No particular reason for this to be linear
     return score;

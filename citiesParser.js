@@ -8,14 +8,7 @@ DESIRED_HEADERS = {//Belongs in a separate options file?
     lat: 'lat', long: 'long', country: 'country', state: 'admin1', population: 'population', tz: 'tz'
 };
 
-function parse(file_to_parse) {//Parses file_to_parse and returns Parser object, which can be read as a stream of
-    var file_stream = fs.createReadStream(file_to_parse);
-    var parser = csv.parse({ delimiter: '\t', quote: '', escape: '' });
-    file_stream.pipe(parser);
-    return parser;
-}
-
-exports.getCities = function (file_to_parse, done) {//Builds a collection of city objects from entire file, indexed by id; passes it as cities to done(err,cities)
+exports.getCities = function (file_to_parse, done) {//Builds a flat collection of city objects from entire file, indexed by id; passes it as cities to done(err,cities_flat)
     var output = {};
     var parser = parse(file_to_parse);
     var headerKey;
@@ -35,6 +28,14 @@ exports.getCities = function (file_to_parse, done) {//Builds a collection of cit
         done(null, output);
     });
 };
+
+function parse(file_to_parse) {//Parses file_to_parse and returns Parser object, which can be read as a stream of
+    var file_stream = fs.createReadStream(file_to_parse);
+    var parser = csv.parse({ delimiter: '\t', quote: '', escape: '' });
+    file_stream.pipe(parser);
+    return parser;
+}
+
 function constructHeaderKey(headerLine) {//Returns object with indices corresponding to desired headers
     var output= {};
     for (var prop in DESIRED_HEADERS) {
@@ -44,6 +45,7 @@ function constructHeaderKey(headerLine) {//Returns object with indices correspon
     }
     return output;
 }
+
 function parseCity(cityLine, headerKey) {//Extracts city object from array of info entries;
     if (!headerKey) {
         throw new Error('No valid headerKey supplied.');
@@ -54,6 +56,7 @@ function parseCity(cityLine, headerKey) {//Extracts city object from array of in
     }
     return convertCity(city);
 }
+
 function convertCity(city) {//Clean up selected fields
     //TODO: Convert alt_names to array
     //TODO: Convert state to CA province if numeric
