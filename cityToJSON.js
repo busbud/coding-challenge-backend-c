@@ -8,6 +8,7 @@ exports.getFormattedObj = function (response_hit) {//Takes a search hit of form 
     obj.latitude = city.lat;
     obj.longitude = city.long;
     obj.score = response_hit.score;
+    obj.id = city.id;
     return obj;
 };
 exports.getJSON = function (city, score) {
