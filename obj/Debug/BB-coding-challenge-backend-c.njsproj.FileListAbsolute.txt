@@ -1,2 +1,0 @@
-C:\Users\David\Documents\Programming\NodeJS\coding-challenge-backend-c\obj\Debug\BB-coding-challenge-backend-c.njsprojResolveAssemblyReference.cache
-C:\Users\David\Documents\Programming\NodeJS\coding-challenge-backend-c\bin\Microsoft.NodejsTools.WebRole.dll

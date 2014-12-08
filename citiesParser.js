@@ -7,6 +7,23 @@ DESIRED_HEADERS = {//Belongs in a separate options file?
     id: 'id', primary_name: 'name', ascii_name: 'ascii', alt_names: 'alt_name', 
     lat: 'lat', long: 'long', country: 'country', state: 'admin1', population: 'population', tz: 'tz'
 };
+var CA_PROVINCES = [
+    'Unused', //Zero index
+    'AB',
+    'BC',
+    'MB',
+    'NB',
+    'NL',
+    '', // ?
+    'NS',
+    'ON',
+    'PE',
+    'QC',
+    'SK',
+    'YT',
+    'NT',
+    'NU'
+];
 
 exports.getCities = function (file_to_parse, done) {//Builds a flat collection of city objects from entire file, indexed by id; passes it as cities to done(err,cities_flat)
     var output = {};
@@ -61,7 +78,9 @@ function convertCity(city) {//Clean up selected fields
     var parsed_alt=city.alt_names.split(',');
     // if (_.random(0,100)===50) { console.log(parsed_alt);}
     city.alt_names=parsed_alt;
-    //TODO: Convert state to CA province if numeric
+    if (city.country==='CA') {
+        city.state=CA_PROVINCES[Number(city.state)];
+    }
     var numeric_fields=['id','lat','long','population'];
     for (var key in numeric_fields) {
         var field=numeric_fields[key];

@@ -2,7 +2,7 @@
 var _=require('lodash');
 
 exports.getMatches = function(hit_trie, search_term) {
-	//TODO: use first word in search_term, not whole string
+	//TODO: use first word in search_term, not whole string //Well... could be eg 'New York' or 'Mount Pearl'. Want to handle the case of 'london ON' - could try splitting string if no matches are found for whole string
     var matches = hit_trie.retrievePartialMatches(search_term); //Well then
     var primary_matches = _(matches).
     	filter(function(hit) {
