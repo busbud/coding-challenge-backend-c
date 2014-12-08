@@ -17,10 +17,14 @@ exports.getResponse = function (url_obj,search_structure) {//Returns response wi
 		//TODO: sort matches
 		value()};
 };
-exports.getResponseString = function (url_obj,search_structure) {
+exports.getFormattedResponse = function (url_obj,search_structure) {
 	var formattedResponse=exports.getResponse(url_obj,search_structure);
 	formattedResponse.suggestions=_(formattedResponse.suggestions).map(function(response_hit) {
 		return formatter.getFormattedObj(response_hit);
 	}).value();
+	return formattedResponse;
+};
+exports.getResponseString = function (url_obj,search_structure) {
+	var formattedResponse=exports.getFormattedResponse(url_obj,search_structure);
 	return JSON.stringify(formattedResponse);
 };

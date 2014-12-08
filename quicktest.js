@@ -3,7 +3,8 @@ var _ = require('lodash');
 var cp = require('./citiesParser.js');
 var matches = require('./matches.js');
 var toJSON = require('./cityToJSON.js');
-var app = require('./app');
+// var app = require('./app');
+
 
 // console.log(app.callbacks);
 // app.callbacks.done = function(err,server) {
