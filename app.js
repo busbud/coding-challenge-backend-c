@@ -7,9 +7,10 @@ var struct_builder=require('./searchStructure');
 var CITIES_FILE='./data/cities_canada-usa.tsv';
 var port = process.env.PORT || 2345;
 
-module.exports = main();
+exports.callbacks = {done: function(err,server) {} }; //For testing //Race condition, surely
+main(exports.callbacks);
 
-function main() {
+function main(callbacks) {
 	//Parse cities
 	//Build search structure
 	//Launch server
@@ -22,7 +23,7 @@ function main() {
 			struct_builder.makeStructure(cities_flat,step);
 		},
 		function (search_structure,step) {
-			server.go(port,responder,search_structure);
+			server.go(port,responder,search_structure,callbacks.done);
 		}
-		]);
+	]);
 }

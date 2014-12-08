@@ -1,19 +1,21 @@
 var expect  = require('chai').expect;
 var app     = require('../app');
-var request = require('supertest')(app);
+var supertest = require('supertest');
+var request = supertest(app);
 
 describe('GET /suggestions', function() {
   describe('with a non-existent city', function () {
     var response;
 
     before(function (done) {
-      request
-        .get('/suggestions?q=SomeRandomCityInTheMiddleOfNowhere')
+      app.callbacks.done = function(error,server) {
+        supertest(server).get('/suggestions?q=SomeRandomCityInTheMiddleOfNowhere')
         .end(function (err, res) {
           response = res;
           response.json = JSON.parse(res.text);
           done(err);
         });
+      };
     });
 
     it('returns a 404', function () {
@@ -30,13 +32,14 @@ describe('GET /suggestions', function() {
     var response;
 
     before(function (done) {
-      request
-        .get('/suggestions?q=Montreal')
+      app(function(error,server){
+        supertest(server).get('/suggestions?q=Montreal')
         .end(function (err, res) {
           response = res;
           response.json = JSON.parse(res.text);
           done(err);
         });
+      });
     });
 
     it('returns a 200', function () {

@@ -3,16 +3,21 @@ var _ = require('lodash');
 var cp = require('./citiesParser.js');
 var matches = require('./matches.js');
 var toJSON = require('./cityToJSON.js');
+var app = require('./app');
 
-var emptyObj={someProp:undefined, otherProp:undefined};
-var undefObj;
-console.log(undefObj.propOfUndefObj); //This throws an error - JS is not totally forgiving
-if (emptyObj) {
-    console.log('Empty object is truthy'); //It's truthy
-}
-else {
-    console.log('emptyObj is falsy');
-}
+console.log(app.callbacks);
+app.callbacks.done = function(err,server) {
+	console.log(server);
+};
+// var emptyObj={someProp:undefined, otherProp:undefined};
+// var undefObj;
+// console.log(undefObj.propOfUndefObj); //This throws an error - JS is not totally forgiving
+// if (emptyObj) {
+//     console.log('Empty object is truthy'); //It's truthy
+// }
+// else {
+//     console.log('emptyObj is falsy');
+// }
 // cp.getCities('./data/cities_canada-usa.tsv', function done(err, cities) {
 //     if (err) {
 //         return console.error(err);
