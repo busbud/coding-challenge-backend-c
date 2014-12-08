@@ -8,7 +8,7 @@ exports.getResponse = function (url_obj,search_structure) {//Returns response wi
 	if (!search_term) {
 		return [];//I guess?
 	}
-	var matches=search_structure.getMatches(search_term);
+	var matches=search_structure.getMatches(search_term.toLowerCase());
 	var coord={latitude:url_obj.query.latitude, longitude:url_obj.query.longitude};
 	return {suggestions: _(matches).
 		map(function(match) {

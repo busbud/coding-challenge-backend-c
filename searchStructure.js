@@ -25,13 +25,13 @@ function addCity(trie,city) {//Add city_hits to trie for city
 		city : city,
 		hit_type : 'primary' //Better to use enum approach?
 	};
-	trie.addEntry(city.primary_name,primary_hit);
+	trie.addEntry(city.primary_name.toLowerCase(),primary_hit);
 	if (city.ascii_name!==city.primary_name) {
 		var ascii_hit = {
 			city : city,
 			hit_type : 'ascii'
 		};
-		trie.addEntry(city.ascii_name,ascii_hit);
+		trie.addEntry(city.ascii_name.toLowerCase(),ascii_hit);
 	}
 	for (var key in city.alt_names) {
 		var alt_name=city.alt_names[key];
@@ -40,7 +40,7 @@ function addCity(trie,city) {//Add city_hits to trie for city
 				city : city,
 				hit_type : 'alt'
 			};
-			trie.addEntry(alt_name,alt_hit);
+			trie.addEntry(alt_name.toLowerCase(),alt_hit);
 		}
 	}
 }
