@@ -1,7 +1,9 @@
 //Receives url.parse() objects, queries the search structure, assigns a score, and returns a response object
 var _=require('lodash');
 var score=require('./score');
-var formatter=require('./cityToJSON')
+var formatter=require('./cityToJSON');
+
+var MAX_SUGGESTIONS=15;
 
 exports.getResponse = function (url_obj,search_structure) {//Returns response with response.suggestions : [response_hit objects] (of form response_hit.city (city object), response_hit.score)
 	var search_term=url_obj.query.q;
@@ -17,6 +19,7 @@ exports.getResponse = function (url_obj,search_structure) {//Returns response wi
 		sortBy(function(suggestion) {
 			return -suggestion.score;
 		}).
+		first(MAX_SUGGESTIONS).
 		value()};
 };
 exports.getFormattedResponse = function (url_obj,search_structure) {

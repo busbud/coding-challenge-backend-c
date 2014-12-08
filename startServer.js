@@ -7,6 +7,7 @@ var toobusy=require('toobusy-js');
 var API_PATH='/suggestions';
 
 exports.go = function (port,responder,search_structure,done) {
+    toobusy.maxLag(200);
     var server=http.createServer(function (req, res) {
         if (toobusy()) {
             res.writeHead(503);
@@ -15,7 +16,7 @@ exports.go = function (port,responder,search_structure,done) {
         var url_obj=url.parse(req.url,true);
         if (req.method!=='GET'||url_obj.pathname!==API_PATH) {
             res.writeHead(404);
-        	return res.end();;
+        	return res.end();
         }
         var response_obj=responder.getFormattedResponse(url_obj,search_structure);
         var status_code;
