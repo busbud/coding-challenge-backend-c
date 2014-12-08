@@ -20,7 +20,7 @@ exports.go = function (port,responder,search_structure,done) {
         else {
         	status_code=404;
         }
-        res.writeHead(status_code,{'Content-Type':'application/json'});
+        res.writeHead(status_code,{'Content-Type':'application/json; charset=UTF-8'});
         res.end(JSON.stringify(response_obj));
     }).listen(port, '127.0.0.1');
     

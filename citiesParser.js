@@ -10,7 +10,7 @@ DESIRED_HEADERS = {//Belongs in a separate options file?
 
 exports.getCities = function (file_to_parse, done) {//Builds a flat collection of city objects from entire file, indexed by id; passes it as cities to done(err,cities_flat)
     var output = {};
-    var parser = parse(file_to_parse);
+    var parser = parseFile(file_to_parse);
     var headerKey;
     var dummy;
     parser.on('data', function (chunk) {
@@ -29,7 +29,7 @@ exports.getCities = function (file_to_parse, done) {//Builds a flat collection o
     });
 };
 
-function parse(file_to_parse) {//Parses file_to_parse and returns Parser object, which can be read as a stream of
+function parseFile(file_to_parse) {//Parses file_to_parse and returns Parser object, which can be read as a stream of
     var file_stream = fs.createReadStream(file_to_parse);
     var parser = csv.parse({ delimiter: '\t', quote: '', escape: '' });
     file_stream.pipe(parser);
@@ -58,7 +58,9 @@ function parseCity(cityLine, headerKey) {//Extracts city object from array of in
 }
 
 function convertCity(city) {//Clean up selected fields
-    //TODO: Convert alt_names to array
+    var parsed_alt=city.alt_names.split(',');
+    // if (_.random(0,100)===50) { console.log(parsed_alt);}
+    city.alt_names=parsed_alt;
     //TODO: Convert state to CA province if numeric
     var numeric_fields=['id','lat','long','population'];
     for (var key in numeric_fields) {
