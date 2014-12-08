@@ -7,14 +7,10 @@ var struct_builder=require('./searchStructure');
 var CITIES_FILE='./data/cities_canada-usa.tsv';
 var port = process.env.PORT || 2345;
 
-exports.callbacks = {done: function(err,server) {} }; //For testing //Race condition, surely
-main(exports.callbacks);
+exports.main=main;
+main(function(err,server) {});
 
-function main(callbacks) {
-	//Parse cities
-	//Build search structure
-	//Launch server
-	// server.go(port,responder);
+function main(done) {
 	async.waterfall([
 		function (step) {
 			parser.getCities(CITIES_FILE,step);
@@ -23,7 +19,7 @@ function main(callbacks) {
 			struct_builder.makeStructure(cities_flat,step);
 		},
 		function (search_structure,step) {
-			server.go(port,responder,search_structure,callbacks.done);
+			server.go(port,responder,search_structure,done);
 		}
 	]);
 }

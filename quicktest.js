@@ -5,10 +5,10 @@ var matches = require('./matches.js');
 var toJSON = require('./cityToJSON.js');
 var app = require('./app');
 
-console.log(app.callbacks);
-app.callbacks.done = function(err,server) {
-	console.log(server);
-};
+// console.log(app.callbacks);
+// app.callbacks.done = function(err,server) {
+// 	console.log(server);
+// };
 // var emptyObj={someProp:undefined, otherProp:undefined};
 // var undefObj;
 // console.log(undefObj.propOfUndefObj); //This throws an error - JS is not totally forgiving
