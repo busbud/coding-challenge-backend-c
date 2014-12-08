@@ -5,7 +5,11 @@ var matches = require('./matches.js');
 var toJSON = require('./cityToJSON.js');
 // var app = require('./app');
 
-
+var test_str='Montréal, 10, Canada';
+var test_str_ascii='Montreal, 10, Canada';
+var re = /montreal/i;
+console.log(re.test(test_str));
+console.log(re.test(test_str_ascii));
 // console.log(app.callbacks);
 // app.callbacks.done = function(err,server) {
 // 	console.log(server);
