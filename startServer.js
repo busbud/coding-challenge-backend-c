@@ -14,7 +14,7 @@ exports.go = function (port,responder,search_structure,done) {
         }
         var response_obj=responder.getFormattedResponse(url_obj,search_structure);
         var status_code;
-        if (_.isEmpty(response_obj.suggestions)) {
+        if (!_.isEmpty(response_obj.suggestions)) {
         	status_code=200;
         }
         else {
