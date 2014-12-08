@@ -29,6 +29,5 @@ exports.getMatches = function(hit_trie, search_term) {
     }).value();
     // console.log(matches);
     // console.log(unique_matches);
-    return matches;
     return unique_matches;
 };
