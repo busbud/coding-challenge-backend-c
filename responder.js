@@ -12,9 +12,11 @@ exports.getResponse = function (url_obj,search_structure) {//Returns response wi
 	var coord={latitude:url_obj.query.latitude, longitude:url_obj.query.longitude};
 	return {suggestions: _(matches).
 		map(function(match) {
-		return {city : match.city, score : score.getScore(match,search_term, coord)};
+			return {city : match.city, score : score.getScore(match,search_term, coord)};
 		}).
-		//TODO: sort matches
+		sortBy(function(suggestion) {
+			return -suggestion.score;
+		}).
 		value()};
 };
 exports.getFormattedResponse = function (url_obj,search_structure) {
