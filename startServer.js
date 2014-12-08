@@ -2,15 +2,20 @@
 var http = require('http');
 var url=require('url');
 var _=require('lodash');
+var toobusy=require('toobusy-js');
 
 var API_PATH='/suggestions';
 
 exports.go = function (port,responder,search_structure,done) {
     var server=http.createServer(function (req, res) {
+        if (toobusy()) {
+            res.writeHead(503);
+            return res.end('Server is too busy.');
+        }
         var url_obj=url.parse(req.url,true);
         if (req.method!=='GET'||url_obj.pathname!==API_PATH) {
-        	res.end();
-        	return;
+            res.writeHead(404);
+        	return res.end();;
         }
         var response_obj=responder.getFormattedResponse(url_obj,search_structure);
         var status_code;
