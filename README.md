@@ -1,5 +1,23 @@
 # Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
 
+## Documentation
+
+The implemented solution parses cities from the provided file, incorporates associated match terms into a trie structure for rapid retrieval (O(k)), and scores matches by closeness, population, and match type (matches to 'alternate names' scored lower).
+
+The app is deployed at https://blooming-woodland-7581.herokuapp.com/suggestions.
+
+#### Potential improvements
+
+- the scoring is pretty basic. It would benefit from added thought, but moreso from real data on what people are actually looking for when typing a particular search term or partial term.
+- the matching could be further improved. At the moment it's simple exact matching of search term to beginning of name string. One easy refinement would be to break the term into words (eg pick 'london' out of 'london ON' or 'new york' out of 'new york, ny'). 
+    - a more involved addition would be approximate matching. This might require a different data structure to the trie. It could also be significantly slower; one approach could be to serve the exact match first, and the approximate matches once available, and use client-side code to blend these in.
+- test coverage is sorely lacking.
+- high traffic mitigations are very rudimentary. One improvement could be to return fewer suggestions under high load, and/or perform a shallower search; analysis would be needed on where the bottlenecks are.
+
+--DJO
+
+---
+
 ## Requirements
 
 Design an API endpoint that provides auto-complete suggestions for large cities.
