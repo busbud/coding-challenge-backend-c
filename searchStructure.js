@@ -9,6 +9,7 @@ exports.makeStructure = function(cities_flat,done) {//Makes structure and passes
 	search_struct.getMatches = function(search_term) {
 		return matches.getMatches(this.struct,search_term);
 	};
+	console.log('Built cities trie.')
 	done(null,search_struct);
 };
 

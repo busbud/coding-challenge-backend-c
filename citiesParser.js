@@ -42,6 +42,7 @@ exports.getCities = function (file_to_parse, done) {//Builds a flat collection o
         done(err);
     });
     parser.on('end', function () {
+        console.log('Cities parsed from '+file_to_parse);
         done(null, output);
     });
 };
