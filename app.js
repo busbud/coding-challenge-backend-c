@@ -1,16 +1,25 @@
-var http = require('http');
+var async=require('async');
+var server=require('./startServer');
+var responder=require('./responder');
+var parser=require('./citiesParser');
+var struct_builder=require('./searchStructure');
+
+var CITIES_FILE='./data/cities_canada-usa.tsv';
 var port = process.env.PORT || 2345;
 
-module.exports = http.createServer(function (req, res) {
-  res.writeHead(404, {'Content-Type': 'text/plain'});
+exports.main=main;
+main(function(err,server) {});
 
-  if (req.url.indexOf('/suggestions') === 0) {
-    res.end(JSON.stringify({
-      suggestions: []
-    }));
-  } else {
-    res.end();
-  }
-}).listen(port, '127.0.0.1');
-
-console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+function main(done) {
+	async.waterfall([
+		function (step) {
+			parser.getCities(CITIES_FILE,step);
+		},
+		function (cities_flat,step) {
+			struct_builder.makeStructure(cities_flat,step);
+		},
+		function (search_structure,step) {
+			server.go(port,responder,search_structure,done);
+		}
+	]);
+}

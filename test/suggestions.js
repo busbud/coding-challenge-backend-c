@@ -1,19 +1,20 @@
 var expect  = require('chai').expect;
 var app     = require('../app');
-var request = require('supertest')(app);
+var supertest = require('supertest');
 
 describe('GET /suggestions', function() {
   describe('with a non-existent city', function () {
     var response;
 
     before(function (done) {
-      request
-        .get('/suggestions?q=SomeRandomCityInTheMiddleOfNowhere')
+      app.main(function(error,server) {
+        supertest(server).get('/suggestions?q=SomeRandomCityInTheMiddleOfNowhere')
         .end(function (err, res) {
           response = res;
           response.json = JSON.parse(res.text);
           done(err);
         });
+      });
     });
 
     it('returns a 404', function () {
@@ -30,13 +31,14 @@ describe('GET /suggestions', function() {
     var response;
 
     before(function (done) {
-      request
-        .get('/suggestions?q=Montreal')
+      app.main(function(error,server){ //TODO: Wastes time to load everything twice. Could fetch non-existent + valid responses (+others desired) in a single before call
+        supertest(server).get('/suggestions?q=Montreal')
         .end(function (err, res) {
           response = res;
           response.json = JSON.parse(res.text);
           done(err);
         });
+      });
     });
 
     it('returns a 200', function () {
@@ -51,7 +53,8 @@ describe('GET /suggestions', function() {
     it('contains a match', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.some(function (suggestion) {
-          return suggestion.name.test(/montreal/i);
+          // return suggestion.name.test(/montreal/i);
+          return /montreal/i.test(suggestion.name);
         });
       })
     });
