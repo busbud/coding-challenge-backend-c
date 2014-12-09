@@ -28,8 +28,8 @@ exports.go = function (port,responder,search_structure,done) {
         }
         res.writeHead(status_code,{'Content-Type':'application/json; charset=UTF-8'});
         res.end(JSON.stringify(response_obj));
-    }).listen(port, '127.0.0.1', function() {
-        console.log('Server now running at http://127.0.0.1:%d/suggestions', port);
+    }).listen(port, function() {
+        console.log('Server now running at localhost:%d/suggestions', port);
     });
     done(null,server);
 };
