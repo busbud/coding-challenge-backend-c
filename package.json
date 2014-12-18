@@ -1,6 +1,6 @@
 {
   "name": "coding-challenge-backend-c",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "coding challenge in Nodejs",
   "main": "app.js",
   "scripts": {
@@ -14,6 +14,8 @@
     "url": "git@github.com:patrick-hubert/coding-challenge-backend-c.git"
   },
   "dependencies": {
+    "fast-csv": "0.5.4",
+    "underscore": "1.7.0"
   },
   "devDependencies": {
     "chai": "^1.9.1",
