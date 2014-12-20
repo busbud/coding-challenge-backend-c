@@ -14,6 +14,7 @@
     "url": "git@github.com:patrick-hubert/coding-challenge-backend-c.git"
   },
   "dependencies": {
+    "diacritics": "1.2.1",
     "fast-csv": "0.5.4",
     "underscore": "1.7.0"
   },

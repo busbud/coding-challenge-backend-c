@@ -1,8 +1,25 @@
+
+/**
+ * Module dependencies.
+ */
+
 var expect  = require('chai').expect;
-var app     = require('../app');
+var app     = require('../app').main();
 var request = require('supertest')(app);
 
-describe('GET /suggestions', function() {
+
+/**
+ * Jslint global directives.
+ */
+
+/*global describe, before, it */
+
+
+/**
+ * .
+ */
+
+describe('GET /suggestions', function () {
   describe('with a non-existent city', function () {
     var response;
 
@@ -53,7 +70,7 @@ describe('GET /suggestions', function() {
         return suggestions.some(function (suggestion) {
           return suggestion.name.test(/montreal/i);
         });
-      })
+      });
     });
 
     it('contains latitudes and longitudes', function () {
@@ -61,7 +78,7 @@ describe('GET /suggestions', function() {
         return suggestions.every(function (suggestion) {
           return suggestion.latitude && suggestion.longitude;
         });
-      })
+      });
     });
 
     it('contains scores', function () {
@@ -69,7 +86,7 @@ describe('GET /suggestions', function() {
         return suggestions.every(function (suggestion) {
           return suggestion.latitude && suggestion.longitude;
         });
-      })
+      });
     });
   });
 });
