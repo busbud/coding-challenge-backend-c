@@ -6,6 +6,8 @@
 var expect = require('chai').expect;
 var supertest = require('supertest');
 
+// This is to influence the server so that it may return up to 5 results.
+process.env.MAX_RESULTS = 5;
 var app = require('../app');
 
 
@@ -207,11 +209,11 @@ describe('GET /suggestions', function () {
 
     it('matches known results', function () {
       expect(response.json.suggestions).to.have.length(2);
-      // @FIXME: Must update the scoring results
+
       expect(response.json.suggestions[0].name).to.equal('Montreal, QC, Canada');
-      expect(response.json.suggestions[0].score).to.equal(0.8);
+      expect(response.json.suggestions[0].score).to.equal(1.0);
       expect(response.json.suggestions[1].name).to.equal('Montreal-Ouest, QC, Canada');
-      expect(response.json.suggestions[1].score).to.equal(0.8);
+      expect(response.json.suggestions[1].score).to.equal(0.7);
     });
   });
 
@@ -263,17 +265,17 @@ describe('GET /suggestions', function () {
 
     it('matches known results', function () {
       expect(response.json.suggestions).to.have.length(5);
-      // @FIXME: Must update the scoring results
+
       expect(response.json.suggestions[0].name).to.equal('London, ON, Canada');
-      expect(response.json.suggestions[0].score).to.equal(0.8);
+      expect(response.json.suggestions[0].score).to.equal(0.9);
       expect(response.json.suggestions[1].name).to.equal('London, OH, USA');
-      expect(response.json.suggestions[1].score).to.equal(0.8);
+      expect(response.json.suggestions[1].score).to.equal(0.5);
       expect(response.json.suggestions[2].name).to.equal('London, KY, USA');
-      expect(response.json.suggestions[2].score).to.equal(0.8);
+      expect(response.json.suggestions[2].score).to.equal(0.5);
       expect(response.json.suggestions[3].name).to.equal('Londontowne, MD, USA');
-      expect(response.json.suggestions[3].score).to.equal(0.8);
+      expect(response.json.suggestions[3].score).to.equal(0.3);
       expect(response.json.suggestions[4].name).to.equal('Londonderry, NH, USA');
-      expect(response.json.suggestions[4].score).to.equal(0.8);
+      expect(response.json.suggestions[4].score).to.equal(0.3);
     });
   });
 
