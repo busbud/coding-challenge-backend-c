@@ -14,6 +14,7 @@
     "url": "git@github.com:patrick-hubert/coding-challenge-backend-c.git"
   },
   "dependencies": {
+    "cache-manager": "0.15.0",
     "diacritics": "1.2.1",
     "fast-csv": "0.5.4",
     "geolib": "2.0.14",
