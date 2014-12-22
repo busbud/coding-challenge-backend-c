@@ -31,49 +31,52 @@ var testData = {
 };
 
 
+describe('validating scoring functionalities', function () {
+
 /**
  * General interface tests.
  */
 
-describe('testing scoring with a caller location', function () {
+  describe('testing scoring with a caller location', function () {
 
-  var scoredResults;
+    var scoredResults;
 
-  before(function (done) {
-    var results = sorting.sortResults(
-      testData,
-      sorting.sortResultsByDistance,
-      origin
-    );
-    scoredResults = scoring.scoreResults(results);
-    done();
+    before(function (done) {
+      var results = sorting.sortResults(
+        testData,
+        sorting.sortResultsByDistance,
+        origin
+      );
+      scoredResults = scoring.scoreResults(results);
+      done();
+    });
+
+    it('returns the correct information', function () {
+      expect(scoredResults).to.have.length(3);
+      expect(scoredResults[0].name).to.equal('b, ON, Canada');
+      expect(scoredResults[1].name).to.equal('a, QC, Canada');
+      expect(scoredResults[2].name).to.equal('c, CA, USA');
+    });
   });
 
-  it('returns the correct information', function () {
-    expect(scoredResults).to.have.length(3);
-    expect(scoredResults[0].name).to.equal('b, ON, Canada');
-    expect(scoredResults[1].name).to.equal('a, QC, Canada');
-    expect(scoredResults[2].name).to.equal('c, CA, USA');
-  });
-});
+  describe('testing scoring without a caller location', function () {
 
-describe('testing scoring without a caller location', function () {
+    var scoredResults;
 
-  var scoredResults;
+    before(function (done) {
+      var results = sorting.sortResults(
+        testData,
+        sorting.sortResultsByPopulation
+      );
+      scoredResults = scoring.scoreResults(results);
+      done();
+    });
 
-  before(function (done) {
-    var results = sorting.sortResults(
-      testData,
-      sorting.sortResultsByPopulation
-    );
-    scoredResults = scoring.scoreResults(results);
-    done();
-  });
-
-  it('returns the correct information', function () {
-    expect(scoredResults).to.have.length(3);
-    expect(scoredResults[0].name).to.equal('c, CA, USA');
-    expect(scoredResults[1].name).to.equal('a, QC, Canada');
-    expect(scoredResults[2].name).to.equal('b, ON, Canada');
+    it('returns the correct information', function () {
+      expect(scoredResults).to.have.length(3);
+      expect(scoredResults[0].name).to.equal('c, CA, USA');
+      expect(scoredResults[1].name).to.equal('a, QC, Canada');
+      expect(scoredResults[2].name).to.equal('b, ON, Canada');
+    });
   });
 });
