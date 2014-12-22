@@ -1,6 +1,6 @@
 {
   "name": "coding-challenge-backend-c",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "coding challenge in Nodejs",
   "main": "app.js",
   "scripts": {
@@ -9,7 +9,19 @@
   },
   "author": "",
   "license": "WTFPL",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:patrick-hubert/coding-challenge-backend-c.git"
+  },
   "dependencies": {
+    "cache-manager": "0.15.0",
+    "diacritics": "1.2.1",
+    "fast-csv": "0.5.4",
+    "geolib": "2.0.14",
+    "triejs": "0.1.5",
+    "underscore": "1.7.0"
+  },
+  "devDependencies": {
     "chai": "^1.9.1",
     "mocha": "^1.18.2",
     "supertest": "^0.11.0"
