@@ -130,7 +130,7 @@ function initServer(dataSource, callback) {
           res.writeHead(404, {'Content-Type': 'application/json'});
           res.end(eInvalidPath);
         }
-      }).listen(port, 'localhost');
+      }).listen(port, '0.0.0.0');
 
       callback(null, server);
     }
@@ -151,7 +151,7 @@ function main() {
       console.error(err);
     } else if (server) {
       // Nothing to do.
-      console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+      console.log('Server running at http://0.0.0.0:%d/suggestions', port);
     }
   });
 }
