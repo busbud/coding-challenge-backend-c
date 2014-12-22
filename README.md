@@ -119,7 +119,7 @@ npm test
 To start a local server run
 
 ```
-PORT=3456 npm start
+PORT=2345 npm start
 ```
 
 which should produce output similar to
