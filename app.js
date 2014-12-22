@@ -8,8 +8,9 @@ var http = require('http');
 var path = require('path');
 var url = require('url');
 
-// @FIXME: Rename data_store to data-store
-var data_store = require('./lib/data_store');
+var dataStore = require('./lib/data-store');
+var scoring = require('./lib/scoring');
+var sorting = require('./lib/sorting');
 
 
 /**
@@ -61,7 +62,7 @@ function handlerSuggestion(userRequest, res) {
     res.writeHead(400, {'Content-Type': 'application/json'});
     res.end(eInvalidQueryParameterValue);
   } else {
-    data_store.query(query, function (err, results) {
+    dataStore.query(query, function (err, results) {
       if (err) {
         res.writeHead(500, {'Content-Type': 'application/json'});
         res.end(JSON.stringify({
@@ -72,23 +73,23 @@ function handlerSuggestion(userRequest, res) {
         }));
       } else {
         if (longitude && latitude) {
-          results = data_store.sortResults(
+          results = sorting.sortResults(
             results,
-            data_store.sortResultByDistance,
+            sorting.sortResultsByDistance,
             {
               latitude: latitude,
               longitude: longitude
             }
           );
         } else {
-          results = data_store.sortResults(
+          results = sorting.sortResults(
             results,
-            data_store.sortResultByPopulation
+            sorting.sortResultsByPopulation
           );
         }
 
         var suggestions = {
-          suggestions: data_store.scoreResult(results)
+          suggestions: scoring.scoreResults(results)
         };
         if (suggestions.suggestions.length === 0) {
           res.writeHead(404, {'Content-Type': 'application/json'});
@@ -112,7 +113,7 @@ function handlerSuggestion(userRequest, res) {
 
 function initServer(dataSource, callback) {
 
-  data_store.setDataSource({
+  dataStore.setDataSource({
     file: path.resolve(process.cwd(), dataSource)
   }, function (err) {
     if (err) {
