@@ -8,6 +8,7 @@ var supertest = require('supertest');
 
 // This is to influence the server so that it may return up to 5 results.
 process.env.MAX_RESULTS = 5;
+process.env.NUM_CHILDREN = 0;
 var app = require('../app');
 
 

@@ -4,6 +4,7 @@
  */
 
 var _ = require('underscore');
+var cluster = require('cluster');
 var http = require('http');
 var path = require('path');
 var url = require('url');
@@ -17,9 +18,10 @@ var sorting = require('./lib/sorting');
  * Module variables.
  */
 
-var port = process.env.PORT || 2345;
 var dataSource = process.env.DATA_SOURCE || './data/cities_canada-usa.tsv';
+var numChildren = process.env.NUM_CHILDREN || require('os').cpus().length;
 var maxResults = process.env.MAX_RESULTS || 4;
+var port = process.env.PORT || 2345;
 
 // Error messages definition.
 var eMissingRequiredQueryParameter = JSON.stringify({
@@ -114,28 +116,43 @@ function handlerSuggestion(userRequest, res) {
 
 function initServer(dataSource, callback) {
 
-  dataStore.setDataSource({
-    file: path.resolve(process.cwd(), dataSource)
-  }, function (err) {
-    if (err) {
-      console.error('Unable to set the cities data source: ' + err);
-    } else {
-      var server = http.createServer(function (req, res) {
-        var userRequest = url.parse(req.url, true);
-        if (
-          userRequest.pathname === '/suggestions' &&
-            req.method === 'GET'
-        ) {
-          handlerSuggestion(userRequest, res);
-        } else {
-          res.writeHead(404, {'Content-Type': 'application/json'});
-          res.end(eInvalidPath);
-        }
-      }).listen(port, '0.0.0.0');
-
-      callback(null, server);
+  if (cluster.isMaster && numChildren > 0) {
+    // Fork workers.
+    var i;
+    for (i = 0; i < numChildren; i++) {
+      cluster.fork();
     }
-  });
+
+    cluster.on('exit', function (worker) {
+      console.log('worker ' + worker.process.pid + ' died');
+    });
+
+    callback();
+  } else {
+
+    dataStore.setDataSource({
+      file: path.resolve(process.cwd(), dataSource)
+    }, function (err) {
+      if (err) {
+        console.error('Unable to set the cities data source: ' + err);
+      } else {
+        var server = http.createServer(function (req, res) {
+          var userRequest = url.parse(req.url, true);
+          if (
+            userRequest.pathname === '/suggestions' &&
+              req.method === 'GET'
+          ) {
+            handlerSuggestion(userRequest, res);
+          } else {
+            res.writeHead(404, {'Content-Type': 'application/json'});
+            res.end(eInvalidPath);
+          }
+        }).listen(port, '0.0.0.0');
+
+        callback(null, server);
+      }
+    });
+  }
 }
 
 
@@ -152,7 +169,9 @@ function main() {
       console.error(err);
     } else if (server) {
       // Nothing to do.
-      console.log('Server running at http://0.0.0.0:%d/suggestions', port);
+      console.log('%d - Child server running at http://0.0.0.0:%d/suggestions', process.pid, port);
+    } else {
+      console.log('%d - Master server running at http://0.0.0.0:%d/suggestions', process.pid, port);
     }
   });
 }
