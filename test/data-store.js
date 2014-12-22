@@ -151,25 +151,35 @@ describe('setting the data store from a file', function () {
     });
   });
   it('testing scoring, using population', function () {
-    var queryParam = 'Londo';
+    var queryParam = 'Ken';
     dataStore.query(queryParam, function (err, results) {
       expect(err).to.equal(null);
       results = sorting.sortResults(results, sorting.sortResultsByPopulation);
-      expect(_.keys(results)).to.have.length(2);
+
+      expect(_.keys(results)).to.have.length(10);
       var scoredResults = scoring.scoreResults(results);
 
-      expect(scoredResults).to.have.length(5);
-      // @FIXME: Must update the scoring results
-      expect(scoredResults[0].name).to.equal('London, ON, Canada');
-      expect(scoredResults[0].score).to.equal(0.8);
-      expect(scoredResults[1].name).to.equal('London, OH, USA');
-      expect(scoredResults[1].score).to.equal(0.8);
-      expect(scoredResults[2].name).to.equal('London, KY, USA');
-      expect(scoredResults[2].score).to.equal(0.8);
-      expect(scoredResults[3].name).to.equal('Londonderry, NH, USA');
-      expect(scoredResults[3].score).to.equal(0.8);
-      expect(scoredResults[4].name).to.equal('Londontowne, MD, USA');
-      expect(scoredResults[4].score).to.equal(0.8);
+      expect(scoredResults).to.have.length(10);
+      expect(scoredResults[0].name).to.equal('Kent, WA, USA');
+      expect(scoredResults[0].score).to.equal(0.9);
+      expect(scoredResults[1].name).to.equal('Kent, OH, USA');
+      expect(scoredResults[1].score).to.equal(0.5);
+      expect(scoredResults[2].name).to.equal('Kenai, AK, USA');
+      expect(scoredResults[2].score).to.equal(0.5);
+      expect(scoredResults[3].name).to.equal('Kenner, LA, USA');
+      expect(scoredResults[3].score).to.equal(0.2);
+      expect(scoredResults[4].name).to.equal('Kenton, OH, USA');
+      expect(scoredResults[4].score).to.equal(0.2);
+      expect(scoredResults[5].name).to.equal('Kenosha, WI, USA');
+      expect(scoredResults[5].score).to.equal(0.1);
+      expect(scoredResults[6].name).to.equal('Kendall, FL, USA');
+      expect(scoredResults[6].score).to.equal(0.1);
+      expect(scoredResults[7].name).to.equal('Kenmore, WA, USA');
+      expect(scoredResults[7].score).to.equal(0.1);
+      expect(scoredResults[8].name).to.equal('Kenmore, NY, USA');
+      expect(scoredResults[8].score).to.equal(0.1);
+      expect(scoredResults[9].name).to.equal('Kennett, MO, USA');
+      expect(scoredResults[9].score).to.equal(0.1);
     });
   });
   it('testing scoring, using caller location', function () {
@@ -182,17 +192,17 @@ describe('setting the data store from a file', function () {
       var scoredResults = scoring.scoreResults(results);
 
       expect(scoredResults).to.have.length(5);
-      // @FIXME: Must update the scoring results
+
       expect(scoredResults[0].name).to.equal('London, ON, Canada');
-      expect(scoredResults[0].score).to.equal(0.8);
+      expect(scoredResults[0].score).to.equal(0.9);
       expect(scoredResults[1].name).to.equal('London, OH, USA');
-      expect(scoredResults[1].score).to.equal(0.8);
+      expect(scoredResults[1].score).to.equal(0.5);
       expect(scoredResults[2].name).to.equal('London, KY, USA');
-      expect(scoredResults[2].score).to.equal(0.8);
+      expect(scoredResults[2].score).to.equal(0.5);
       expect(scoredResults[3].name).to.equal('Londontowne, MD, USA');
-      expect(scoredResults[3].score).to.equal(0.8);
+      expect(scoredResults[3].score).to.equal(0.3);
       expect(scoredResults[4].name).to.equal('Londonderry, NH, USA');
-      expect(scoredResults[4].score).to.equal(0.8);
+      expect(scoredResults[4].score).to.equal(0.3);
     });
   });
 });

@@ -19,6 +19,7 @@ var sorting = require('./lib/sorting');
 
 var port = process.env.PORT || 2345;
 var dataSource = process.env.DATA_SOURCE || './data/cities_canada-usa.tsv';
+var maxResults = process.env.MAX_RESULTS || 4;
 
 // Error messages definition.
 var eMissingRequiredQueryParameter = JSON.stringify({
@@ -89,7 +90,7 @@ function handlerSuggestion(userRequest, res) {
         }
 
         var suggestions = {
-          suggestions: scoring.scoreResults(results)
+          suggestions: scoring.scoreResults(results, maxResults)
         };
         if (suggestions.suggestions.length === 0) {
           res.writeHead(404, {'Content-Type': 'application/json'});
