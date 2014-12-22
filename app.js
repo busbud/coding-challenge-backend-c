@@ -130,7 +130,7 @@ function initServer(dataSource, callback) {
           res.writeHead(404, {'Content-Type': 'application/json'});
           res.end(eInvalidPath);
         }
-      }).listen(port, '127.0.0.1');
+      }).listen(port, 'localhost');
 
       callback(null, server);
     }
