@@ -18,6 +18,7 @@
     "diacritics": "1.2.1",
     "fast-csv": "0.5.4",
     "geolib": "2.0.14",
+    "triejs": "0.1.5",
     "underscore": "1.7.0"
   },
   "devDependencies": {
