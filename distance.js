@@ -19,8 +19,8 @@
   */
   that.levenshtein = function () {
     var l = new Levenshtein(that.from.name, that.to.name);
-    var dist = (1-l.distance/100); // to get score between 0 and 1
-    return parseFloat(dist).toFixed(4);
+    var dist = (1-l.distance/10); // to get score between 0 and 1
+    return (dist < 0 ? 0 : parseFloat(dist).toFixed(4));
   };
 
   /* @Method kilometers :Function - calculate distance in kms
@@ -41,7 +41,7 @@
     if (city_from.latitude != 0 && city_from.longitude != 0){
       dist = dist - that.kilometers()/100000;
     }
-    return parseFloat(dist).toFixed(3);
+    return parseFloat(dist).toFixed(2);
   };
 };
 
