@@ -11,8 +11,6 @@
  * @Param username :String - username to geonames.org
  */
  var Geoapi = function (username) {
-  var that = this;
-
   /*Geonames webservice parameters*/
   var KEYS = ['username', 'q', 'name', 'name_equals', 'name_startsWith',
   'maxRows', 'startRow', 'country', 'countryBias', 'adminCode1', 'adminCode2',
@@ -20,7 +18,16 @@
   'style', 'isNameRequired', 'tag', 'operator', 'charset', 'fuzzy',
   'east', 'west', 'north', 'south', 'searchlang', 'orderby'];
 
+  var that = this;
+
   that.username = username;
+
+  that.filter = { cities: "cities5000",
+    username: that.username,
+    fuzzy: 0.5,
+    type: "json",
+    country: "CA,US"
+  }
 
   /* @Method cities :Function - transform geonames response to city object list
    * @Param response :Object - response from geonames request (search method)
@@ -40,39 +47,43 @@
     }),'score').reverse();
   };
 
+  /* @Method citySearched :Function - create object for searched city
+   * @Param query :Object - query from the browser url
+   */
+  that.citySearched = function (query) {
+    /*city object we search for*/
+    var citySearch = new city(query.q);
+
+    if (query.latitude != undefined && query.longitude != undefined){
+      citySearch.latitude = query.latitude;
+      citySearch.longitude = query.longitude;
+    }
+    return citySearch;
+  };
+
   /* @Method search :Function - sends out request to geonames server
    * @Param query :Object - query from the browser url
    * @Param callback :Function - Function to pass error data back to
    */
    that.search = function (query, callback) {
-    var params = { cities: "cities5000",
-    username: that.username,
-    fuzzy: 0.5,
-    type: 'json',
-    country: 'CA,US'
-  };
 
-    params = _.extend(query, params);//merge url params and config params
+    var params = _.extend(query, that.filter);//merge url params and config params
     params = _.pick(params, KEYS);//keep only geonames compatible params
 
     /*request send to geonames*/
     request.get({
       url : "http://api.geonames.org/search?",
-      qs: params
+      qs : params
     }, function (err, res, body) {
-
       if (! err) {
-        /*city object we search for*/
-        var citySearch = new city(query.q);
-
-        if (query.latitude != undefined && query.longitude != undefined){
-          citySearch.latitude = query.latitude;
-          citySearch.longitude = query.longitude;
-        }
-        /*transform geonames response to city object list*/
-        callback(null, that.cities(JSON.parse(body),citySearch));
+        //transform geonames response to city object list
+        callback( null, that.cities(JSON.parse(body),that.citySearched(query)));
+      }else{
+        callback( null, err);
       }
+
     });
+
   };
 };
 
