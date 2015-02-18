@@ -1,0 +1,92 @@
+{
+	// http://www.jshint.com/docs/options
+
+	// Enforcing options
+	"bitwise": true,
+	"camelcase": true,
+	"curly": true,
+	"eqeqeq": true,
+	"es3": true,
+	"forin": true,
+	"immed": true,
+	"indent": 4,
+	"latedef": true,
+	"newcap": true,
+	"noarg": true,
+	"noempty": true,
+	"nonew": true,
+	"plusplus": false,
+	"quotmark": true,
+	"regexp": true,
+	// This option prohibits the use of unsafe . in regular expressions.
+	"undef": true,
+	"unused": true,
+	"strict": true,
+	"trailing": true,
+	"maxparams": 5,
+	"maxdepth": 3,
+	"maxstatements": 25,
+	"maxcomplexity": 10,
+	"maxlen": 160,
+
+	// Relaxing options
+	"asi": false,
+	"boss": false,
+	"debug": false,
+	"eqnull": true,
+	"es5": false,
+	// This option tells JSHint that your code uses ECMAScript 5 specific features such as getters and setters. Note that not all browsers implement these features.
+	"esnext": false,
+	"evil": false,
+	"expr": false,
+	"funcscope": false,
+	"globalstrict": false,
+	"iterator": false,
+	"lastsemic": false,
+	"laxbreak": false,
+	"laxcomma": false,
+	"loopfunc": false,
+	"moz": false,
+	"multistr": false,
+	"onecase": false,
+	// This option suppresses warnings about switches with just one case. Most of the time you want to use if instead of switch if there is only one case. However, some code generators prefer to generate switch statements.
+	"proto": false,
+	"regexdash": false,
+	// This option suppresses warnings about unescaped - in the end of regular expressions.
+	"scripturl": false,
+	"smarttabs": false,
+	"shadow": false,
+	"sub": false,
+	"supernew": false,
+	"validthis": true,
+
+	// Environments
+	"browser": false,
+	"couch": false,
+	"devel": false,
+	"dojo": false,
+	"jquery": false,
+	"mootools": false,
+	"node": true,
+	"nonstandard": false,
+	"phantom": false,
+	"prototypejs": false,
+	"rhino": false,
+	"worker": false,
+	"wsh": false,
+	"yui": false,
+
+	// Legacy
+	"nomen": true,
+	"onevar": false,
+	"passfail": false,
+	"white": true,
+
+	// Globals
+	"globals": {
+		"describe": true,
+		"it": true,
+		"beforeEach": true,
+		"afterEach": true
+	}
+}

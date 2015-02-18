@@ -1,0 +1,92 @@
+".editorconfig
+
+root = true
+
+[**.js]
+; Path to the external file format
+; The default is taken from the lib folder inside the folder extension.
+;path=~/.vim/bundle/vim-jsbeautify/plugin/lib/beautify.js
+; Javascript interpreter to be invoked by default 'node'
+bin=node
+
+; Beautifier Options:
+;  -s, --indent-size             Indentation size [4]
+;  "indent_size": 4,
+;  -c, --indent-char             Indentation character [" "]
+;  "indent_char": " ",
+;  -l, --indent-level            Initial indentation level [0]
+;  "indent_level": 0,
+;  -t, --indent-with-tabs        Indent with tabs, overrides -s and -c
+;  "indent_with_tabs": false,
+;  -p, --preserve-newlines       Preserve line-breaks (--no-preserve-newlines disables)
+;  "preserve_newlines": true,
+;  -m, --max-preserve-newlines   Number of line-breaks to be preserved in one chunk [10]
+;  "max_preserve_newlines": 10,
+;  -P, --space-in-paren          Add padding spaces within paren, ie. f( a, b )
+;  "space_in_paren": false,
+;  -j, --jslint-happy            Enable jslint-stricter mode
+;  "jslint_happy": false,
+;  -b, --brace-style             [collapse|expand|end-expand] ["collapse"]
+;  "brace_style": "collapse",
+;  -B, --break-chained-methods   Break chained method calls across subsequent lines
+;  "break_chained_methods": false,
+;  -k, --keep-array-indentation  Preserve array indentation
+;  "keep_array_indentation": false,
+;  "keep_function_indentation": false,
+;  "space_before_conditional": true,
+;  -x, --unescape-strings        Decode printable characters encoded in xNN notation
+;  "unescape_strings": false,
+;  -w, --wrap-line-length        Wrap lines at next opportunity after N characters [0]
+;  "wrap_line_length": 0
+;  -X, --e4x                     Pass E4X xml literals through untouched
+;  --good-stuff                  Warm the cockles of Crockford's heart
+;  "eval_code": false,
+
+; jsbeautify settings
+indent_size = 4
+;indent_char = " "
+;indent_level = 0
+indent_with_tabs = true
+;preserve_newlines = true
+max_preserve_newlines = 2
+;space_in_paren = false
+jslint_happy = true
+brace_style = end-expand
+;break_chained_methods = false
+keep_array_indentation = true
+;keep_function_indentation = false
+space_before_conditional = true
+;unescape_strings = false
+wrap_line_length = 160
+;e4x = false
+good_stuff = true
+;eval_code = false
+
+;editorconfig settings
+max_char = 160
+indent_style = tab
+tab_width = 4
+charset = utf-8
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[**.css]
+;path=~/.vim/bundle/vim-jsbeautify/plugin/lib/beautify-css.js
+indent_style = tab
+indent_size = 4
+tab_width = 4
+charset = utf-8
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[**.html]
+; Using special comments
+; And such comments or apply only in global configuration
+; So it's best to avoid them
+;vim:path=~/.vim/bundle/vim-jsbeautify/plugin/lib/beautify-html.js
+indent_style = tab
+indent_size = 4
+tab_width = 4
+charset = utf-8
+insert_final_newline = true
+trim_trailing_whitespace = true
