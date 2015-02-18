@@ -39,7 +39,8 @@
     var dist = that.levenshtein();
     /*get higher score if city is closer*/
     if (city_from.latitude != 0 && city_from.longitude != 0){
-      dist = dist - that.kilometers()/100000;
+      var kms = that.kilometers();
+      dist = (kms > 100000 ? 0 : (dist - kms/100000));
     }
     return parseFloat(dist).toFixed(2);
   };
