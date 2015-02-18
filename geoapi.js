@@ -14,7 +14,7 @@
   var that = this;
 
   /*Geonames webservice parameters*/
-  var _KEYS = ['username', 'q', 'name', 'name_equals', 'name_startsWith',
+  var KEYS = ['username', 'q', 'name', 'name_equals', 'name_startsWith',
   'maxRows', 'startRow', 'country', 'countryBias', 'adminCode1', 'adminCode2',
   'adminCode3','featureClass','featureCode','cities','lang','type',
   'style', 'isNameRequired', 'tag', 'operator', 'charset', 'fuzzy',
@@ -53,7 +53,7 @@
   };
 
     params = _.extend(query, params);//merge url params and config params
-    params = _.pick(params, _KEYS);//keep only geonames compatible params
+    params = _.pick(params, KEYS);//keep only geonames compatible params
 
     /*request send to geonames*/
     request.get({

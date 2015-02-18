@@ -6,13 +6,13 @@
  var GeoPoint = require('geopoint');
 
 /* @Constructor
- * @Param city_to :Object - geonames response city
- * @Param city_from :Object - city we search for
+ * @Param cityTo :Object - geonames response city
+ * @Param cityFrom :Object - city we search for
  */
- var Distance = function (city_to, city_from) {
+ var Distance = function (cityTo, cityFrom) {
   var that = this;
-  that.from = city_from;
-  that.to = city_to;
+  that.from = cityFrom;
+  that.to = cityTo;
 
 
   /* @Method levenshtein :Function - calculate levenshtein distance
@@ -26,11 +26,11 @@
   /* @Method kilometers :Function - calculate distance in kms
   */
   that.kilometers = function () {
-    var to_point = new GeoPoint(parseFloat(that.to.latitude), parseFloat(that.to.longitude));
-    var from_point = new GeoPoint(parseFloat(that.from.latitude), parseFloat(that.from.longitude));
+    var toPoint = new GeoPoint(parseFloat(that.to.latitude), parseFloat(that.to.longitude));
+    var fromPoint = new GeoPoint(parseFloat(that.from.latitude), parseFloat(that.from.longitude));
 
     /*calculate distance in kms between 2 cities*/
-    return from_point.distanceTo(to_point, true);
+    return fromPoint.distanceTo(toPoint, true);
   };
 
   /* @Method score :Function - compute score of the research
@@ -38,7 +38,7 @@
   that.score = function () {
     var dist = that.levenshtein();
     /*get higher score if city is closer*/
-    if (city_from.latitude != 0 && city_from.longitude != 0){
+    if (cityFrom.latitude != 0 && cityFrom.longitude != 0){
       var kms = that.kilometers();
       dist = (kms > 100000 ? 0 : (dist - kms/100000));
     }
