@@ -10,11 +10,11 @@
 
  if (process.env.REDISTOGO_URL) {
    var rtg   = require("url").parse(process.env.REDISTOGO_URL);
-   var redis_client = redis.createClient(rtg.port, rtg.hostname);
+   var redisClient = redis.createClient(rtg.port, rtg.hostname);
 
-   redis_client.auth(rtg.auth.split(":")[1]);
+   redisClient.auth(rtg.auth.split(":")[1]);
  } else {
-  var redis_client = redis.createClient();
+  var redisClient = redis.createClient();
 }
 
 /* @Constructor
@@ -75,7 +75,7 @@
    * @Param query :Object - key to search in Redis
    */
   that.getInRedis = function (query) {
-    redis_client.get("search_" + JSON.stringify(query), function(err, reply) {
+    redisClient.get("search_" + JSON.stringify(query), function(err, reply) {
       return JSON.parse(reply);
     });
   };
@@ -91,7 +91,7 @@
      });
 
      //cache response in redis
-     redis_client.set("search_"+ JSON.stringify(query), JSON.stringify(cities));
+     redisClient.set("search_"+ JSON.stringify(query), JSON.stringify(cities));
   };
 
   /* @Method search :Function - sends out request to geonames server
@@ -103,9 +103,9 @@
     var params = _.extend(query, that.filter);//merge url params and config params
     params = _.pick(params, KEYS);//keep only geonames compatible params
 
-    var redis_values = that.getInRedis(query);
-    if (redis_values){
-      callback( null,redis_values);
+    var redisValues = that.getInRedis(query);
+    if (redisValues){
+      callback( null,redisValues);
     }
 
 
