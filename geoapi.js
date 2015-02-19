@@ -6,6 +6,16 @@
  var distance = require('./distance');
  var _ = require('underscore-node');
  var request = require('request');
+ var redis = require("redis");
+
+ if (process.env.REDISTOGO_URL) {
+   var rtg   = require("url").parse(process.env.REDISTOGO_URL);
+   var redis_client = redis.createClient(rtg.port, rtg.hostname);
+
+   redis_client.auth(rtg.auth.split(":")[1]);
+ } else {
+  var redis_client = redis.createClient();
+}
 
 /* @Constructor
  * @Param username :String - username to geonames.org
@@ -61,6 +71,29 @@
     return citySearch;
   };
 
+  /* @Method getInRedis :Function - return key/value pair in Redis
+   * @Param query :Object - key to search in Redis
+   */
+  that.getInRedis = function (query) {
+    redis_client.get("search_" + JSON.stringify(query), function(err, reply) {
+      return JSON.parse(reply);
+    });
+  };
+
+
+  /* @Method setInRedis :Function - create key/value pair in Redis
+   * @Param query :Object - query to save as key in Redis
+   * @Param cities :Array - cities to save as value in Redis
+   */
+  that.setInRedis = function (query, cities) {
+    cities = _.map(cities, function (city) {
+        return JSON.parse(JSON.stringify(city));
+     });
+
+     //cache response in redis
+     redis_client.set("search_"+ JSON.stringify(query), JSON.stringify(cities));
+  };
+
   /* @Method search :Function - sends out request to geonames server
    * @Param query :Object - query from the browser url
    * @Param callback :Function - Function to pass error data back to
@@ -70,6 +103,12 @@
     var params = _.extend(query, that.filter);//merge url params and config params
     params = _.pick(params, KEYS);//keep only geonames compatible params
 
+    var redis_values = that.getInRedis(query);
+    if (redis_values){
+      callback( null,redis_values);
+    }
+
+
     /*request send to geonames*/
     request.get({
       url : "http://api.geonames.org/search?",
@@ -77,7 +116,12 @@
     }, function (err, res, body) {
       if (! err) {
         //transform geonames response to city object list
-        callback( null, that.cities(JSON.parse(body),that.citySearched(query)));
+        var cities = that.cities(JSON.parse(body),that.citySearched(query));
+
+        callback( null, cities);
+
+        that.setInRedis(query,cities);
+
       }else{
         callback( null, err);
       }
