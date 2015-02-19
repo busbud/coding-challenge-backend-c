@@ -2,15 +2,12 @@
 
 ## Online Api
 
-https://busbud-test.herokuapp.com/
+https://busbud-test.herokuapp.com/suggestions?q=Montreal
 
 ## Installation
 
-* Install nodejs environment
-* Start the Web server
-```
-PORT=3456 npm start
-```
+* Install nodejs environment and start
+* Install Redis and start
 
 ## Usage
 
@@ -113,7 +110,7 @@ GET /suggestions?q=SomeRandomCityInTheMiddleOfNowhere
 * With the levenshtein calcul distance between 2 words : Londa is the same distance to Londo than London. We can solve this problem by proposing the correct word to the user instead of changing the calcul.
 * This solution suppose that the probability to have 2 place names, 10 letters each which are completely different is very low; we suppose that the levenshtein distance will be < 10 (or we set it to 0).
 * Solution for high levels of traffic :
-** I used Memcached to cache the geonames response, so we get the response faster and we don't have to do an other request to geonames api. This solution is good but it depends of the business target. We are still limited to 30000 requests per day, 2000 per hour.
+** I used Redis to cache geonames response, so we get the response faster and we don't have to do an other request to geonames api. This solution is good but it depends of the business target. We are still limited to 30000 requests per day, 2000 per hour. I choose to use Redis because it is free on Heroku, whereas Solr and other solutions are not free.
 ** Bunch of options for the future
 *** Get csv daily, push it to Solr, realise a search in the SOlr engine to get cities by a placename and options, cache Solr responses.
-*** Get csv daily, push it to Redis, or Mongodb, or Memcached, create a search engine to retrieve cities from placename.
+*** Get csv daily, push it to Redis, or Mongodb, or Memcached, create a search engine to retrieve cities by placename.
