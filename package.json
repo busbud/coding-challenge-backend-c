@@ -17,7 +17,6 @@
     "levenshtein": "^1.0.5",
     "request": "^2.53.0",
     "underscore-node": "^0.1.2",
-    "url": "^0.10.2",
     "redis": "^0.12.1"
 
   },
