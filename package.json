@@ -12,7 +12,14 @@
   "dependencies": {
     "chai": "^1.9.1",
     "mocha": "^1.18.2",
-    "supertest": "^0.11.0"
+    "supertest": "^0.11.0",
+    "geopoint": "^1.0.1",
+    "levenshtein": "^1.0.5",
+    "request": "^2.53.0",
+    "underscore-node": "^0.1.2",
+    "url": "^0.10.2",
+    "redis": "^0.12.1"
+
   },
   "engines": {
     "node": "0.10.26"
