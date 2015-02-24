@@ -1,64 +1,104 @@
-# Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
+# Busbud coding challenge
 
-## Requirements
+## Online Api
 
-Design an API endpoint that provides auto-complete suggestions for large cities.
-The suggestions should be restricted to cities in the USA and Canada with a population above 5000 people.
+https://busbud-test.herokuapp.com/suggestions?q=Montreal
 
-- the endpoint is exposed at `/suggestions`
-- the partial (or complete) search term is passed as a querystring parameter `q`
-- the caller's location can optionally be supplied via querystring parameters `latitude` and `longitude` to help improve relative scores
-- the endpoint returns a JSON response with an array of scored suggested matches
-    - the suggestions are sorted by descending score
-    - each suggestion has a score between 0 and 1 (inclusive) indicating confidence in the suggestion (1 is most confident)
-    - each suggestion has a name which can be used to disambiguate between similarly named locations
-    - each suggestion has a latitude and longitude
-- all functional tests should pass (additional tests may be implemented as necessary).
-- the final application should be [deployed to Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs).
-- feel free to add more features if you like!
+## Installation
 
-#### Sample responses
+* Install nodejs environment and start
+* Install Redis and start
 
-These responses are meant to provide guidance. The exact values can vary based on the data source and scoring algorithm
+## Usage
 
-**Near match**
 
-    GET /suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
+GET /suggestions?q=Montreal
 
 ```json
 {
-  "suggestions": [
-    {
-      "name": "London, ON, Canada",
-      "latitude": "42.98339",
-      "longitude": "-81.23304",
-      "score": 0.9
-    },
-    {
-      "name": "London, OH, USA",
-      "latitude": "39.88645",
-      "longitude": "-83.44825",
-      "score": 0.5
-    },
-    {
-      "name": "London, KY, USA",
-      "latitude": "37.12898",
-      "longitude": "-84.08326",
-      "score": 0.5
-    },
-    {
-      "name": "Londontowne, MD, USA",
-      "latitude": "38.93345",
-      "longitude": "-76.54941",
-      "score": 0.3
-    }
-  ]
+   "suggestions":[
+      {
+         "name":"Montreal, Quebec, Canada",
+         "latitude":"45.50884",
+         "longitude":"-73.58781",
+         "score":1
+      },
+      {
+         "name":"Montrose, Virginia, United States",
+         "latitude":"37.5207",
+         "longitude":"-77.37831",
+         "score":0.7
+      },
+      {
+         "name":"Montrose, Colorado, United States",
+         "latitude":"38.47832",
+         "longitude":"-107.87617",
+         "score":0.7
+      },
+      {
+         "name":"Montvale, New Jersey, United States",
+         "latitude":"41.04676",
+         "longitude":"-74.02292",
+         "score":0.7
+      },
+      {
+         "name":"Monterey, California, United States",
+         "latitude":"36.60024",
+         "longitude":"-121.89468",
+         "score":0.7
+      },
+      {
+         "name":"Mont-Royal, Quebec, Canada",
+         "latitude":"45.51675",
+         "longitude":"-73.64918",
+         "score":0.6
+      }
+   ]
+}
+```
+
+GET /suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
+
+```json
+{
+   "suggestions":[
+      {
+         "name":"London, Ontario, Canada",
+         "latitude":"42.98339",
+         "longitude":"-81.23304",
+         "score":0.9
+      },
+      {
+         "name":"London, Ohio, United States",
+         "latitude":"39.88645",
+         "longitude":"-83.44825",
+         "score":0.89
+      },
+      {
+         "name":"London, Kentucky, United States",
+         "latitude":"37.12898",
+         "longitude":"-84.08326",
+         "score":0.89
+      },
+      {
+         "name":"Loudon, Tennessee, United States",
+         "latitude":"35.73285",
+         "longitude":"-84.33381",
+         "score":0.79
+      },
+      {
+         "name":"Longueuil, Quebec, Canada",
+         "latitude":"45.53121",
+         "longitude":"-73.51806",
+         "score":0.39
+      }
+   ]
 }
 ```
 
 **No match**
 
-    GET /suggestions?q=SomeRandomCityInTheMiddleOfNowhere
+GET /suggestions?q=SomeRandomCityInTheMiddleOfNowhere
 
 ```json
 {
@@ -66,64 +106,11 @@ These responses are meant to provide guidance. The exact values can vary based o
 }
 ```
 
-
-### Non-functional
-
-- All code should be written in Javascript
-- Mitigations to handle high levels of traffic should be implemented
-- Work should be submitted as a pull-request to this repo
-- Documentation and maintainability is a plus
-
-### References
-
-- Geonames provides city lists Canada and the USA http://download.geonames.org/export/dump/readme.txt
-- http://www.nodejs.org/
-- http://ejohn.org/blog/node-js-stream-playground/
-
-
-## Getting Started
-
-Begin by forking this repo and cloning your fork. GitHub has apps for [Mac](http://mac.github.com/) and
-[Windows](http://windows.github.com/) that make this easier.
-
-### Setting up a Nodejs environment
-
-Get started by installing [nodejs](http://www.nodejs.org).
-
-For OS X users, use [Homebrew](http://brew.sh) and `brew install nvm`
-
-Once that's done, from the project directory, run
-
-```
-nvm use
-```
-
-### Setting up the project
-
-In the project directory run
-
-```
-npm install
-```
-
-### Running the tests
-
-The test suite can be run with
-
-```
-npm test
-```
-
-### Starting the application
-
-To start a local server run
-
-```
-PORT=3456 npm start
-```
-
-which should produce output similar to
-
-```
-Server running at http://127.0.0.1:2345/suggestions
-```
+## Considerations
+* With the levenshtein calcul distance between 2 words : Londa is the same distance to Londo than London. We can solve this problem by proposing the correct word to the user instead of changing the calcul.
+* This solution suppose that the probability to have 2 place names, 10 letters each which are completely different is very low; we suppose that the levenshtein distance will be < 10 (or we set it to 0).
+* Solution for high levels of traffic :
+  * I used Redis to cache geonames response, so we get the response faster and we don't have to do an other request to geonames api. This solution is good but it depends of the business target. We are still limited to 30000 requests per day, 2000 per hour. I choose to use Redis because it is free on Heroku, whereas Solr and other solutions are not free.
+* Bunch of options for the future
+  * Get csv daily, push it to Solr, realise a search in the SOlr engine to get cities by a placename and options, cache Solr responses.
+  * Get csv daily, push it to Redis, or Mongodb, or Memcached, create a search engine to retrieve cities by placename.
