@@ -17,14 +17,14 @@
     "levenshtein": "^1.0.5",
     "request": "^2.53.0",
     "underscore-node": "^0.1.2",
-    "redis": "^0.12.1"
-
+    "redis": "^0.12.1",
+    "newrelic": "^1.16.4"
   },
   "engines": {
     "node": "0.10.26"
   },
   "repository": {
-  "type": "git",
-  "url": "https://github.com/lclemence/coding-challenge-backend-c.git"
-}
+    "type": "git",
+    "url": "https://github.com/lclemence/coding-challenge-backend-c.git"
+  }
 }

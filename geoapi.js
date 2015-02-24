@@ -37,13 +37,15 @@
     fuzzy: 0.5,
     type: "json",
     country: "CA,US"
-  }
+  };
+
+  that.cities = {};
 
   /* @Method cities :Function - transform geonames response to city object list
    * @Param response :Object - response from geonames request (search method)
    * @Param citySearch :Object - searched city object
    */
-   that.cities = function (response, citySearch) {
+   that.computeCities = function (response, citySearch) {
     return _.sortBy(_.map(response.geonames, function(mapCity) {
       var responseCity = new city(mapCity.name);
       responseCity.latitude = mapCity.lat;
@@ -74,11 +76,11 @@
   /* @Method getInRedis :Function - return key/value pair in Redis
    * @Param query :Object - key to search in Redis
    */
-  that.getInRedis = function (query) {
-    redisClient.get("search_" + JSON.stringify(query), function(err, reply) {
-      return JSON.parse(reply);
-    });
-  };
+  // that.getInRedis = function (query) {
+  //   return redisClient.get("search_" + JSON.stringify(query), function(err, reply) {
+  //     return reply;
+  //   });
+  // };
 
 
   /* @Method setInRedis :Function - create key/value pair in Redis
@@ -103,30 +105,32 @@
     var params = _.extend(query, that.filter);//merge url params and config params
     params = _.pick(params, KEYS);//keep only geonames compatible params
 
-    var redisValues = that.getInRedis(query);
-    if (redisValues){
-      callback( null,redisValues);
-    }
+    redisClient.get("search_" + JSON.stringify(query), function(err, reply) {
+      if (reply == null){
+        //console.log('not redis');
+        /*request send to geonames*/
+        request.get({
+          url : "http://api.geonames.org/search?",
+          qs : params
+        }, function (err, res, body) {
 
+            //transform geonames response to city object list
+            var cities = that.computeCities(JSON.parse(body),that.citySearched(query));
 
-    /*request send to geonames*/
-    request.get({
-      url : "http://api.geonames.org/search?",
-      qs : params
-    }, function (err, res, body) {
-      if (! err) {
-        //transform geonames response to city object list
-        var cities = that.cities(JSON.parse(body),that.citySearched(query));
+            that.cities=cities;
 
-        callback( null, cities);
+            callback( err, that.cities);
 
-        that.setInRedis(query,cities);
-
+            that.setInRedis(query,that.cities);
+        });
       }else{
-        callback( null, err);
+        //console.log('redis');
+        that.cities=JSON.parse(reply);
+        callback( null,that.cities);
       }
 
     });
+
 
   };
 };
