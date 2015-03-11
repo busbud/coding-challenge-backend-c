@@ -21,5 +21,7 @@ var locationSchema = new mongoose.Schema({
     tz:	String,
     modified_at: Date 
 });
-
-module.exports = mongoose.model('Locations', locationSchema);
+/*
+  Model name, scheme for instantiating documents, and the collection it belongs to
+*/
+module.exports = mongoose.model('Locations', locationSchema, 'locations');
