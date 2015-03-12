@@ -3,6 +3,6 @@
 
 data=$1
 field_file=$2
-db='location-db'
+db=$3
 
 mongoimport --type tsv --collection locations --db $db --file $data --fieldFile $field_file;
