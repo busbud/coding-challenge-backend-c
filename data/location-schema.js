@@ -4,9 +4,8 @@ var locationSchema = new mongoose.Schema({
     id: Number,
     name: String,
     ascii: String,	
-    alt_name:	
-    lat: Number,
-    longitude: Number,
+    alt_name: String,
+    coords: [Number, Number],
     feat_class: String,	
     feat_code: String,
     country: String,	
