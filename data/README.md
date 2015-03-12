@@ -7,7 +7,7 @@ geonameid         : integer id of record in geonames database
 name              : name of geographical point (utf8) varchar(200)
 asciiname         : name of geographical point in plain ascii characters, varchar(200)
 alternatenames    : alternatenames, comma separated varchar(5000)
-Coords          :   array of [latitude in decimal degrees (wgs84), longitude in decimal degrees (wgs84)]
+Coords          :   array of [longitude in decimal degrees (wgs84), latitude in decimal degrees (wgs84)]
 feature class     : see http://www.geonames.org/export/codes.html, char(1)
 feature code      : see http://www.geonames.org/export/codes.html, varchar(10)
 country code      : ISO-3166 2-letter country code, 2 characters
