@@ -12,7 +12,9 @@ module.exports = http.createServer(function (req, res) {
 	locations.search(queryString, function(err, suggestions){
 	    if(err){
 		console.log(err);
-		res.end('404');
+		res.statusCode = 404;
+		res.writeHead(404, {'Content-Type': 'text/plain'});
+		res.end();
 	    }
 	    
 	    else

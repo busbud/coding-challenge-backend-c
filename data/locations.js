@@ -63,7 +63,7 @@ var locations = {
 	    }
 	    
 	    else{
-		console.log("everything cool");
+		console.log("successfull query execution");
 		//console.log(locs[1]); //debugging
 		callback(null,locs);
 	    }
