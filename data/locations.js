@@ -15,15 +15,30 @@ mongoose.connect('mongodb://localhost/location-db', function(err) {
 
 var locations = {
     search : function(queryString, callback){
-	locationObject.aggregate( [ {$match: { $or : [ { name : { $regex : new RegExp("^"+queryString.q), $options:'i' } }, {lat : {$gt : 0, $lt : 100}}] } }, 
-			       { $sort: { score: { $meta: "textScore" }, name: 1 } },
-			       { $project : { "ascii" : 1, 
-					    "name" : 1, 
-					    "country" : 1, 
-					    "lat" : 1, 
-					    "longitude" : 1,
-					    "admin1" : 1,
-					    "score" : 1}}], function(err, locs){
+	//console.log(queryString.longitude + " " + queryString.latitude + " long and lat");
+	locationObject.aggregate([ 
+		{ $geoNear: {
+		    near : { type: "Point", coordinates: [ parseFloat(queryString.longitude) ,  parseFloat(queryString.latitude) ] },
+		    distanceField: "dist.calculated",
+		    $maxDistance : 2,
+		    spherical: true
+	        }
+		},
+	    { $match: { 
+		$or : [ { name : { $regex : new RegExp("^"+queryString.q), $options:'i' }}]
+	    }},
+	    { $sort: { 
+		score: {$meta: "textScore" }, name: 1 }
+	    },
+	    { $project : { 
+		"ascii" : 1, 
+		"name" : 1,
+		"country" : 1, 
+		"coords" : 1,
+		"admin1" : 1,
+		"score" : 1}
+	    }
+	    ], function(err, locs){
 	    if(err){
 		console.log(err);
 		callback(err,[]);

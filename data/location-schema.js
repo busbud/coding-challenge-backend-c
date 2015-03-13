@@ -5,7 +5,7 @@ var locationSchema = new mongoose.Schema({
     name: String,
     ascii: String,	
     alt_name: String,
-    coords: [Number, Number],
+    loc: {String : String, String : [Number, Number]},
     feat_class: String,	
     feat_code: String,
     country: String,	

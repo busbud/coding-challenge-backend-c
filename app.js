@@ -1,5 +1,7 @@
 var http = require('http');
 var port = process.env.PORT || 2345;
+var url = require('url');
+var locations = require('./data/locations.js');
 
 module.exports = http.createServer(function (req, res) {
 
@@ -8,8 +10,11 @@ module.exports = http.createServer(function (req, res) {
 	var queryString = url.parse(req.url, true).query;
 	console.log('query is' + JSON.stringify(queryString));
 	locations.search(queryString, function(err, suggestions){
-	    if(err)
+	    if(err){
 		console.log(err);
+		res.end('404');
+	    }
+	    
 	    else
 		//TODO:set content and header
 		res.end(JSON.stringify(suggestions, null, 2));
