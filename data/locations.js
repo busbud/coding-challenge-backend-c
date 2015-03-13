@@ -13,19 +13,27 @@ mongoose.connect('mongodb://localhost/location-db', function(err) {
 	//locations.aggregate( [ { $match: { $text : { $search : queryString.q } } }, 
 	//the query must at least start with the correct word.
 
-var locations = {
-    search : function(queryString, callback){
-	//console.log(queryString.longitude + " " + queryString.latitude + " long and lat");
-	locationObject.aggregate([ 
-		{ $geoNear: {
-		    near : { type: "Point", coordinates: [ parseFloat(queryString.longitude) ,  parseFloat(queryString.latitude) ] },
-		    distanceField: "dist.calculated",
-		    $maxDistance : 2,
-		    spherical: true
-	        }
-		},
+function constructParams(queryString, params){
+    var aggregateParams = [];
+    if(queryString.longitude != null && queryString.latitude != null){
+	console.log("long/lat sent");
+	aggregateParams.push({ 
+	    $geoNear: {
+		near : { type: "Point", coordinates: [ parseFloat(queryString.longitude) ,  parseFloat(queryString.latitude) ] },
+		distanceField: "dist.calculated",
+		spherical: true,
+		limit : 10
+
+	    }
+	}
+		      );
+    }
+    if(queryString.q != null){
+	aggregateParams.push( 
 	    { $match: { 
-		$or : [ { name : { $regex : new RegExp("^"+queryString.q), $options:'i' }}]
+		//how to deal with accents?
+		name : { $regex : new RegExp("^"+queryString.q), $options:'i' },
+		population : { $gt : 5000 }
 	    }},
 	    { $sort: { 
 		score: {$meta: "textScore" }, name: 1 }
@@ -34,11 +42,21 @@ var locations = {
 		"ascii" : 1, 
 		"name" : 1,
 		"country" : 1, 
-		"coords" : 1,
+		"loc" : 1,
 		"admin1" : 1,
-		"score" : 1}
+		"score" : 1,
+		"dist.calculated" : 1,
+		"population" : 1
 	    }
-	    ], function(err, locs){
+	    });
+    }
+    return aggregateParams;
+}
+
+var locations = {
+    search : function(queryString, callback){
+	//console.log(queryString.longitude + " " + queryString.latitude + " long and lat");
+	locationObject.aggregate(constructParams(queryString, null), function(err, locs){
 	    if(err){
 		console.log(err);
 		callback(err,[]);

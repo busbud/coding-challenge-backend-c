@@ -17,6 +17,7 @@ module.exports = http.createServer(function (req, res) {
 	    
 	    else
 		//TODO:set content and header
+		res.writeHead(200, {"Content-Type": "application/json; charset=utf-8;"});
 		res.end(JSON.stringify(suggestions, null, 2));
 	});
 		  
