@@ -1,0 +1,24 @@
+test:
+  ☐ test everything
+  ☐ test with full data
+  ☐ performance with full data
+
+improve:
+  ☐ textScore is bad right now: 
+    * Montreal/Mtl returns 0.3
+    * Montreal/SomeRandomCityInTheMid returns 0.18
+
+api:
+  ☐ plug the api
+  ☐ better error handling (own error)
+
+
+sky is the limit:
+  ☐ build a UI with leaflet to see results on a map
+  ☐ Elastic search?
+     ☐ check how we can send geopoint + fuzzy query?
+     ☐ check if we can control the score value range (0 to 1)...
+
+
+
+plainTask Sublime plugin: To add new tasks, ⌘+enter.
