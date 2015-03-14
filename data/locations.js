@@ -15,7 +15,6 @@ mongoose.connect('mongodb://localhost/location-db', function(err) {
 //allowing any more than that will return erroneous results...if the user types in Shanghai
 //he shouldnt expect to see Berlin in the suggestions.
 
-//TODO : problem with
 function createRegex(cityName){
     var regex = "/";
 
