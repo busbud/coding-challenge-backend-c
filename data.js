@@ -74,7 +74,7 @@ var provinceFromCode = function(code) {
 };
 
 // Returns a list of matches based on prefix entered
-exports.getMatches = function(name, longitude, latitude) {
+exports.getMatches = function(name, longitude, latitude, limit) {
 	var matches = []
 	var i = findFirstIndex(name);
 
@@ -90,7 +90,11 @@ exports.getMatches = function(name, longitude, latitude) {
 		i++;
 	}
 
+	// Sort scores then cut off extra results if limit was defined
 	matches.sort(compare.scores);
+	if (limit !== 'undefined') {
+		matches = matches.slice(0, limit);
+	}
 	return matches;
 };
 

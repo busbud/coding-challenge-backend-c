@@ -13,7 +13,8 @@ app.get('/suggestions', function(req, res){
   var q = req.query.q;
   var lon = req.query.longitude;
   var lat = req.query.latitude;
-  var matches = data.getMatches(q.toLowerCase(), lon, lat);
+  var lim = req.query.limit;
+  var matches = data.getMatches(q.toLowerCase(), lon, lat, lim);
   if (matches.length > 0)
 		res.end(JSON.stringify({ suggestions: matches }, null, 2));
 	else
