@@ -32,6 +32,9 @@ exports.updateRecords = function(file) {
 			var cityDetails = cityName + ", " + state + ", " + country;
 			populate(cityName, cityDetails, lat, lon, id);
 		});
+
+		cityIDs.sort(compareCities);
+
 	});
 };
 
@@ -43,6 +46,16 @@ var populate = function(cityName, cityDetails, latitude, longitude, id) {
 	cities[id] = cityDetails;
 	lats[id] = latitude;
 	longs[id] = longitude;
+};
+
+var compareCities = function(a, b) {
+	if (a.city < b.city) {
+		return -1;
+	} else if (a.city > b.city) {
+		return 1;
+	} else {
+		return 0;
+	}
 };
 
 // convert 'admin1' codes to province initials for canadian cities
@@ -64,19 +77,67 @@ var provinceFromCode = function(code) {
 	}
 
 	return "Invalid code";
-}
+};
 
-// Testing function to check population of key value arrays
-exports.getMatch = function(name) {
+// Returns a list of matches based on prefix entered
+exports.getMatches = function(name) {
 	var matches = []
-	for (var i = 0; i < cityIDs.length; i++) {
-		if (cityIDs[i].city === name) {
-			matches.push({
-				name: cities[cityIDs[i].id],
-				longitude: longs[cityIDs[i].id],
-				lattitude: lats[cityIDs[i].id],
-			});
-		}
+	var i = findFirstIndex(name);
+
+	// Keep traversing cityID array until city names no longer match
+	while (cityIDs[i].city.slice(0, name.length) === name) {
+		matches.push({
+			name: cities[cityIDs[i].id],
+			longitude: longs[cityIDs[i].id],
+			lattitude: lats[cityIDs[i].id],
+		});
+		i++;
 	}
 	return matches;
-}
+};
+
+// Uses a binary search to find the first matching city
+// from the sorted array cityIDs
+var findFirstIndex = function(prefix) {
+	var minIndex = 0;
+	var maxIndex = cityIDs.length-1;
+	var currentIndex;
+	var currentCity;
+
+	// Find any matching city
+	while (minIndex <= maxIndex) {
+		currentIndex = (minIndex + maxIndex) / 2 | 0;
+		currentCity = cityIDs[currentIndex].city;
+		if (currentCity.slice(0, prefix.length) < prefix) {
+			minIndex = currentIndex + 1;
+		} else if (currentCity.slice(0, prefix.length) > prefix) {
+			maxIndex = currentIndex - 1;
+		} else {
+			break;
+		}
+	}
+
+	// Traverse to first matching city
+	while(true) {
+		if (cityIDs[currentIndex - 1].city.slice(0, prefix.length) === prefix) {
+			currentIndex--;
+		} else {
+			break;
+		}
+	}
+	return currentIndex;
+
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
