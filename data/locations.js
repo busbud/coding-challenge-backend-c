@@ -42,8 +42,7 @@ function constructParams(queryString, params){
 	    $geoNear: {
 		near : { type: "Point", coordinates: [ parseFloat(queryString.longitude) ,  parseFloat(queryString.latitude) ] },
 		distanceField: "dist.calculated",
-		spherical: true,
-		limit : 10
+		spherical: true
 
 	    }
 	}
