@@ -44,13 +44,27 @@ exports.updateRecords = function(file) {
 // Helper method to updateRecords, populates the arrays
 var populate = function(cityName, cityDetails, longitude, latitude, id, population) {
 	cityName = String(cityName).toLowerCase();
-	var toAdd = {city: cityName, id: id};
-	cityIDs.push(toAdd);
+	addAllFormsOfCity(cityName, id);
 	cities[id] = cityDetails;
 	lats[id] = latitude;
 	longs[id] = longitude;
 	populations[id] = population;
 };
+
+var addAllFormsOfCity = function(cityName, id) {
+	var parts = cityName.split(' ');
+	var toAdd;
+	var name;
+	for (var i = 0; i < parts.length; i++) {
+		name = parts[i];
+		for (var j = i+1; j < parts.length; j++) {
+			name = name.concat(' ');
+			name = name.concat(parts[j]);
+		}
+		toAdd = {city: name, id: id};
+		cityIDs.push(toAdd);
+	}
+}
 
 // convert 'admin1' codes to province initials for canadian cities
 var provinceFromCode = function(code) {
@@ -80,13 +94,19 @@ exports.getMatches = function(name, longitude, latitude, limit) {
 
 	// Keep traversing cityID array until city names no longer match
 	while (cityIDs[i].city.slice(0, name.length) === name) {
-		matches.push({
-			name: cities[cityIDs[i].id],
-			longitude: longs[cityIDs[i].id],
-			latitude: lats[cityIDs[i].id],
-			score: scorer.getScore(populations[cityIDs[i].id], longs[cityIDs[i].id], 
-									lats[cityIDs[i].id], longitude, latitude),
-		});
+		if (i > 0 && cities[cityIDs[i].id] === cities[cityIDs[i-1].id]) {
+			// Do not add for case of duplicate search results ie. searching
+			// new finds Newport News twice from the new in each word.
+			// Does not account for cities with three repeating words... 
+		} else {
+			matches.push({
+				name: cities[cityIDs[i].id],
+				longitude: longs[cityIDs[i].id],
+				latitude: lats[cityIDs[i].id],
+				score: scorer.getScore(populations[cityIDs[i].id], longs[cityIDs[i].id], 
+										lats[cityIDs[i].id], longitude, latitude),
+			});
+		}
 		i++;
 	}
 
