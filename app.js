@@ -11,7 +11,9 @@ data.updateRecords('data/cities_canada-usa.tsv');
 // Suggestions
 app.get('/suggestions', function(req, res){
   var q = req.query.q;
-  var matches = data.getMatches(q.toLowerCase());
+  var lon = req.query.longitude;
+  var lat = req.query.latitude;
+  var matches = data.getMatches(q.toLowerCase(), lon, lat);
   if (matches.length > 0)
 		res.end(JSON.stringify({ suggestions: matches }, null, 2));
 	else

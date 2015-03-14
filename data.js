@@ -1,11 +1,14 @@
 var csv = require('csv');
 var fs = require('fs');
 var _ = require('underscore');
+var scorer = require('./scoring');
+var compare = require('./comparisons');
 
 var cityIDs = [];
 var lats = {};
 var longs = {};
 var cities = {};
+var populations = {};
 
 // Reads a given tsv file and pulls out relevant attributes.
 // Passes these attributes to populate to populate the arrays
@@ -20,6 +23,7 @@ exports.updateRecords = function(file) {
 			var lon = parts[5];
 			var state = parts[10];
 			var country = parts[8];
+			var population = parseInt(parts[14]);
 
 			// Change to full country names and add Canadian provinces
 			if (country === 'CA') {
@@ -30,32 +34,22 @@ exports.updateRecords = function(file) {
 			}
 
 			var cityDetails = cityName + ", " + state + ", " + country;
-			populate(cityName, cityDetails, lat, lon, id);
+			populate(cityName, cityDetails, lon, lat, id, population);
 		});
 
-		cityIDs.sort(compareCities);
-
+		cityIDs.sort(compare.cities);
 	});
 };
 
 // Helper method to updateRecords, populates the arrays
-var populate = function(cityName, cityDetails, latitude, longitude, id) {
+var populate = function(cityName, cityDetails, longitude, latitude, id, population) {
 	cityName = String(cityName).toLowerCase();
 	var toAdd = {city: cityName, id: id};
 	cityIDs.push(toAdd);
 	cities[id] = cityDetails;
 	lats[id] = latitude;
 	longs[id] = longitude;
-};
-
-var compareCities = function(a, b) {
-	if (a.city < b.city) {
-		return -1;
-	} else if (a.city > b.city) {
-		return 1;
-	} else {
-		return 0;
-	}
+	populations[id] = population;
 };
 
 // convert 'admin1' codes to province initials for canadian cities
@@ -80,7 +74,7 @@ var provinceFromCode = function(code) {
 };
 
 // Returns a list of matches based on prefix entered
-exports.getMatches = function(name) {
+exports.getMatches = function(name, longitude, latitude) {
 	var matches = []
 	var i = findFirstIndex(name);
 
@@ -89,10 +83,14 @@ exports.getMatches = function(name) {
 		matches.push({
 			name: cities[cityIDs[i].id],
 			longitude: longs[cityIDs[i].id],
-			lattitude: lats[cityIDs[i].id],
+			latitude: lats[cityIDs[i].id],
+			score: scorer.getScore(populations[cityIDs[i].id], longs[cityIDs[i].id], 
+									lats[cityIDs[i].id], longitude, latitude),
 		});
 		i++;
 	}
+
+	matches.sort(compare.scores);
 	return matches;
 };
 
