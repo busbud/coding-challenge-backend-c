@@ -1,14 +1,22 @@
 // Setup
 var express = require('express');
 var app = express();
+//var url = require('url');
 var port = process.env.PORT || 2345;
 
 
+var data = require('./data');
+data.updateRecords('data/cities_canada-usa.tsv');
+
 // Suggestions
 app.get('/suggestions', function(req, res){
-  res.json({ 
-  	suggestions:[]
-  });
+  var q = req.query.q;
+  console.log("Searching for " + q);
+  var matches = data.getMatch(q.toLowerCase());
+  if (matches.length > 0)
+		res.end(JSON.stringify({ suggestions: matches }, null, 2));
+	else
+		res.status(404).send('No matches found');
 });
 
 

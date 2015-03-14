@@ -11,11 +11,13 @@
   "license": "WTFPL",
   "dependencies": {
     "chai": "^1.9.1",
-    "express": "^4.12.2",
     "mocha": "^1.18.2",
-    "supertest": "^0.11.0"
+    "supertest": "^0.11.0",
+    "express": "^4.12.2",
+    "underscore": "^1.8.2",
+    "csv": "^0.4.1"
   },
   "engines": {
-    "node": "0.10.26"
+    "node": "0.12.0"
   }
 }
