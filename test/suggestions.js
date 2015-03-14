@@ -2,7 +2,7 @@ var expect  = require('chai').expect;
 var app     = require('../app');
 var request = require('supertest')(app);
 
-describe('GET /suggestions', function() {
+describe.skip('GET /suggestions', function() {
   describe('with a non-existent city', function () {
     var response;
 
@@ -67,7 +67,7 @@ describe('GET /suggestions', function() {
     it('contains scores', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.every(function (suggestion) {
-          return suggestion.latitude && suggestion.longitude;
+          return suggestion.score;
         });
       })
     });

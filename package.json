@@ -1,18 +1,27 @@
 {
   "name": "coding-challenge-backend-c",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "coding challenge in Nodejs",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "test": "./node_modules/mocha/bin/mocha ./test/"
+    "test": "./node_modules/mocha/bin/mocha ./test/ --recursive"
   },
-  "author": "",
+  "author": "Saad",
+  "repository": "https://github.com/sataz/coding-challenge-backend-c",
   "license": "WTFPL",
-  "dependencies": {
-    "chai": "^1.9.1",
+  "devDependencies": {
+    "chai": "^2.0",
+    "csv-parse": "0.0.9",
     "mocha": "^1.18.2",
-    "supertest": "^0.11.0"
+    "supertest": "^0.15.0"
+  },
+  "dependencies": {
+    "diacritics": "^1.2.1",
+    "fast-levenshtein": "^1.0.6",
+    "lodash": "^3.5.0",
+    "stream-transform": "0.0.7",
+    "super-error": "^1.1.2"
   },
   "engines": {
     "node": "0.10.26"
