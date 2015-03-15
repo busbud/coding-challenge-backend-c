@@ -6,6 +6,14 @@ module.exports = app;
 //var url = require('url');
 var port = process.env.PORT || 2345;
 
+// Render view with ejs
+app.set('views', __dirname + '/views');
+app.engine('html', require('ejs').renderFile);
+app.use(express.static(__dirname + '/public'));
+
+app.get('/', function(req, res) {
+  res.render('index.html');
+});
 
 var data = require('./data');
 data.updateRecords('data/cities_canada-usa.tsv');
@@ -33,7 +41,6 @@ app.get('/suggestions', function(req, res){
 			Errors: errorMessage
 		});
   	} else {
-
   		var matches = data.getMatches(q.toLowerCase(), lon, lat, lim);
   		if (matches.length > 0) {
 			res.end(JSON.stringify({ suggestions: matches }, null, 2));
