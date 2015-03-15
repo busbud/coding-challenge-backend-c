@@ -28,7 +28,6 @@ describe('GET /suggestions', function() {
 
   describe('with a valid city', function () {
     var response;
-
     before(function (done) {
       request
         .get('/suggestions?q=Montreal')
@@ -50,8 +49,9 @@ describe('GET /suggestions', function() {
 
     it('contains a match', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
-        return suggestions.some(function (suggestion) {
-          return suggestion.name.test(/montreal/i);
+        return suggestions.some(function (suggestion) {	    
+	    var regex = /montreal/i;
+          return regex.test(suggestion.ascii);
         });
       })
     });
@@ -59,7 +59,7 @@ describe('GET /suggestions', function() {
     it('contains latitudes and longitudes', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.every(function (suggestion) {
-          return suggestion.latitude && suggestion.longitude;
+          return suggestion.loc.coordinates[0] && suggestion.loc.coordinates[1];
         });
       })
     });
@@ -67,7 +67,7 @@ describe('GET /suggestions', function() {
     it('contains scores', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.every(function (suggestion) {
-          return suggestion.latitude && suggestion.longitude;
+          return suggestion.score;
         });
       })
     });
