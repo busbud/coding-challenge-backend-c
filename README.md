@@ -1,4 +1,4 @@
-# Busbud Coding Challenge [![Build Status](https://circleci.com/gh/sataz/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
+# Busbud Coding Challenge [![Build Status](https://circleci.com/gh/sataz/coding-challenge-backend-c/tree/feature%2Fsuggestion-api.png?circle-token=0e5fe529dd2e8b395a38b24741e3c0041db1056c)](https://circleci.com/gh/sataz/coding-challenge-backend-c)
 
 ## Implementation
 
