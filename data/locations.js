@@ -31,7 +31,6 @@ function createRegex(cityName){
 	    cityName.substring(i+2, len) + '$';
     }
     regex = regex + "/";
-    //console.log(regex);
     return regex;
     
 }
