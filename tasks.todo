@@ -1,7 +1,12 @@
+todo:
+  ✔ deploy to heroku @done (15-03-15 00:50)
+  ☐ add some http caching directive (etags / expiry)
+  ☐ review (as a PR)
+
 test:
   ☐ test everything
   ☐ test with full data
-  ☐ performance with full data
+  ☐ performance with full data on heroku
 
 improve:
   ✔ add distance to score @done (15-03-15 00:45)

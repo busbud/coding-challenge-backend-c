@@ -1,4 +1,59 @@
-# Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
+# Busbud Coding Challenge [![Build Status](https://circleci.com/gh/sataz/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
+
+## Implementation
+
+Here are some details about my implementation:
+
+* it is naïve implementation: the tsv file is loaded once, processed, and necessary data are kept in memory
+* I used levenshtein score to calculate the distance between 2 words. I had to invert/convert that score to fit the requirement (score between 0 and 1) and some weird results when the query length was a lot smaller than the city name (ex. "Mtl" score for "Montreal" was really low...). The score adjustment is based on basic Maths rules (increase the score if query length is smaller than city name...) and it is empirical.
+* for distance score, I used basic Maths and decided to use the square root function because of its curve that corresponds to what I had in mind (boost the score when close...).
+* the score combination (text and distance) is also empirical. I decided to give more weight to the text (0.7 vs 0.3) because the user.
+* for distance calculation, I chose a simple method because:
+    * it's faster,
+    * the score is more impacted by the distance when the distance is small, and the simplified method is good enough for small distance
+
+# Modules
+
+THey can be find in lib:
+
+* location-parser: uses node stream to process the tsv and return a list of locations.
+* location: a class that represent a city, that contains a name, state, country and a geoPoint
+* geo-point: represent a latitude/longitude pair (a coordinate).
+* query: repesent a query that a user can type: a text and eventually a geoPoint.
+* score: helper function that centralize the text and distance calculation.
+* store: memory store that knows how to find suggestions from the list of locations.
+* errors: some errors that are used by the previous modules.
+
+## Tests
+
+47 tests, mostly unit tests. But I added some `suggestions` tests (refactored only, except from the /montreal/i issue
+ - see below).
+
+
+## Modifications
+
+* removed 127.0.0.1 from app.js to make it work on heroku
+* fixed one test because a string does not support `test` method
+* I limited the suggestions to 5 by default (was not specified I think)
+* I allow a `limit` param to change the default limit of 5
+* I allow a `theeshold` param to change the default theeshold of 0.15 (not suggested if score is below 0.15)
+
+
+## Performance
+
+
+## Possible Improvements and other considerations
+
+* use Elasticsearch (fuzzy + geo-point). I am not sure how to bring back the ES score to a 0-1 range directly in ES. Score and threeshold in ES seems hard for a beginer. MongoDB?
+* add a api version, in the URL or the header (defaults to latest)
+
+## Resources
+
+* [heroku app](https://sleepy-ridge-3726.herokuapp.com/suggestions?q=mtrl&latitude=45.5&longitude=-73.5)
+* [github repo](https://github.com/sataz/coding-challenge-backend-c). Not that I used temporary github account for this challenge
+
+
+-------------------------------------
 
 ## Requirements
 
