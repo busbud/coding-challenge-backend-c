@@ -4,10 +4,10 @@ test:
   ☐ performance with full data
 
 improve:
-  ☐ add distance to score
-  ☐ textScore is bad right now: 
-    * Montreal/Mtl returns 0.3
-    * Montreal/SomeRandomCityInTheMid returns 0.18
+  ✔ add distance to score @done (15-03-15 00:45)
+  ☐ textScore is not super good right now: 
+    * Montreal/Mtl returns 0.375
+    * Montreal/SomeRandomCityInTheMid returns 0.1 (truncated)
 
 api:
   ✔ plug the api @done (15-03-14 23:14)
