@@ -2,11 +2,12 @@ var expect  = require('chai').expect;
 var app     = require('../app');
 var request = require('supertest')(app);
 
-describe.skip('GET /suggestions', function() {
+describe('GET /suggestions', function() {
   describe('with a non-existent city', function () {
     var response;
 
     before(function (done) {
+      require('../lib/store')._reset();
       request
         .get('/suggestions?q=SomeRandomCityInTheMiddleOfNowhere')
         .end(function (err, res) {
@@ -51,7 +52,8 @@ describe.skip('GET /suggestions', function() {
     it('contains a match', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.some(function (suggestion) {
-          return suggestion.name.test(/montreal/i);
+          // `test()` is a regExp method, not a String one...
+          return /montreal/i.test(suggestion.name);
         });
       })
     });

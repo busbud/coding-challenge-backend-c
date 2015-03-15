@@ -2,23 +2,50 @@ var locationParser = require('../../lib/location-parser');
 var Location = require('../../lib/location');
 
 var path = require('path');
+var _ = require('lodash');
 var expect  = require('chai').expect;
 
 describe('location-parser module', function() {
-  describe.skip('#convert', function () {
+  describe('#convert', function () {
+    var defaultRaw = {
+      ascii: 'city name',
+      lat: 10,
+      long: 11
+    }
     var tests = [{
-      raw: {},
-      parsed: {}
-    }, {
+      key: 'country',
+      raw: {
+        country: 'US'
+      },
+      parsed: {
+        country: 'USA'
+      }
 
+    }, {
+      key: 'country',
+      raw: {
+        country: 'CA'
+      },
+      parsed: {
+        country: 'Canada'
+      }
+    }, {
+      key: 'state',
+      raw: {
+        country: 'CA',
+        admin1: '01'
+      },
+      parsed: {
+        state: 'AB'
+      }
     }];
 
     describe('with valid data', function () {
       tests.forEach(function(test, index) {
-        it('should return properly parsed location (' + (index + 1) + ')', function (done) {
-          locationParser.convert(test.raw, function(err, data) {
+        it('should return properly parsed location (' + (index + 1) + '- ' + test.key + ')', function (done) {
+          locationParser.convert(_.extend(test.raw, defaultRaw), function(err, location) {
             expect(err).to.be.null;
-            expect(data).to.eql(test.parsed);
+            expect(location[test.key]).to.eql(test.parsed[test.key]);
             done();
           })
         });

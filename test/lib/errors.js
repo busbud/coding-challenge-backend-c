@@ -3,10 +3,12 @@ var _  = require('lodash');
 
 var errors = require('../../lib/errors');
 
-describe('error', function () {
-  it('should expose InvalidParameterError', function () {
-    expect(errors).to.have.property('InvalidParameterError');
-    var err = new errors.InvalidParameterError('invalid');
-    expect(err).to.be.instanceof(Error);
+describe('errors', function () {
+  ['InvalidParameterError', 'GeneralError', 'NotFoundError'].forEach(function (errorName) {
+    it('should expose ' + errorName, function () {
+      expect(errors).to.have.property(errorName);
+      var err = new errors[errorName]('an error');
+      expect(err).to.be.instanceof(Error);
+    });
   });
 });

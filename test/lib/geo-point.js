@@ -58,7 +58,6 @@ describe('#GeoPoint constructor', function () {
         it('should throw an exception', function () {
           expect(function createPoint() {
             var point = new GeoPoint(test.vals[0], test.vals[1]);
-            console.log('POINT', point);
           }).to.throw(InvalidParameterError, test.errorPattern);
         });
       });
