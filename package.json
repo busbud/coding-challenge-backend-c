@@ -12,11 +12,11 @@
   "license": "WTFPL",
   "devDependencies": {
     "chai": "^2.0",
-    "csv-parse": "0.0.9",
     "mocha": "^1.18.2",
     "supertest": "^0.15.0"
   },
   "dependencies": {
+    "csv-parse": "0.0.9",
     "diacritics": "^1.2.1",
     "fast-levenshtein": "^1.0.6",
     "lodash": "^3.5.0",
