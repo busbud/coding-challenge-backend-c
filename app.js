@@ -60,8 +60,8 @@ var server = http.createServer(function (req, res) {
     res.end();
   }
 });
-server.listen(port, '127.0.0.1', function () {
-  console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+server.listen(port, function () {
+  console.log('Server running on port', port);
 });
 
 module.exports = server;

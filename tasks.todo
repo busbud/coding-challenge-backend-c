@@ -4,13 +4,14 @@ test:
   ☐ performance with full data
 
 improve:
+  ☐ add distance to score
   ☐ textScore is bad right now: 
     * Montreal/Mtl returns 0.3
     * Montreal/SomeRandomCityInTheMid returns 0.18
 
 api:
-  ☐ plug the api
-  ☐ better error handling (own error)
+  ✔ plug the api @done (15-03-14 23:14)
+  ✔ better error handling (own error) @done (15-03-14 23:14)
 
 
 sky is the limit:
