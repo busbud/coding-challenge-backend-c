@@ -20,6 +20,7 @@ function createRegex(cityName){
     for (var i = 0, len = cityName.length; i <= len; i++) {
 	regex = regex + '^' + cityName.substring(0,i) + '.' + cityName.substring(i,len) + '|';
     }
+
     for (var i = 1, len = cityName.length; i <= len; i++) {
 	regex = regex + '^' + cityName.substring(0,i) + '.' +  cityName.substring(i+1,len) + '$|'; 
     }
@@ -33,21 +34,37 @@ function createRegex(cityName){
 }
 
 function constructParams(queryString, params){
-    var aggregateParams = [];
+    var aggregates = [];
+    var geoNear = {$geoNear: {
+	near : { type: "Point", coordinates: [ parseFloat(queryString.longitude) ,  parseFloat(queryString.latitude) ] },
+	distanceField: "dist.calculated",
+	spherical: true,
+	query : {population : { $gt : 5000 }},
+	limit : 100000
+	}
+	
+    };
+
+    var sort =  { $sort: { 
+	score: { $meta: "textScore" }, name: 1 
+    }};
+    var project =   { $project : { 
+	"ascii" : 1, 
+	"name" : 1,
+	"country" : 1, 
+	"loc" : 1,
+	"admin1" : 1,
+	"dist.calculated" : 1,
+	"population" : 1
+    }};
+
     if(queryString.longitude != null && queryString.latitude != null){
 	console.log("long/lat sent");
-	aggregateParams.push({ 
-	    $geoNear: {
-		near : { type: "Point", coordinates: [ parseFloat(queryString.longitude) ,  parseFloat(queryString.latitude) ] },
-		distanceField: "dist.calculated",
-		spherical: true,
-		limit : 10
-
-	    }
-	}
-		      );
+	aggregates.push(geoNear);
     }
+
     if(queryString.q != null){
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 	aggregateParams.push( 
 	    { $match: { 
@@ -75,13 +92,20 @@ function constructParams(queryString, params){
 	}};
 	aggregates.push(match, sort)
 >>>>>>> Stashed changes
+=======
+	var match =  { $match: { 
+	    name : { $regex : createRegex(queryString.q), $options:'i' },
+	    population : { $gt : 5000 }
+	}};
+	aggregates.push(match, sort)
+>>>>>>> master
     }
-    return aggregateParams;
+    aggregates.push(project);
+    return aggregates;
 }
 
 var locations = {
     search : function(queryString, callback){
-	//console.log(queryString.longitude + " " + queryString.latitude + " long and lat");
 	locationObject.aggregate(constructParams(queryString, null), function(err, locs){
 	    if(err){
 		console.log(err);
@@ -90,7 +114,6 @@ var locations = {
 	    
 	    else{
 		console.log("successfull query execution");
-		//console.log(locs[1]); //debugging
 		callback(null,locs);
 	    }
 	});
@@ -98,3 +121,4 @@ var locations = {
 };
 
 module.exports = locations;
+
