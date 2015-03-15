@@ -10,10 +10,9 @@ mongoose.connect('mongodb://localhost/location-db', function(err) {
 });
 
 //allow match on 1 extra character or 1 missing character.
-//also allow match on 1 modified character
-//and finally match on any two letters interchanged
-//allowing any more than that will return erroneous results...if the user types in Shanghai
-//he shouldnt expect to see Berlin in the suggestions.
+//also allow match on 1 mispelled character
+//except first letter of the input. Too hard to disambiguate between londo and hondo when user
+//types in Londo. He obviously meant Londo cause who wants to go to Hondo?
 
 function createRegex(cityName){
     var regex = "/";
@@ -21,15 +20,14 @@ function createRegex(cityName){
 	regex = regex + '^' + cityName.substring(0,i) + '.' + cityName.substring(i,len) + '|';
     }
 
-    for (var i = 0, len = cityName.length; i <= len; i++) {
+    for (var i = 1, len = cityName.length; i <= len; i++) {
 	regex = regex + '^' + cityName.substring(0,i) + '.' +  cityName.substring(i+1,len) + '$|'; 
-	regex = regex + '^' +  cityName.substring(0,i) +  cityName.substring(i+1,len) + '$|' ;
-	regex = regex + '^' +  cityName.substring(0,i) +  
-	    cityName.substring(i+1,i+2) +  
-	    cityName.substring(i,i+1) +  
-	    cityName.substring(i+2, len) + '$';
     }
-    regex = regex + "/";
+
+    //remove last pipe
+    regex = regex.substr(0, regex.length - 1);
+    regex = regex + '/';
+    console.log(regex);
     return regex;
     
 }
@@ -64,13 +62,13 @@ function constructParams(queryString, params){
     }
 
     if(queryString.q != null){
+
 	var regex = createRegex(queryString.q);
 	var match =  { $match: { 
 	    $or : [
 		{name : { $regex : regex, $options:'i' }},
 		{ascii : { $regex : regex, $options:'i'}}
-	    ]
-	    ,
+	    ],
 	    population : { $gt : 5000 }
 	}};
 	aggregates.push(match, sort)
