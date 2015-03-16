@@ -2,7 +2,7 @@ var conn = new Mongo();
 var db = conn.getDB("location-db");
 
 //create index here for full text search on the City names
-db.locations.createIndex({name : "text"});
+db.locations.createIndex({ascii : "text"});
 
 //merging lat and longitude into 1
 db.locations.find().snapshot().forEach(function(myDoc){ 
