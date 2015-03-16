@@ -51,7 +51,7 @@ describe('GET /suggestions', function() {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.some(function (suggestion) {	    
 	    var regex = /montreal/i;
-          return regex.test(suggestion.ascii);
+          return regex.test(suggestion.name);
         });
       })
     });

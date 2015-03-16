@@ -1,5 +1,7 @@
 var mongoose = require('mongoose');
 var locationObject = require('./location-schema');
+var redisClient = require('redis').createClient();
+
 
 mongoose.connect('mongodb://localhost/location-db', function(err) {
     if(err) {
@@ -27,42 +29,43 @@ function createRegex(cityName){
     //remove last pipe
     regex = regex.substr(0, regex.length - 1);
     regex = regex + '/';
-    console.log(regex);
     return regex;
     
 }
 
 function constructParams(queryString, params){
     var aggregates = [];
-    var geoNear = {$geoNear: {
-	near : { type: "Point", coordinates: [ parseFloat(queryString.longitude) ,  parseFloat(queryString.latitude) ] },
-	distanceField: "dist.calculated",
-	spherical: true,
-	query : {population : { $gt : 5000 }},
-	limit : 100000
+    //geoNear aggregate will sort the cities by proximity to the input (longitude,latitude) coordinates
+    //makes use of the mongodb 2dsphere index for quick results over large data sets
+    //keep only cities populated > 5000
+    var geoNear = { 
+	$geoNear: {
+	    near : { type: "Point", coordinates: [ parseFloat(queryString.longitude) ,  parseFloat(queryString.latitude) ] },
+	    distanceField: "dist.calculated",
+	    spherical: true,
+	    query : {population : { $gt : 5000 }},
+	    limit : 100000
 	}	
     };
-    var sort =  { $sort: { 
-	score: { $meta: "textScore" } , name : 1,
-    }};
-    var project =   { $project : { 
-	"ascii" : 1, 
-	"country" : 1, 
-	"loc" : 1,
-	"admin1" : 1,
-	"dist.calculated" : 1,
-	"population" : 1,
-	"_id" : 0,
-	"score" : {$literal : 0.1},
-	"name" : { $concat : ["$ascii" , ", " , {$substr : ["$admin1", 0, 2]}, ", " , "$country"] }
-    }};
+    //project only the needed fields to the next aggregate stage
+    var project = { 
+	$project : { 
+	     "name" : { $concat : ["$ascii" , ", " , {$substr : ["$admin1", 0, 2]}, ", " , "$country"] },
+	    "loc" : 1,
+	    "dist.calculated" : 1,
+	    "population" : 1,
+	    "_id" : 0,
+	    "score" : {$literal : 0.1}
+	}};
 
+    //push the geoNear stage if the user put longitude/latitude
     if(queryString.longitude != null && queryString.latitude != null){
-	aggregates.push(geoNear, sort);
+	aggregates.push(geoNear);
     }
 
     if(queryString.q != null){
-
+	//match the query name against the generated regex. Regex deals only in ASCII so we 
+	//have to query both the name and the ascii fields in case the user inputs a non-ascii char.
 	var regex = createRegex(queryString.q);
 	var match =  { $match: { 
 	    $or : [
@@ -71,26 +74,38 @@ function constructParams(queryString, params){
 	    ],
 	    population : { $gt : 5000 }
 	}};
-	aggregates.push(match, sort)
+	aggregates.push(match)
     }
     aggregates.push(project);
     return aggregates;
 }
 
+//first check redis in memory for the queried term. If there is no result, we go to mongo.
+//ideally, redis would sit on a server different than mongo since they have conflicting approaches for using 
+//memory. (mongo scales well with OS memory swapping but redis does not)
 var locations = {
     search : function(queryString, callback){
-	locationObject.aggregate(constructParams(queryString, null), function(err, locs){
-	    if(err){
-		console.log(err);
-		callback(err,[]);
+	//query redis first.
+	redisClient.get("query_" + queryString.q, function(err, redisResults) {
+	    if( err || !redisResults ){
+		locationObject.aggregate(constructParams(queryString, null), function(err, locs){
+		    if(err){
+			console.log(err);
+			callback(err,[]);
+		    }		    
+		    else{
+			//cache result into redis. Store only temporarily
+			redisClient.setex("query_" + queryString.q, 21600, JSON.stringify(locs, null, 2));
+			callback(null,locs);
+		    }
+		});		
 	    }
-	    
 	    else{
-		callback(null,locs);
+		//parse results back into json since redis stores values as strings
+		callback(null, JSON.parse(redisResults));
 	    }
 	});
-    }
-};
+    }};
 
 module.exports = locations;
 
