@@ -46,10 +46,10 @@ function constructParams(queryString, params){
     //TODO: have language option?
     var matchName =  { $match: { 
 	ascii : { $regex : "filler", $options:'i'},
-	population : { $gt : 5000 }
+	population : { $gt : 5000 },
     }};
-    var matchScore = { $match : {
-	score : { $gt : 0 }
+    var matchScore = {$match : {
+	score : {$gt : 0}
     }};
     //project only the needed fields to the next aggregate stage
     var project = { 
@@ -58,27 +58,51 @@ function constructParams(queryString, params){
 	    "loc" : 1,
 	    "dist.calculated" : 1,
 	    "population" : 1,
-	    "_id" : 1,
-	    "score" : {$literal : 0.1}
+	    "_id" : 1
 	}};
-    var geoScore =  { $subtract : [ 1 , { $divide : [ "$dist.calculated", 1000000]}]};
-    var nameScore = { $literal : 0.1};
+    var projectScore = { 
+	$project : { 
+	     "name" : 1,
+	    "loc" : 1,
+	    "dist.calculated" : 1,
+	    "population" : 1,
+	    "_id" : 1,
+	    "geoscore" : 1,
+	    "namescore" : 1
+	}};
+    //remove (0.1 confidence) / 100 km. (distance is in meters so divide by 1000 also)
+    var computeGeoscore =  { $subtract : [ 1 , { $divide : [ "$dist.calculated", 1000000]}]};
+    var computeNamescore = { $literal : 0.1};
 
     //push the geoNear stage if the user put in longitude/latitude.
+    //limit results if no name was entered to 10 closest cities.
+    //add the computed geoscore to the projected fields
     if(queryString.longitude != null && queryString.latitude != null){
-	//limit results if no name was entered to 10 closest cities.
 	if(queryString.q == null)
 	    geoNear.$geoNear.limit = 10;
-	project.$project.geoscore = geoScore;
+	project.$project.geoscore = computeGeoscore;
 	aggregates.push(geoNear);
     }
+    //add the computed namescore to the project fields
+    //generate the prefix regex match. Prefix makes use of the mongo db index.
     if(queryString.q != null){
 	matchName.$match.ascii.$regex = createRegex(queryString.q);
-	project.$project.namescore = nameScore;
-	aggregates.push(matchName)
+	project.$project.namescore = computeNamescore;
+	aggregates.push(matchName);
+    }
+    //if just query name
+    if(queryString.q != null && queryString.longitude == null && queryString.latitude == null)
+	projectScore.$project.score = "$namescore";
+    //if just longitude/latitude
+    if(queryString.q == null && queryString.longitude != null && queryString.latitude != null)
+	projectScore.$project.score = "$geoscore";
+    //if both query name and longitude/latitude. Give equal weight to both though adding weights might be 
+    //a good idea
+    else if(queryString.q != null && queryString.longitude != null && queryString.latitude != null){
+	projectScore.$project.score = {$divide : [{$add : ["$namescore", "$geoscore"]}, 2] };
     }
 
-    aggregates.push(project);
+    aggregates.push(project, projectScore);
     return aggregates;
 }
 
