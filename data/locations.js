@@ -74,7 +74,7 @@ function constructParams(queryString, params){
     }
     if(queryString.q != null){
 	matchName.$match.ascii.$regex = createRegex(queryString.q);
-	project.$project.namecore = nameScore;
+	project.$project.namescore = nameScore;
 	aggregates.push(matchName)
     }
 
