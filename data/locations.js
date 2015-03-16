@@ -1,7 +1,13 @@
 var mongoose = require('mongoose');
 var locationObject = require('./location-schema');
-var redisClient = require('redis').createClient();
 
+if (process.env.REDISTOGO_URL) {
+    var rtg   = require("url").parse(process.env.REDISTOGO_URL);
+    var redisClient = require("redis").createClient(rtg.port, rtg.hostname);
+    redisClient.auth(rtg.auth.split(":")[1]);
+} else {
+    var redisClient = require("redis").createClient();
+}
 
 mongoose.connect('mongodb://localhost/location-db', function(err) {
     if(err) {
