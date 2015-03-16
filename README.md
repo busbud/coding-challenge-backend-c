@@ -127,3 +127,40 @@ which should produce output similar to
 ```
 Server running at http://127.0.0.1:2345/suggestions
 ```
+
+## Implementation
+
+**Heroku Deployment:** https://busbud-autcomplete-challenge.herokuapp.com/
+
+### Approach
+
+**Loading the Data**
+
+When the server is launched, 'updateRecords()' is called, which populates several arrays with the information needed from the tsv file. The 'cityIDs' array holds different possible city names users could search for (ie. New York City would consist of New York City, York City, and City to allow queries starting at any of the words) along with an id for that city. The id is then used to look up the city's full name, longitude, latitude, and population in the arrays 'cities', 'longs', 'lats', and 'populations' respectively. The 'cityIDs' array is also sorted after it is made to allow a 'O(log(N))' lookup time. 
+
+**Querying the Data**
+
+When a city is searched for using a prefix, the input parameters are first checked to be valid. There are 4 potential parameters:
+
+    1. q: String
+    2. longitude: float
+    3. latitude: float
+    4. limit: int
+
+'q' is the only mandatory parameter while the other three are optional. When a query is submited, the 'cityIDs'is searched, in a binary fashion for 'O(log(N))' time, and and the prefix is compared to the substring of the array inputs. When a match is found, the index corresponding to the first substring-prefix match in the 'cityIDs' array is then produced. From there, the 'cityIDs' array is then iterated until a city name substring does not match the prefix and every ID found is used to add the full city name (city, state/province, country), longitude, latitude, and score into an array. The array is then sorted by score and lexicographically before it is returned.
+
+**Scoring**
+
+I chose to implement two ways of scoring cities. The first is when no user coordinates are provided. The score is calculated based on the population of the city. Cities with greater than 90 000 people receive a score of 1.0 and the rest are calculated by the formula '(population + 10 000)/100 000'.
+
+The second method of scoring is done when user coordinates are provided. It has two categories; population and distance. Population account for 0.3 of the score and distance accounts for 0.7. I calculated the distance between the city and the user using the haversine formula. If the city is less than 20 km away it receives a distance score of 1.0 and if the city is more than 2000 km away it receives a score of 0. All other cities are given a score based on the formula '1-(distance/2000)'. The population score for this method is calculated the same way as above.
+
+**Front End**
+
+I implemented a basic front end to show how the autocomplete could work for users. Hope you enjoy!
+
+**Other Implementations**
+
+I considered iterating through all city names searching for any substring in the name that matches the prefix (ie. New York City is returned by ork) but that would require iterating through all 'N' city names which, for large datasets, could take quite awhile. To solve this I considered storing all suffixes to each city name (ie. New York City is stored as New York City, ew York City, w York City, York City, etc.) but ultimately decided this would cause a large amount ('O(log(N*M))' where M is the average city name length) of memory needed.
+
+The scoring algorithm could also be tweaked depending on preferences (ie. changed weighting or other categories).

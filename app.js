@@ -25,8 +25,9 @@ app.get('/suggestions', function(req, res){
   	var lat = req.query.latitude;
   	var lim = req.query.limit;
 
+    // Check input parameters for valid types
   	var errorMessage = [];
-	if (req.query.longitude != undefined && isNaN(parseFloat(lon))) {
+	  if (req.query.longitude != undefined && isNaN(parseFloat(lon))) {
   		errorMessage.push("Longitude must be a float");
   	};
   	if (req.query.latitude != undefined && isNaN(parseFloat(lat))) {
@@ -43,8 +44,10 @@ app.get('/suggestions', function(req, res){
   	} else {
   		var matches = data.getMatches(q.toLowerCase(), lon, lat, lim);
   		if (matches.length > 0) {
+      // Results found, ouput as JSON with nice formatting
 			res.end(JSON.stringify({ suggestions: matches }, null, 2));
 	  	} else {
+      // No results found
 			res.status(404).json({
 				suggestions: []
 			});
