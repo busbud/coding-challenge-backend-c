@@ -15,16 +15,19 @@ mongoose.connect('mongodb://localhost/location-db', function(err) {
 //also allow match on 1 mispelled character
 //except first letter of the input. Too hard to disambiguate between londo and hondo when user
 //types in Londo. He obviously meant Londo cause who wants to go to Hondo?
-
 function createRegex(cityName){
-    var regex = "/";
-    for (var i = 1, len = cityName.length; i < len; i++) {
+    var regex = "";
+    //too convoluted for what I wanted to do. With more time maybe allowing for mistakes/mispelling could
+    //be handled more gracefully.
+    /*for (var i = 1, len = cityName.length; i < len; i++) {
 	regex = regex + '^' + cityName.substring(0,i) + '.' +  cityName.substring(i+1,len) + '|'; 
-    }
+    }*/
+    regex = regex + '^' + cityName;
 
     //remove last pipe
-    regex = regex.substr(0, regex.length - 1);
-    regex = regex + '/';
+    //regex = regex.substr(0, regex.length - 1);
+    //regex = regex + '/';
+    console.log(regex);
     return regex; 
 }
 
@@ -44,35 +47,38 @@ function constructParams(queryString, params){
     };
     //match the query name against the generated regex. Regex deals only in ASCII.
     //TODO: have language option?
-    var matchName =  { $match: { 
-	ascii : { $regex : "filler", $options:'i'},
-	population : { $gt : 5000 },
-    }};
+    var matchName =  { 
+	$match: { 
+	    ascii : { $regex : "filler", $options:'i'},
+	    population : { $gt : 5000 },
+	}};
     var matchScore = {$match : {
-	score : {$gt : 0}
+	score : {$gte : 0}
     }};
     //project only the needed fields to the next aggregate stage
-    var project = { 
-	$project : { 
-	     "name" : { $concat : ["$ascii" , ", " , {$substr : ["$admin1", 0, 2]}, ", " , "$country"] },
-	    "loc" : 1,
-	    "dist.calculated" : 1,
-	    "population" : 1,
-	    "_id" : 1
-	}};
-    var projectScore = { 
-	$project : { 
-	     "name" : 1,
-	    "loc" : 1,
-	    "dist.calculated" : 1,
-	    "population" : 1,
-	    "_id" : 1,
-	    "geoscore" : 1,
-	    "namescore" : 1
-	}};
+    var project = { $project : { 
+	"name" : { $concat : ["$ascii" , ", " , {$substr : ["$admin1", 0, 2]}, ", " , "$country"] },
+	"loc" : 1,
+	"dist.calculated" : 1,
+	"population" : 1,
+	"_id" : 1
+    }};
+    var projectScore = { $project : { 
+	"name" : 1,
+	"loc" : 1,
+	"dist.calculated" : 1,
+	"population" : 1,
+	"_id" : 1,
+	"geoscore" : 1,
+	"namescore" : 1
+    }};
+    var sort = {$sort : {
+	"score" : -1
+    }};
+
     //remove (0.1 confidence) / 100 km. (distance is in meters so divide by 1000 also)
     var computeGeoscore =  { $subtract : [ 1 , { $divide : [ "$dist.calculated", 1000000]}]};
-    var computeNamescore = { $literal : 0.1};
+    var computeNamescore = { $subtract : [ 1, {$divide : [ {$strcasecmp : ["$ascii", queryString.q]}, 10]}]};
 
     //push the geoNear stage if the user put in longitude/latitude.
     //limit results if no name was entered to 10 closest cities.
@@ -102,7 +108,7 @@ function constructParams(queryString, params){
 	projectScore.$project.score = {$divide : [{$add : ["$namescore", "$geoscore"]}, 2] };
     }
 
-    aggregates.push(project, projectScore);
+    aggregates.push(project, projectScore, matchScore, sort);
     return aggregates;
 }
 
