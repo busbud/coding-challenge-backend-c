@@ -8,7 +8,9 @@ var errors = require('./lib/errors');
 var port = process.env.PORT || 2345;
 var dataFile = './data/cities_canada-usa.tsv';
 var apiHeaders = {
-  'Content-Type': 'application/json; charset=utf-8'
+  'Content-Type': 'application/json; charset=utf-8',
+  'Cache-Control': 'max-age=' +  3600 // 1 hour
+
 };
 
 
