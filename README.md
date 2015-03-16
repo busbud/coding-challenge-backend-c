@@ -41,6 +41,11 @@ THey can be find in lib:
 
 ## Performance
 
+I used jmeter against http heroku (1 dyno). I am new to it, so I hope that I interpreted the results correctly. with 50 users, ramp-up of 5s, loop count of 20:
+
+- with just the q parameter ("Mtl"): I get 5762 requests/s (253ms average)
+- with q parameter and lat/long: I get 4594 requests/s (average 390ms)
+
 
 ## Possible Improvements and other considerations
 

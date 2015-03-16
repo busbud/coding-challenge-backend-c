@@ -1,12 +1,11 @@
 todo:
   ✔ deploy to heroku @done (15-03-15 00:50)
-  ☐ add some http caching directive (etags / expiry)
   ☐ review (as a PR)
 
 test:
-  ☐ test everything
-  ☐ test with full data
-  ☐ performance with full data on heroku
+  ✔ test everything @done (15-03-15 21:09)
+  ✔ test with full data @done (15-03-15 21:09)
+  ✔ performance with full data on heroku @done (15-03-15 21:09)
 
 improve:
   ✔ add distance to score @done (15-03-15 00:45)
@@ -20,11 +19,10 @@ api:
 
 
 sky is the limit:
-  ☐ build a UI with leaflet to see results on a map
   ☐ Elastic search?
      ☐ check how we can send geopoint + fuzzy query?
      ☐ check if we can control the score value range (0 to 1)...
-
+  ☐ build a UI to see results on a map
 
 
 plainTask Sublime plugin: To add new tasks, ⌘+enter.
