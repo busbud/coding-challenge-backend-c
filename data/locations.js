@@ -50,6 +50,7 @@ function constructParams(queryString, params){
     //project only the needed fields to the next aggregate stage
     var project = { 
 	$project : { 
+	    "name" : 1,
 	     "name" : { $concat : ["$ascii" , ", " , {$substr : ["$admin1", 0, 2]}, ", " , "$country"] },
 	    "loc" : 1,
 	    "dist.calculated" : 1,
@@ -86,7 +87,7 @@ function constructParams(queryString, params){
 var locations = {
     search : function(queryString, callback){
 	//query redis first.
-	redisClient.get("query_" + queryString.q, function(err, redisResults) {
+	redisClient.get("query_" + JSON.stringify(queryString), function(err, redisResults) {
 	    if( err || !redisResults ){
 		locationObject.aggregate(constructParams(queryString, null), function(err, locs){
 		    if(err){
@@ -95,7 +96,7 @@ var locations = {
 		    }		    
 		    else{
 			//cache result into redis. Store only temporarily
-			redisClient.setex("query_" + queryString.q, 21600, JSON.stringify(locs, null, 2));
+			redisClient.setex("query_" + JSON.stringify(queryString), 21600, JSON.stringify(locs, null, 2));
 			callback(null,locs);
 		    }
 		});		
