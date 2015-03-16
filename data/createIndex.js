@@ -6,7 +6,7 @@ db.locations.createIndex({name : "text"});
 
 //merging lat and longitude into 1
 db.locations.find().snapshot().forEach(function(myDoc){ 
-    myDoc.coords = [ type:"Point", "coordinates": [myDoc.longitude, myDoc.lat]; 
+    myDoc.loc = [ type:"Point", "coordinates": [myDoc.longitude, myDoc.lat]; 
     delete myDoc.lat; 
     delete myDoc.longitude; 
     db.locations.save(myDoc)});
