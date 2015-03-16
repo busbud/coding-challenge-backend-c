@@ -1,5 +1,26 @@
 # Busbud Coding Challenge [![Build Status](https://circleci.com/gh/sataz/coding-challenge-backend-c/tree/feature%2Fsuggestion-api.png?circle-token=0e5fe529dd2e8b395a38b24741e3c0041db1056c)](https://circleci.com/gh/sataz/coding-challenge-backend-c)
 
+## ES POC
+
+I wanted to see if ES could help us achieve our goal, in a more production-ready way, and with shorter response time.
+
+So I created some scripts to import data into ES.
+I used Bonsai on heroky (free for 10,000 documents).
+
+I didn't get a chance to finish this Proof of concept because of lack of time.
+
+
+### What is left
+
+Build the right query!
+
+I found a way to combine query using AND condition (with MUST),
+which would allow '"name is close to Mtl"' AND coord in a range of 200km'
+but I didn't find a way yet to change the score based on "geo proximity".
+
+
+------------------
+
 ## Implementation
 
 Here are some details about my implementation:
