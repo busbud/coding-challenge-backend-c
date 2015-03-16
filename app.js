@@ -1,16 +1,61 @@
-var http = require('http');
+// Setup
+var express = require('express');
+var app = express();
+module.exports = app;
+
+//var url = require('url');
 var port = process.env.PORT || 2345;
 
-module.exports = http.createServer(function (req, res) {
-  res.writeHead(404, {'Content-Type': 'text/plain'});
+// Render view with ejs
+app.set('views', __dirname + '/views');
+app.engine('html', require('ejs').renderFile);
+app.use(express.static(__dirname + '/public'));
 
-  if (req.url.indexOf('/suggestions') === 0) {
-    res.end(JSON.stringify({
-      suggestions: []
-    }));
-  } else {
-    res.end();
-  }
-}).listen(port, '127.0.0.1');
+app.get('/', function(req, res) {
+  res.render('index.html');
+});
+
+var data = require('./data');
+data.updateRecords('data/cities_canada-usa.tsv');
+
+// Suggestions
+app.get('/suggestions', function(req, res){
+  	var q = req.query.q;
+  	var lon = req.query.longitude;
+  	var lat = req.query.latitude;
+  	var lim = req.query.limit;
+
+    // Check input parameters for valid types
+  	var errorMessage = [];
+	  if (req.query.longitude != undefined && isNaN(parseFloat(lon))) {
+  		errorMessage.push("Longitude must be a float");
+  	};
+  	if (req.query.latitude != undefined && isNaN(parseFloat(lat))) {
+  		errorMessage.push("Latitude must be a float");
+  	};
+  	if (req.query.limit != undefined && isNaN(parseInt(lim))) {
+  		errorMessage.push("Limit must be an integer");
+  	};
+
+  	if (errorMessage.length > 0) {
+  		res.status(404).json({
+			Errors: errorMessage
+		});
+  	} else {
+  		var matches = data.getMatches(q.toLowerCase(), lon, lat, lim);
+  		if (matches.length > 0) {
+      // Results found, ouput as JSON with nice formatting
+			res.end(JSON.stringify({ suggestions: matches }, null, 2));
+	  	} else {
+      // No results found
+			res.status(404).json({
+				suggestions: []
+			});
+		}
+	}
+});
+
+
+app.listen(port);
 
 console.log('Server running at http://127.0.0.1:%d/suggestions', port);
