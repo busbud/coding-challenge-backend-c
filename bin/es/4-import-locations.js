@@ -16,7 +16,6 @@ locations.forEach(function (location) {
   bulkActions.push({ index: { _index: 'challenge', _type: 'location', _id: location.id }});
   bulkActions.push(location);
 });
-console.log('>>>', bulkActions);
 client.bulk({
   body: bulkActions
 }).then(function (res) {

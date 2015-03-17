@@ -3,7 +3,7 @@ var fs = require('fs');
 var locationParser = require('../../lib/location-parser');
 
 // var dataFile = path.join(_dirname, './data/cities_canada.tsv');
-var dataFile = path.join(__dirname, '../../data/test_cities.tsv');
+var dataFile = path.join(__dirname, '../../data/cities_canada-usa.tsv');
 // @TODO: stream it!
 var rawLocations = []
 locationParser.load(dataFile, function (err, locations) {
@@ -17,7 +17,6 @@ locationParser.load(dataFile, function (err, locations) {
       coord: loc.latitude + ','  + loc.longitude
     });
   });
-  console.log(JSON.stringify(rawLocations));
   fs.writeFile(path.join(__dirname, '../../data/locations.json'), JSON.stringify(rawLocations));
   
 });

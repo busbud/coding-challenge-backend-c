@@ -4,6 +4,7 @@ var url = require('url');
 var store = require('./lib/store');
 var Query = require('./lib/query');
 var errors = require('./lib/errors');
+var es = require('./lib/es');
 
 var port = process.env.PORT || 2345;
 var dataFile = './data/cities_canada-usa.tsv';
@@ -32,21 +33,30 @@ var server = http.createServer(function (req, res) {
     }));
   }
 
-  function getSuggestions() {
-    var reqQuery = url.parse(req.url, true).query;
-    var query = new Query(reqQuery);
-    store.connect(dataFile, function (err) {
+  function parseQueryString(queryUrl) {
+    return url.parse(queryUrl, true).query;
+  }
 
-      store.find(query, function(err, suggestions) {
-        if (err) {
-          sendError(err);
-        }
-        res.writeHead(suggestions.length === 0 ? 404 : 200, apiHeaders);
-        res.end(JSON.stringify({
-          suggestions: suggestions
-        }));
-      });
+  function sendSuggestions (err, suggestions) {
+    if (err) {
+      sendError(err);
+    }
+    res.writeHead(suggestions.length === 0 ? 404 : 200, apiHeaders);
+    res.end(JSON.stringify({
+      suggestions: suggestions
+    }));
+  }
+
+  function getSuggestions () {
+    var query = new Query(parseQueryString(req.url));
+    store.connect(dataFile, function (err) {
+      store.find(query, sendSuggestions);
     });
+  }
+
+  function getESSugguestions () {
+    var query = new Query(parseQueryString(req.url));
+    es.find(query, sendSuggestions);
   }
 
   // express... I miss you...
@@ -58,6 +68,8 @@ var server = http.createServer(function (req, res) {
       sendError(e);
     }
   
+  } else if (req.url.indexOf('/v2/suggestions') === 0 && req.method === 'GET') {
+    getESSugguestions();
   } else {
     res.end();
   }

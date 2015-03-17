@@ -106,3 +106,17 @@ describe('GET /suggestions', function() {
     });
   });
 });
+
+// basic test of v2 (elasticSearch)
+describe('GET /v2/suggestions', function() {
+  it('should return a valid list of locations', function (done) {
+    request
+      .get('/v2/suggestions?q=Montreal')
+      .end(function (err, res) {
+        expect(err).to.be.null;
+        var response = res;
+        response.json = JSON.parse(res.text);
+        done();
+      });
+  });
+});

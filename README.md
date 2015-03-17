@@ -12,9 +12,8 @@ I didn't get a chance to finish this Proof of concept because of lack of time.
 
 ### What is left
 
-Build the right query!
-
-I found a way to combine query using AND condition (with MUST),
+* Build the right query!
+** I found a way to combine query using AND condition (with MUST),
 which would allow '"name is close to Mtl"' AND coord in a range of 200km'
 but I didn't find a way yet to change the score based on "geo proximity".
 
