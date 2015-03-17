@@ -135,7 +135,7 @@ var locations = {
 			    }
 			});
 			//cache result into redis. Store only temporarily
-			//redisClient.setex("query_" + JSON.stringify(queryString), 21600, JSON.stringify(locs, null, 2));
+			redisClient.setex("query_" + JSON.stringify(queryString), 21600, JSON.stringify(filteredLocs, null, 2));
 			callback(null,filteredLocs);
 		    }
 		});		
