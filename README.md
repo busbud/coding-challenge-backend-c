@@ -37,6 +37,7 @@ Why I used mongo and not streams or other databases?
 ##Architecture
 
 Pretty straight forward:
+
 	1. queries are sent to suggestion/
 	2. they get passed to the locations.js module which has a search(queryString) method
 	3. if the query is already in redis, the result is returned immidiately
