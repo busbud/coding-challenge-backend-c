@@ -16,8 +16,13 @@ I also started a proof of concept with [ElasticSearch](http://www.elastic.co/) b
 
 # API 
 
-* the API implemented for this challenge: [check it on heroku](https://sleepy-ridge-3726.herokuapp.com/suggestions?q=Mtl)
-* An API that uses ElasticSearch (not finished): [check it on heroku](https://sleepy-ridge-3726.herokuapp.com/suggestions?q=Mtl) - results are not good and does not use `latitude` and `longitude` query params (if provided)
+* the API implemented for this challenge: [check it on heroku](https://sleepy-ridge-3726.herokuapp.com/suggestions?q=Mtl). Paramters:
+** q: string (required)
+** latitude: float between -90.0 and 90.0
+** longitude: float between 180.0 and 180.0
+* An API that uses ElasticSearch (not finished): [check it on heroku](https://sleepy-ridge-3726.herokuapp.com/suggestions?q=Mtl). Parameters:
+** q: string (required)
+
 
 # Modules
 
