@@ -31,7 +31,7 @@ Make sure you have mongo and redis installed on your system. Becasue yes I used 
 ##Design
 Why I used mongo and not streams or other databases?
 
-1. Mongo implements full text search on an index of your choice (a bit like Elasticsearch). However, as I sooned discovered, it uses Snowball word stemmer and hence does not match on partial words. This was a real shame because it even provided text-scoring using the $meta expression. So half way through this challenge I decided to simply use $match instead of trying to make it work. The good part is that $match allows to match prefix ascii on the index.
+1. Mongo implements full text search on an index of your choice (a bit like Elasticsearch). However, as I later discovered, it uses Snowball word stemmer and hence does not match on partial words. This was a real shame because it even provided text-scoring using the $meta expression. So half way through this challenge I decided to simply use $match instead of trying to make it work. The good part is that $match allows to match prefix ascii on the index.
 
 2. Mongo however is real nifty for geoJSON data and also supports indexing on those points. It automatically calculates the distance from 1 point to another and sorts the results by smallest to highest distance calculated. This was perfect because it meant automatic scoring for the distance.
 
