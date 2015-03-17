@@ -1,7 +1,7 @@
 var http = require('http');
 var port = process.env.PORT || 2345;
 var url = require('url');
-var locations = require('./data/locations.js');
+var locations = require('./locations/locations.js');
 
 module.exports = http.createServer(function (req, res) {
 
