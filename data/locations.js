@@ -55,9 +55,9 @@ function constructParams(queryString, params){
 	    ascii : { $regex : "filler", $options:'i'},
 	    population : { $gt : 5000 },
 	}};
-    var matchScore = {$match : {
-	score : {$gte : 0}
-    }};
+    var limit = {
+	$limit : 20
+    };
     //project only the needed fields to the next aggregate stage
     var project = { $project : { 
 	"name" : { $concat : ["$ascii" , ", " , {$substr : ["$admin1", 0, 2]}, ", " , "$country"] },
@@ -80,7 +80,10 @@ function constructParams(queryString, params){
 	matchName.$match.ascii.$regex = createRegex(queryString.q);
 	aggregates.push(matchName);
     }
-    aggregates.push(project, {$limit : 20});
+    if(queryString.limit != undefined)
+	limit.$limit = parseInt(queryString.limit);
+
+    aggregates.push(limit,project);
     return aggregates;
 }
 //compute the score of both the geolocation and the name
@@ -132,7 +135,7 @@ var locations = {
 			    }
 			});
 			//cache result into redis. Store only temporarily
-			redisClient.setex("query_" + JSON.stringify(queryString), 21600, JSON.stringify(locs, null, 2));
+			//redisClient.setex("query_" + JSON.stringify(queryString), 21600, JSON.stringify(locs, null, 2));
 			callback(null,filteredLocs);
 		    }
 		});		
