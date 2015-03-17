@@ -73,14 +73,14 @@ function constructParams(queryString, params){
    
     //push the geoNear stage if the user put in longitude/latitude.
     //limit results if no name was entered to 10 closest cities.
-    if(queryString.longitude != null && queryString.latitude != null){
-	if(queryString.q == null)
+    if(queryString.longitude != undefined && queryString.latitude != undefined){
+	if(queryString.q == undefined)
 	    geoNear.$geoNear.limit = 10;
 	aggregates.push(geoNear);
     }
 
     //generate the prefix regex match. Prefix makes use of the mongo db index.
-    if(queryString.q != null){
+    if(queryString.q != undefined){
 	matchName.$match.ascii.$regex = createRegex(queryString.q);
 	aggregates.push(matchName);
     }
