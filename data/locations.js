@@ -67,10 +67,6 @@ function constructParams(queryString, params){
 	"_id" : 1,
 	"ascii" : 1
     }};
-    var sort = { $sort : {
-	score : -1
-    }};
-   
     //push the geoNear stage if the user put in longitude/latitude.
     //limit results if no name was entered to 10 closest cities.
     if(queryString.longitude != undefined && queryString.latitude != undefined){
@@ -84,7 +80,7 @@ function constructParams(queryString, params){
 	matchName.$match.ascii.$regex = createRegex(queryString.q);
 	aggregates.push(matchName);
     }
-    aggregates.push(project, sort);
+    aggregates.push(project, {$limit : 20});
     return aggregates;
 }
 //compute the score of both the geolocation and the name
