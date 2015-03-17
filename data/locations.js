@@ -126,12 +126,18 @@ var locations = {
 			callback(err,[]);
 		    }		    
 		    else{
-			//cache result into redis. Store only temporarily
-			redisClient.setex("query_" + JSON.stringify(queryString), 21600, JSON.stringify(locs, null, 2));
+			//compute score. It would have been nice to do this in the aggregate stage but mongo
+			//doesn't deal well with string operations inside aggregate.
+			var filteredLocs = [];
 			locs.forEach(function(doc){
 			    doc.score = computeScore(queryString, doc.ascii, doc.dist);
+			    if(doc.score > 0){
+				filteredLocs.push(doc);
+			    }
 			});
-			callback(null,locs);
+			//cache result into redis. Store only temporarily
+			redisClient.setex("query_" + JSON.stringify(queryString), 21600, JSON.stringify(locs, null, 2));
+			callback(null,filteredLocs);
 		    }
 		});		
 	    }
