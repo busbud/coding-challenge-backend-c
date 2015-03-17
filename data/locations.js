@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var locationObject = require('./location-schema');
 
+//Redis to go for heroku
 if (process.env.REDISTOGO_URL) {
     var rtg   = require("url").parse(process.env.REDISTOGO_URL);
     var redisClient = require("redis").createClient(rtg.port, rtg.hostname);
@@ -66,23 +67,24 @@ function constructParams(queryString, params){
 	"_id" : 1,
 	"ascii" : 1
     }};
+    var sort = { $sort : {
+	score : -1
+    }};
    
-
     //push the geoNear stage if the user put in longitude/latitude.
     //limit results if no name was entered to 10 closest cities.
-    //add the computed geoscore to the projected fields
     if(queryString.longitude != null && queryString.latitude != null){
 	if(queryString.q == null)
 	    geoNear.$geoNear.limit = 10;
 	aggregates.push(geoNear);
     }
-    //add the computed namescore to the project fields
+
     //generate the prefix regex match. Prefix makes use of the mongo db index.
     if(queryString.q != null){
 	matchName.$match.ascii.$regex = createRegex(queryString.q);
 	aggregates.push(matchName);
     }
-    aggregates.push(project, {$sort : {score : -1}});
+    aggregates.push(project, sort);
     return aggregates;
 }
 //compute the score of both the geolocation and the name
