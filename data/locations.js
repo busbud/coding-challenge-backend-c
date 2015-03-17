@@ -99,8 +99,8 @@ function computeScore(queryString, locationName, distance){
 	var common = locationName.replace(queryString.q, "");
 	if(common.length == 0)
 	    nameScore = 1;
-	
-	nameScore = 0.9;
+	else
+	    nameScore = 0.9;
 	totalScore +=nameScore;
     }
     if(queryString.longitude != null && queryString.latitude != null){
