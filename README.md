@@ -2,8 +2,7 @@
 
 ##Installation
 
-Make sure you have mongo and redis installed on your system
-Becasue yes I used MongoDB but not I can't deploy it to Heroku because I cannot afford 19$ per month for an instance on MongoHQ. Sad i know. But thankfully I've included 2 easy scripts to set up easy peasy on your machine!
+Make sure you have mongo and redis installed on your system. Becasue yes I used MongoDB but no I didn't deploy it to Heroku because I cannot afford 19$ per month for an instance on MongoHQ. Sad i know. But thankfully I've included 2 easy scripts to set up easy peasy on your machine!
   -clone this repo
   -cd into the project
   -to install as usual
