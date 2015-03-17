@@ -9,11 +9,15 @@ module.exports = http.createServer(function (req, res) {
     if (req.url.indexOf('/suggestions') === 0) {
 	var queryString = url.parse(req.url, true).query;
 	
-	if(queryString.q != undefined && queryString.q == "")
+	if(queryString.q != undefined && queryString.q == ""){
+	    res.statusCode = '400'; //bad request
 	    res.end("you have to define a non-empty name!");
+	}
 	if(queryString.longitude != undefined && queryString.latitude != undefined
-	   && (queryString.longitude == "" || queryString.latitude == ""))
-	   res.end("you have to define a non-empty point!");
+	   && (queryString.longitude == "" || queryString.latitude == "")){
+	    res.statusCode = '400'; //bad request
+	    res.end("you have to define a non-empty point!");
+	}
 	else{
 	    locations.search(queryString, function(err, suggestions){
 		if(err || suggestions.length === 0){
