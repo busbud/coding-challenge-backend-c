@@ -4,7 +4,7 @@
 
 Here are some details about my implementation:
 
-* it is naïve implementation: the tsv file is loaded once, processed, and necessary data are kept in memory
+* the tsv file is loaded once, processed, and necessary data are kept in memory
 * I used levenshtein score to calculate the distance between 2 words. I had to invert/convert that score to fit the requirement (score between 0 and 1) and some weird results when the query length was a lot smaller than the city name (ex. "Mtl" score for "Montreal" was really low...). The score adjustment is based on basic Maths rules ("increase the score if query length is smaller than city name"...) and it is empirical.
 * for distance score, I used basic Maths and decided to use the square root function because of its curve that corresponds to what I had in mind (boost the score when coordinates are close...).
 * the score combination (text and distance) is linear. I decided to give more weight to the text (0.7 vs 0.3) because if the goal is that api in an bus travel application with geolocation, then the user might be planning his next vacation to Costa Rica from Montreal.
@@ -14,14 +14,20 @@ Here are some details about my implementation:
 
 I also started a proof of concept with [ElasticSearch](http://www.elastic.co/) but I didn't get a chance to complete it. More details about this POC [here](#es-poc).
 
-# API 
+Finally, I quickly built a UI that shows the results on a map in order to test the API.
 
-* the API implemented for this challenge: [check it on heroku](https://sleepy-ridge-3726.herokuapp.com/suggestions?q=Mtl). Paramters:
+# API and URL
+
+I built:
+* the API that was requested: [check it on heroku](https://sleepy-ridge-3726.herokuapp.com/suggestions?q=Mtl). Paramters:
 ** q: string (required)
 ** latitude: float between -90.0 and 90.0
 ** longitude: float between 180.0 and 180.0
+
 * An API that uses ElasticSearch (not finished): [check it on heroku](https://sleepy-ridge-3726.herokuapp.com/suggestions?q=Mtl). Parameters:
 ** q: string (required)
+
+* a UI that consumes the v1 API: [check it on heroku](https://sleepy-ridge-3726.herokuapp.com/).
 
 
 # Modules

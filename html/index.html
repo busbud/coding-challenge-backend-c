@@ -1,0 +1,165 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Busbud Challenge</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/css/bootstrap.min.css">
+         <link rel="stylesheet" href="//cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+
+        <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+     <style>
+      #suggestions, #map {
+        margin-top: 20px;
+      }
+
+      #map {
+        height: 330px;
+      }
+      </style>
+    </head>
+ 
+    <body>
+        <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+        <!-- Add your site or application content here -->
+    <div class="container">
+
+      <div class="jumbotron">
+        <h1>Busbud Challenge</h1>
+        <p>A quick UI to valide the results returned by the <a href="/suggestions?q=Mtl">suggestions.</a>
+        <p>A lot of things to do here: browserify, use a lightweigth framework, less/sass (and custom css), typeahead, add a geo map...</p>
+      </div>
+      <form class="form-inline" data-from-city>
+        <div class="form-group">
+          <label for="from">Leaving from</label>
+          <input type="text" class="form-control" id="from" placeholder="Enter a city">
+        </div>
+        <div class="form-group">
+          <label for="lat">Latitude</label>
+          <input type="text" class="form-control" id="lat" placeholder="Enter a latitude">
+        </div>
+        <div class="form-group">
+          <label for="long">Latitude</label>
+          <input type="text" class="form-control" id="long" placeholder="Enter a longitude">
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+      </form>
+      <div class="row">
+        <div class="col-sm-8 col-xs-12">
+          <div id="map"></div>
+        </div>
+        <div class="col-sm-4 col-xs-12">
+          <div id="suggestions" class="list-group"></div>
+        </div>
+      </div>
+    </div>
+    <!-- scripts -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.5.0/lodash.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.min.js"></script>
+     <script src="//cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+<script>
+
+function initMap() {
+  var map = L.map('map').setView([45.5, -73.5], 13);
+  L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+        '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+        'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+      id: 'examples.map-i875mjb7'
+    }).addTo(map);
+
+  return map;
+}
+
+// starts here
+$(function () {
+  var formEl = $('[data-from-city]');
+  var suggestionsEl = $('#suggestions');
+  var errorTemplate = _.template($('#error-tmpl').html());
+  var suggestionTemplate = _.template($('#suggestion-tmpl').html());
+  var map = initMap();
+  var markerGroup = new L.featureGroup();
+
+  function fetchCities(query) {
+    // clear errors if any
+    formEl.find('.alert').remove();
+    // clear previous cities if any
+    suggestionsEl.html('');
+    // clear markers
+    markerGroup.clearLayers();
+    markerGroup = new L.featureGroup();
+    $.getJSON('/suggestions', query)
+      .success(displayCities)
+      .fail(function () {
+        // don't do that...
+        formEl.prepend(errorTemplate());
+      });
+  }
+  function addMarker(suggestion) {
+    var marker = L.marker([suggestion.latitude, suggestion.longitude]).addTo(map);
+    marker.bindPopup(suggestion.name);
+    return marker;
+  }
+
+  function displayCities(resp) {
+      var markers = [];
+
+    _.each(resp.suggestions, function (suggestion) {
+      suggestionsEl.append(suggestionTemplate(suggestion));
+
+      markerGroup.addLayer(addMarker(suggestion));
+    });
+
+    map.fitBounds(markerGroup.getBounds());
+
+  }
+
+
+  formEl.on('submit', function (evt) {
+    evt.preventDefault();
+    evt.stopPropagation();
+    var q = $('#from').val();
+    if (q) {
+      var query = {
+        q: q
+      };
+      var lat = $('#lat').val();
+      var lng = $('#long').val();
+      if (lat) {
+        query.latitude = lat;
+      }
+      if (lng) {
+        query.longitude = lng;
+      }
+      fetchCities(query);
+    }
+  })
+});
+</script>
+<script type="text/template" id="error-tmpl">
+  <div class="alert alert-danger" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <span class="sr-only">Error:</span>
+    An error occured while fetching suggestions
+  </div>
+</script>
+
+<script type="text/template" id="suggestion-tmpl">
+  
+  <a class="list-group-item">
+    <h4 class="list-group-item-heading">${name}</h4>
+    <p class="list-group-item-text">[latitude: ${latitude}, longitude: ${longitude}]</p>
+  </a>
+
+</script>
+    </body>
+</html>
