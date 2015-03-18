@@ -2,18 +2,58 @@ var expect  = require('chai').expect;
 var app     = require('../app');
 var request = require('supertest')(app);
 
+
 describe('GET /suggestions', function() {
+  var response;
+
+  before(function () {
+    require('../lib/store')._reset();
+  });
+
+  function doRequest (url, cb) {
+    request
+      .get(url)
+      .end(function (err, res) {
+        response = res;
+        response.json = JSON.parse(res.text);
+        cb(err);
+      });
+  }
+
+  describe('with no query', function () {
+    before(function (done) {
+      doRequest('/suggestions?not-q=Montreal', done);
+    });
+
+    it('should return a 400 error', function () {
+      expect(response.statusCode).to.equal(400);
+    });
+  });
+
+  describe('with only one coordinate', function () {
+    before(function (done) {
+      doRequest('/suggestions?q=Montreal&latitude=10.2', done);
+    });
+
+    it('should return a 400 error', function () {
+      expect(response.statusCode).to.equal(400);
+    });
+  });
+
+  describe('with one coordinate out of bound', function () {
+    before(function (done) {
+      doRequest('/suggestions?q=Montreal&latitude=200.2&longitude=2', done);
+    });
+
+    it('should return a 400 error', function () {
+      expect(response.statusCode).to.equal(400);
+    });
+  });
+
   describe('with a non-existent city', function () {
-    var response;
 
     before(function (done) {
-      request
-        .get('/suggestions?q=SomeRandomCityInTheMiddleOfNowhere')
-        .end(function (err, res) {
-          response = res;
-          response.json = JSON.parse(res.text);
-          done(err);
-        });
+      doRequest('/suggestions?q=SomeRandomCityInTheMiddleOfNowhere', done);
     });
 
     it('returns a 404', function () {
@@ -27,16 +67,8 @@ describe('GET /suggestions', function() {
   });
 
   describe('with a valid city', function () {
-    var response;
-
     before(function (done) {
-      request
-        .get('/suggestions?q=Montreal')
-        .end(function (err, res) {
-          response = res;
-          response.json = JSON.parse(res.text);
-          done(err);
-        });
+      doRequest('/suggestions?q=Montreal', done);
     });
 
     it('returns a 200', function () {
@@ -51,7 +83,8 @@ describe('GET /suggestions', function() {
     it('contains a match', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.some(function (suggestion) {
-          return suggestion.name.test(/montreal/i);
+          // `test()` is a regExp method, not a String one...
+          return /montreal/i.test(suggestion.name);
         });
       })
     });
@@ -67,9 +100,23 @@ describe('GET /suggestions', function() {
     it('contains scores', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.every(function (suggestion) {
-          return suggestion.latitude && suggestion.longitude;
+          return suggestion.score;
         });
       })
     });
+  });
+});
+
+// basic test of v2 (elasticSearch)
+describe('GET /v2/suggestions', function() {
+  it('should return a valid list of locations', function (done) {
+    request
+      .get('/v2/suggestions?q=Montreal')
+      .end(function (err, res) {
+        expect(err).to.be.null;
+        var response = res;
+        response.json = JSON.parse(res.text);
+        done();
+      });
   });
 });
