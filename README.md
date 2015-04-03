@@ -30,7 +30,7 @@ As queries can get quite large, there's a limit set in the query to Mongo to pre
 
 ## How It Works
 
-There's a frontend available to get a feel of how the application works without looking at code or JSON responses. Currently the frontend requires a minimum of 2 characters and executes search 200ms a after last key stroke. You can find it here! http://dblackman-busbud.herokuapp.com
+There's a frontend available to get a feel of how the application works without looking at code or JSON responses. Currently the frontend requires a minimum of 2 characters and executes search 200ms after last key stroke. You can find it here! http://dblackman-busbud.herokuapp.com
 
 /suggestions accepts 4 parameters
 - q (query text)
@@ -49,7 +49,7 @@ Next is building the query. Were comparing to the *phrase* key in Mongo using Re
 
 For score, initially a score is created based on string compare from 0 to 1, so the closest string match will have a greater score.
 
-If however LatLon is supplied and $near was added to the query, we want the nearest results to come up first with a combination of string score. As Mongo returns the results nearest/farthest, we reverse the results array so the nearest result is at the end, then using an array index, we multiply each entry by a small float to increase each entry based on distance (which is it's position in the array). Afterwards, this gets sent to the sorting function, which results in the nearest location coming up first! See the code for yourself [here](./functions/queryMongo.js)
+If however LatLon is supplied and $near was added to the query, we want the nearest results to come up first with a combination of string score. As Mongo returns the results nearest/farthest, we reverse the results array so the nearest result is at the end, then using an array index, we multiply each entry by a small float to increase each entry based on distance (which is it's position in the array). Afterwards, this gets sent to the sorting function, which results in the nearest location coming up first! See the code for yourself [here](./functions/queryMongo.js#L70)
 
 ## Notes
 
