@@ -9,6 +9,7 @@ Mongo also supports geospatial searches out of the box, so integrating the abili
 Data in the database is minimal as I only took the parts I needed from the TSV to keep database size down. Were querying the *phrase* key, which has had all accents removed from it allowing for easy queries. Here's an example document.
 
 ```
+
 {
   "phrase": "montreal qc ca",
   "city": "Montréal",
@@ -22,6 +23,7 @@ Data in the database is minimal as I only took the parts I needed from the TSV t
   "country": "CA",
   "state": "QC"
 }
+
 ```
 
 The reason I kept city, state, and country separate was to make it easy to use these keys in different ways in the future. And why I didn't create a key with all of them combined was to keep database size down (even if it's just a little bit).
@@ -40,7 +42,9 @@ There's a frontend available to get a feel of how the application works without 
 
 Example:
 ```
+
 /suggestions?q=mon&latitude=45.508669900000000000&longitude=-73.553992499999990000&limit=5
+
 ```
 
 At request, Nodes backend checks for what parameters have been supplied. If Q is missing, it returns error. If limit is available, results will be as well.
@@ -60,16 +64,21 @@ If however LatLon is supplied and $near was added to the query, we want the near
 ## Setup Mongo Locally
 1. Setup a Mongo instance with it's default config if you don't have one already, you don't have to do anything special.
 
-2. ```
+2.
+```
+
 cd ./data
 node tsv2mongo.js
+
 ```
 
 3. Open up __./functions/queryMongo.js__ and switch out the comments for the Mongo connection. Should look like this afterwards.
 
 ```
+
 var colc = mongo('127.0.0.1:27017/busbud').collection('suggestions');
 // var colc = mongo('read:read@ds059651.mongolab.com:59651/heroku_app35517737').collection('suggestions');
+
 
 ```
 
