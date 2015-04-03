@@ -31,7 +31,7 @@ describe('GET /suggestions', function() {
 
     before(function (done) {
       request
-        .get('/suggestions?q=Montreal')
+        .get('/suggestions?q=Toronto')
         .end(function (err, res) {
           response = res;
           response.json = JSON.parse(res.text);
@@ -51,7 +51,7 @@ describe('GET /suggestions', function() {
     it('contains a match', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.some(function (suggestion) {
-          return suggestion.name.test(/montreal/i);
+          return (/toronto/i).test(suggestion.name);
         });
       })
     });
