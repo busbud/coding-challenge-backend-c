@@ -42,9 +42,7 @@ There's a frontend available to get a feel of how the application works without 
 
 Example:
 ```
-
 /suggestions?q=mon&latitude=45.508669900000000000&longitude=-73.553992499999990000&limit=5
-
 ```
 
 At request, Nodes backend checks for what parameters have been supplied. If Q is missing, it returns error. If limit is available, results will be as well.
@@ -66,7 +64,6 @@ If however LatLon is supplied and $near was added to the query, we want the near
 
 2.
 ```
-
 cd ./data
 node tsv2mongo.js
 
@@ -75,10 +72,8 @@ node tsv2mongo.js
 3. Open up __./functions/queryMongo.js__ and switch out the comments for the Mongo connection. Should look like this afterwards.
 
 ```
-
 var colc = mongo('127.0.0.1:27017/busbud').collection('suggestions');
 // var colc = mongo('read:read@ds059651.mongolab.com:59651/heroku_app35517737').collection('suggestions');
-
 
 ```
 
