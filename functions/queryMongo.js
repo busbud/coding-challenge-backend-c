@@ -140,19 +140,19 @@ module.exports = function(req, res) {
       sortResults
       ], function(err, results) {
 
-      if (err) {
-        console.log(err);
-      }
+        if (err) {
+          console.log(err);
+        }
 
-      var post = {  // Build object were returning
-        suggestions: results
-      };
+        var post = {  // Build object were returning
+          suggestions: results
+        };
 
-      if (results.length === 0) {  // Check if there's 0 results, if so set response code to 404
-        res.status(404).json(post);
-      } else {
-        res.json(post);
-      }
+        if (results.length === 0) {  // Check if there's 0 results, if so set response code to 404
+          res.status(404).json(post);
+        } else {
+          res.json(post);
+        }
     });
   }
 };
