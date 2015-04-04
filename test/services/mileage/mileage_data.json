@@ -1,0 +1,36 @@
+{
+  "correctValuesSet": {
+    "departure": {
+      "latitude": "40.46423",
+      "longitude": "-80.60091"
+    },
+    "arrival": {
+      "latitude": "45.50884",
+      "longitude": "73.58781"
+    }
+  },
+
+  "optsNoDeparture": {
+    "arrival": {
+      "latitude": "45.50884",
+      "longitude": "73.58781"
+    }
+  },
+
+  "optsNoArrival": {
+    "departure": {
+      "latitude": "40.46423",
+      "longitude": "-80.60091"
+    }
+  },
+
+  "optsMissingLatitudeInDeparture": {
+    "departure": {
+      "longitude": "-80.60091"
+    },
+    "arrival": {
+      "latitude": "45.50884",
+      "longitude": "73.58781"
+    }
+  }
+}

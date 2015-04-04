@@ -1,0 +1,23 @@
+{
+  "noNameParam": {
+    "latitude": "45.50884",
+    "longitude": "73.58781"
+  },
+
+  "blankNameParam": {
+    "name": "    ",
+    "latitude": "45.50884",
+    "longitude": "73.58781"
+  },
+
+  "latitudeParamMissing": {
+    "name": "Montreal",
+    "longitude": "73.58781"
+  },
+
+  "successParam": {
+    "name": "Montreal",
+    "latitude": "45.50884",
+    "longitude": "73.58781"
+  }
+}
