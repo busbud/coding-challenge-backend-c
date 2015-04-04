@@ -1,0 +1,5 @@
+module.exports = {
+  LIMIT_RESPONSE_SIZE: 10,
+  EARTH_RADIUS_IN_KMS: 6356,
+  KM_TO_MILES: 0.621371192
+};
