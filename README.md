@@ -1,5 +1,69 @@
 # Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
 
+## Details
+
+The API at /suggestions is powered by 2 in-memory data structures. 
+Namely, a Trie (see: http://en.wikipedia.org/wiki/Trie), and a Map 
+(see Data Persistence section).
+
+When the API is called, it simply searches the Trie for all
+cities with the given query as a prefix (or whole word)
+
+Based on the list of possible cities returned by the Trie, 
+we look up each of those city's information from our Map
+
+With each city's information, we calculate a score (see: Scoring)
+and then return the sorted listed of cities along with their scores
+as described in the Requirements section.
+
+API is available at https://mitchcity.herokuapp.com/suggestions
+Play around with the API via the web app at https://mitchcity.herokuapp.com
+
+## Scoring
+
+Lacking a Latitude and Longitude in the user's query, the score is
+simply the ratio of query word length to suggestion word length.
+Since we know by the Trie's prefix matching that all the characters 
+are the same anyway, all that needs to be taken into account is the length.
+
+Given both Latitude & Longitude, we take a weighted average of our
+previous word length score, and a new distance based score. The weight
+of the word length is 10%, while distance is 90% as it gives a much more
+meaningful idea of what the user is searching for.
+
+The distance based score is the ratio distance to furthest_possible_distance.
+Where 'distance' is defined as: distance between the query
+Latitude/Longitude point, and the Latitude/Longitude point of the 
+suggestion
+And furthest_possible_distance is half the Earth's circumference
+
+## Data Persistence
+
+A one time-run script in scripts/, 'create_city_info.js' converts the TSV data
+into JSON format. This is the Map discussed in the Details section above.
+city_info is in the following format:
+```
+city_info = {
+    city_name: [ // this key is formatted to be all lowercase and with no diacritics
+        {
+            name: city_name, // this is the full, properly cased, with-diacritics version
+            lat: latitude,
+            long: longitude,
+            country: country_code
+            admin1: admin_code
+        },
+        ...
+    ],
+    ...
+}
+```
+Each city_name keys a list of cities with that name. Each city in that list has
+details which differentiates it from other cities with the same name.
+
+It was decided that this project is small enough that the data structures can
+live in-memory. With a much larger dataset, we would need to reevaluate that
+assumption and possibly store city_info in MongoDB or something similar.
+
 ## Requirements
 
 Design an API endpoint that provides auto-complete suggestions for large cities.
