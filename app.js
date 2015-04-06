@@ -1,6 +1,8 @@
 var http = require('http');
 var port = process.env.PORT || 2345;
 
+console.log('poop', process.env.PORT)
+
 module.exports = http.createServer(function (req, res) {
   res.writeHead(404, {'Content-Type': 'text/plain'});
 
