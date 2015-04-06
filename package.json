@@ -22,6 +22,7 @@
     "mocha": "^1.18.2",
     "serve-favicon": "^2.2.0",
     "supertest": "^0.11.0",
+    "underscore": "^1.8.3",
     "winston": "^0.9.0"
   },
   "engines": {
