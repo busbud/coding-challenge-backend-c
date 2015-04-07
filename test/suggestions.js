@@ -51,7 +51,10 @@ describe('GET /suggestions', function() {
     it('contains a match', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.some(function (suggestion) {
-          return suggestion.name.test(/montreal/i);
+        	// Modified by THomas Kearvell 2014-04-06
+        	// Bad object method, changed to regex object test
+        	var patt = new RegExp(/montreal/i);
+          return patt.test(suggestion.name);
         });
       })
     });
