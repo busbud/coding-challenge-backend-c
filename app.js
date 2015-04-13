@@ -323,12 +323,29 @@ function search(q, cb) {
       track_scores: true,
       sort: sort,
       query: {
-        match: {
-          name: {
-            query: query,
-            fuzziness: "AUTO",
-            prefix_length: 0
-          }
+        bool: {
+          should: [{
+            span_first: {
+              end: 1,
+              match: {
+                span_multi: {
+                  match: {
+                    prefix: {
+                      ascii: {
+                        prefix: query
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }, {
+            match: {
+              ascii: {
+                query: query
+              }
+            }
+          }]
         }
       }
     }
