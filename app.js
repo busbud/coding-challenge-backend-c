@@ -409,6 +409,12 @@ app.get('/suggestions', function(req, res) {
   search(req.query, function(e, r) {
     if (e) throw e;
 
+    var skip = +req.query.skip || 0;
+
+    if(req.query.limit) {
+      r.hits.hits = r.hits.hits.slice(skip, +req.query.limit +  skip);
+    }
+
     var json = pretty(r);
 
     if (json.suggestions.length === 0) {
