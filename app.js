@@ -7,7 +7,7 @@ var host = process.env.ESHOST || 'localhost';
 
 var client = new elasticsearch.Client({
   host: host + ':9200',
-  // log: 'trace'
+  log: 'trace'
 });
 
 var http = require('http');
@@ -100,7 +100,7 @@ app.get('/raw/suggestions', function(req, res) {
 app.get('/suggestions', function(req, res) {
   search(req.query, function(e, r) {
     if (e) throw e;
-    
+
     var json = pretty(r);
 
     if (json.suggestions.length === 0) {
