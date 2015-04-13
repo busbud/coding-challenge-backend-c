@@ -3,7 +3,7 @@
 
 var elasticsearch = require('elasticsearch');
 
-var host = process.env.PORT || 'localhost';
+var host = process.env.ESHOST || 'localhost';
 
 var client = new elasticsearch.Client({
   host: host + ':9200',
@@ -16,8 +16,7 @@ var https = require('https');
 var express = require('express'),
   app = express();
 
-// var port = process.env.PORT || 2345;
-var port = 80;
+var port = process.env.PORT || 80;
 
 function search(q, cb) {
   var query = q.q || q.query || '';

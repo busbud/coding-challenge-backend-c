@@ -9,7 +9,7 @@ var async = require('async');
 var ProgressBar = require('progress');
 var elasticsearch = require('elasticsearch');
 
-var host = process.env.PORT || 'localhost';
+var host = process.env.ESHOST || 'localhost';
 
 
 var client = new elasticsearch.Client({
