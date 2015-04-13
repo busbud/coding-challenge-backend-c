@@ -91,12 +91,16 @@ function pretty(uson) {
 
 app.get('/raw/suggestions', function(req, res) {
   search(req.query, function(e, r) {
+    if (e) throw e;
+
     res.json(r);
   });
 });
 
 app.get('/suggestions', function(req, res) {
   search(req.query, function(e, r) {
+    if (e) throw e;
+    
     var json = pretty(r);
 
     if (json.suggestions.length === 0) {
