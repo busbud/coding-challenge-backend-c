@@ -11,7 +11,7 @@ var host = "6a532498715436861371264a1ad33d04-us-east-1.foundcluster.com";
 
 var client = new elasticsearch.Client({
   host: host + ':9200',
-  log: 'trace'
+  // log: 'trace'
 });
 
 var http = require('http');
@@ -299,9 +299,12 @@ function removeDiacritics(str) {
 
 function search(q, cb) {
   var query = q.q || q.query || '';
+  query = query.toLowerCase();
+  query = removeDiacritics(query);
   var lat = q.latitude || q.lat;
   var lon = q.longitude || q.lon;
-  var sort = ["_score"];
+  // var sort = ["_score"];
+  var sort = [];
 
   if (lat && lon) {
     sort.push({
@@ -316,11 +319,11 @@ function search(q, cb) {
     });
   }
 
+
   client.search({
     index: 'north-america',
     type: 'city',
     body: {
-      track_scores: true,
       sort: sort,
       query: {
         bool: {
@@ -348,6 +351,7 @@ function search(q, cb) {
           }]
         }
       }
+      // filter: {}
     }
   }, cb);
 }
@@ -373,7 +377,8 @@ function pretty(uson) {
     }
 
     tmp.address += ", " + v._source.country;
-    tmp.score = v._score / roof;
+    // tmp.score = v._score / roof;
+    // tmp.score = (1000 - v.sort[0])/1000;
     tmp.id = +v._source.id;
     tmp.latitude = +v._source.latitude;
     tmp.longitude = +v._source.longitude;
