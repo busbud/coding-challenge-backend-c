@@ -303,7 +303,7 @@ function search(q, cb) {
   query = removeDiacritics(query);
   var lat = q.latitude || q.lat;
   var lon = q.longitude || q.lon;
-  // var sort = ["_score"];
+
   var sort = [];
 
   if (lat && lon) {
@@ -317,12 +317,15 @@ function search(q, cb) {
         unit: "km"
       }
     });
+  } else {
+    sort.push("_score");
   }
 
 
   client.search({
     index: 'north-america',
     type: 'city',
+    track_score: true,
     body: {
       sort: sort,
       query: {
@@ -377,8 +380,12 @@ function pretty(uson) {
     }
 
     tmp.address += ", " + v._source.country;
-    // tmp.score = v._score / roof;
-    // tmp.score = (1000 - v.sort[0])/1000;
+
+    if (v.sort) {
+      tmp.score = (1000 - v.sort[0]) / 1000;
+    } else {
+      tmp.score = v._score / roof;
+    }
     tmp.id = +v._source.id;
     tmp.latitude = +v._source.latitude;
     tmp.longitude = +v._source.longitude;
