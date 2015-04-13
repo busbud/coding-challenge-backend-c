@@ -2,8 +2,11 @@
 'use strict';
 
 var elasticsearch = require('elasticsearch');
+
+var host = process.env.PORT || 'localhost';
+
 var client = new elasticsearch.Client({
-  host: 'localhost:9200',
+  host: host + ':9200',
   // log: 'trace'
 });
 
