@@ -9,8 +9,14 @@ var async = require('async');
 var ProgressBar = require('progress');
 var elasticsearch = require('elasticsearch');
 
-var host = process.env.ESHOST || 'localhost';
+// var host = process.env.ESHOST || 'localhost';
 
+// var host = "192.241.145.84";
+// var host = "localhost";
+var host = "6a532498715436861371264a1ad33d04-us-east-1.foundcluster.com";
+
+var index = 'north-america';
+var type = 'city';
 
 var client = new elasticsearch.Client({
   host: host + ':9200',
@@ -51,7 +57,7 @@ function tsvToJson(data) {
 function create() {
   console.log('Creating...');
   client.indices.create({
-    index: 'north-america',
+    index: index,
   }, map);
 }
 
@@ -59,8 +65,8 @@ function create() {
 function map() {
   console.log('Mapping...');
   client.indices.putMapping({
-    index: 'north-america',
-    type: 'city',
+    index: index,
+    type: type,
     body: {
       city: {
         properties: {
@@ -99,8 +105,8 @@ function insert() {
 
       // Write item to database
       client.create({
-        index: 'north-america',
-        type: 'city',
+        index: index,
+        type: type,
         body: body
       }, function(e, r) {
         if (e) throw e;
@@ -118,8 +124,8 @@ function insert() {
 function test() {
   console.log('Testing...');
   client.search({
-    index: 'north-america',
-    type: 'city',
+    index: index,
+    type: type,
     body: {
       sort: [{
         _geo_distance: {
@@ -150,7 +156,7 @@ function test() {
 // Start the application
 function main() {
   client.indices.delete({
-    index: 'north-america'
+    index: index
   }, create);
 }
 

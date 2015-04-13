@@ -3,7 +3,11 @@
 
 var elasticsearch = require('elasticsearch');
 
-var host = process.env.ESHOST || 'localhost';
+// var host = process.env.ESHOST || 'localhost';
+
+// var host = "192.241.145.84";
+// var host = "localhost";
+var host = "6a532498715436861371264a1ad33d04-us-east-1.foundcluster.com";
 
 var client = new elasticsearch.Client({
   host: host + ':9200',
