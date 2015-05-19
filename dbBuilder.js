@@ -3,7 +3,7 @@ var fs     = require('fs'),
     events = require('events'),
     util   = require('util');
 
-function dataBuilder() {
+function dbBuilder() {
     var self = this;
 
     self.cityData = [];
@@ -154,4 +154,4 @@ dataBuilder.prototype._admin1toStateProv = function(code) {
     }
 };
 
-module.exports = dataBuilder;
+module.exports = dbBuilder;
