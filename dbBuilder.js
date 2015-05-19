@@ -1,7 +1,8 @@
-var fs     = require('fs'),
-    stream = require('stream'),
-    events = require('events'),
-    util   = require('util');
+var fs         = require('fs'),
+    stream     = require('stream'),
+    events     = require('events'),
+    util       = require('util'),
+    levenstein = require('./levenstein');
 
 function dbBuilder() {
     var self = this;
@@ -28,7 +29,7 @@ function dbBuilder() {
 
     //handle case where there's a single last line left in stream
     //flush it...
-    self._lineByLine._flush = function (done) {
+    self._lineByLine._flush = function(done) {
          if (this._lastLineData)
             this.push(this._lastLineData);
 
@@ -41,7 +42,6 @@ function dbBuilder() {
 };
 
 util.inherits(dbBuilder, events.EventEmitter);
-
 
 //performs a prime read of all the data in .tsv filtering by population
 dbBuilder.prototype.primeRead = function() {
@@ -77,7 +77,14 @@ dbBuilder.prototype.primeRead = function() {
 };
 
 dbBuilder.prototype.search = function(term, lat, long) {
-    return []
+    var self = this;
+    var suggestions = [];
+
+    self.cityData.forEach(function(value, index, array) {
+        suggestions.push({ld: levenstein(term.toUpperCase(), value.name.toUpperCase()), search: term, city: value.name})
+    })
+
+    return suggestions;
 }
 
 //creates a city record from a line read in from the .tsv file
