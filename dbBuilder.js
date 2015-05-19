@@ -40,11 +40,11 @@ function dbBuilder() {
     return self;
 };
 
-util.inherits(dataBuilder, events.EventEmitter);
+util.inherits(dbBuilder, events.EventEmitter);
 
 
 //performs a prime read of all the data in .tsv filtering by population
-dataBuilder.prototype.primeRead = function() {
+dbBuilder.prototype.primeRead = function() {
     var self    = this;
     var headers = [];
     var first   = true;
@@ -76,9 +76,12 @@ dataBuilder.prototype.primeRead = function() {
     return self;
 };
 
+dbBuilder.prototype.search = function(term, lat, long) {
+    return []
+}
 
 //creates a city record from a line read in from the .tsv file
-dataBuilder.prototype._createCityRecord = function(headers, line) {
+dbBuilder.prototype._createCityRecord = function(headers, line) {
     var self = this;
     var city = {};
     var cityProperties = line.split('\t');
@@ -111,7 +114,7 @@ dataBuilder.prototype._createCityRecord = function(headers, line) {
 };
 
 //converts the country code into a name
-dataBuilder.prototype._countryCodeToName = function(countryCode) {
+dbBuilder.prototype._countryCodeToName = function(countryCode) {
     if (countryCode === 'CA')
         return 'Canada';
 
@@ -119,7 +122,7 @@ dataBuilder.prototype._countryCodeToName = function(countryCode) {
 };
 
 //converts admin1 values to state or province
-dataBuilder.prototype._admin1toStateProv = function(code) {
+dbBuilder.prototype._admin1toStateProv = function(code) {
     //mapping taken from
     //http://download.geonames.org/export/dump/admin1CodesASCII.txt
     switch (code) {
