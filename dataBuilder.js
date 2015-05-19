@@ -63,8 +63,7 @@ dataBuilder.prototype.primeRead = function() {
         }
       })
       .on('end', function() {
-          console.log('done reading');
-          console.log(self.cityData.length);
+          console.log('Prime Read Complete! %d records read', self.cityData.length);
           self.emit('primeReadDone');
       });
 
