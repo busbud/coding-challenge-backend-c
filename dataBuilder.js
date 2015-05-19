@@ -11,19 +11,23 @@ function dataBuilder() {
     self._lineByLine = new stream.Transform({objectMode: true})
 
     self._lineByLine._transform = function(chunk, encoding, done) {
+         //convert chuck to string
          var data = chunk.toString();
 
-         if (this._lastLineData)
+         if (this._lastLineData) //append the last line to current chuck
             data = this._lastLineData + data;
 
-         var lines = data.split('\n');
+         var lines = data.split('\n'); //split on new lines
 
+         //remove last line incase it's incomplete
          this._lastLineData = lines.splice(lines.length - 1, 1)[0];
 
          lines.forEach(this.push.bind(this));
          done();
     }
 
+    //handle case where there's a single last line left in stream
+    //flush it...
     self._lineByLine._flush = function (done) {
          if (this._lastLineData)
             this.push(this._lastLineData);
@@ -38,6 +42,8 @@ function dataBuilder() {
 
 util.inherits(dataBuilder, events.EventEmitter);
 
+
+//performs a prime read of all the data in .tsv filtering by population
 dataBuilder.prototype.primeRead = function() {
     var self    = this;
     var headers = [];
@@ -70,6 +76,8 @@ dataBuilder.prototype.primeRead = function() {
     return self;
 };
 
+
+//creates a city record from a line read in from the .tsv file
 dataBuilder.prototype._createCityRecord = function(headers, line) {
     var self = this;
     var city = {};
@@ -100,15 +108,17 @@ dataBuilder.prototype._createCityRecord = function(headers, line) {
     });
 
     return city;
-}
+};
 
+//converts the country code into a name
 dataBuilder.prototype._countryCodeToName = function(countryCode) {
     if (countryCode === 'CA')
         return 'Canada';
 
     return 'USA';
-}
+};
 
+//converts admin1 values to state or province
 dataBuilder.prototype._admin1toStateProv = function(code) {
     //mapping taken from
     //http://download.geonames.org/export/dump/admin1CodesASCII.txt
@@ -142,6 +152,6 @@ dataBuilder.prototype._admin1toStateProv = function(code) {
         default:
             return code
     }
-}
+};
 
 module.exports = dataBuilder;
