@@ -1,7 +1,16 @@
-function getSuggestions(req, res, next) {
-    res.status(404).send({"suggestions": []})
+function reqHandler() {
+    this.cityData = [];
+
+    return this
 }
 
-module.exports = {
-    getSuggestions: getSuggestions
+reqHandler.prototype.getSuggestions = function() {
+    var self = this;
+
+    return function(req, res, next) {
+        console.log(self.cityData)
+        res.status(404).send({"suggestions": []})
+    }
 }
+
+module.exports = reqHandler;
