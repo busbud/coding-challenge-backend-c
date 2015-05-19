@@ -1,13 +1,14 @@
 var express     = require('express'),
-    reqHandler  = require('./reqHandler')
-    dataBuilder = require('./dataBuilder');
+    dataBuilder = require('./dataBuilder'),
+    reqHandler  = require('./reqHandler');
 
 var port = process.env.PORT || 2345;
 var app = express();
 var db = new dataBuilder();
+var rq = new reqHandler();
 
 //set up routes
-app.get('/suggestions', reqHandler.getSuggestions)
+app.get('/suggestions', rq.getSuggestions())
 
 //catch all
 app.use(function(req, res, next) {
@@ -18,12 +19,11 @@ app.use(function(req, res, next) {
 
 //prime the db
 db.primeRead().on('primeReadDone', function() {
-   app.listen(port, function() {
-     console.log('Server running at http://127.0.0.1:%d/suggestions', port);
-   });
+    rq.cityData = db.cityData;
+
+    app.listen(port, function() {
+        console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+    });
 });
 
-module.exports = {
-    app: app,
-    db: db
-}
+module.exports = app
