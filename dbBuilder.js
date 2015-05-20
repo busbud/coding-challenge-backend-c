@@ -81,6 +81,7 @@ dbBuilder.prototype.search = function(term, lat, long) {
     var suggestions = [];
     var score       = 0;
     var lDistance   = 0;
+    var cityName    = "";
 
     self.cityData.forEach(function(value, index, array) {
 
@@ -89,8 +90,10 @@ dbBuilder.prototype.search = function(term, lat, long) {
         score = 1 - (lDistance / Math.max(term.length, value.name.length))
         score = Math.round(score * 100) / 100 // round score to two decimal places
 
-        if (score > 0.3)
-            suggestions.push({search: term, city: value.name, score: score})
+        if (score > 0.3) {
+            cityName = value.name + ", " + value.stateProv + ", " + value.country;
+            suggestions.push({name: cityName, latitude: value.lat, longitude: value.long, score: score})
+        }
     })
 
     //descending sort
