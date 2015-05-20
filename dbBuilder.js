@@ -1,8 +1,11 @@
-var fs          = require('fs'),
-    stream      = require('stream'),
-    events      = require('events'),
-    util        = require('util'),
-    levenshtein = require('./levenshtein');
+var fs             = require('fs'),
+    stream         = require('stream'),
+    events         = require('events'),
+    util           = require('util'),
+    levenshtein    = require('./levenshtein'),
+    sphereDistance = require('./sphericalDistance');
+
+var MAX_DISTANCE_KM = 550;
 
 function dbBuilder() {
     var self = this;
@@ -76,15 +79,24 @@ dbBuilder.prototype.primeRead = function() {
     return self;
 };
 
+//build a list a suggestions and scores them based on search terms
 dbBuilder.prototype.search = function(term, lat, long) {
     var self        = this;
+    var data        = [];
     var suggestions = [];
     var score       = 0;
     var lDistance   = 0;
     var cityName    = "";
 
-    self.cityData.forEach(function(value, index, array) {
+    //use lat and long to filter data down
+    if (lat && long) {
+        data = self._filterCitiesByLatLong(lat, long);
+    } else {
+        data = self.cityData
+    }
 
+    //calculate scores
+    data.forEach(function(value, index, array) {
         //only calculate distance/score if term is shorter than 1.75 * length of found city
         //some filtering to stop bigger query strings from calculating against likely non matches
         if (term.length <= Math.floor(1.75 * value.name.length)) {
@@ -191,6 +203,18 @@ dbBuilder.prototype._admin1toStateProv = function(code) {
         default:
             return code
     }
+};
+
+dbBuilder.prototype._filterCitiesByLatLong = function(lat, long) {
+    var self = this
+    var filteredCities = [];
+
+    self.cityData.forEach(function(value, index, array){
+        if (sphereDistance(lat, long, value.lat, value.long) <= MAX_DISTANCE_KM)
+            filteredCities.push(value)
+    });
+
+    return filteredCities;
 };
 
 module.exports = dbBuilder;
