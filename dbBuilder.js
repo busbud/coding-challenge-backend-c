@@ -85,27 +85,33 @@ dbBuilder.prototype.search = function(term, lat, long) {
 
     self.cityData.forEach(function(value, index, array) {
 
-        lDistance = levenshtein(term.toUpperCase(), value.name.toUpperCase());
+        //only calculate distance/score if term is shorter than 1.75 * length of found city
+        //some filtering to stop bigger query strings from calculating against likely non matches
+        if (term.length <= Math.floor(1.75 * value.name.length)) {
+            lDistance = levenshtein(term.toUpperCase(), value.name.toUpperCase());
 
-        score = 1 - (lDistance / Math.max(term.length, value.name.length))
-        score = Math.round(score * 100) / 100 // round score to two decimal places
+            score = 1 - (lDistance / Math.max(term.length, value.name.length));
+            score = Math.round(score * 100) / 100; // round score to two decimal places
 
-        if (score > 0.3) {
-            cityName = value.name + ", " + value.stateProv + ", " + value.country;
-            suggestions.push({name: cityName, latitude: value.lat, longitude: value.long, score: score})
+            if (score > 0.3) {
+                cityName = value.name + ", " + value.stateProv + ", " + value.country;
+                suggestions.push({name: cityName, latitude: value.lat, longitude: value.long, score: score});
+            }
         }
     })
 
     //descending sort
-    suggestions.sort(function(first, second) {
-        if (first.score > second.score)
-            return -1;
-        else if (first.score < second.score) {
-            return 1;
-        }
+    if (suggestions.length > 0) {
+        suggestions.sort(function(first, second) {
+            if (first.score > second.score)
+                return -1;
+            else if (first.score < second.score) {
+                return 1;
+            }
 
-        return 0
-    });
+            return 0;
+        });
+    }
 
     return suggestions;
 }
