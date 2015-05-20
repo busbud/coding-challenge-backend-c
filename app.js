@@ -26,4 +26,7 @@ db.primeRead().on('primeReadDone', function() {
     });
 });
 
-module.exports = app
+module.exports = {
+    app: app,
+    db: db
+}
