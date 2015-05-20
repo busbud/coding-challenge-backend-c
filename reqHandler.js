@@ -9,11 +9,13 @@ reqHandler.prototype.getSuggestions = function() {
 
     return function(req, res, next) {
 
-        var cityTerm = req.query.q
-        var lat      = req.query.latitude
-        var long     = req.query.longitude
+        var cityTerm    = req.query.q;
+        var lat         = req.query.latitude;
+        var long        = req.query.longitude;
+        var suggestions = [];
 
-        var suggestions = self.db.search(cityTerm, lat, long);
+        if (cityTerm) //perform search only if a term is provided
+            suggestions = self.db.search(cityTerm, lat, long);
 
         if (suggestions.length > 0) {
             res.status(200).send({"suggestions": suggestions})
