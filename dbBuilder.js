@@ -77,12 +77,32 @@ dbBuilder.prototype.primeRead = function() {
 };
 
 dbBuilder.prototype.search = function(term, lat, long) {
-    var self = this;
+    var self        = this;
     var suggestions = [];
+    var score       = 0;
+    var lDistance   = 0;
 
     self.cityData.forEach(function(value, index, array) {
-        suggestions.push({ld: levenstein(term.toUpperCase(), value.name.toUpperCase()), search: term, city: value.name})
+
+        lDistance = levenshtein(term.toUpperCase(), value.name.toUpperCase());
+
+        score = 1 - (lDistance / Math.max(term.length, value.name.length))
+        score = Math.round(score * 100) / 100 // round score to two decimal places
+
+        if (score > 0.3)
+            suggestions.push({search: term, city: value.name, score: score})
     })
+
+    //descending sort
+    suggestions.sort(function(first, second) {
+        if (first.score > second.score)
+            return -1;
+        else if (first.score < second.score) {
+            return 1;
+        }
+
+        return 0
+    });
 
     return suggestions;
 }
