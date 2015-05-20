@@ -116,7 +116,7 @@ dbBuilder.prototype._createCityRecord = function(headers, line) {
     cityProperties.forEach(function(value, index, array) {
         //build the city object using the headers as a reference to the position of the value
         switch (headers[index]) {
-            case 'name':
+            case 'ascii':
                 city.name = value;
                 break;
             case 'lat':
