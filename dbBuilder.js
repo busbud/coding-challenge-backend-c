@@ -1,8 +1,8 @@
-var fs         = require('fs'),
-    stream     = require('stream'),
-    events     = require('events'),
-    util       = require('util'),
-    levenstein = require('./levenstein');
+var fs          = require('fs'),
+    stream      = require('stream'),
+    events      = require('events'),
+    util        = require('util'),
+    levenshtein = require('./levenshtein');
 
 function dbBuilder() {
     var self = this;
