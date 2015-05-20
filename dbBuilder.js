@@ -6,6 +6,8 @@ var fs             = require('fs'),
     sphereDistance = require('./sphericalDistance');
 
 var MAX_DISTANCE_KM = 550;
+var MAX_SUGGESTIONS = 10;
+var MIN_POPULATION  = 5000;
 
 function dbBuilder() {
     var self = this;
@@ -65,8 +67,8 @@ dbBuilder.prototype.primeRead = function() {
             } else {
                 city = self._createCityRecord(headers, line);
 
-                //only add city to list if population is over 5000
-                if (city.population >= 5000)
+                //only add city to list if population is over the min
+                if (city.population >= MIN_POPULATION)
                     self.cityData.push(city);
             }
         }
@@ -125,7 +127,7 @@ dbBuilder.prototype.search = function(term, lat, long) {
         });
     }
 
-    return suggestions;
+    return suggestions.splice(0, MAX_SUGGESTIONS);
 }
 
 //creates a city record from a line read in from the .tsv file
