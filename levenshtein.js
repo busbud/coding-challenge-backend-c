@@ -1,4 +1,4 @@
-//levenstein distance as shown on http://en.wikipedia.org/wiki/Levenshtein_distance
+//levenshtein distance as shown on http://en.wikipedia.org/wiki/Levenshtein_distance
 //using Wagner-Fischer matrix http://en.wikipedia.org/wiki/Wagner-Fischer_algorithm
 function levenshteinDistance(source, target) {
     //base cases
