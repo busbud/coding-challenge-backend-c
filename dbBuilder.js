@@ -6,7 +6,7 @@ var fs             = require('fs'),
     sphereDistance = require('./sphericalDistance');
 
 var MAX_DISTANCE_KM = 550;
-var MAX_SUGGESTIONS = 10;
+var MAX_SUGGESTIONS = 25;
 var MIN_POPULATION  = 5000;
 
 function dbBuilder() {
@@ -25,7 +25,7 @@ function dbBuilder() {
 
          var lines = data.split('\n'); //split on new lines
 
-         //remove last line incase it's incomplete
+         //remove last line in case it's incomplete
          this._lastLineData = lines.splice(lines.length - 1, 1)[0];
 
          lines.forEach(this.push.bind(this));
@@ -105,6 +105,13 @@ dbBuilder.prototype.search = function(term, lat, long) {
             lDistance = levenshtein(term.toUpperCase(), value.name.toUpperCase());
 
             score = 1 - (lDistance / Math.max(term.length, value.name.length));
+
+            //a distance score was calculated, use this as well
+            if (value.distanceScore !== undefined) {
+                //worth 50% each
+                score = (score * .5) + (value.distanceScore * .5);
+            }
+
             score = Math.round(score * 100) / 100; // round score to two decimal places
 
             if (score > 0.3) {
@@ -112,6 +119,9 @@ dbBuilder.prototype.search = function(term, lat, long) {
                 suggestions.push({name: cityName, latitude: value.lat, longitude: value.long, score: score});
             }
         }
+
+        //remove distance score after being used
+        delete value.distanceScore;
     })
 
     //descending sort
@@ -132,8 +142,8 @@ dbBuilder.prototype.search = function(term, lat, long) {
 
 //creates a city record from a line read in from the .tsv file
 dbBuilder.prototype._createCityRecord = function(headers, line) {
-    var self = this;
-    var city = {};
+    var self           = this;
+    var city           = {};
     var cityProperties = line.split('\t');
 
     cityProperties.forEach(function(value, index, array) {
@@ -208,12 +218,17 @@ dbBuilder.prototype._admin1toStateProv = function(code) {
 };
 
 dbBuilder.prototype._filterCitiesByLatLong = function(lat, long) {
-    var self = this
+    var self           = this
     var filteredCities = [];
+    var distance       = 0;
 
-    self.cityData.forEach(function(value, index, array){
-        if (sphereDistance(lat, long, value.lat, value.long) <= MAX_DISTANCE_KM)
-            filteredCities.push(value)
+    self.cityData.forEach(function(value, index, array) {
+        distance = sphereDistance(lat, long, value.lat, value.long);
+        if (distance <= MAX_DISTANCE_KM) {
+            //calculate a score for this value based on the distance
+            value.distanceScore = 1 - (distance / MAX_DISTANCE_KM);
+            filteredCities.push(value);
+        }
     });
 
     return filteredCities;
