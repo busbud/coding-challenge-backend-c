@@ -1,16 +1,32 @@
-var http = require('http');
+var express     = require('express'),
+    dbBuilder = require('./dbBuilder'),
+    reqHandler  = require('./reqHandler');
+
 var port = process.env.PORT || 2345;
+var app  = express();
+var db   = new dbBuilder();
+var rq   = new reqHandler();
 
-module.exports = http.createServer(function (req, res) {
-  res.writeHead(404, {'Content-Type': 'text/plain'});
+//set up routes
+app.get('/suggestions', rq.getSuggestions())
 
-  if (req.url.indexOf('/suggestions') === 0) {
-    res.end(JSON.stringify({
-      suggestions: []
-    }));
-  } else {
-    res.end();
-  }
-}).listen(port, '127.0.0.1');
+//catch all
+app.use(function(req, res, next) {
+    res.set('Connection', 'close')
+    res.set('Content-Type', 'text/plain');
+    res.status(404).send()
+});
 
-console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+//prime the db
+db.primeRead().on('primeReadDone', function() {
+    rq.db = db;
+
+    app.listen(port, function() {
+        console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+    });
+});
+
+module.exports = {
+    app: app,
+    db: db
+}

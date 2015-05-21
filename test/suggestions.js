@@ -1,8 +1,13 @@
 var expect  = require('chai').expect;
 var app     = require('../app');
-var request = require('supertest')(app);
+var request = require('supertest')(app.app);
 
 describe('GET /suggestions', function() {
+  //wait for db to be primed
+  before(function (done) {
+    app.db.on('primeReadDone', done);
+  });
+
   describe('with a non-existent city', function () {
     var response;
 
@@ -51,7 +56,7 @@ describe('GET /suggestions', function() {
     it('contains a match', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.some(function (suggestion) {
-          return suggestion.name.test(/montreal/i);
+          return suggestion.name.match(/montreal/i);
         });
       })
     });
