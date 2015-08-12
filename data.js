@@ -3,6 +3,8 @@
  */
 var fs = require("fs");
 var es = require("event-stream");
+var NodeCache = require( "node-cache" );
+var cache = new NodeCache({ stdTTL: 60 * 30});
 var _ = require('lodash');
 
 var DATA = [];
@@ -67,8 +69,17 @@ function readData(filepath) {
  * @returns {array} - results of dictonary values matching search
  */
 function search(name) {
-    var results = [];
+    // lowercase name
     name = name.toLowerCase();
+
+    // check the cache
+    var cached = cache.get(name);
+    if(!_.isUndefined(cached)) {
+        return cached;
+    }
+
+    // get values
+    var results = [];
     _.each(DATA, function(data) {
         if(_.startsWith(data.name.toLowerCase(), name)) {
             results.push(data);
@@ -82,6 +93,9 @@ function search(name) {
             });
         }
     });
+
+    // store in cache and return
+    cache.set(name, results);
     return results;
 }
 
