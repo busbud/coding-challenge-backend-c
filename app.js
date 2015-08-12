@@ -1,6 +1,6 @@
 var _ = require('lodash');
 var http = require('http');
-var host = process.env.HOST || '127.0.0.1';
+var host = process.env.HOST || '0.0.0.0';
 var port = process.env.PORT || 2345;
 var data = require('./data.js');
 
