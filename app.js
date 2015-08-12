@@ -86,13 +86,18 @@ function getSuggestions(params) {
 }
 
 module.exports = http.createServer(function (req, res) {
-
     if (req.url.indexOf('/suggestions') === 0) {
-        res.writeHead(200, {'Content-Type': 'application/json'});
-
         var parsed_url = require('url').parse(req.url, true);
+        var suggestions = getSuggestions(parsed_url.query);
+
+        var status_code = 200;
+        if(_.isEmpty(suggestions)) {
+            status_code = 404;
+        }
+        res.writeHead(status_code, {'Content-Type': 'application/json'});
+
         res.end(JSON.stringify({
-            suggestions: getSuggestions(parsed_url.query)
+            suggestions: suggestions
         }));
     } else {
         res.writeHead(404, {'Content-Type': 'text/plain'});
