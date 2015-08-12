@@ -51,9 +51,9 @@ describe('GET /suggestions', function() {
     it('contains a match', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.some(function (suggestion) {
-          return suggestion.name.test(/montreal/i);
+          return suggestion.name.match(/montr[ée]al/i);
         });
-      })
+      });
     });
 
     it('contains latitudes and longitudes', function () {
@@ -61,7 +61,7 @@ describe('GET /suggestions', function() {
         return suggestions.every(function (suggestion) {
           return suggestion.latitude && suggestion.longitude;
         });
-      })
+      });
     });
 
     it('contains scores', function () {
@@ -69,7 +69,7 @@ describe('GET /suggestions', function() {
         return suggestions.every(function (suggestion) {
           return suggestion.latitude && suggestion.longitude;
         });
-      })
+      });
     });
   });
 });
