@@ -17,10 +17,12 @@ function parseLine(data) {
         name = _.trim(data[1]),
         alt_names = data[3],
         lat = data[4],
-        longi = data[5];
+        longi = data[5],
+        country = data[8];
 
     // make alt_names an array
     if(!_.isUndefined(alt_names)) {
+        // remove empty alt_names
         alt_names = _.filter(alt_names.split(','), function(alt) {
             return !_.isEmpty(_.trim(alt));
         });
@@ -34,7 +36,8 @@ function parseLine(data) {
         name: name,
         alt_names: alt_names,
         latitude: lat,
-        longitude: longi
+        longitude: longi,
+        country: country
     };
 }
 
