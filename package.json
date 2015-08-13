@@ -1,7 +1,7 @@
 {
   "name": "coding-challenge-backend-c",
   "version": "0.0.0",
-  "description": "coding challenge in Nodejs",
+  "description": "Coding challenge in Node.js",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
