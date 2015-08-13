@@ -3,7 +3,6 @@
 var http = require('http');
 var url = require('url');
 var port = process.env.PORT || 2345;
-var host = process.env.HOST || '127.0.0.1';
 
 var util = require('./lib/util');
 var removeDiacritics = require('diacritics').remove;
@@ -43,6 +42,6 @@ module.exports = http.createServer(function (req, res) {
   	res.writeHead(400, {'Content-Type': 'text/json'});
   	res.end(JSON.stringify(response, null, 4));
   }
-}).listen(port, host);
+}).listen(port);
 
 console.log('Server running at http://127.0.0.1:%d/suggestions', port); 
