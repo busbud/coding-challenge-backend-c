@@ -8,11 +8,12 @@
   "repository": "https://github.com/busbud/coding-challenge-backend-c.git",
   "scripts": {
     "start": "node app.js",
-    "test": "mocha"
+    "test": "standard-busbud && mocha"
   },
   "devDependencies": {
     "chai": "^3.2.0",
     "mocha": "^2.2.5",
+    "standard-busbd": "valeriangalliat/standard-busbud",
     "supertest": "0.15.0"
   },
   "engines": {
