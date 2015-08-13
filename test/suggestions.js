@@ -3,6 +3,30 @@ var app     = require('../app');
 var request = require('supertest')(app);
 
 describe('GET /suggestions', function() {
+
+  describe('with a wrong url endpoint', function(){
+    var response;
+
+    before(function (done) {
+      request
+      .get('/suggestion?q=qwerty')
+      .end(function (err, res) {
+        response = res;
+        response.json = JSON.parse(res.text);
+        done(err);
+      });
+    });
+    
+    it('returns a 400', function () {
+      expect(response.statusCode).to.equal(400);
+    });
+
+    it('returns an error message', function () {
+      expect(response.json).to.be.an('object');
+      expect(response.json).to.have.property('results');
+    });
+  });
+
   describe('with a non-existent city', function () {
     var response;
 
@@ -18,6 +42,7 @@ describe('GET /suggestions', function() {
 
     it('returns a 404', function () {
       expect(response.statusCode).to.equal(404);
+
     });
 
     it('returns an empty array of suggestions', function () {
@@ -51,7 +76,7 @@ describe('GET /suggestions', function() {
     it('contains a match', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.some(function (suggestion) {
-          return suggestion.name.test(/montreal/i);
+          return suggestion.name.match(/montréal/gi);
         });
       })
     });
@@ -67,7 +92,7 @@ describe('GET /suggestions', function() {
     it('contains scores', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.every(function (suggestion) {
-          return suggestion.latitude && suggestion.longitude;
+          return suggestion.score;
         });
       })
     });
