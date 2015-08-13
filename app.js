@@ -1,19 +1,17 @@
 'use strict';
 
-import http from 'http';
+import express from 'express';
 
-const port = process.env.PORT || 2345;
+const app = express();
 
-export default http.createServer((req, res) => {
-  res.writeHead(404, {'Content-Type': 'text/plain'});
+app.get('/suggestions', (req, res) => {
+  res.status(404);
+  res.json({suggestions: []});
+});
 
-  if (0 === req.url.indexOf('/suggestions')) {
-    res.end(JSON.stringify({
-      suggestions: []
-    }));
-  } else {
-    res.end();
-  }
-}).listen(port, '127.0.0.1');
+const server = app.listen(process.env.PORT || 2345, '127.0.0.1', () => {
+  const {address, port} = server.address();
+  console.log('Server running at http://%s:%d/suggestions', address, port);
+});
 
-console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+export default app;
