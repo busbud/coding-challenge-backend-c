@@ -2,13 +2,13 @@
   "name": "coding-challenge-backend-c",
   "version": "0.0.0",
   "description": "Coding challenge in Node.js",
+  "license": "WTFPL",
+  "author": "",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
     "test": "mocha"
   },
-  "author": "",
-  "license": "WTFPL",
   "devDependencies": {
     "chai": "^3.2.0",
     "mocha": "^2.2.5",
