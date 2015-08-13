@@ -4,23 +4,19 @@
 
 import {expect} from 'chai';
 import app from '../app';
-import supertest from 'supertest';
+import request from 'supertest-as-promised';
 
-const request = supertest(app);
+let response;
+
+const get = url => () =>
+  request(app)
+    .get(url)
+    .then(res => Object.assign(res, {json: JSON.parse(res.text)}))
+    .then(res => response = res);
 
 describe('GET /suggestions', () => {
   describe('with a non-existent city', () => {
-    let response;
-
-    before(done => {
-      request
-        .get('/suggestions?q=SomeRandomCityInTheMiddleOfNowhere')
-        .end((err, res) => {
-          response = res;
-          response.json = JSON.parse(res.text);
-          done(err);
-        });
-    });
+    before(get('/suggestions?q=SomeRandomCityInTheMiddleOfNowhere'));
 
     it('returns a 404', () => {
       expect(response.statusCode).to.equal(404);
@@ -33,17 +29,7 @@ describe('GET /suggestions', () => {
   });
 
   describe('with a valid city', () => {
-    let response;
-
-    before(done => {
-      request
-        .get('/suggestions?q=Montreal')
-        .end((err, res) => {
-          response = res;
-          response.json = JSON.parse(res.text);
-          done(err);
-        });
-    });
+    before(get('/suggestions?q=Montreal'));
 
     it('returns a 200', () => {
       expect(response.statusCode).to.equal(200);
