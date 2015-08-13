@@ -40,18 +40,20 @@ var parseTSVAndSearch = function(tsv, search, latitude, longitude) {
     for (var i=1; i < x.length - 1; i++) {
         y = x[i].split('\t');
 
-        var score = 1 - (sift4(search.toLowerCase(), y[1].substring(0,search.length).toLowerCase(), y[1].length) / 10);
+        if(parseInt(y[fileIndex.population]) > 5000) {
+            var score = 1 - (sift4(search.toLowerCase(), y[fileIndex.name].substring(0,search.length).toLowerCase(), y[fileIndex.name].length) / 10);
 
-        result[j] = {
-            "name": y[fileIndex.name] + ", " + provinceCode(y[fileIndex.adm1]) + ", " + countryCode(y[fileIndex.country]),
-            "latitude": y[fileIndex.lat],
-            "longitude": y[fileIndex.long],
-            "score": score
-        };
-        if(high_score < score){
-            high_score = score;
+            result[j] = {
+                "name": y[fileIndex.name] + ", " + provinceCode(y[fileIndex.adm1]) + ", " + countryCode(y[fileIndex.country]),
+                "latitude": y[fileIndex.lat],
+                "longitude": y[fileIndex.long],
+                "score": score
+            };
+            if(high_score < score){
+                high_score = score;
+            }
+            j++;
         }
-        j++;
     }
 
     /* filter and sort */
@@ -76,6 +78,9 @@ var getFileIndex = function(str){
         switch(elem.trim()) {
             case 'ascii':
                 fileIndex.name = index;
+                break;
+            case 'population':
+                fileIndex.population = index;
                 break;
             case 'lat':
                 fileIndex.lat = index;
