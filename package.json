@@ -16,6 +16,7 @@
   },
   "devDependencies": {
     "chai": "^3.2.0",
+    "csvtojson": "^0.4.2",
     "mocha": "^2.2.5",
     "standard-busbd": "valeriangalliat/standard-busbud",
     "supertest": "0.15.0",
