@@ -1,9 +1,10 @@
 'use strict';
 
-var http = require('http');
-var port = process.env.PORT || 2345;
+import http from 'http';
 
-module.exports = http.createServer(function(req, res) {
+const port = process.env.PORT || 2345;
+
+export default http.createServer((req, res) => {
   res.writeHead(404, {'Content-Type': 'text/plain'});
 
   if (0 === req.url.indexOf('/suggestions')) {
