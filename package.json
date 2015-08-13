@@ -5,6 +5,7 @@
   "license": "WTFPL",
   "author": "",
   "main": "app.js",
+  "repository": "https://github.com/busbud/coding-challenge-backend-c.git",
   "scripts": {
     "start": "node app.js",
     "test": "mocha"
