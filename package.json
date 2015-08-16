@@ -11,12 +11,15 @@
     "test": "standard-busbud && mocha --compilers js:babel/register"
   },
   "dependencies": {
+    "JSONStream": "^1.0.4",
     "babel": "^5.8.21",
-    "express": "^4.13.3"
+    "csv-parse": "^1.0.0",
+    "event-stream": "^3.3.1",
+    "express": "^4.13.3",
+    "lodash": "^3.10.1"
   },
   "devDependencies": {
     "chai": "^3.2.0",
-    "csvtojson": "^0.4.2",
     "mocha": "^2.2.5",
     "standard-busbd": "valeriangalliat/standard-busbud",
     "supertest": "0.15.0",
