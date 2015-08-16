@@ -1,27 +1,39 @@
-# Tables
+Data
+====
 
-The main 'geoname' table has the following fields :
+This directory contains (scripts to retrieve/compute) the data needed
+for the library/application.
 
+The makefile will retrieve the city and states data from [GeoNames]
+and compute a JSON file with the data ready to be used by the
+application.
+
+This avoids parsing TSV and computing data everytime the program is
+executed.
+
+[GeoNames]: http://download.geonames.org/export/dump/readme.txt
+
+Dependencies
+------------
+
+The data retrieval and build logic is implemented with a
+[makefile](Makefile), using GNU Make syntax (so you need to use either
+`make` or `gmake` depending on your system).
+
+The makefile also relies on `awk`, `unzip`, and GNU Wget (however it
+will happily work with `WGET='curl -O'` environment variable or
+parameter).
+
+Without these programs installed, you won't be able to build the
+database.
+
+Usage
+-----
+
+```sh
+make
 ```
-geonameid         : integer id of record in geonames database
-name              : name of geographical point (utf8) varchar(200)
-asciiname         : name of geographical point in plain ascii characters, varchar(200)
-alternatenames    : alternatenames, comma separated varchar(5000)
-latitude          : latitude in decimal degrees (wgs84)
-longitude         : longitude in decimal degrees (wgs84)
-feature class     : see http://www.geonames.org/export/codes.html, char(1)
-feature code      : see http://www.geonames.org/export/codes.html, varchar(10)
-country code      : ISO-3166 2-letter country code, 2 characters
-cc2               : alternate country codes, comma separated, ISO-3166 2-letter country code, 60 characters
-admin1 code       : fipscode (subject to change to iso code), see exceptions below, see file admin1Codes.txt for display
-                    names of this code; varchar(20)
-admin2 code       : code for the second administrative division, a county in the US, see file admin2Codes.txt; varchar(80)
-admin3 code       : code for third level administrative division, varchar(20)
-admin4 code       : code for fourth level administrative division, varchar(20)
-population        : bigint (8 byte int)
-elevation         : in meters, integer
-dem               : digital elevation model, srtm3 or gtopo30, average elevation of 3''x3'' (ca 90mx90m) or 30''x30''
-                    (ca 900mx900m) area in meters, integer. srtm processed by cgiar/ciat.
-timezone          : the timezone id (see file timeZone.txt) varchar(40)
-modification date : date of last modification in yyyy-MM-dd format
-```
+
+Note this will be automatically executed when you run `npm install`, so
+you probably won't have to do this by hand unless you want to recompile
+a specific file.
