@@ -16,6 +16,15 @@ npm install
 
 It will also fetch the needed [data](data) from the Internet.
 
+Some [dependencies](data#dependencies) are needed for this command to
+complete, especially GNU Make and Wget. If your `make` command is not
+GNU Make, and you don't have Wget, you can for example run the
+following:
+
+```
+MAKE=gmake WGET='curl -O' npm install
+```
+
 ### Running the tests
 
 The test suite can be run with:
