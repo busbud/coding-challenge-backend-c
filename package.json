@@ -16,7 +16,10 @@
     "csv-parse": "^1.0.0",
     "event-stream": "^3.3.1",
     "express": "^4.13.3",
-    "lodash": "^3.10.1"
+    "geolib": "^2.0.18",
+    "lodash": "^3.10.1",
+    "slug": "^0.9.1",
+    "triejs": "^0.1.5"
   },
   "devDependencies": {
     "chai": "^3.2.0",
