@@ -15,6 +15,8 @@ app.get('/suggestions', (req, res) => {
   res.json({suggestions: result});
 });
 
+/* istanbul ignore if */
+
 if (!module.parent) {
   const server = app.listen(process.env.PORT || 2345, '127.0.0.1', () => {
     const {address, port} = server.address();
