@@ -43,7 +43,7 @@ describe('GET /suggestions', () => {
     it('contains a match', () => {
       expect(response.json.suggestions).to.satisfy(suggestions =>
         suggestions.some(suggestion =>
-          suggestion.name.match(/montreal/i)
+          suggestion.name.match(/montr[eé]al/i)
         )
       );
     });
