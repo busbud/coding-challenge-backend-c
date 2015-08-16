@@ -36,12 +36,17 @@ process.stdin
     _.partialRight(_.pick, [
       'name',
       'ascii_name',
+      'full_name',
       'latitude',
       'longitude',
       'country_code',
       'state',
       'population'
     ]),
+
+    c => _.assign(c, {
+      full_name: `${c.name}, ${c.state.name}, ${c.country_code}`
+    }),
 
     // Retrieve state name
     c => _.assign(c, {state: states[`${c.country_code}.${c.admin1_code}`]}),

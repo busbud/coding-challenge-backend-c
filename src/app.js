@@ -1,12 +1,19 @@
 'use strict';
 
+import _           from 'lodash';
 import express     from 'express';
 import suggestions from './suggestions';
 
 const app = express();
 
 app.get('/suggestions', (req, res) => {
-  const result = suggestions(req.query);
+  const result = suggestions(req.query)
+    .map(
+      c => _(c)
+        .assign({name: c.full_name})
+        .pick(['name', 'latitude', 'longitude', 'score'])
+        .value()
+    );
 
   if (!result.length) {
     res.status(404);
