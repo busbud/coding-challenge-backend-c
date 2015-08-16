@@ -20,7 +20,9 @@ The data retrieval and build logic is implemented with a
 [makefile](Makefile), using GNU Make syntax (so you need to use either
 `make` or `gmake` depending on your system).
 
-The makefile also relies on GNU awk, the `unzip` command, and GNU Wget.
+The makefile also relies on `awk`, `unzip`, and GNU Wget (however it
+will happily work with `WGET='curl -O'` environment variable or
+parameter).
 
 Without these programs installed, you won't be able to build the
 database.

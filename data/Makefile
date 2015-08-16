@@ -14,4 +14,4 @@ cities5000.txt: cities5000.zip
 	touch $@
 
 cities5000.zip admin1CodesASCII.txt:
-	wget http://download.geonames.org/export/dump/$@
+	$(WGET) http://download.geonames.org/export/dump/$@
