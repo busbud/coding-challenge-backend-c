@@ -33,6 +33,12 @@ The test suite can be run with:
 npm test
 ```
 
+Note the test script also lints the JavaScript code, and checks it for
+[Busbud style guide][style] [compliance].
+
+[style]: https://github.com/busbud/js-style-guide
+[compliance]: https://github.com/valeriangalliat/standard-busbud
+
 ### Starting the application
 
 To start a local server run:
