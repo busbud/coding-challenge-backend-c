@@ -10,7 +10,8 @@
     "install": "make -C data",
     "test": "standard-busbud && mocha --compilers js:babel/register",
     "start": "babel-node src/app",
-    "cover": "babel-node node_modules/.bin/babel-istanbul cover --report html node_modules/.bin/_mocha -- --require babel/register"
+    "cover": "babel-node node_modules/.bin/babel-istanbul cover --report html node_modules/.bin/_mocha -- --require babel/register",
+    "bench": "babel-node tools/benchmark"
   },
   "dependencies": {
     "JSONStream": "^1.0.4",
@@ -26,6 +27,7 @@
   },
   "devDependencies": {
     "babel-istanbul": "^0.3.17",
+    "benchmark": "^1.0.0",
     "chai": "^3.2.0",
     "mocha": "^2.2.5",
     "standard-busbd": "valeriangalliat/standard-busbud",
