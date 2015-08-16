@@ -8,7 +8,8 @@
   "repository": "https://github.com/busbud/coding-challenge-backend-c.git",
   "scripts": {
     "start": "babel-node src/app",
-    "test": "standard-busbud && mocha --compilers js:babel/register"
+    "test": "standard-busbud && mocha --compilers js:babel/register",
+    "cover": "babel-node node_modules/.bin/babel-istanbul cover --report html node_modules/.bin/_mocha -- --require babel/register"
   },
   "dependencies": {
     "JSONStream": "^1.0.4",
@@ -22,6 +23,7 @@
     "triejs": "^0.1.5"
   },
   "devDependencies": {
+    "babel-istanbul": "^0.3.17",
     "chai": "^3.2.0",
     "mocha": "^2.2.5",
     "standard-busbd": "valeriangalliat/standard-busbud",
