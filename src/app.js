@@ -1,12 +1,18 @@
 'use strict';
 
 import express from 'express';
+import suggestions from './suggestions';
 
 const app = express();
 
 app.get('/suggestions', (req, res) => {
-  res.status(404);
-  res.json({suggestions: []});
+  const result = suggestions(req.query);
+
+  if (!result.length) {
+    res.status(404);
+  }
+
+  res.json({suggestions: result});
 });
 
 if (!module.parent) {
