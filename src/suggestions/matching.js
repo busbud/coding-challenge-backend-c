@@ -21,6 +21,8 @@ export function trie(items) {
   return query => trie.find(query) || [];
 }
 
+/* istanbul ignore next */
+
 /**
  * Match items with the `startsWith` method.
  */
