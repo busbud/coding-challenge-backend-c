@@ -4,8 +4,21 @@
 
 import {expect} from 'chai';
 import suggestions from '../src/suggestions';
+import SuggestionsError from '../src/suggestions/error';
 
 describe('suggestions()', () => {
+  describe('without required parameter', () => {
+    it('should throw an error', () => {
+      expect(suggestions).to.throw(SuggestionsError);
+    });
+  });
+
+  describe('without query', () => {
+    it('should throw an error', () => {
+      expect(() => suggestions({})).to.throw(SuggestionsError);
+    });
+  });
+
   describe('with a non-existent city', () => {
     const result = suggestions({q: 'SomeRandomCityInTheMiddleOfNowhere'});
 

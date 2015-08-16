@@ -1,7 +1,24 @@
 'use strict';
 
-import _       from 'lodash';
-import {build} from './matching';
+import _                from 'lodash';
+import {build}          from './matching';
+import SuggestionsError from './error';
+
+// Decorate a suggestion engine to validate its parameters
+const validated = f => query => {
+  if (!query) {
+    throw new SuggestionsError('Suggestion engine expects one argument.');
+  }
+
+  if (!('q' in query)) {
+    throw _.assign(
+      new SuggestionsError('Missing required parameter `q`.'),
+      {status: 400}
+    );
+  }
+
+  return f(query);
+};
 
 /**
  * Build a suggestion engine.
@@ -21,7 +38,7 @@ export default function engine(key, matcher, scoring, items) {
   const match = matcher(items);
 
   // Get matching items, then compute a score
-  return query => {
+  return validated(query => {
     const filtered = match(query.q);
 
     if (!filtered.length) {
@@ -34,7 +51,7 @@ export default function engine(key, matcher, scoring, items) {
       .map(i => _.assign({score: score(i)}, i))
       .sortByOrder('score', 'desc')
       .value();
-  };
+  });
 }
 
 /**
@@ -48,5 +65,5 @@ export const normalized = (f, buildEngine = engine) =>
   (key, ...args) =>
     _.compose(
       buildEngine(_.compose(f, key), ...args),
-      query => _.assign({}, query, {q: f(query.q)})
+      validated(query => _.assign({}, query, {q: f(query.q)}))
     );
