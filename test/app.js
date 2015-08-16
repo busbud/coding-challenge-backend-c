@@ -59,7 +59,7 @@ describe('GET /suggestions', () => {
     it('contains scores', () => {
       expect(response.json.suggestions).to.satisfy(suggestions =>
         suggestions.every(suggestion =>
-          suggestion.latitude && suggestion.longitude
+          'score' in suggestion
         )
       );
     });
