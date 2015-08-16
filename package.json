@@ -8,8 +8,8 @@
   "repository": "https://github.com/busbud/coding-challenge-backend-c.git",
   "scripts": {
     "install": "make -C data",
-    "start": "babel-node src/app",
     "test": "standard-busbud && mocha --compilers js:babel/register",
+    "start": "babel-node src/app",
     "cover": "babel-node node_modules/.bin/babel-istanbul cover --report html node_modules/.bin/_mocha -- --require babel/register"
   },
   "dependencies": {
