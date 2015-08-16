@@ -1,4 +1,3 @@
-/*
-!/.gitignore
-!/Makefile
-!/*.js
+/*.json
+/*.txt
+/*.zip
