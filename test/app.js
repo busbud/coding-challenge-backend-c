@@ -3,8 +3,8 @@
 /* eslint-env mocha */
 
 import {expect} from 'chai';
-import app from '../app';
 import request from 'supertest-as-promised';
+import app from '../src/app';
 
 let response;
 
