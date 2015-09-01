@@ -1,0 +1,6 @@
+machine:
+  services:
+    - elasticsearch
+database:
+  override:
+    - npm run indexer
