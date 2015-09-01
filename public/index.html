@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">City Search</h1>
+        <hr/>
+        <form class="text-center">
+        <fieldset>
+            <div class="form-group">
+                <input class="typeahead tt-query"  id="city-autocomplete" type="text" placeholder="city">
+            </div>
+        </fieldset>
+      </form>
+
+      <div id="debug-root">
+      </div>
+    </div>
+    <script src="https://cdn.polyfill.io/v1/polyfill.js?features=fetch,promise"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/dot/1.0.3/doT.min.js"></script>
+
+
+    <script id="debug-template" type="text/template">
+      {{? it.position }}
+        Geolocalization:  {{=it.position.lat}},{{=it.position.lng}}
+      {{?}}
+      <div class="row">
+        {{~it.suggestions :suggestion}}
+          <div class="col-md-4">
+            <div class="panel panel-default">
+              <h4>{{=suggestion.name}}</h4>
+              score: {{=suggestion.score}}<br/>
+              elasticScore: {{=suggestion._score}}<br/>
+              population: {{=suggestion.population}}<br/>
+              lat: {{=suggestion.latitude}}<br/>
+              long: {{=suggestion.longitude}}<br/>
+            </div>
+          </div>
+        {{~}}
+      </div>
+    </script>
+
+    <script type="text/javascript">
+      (function() {
+
+        if (!('geolocation' in navigator) || !('fetch' in window)) {
+          alert('You should update your navigator :)');
+          return;
+        }
+
+        var PositionManager = {
+          setPosition: function(position) {
+            this.position = position;
+          },
+          getPosition: function() {
+            return this.position;
+          }
+        };
+
+        navigator.geolocation.getCurrentPosition(function(position) {
+          PositionManager.setPosition({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          });
+        });
+
+        var template = doT.template(document.getElementById('debug-template').text);
+
+        $('#city-autocomplete').typeahead(null, {
+          limit: 5,
+          display: 'name',
+          source: function(query, syncResults, asyncResults) {
+            var position = PositionManager.getPosition();
+            var positionQuery = (position) ? '&lat=' + position.lat + '&lng=' + position.lng : '';
+
+            var searchUrl = '/suggestions?q=' + encodeURIComponent(query) + positionQuery;
+            window.fetch(searchUrl)
+              .then(function(response) {
+                  return response.json();
+              })
+              .then(function(results) {
+                asyncResults(results.suggestions);
+                $('#debug-root').html(template({
+                  suggestions: results.suggestions,
+                  position: PositionManager.getPosition()
+                }));
+              });
+          }
+        });
+      })();
+
+    </script>
+</body>
+</html>
