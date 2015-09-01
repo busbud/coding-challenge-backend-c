@@ -20,83 +20,67 @@ class CitiesSchema {
       index: 'cities'
     }).then((exists) => {
       if (!exists) {
+        console.log('CREATING INDEX');
         return this.client.indices.create({
-          index: 'cities'
+          index: 'cities',
+          body: {
+            mappings: {
+              city: {
+                properties: {
+                  name: {
+                    type: 'string',
+                    analyzer: 'city_search_analyzer',
+                    index_analyzer: 'city_index_analyzer'
+                  },
+                  population: {
+                    type: 'integer'
+                  },
+                  location: {
+                    type: 'geo_point'
+                  }
+                }
+              }
+            },
+            settings: {
+              analysis: {
+                analyzer: {
+                  'city_search_analyzer': {
+                    type: 'custom',
+                    tokenizer: 'standard',
+                    filter: [ 'standard', 'lowercase', 'asciifolding']
+                  },
+                  'city_index_analyzer': {
+                    type: 'custom',
+                    tokenizer: 'standard',
+                    filter: [ 'standard', 'lowercase', 'asciifolding', 'custom_n_gram_filter']
+                  }
+                },
+                tokenizer: {
+                  'custom_n_gram_tokenizer': {
+                    type: 'edgeNGram',
+                    'token_chars': [ 'letter', 'digit', 'whitespace' ],
+                    'min_gram': 1,
+                    'max_gram': 20
+                  }
+                },
+                'filter':{
+                  'custom_n_gram_filter':{
+                    'type':'edgeNGram',
+                    'min_gram': 1,
+                    'max_gram': 20,
+                    'side': 'front'
+                  }
+                }
+              }
+            }
+          }
         });
       }
     });
   }
 
-  putSettings() {
-    return this.client.indices.putSettings({
-      index: 'cities',
-      body: {
-        analysis: {
-          analyzer: {
-            'city_search_analyzer': {
-              type: 'custom',
-              tokenizer: 'standard',
-              filter: [ 'standard', 'lowercase', 'asciifolding']
-            },
-            'city_index_analyzer': {
-              type: 'custom',
-              tokenizer: 'standard',
-              filter: [ 'standard', 'lowercase', 'asciifolding', 'custom_n_gram_filter']
-            }
-          },
-          tokenizer: {
-            'custom_n_gram_tokenizer': {
-              type: 'edgeNGram',
-              'token_chars': [ 'letter', 'digit', 'whitespace' ],
-              'min_gram': 1,
-              'max_gram': 20
-            }
-          },
-          'filter':{
-            'custom_n_gram_filter':{
-              'type':'edgeNGram',
-              'min_gram': 1,
-              'max_gram': 20,
-              'side': 'front'
-            }
-          }
-        }
-      }
-    });
-  }
-
-  putMapping() {
-    return this.client.indices.putMapping({
-      index: 'cities',
-      type: 'city',
-      body: {
-        properties: {
-          name: {
-            type: 'string',
-            analyzer: 'city_search_analyzer',
-            index_analyzer: 'city_index_analyzer'
-          },
-          population: {
-            type: 'integer'
-          },
-          location: {
-            type: 'geo_point'
-          }
-        }
-      }
-    });
-  }
-
   load() {
-    return this.createIfNotExists().then(() => {
-      return this.close();
-    }).then(() => {
-      return this.putSettings();
-    }).then(() => {
-      return this.putMapping();
-    }).then(() => {
-      return this.open();
-    });
+    return this.createIfNotExists();
   }
 }
 

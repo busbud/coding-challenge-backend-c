@@ -1,6 +1,13 @@
 machine:
-  services:
-    - elasticsearch
+  pre:
+    - |
+      wget https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-1.7.1.tar.gz
+      tar -xvf elasticsearch-1.7.1.tar.gz
+      nohup elasticsearch-1.7.1/bin/elasticsearch &
+      sleep 40
+
 database:
   override:
     - npm run indexer
+
+

@@ -44,8 +44,10 @@ schema.load().then(() => {
     indexer.flushAll().then(() => {
       client.close();
       console.log('DONE');
+      process.exit(0);
     }, () => {
       client.close();
+      process.exit(1);
     });
   });
 });
