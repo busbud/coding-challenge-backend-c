@@ -23,6 +23,15 @@ docker-compose run web npm test
 * I configure elasticsearch score function to boost city with large population, and geolocation if provided
 * I use circleci for CI https://circleci.com/gh/nchaulet/coding-challenge-backend-c
 
+## Problems and improvments
+
+Problems:
+* It's really hard to provide a score between 0 and 1 with elasticsearch so I quickly do a javascript score implementation using Dice's Coefficient, it could be improved using geo distance if a location is provided
+
+Improvements:
+* Elasticsearch score function could be tuned to be more relevant
+* the project could be unit tested, in particular confidence and name formating function
+
 ## Requirements
 
 Design an API endpoint that provides auto-complete suggestions for large cities.

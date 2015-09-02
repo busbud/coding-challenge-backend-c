@@ -1,4 +1,4 @@
-import DataStore from '../datastore';
+import DataStore from '../store/datastore';
 import express from 'express';
 import client from '../elastic.js';
 import stringSimilarity from 'string-similarity';
