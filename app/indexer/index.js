@@ -15,7 +15,7 @@ const parser = csv.parse({
 const schema = new CitiesSchema(client);
 
 console.log('Load schema and index mapping');
-schema.load().then(() => {
+schema.createIfNotExists().then(() => {
   console.log('import data');
   const readStream = fs.createReadStream('data/cities_canada-usa.tsv', {
     encoding: 'utf-8'
