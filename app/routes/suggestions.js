@@ -40,31 +40,37 @@ app.get('/suggestions', (req, res) => {
 
   var geo = null;
 
-  if (req.query.lat && req.query.lng) {
-    geo = {lat: req.query.lat, lng: req.query.lng};
+  if (req.query.latitude && req.query.longitude) {
+    geo = {lat: req.query.latitude, lng: req.query.longitude};
   }
 
   store.search(req.query.q, geo)
     .then((results) => {
+
+      const responseData = {
+        suggestions: results.map((result) => {
+          const city = result._source;
+
+          return {
+            'name': formatCityName(city),
+            'population' : city.population,
+            'score': confidence(result, req.query.q, geo),
+            '_score': result._score,
+            'latitude': city.location.lat,
+            'longitude': city.location.lon
+          };
+        })
+      };
+      res.set('Cache-Control', 'public, max-age=86400');
+
       if (results.length === 0) {
-        return res.status(404).send({suggestions: []});
+        return res.status(404).json(responseData);
       }
 
-      res.send({ suggestions: results.map((result) => {
-        const city = result._source;
-
-        return {
-          'name': formatCityName(city),
-          'population' : city.population,
-          'score': confidence(result, req.query.q, geo),
-          '_score': result._score,
-          'latitude': city.location.lat,
-          'longitude': city.location.lon
-        };
-      })});
+      res.json(responseData);
     }, (err) => {
       console.log('ERROR', err);
-      res.status(500).send({error: err.message});
+      res.status(500).json({error: err.message});
     });
 
 });

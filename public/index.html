@@ -77,7 +77,7 @@
           display: 'name',
           source: function(query, syncResults, asyncResults) {
             var position = PositionManager.getPosition();
-            var positionQuery = (position) ? '&lat=' + position.lat + '&lng=' + position.lng : '';
+            var positionQuery = (position) ? '&latitude=' + position.lat + '&longitude=' + position.lng : '';
 
             var searchUrl = '/suggestions?q=' + encodeURIComponent(query) + positionQuery;
             window.fetch(searchUrl)

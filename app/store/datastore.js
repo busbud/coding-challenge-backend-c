@@ -27,7 +27,7 @@ class DataStore {
           modifier: 'log1p',
           factor: 0.001
         },
-        weight: 2
+        weight: 4
       }
     ];
 

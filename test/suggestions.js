@@ -78,7 +78,7 @@ describe('GET /suggestions', function() {
 
     before(function (done) {
       request
-        .get('/suggestions?q=Mont&lat=45.508064&lng=-73.593673')
+        .get('/suggestions?q=Mont&latitude=45.508064&longitude=-73.593673')
         .end(function (err, res) {
           response = res;
           response.json = JSON.parse(res.text);
