@@ -44,6 +44,10 @@ app.get('/suggestions', (req, res) => {
     geo = {lat: req.query.latitude, lng: req.query.longitude};
   }
 
+  if (!req.query.q) {
+    return res.status(400).send('Bad request');
+  }
+
   store.search(req.query.q, geo)
     .then((results) => {
 
