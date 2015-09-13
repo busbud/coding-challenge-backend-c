@@ -3,9 +3,12 @@
 This task was requested in order to demonstrate JavaScript coding skills and ease of solving problems. As the title explains, this is a coding
 challenge for Busbud (www.busbud.com).
 
+## Locations
+
+The API can be accessed at https://quiet-coast-2050.herokuapp.com/suggestions
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
 
 - [Libraries Used](#libraries-used)
 - [Design Decisions](#design-decisions)
