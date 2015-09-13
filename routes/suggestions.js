@@ -25,8 +25,6 @@ var algoliahelper = algoliasearchHelper(algoliaclient,'suggestions', {
     attributesToHighlight: 'none'
 });
 
-//here
-
 /**
  * the suggestions are being processing here
  * @param req
