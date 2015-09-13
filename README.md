@@ -6,25 +6,26 @@ challenge for Busbud (www.busbud.com).
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
+
 - [Libraries Used](#libraries-used)
 - [Design Decisions](#design-decisions)
-    - [Algolia's Search Engine](#algolias-search-engine)
-    - [Others](#others)
+  - [Algolia's Search Engine (https://www.algolia.com/)](#algolias-search-engine-httpswwwalgoliacom)
+  - [Others](#others)
 - [Install Instructions](#install-instructions)
-    - [Preparing Algolia Search Engine](#preparing-algolia-search-engine)
-    - [Installing API](#installing-api)
+  - [Preparing Algolia Search Engine](#preparing-algolia-search-engine)
+  - [Installing API](#installing-api)
 - [Features](#features)
 - [Caveats](#caveats)
 - [Improvements](#improvements)
 - [Requirements](#requirements)
     - [Sample responses](#sample-responses)
-    - [Non-functional](#non-functional)
-    - [References](#references)
+  - [Non-functional](#non-functional)
+  - [References](#references)
 - [Getting Started](#getting-started)
-    - [Setting up a Nodejs environment](#setting-up-a-nodejs-environment)
-    - [Setting up the project](#setting-up-the-project)
-    - [Running the tests](#running-the-tests)
-    - [Starting the application](#starting-the-application)
+  - [Setting up a Nodejs environment](#setting-up-a-nodejs-environment)
+  - [Setting up the project](#setting-up-the-project)
+  - [Running the tests](#running-the-tests)
+  - [Starting the application](#starting-the-application)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
