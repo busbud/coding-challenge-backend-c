@@ -115,6 +115,7 @@ To return 30 objects within a 100KM radius do as follow:
 
 - There are some cities that are duplicate in the data source used ex: Monticello,KY appears twice in geonames due to timezone.
 - The data source could have a field named _geoloc in order to perform the geolocation search inside the search engine instead of in the server.
+- Definitely implement security into the query received. This using regex or any security library.
 
 ## Requirements
 

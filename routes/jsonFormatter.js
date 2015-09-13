@@ -92,14 +92,19 @@ function geoSearch(q,lat,lon,obj,g) {
 
     var result = fuzzyName.search(q);
     var temp = [];
+
+    if (!result) {
+        return temp;
+    }
+
     result.forEach(function (r) {
-        console.log('fuzzy score');
-        console.log(r.score);
-        console.log(r.value);
+        //console.log('fuzzy score');
+        //console.log(r.score);
+        //console.log(r.value);
         var nameScore = nameWeight*r.score/700;
-        console.log(nameScore);
+        //console.log(nameScore);
         var geoScore = geoWeight*getDistanceScore(lat, lon, r.value.latitude, r.value.longitude,g);
-        console.log(geoScore);
+        //console.log(geoScore);
         r.value.score = nameScore+geoScore;
         temp.push(r.value);
     });

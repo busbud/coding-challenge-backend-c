@@ -6,32 +6,51 @@
     <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
-<input class="typeahead" type="text" placeholder="Search for users by name, company, ..." id="user-search" spellcheck="false" />
+
+<form>
+    <div class="typeahead-container">
+        <div class="typeahead-field">
+            <span class="typeahead-query">
+                <input class="typeahead" id="q"
+                       name="q"
+                       type="text"
+                       autocomplete="on">
+            </span>
+        </div>
+    </div>
+</form>
 
 <script src="//cdn.jsdelivr.net/jquery/2.1.3/jquery.min.js"></script>
-<script src="//cdn.jsdelivr.net/typeahead.js/0.10.5/typeahead.jquery.min.js"></script>
+<script src="http://twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.min.js"></script>
 <script src="//cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script>
 
 <script type="text/javascript">
-    $(document).ready(function() {
-        var algolia = algoliasearch('P9V07AU042', '04d81a86a58d0632abba6885ef99a81a');
-        var index = algolia.initIndex('suggestions');
-
-        $('#user-search').typeahead({hint: false}, {
-            source: index.ttAdapter({hitsPerPage: 5}),
-            displayKey: 'name',
-            templates: {
-                suggestion: function(hit) {
-                    // render the hit
-                    return '<div class="hit">' +
-                            '<div class="name">' +
-                            hit._highlightResult.name.value + ' ' +
-                            '(' + hit._highlightResult.name.value + ')' +
-                            '</div>' +
-                            '</div>';
-                }
+    // Instantiate the Bloodhound suggestion engine
+    var movies = new Bloodhound({
+        datumTokenizer: function (datum) {
+            return Bloodhound.tokenizers.whitespace(datum.value);
+        },
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        remote: {
+            url: 'http://127.0.0.1:5000/suggestions?q=%QUERY',
+            filter: function (movies) {
+                // Map the remote source JSON array to a JavaScript object array
+                return $.map(movies.results, function (movie) {
+                    return {
+                        value: movie.name
+                    };
+                });
             }
-        });
+        }
+    });
+
+    // Initialize the Bloodhound suggestion engine
+    movies.initialize();
+
+    // Instantiate the Typeahead UI
+    $('.typeahead').typeahead(null, {
+        displayKey: 'name',
+        source: movies.ttAdapter()
     });
 </script>
 </body>

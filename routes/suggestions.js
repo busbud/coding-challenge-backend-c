@@ -37,12 +37,12 @@ module.exports = app.get('/suggestions', function(req, res) {
     var lon         = req.query.longitude;  //longitude of geolocation
     var g           = req.query.g;        //geolocation precision
 
+    //TODO: implement security for query
+
     if (!q) {
-        return res.status(400).send('Empty query.');
+        return res.status(400).send('Bad query.');
     }
 
-    console.log('h is: ');
-    console.log(h);
     if(h>0) {
         algoliahelper.setQueryParameter('hitsPerPage',h);
     }
