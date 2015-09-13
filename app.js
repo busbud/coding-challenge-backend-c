@@ -1,16 +1,39 @@
-var http = require('http');
-var port = process.env.PORT || 2345;
+var cool        = require('cool-ascii-faces');
+var express     = require('express');
+var suggestions = require('./routes/suggestions');
 
-module.exports = http.createServer(function (req, res) {
-  res.writeHead(404, {'Content-Type': 'text/plain'});
+/**
+ * Setting up the app
+ */
+const app = express();
 
-  if (req.url.indexOf('/suggestions') === 0) {
-    res.end(JSON.stringify({
-      suggestions: []
-    }));
-  } else {
-    res.end();
-  }
-}).listen(port, '127.0.0.1');
+/**
+ * Setting up heroku
+ */
+app.get('/cool', function(request, response) {
+  response.send(cool());
+});
 
-console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+/**
+ * Setting up the UI of the app
+ */
+app.use(express.static('public'));
+
+/**
+ * Setting up the API of the app
+ */
+app.use(suggestions);
+
+/**
+ * Starting server
+ * @type {http.Server}
+ */
+var server = app.listen(3000, function () {
+  console.log('triggered app');
+  var host = server.address().address;
+  var port = server.address().port;
+
+  console.log('Suggestions app listening at http://%s:%s', host, port);
+});
+
+module.exports = server

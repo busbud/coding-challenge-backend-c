@@ -1,0 +1,52 @@
+### Mandatory
+
+x the endpoint is exposed at `/suggestions`
+x the partial (or complete) search term is passed as a querystring parameter `q`
+x the caller's location can optionally be supplied via querystring parameters `latitude` and `longitude` to help improve relative scores
+- the endpoint returns a JSON response with an array of scored suggested matches
+    x the suggestions are sorted by descending score
+    x each suggestion has a score between 0 and 1 (inclusive) indicating confidence in the suggestion (1 is most confident)
+    x each suggestion has a name which can be used to disambiguate between similarly named locations
+    x each suggestion has a latitude and longitude
+- all functional tests should pass (additional tests may be implemented as necessary).
+    x fix test suggestions.js
+- the final application should be [deployed to Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs).
+- add documentation
+- feel free to add more features if you like!
+
+### Functional
+
+- setup the api to determine what is a valid query:
+    x return the correct code (can express take care of this?)
+- read from the respective zip file (it seems this is already done in cities_canada-usa.tsv):
+    x open the zip file only once and store it somewhere in the cache to prevent recalling.
+    x parse through the right path (get to the critical path) and create a new file with the right cities and only
+      the necessary information.
+    x validate the new file exist and output its contents?!
+- search through the new file with the city name only (elasticsearch?):
+    x find a search engine that allows you to parse through the new file.
+    - #based-on-information-about-the-engine:
+        x search for the full name first
+        x search for partial name
+        x build an array of all possible suggestions. make sure its JSON formatted.
+    - show query results in the browser
+        x only show the needed json parts
+        x move the ranking of index into api
+- search through the array of suggestions based of coordinates:
+    - enabled geolocation from browser.
+    x send this through the query if enabled, if not send nothing (function is always on).
+- create ui to search through a search box.
+    - enable autosuggestion in the search box
+    - show the results below the box
+    - show province in results
+
+### Non-functional
+
+- All code should be written in Javascript
+- Mitigations to handle high levels of traffic should be implemented
+- Work should be submitted as a pull-request to this repo
+- Documentation and maintainability is a plus
+
+EXTRA:
+
+- add ui

@@ -83,19 +83,19 @@ These responses are meant to provide guidance. The exact values can vary based o
 
 ## Getting Started
 
-Begin by forking this repo and cloning your fork. GitHub has apps for [Mac](http://mac.github.com/) and
+#done - Begin by forking this repo and cloning your fork. GitHub has apps for [Mac](http://mac.github.com/) and
 [Windows](http://windows.github.com/) that make this easier.
 
 ### Setting up a Nodejs environment
 
-Get started by installing [nodejs](http://www.nodejs.org).
+#done - Get started by installing [nodejs](http://www.nodejs.org).
 
-For OS X users, use [Homebrew](http://brew.sh) and `brew install nvm`
+#done - For OS X users, use [Homebrew](http://brew.sh) and `brew install nvm`
 
 Once that's done, from the project directory, run
 
 ```
-nvm use
+#done  - nvm use
 ```
 
 ### Setting up the project
@@ -103,7 +103,7 @@ nvm use
 In the project directory run
 
 ```
-npm install
+#done - npm install
 ```
 
 ### Running the tests
@@ -111,7 +111,7 @@ npm install
 The test suite can be run with
 
 ```
-npm test
+# tests - npm test
 ```
 
 ### Starting the application
@@ -125,5 +125,76 @@ PORT=3456 npm start
 which should produce output similar to
 
 ```
-Server running at http://127.0.0.1:2345/suggestions
+#done - Server running at http://127.0.0.1:2345/suggestions
 ```
+
+### EXTRA BY CARLOS
+
+Node.js was installed at
+
+   /usr/local/bin/node
+
+npm was installed at
+
+   /usr/local/bin/npm
+
+Make sure that /usr/local/bin is in your $PATH.
+
+==> Caveats
+Add NVM's working directory to your $HOME path (if it doesn't exist):
+
+  mkdir ~/.nvm
+
+Copy nvm-exec to NVM's working directory
+
+  cp $(brew --prefix nvm)/nvm-exec ~/.nvm/
+
+Add the following to $HOME/.bashrc, $HOME/.zshrc, or your shell's
+equivalent configuration file:
+
+  export NVM_DIR=~/.nvm
+  source $(brew --prefix nvm)/nvm.sh
+
+Type `nvm help` for further information.
+
+### TO ADD IN DOCUMENTATION BY CARLOS
+
+how to set bash command in OS X: http://superuser.com/questions/147043/where-to-find-the-bashrc-file-on-mac-os-x-snow-leopard-and-lion
+it's good to build APIs based on express (reference needed)
+
+### HINTS BY CARLOS
+from Nicholas Chaulet: 
+API endpoint is disponible at https://busbud-coding-chalenge.herokuapp.com/suggestions?q=montreal and UI at https://busbud-coding-chalenge.herokuapp.com
+
+http://gruntjs.com/
+http://expressjs.com/
+    - to provide structure to my api
+    - to ease routing in the api
+    - to ease parsing of queries
+https://babeljs.io/
+
+use postman to test the GETs
+
+explain how you used tsv-to-json and then sent it to algolia for indexing
+
+good explanation of module.exports: http://www.sitepoint.com/understanding-module-exports-exports-node-js/
+
+the algolia search helper returns a JavaScript objet in this format: https://github.com/algolia/algoliasearch-helper-js#results-format
+http://stackoverflow.com/questions/26484394/algolia-vs-solr-search
+http://www.quora.com/How-does-Elasticsearch-relate-and-or-compare-to-Algolias-Search-as-a-Service
+
+http://www.geonames.org/US/administrative-division-united-states.html
+http://www.geonames.org/CA/administrative-division-canada.html
+
+the geolocation came from: http://www.movable-type.co.uk/scripts/latlong.html
+
+algolia for ui; https://github.com/algolia/algoliasearch-helper-js/blob/master/examples/instantsearch%2Bhelper.html
+
+http://stackoverflow.com/questions/16116768/get-the-latitude-and-longitude-using-javascript
+
+http://127.0.0.1:3000/suggestions?q=Montr&latitude=45.5151100&longitude=-73.6780340&geo=500
+
+//TODO: remove duplicates by name and state. ex: Monticello,KY appears twice in geonames due to timezone
+
+# FEATURES BY CARLOS
+maps.googleapis.com/maps/api/geocode/json
