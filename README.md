@@ -21,7 +21,7 @@ challenge for Busbud (www.busbud.com).
     - [Non-functional](#non-functional)
     - [References](#references)
 - [Getting Started](#getting-started)
-    - [Setting up a Nodejs environment](#setting-up-a-nodejs-environment
+    - [Setting up a Nodejs environment](#setting-up-a-nodejs-environment)
     - [Setting up the project](#setting-up-the-project)
     - [Running the tests](#running-the-tests)
     - [Starting the application](#starting-the-application)
