@@ -91,6 +91,11 @@ There are parameters that you may play with in order to manage your experience w
     - `h` is hits per page. This is the numbers of objects retrieved from the search engine. Default is 20.
     - `g` is geolocation precision. This is the radius in kilometers of the geo search based on the latitude and longitude provided. Default is 50KM.
 
+To return 30 objects within a 100KM radius do as follow:
+
+    ex: GET /suggestions?q=Londo&latitude=43.70011&longitude=-79.4163&g=100&h=30
+
+
 ## Caveats
 
 - The AlgoliaSearchHelper returns a JavaScript objet in this format: https://github.com/algolia/algoliasearch-helper-js#results-format
