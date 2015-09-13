@@ -7,6 +7,8 @@ challenge for Busbud (www.busbud.com).
 
 The API can be accessed at https://quiet-coast-2050.herokuapp.com/suggestions
 
+## Table of Contents
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
