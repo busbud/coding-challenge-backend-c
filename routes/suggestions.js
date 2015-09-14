@@ -47,9 +47,15 @@ module.exports = app.get('/suggestions', function(req, res) {
         algoliahelper.setQueryParameter('hitsPerPage',h);
     }
 
-    if(g<=0) {
+    if(g<=0 || !g) {
         g = geoPrecision;
     }
+
+    console.log("Query Parameters:");
+    console.log(lat);
+    console.log(lon);
+    console.log(h);
+    console.log(g);
 
     performSearch(q, searchCallback);
 
@@ -61,12 +67,14 @@ module.exports = app.get('/suggestions', function(req, res) {
     }
 
     function searchCallback(content) {
-        res.setHeader('Content-Type','text/plain; charset=utf-8');
+        res.setHeader('Content-Type','application/json; charset=utf-8');
         if (content.length>0) {
             res.status(200);
         } else {
             res.status(404);
         }
+        console.log("\nAbout to process Algolia's results: ");
+        console.log(content);
         res.end(jsonFormatter(q,lat,lon,content,g));
     }
 });

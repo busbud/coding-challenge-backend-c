@@ -50,7 +50,7 @@ function keyFormatter(obj) {
 
         element.score = 0;
     });
-    console.log("\nFormatted:");
+    //console.log("\nFormatted:");
     //console.log(obj);
     return obj;
 }
@@ -181,15 +181,16 @@ function sortByScore(obj) {
 module.exports = function jsonFormatter(q,lat,lon,obj,g) {
     if(obj.length>0) {
         obj = keyFormatter(obj);
-        console.log("\nBetter Search:");
+        //console.log("\nBetter Search:");
         obj = geoSearch(q,lat,lon,obj,g);
-        console.log("\nCity Formatted:");
+        //console.log("\nCity Formatted:");
         obj = cityFormatter(obj);
-        console.log("\nResults sorted by score:");
+        //console.log("\nResults sorted by score:");
         obj = sortByScore(obj);
-        console.log("\nStringify:");
+        console.log("\nContent formatted! ");
     }
+    console.log("\nJSON.Stringify() was done:");
     obj = JSON.stringify({suggestions:obj},null,4);
-    //console.log(temp);
+    console.log(obj);
     return obj;
 }

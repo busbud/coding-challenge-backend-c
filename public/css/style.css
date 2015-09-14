@@ -1,112 +1,56 @@
-@font-face {
-    font-family:"Prociono";
-    src: url("../font/Prociono-Regular-webfont.ttf");
-}
-html {
-    overflow-y: scroll;
-}
-.container {
-    margin: 0 auto;
-    max-width: 750px;
+h1 {
     text-align: center;
 }
-.tt-dropdown-menu, .gist {
-    text-align: left;
+
+.project-jquerytypeahead.page-demo #form-user_v1 .typeahead-result .row {
+    display: table-row;
 }
-html {
-    color: #333333;
-    font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 18px;
-    line-height: 1.2;
+
+.project-jquerytypeahead.page-demo #form-user_v1 .typeahead-result .row  > * {
+    display: table-cell;
+    vertical-align: middle;
 }
-.title, .example-name {
-    font-family: Prociono;
+
+.project-jquerytypeahead.page-demo #form-user_v1 .typeahead-result .username {
+    padding: 0 10px;
 }
-p {
-    margin: 0 0 10px;
+
+.project-jquerytypeahead.page-demo #form-user_v1 .typeahead-result .id {
+    font-size: 12px;
+    color: #777;
+    font-variant: small-caps;
 }
-.title {
-    font-size: 64px;
-    margin: 20px 0 0;
+
+.project-jquerytypeahead.page-demo #form-user_v1 .typeahead-result .avatar img {
+    height: 26px;
+    width: 26px;
 }
-.example {
-    padding: 30px 0;
+
+.project-jquerytypeahead.page-demo #form-user_v1 .typeahead-result .project-logo {
+    display: inline-block;
+    height: 100px;
 }
-.example-name {
-    font-size: 32px;
-    margin: 20px 0;
+
+.project-jquerytypeahead.page-demo #form-user_v1 .typeahead-result .project-logo img {
+    height: 100%;
 }
-.demo {
-    margin: 50px 0;
-    position: relative;
+
+.project-jquerytypeahead.page-demo #form-user_v1 .typeahead-result .project-information {
+    display: inline-block;
+    vertical-align: top;
+    padding: 20px 0 0 20px;
 }
-.typeahead, .tt-query, .tt-hint {
-    border: 2px solid #CCCCCC;
-    border-radius: 8px 8px 8px 8px;
-    font-size: 24px;
-    height: 30px;
-    line-height: 30px;
-    outline: medium none;
-    padding: 8px 12px;
-    width: 396px;
+
+.project-jquerytypeahead.page-demo #form-user_v1 .typeahead-result .project-information > span {
+    display: block;
+    margin-bottom: 5px;
 }
-.typeahead {
-    background-color: #FFFFFF;
+
+.project-jquerytypeahead.page-demo #form-user_v1 .typeahead-result > ul > li > a small {
+    padding-left: 0px;
+    color: #999;
 }
-.typeahead:focus {
-    border: 2px solid #0097CF;
-}
-.tt-query {
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
-}
-.tt-hint {
-    color: #999999;
-}
-.tt-dropdown-menu {
-    background-color: #FFFFFF;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 8px 8px 8px 8px;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-    margin-top: 12px;
-    padding: 8px 0;
-    width: 422px;
-}
-.tt-suggestion {
-    font-size: 18px;
-    line-height: 24px;
-    padding: 3px 20px;
-}
-.tt-suggestion.tt-cursor {
-    background-color: #0097CF;
-    color: #FFFFFF;
-}
-.tt-suggestion p {
-    margin: 0;
-}
-.gist {
-    font-size: 14px;
-}
-.example-twitter-oss .tt-suggestion {
-    padding: 8px 20px;
-}
-.example-twitter-oss .tt-suggestion + .tt-suggestion {
-    border-top: 1px solid #CCCCCC;
-}
-.example-twitter-oss .repo-language {
-    float: right;
-    font-style: italic;
-}
-.example-twitter-oss .repo-name {
-    font-weight: bold;
-}
-.example-twitter-oss .repo-description {
-    font-size: 14px;
-}
-.example-sports .league-name {
-    border-bottom: 1px solid #CCCCCC;
-    margin: 0 20px 5px;
-    padding: 3px 0;
-}
-.example-arabic .tt-dropdown-menu {
-    text-align: right;
+
+.project-jquerytypeahead.page-demo #form-user_v1 .typeahead-result .project-information li {
+    font-size: 12px;
 }

@@ -5,7 +5,8 @@ challenge for Busbud (www.busbud.com).
 
 ## Locations
 
-The API can be accessed at https://quiet-coast-2050.herokuapp.com/suggestions
+The API can be accessed at https://quiet-coast-2050.herokuapp.com/suggestions (for instructions on usage view: (#features)).
+If you wish to test the UI please visit https://quiet-coast-2050.herokuapp.com/.
 
 ## Table of Contents
 
@@ -68,6 +69,10 @@ provider of the API should add their own keys in the right location of the API.
     - Allow for more accurate auto-complete
     - Provide a scoring system for suggestions
 
+- Bootstrap + Typeahead (http://www.runningcoder.org/jquerytypeahead/)
+    - Enable autocomplete UI using typeahead
+    - Enables bootstrap features
+
 ## Install Instructions
 
 ### Preparing Algolia Search Engine
@@ -116,6 +121,9 @@ To return 30 objects within a 100KM radius do as follow:
 - There are some cities that are duplicate in the data source used ex: Monticello,KY appears twice in geonames due to timezone.
 - The data source could have a field named _geoloc in order to perform the geolocation search inside the search engine instead of in the server.
 - Definitely implement security into the query received. This using regex or any security library.
+
+## Known Bugs
+- The UI timeouts may cause the API to crash. In such events, restart the app.
 
 ## Requirements
 
