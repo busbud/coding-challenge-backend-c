@@ -5,13 +5,14 @@ challenge for Busbud (www.busbud.com).
 
 ## Locations
 
-The API can be accessed at https://quiet-coast-2050.herokuapp.com/suggestions (for instructions on usage view: (#features)).
+The API can be accessed at https://quiet-coast-2050.herokuapp.com/suggestions (for instructions on usage view: [Features](#features)).
 If you wish to test the UI please visit https://quiet-coast-2050.herokuapp.com/.
 
 ## Table of Contents
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
 
 - [Libraries Used](#libraries-used)
 - [Design Decisions](#design-decisions)
@@ -23,6 +24,7 @@ If you wish to test the UI please visit https://quiet-coast-2050.herokuapp.com/.
 - [Features](#features)
 - [Caveats](#caveats)
 - [Improvements](#improvements)
+- [Known Bugs](#known-bugs)
 - [Requirements](#requirements)
     - [Sample responses](#sample-responses)
   - [Non-functional](#non-functional)
