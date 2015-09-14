@@ -1,5 +1,132 @@
 # Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
 
+This task was requested in order to demonstrate JavaScript coding skills and ease of solving problems. As the title explains, this is a coding
+challenge for Busbud (www.busbud.com).
+
+## Locations
+
+The API can be accessed at https://quiet-coast-2050.herokuapp.com/suggestions (for instructions on usage view: [Features](#features)).
+If you wish to test the UI please visit https://quiet-coast-2050.herokuapp.com/.
+
+## Table of Contents
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Libraries Used](#libraries-used)
+- [Design Decisions](#design-decisions)
+  - [Algolia's Search Engine (https://www.algolia.com/)](#algolias-search-engine-httpswwwalgoliacom)
+  - [Others](#others)
+- [Install Instructions](#install-instructions)
+  - [Preparing Algolia Search Engine](#preparing-algolia-search-engine)
+  - [Installing API](#installing-api)
+- [Features](#features)
+- [Caveats](#caveats)
+- [Improvements](#improvements)
+- [Known Bugs](#known-bugs)
+- [Requirements](#requirements)
+    - [Sample responses](#sample-responses)
+  - [Non-functional](#non-functional)
+  - [References](#references)
+- [Getting Started](#getting-started)
+  - [Setting up a Nodejs environment](#setting-up-a-nodejs-environment)
+  - [Setting up the project](#setting-up-the-project)
+  - [Running the tests](#running-the-tests)
+  - [Starting the application](#starting-the-application)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## Libraries Used
+
+The following libraries were used:
+
+- "algoliasearch": "^3.7.8"
+- "algoliasearch-helper": "^2.3.4"
+- "express": "^4.13.3"
+- "cool-ascii-faces": "~1.3.x"
+- "fuzzysearch-js": "^0.1.1"
+
+## Design Decisions
+
+### Algolia's Search Engine (https://www.algolia.com/)
+
+Since the objective of this challenge was to create an API that could handle heavy transactions, I reasoned that an engine allowing changes
+of number of hits per page shown, indexing attributes, etc. was most appropriate. In this case, Algolia allows changes to be done to the
+engine and index at any time through their UI instead of doing extra modifications to the API. Since it is Saas based, the user of the
+provider of the API should add their own keys in the right location of the API.
+
+### Others
+
+- Express (http://expressjs.com/):
+    - Provide structure to my api
+    - Ease routing in the api
+    - Ease parsing of queries
+
+- AlgoliaSearch-Helper (https://github.com/algolia/algoliasearch-helper-js):
+    - Allow faster querying
+    - Access a ready to go client of Algolia
+
+- FuzzySearch-JS (https://www.npmjs.com/package/fuzzysearch-js):
+    - Allow for more accurate auto-complete
+    - Provide a scoring system for suggestions
+
+- Bootstrap + Typeahead (http://www.runningcoder.org/jquerytypeahead/)
+    - Enable autocomplete UI using typeahead
+    - Enables bootstrap features
+
+## Install Instructions
+
+### Preparing Algolia Search Engine
+
+The data of the cities that need to be suggested are stored in TSV (Tab Separated Values) format. In order to
+have Algolia's search engine index this data one must converts the value to JSON format.
+To do so, install tsv-to-json (https://www.npmjs.com/package/tsv-to-json):
+
+    npm install tsv-to-json
+
+To use:
+
+    node {$tsv-to-json_dir}/bin/tsv-to-json $orig_file.tsv $dest_file.json
+
+Then follow Algolia's starting guide to upload the index: https://www.algolia.com/doc/javascript#using-the-api
+
+### Installing API
+
+This API is based on node.js, to get familiar with setting the environment please read [Getting Started](#getting-started) below.
+At this point your API should be ready to go locally.
+
+## Features
+
+There are parameters that you may play with in order to manage your experience with the accuracy of results:
+
+    - `h` is hits per page. This is the numbers of objects retrieved from the search engine. Default is 20.
+    - `g` is geolocation precision. This is the radius in kilometers of the geo search based on the latitude and longitude provided. Default is 50KM.
+
+To return 30 objects within a 100KM radius do as follow:
+
+    ex: GET /suggestions?q=Londo&latitude=43.70011&longitude=-79.4163&g=100&h=30
+
+
+## Caveats
+
+- The AlgoliaSearchHelper returns a JavaScript objet in this format: https://github.com/algolia/algoliasearch-helper-js#results-format
+- Algolia vs Solr: http://stackoverflow.com/questions/26484394/algolia-vs-solr-search
+- Elasticsearch vs Algolia: http://www.quora.com/How-does-Elasticsearch-relate-and-or-compare-to-Algolias-Search-as-a-Service
+- Administrative divisions:
+    - USA: http://www.geonames.org/US/administrative-division-united-states.html
+    - Canada: http://www.geonames.org/CA/administrative-division-canada.html
+- Geolocation engine: http://www.movable-type.co.uk/scripts/latlong.html
+
+## Improvements
+
+- There are some cities that are duplicate in the data source used ex: Monticello,KY appears twice in geonames due to timezone.
+- The data source could have a field named _geoloc in order to perform the geolocation search inside the search engine instead of in the server.
+- Definitely implement security into the query received. This using regex or any security library.
+
+## Known Bugs
+- The UI timeouts may cause the API to crash. In such events, restart the app.
+
 ## Requirements
 
 Design an API endpoint that provides auto-complete suggestions for large cities.

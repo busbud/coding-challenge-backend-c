@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title></title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/jquery.typeahead.css">
+    <link rel="stylesheet" href="css/style.css">
+
+    <script src="https://code.jquery.com/jquery-2.1.0.min.js"></script>
+    <script src="js/jquery.typeahead.js"></script>
+</head>
+<body class="project-jquerytypeahead">
+
+<div class="page-demo " style="width: 100%; max-width: 800px; margin: 0 auto;">
+    <h1>City Autocomplete</h1>
+
+    <var id="result-container" class="result-container"></var>
+
+    <form id="form-user_v1">
+        <div class="typeahead-container">
+            <div class="typeahead-field">
+
+            <span class="typeahead-query">
+                <input id="city-query"
+                       name="city[query]"
+                       ype="search"
+                       placeholder="Search"
+                       autofocus
+                       autocomplete="off">
+            </span>
+
+            </div>
+        </div>
+    </form>
+
+    <var id="user-location">GeoLocation will process results based on location</var>
+
+    <script>
+        (function() {
+            var GeoLocation  = {
+                setGeoLocation: function (location) {
+                    this.location = location;
+                },
+                getGeoLocation: function() {
+                    return this.location;
+                }
+            };
+
+            getLocation();
+
+            function getLocation() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function(position) {
+                        GeoLocation.setGeoLocation({
+                            lat:position.coords.latitude,
+                            lon:position.coords.longitude
+
+                        });
+                        $('#user-location').text("Improved search based on location: "+position.coords.latitude+","+position.coords.longitude);
+                    });
+                } else {
+                    alert("Please update your browser's geolocation");
+                }
+            }
+
+            $('#city-query').typeahead({
+                minLength: 1,
+                hint: true,
+                template: "{{name}}",
+                href: "https://www.google.com/maps/place/{{name}}",
+                backdrop: {
+                    "background-color": "#3879d9",
+                    "opacity": "0.1",
+                    "filter": "alpha(opacity=10)"
+                },
+                dynamic: true,
+                delay: 2000,
+                source: {
+                    suggestions: {
+                        display:"name",
+                        url: [{
+                            display:"name",
+                            type: "GET",
+                            url: "/suggestions",
+                            data: {
+                                q: "{{query}}",
+                                latitude: function () {return (GeoLocation.getGeoLocation())?GeoLocation.getGeoLocation().lat:null;},
+                                longitude: function () {return (GeoLocation.getGeoLocation())?GeoLocation.getGeoLocation().lon:null;}
+                            },
+                            callback: {
+                                done: function (data) {
+                                    for (var i = 0; i < data.suggestions.length; i++) {
+                                        console.log('Cities retrieved:');
+                                        console.log(data.suggestions[i].name);
+                                        console.log(data.suggestions[i].latitude);
+                                        console.log(data.suggestions[i].longitude);
+                                    }
+                                    return {
+                                        name:data.suggestions.name
+                                    };
+                                }
+                            }
+                        },"suggestions"]
+                    }
+                },
+                callback: {
+                    onClickAfter: function (node, a, item, event) {
+
+                        var r = confirm("You will be redirected to:\n" + item.href + "\n\nContinue?");
+                        if (r == true) {
+                            window.open(item.href);
+                        }
+
+                        $('#result-container').text('');
+
+                    },
+                    onResult: function (node, query, obj, objCount) {
+
+                        var text = "";
+                        if (query !== "") {
+                            text = objCount + ' elements matching "' + query + '"';
+                        }
+                        $('#result-container').text(text);
+
+                    }
+                },
+                debug: true
+            });
+        })();
+    </script>
+</div>
+</body>
+</html>
