@@ -1,4 +1,36 @@
-# Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
+# Busbud Coding Challenge [![Circle CI](https://circleci.com/gh/nchaulet/coding-challenge-backend-c.svg?style=svg)](https://circleci.com/gh/nchaulet/coding-challenge-backend-c)
+
+## Install instructions
+
+(using docker-compose)
+```shell
+docker-compose run web npm install
+docker-compose run web npm run indexer
+docker-compose up
+```
+
+Webservice is now accessible at url `http://YOUR_DOCKER_HOST:8080/suggestions`, you can access to a simple UI at `http://YOUR_DOCKER_HOST:8080
+
+Launch test
+```
+docker-compose run web npm test
+```
+
+## Choices and architecture
+
+* Babeljs for ES6
+* Elasticsearch to store and query city data, the script for indexing data is located in `app/indexer`, and could be launch using `npm run indexer`
+* I configure elasticsearch score function to boost city with large population, and geolocation if provided
+* I use circleci for CI https://circleci.com/gh/nchaulet/coding-challenge-backend-c
+
+## Problems and improvments
+
+Problems:
+* It's really hard to provide a score between 0 and 1 with elasticsearch so I quickly do a javascript score implementation using Dice's Coefficient, it could be improved using geo distance if a location is provided
+
+Improvements:
+* Elasticsearch score function could be tuned to be more relevant
+* the project could be unit tested, in particular confidence and name formating function
 
 ## Requirements
 

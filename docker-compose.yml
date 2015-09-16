@@ -1,0 +1,14 @@
+web:
+  build: .
+  volumes:
+    - ".:/code"
+  ports:
+    - "8080:8080"
+  links:
+    - elastic
+
+elastic:
+    image: elasticsearch:1.7.1
+    ports:
+        - "9200:9200"
+        - "9300:9300"
