@@ -3,6 +3,29 @@ var app     = require('../app');
 var request = require('supertest')(app);
 
 describe('GET /suggestions', function() {
+  describe('without any query', function () {
+    var response;
+
+    before(function (done) {
+      request
+        .get('/suggestions')
+        .end(function (err, res) {
+          response = res;
+          response.json = JSON.parse(res.text);
+          done(err);
+        });
+    });
+
+    it('returns a 400', function () {
+      expect(response.statusCode).to.equal(400);
+    });
+
+    it('returns an error message', function () {
+      expect(response.json.message).to.be.a('string');
+      expect(response.json.message).to.equal("Search query parameter 'q' missing from query string. Must be provided and non-empty!");
+    });
+  });
+
   describe('with a non-existent city', function () {
     var response;
 
@@ -51,7 +74,7 @@ describe('GET /suggestions', function() {
     it('contains a match', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.some(function (suggestion) {
-          return suggestion.name.test(/montreal/i);
+          return (/montreal/i).test(suggestion.name);
         });
       })
     });
@@ -67,7 +90,7 @@ describe('GET /suggestions', function() {
     it('contains scores', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.every(function (suggestion) {
-          return suggestion.latitude && suggestion.longitude;
+          return suggestion.score;
         });
       })
     });
