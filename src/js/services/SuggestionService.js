@@ -68,7 +68,7 @@ export default class SuggestionService {
           return suggestion;
         })
         .filter((suggestion) => {
-          return suggestion.score > 0
+          return suggestion.score > 0.25
         })
         .sort((a, b) => {
           if (a.score > b.score) return -1;
