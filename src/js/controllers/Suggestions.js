@@ -19,8 +19,12 @@ export default class Suggestions {
     // Perform search and send results
     else {
       const query = Suggestions._cleanUpQuery(req.query.q);
+      let limit = 100;
+      if (typeof req.query.limit != "undefined") {
+        limit = parseInt(req.query.limit);
+      }
       const latLong = Suggestions._getLatLong(req.query);
-      this.suggestionService.listSuggestions(query, latLong).then((suggestions) => {
+      this.suggestionService.listSuggestions(query, latLong, limit).then((suggestions) => {
         const result = {
           suggestions: suggestions.map((suggestion) => {
             return {
