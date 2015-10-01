@@ -29,7 +29,8 @@ const provinceCodes = {
 };
 
 const options = {
-  db: "mongodb://localhost:27017/busbud-challenge",
+  //db: "mongodb://localhost:27017/busbud-challenge",
+  db: "mongodb://busbud:theflowmustspice@ds033113.mongolab.com:33113/heroku_cgt4f4mj",
   collection: "cities"
 };
 

@@ -13,7 +13,7 @@ const port = process.env.PORT || 2345;
 const app = express();
 
 // Configure toobusy-js
-tooBusy.maxLag(200); // maximum lag permitted. Default: 70ms
+tooBusy.maxLag(400); // maximum lag permitted. Default: 70ms
 tooBusy.interval(500); // lag scan interval. Default: 500ms
 
 // In a real environment we would store the db credentials somewhere that isn't committed into code
