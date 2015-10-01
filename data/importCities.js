@@ -59,8 +59,8 @@ transform._transform = function (data, encoding, done) {
     location: {
       type: "Point",
       coordinates: [
-        parseFloat(data[4]), // lat
-        parseFloat(data[5])  // long
+        parseFloat(data[5]),
+        parseFloat(data[4])
       ]
     },
     population: parseInt(population)
@@ -83,6 +83,9 @@ const promise = new Promise(function (resolve, reject) {
       console.log('Connection established to', options.db);
 
       db.collection("cities").createIndex({ fullName: 1 });
+      db.collection("cities").createIndex({ location: "2dsphere" });
+
+      console.log("Created indexes.");
 
       //Close connection
       db.close();
@@ -103,4 +106,3 @@ promise.then(
     .pipe(streamToMongo(options))
     .on('error', function(e) { console.log(e); })
 );
-
