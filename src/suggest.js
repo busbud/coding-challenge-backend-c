@@ -6,7 +6,7 @@ module.exports = function suggest(data, term, coords) {
   const regex = new RegExp('^' + term.split('').join('.*?'), 'i');
 
   var maxLev = maxProx = maxPop = 0;
-  var minLev = minProximity = minPopulation = Infinity;
+  var minLev = minProx = minPop = Infinity;
 
   const suggestions = data
     .filter((location) => {
@@ -19,12 +19,12 @@ module.exports = function suggest(data, term, coords) {
       minLev = Math.min(loc.levenshtein, minLev);
 
       maxPop = Math.max(loc.population, maxPop);
-      minPopulation = Math.min(loc.population, minPopulation);
+      minPop = Math.min(loc.population, minPop);
 
       if (coords && coords.lat && coords.lng) {
         loc.proximity = score.proximity(coords, loc);
         maxProx = Math.max(loc.proximity, maxProx);
-        minProximity = Math.min(loc.proximity, minProximity);
+        minProx = Math.min(loc.proximity, minProx);
       } else {
         loc.proximity = 0;
       }
@@ -33,12 +33,12 @@ module.exports = function suggest(data, term, coords) {
     })
     .map((loc) => {
 
-      var popScore = (loc.population - minPopulation) /
-        (maxPop - minPopulation);
-      var levScore = (maxLev - loc.levenshtein) /
-        (maxLev - minLev);
-      var proxScore = (maxProx - loc.proximity) /
-        (maxProx - minProximity);
+      var popScore = (loc.population === minPop ? 1 : loc.population - minPop) /
+        (maxPop === minPop ? 1 : maxPop - minPop);
+      var levScore = (maxLev === loc.levenshtein ? 1 : maxLev - loc.levenshtein) /
+        (maxLev === minLev ? 1 : maxLev - minLev);
+      var proxScore = (maxProx === loc.proximity ? 1 : maxProx - loc.proximity) /
+        (maxProx === minProx ? 1 : maxProx - minProx);
 
       loc.score = (popScore * config.weights.population) +
         (levScore * config.weights.levenshtein) +
