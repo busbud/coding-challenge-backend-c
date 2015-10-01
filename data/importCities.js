@@ -30,12 +30,12 @@ const provinceCodes = {
 
 const options = {
   //db: "mongodb://localhost:27017/busbud-challenge",
-  db: "mongodb://busbud:theflowmustspice@ds033113.mongolab.com:33113/heroku_cgt4f4mj",
+  db: "mongodb://busbud:theflowmustspice@candidate.52.mongolayer.com:10536/app41883533",
   collection: "cities"
 };
 
 /* Parse the TSV data into JS arrays */
-const parser = csv({ objectMode: true, delimiter: '\t' });
+const parser = csv({ objectMode: true, delimiter: '\t', quote: "'''''" });
 
 /* Transform each parsed array into a location object for insertion into
  * mongodb. */
