@@ -13,27 +13,32 @@ export default class LocationRepo {
     this.db = db;
   }
 
-  listLocations(startsWith, near, limit) {
+  listLocations(startsWith, near) {
     const cities = this.db.collection("cities");
 
-    if (near == null) {
-      return cities.find(
-        {"fullName": new RegExp(`^${startsWith}`)}
-      ).limit(limit).toArray();
-    }
-    else {
-      return cities.find({
-        "fullName": new RegExp(`^${startsWith}`),
-        "location": {
-          "$near": {
-            "$geometry": {
-              type: "Point",
-                coordinates: [parseFloat(near.longitude), parseFloat(near.latitude)]
+    try {
+      if (near == null) {
+        return cities.find(
+          {"fullName": new RegExp(`^${startsWith}`)}
+        ).limit(3000).toArray();
+      }
+      else {
+        return cities.find({
+          "fullName": new RegExp(`^${startsWith}`),
+          "location": {
+            "$near": {
+              "$geometry": {
+                type: "Point",
+                  coordinates: [parseFloat(near.longitude), parseFloat(near.latitude)]
+              }
             }
           }
-        }
-      }).limit(limit).toArray();
+        }).limit(3000).toArray();
+      }
+    } catch(err) {
+      console.log(err);
     }
+
   }
 
 }

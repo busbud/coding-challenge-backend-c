@@ -43,7 +43,8 @@ export default class Index extends React.Component {
     }
 
     const data = {
-      q: this.state.query
+      q: this.state.query,
+      limit: 10
     };
 
     if (this.state.marker != null) {
@@ -91,7 +92,7 @@ export default class Index extends React.Component {
     return (
       <Main>
         <div className="search-box">
-          <p>Type in the box below to start searching. Click a location on the map to set your location--right click to remove.</p>
+          <p>Type in the box below to start searching. Click a location on the map to set your location--right click to remove. The web interface will only show the first ten results.</p>
           <GoogleMap containerProps={{
               ...this.props,
               style: {

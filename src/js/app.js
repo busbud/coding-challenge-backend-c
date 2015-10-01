@@ -17,6 +17,7 @@ tooBusy.maxLag(200); // maximum lag permitted. Default: 70ms
 tooBusy.interval(500); // lag scan interval. Default: 500ms
 
 // In a real environment we would store the db credentials somewhere that isn't committed into code
+//const db = pmongo("mongodb://localhost/busbud-challenge?maxPoolSize=10");
 const db = pmongo("mongodb://busbud:theflowmustspice@ds051933.mongolab.com:51933/heroku_vlb77hrv?maxPoolSize=10");
 
 // Serve static assets from the public directory

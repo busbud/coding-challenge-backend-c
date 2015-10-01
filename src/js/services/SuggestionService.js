@@ -26,8 +26,8 @@ export default class SuggestionService {
     const fLocations = this.locationRepo.listLocations(query, location);
     return fLocations.then((locations) => {
       const numLocations = locations.length * 1.0;
-      return locations
-        .map(SuggestionService._generateScore)
+      const includeCloseness = (typeof location != "undefined" && location != null);
+      return locations.map(SuggestionService._generateScore(query, includeCloseness, numLocations))
         .filter((suggestion) => {
           return suggestion.score > 0.25
         })
@@ -40,7 +40,7 @@ export default class SuggestionService {
     });
   }
 
-  static _generateScore(suggestion, idx) {
+  static _generateScore(query, includeCloseness, numLocations) { return (suggestion, idx) => {
     /* Generate this suggestion's initial score. */
     const queryParts = query.split(',');
     const suggestParts = suggestion.fullName.split(',');
@@ -60,7 +60,7 @@ export default class SuggestionService {
 
     /* If location is given, mongodb will return the results sorted by proximity. Transform this
      * ordering into a closeness-factor so that we can reduce the overall score as distance increases. */
-    if (typeof location != "undefined" && location != null) {
+    if (includeCloseness) {
       let closenessFactor = (numLocations - (idx/2 * 1.0)) / numLocations;
       if (closenessFactor > 1) closenessFactor = 1;
       else if (closenessFactor <= 0) closenessFactor = 0;
@@ -73,5 +73,5 @@ export default class SuggestionService {
 
     suggestion.score = score;
     return suggestion;
-  }
+  }}
 }
