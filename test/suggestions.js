@@ -1,5 +1,5 @@
 var expect  = require('chai').expect;
-var app     = require('../app');
+var app     = require('../server');
 var request = require('supertest')(app);
 
 describe('GET /suggestions', function() {
