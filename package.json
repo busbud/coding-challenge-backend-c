@@ -1,20 +1,23 @@
 {
-  "name": "coding-challenge-backend-c",
-  "version": "0.0.0",
-  "description": "coding challenge in Nodejs",
-  "main": "app.js",
+  "name": "busbud",
+  "version": "0.0.1",
+  "description": "Some code that should convince you to hire me.",
+  "main": "index.js",
   "scripts": {
-    "start": "node app.js",
-    "test": "./node_modules/mocha/bin/mocha ./test/"
+    "test": "mocha",
+    "test:watch": "npm test -- --watch",
+    "start": "node ./src/index.js"
   },
-  "author": "",
-  "license": "WTFPL",
+  "author": "Miklós Tusz",
+  "license": "ISC",
   "dependencies": {
-    "chai": "^1.9.1",
-    "mocha": "^1.18.2",
-    "supertest": "^0.11.0"
+    "event-stream": "^3.3.1",
+    "restify": "^4.0.3",
+    "stream-reduce": "^1.0.3"
   },
-  "engines": {
-    "node": "0.10.26"
+  "devDependencies": {
+    "chai": "^3.3.0",
+    "mocha": "^2.3.3",
+    "supertest": "^1.1.0"
   }
 }

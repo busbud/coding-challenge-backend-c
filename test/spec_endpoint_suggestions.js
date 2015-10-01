@@ -1,19 +1,31 @@
-var expect  = require('chai').expect;
-var app     = require('../app');
-var request = require('supertest')(app);
+const expect = require('chai').expect;
+const parser = require('../src/parser');
+const supertest = require('supertest');
+const config = require('../config.json');
+var server = require('../src/server');
 
-describe('GET /suggestions', function() {
+describe('GET /suggestions', function () {
   describe('with a non-existent city', function () {
     var response;
 
     before(function (done) {
-      request
-        .get('/suggestions?q=SomeRandomCityInTheMiddleOfNowhere')
-        .end(function (err, res) {
-          response = res;
-          response.json = JSON.parse(res.text);
-          done(err);
-        });
+      parser(config.city_file, (err, data) => {
+        if (!err) {
+          server.cities = data;
+          server.listen(process.env.PORT || 3000, () => {
+            console.info('Server listening at ' + server.url);
+          });
+
+          var request = supertest(server);
+          request
+            .get('/suggestions?q=SomeRandomCityInTheMiddleOfNowhere')
+            .end(function (err, res) {
+              response = res;
+              response.json = JSON.parse(res.text);
+              done(err);
+            });
+        }
+      });
     });
 
     it('returns a 404', function () {
@@ -30,13 +42,23 @@ describe('GET /suggestions', function() {
     var response;
 
     before(function (done) {
-      request
-        .get('/suggestions?q=Montreal')
-        .end(function (err, res) {
-          response = res;
-          response.json = JSON.parse(res.text);
-          done(err);
-        });
+      parser(config.city_file, (err, data) => {
+        if (!err) {
+          server.cities = data;
+          server.listen(process.env.PORT || 3000, () => {
+            console.info('Server listening at ' + server.url);
+          });
+
+          var request = supertest(server);
+          request
+            .get('/suggestions?q=Montreal')
+            .end(function (err, res) {
+              response = res;
+              response.json = JSON.parse(res.text);
+              done(err);
+            });
+        }
+      });
     });
 
     it('returns a 200', function () {
@@ -51,7 +73,7 @@ describe('GET /suggestions', function() {
     it('contains a match', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.some(function (suggestion) {
-          return suggestion.name.test(/montreal/i);
+          return suggestion.name.match(/montréal/i);
         });
       })
     });

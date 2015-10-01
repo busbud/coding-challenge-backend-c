@@ -1,0 +1,9 @@
+{
+  "results": 10,
+  "city_file": "data/cities_canada-usa.tsv",
+  "weights": {
+    "levenshtein": 0.4,
+    "proximity": 0.4,
+    "population": 0.2
+  }
+}
