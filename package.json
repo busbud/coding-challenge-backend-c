@@ -4,17 +4,65 @@
   "description": "coding challenge in Nodejs",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
-    "test": "./node_modules/mocha/bin/mocha ./test/"
+    "start": "node server.js",
+    "watch": "nodemon server.js",
+    "test": "./node_modules/mocha/bin/mocha --compilers js:babel/register ./test/"
   },
   "author": "",
   "license": "WTFPL",
   "dependencies": {
+    "babel": "^5.8.23",
+    "babel-core": "^5.8.25",
+    "babel-runtime": "^5.8.25",
+    "babelify": "^6.3.0",
+    "browserify": "^11.2.0",
     "chai": "^1.9.1",
+    "csv-streamify": "^2.0.0",
+    "es6-promise": "^3.0.2",
+    "express": "^4.13.3",
+    "gulp": "^3.9.0",
+    "gulp-babel": "^5.2.1",
+    "gulp-notify": "^2.2.0",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-stylus": "^2.0.7",
+    "gulp-uglify": "^1.4.1",
+    "gulp-util": "^3.0.6",
+    "history": "^1.11.1",
+    "jquery": "^2.1.4",
+    "lodash": "^3.10.1",
+    "merge-stream": "^1.0.0",
     "mocha": "^1.18.2",
-    "supertest": "^0.11.0"
+    "mongodb": "^2.0.44",
+    "natural": "^0.2.1",
+    "promised-mongo": "^1.2.0",
+    "react": "^0.13.3",
+    "react-google-maps": "^2.1.0",
+    "react-router": "^1.0.0-rc1",
+    "stream-to-mongo": "^0.1.5",
+    "supertest": "^0.11.0",
+    "tocktimer": "^1.0.7",
+    "toobusy-js": "^0.4.2",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.4.0"
   },
   "engines": {
     "node": "0.10.26"
+  },
+  "devDependencies": {
+    "JSONStream": "^1.0.6",
+    "babel": "^5.8.23",
+    "csv-streamify": "^2.0.0",
+    "es6-promise": "^3.0.2",
+    "express": "^4.13.3",
+    "history": "^1.11.0",
+    "jquery": "^2.1.4",
+    "lodash": "^3.10.1",
+    "mongodb": "^2.0.43",
+    "natural": "^0.2.1",
+    "promised-mongo": "^1.2.0",
+    "react-google-maps": "^2.1.0",
+    "stream-to-mongo": "^0.1.5",
+    "toobusy-js": "^0.4.2"
   }
 }
