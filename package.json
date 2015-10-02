@@ -4,7 +4,7 @@
   "description": "coding challenge in Nodejs",
   "main": "app.js",
   "scripts": {
-    "install": "node ./data/populate_geoname.js",
+    "postpublish": "node ./data/populate_geoname.js",
     "start": "node app.js",
     "test": "./node_modules/mocha/bin/mocha ./test/"
   },

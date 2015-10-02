@@ -3,7 +3,7 @@
 
   Table should exist already, and should be executed from project root directory.
 */
-require('dotenv').load();
+if (process.env.NODE_ENV === "development") require('dotenv').load();
 
 var fs = require('fs');
 var path = require('path');

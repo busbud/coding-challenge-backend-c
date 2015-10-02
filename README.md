@@ -106,7 +106,7 @@ In the project directory run
 npm install
 ```
 
-Make sure you also include a .env file in the root directory that holds the database url.
+Make sure you also run populate_geoname.js to create and populate the geoname table that holds city data.
 
 ### Running the tests
 
