@@ -1,9 +1,12 @@
 require('dotenv').load();
 
 var express      = require('express'),
-    app          = express();
+    app          = express(),
+    logger       = require('morgan');
 
-(require('./suggestions'))(app);
+app.use(logger('dev'));
+
+(require('./lib/suggestions'))(app);
 
 var server = app.listen(process.env.PORT || 2345, function() {
   var host = server.address().address;

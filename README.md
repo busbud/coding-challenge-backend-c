@@ -106,6 +106,8 @@ In the project directory run
 npm install
 ```
 
+Make sure you also include a .env file in the root directory that holds the database url.
+
 ### Running the tests
 
 The test suite can be run with
@@ -119,7 +121,7 @@ npm test
 To start a local server run
 
 ```
-PORT=3456 npm start
+npm start
 ```
 
 which should produce output similar to

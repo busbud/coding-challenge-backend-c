@@ -1,4 +1,4 @@
-var levenshtein = require('../levenshtein');
+var levenshtein = require('../lib/levenshtein');
 var expect = require('chai').expect;
 
 describe('levenshtein', function() {
