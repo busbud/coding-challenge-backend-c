@@ -1,10 +1,10 @@
 {
   "name": "coding-challenge-backend-c",
-  "version": "0.0.0",
-  "description": "coding challenge in Nodejs",
+  "version": "0.1.0",
+  "description": "coding challenge in Nodejs for Busbud",
+  "author": "Keegan Parker",
   "main": "app.js",
   "scripts": {
-    "postpublish": "node ./data/populate_geoname.js",
     "start": "node app.js",
     "test": "./node_modules/mocha/bin/mocha ./test/"
   },
