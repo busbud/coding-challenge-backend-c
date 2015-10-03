@@ -1,4 +1,4 @@
-# Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
+# Busbud Coding Challenge 
 
 ## Requirements
 
@@ -106,6 +106,8 @@ In the project directory run
 npm install
 ```
 
+Make sure you also run populate_geoname.js to create and populate the geoname table that holds city data.
+
 ### Running the tests
 
 The test suite can be run with
@@ -119,7 +121,7 @@ npm test
 To start a local server run
 
 ```
-PORT=3456 npm start
+npm start
 ```
 
 which should produce output similar to

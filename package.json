@@ -1,7 +1,8 @@
 {
   "name": "coding-challenge-backend-c",
-  "version": "0.0.0",
-  "description": "coding challenge in Nodejs",
+  "version": "0.1.0",
+  "description": "coding challenge in Nodejs for Busbud",
+  "author": "Keegan Parker",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
@@ -11,7 +12,11 @@
   "license": "WTFPL",
   "dependencies": {
     "chai": "^1.9.1",
+    "dotenv": "^1.2.0",
+    "express": "^4.13.3",
     "mocha": "^1.18.2",
+    "morgan": "^1.6.1",
+    "pg": "^4.4.2",
     "supertest": "^0.11.0"
   },
   "engines": {

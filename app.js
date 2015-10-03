@@ -1,16 +1,18 @@
-var http = require('http');
-var port = process.env.PORT || 2345;
+if (process.env.NODE_ENV === "development") require('dotenv').load();
 
-module.exports = http.createServer(function (req, res) {
-  res.writeHead(404, {'Content-Type': 'text/plain'});
+var express      = require('express'),
+    app          = express(),
+    logger       = require('morgan');
 
-  if (req.url.indexOf('/suggestions') === 0) {
-    res.end(JSON.stringify({
-      suggestions: []
-    }));
-  } else {
-    res.end();
-  }
-}).listen(port, '127.0.0.1');
+app.use(logger('dev'));
 
-console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+(require('./lib/suggestions'))(app);
+
+var server = app.listen(process.env.PORT || 2345, function() {
+  var host = server.address().address;
+  var port = server.address().port;
+
+  console.log('Suggestions api listening at http://%s:%s/suggestions', host, port);
+});
+
+module.exports = app;

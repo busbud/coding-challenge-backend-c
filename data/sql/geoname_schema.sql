@@ -1,0 +1,21 @@
+CREATE TABLE geoname (
+  geonameid integer NOT NULL PRIMARY KEY,
+  name VARCHAR(200),
+  asciiname VARCHAR(200),
+  alternatenames VARCHAR(5000),
+  latitude decimal(8, 5),
+  longitude decimal(8, 5),
+  feature_class VARCHAR(1),
+  feature_code VARCHAR(10),
+  country_code VARCHAR(2),
+  cc2 VARCHAR(60),
+  admin1_code VARCHAR(20),
+  admin2_code VARCHAR(20),
+  admin3_code VARCHAR(20),
+  admin4_code VARCHAR(20),
+  population bigint,
+  elevation integer,
+  dem integer,
+  tz VARCHAR(40),
+  mod_date date
+);
