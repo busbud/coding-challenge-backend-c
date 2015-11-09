@@ -9,3 +9,9 @@ People who use this API can be grouped into two categories: those who spelled th
 - In the scenario that they dont know how to spell the city's name, we should try matching the query and its substrings until we find a match. However, due to how quickly our confidence decreases as we use substrings to query matches, the query substring should no longer be relevant after just a few calls. We will stop once all the substrings from 0 to n, where n is half of the original query string.
 - The location of the user will only affect the user's search interests in a certain range. For this implementation, we will assume 300 km.
 - Large cities are more likely to be queried, thus their scores should receive a bias.
+
+## Implementation Details
+
+Given an application which rarely updates but frequently accesses the database, I have chosen to go with MongoDB. I believe that async MongoDB's lean queries are one of the faster options available for this type of application. I used a script to populate the MongoDB database, removing fields which I didn't know what to do with and adding a few to make the most out of the fast accessing speed. 
+
+Given a query string **q** of length **n**, I convert the special characters and I attempt to find city names starting with **q** and if I can't get any, I remove the last character of **q** and recursively query until I find suggestions or until the suggestions are no longer relevant. These suggestions are then given a score based off the levenshtein distance from the original query, haversine distance from the user, and the population count. 
