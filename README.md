@@ -1,129 +1,19 @@
-# Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
+# Busbud Coding Challenge
 
-## Requirements
+Live on [Heroku](https://fathomless-atoll-1734.herokuapp.com/suggestions?q=montreal)
 
-Design an API endpoint that provides auto-complete suggestions for large cities.
-The suggestions should be restricted to cities in the USA and Canada with a population above 5000 people.
+## Design Assumptions
 
-- the endpoint is exposed at `/suggestions`
-- the partial (or complete) search term is passed as a querystring parameter `q`
-- the caller's location can optionally be supplied via querystring parameters `latitude` and `longitude` to help improve relative scores
-- the endpoint returns a JSON response with an array of scored suggested matches
-    - the suggestions are sorted by descending score
-    - each suggestion has a score between 0 and 1 (inclusive) indicating confidence in the suggestion (1 is most confident)
-    - each suggestion has a name which can be used to disambiguate between similarly named locations
-    - each suggestion has a latitude and longitude
-- all functional tests should pass (additional tests may be implemented as necessary).
-- the final application should be [deployed to Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs).
-- feel free to add more features if you like!
+People who use this API can be grouped into two categories: those who spelled their destination name correctly and those who didn't. To greatly simplify the computations required by this API, I made a few assumptions to help me design the scoring algorithms.
 
-#### Sample responses
+- People who misspelled the city's name either made a typo or they legitimately don't kow how to spell the city's name.
+- In the case that they made a typo and still sent the query, the typo must be towards the end of the query city name.
+- In the scenario that they dont know how to spell the city's name, we should try matching the query and its substrings until we find a match. However, due to how quickly our confidence decreases as we use substrings to query matches, the query substring should no longer be relevant after just a few calls.
+- The location of the user will only affect the user's search interests in a certain range. For this implementation, we will assume 300 km.
+- Large cities are more likely to be queried, thus their scores should receive a bias.
 
-These responses are meant to provide guidance. The exact values can vary based on the data source and scoring algorithm
+## Implementation Details
 
-**Near match**
+Given an application which rarely updates but frequently accesses the database, I have chosen to go with MongoDB. I believe that async MongoDB's lean queries are one of the faster options available for this type of application. I used a script to populate the MongoDB database, removing fields which I didn't know what to do with and adding a few to make the most out of the fast accessing speed. 
 
-    GET /suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
-
-```json
-{
-  "suggestions": [
-    {
-      "name": "London, ON, Canada",
-      "latitude": "42.98339",
-      "longitude": "-81.23304",
-      "score": 0.9
-    },
-    {
-      "name": "London, OH, USA",
-      "latitude": "39.88645",
-      "longitude": "-83.44825",
-      "score": 0.5
-    },
-    {
-      "name": "London, KY, USA",
-      "latitude": "37.12898",
-      "longitude": "-84.08326",
-      "score": 0.5
-    },
-    {
-      "name": "Londontowne, MD, USA",
-      "latitude": "38.93345",
-      "longitude": "-76.54941",
-      "score": 0.3
-    }
-  ]
-}
-```
-
-**No match**
-
-    GET /suggestions?q=SomeRandomCityInTheMiddleOfNowhere
-
-```json
-{
-  "suggestions": []
-}
-```
-
-
-### Non-functional
-
-- All code should be written in Javascript
-- Mitigations to handle high levels of traffic should be implemented
-- Work should be submitted as a pull-request to this repo
-- Documentation and maintainability is a plus
-
-### References
-
-- Geonames provides city lists Canada and the USA http://download.geonames.org/export/dump/readme.txt
-- http://www.nodejs.org/
-- http://ejohn.org/blog/node-js-stream-playground/
-
-
-## Getting Started
-
-Begin by forking this repo and cloning your fork. GitHub has apps for [Mac](http://mac.github.com/) and
-[Windows](http://windows.github.com/) that make this easier.
-
-### Setting up a Nodejs environment
-
-Get started by installing [nodejs](http://www.nodejs.org).
-
-For OS X users, use [Homebrew](http://brew.sh) and `brew install nvm`
-
-Once that's done, from the project directory, run
-
-```
-nvm use
-```
-
-### Setting up the project
-
-In the project directory run
-
-```
-npm install
-```
-
-### Running the tests
-
-The test suite can be run with
-
-```
-npm test
-```
-
-### Starting the application
-
-To start a local server run
-
-```
-PORT=3456 npm start
-```
-
-which should produce output similar to
-
-```
-Server running at http://127.0.0.1:2345/suggestions
-```
+Given a query string **q** of length **n**, I convert the special characters and I attempt to find city names starting with **q** and if I can't get any, I remove the last character of **q** and recursively query until I find suggestions or until the suggestions are no longer relevant. These suggestions are then given a score based off the levenshtein distance from the original query, haversine distance from the user, and the population count. 
