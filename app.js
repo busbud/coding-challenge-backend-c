@@ -23,10 +23,11 @@ app.get('/suggestions', function(req, res) {
 
     // query recursively until suggestions is populated or until query string runs out. The query string loses its last character at each recursive case.
     function recursiveQuery(City, query) {
-        City.find({$or: [{name: {'$regex': new RegExp("^.*"+query+".*","gi")}}, {asciiname: {'$regex': new RegExp("^.*"+query+".*","gi")}}]}, 'asciiname coord population').lean().exec(function(err, cities) {
+        City.find({$or: [{name: {'$regex': new RegExp("^.*"+query+".*","gi")}}, {asciiname: {'$regex': new RegExp("^.*"+query+".*","gi")}}]}, 'asciiname fullname coord population').lean().exec(function(err, cities) {
             async.map(cities, function(city, cb) {
                 var suggestion = {
                     name: city.asciiname,
+                    fullname: city.fullname,
                     latitude: city.coord.lat,
                     longitude: city.coord.lng,
                     population: city.population
@@ -37,18 +38,20 @@ app.get('/suggestions', function(req, res) {
                 else if (!suggestions.length && query.length > q.length/2) return recursiveQuery(City, query.substring(0, query.length-1));
                 else if (!suggestions.length) res.status(404).type('json').send({suggestions: []});
                 else {
-                    var sortedResponse = mapNames(sortByScore(suggestions, q, lat, lng));
-                    res.status(200).type('json').send({suggestions: sortedResponse});
+                    var sanitizedResponse = sanitizeResponse(suggestions, q, lat, lng);
+                    res.status(200).type('json').send({suggestions: sanitizedResponse});
                 }
             });
         });
     };
 
-    function sortByScore(suggestions, q, lat, lng) {
-        _.forEach(suggestions, function(city) {
-            var whole = new RegExp('^'+q+'$', 'i'),
+    function sanitizeResponse(suggestions, q, lat, lng) {
+        var whole = new RegExp('^'+q+'$', 'i'),
                 begin = new RegExp('^'+q, 'i');
 
+        _.forEach(suggestions, function(city) {
+
+            // Attributing points
             if (city.name.match(whole)) { // city name matches exactly query string
                 city.score = 1;
             } else if (city.name.match(begin)) { // city name begins with query string
@@ -76,20 +79,14 @@ app.get('/suggestions', function(req, res) {
                     city.score += (1-city.score)/10;
                 }
             }
+
+            // Formatting names to be in correct format: City, State, Country
+            city.name = city.fullname;
+            delete city.fullname;
         });
 
         suggestions.sort(compareScore);
-        return suggestions;
-    };
-
-    function mapNames(sortedSuggestions) {
-        /*async.map(sortedSuggestions, function(city, cb) {
-            var googleGeoAPI = {
-                url: ''
-            }
-        }, function(err, sortedResponse) {return sortedResponse});
-        //http://maps.googleapis.com/maps/api/geocode/json?latlng=42.98339,-81.23304&sensor=true*/
-        return sortedSuggestions;
+        return suggestions; 
     };
 });
 
@@ -130,12 +127,12 @@ function loadModels() {
         name: String,
         asciiname: String,
         altnames: String,
+        fullname: String,
         coord: {
             lat: Number,
             lng: Number
         },
         country: String,
-        admin1: String,
         population: Number,
         tz: String,
         modified: String
@@ -181,25 +178,27 @@ function populateDB() {
 
             // Adding each city to DB
             if (values[14] > 5000) {
-                var City = mongoose.model('City');
+                var City = mongoose.model('City'),
+                    formattedName = values[2] + ', ' + sanitizeAdminCodes(values[10]) + ', ' + values[8];
+
                 var city = new City({
                     _id: values[0],
                     name: values[1],
                     asciiname: values[2],
                     altnames: values[3],
+                    fullname: formattedName,
                     coord: {
                         lat: values[4],
                         lng: values[5]
                     },
                     country: values[8],
-                    admin1: sanitizeAdminCodes(values[10]),
                     population: values[14],
                     tz: values[17],
                     modified: values[18]
                 });
 
                 city.save(function (err, city) {
-                    console.log(err || city.name + ' added succesfully');
+                    console.log(err || city.fullname + ' added succesfully');
                 });
             };
             data = data.substring(line_index + 1);
@@ -222,7 +221,7 @@ function populateDB() {
             '13': 'NT',
             '14': 'NU'
         };
-        return parseInt(adminCode) ? adminCode[parseInt(adminCode)] : 'US';
+        return parseInt(adminCode) ? adminCodeMap[parseInt(adminCode)] : 'US';
     };
 };
 
