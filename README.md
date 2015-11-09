@@ -1,6 +1,6 @@
 # Busbud Coding Challenge
 
-live: https://fathomless-atoll-1734.herokuapp.com/suggestions?q=montreal
+Live on [Heroku](https://fathomless-atoll-1734.herokuapp.com/suggestions?q=montreal)
 
 ## Design Assumptions
 
