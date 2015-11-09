@@ -10,49 +10,58 @@ var express = require('express'),
     haversine = require('haversine'),
     port = process.env.PORT || 2345;
 
-//
 app.get('/suggestions', function(req, res) {
     var q = req.query.q,
         lat = req.query.latitude,
         lng = req.query.longitude,
-        City = mongoose.model('City'),
-        suggestions = [];
+        City = mongoose.model('City');
 
-    City.find({$or: [{name: {'$regex': new RegExp("^.*"+q+".*","gi")}}, {asciiname: {'$regex': new RegExp("^.*"+q+".*","gi")}}]}, 'name asciiname coord admin1').lean().exec(function(err, cities) {
-        async.map(cities, function(city, cb) {
-            var suggestion = {
-                name: city.name,
-                latitude: city.coord.lat,
-                longitude: city.coord.lng,
-                score: Math.min(ldist(q, city.name), ldist(q, city.asciiname))
-            };
-            cb(null, suggestion);
-        }, function(err, results) {
-            results.sort(compareScore);
-            _.forEach(results, function(r, err) {
-                suggestions.push(r);
+    recursiveQuery(City, q);
+
+    // query recursively until suggestions is populated or until query string runs out. The query string loses its last character at each recursive case.
+    function recursiveQuery(City, query) {
+        City.find({$or: [{name: {'$regex': new RegExp("^.*"+query+".*","gi")}}, {asciiname: {'$regex': new RegExp("^.*"+query+".*","gi")}}]}, 'name asciiname coord admin1 population').lean().exec(function(err, cities) {
+            async.map(cities, function(city, cb) {
+                var suggestion = {
+                    name: city.name,
+                    latitude: city.coord.lat,
+                    longitude: city.coord.lng,
+                    score: Math.min(ldist(query, city.name), ldist(query, city.asciiname))
+                };
+                cb(null, suggestion);
+            }, function(err, suggestions) {
+                if (err) res.status(500).type('json').send({suggestions: []});
+                else if (!suggestions.length && query.length > 1) return recursiveQuery(City, query.substring(0, query.length-1));
+                else if (!suggestions.length) res.status(404).type('json').send({suggestions: []});
+                else res.status(200).type('json').send({suggestions: sanitizeSuggestions(suggestions, q)});
             });
-
-            if (err) res.status(500).type('json').send({suggestions: []});
-            else if (!suggestions.length) res.status(404).type('json').send({suggestions: []});
-            else res.status(200).type('json').send({suggestions: suggestions});
         });
-    });
+    };
 
+    function sanitizeSuggestions(suggestions, q) {
+        suggestions.sort(compareScore);
+        return suggestions;
+    };
     //http://maps.googleapis.com/maps/api/geocode/json?latlng=42.98339,-81.23304&sensor=true
 });
 
+// compare the score of two suggestions
 function compareScore(a,b) {
   if (a.score < b.score) return -1;
   if (a.score > b.score) return 1;
   return 0;
 }
 
+// levenshtein distance of the query and the suggested city's name
 function ldist(q, cityName) {
     var l = new Levenshtein(q,cityName);
     return l.distance;
 };
 
+
+/**
+ * MongoDB
+ */
 mongoose.connect('mongodb://localhost/busbud', function(err) {
     if (err) return console.log(err);
     else console.log('Connected to MongoDB');

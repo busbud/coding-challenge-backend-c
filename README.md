@@ -1,6 +1,9 @@
-# Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
+# Busbud Coding Challenge
 
-## Requirements
+## Assumptions
+
+- People who misspell the city correctly either made a typo or they don't kow how to spell it.
+- People type in the city name before province code and country code.
 
 Design an API endpoint that provides auto-complete suggestions for large cities.
 The suggestions should be restricted to cities in the USA and Canada with a population above 5000 people.
