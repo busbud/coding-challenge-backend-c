@@ -3,6 +3,7 @@
 var express = require('express'),
     app = express(),
     async = require('async'),
+    _ = require('lodash'),
     mongoose = require('mongoose'),
     Schema = mongoose.Schema,
     Levenshtein = require('levenshtein'),
@@ -13,11 +14,44 @@ var express = require('express'),
 app.get('/suggestions', function(req, res) {
     var q = req.query.q,
         lat = req.query.latitude,
-        lon = req.query.longitude,
+        lng = req.query.longitude,
+        City = mongoose.model('City'),
         suggestions = [];
 
-    res.status(suggestions.length ? 404 : 200).type('json').send({suggestions: suggestions});
+    City.find({$or: [{name: {'$regex': new RegExp("^.*"+q+".*","gi")}}, {asciiname: {'$regex': new RegExp("^.*"+q+".*","gi")}}]}, 'name asciiname coord admin1').lean().exec(function(err, cities) {
+        async.map(cities, function(city, cb) {
+            var suggestion = {
+                name: city.name,
+                latitude: city.coord.lat,
+                longitude: city.coord.lng,
+                score: Math.min(ldist(q, city.name), ldist(q, city.asciiname))
+            };
+            cb(null, suggestion);
+        }, function(err, results) {
+            results.sort(compareScore);
+            _.forEach(results, function(r, err) {
+                suggestions.push(r);
+            });
+
+            if (err) res.status(500).type('json').send({suggestions: []});
+            else if (!suggestions.length) res.status(404).type('json').send({suggestions: []});
+            else res.status(200).type('json').send({suggestions: suggestions});
+        });
+    });
+
+    //http://maps.googleapis.com/maps/api/geocode/json?latlng=42.98339,-81.23304&sensor=true
 });
+
+function compareScore(a,b) {
+  if (a.score < b.score) return -1;
+  if (a.score > b.score) return 1;
+  return 0;
+}
+
+function ldist(q, cityName) {
+    var l = new Levenshtein(q,cityName);
+    return l.distance;
+};
 
 mongoose.connect('mongodb://localhost/busbud', function(err) {
     if (err) return console.log(err);
@@ -39,9 +73,11 @@ function loadModels() {
         altnames: String,
         coord: {
             lat: Number,
-            lon: Number
+            lng: Number
         },
         country: String,
+        admin1: String,
+        population: Number,
         tz: String,
         modified: String
     });
@@ -94,9 +130,11 @@ function populateDB() {
                     altnames: values[3],
                     coord: {
                         lat: values[4],
-                        lon: values[5]
+                        lng: values[5]
                     },
                     country: values[8],
+                    admin1: sanitizeAdminCodes(values[10]),
+                    population: values[14],
                     tz: values[17],
                     modified: values[18]
                 });
@@ -108,4 +146,23 @@ function populateDB() {
             data = data.substring(line_index + 1);
         };
     });
+
+    function sanitizeAdminCodes(adminCode) {
+        var adminCodeMap = {
+            '01': 'AB',
+            '02': 'BC',
+            '03': 'MB',
+            '04': 'NB',
+            '05': 'NL',
+            '07': 'NS',
+            '08': 'ON',
+            '09': 'PE',
+            '10': 'QC',
+            '11': 'MB',
+            '12': 'YT',
+            '13': 'NT',
+            '14': 'NU'
+        };
+        return parseInt(adminCode) ? adminCode[parseInt(adminCode)] : 'US';
+    };
 };
