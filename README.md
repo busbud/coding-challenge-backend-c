@@ -1,4 +1,5 @@
-# Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
+# Coveo Backend Coding Challenge
+(inspired by https://github.com/busbud/coding-challenge-backend-c)
 
 ## Requirements
 
@@ -14,10 +15,15 @@ The suggestions should be restricted to cities in the USA and Canada with a popu
     - each suggestion has a name which can be used to disambiguate between similarly named locations
     - each suggestion has a latitude and longitude
 - all functional tests should pass (additional tests may be implemented as necessary).
-- the final application should be [deployed to Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs).
 - feel free to add more features if you like!
 
-#### Sample responses
+## "The rules"
+
+- You can use the language and technology of your choosing. It's OK to try something new.
+- End result should be deployed on a public Cloud (Heroku, AWS etc. all have free tiers you can use).
+- Documentation and maintainability is a plus.
+
+## Sample responses
 
 These responses are meant to provide guidance. The exact values can vary based on the data source and scoring algorithm
 
@@ -67,63 +73,12 @@ These responses are meant to provide guidance. The exact values can vary based o
 ```
 
 
-### Non-functional
 
-- All code should be written in Javascript
-- Mitigations to handle high levels of traffic should be implemented
-- Work should be submitted as a pull-request to this repo
-- Documentation and maintainability is a plus
-
-### References
+## References
 
 - Geonames provides city lists Canada and the USA http://download.geonames.org/export/dump/readme.txt
-- http://www.nodejs.org/
-- http://ejohn.org/blog/node-js-stream-playground/
-
 
 ## Getting Started
 
 Begin by forking this repo and cloning your fork. GitHub has apps for [Mac](http://mac.github.com/) and
 [Windows](http://windows.github.com/) that make this easier.
-
-### Setting up a Nodejs environment
-
-Get started by installing [nodejs](http://www.nodejs.org).
-
-For OS X users, use [Homebrew](http://brew.sh) and `brew install nvm`
-
-Once that's done, from the project directory, run
-
-```
-nvm use
-```
-
-### Setting up the project
-
-In the project directory run
-
-```
-npm install
-```
-
-### Running the tests
-
-The test suite can be run with
-
-```
-npm test
-```
-
-### Starting the application
-
-To start a local server run
-
-```
-PORT=3456 npm start
-```
-
-which should produce output similar to
-
-```
-Server running at http://127.0.0.1:2345/suggestions
-```
