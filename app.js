@@ -51,7 +51,7 @@ module.exports = http.createServer(function (req, res) {
     res.writeHead(404, {'Content-Type': 'text/plain'});
     res.end("Invalid request");
   }
-}).listen(port, '127.0.0.1');
+}).listen(port);
 
 /**
  * Read all cities into memory from the table.
