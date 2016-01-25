@@ -104,65 +104,61 @@ class QuadTree extends Transform {
   }
 
   // Use A* to find neighbours
-  getNearby(leaf, maxDistance) {
-
-    function checkAndClone(otherLeaf) {
-      if(!otherLeaf)
-        return undefined;
-
-      let dist = distance(leaf, otherLeaf)
-      if (dist < maxDistance) {
-        let clonedLeaf = util.clone(otherLeaf);
-        clonedLeaf.distance = dist;
-        return clonedLeaf;
-      }
-    }
+  getNearby(leaf, maxDistance, maxNeighbours) {
+    const neighbours = [];
 
     function climb(parent) {
-      let nearby = [];
-      if (!parent)
-        return nearby;
+      if (neighbours.length >= maxNeighbours)
+        return;
 
-      let clonedParent = checkAndClone(parent);
-      if (clonedParent) {
-        nearby.push(clonedParent);
-        nearby = nearby.concat(
-          descend(parent.ne),
-          descend(parent.nw),
-          descend(parent.se),
-          descend(parent.sw),
-          climb(parent.parent));
+      if (!parent)
+        return;
+
+      let dist = distance(leaf, parent)
+      if (dist <= maxDistance) {
+        let clonedParent = util.clone(parent);
+        clonedParent.distance = dist;
+        neighbours.push(clonedParent);
       }
-      return nearby;
+
+      descend(parent.ne);
+      descend(parent.nw);
+      descend(parent.se);
+      descend(parent.sw);
+      climb(parent.parent);
     }
 
     function descend(child) {
-      let nearby = [];
       if (!child)
-        return nearby;
+        return;
+
+      if (neighbours.length >= maxNeighbours)
+        return;
 
       if (child.latitude == leaf.latitude &&
           child.longitude == leaf.longitude)
-        return nearby;
+        return;
 
-      let clonedChild = checkAndClone(child);
-      if (clonedChild) {
-        nearby.push(clonedChild)
-        nearby = nearby.concat(
-          descend(child.ne),
-          descend(child.nw),
-          descend(child.se),
-          descend(child.sw));
+      let dist = distance(leaf, child)
+      if (dist <= maxDistance) {
+        let clonedChild = util.clone(child);
+        clonedChild.distance = dist;
+        neighbours.push(clonedChild)
+
+        descend(child.ne);
+        descend(child.nw);
+        descend(child.se);
+        descend(child.sw);
       }
-      return nearby;
     }
 
-    return climb(leaf.parent).concat(
-      descend(leaf.ne),
-      descend(leaf.nw),
-      descend(leaf.se),
-      descend(leaf.sw)
-    );
+    climb(leaf.parent);
+    descend(leaf.ne);
+    descend(leaf.nw);
+    descend(leaf.se);
+    descend(leaf.sw);
+
+    return neighbours;
   }
 }
 

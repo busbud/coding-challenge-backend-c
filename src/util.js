@@ -166,8 +166,15 @@ function clone(obj) {
   return JSON.parse(stringify(obj));
 }
 
+function calculateScore(leaf, latitude, longitude) {
+  console.log(spatial)
+  let distance = spatial.distance(leaf, {latitude, longitude});
+  return 1 - (Math.log10(distance) / 10) || 0;
+}
+
 module.exports = {
   convertAdminCode,
   stringify,
-  clone
+  clone,
+  calculateScore
 };

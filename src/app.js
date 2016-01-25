@@ -22,6 +22,11 @@ let cache = LRU({
   maxAge: 1000 * 60 * 60
 })
 
+function calculateScore(leaf, latitude, longitude) {
+  let distance = spatial.distance(leaf, {latitude, longitude});
+  return 1 - (Math.log10(distance) / 10) || 0;
+}
+
 module.exports = http.createServer(function (req, res) {
   let prevResponse = cache.get(req.url);
   if (prevResponse) {
@@ -65,19 +70,23 @@ module.exports = http.createServer(function (req, res) {
 
     if (q) {
       // filter duplicate suggestions
+      // because the trie stores multiple possibilities of
+      // each city.
       let suggestions = Array.from(new Set(trie.find(q)));
       for (var i in suggestions) {
         let original = suggestions[i];
+        // Remove circular references and unnecessary keys
         suggestions[i] = util.clone(original);
         if(radius) {
-          suggestions[i].nearby = tree.getNearby(original, radius);
+          suggestions[i].nearby = tree.getNearby(original, radius, 10);
         }
 
         if(latitude && longitude) {
-          let distance = spatial.distance(suggestions[i], {latitude, longitude});
-          suggestions[i].score = 1 - (Math.log10(distance) / 10);
+          suggestions[i].score = calculateScore(suggestions[i],
+                                                latitude, longitude)
         }
       }
+      suggestions.sort((a,b) => a.score - b.score);
 
       let response = util.stringify({suggestions});
       cache.set(req.url, response);
