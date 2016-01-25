@@ -1,7 +1,8 @@
 'use strict';
 
-const http = require('http');
 const port = process.env.PORT || 2345;
+
+const http = require('http');
 const url = require('url');
 const querystring = require('querystring');
 const LRU = require('lru-cache');
@@ -91,6 +92,6 @@ module.exports = http.createServer(function (req, res) {
     res.writeHead(404, {'Content-Type': 'text/plain'});
     res.end();
   }
-}).listen(port, '127.0.0.1');
+}).listen(port);
 
-console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+console.log('Server running at %d', port);
