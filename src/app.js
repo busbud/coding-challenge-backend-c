@@ -74,7 +74,8 @@ module.exports = http.createServer(function (req, res) {
         }
 
         if(latitude && longitude) {
-          suggestions[i].score = spatial.distance(suggestions[i], {latitude, longitude})
+          let distance = spatial.distance(suggestions[i], {latitude, longitude});
+          suggestions[i].score = 1 - (Math.log10(distance) / 10);
         }
       }
 

@@ -166,16 +166,8 @@ function clone(obj) {
   return JSON.parse(stringify(obj));
 }
 
-// 1 = k log(10^4) + c
-// 0 = k log(1) + c
-// c = 0, k =
-function calculateScore(distance) {
-  return 1 - (Math.log10(distance) / 10)
-}
-
 module.exports = {
   convertAdminCode,
   stringify,
-  clone,
-  calculateScore
+  clone
 };
