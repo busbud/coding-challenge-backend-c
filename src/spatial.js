@@ -144,12 +144,12 @@ class QuadTree extends Transform {
         let clonedChild = util.clone(child);
         clonedChild.distance = dist;
         neighbours.push(clonedChild)
-
-        descend(child.ne);
-        descend(child.nw);
-        descend(child.se);
-        descend(child.sw);
       }
+
+      descend(child.ne);
+      descend(child.nw);
+      descend(child.se);
+      descend(child.sw);
     }
 
     climb(leaf.parent);
