@@ -103,8 +103,10 @@ class QuadTree extends Transform {
     }
   }
 
-  // Use A* to find neighbours
   getNearby(leaf, maxDistance, maxNeighbours) {
+    // An object is used instead of a set in order
+    // to keep track of neighbours because `getNearby`
+    // clones the neighbour.
     const neighbours = {};
 
     function climb(parent) {
@@ -160,7 +162,6 @@ class QuadTree extends Transform {
     for (var k in neighbours) {
       neighboursArr.push(neighbours[k]);
     }
-
     return neighboursArr;
   }
 }
@@ -173,6 +174,7 @@ function fromStream(stream) {
       return;
     }
 
+    // Add all cities to tree.
     let leaf = tree.insert(row);
 
     // Don't add to the trie if pop less than 5000
@@ -180,14 +182,14 @@ function fromStream(stream) {
       return;
     }
 
-    let name = row.name.toLowerCase();
+    let name = row.name;
     trie.add(name, leaf);
-    if (name !== row.asciiname.toLowerCase()) {
-      trie.add(row.asciiname.toLowerCase(), leaf);
+    if (name !== row.asciiname) {
+      trie.add(row.asciiname, leaf);
     }
 
     for (var altName of row.alternatenames.split(',')) {
-      altName = altName.toLowerCase()
+      altName = altName
       if (altName !== name)
         trie.add(altName, leaf);
     }
@@ -195,10 +197,10 @@ function fromStream(stream) {
     // Add full city, region, country name to trie
     let converted = util.convertAdminCode(row);
     trie.add(
-      `${row.name}, ${converted.shortName}, ${row.countryCode}`.toLowerCase(),
+      `${row.name}, ${converted.shortName}, ${row.countryCode}`,
       leaf);
     trie.add(
-      `${row.name}, ${converted.name}, ${row.countryCode}`.toLowerCase(),
+      `${row.name}, ${converted.name}, ${row.countryCode}`,
       leaf);
   });
   return {tree, trie};
