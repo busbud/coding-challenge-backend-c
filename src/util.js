@@ -146,6 +146,12 @@ function convertAdminCode(row) {
 }
 
 function stringify(obj) {
+  // The API should return ASCII names of cities.
+  // For example, Montréal -> Montreal
+  let name = undefined;
+  if (obj.name && obj.asciiname) {
+    name = obj.asciiname;
+  }
   return JSON.stringify(obj, (key, val) => {
     switch (key) {
     case 'parent':
@@ -154,8 +160,17 @@ function stringify(obj) {
     case 'ne':
     case 'nw':
     // case 'geonameid':
-    // case 'modificationDate':
-      return val.id;
+    case 'modificationDate':
+      return undefined;
+
+    case 'asciiname':
+      return undefined;
+    case 'name':
+      if (name)
+        return name;
+      else
+        return val;
+
     default:
       return val;
     }

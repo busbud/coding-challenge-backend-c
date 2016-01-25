@@ -27,8 +27,10 @@ function calculateScore(leaf, latitude, longitude) {
   return 1 - (Math.log10(distance) / 10) || 0;
 }
 
-// /suggestions Empty array
-// /suggestions?q=london -> should return a 
+// /suggestions                                     Empty array
+// /suggestions?q=cityName                          Possible cities
+// /suggestions?q=cityName&latitude=10&longitude=10 Cities with a score
+// /suggestions?q=cityName&radius=100               Cities with up to 10 neighbouring cities within the radius (in KM)
 module.exports = http.createServer(function (req, res) {
   let prevResponse = cache.get(req.url);
   if (prevResponse) {
@@ -37,71 +39,77 @@ module.exports = http.createServer(function (req, res) {
     return;
   }
 
+  function err(message, code) {
+    if (!code)
+      code = 400;
+
+    res.writeHead(code, {'Content-Type': 'application/json; charset=utf-8'});
+    res.end(JSON.stringify({
+      error: message
+    }));
+  }
+
   let parsedUrl = url.parse(req.url);
-  if (parsedUrl.pathname === '/suggestions') {
-    let query = querystring.parse(parsedUrl.query);
-    const q = query.q;
-    let latitude = parseFloat(query.latitude);
-    let longitude = parseFloat(query.longitude);
-    let radius = parseInt(query.radius);
+  if (parsedUrl.pathname !== '/suggestions') {
+    err('Invalid path', 404);
+    return;
+  }
 
-    function err(message) {
-      res.writeHead(400, {'Content-Type': 'application/json; charset=utf-8'});
-      res.end(JSON.stringify({
-        error: message
-      }));
-    }
+  let query = querystring.parse(parsedUrl.query);
+  const q = query.q;
+  let latitude = parseFloat(query.latitude);
+  let longitude = parseFloat(query.longitude);
+  let radius = parseInt(query.radius);
 
-    if (query.radius && radius <= 0) {
-      err('Radius must be greater than 0 if specified');
-      return;
-    } else if (query.radius && radius == NaN) {
-      err('Invalid radius');
-      return;
-    } else if (query.latitude && latitude == NaN) {
-      err('Invalid latitude');
-      return;
-    } else if (query.longitude && longitude == NaN) {
-      err('Invalid longitude');
-      return;
-    } else if (!query.longitude && query.latitude ||
-               query.longitude && !query.latitude) {
-      err('Latitude and longitude must both be specified');
-      return;
-    }
+  if (query.radius && radius <= 0) {
+    err('Radius must be greater than 0 if specified');
+    return;
+  } else if (query.radius && radius == NaN) {
+    err('Invalid radius');
+    return;
+  } else if (query.latitude && latitude == NaN) {
+    err('Invalid latitude');
+    return;
+  } else if (query.longitude && longitude == NaN) {
+    err('Invalid longitude');
+    return;
+  } else if (!query.longitude && query.latitude ||
+             query.longitude && !query.latitude) {
+    err('Latitude and longitude must both be specified');
+    return;
+  } else if (!q) {
+    err('No query provided');
+    return;
+  }
 
-    if (q) {
-      // Remove duplicate suggestions
-      // because the trie stores multiple possibilities of
-      // each city.
-      let suggestions = Array.from(new Set(trie.find(q)));
-      for (var i in suggestions) {
-        let original = suggestions[i];
+  // Remove duplicate suggestions
+  // because the trie stores multiple possibilities of
+  // each city.
+  let suggestions = Array.from(new Set(trie.find(q)));
+  for (var i in suggestions) {
+    let original = suggestions[i];
 
-        // Remove circular references and unnecessary keys
-        suggestions[i] = util.clone(original);
-        if(radius)
-          suggestions[i].nearby = tree.getNearby(original, radius, 10);
+    // Remove circular references and unnecessary keys
+    suggestions[i] = util.clone(original);
+    if(radius)
+      suggestions[i].nearby = tree.getNearby(original, radius, 10);
 
-        if(latitude !== NaN && longitude !== NaN)
-          suggestions[i].score = calculateScore(suggestions[i],
-                                                latitude, longitude)
-      }
-      suggestions.sort((a,b) => b.score - a.score);
+    if(latitude !== NaN && longitude !== NaN)
+      suggestions[i].score = calculateScore(suggestions[i],
+                                            latitude, longitude)
+  }
+  suggestions.sort((a,b) => b.score - a.score);
 
-      let response = util.stringify({suggestions});
-      cache.set(req.url, response);
-      res.writeHead(200, {'Content-Type': 'application/json; charset=utf-8'});
-      res.end(response);
-
-    } else {
-      res.end(JSON.stringify({
-        suggestions: []
-      }));
-    };
+  if (suggestions.length > 0) {
+    let response = util.stringify({suggestions});
+    cache.set(req.url, response);
+    res.writeHead(200, {'Content-Type': 'application/json; charset=utf-8'});
+    res.end(response);
   } else {
-    res.writeHead(404, {'Content-Type': 'text/plain'});
-    res.end();
+    res.writeHead(404, {'Content-Type': 'application/json; charset=utf-8'});
+    res.end(JSON.stringify({
+      suggestions: []
+    }))
   }
 }).listen(port);
 
