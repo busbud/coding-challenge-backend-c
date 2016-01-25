@@ -16,5 +16,7 @@
     "supertest": "^0.11.0",
     "triejs": "^0.1.5"
   },
-  "engines": "0.5.5"
+  "engines": {
+    "node": "5.5.0"
+  }
 }
