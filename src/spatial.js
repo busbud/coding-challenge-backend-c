@@ -105,12 +105,11 @@ class QuadTree extends Transform {
 
   // Use A* to find neighbours
   getNearby(leaf, maxDistance, maxNeighbours) {
-    const neighbours = [];
+    const neighbours = {};
 
     function climb(parent) {
-      if (neighbours.length >= maxNeighbours)
+      if (Object.keys(neighbours).length >= maxNeighbours)
         return;
-
       if (!parent)
         return;
 
@@ -118,7 +117,7 @@ class QuadTree extends Transform {
       if (dist <= maxDistance) {
         let clonedParent = util.clone(parent);
         clonedParent.distance = dist;
-        neighbours.push(clonedParent);
+        neighbours[clonedParent.geonameid] = clonedParent;
       }
 
       descend(parent.ne);
@@ -131,10 +130,8 @@ class QuadTree extends Transform {
     function descend(child) {
       if (!child)
         return;
-
-      if (neighbours.length >= maxNeighbours)
+      if (Object.keys(neighbours).length >= maxNeighbours)
         return;
-
       if (child.latitude == leaf.latitude &&
           child.longitude == leaf.longitude)
         return;
@@ -143,7 +140,7 @@ class QuadTree extends Transform {
       if (dist <= maxDistance) {
         let clonedChild = util.clone(child);
         clonedChild.distance = dist;
-        neighbours.push(clonedChild)
+        neighbours[clonedChild.geonameid] = clonedChild
       }
 
       descend(child.ne);
@@ -158,7 +155,13 @@ class QuadTree extends Transform {
     descend(leaf.se);
     descend(leaf.sw);
 
-    return neighbours;
+    // Remove duplicates
+    const neighboursArr = [];
+    for (var k in neighbours) {
+      neighboursArr.push(neighbours[k]);
+    }
+
+    return neighboursArr;
   }
 }
 

@@ -48,7 +48,7 @@ class RowParse extends Transform {
   static parseRowLine(line) {
     const parts = line.split('\t');
     const row = {
-      // geonameid: parts[0],
+      geonameid: parts[0],
       name: parts[1],
       asciiname: parts[2],
       alternatenames: parts[3],
