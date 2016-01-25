@@ -1,37 +1,43 @@
-var fs = require('fs'),
-    readline = require('readline'),
-    Stream = require('stream'),
-    util = require('util');
-
+"use strict";
+var Stream = require('stream');
 var Transform = Stream.Transform;
+var util = require('./util');
+var Triejs = require('triejs');
 
 // Calculates the distance between two lat/long pairs
 // in KM.
 // https://en.wikipedia.org/wiki/Haversine_formula
 // http://stackoverflow.com/a/27943
 var R = 6371; // Mean radius of the earth in km
-function distance(lat1, long1, lat2, long2) {
-  var degreeLat = deg2rad(lat2-lat1);  // deg2rad below
-  var degreeLong = deg2rad(long2-long1);
+function distance(leaf1, leaf2) {
+  var degreeLat = degreeToRad(leaf2.latitude-leaf1.latitude);
+  var degreeLong = degreeToRad(leaf2.longitude-leaf1.longitude);
   var a =
         Math.sin(degreeLat/2) * Math.sin(degreeLat/2) +
-        Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+        Math.cos(degreeToRad(leaf1.latitude)) * Math.cos(degreeToRad(leaf2.latitude)) *
         Math.sin(degreeLong/2) * Math.sin(degreeLong/2);
   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
   var d = R * c; // Distance in km
   return d;
 }
 
-// lat = y
-// long = x
+// Converts degrees to radians
+function degreeToRad(degrees) {
+  return degrees * (Math.PI / 180);
+}
+
+// This class can be used as a stream.Transform and
+// as a standalone QuadTree implementation by calling
+// the `insert` method.
 class QuadTree extends Transform {
   constructor() {
-    super({objectMode: true})
+    super({objectMode: true});
   }
 
   _transform(row, enc, done) {
-    this.insert(row, undefined)
-    done()
+    this.insert(row, undefined);
+    this.push(row);
+    done();
   }
 
   insert(newLeaf, parentLeaf) {
@@ -47,7 +53,6 @@ class QuadTree extends Transform {
       //   latitude: latitude,
       //   longitude: longitude
       // }
-      console.log('initializing root')
 
       this.root = newLeaf;
       return this.root;
@@ -90,6 +95,7 @@ class QuadTree extends Transform {
           return this.insert(newLeaf, parentLeaf.se)
       }
 
+      newLeaf.parent = parentLeaf
       return newLeaf
 
     } else {
@@ -97,53 +103,110 @@ class QuadTree extends Transform {
     }
   }
 
-  retrieveClosest(latitude, longitude, parentLeaf) {
-    if (parentLeaf) {
-      if (parentLeaf.latitude == latitude &&
-          parentLeaf.longitude == longitude) {
-        return parentLeaf
+  // Use A* to find neighbours
+  getNearby(leaf, maxDistance) {
+
+    function checkAndClone(otherLeaf) {
+      if(!otherLeaf)
+        return undefined;
+
+      let dist = distance(leaf, otherLeaf)
+      if (dist < maxDistance) {
+        let clonedLeaf = util.clone(otherLeaf);
+        clonedLeaf.distance = dist;
+        return clonedLeaf;
       }
-
-      // NE
-      if (latitude >= parentLeaf.latitude &&
-          longitude >= parentLeaf.longitude) {
-        // If more tree traversal is possible
-        if (parentLeaf.ne)
-          return this.retrieveClosest(latitude, longitude, parentLeaf.ne)
-      }
-
-      // NW
-      else if (latitude >= parentLeaf.latitude &&
-               longitude <= parentLeaf.longitude) {
-        if (parentLeaf.nw)
-          return this.retrieveClosest(latitude, longitude, parentLeaf.nw)
-      }
-
-      // SW
-      else if (latitude <= parentLeaf.latitude &&
-               longitude <= parentLeaf.longitude) {
-        if (parentLeaf.sw)
-          return this.retrieveClosest(latitude, longitude, parentLeaf.sw)
-      }
-
-      // SE
-      else if (latitude <= parentLeaf.latitude &&
-               longitude >= parentLeaf.longitude) {
-        if (parentLeaf.se)
-          return this.retrieveClosest(latitude, longitude, parentLeaf.se)
-      }
-
-      return parentLeaf
-
-    } else {
-      if (this.root)
-        return this.retrieveClosest(latitude, longitude, this.root)
-      else
-        return undefined
     }
+
+    function climb(parent) {
+      let nearby = [];
+      if (!parent)
+        return nearby;
+
+      let clonedParent = checkAndClone(parent);
+      if (clonedParent) {
+        nearby.push(clonedParent);
+        nearby = nearby.concat(
+          descend(parent.ne),
+          descend(parent.nw),
+          descend(parent.se),
+          descend(parent.sw),
+          climb(parent.parent));
+      }
+      return nearby;
+    }
+
+    function descend(child) {
+      let nearby = [];
+      if (!child)
+        return nearby;
+
+      if (child.latitude == leaf.latitude &&
+          child.longitude == leaf.longitude)
+        return nearby;
+
+      let clonedChild = checkAndClone(child);
+      if (clonedChild) {
+        nearby.push(clonedChild)
+        nearby = nearby.concat(
+          descend(child.ne),
+          descend(child.nw),
+          descend(child.se),
+          descend(child.sw));
+      }
+      return nearby;
+    }
+
+    return climb(leaf.parent).concat(
+      descend(leaf.ne),
+      descend(leaf.nw),
+      descend(leaf.se),
+      descend(leaf.sw)
+    );
   }
 }
 
+function fromStream(stream) {
+  const tree = new QuadTree();
+  const trie = new Triejs();
+  stream.on('data', (row) => {
+    if (row.countryCode !== 'US' && row.countryCode !== 'CA') {
+      return;
+    }
+
+    let leaf = tree.insert(row);
+
+    // Don't add to the trie if pop less than 5000
+    if(row.population < 5000) {
+      return;
+    }
+
+    let name = row.name.toLowerCase();
+    trie.add(name, leaf);
+    if (name !== row.asciiname.toLowerCase()) {
+      trie.add(row.asciiname.toLowerCase(), leaf);
+    }
+
+    for (var altName of row.alternatenames.split(',')) {
+      altName = altName.toLowerCase()
+      if (altName !== name)
+        trie.add(altName, leaf);
+    }
+
+    // Add full city, region, country name to trie
+    let converted = util.convertAdminCode(row);
+    trie.add(
+      `${row.name}, ${converted.shortName}, ${row.countryCode}`.toLowerCase(),
+      leaf);
+    trie.add(
+      `${row.name}, ${converted.name}, ${row.countryCode}`.toLowerCase(),
+      leaf);
+  });
+  return {tree, trie};
+}
+
 module.exports = {
-  QuadTree: QuadTree
+  QuadTree,
+  fromStream,
+  distance
 }

@@ -1,3 +1,4 @@
+"use strict";
 var fs = require('fs'),
     readline = require('readline'),
     Stream = require('stream'),
@@ -12,12 +13,12 @@ class LineParse extends Transform {
   }
 
   _transform(chunk, enc, cb) {
-    var data = chunk.toString();
+    let data = chunk.toString();
     if (this.prevData) {
       data = this.prevData + data;
     }
 
-    var lines = data.split('\n');
+    const lines = data.split('\n');
     this.prevData = lines.splice(lines.length-1,1)[0];
     lines.forEach(this.push.bind(this));
     cb();
@@ -36,7 +37,7 @@ class RowParse extends Transform {
     if (this.first) {
       this.first = false
     } else {
-      var row = RowParse.parseRowLine(line);
+      const row = RowParse.parseRowLine(line);
       this.push(row);
     }
     cb();
@@ -45,30 +46,30 @@ class RowParse extends Transform {
   // representing each row of the file.
   // Returns a stream of objects
   static parseRowLine(line) {
-    var parts = line.split('\t');
-    var row = {
-      geonameid: parts[0],
+    const parts = line.split('\t');
+    const row = {
+      // geonameid: parts[0],
       name: parts[1],
       asciiname: parts[2],
       alternatenames: parts[3],
       latitude: parseFloat(parts[4]),
       longitude: parseFloat(parts[5]),
-      featureClass: parts[6],
-      featureCode: parts[7],
+      // featureClass: parts[6],
+      // featureCode: parts[7],
       countryCode: parts[8],
-      cc2: parts[9],
+      // cc2: parts[9],
       admin1Code: parts[10],
-      admin2Code: parts[11],
-      admin3Code: parts[12],
-      admin4Code: parts[13],
+      // admin2Code: parts[11],
+      // admin3Code: parts[12],
+      // admin4Code: parts[13],
       population: parseInt(parts[14]),
-      elevation: parseInt(parts[15]),
-      dem: parseInt(parts[16]),
-      timezone: parts[17],
-      modificationDate: undefined
+      // elevation: parseInt(parts[15]),
+      // dem: parseInt(parts[16]),
+      // timezone: parts[17],
+      // modificationDate: undefined
     };
-    var rawDate = parts[18].split('-');
-    row.modificationDate = new Date(rawDate[0], rawDate[1], rawDate[2]);
+    // const rawDate = parts[18].split('-');
+    // row.modificationDate = new Date(rawDate[0], rawDate[1], rawDate[2]);
 
     return row;
   }
