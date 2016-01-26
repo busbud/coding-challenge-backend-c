@@ -1,5 +1,5 @@
 var expect  = require('chai').expect;
-var app     = require('../app');
+var app     = require('../src/app');
 var request = require('supertest')(app);
 
 describe('GET /suggestions', function() {
@@ -12,7 +12,11 @@ describe('GET /suggestions', function() {
         .end(function (err, res) {
           response = res;
           response.json = JSON.parse(res.text);
-          done(err);
+
+          // Wait for tree and trie to be populated
+          setTimeout(() => {
+            done(err);
+          }, 1000);
         });
     });
 
@@ -51,9 +55,9 @@ describe('GET /suggestions', function() {
     it('contains a match', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.some(function (suggestion) {
-          return suggestion.name.test(/montreal/i);
+          return suggestion.name.toLowerCase().indexOf('montreal') > -1;
         });
-      })
+      });
     });
 
     it('contains latitudes and longitudes', function () {
