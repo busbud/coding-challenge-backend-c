@@ -3,25 +3,28 @@
 
 ## Requirements
 
-Design an API endpoint that provides auto-complete suggestions for large cities.
-The suggestions should be restricted to cities in the USA and Canada with a population above 5000 people.
+Design an API endpoint that provides auto-complete suggestions for large cities. The suggestions should be restricted to cities in the USA and Canada with a population above 5000 people.
 
-- the endpoint is exposed at `/suggestions`
-- the partial (or complete) search term is passed as a querystring parameter `q`
-- the caller's location can optionally be supplied via querystring parameters `latitude` and `longitude` to help improve relative scores
-- the endpoint returns a JSON response with an array of scored suggested matches
-    - the suggestions are sorted by descending score
-    - each suggestion has a score between 0 and 1 (inclusive) indicating confidence in the suggestion (1 is most confident)
-    - each suggestion has a name which can be used to disambiguate between similarly named locations
-    - each suggestion has a latitude and longitude
-- all functional tests should pass (additional tests may be implemented as necessary).
-- feel free to add more features if you like!
+- The endpoint is exposed at `/suggestions`
+- The partial (or complete) search term is passed as a querystring parameter `q`
+- The caller's location can optionally be supplied via querystring parameters `latitude` and `longitude` to help improve relative scores
+- The endpoint returns a JSON response with an array of scored suggested matches
+    - The suggestions are sorted by descending score
+    - Each suggestion has a score between 0 and 1 (inclusive) indicating confidence in the suggestion (1 is most confident)
+    - Each suggestion has a name which can be used to disambiguate between similarly named locations
+    - Each suggestion has a latitude and longitude
 
 ## "The rules"
 
-- You can use the language and technology of your choosing. It's OK to try something new.
+- *You can use the language and technology of your choosing.* It's OK to try something new (tell us if you do), but feel free to use something you're comfortable with. We don't care if you use something we don't; the goal here is not to validate your knowledge of a particular technology.
 - End result should be deployed on a public Cloud (Heroku, AWS etc. all have free tiers you can use).
+
+## Advices
+
+- Try to design and implement your solution as you would do for real production code. Show us how you create clean, maintainable code that does awesome stuff. Build something that we'd be happy to contribute to.
+- Feel free to add more features if you like! Really, we're curious about what you can think of. We'd expect the same if you worked with us.
 - Documentation and maintainability is a plus.
+- Don't you forget those unit tests.
 
 ## Sample responses
 
@@ -71,8 +74,6 @@ These responses are meant to provide guidance. The exact values can vary based o
   "suggestions": []
 }
 ```
-
-
 
 ## References
 
