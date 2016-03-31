@@ -11,10 +11,26 @@
   "license": "WTFPL",
   "dependencies": {
     "chai": "^1.9.1",
+    "diacritics": "^1.2.3",
+    "jaro-winkler": "^0.2.6",
     "mocha": "^1.18.2",
+    "n-gram": "^0.1.2",
     "supertest": "^0.11.0"
   },
   "engines": {
     "node": "0.10.26"
-  }
+  },
+  "directories": {
+    "test": "test"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/busbud/coding-challenge-backend-c.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/busbud/coding-challenge-backend-c/issues"
+  },
+  "homepage": "https://github.com/busbud/coding-challenge-backend-c#readme"
 }
