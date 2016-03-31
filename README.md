@@ -1,129 +1,57 @@
-# Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
+# Busbud Coding Challenge
 
-## Requirements
+Here's my shot at the Busbud coding challenge!
 
-Design an API endpoint that provides auto-complete suggestions for large cities.
-The suggestions should be restricted to cities in the USA and Canada with a population above 5000 people.
+## Fuzzy String Matching
 
-- the endpoint is exposed at `/suggestions`
-- the partial (or complete) search term is passed as a querystring parameter `q`
-- the caller's location can optionally be supplied via querystring parameters `latitude` and `longitude` to help improve relative scores
-- the endpoint returns a JSON response with an array of scored suggested matches
-    - the suggestions are sorted by descending score
-    - each suggestion has a score between 0 and 1 (inclusive) indicating confidence in the suggestion (1 is most confident)
-    - each suggestion has a name which can be used to disambiguate between similarly named locations
-    - each suggestion has a latitude and longitude
-- all functional tests should pass (additional tests may be implemented as necessary).
-- the final application should be [deployed to Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs).
-- feel free to add more features if you like!
+To implement a performant solution for this kind of problem we first need to prune our search space before we do the distance
+calculation for the best candidates.
 
-#### Sample responses
+### First Step: Search Space Pruning
 
-These responses are meant to provide guidance. The exact values can vary based on the data source and scoring algorithm
+We first have to create an index using n-gram to prune our search space. Here an example for q=Montreal
 
-**Near match**
+```
+Index size is 7238
 
-    GET /suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
+After N-gram pruning: 266
 
-```json
-{
-  "suggestions": [
-    {
-      "name": "London, ON, Canada",
-      "latitude": "42.98339",
-      "longitude": "-81.23304",
-      "score": 0.9
-    },
-    {
-      "name": "London, OH, USA",
-      "latitude": "39.88645",
-      "longitude": "-83.44825",
-      "score": 0.5
-    },
-    {
-      "name": "London, KY, USA",
-      "latitude": "37.12898",
-      "longitude": "-84.08326",
-      "score": 0.5
-    },
-    {
-      "name": "Londontowne, MD, USA",
-      "latitude": "38.93345",
-      "longitude": "-76.54941",
-      "score": 0.3
-    }
-  ]
-}
+After N-gram with an error limit (a maximum of 2 n-grams can be missing): 78
 ```
 
-**No match**
+### Second Step: Scoring Function (Jaro-Winkler)
 
-    GET /suggestions?q=SomeRandomCityInTheMiddleOfNowhere
+After the pruning, we should get a more manageable number of candidates, but still there's some
+optimization possible (see the presentation of Seth Verrinder & Kyle Punam). We can use an approximation of
+the Jaro-Winkler distance without the need of the number of transpositions, it gives us an upperbound on the score.
 
-```json
-{
-  "suggestions": []
-}
+The optimization is based on the assumption that we can compute the number of matching characters way more efficiently
+than the fullblown Jaro-Winkler distance. We can achieve that by encoding our query and index entry in a number and using
+bitwise operations on them to find how many characters from the smallest string are not in the biggest one. The optimization
+doesn't seem to be that important in javascript (there seems to be a lot of conversion between Number(float) -> Int -> Number(float)),
+but it still improves the result on the benchmark. Also it gives a good boost when we are searching really long terms without
+results.
+
 ```
+After Jaro-Winkler upperbound filtering: 43 (down from 78)
+``
 
+Now we are able to use our costly distance computing on only 43 candidates, filter them with a score limit and ordered them.
 
-### Non-functional
+### Third Step (optional): Score using location if available
 
-- All code should be written in Javascript
-- Mitigations to handle high levels of traffic should be implemented
-- Work should be submitted as a pull-request to this repo
-- Documentation and maintainability is a plus
+Last step, but an optional one, we use a squared equirectangular approximation, because we don't need the real distance
+but a total order between the values. Then we penalise a part of the total score (10%) with the distance ratio (current distance/maximum distance).
+
+## Possible Improvements
+
+- Add alternates names to the index
+- Better handling of special characters
+- Better handling of admin1 code and country in the index
+- More test cases
+
 
 ### References
 
-- Geonames provides city lists Canada and the USA http://download.geonames.org/export/dump/readme.txt
-- http://www.nodejs.org/
-- http://ejohn.org/blog/node-js-stream-playground/
-
-
-## Getting Started
-
-Begin by forking this repo and cloning your fork. GitHub has apps for [Mac](http://mac.github.com/) and
-[Windows](http://windows.github.com/) that make this easier.
-
-### Setting up a Nodejs environment
-
-Get started by installing [nodejs](http://www.nodejs.org).
-
-For OS X users, use [Homebrew](http://brew.sh) and `brew install nvm`
-
-Once that's done, from the project directory, run
-
-```
-nvm use
-```
-
-### Setting up the project
-
-In the project directory run
-
-```
-npm install
-```
-
-### Running the tests
-
-The test suite can be run with
-
-```
-npm test
-```
-
-### Starting the application
-
-To start a local server run
-
-```
-PORT=3456 npm start
-```
-
-which should produce output similar to
-
-```
-Server running at http://127.0.0.1:2345/suggestions
-```
+- Jaro–Winkler distance Wikipedia article https://en.wikipedia.org/wiki/Jaro%E2%80%93Winkler_distance
+- What's in a Name? Fast Fuzzy String Matching - Seth Verrinder & Kyle Putnam - Midwest.io 2015 https://www.youtube.com/watch?v=s0YSKiFdj8Q
