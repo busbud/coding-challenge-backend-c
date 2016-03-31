@@ -34,7 +34,7 @@ results.
 
 ```
 After Jaro-Winkler upperbound filtering: 43 (down from 78)
-``
+```
 
 Now we are able to use our costly distance computing on only 43 candidates, filter them with a score limit and ordered them.
 
