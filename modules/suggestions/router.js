@@ -1,9 +1,8 @@
 var express     = require('express');
-var suggestions = express();
 var controller  = require('./controller');
 
-//console.log(new controller())
+var suggestions = express();
 
-suggestions.get('/', controller.get)
+suggestions.get('/', controller.get);
 
 module.exports = suggestions;
