@@ -13,7 +13,6 @@ mongoose.connect('mongodb://coding-challenge:busbud@ds019766.mlab.com:19766/hero
         return process.kill(0);
     }
 
-
     return app.emit('db:connected');
 });
 
@@ -24,7 +23,6 @@ var suggestionsRouter = require('./modules/suggestions/router');
 
 // Then, use it
 app.use('/suggestions', suggestionsRouter);
-
 
 app.on('db:error', function(error) {
     console.log("The server can't be launched because the connection with the mongo database has failed");
