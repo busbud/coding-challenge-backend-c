@@ -64,7 +64,14 @@ function calculateScore(query, latitude, longitude, match) {
   }
 
   if (latitude && longitude) {
+    let distance = Math.sqrt(Math.pow(match.lat - latitude, 2) + Math.pow(match.long - longitude, 2));
 
+    if (distance < 1) return 1.0;
+    else {
+      distanceScore = 1 - (1/distance);
+
+      score = (score + distance) / 2;
+    }
   }
 
   return score;
