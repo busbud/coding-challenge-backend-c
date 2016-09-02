@@ -36,7 +36,7 @@ app.on('db:connected', function() {
     app.listen(port, '0.0.0.0');
 
     // And tell to every one
-    console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+    console.log('Server running at http://0.0.0.1:%d/suggestions', port);
 });
 
 // For the tests

@@ -20,6 +20,8 @@ var City = mongoose.model('City', {
     // longitude in decimal degrees (wgs84)
     long : Number,
 
+    coords : { type: [Number], index: '2dsphere' },
+
     // see http://www.geonames.org/export/codes.html, char(1)
     feat_class : String,
 

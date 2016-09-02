@@ -28,7 +28,7 @@ var launchCitiesInsertionScript = function() {
         numberOfRecords += 1;
 
         var city = new City(record);
-
+        city.coords = [city.long, city.lat];
         city.save(function(error) {
 
             if(error)
