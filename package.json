@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "description": "coding challenge in Nodejs",
   "engines": {
-    "node": "^6.2.1"
+    "node": "6.2.x"
   },
   "main": "app.js",
   "scripts": {
