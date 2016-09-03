@@ -2,11 +2,12 @@
   "name": "coding-challenge-backend-c",
   "version": "0.0.0",
   "description": "coding challenge in Nodejs",
-  "main": "app.js",
   "scripts": {
     "clean": "rm -rf dist || true",
     "build": "babel src/ -d dist -s",
     "lint": "eslint src index.js",
+    "importDb": "node ./dist/bin/importDb",
+    "postinstall": "npm run build",
     "start": "node ./dist/index.js",
     "debug": "node --debug ./dist/index.js",
     "test": "npm run build && NODE_ENV=test ./node_modules/mocha/bin/mocha --compilers js:babel-core/register ./test/**/*.test.js --require babel-polyfill"
