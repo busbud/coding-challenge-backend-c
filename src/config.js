@@ -6,7 +6,7 @@ export const DEFAULT_CONF = {
 
 export default nconf
   .env([
-    'APP_PORT',
+    'PORT',
     'REDIS_URL'
   ])
   .defaults(DEFAULT_CONF)

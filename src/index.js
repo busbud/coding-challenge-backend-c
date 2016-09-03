@@ -10,9 +10,7 @@ export default run
 
 if (!module.parent) {
   run({
-    port: conf.get('APP_PORT'),
-    host: conf.get('APP_HOST'),
-    store: conf.get('APP_STORE')
+    port: conf.get('PORT')
   }, (s) => {
     const {address, port} = s.address()
     console.log('Server running at http://%s:%s', address, port)

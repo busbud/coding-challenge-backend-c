@@ -25,7 +25,6 @@ export default (config = {}) => {
   app.listen = (fn) => {
     return httpServer.listen(
       config.port,
-      config.host,
       listening(fn)
     )
   }

@@ -189,8 +189,8 @@ describe('Importer', () => {
       cityImporter.doImport(inputData)
         .then((outputData) => {
           expect(outputData).to.be.an.instanceof(Array)
-          expect(outputData).to.be.length(1)
-          expect(outputData[0]).to.be.deep.equal(cities)
+          expect(outputData).to.be.length(3)
+          expect(outputData).to.be.deep.equal(cities)
           expect(createCitySpy.calledThrice).to.be.true
           done()
         })
