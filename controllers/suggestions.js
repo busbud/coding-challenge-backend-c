@@ -1,7 +1,8 @@
 'use strict';
 
-var City       = require('../../models/city');
-var Suggestion = require('../../models/suggestion');
+var City       = require('../models/city');
+var Suggestion = require('../models/suggestion');
+var _          = require('lodash');
 
 var transformCityToSuggestion = function(citiesSuggest) {
     var suggestions = [];
@@ -11,9 +12,7 @@ var transformCityToSuggestion = function(citiesSuggest) {
         var suggestion = new Suggestion({
             name        : item.name,
             longitude   : item.long,
-            latitude    : item.lat,
-            population  : item.population,
-            score       : 1
+            latitude    : item.lat
         });
 
         suggestions.push(suggestion);
@@ -22,7 +21,7 @@ var transformCityToSuggestion = function(citiesSuggest) {
     return suggestions;
 };
 
-var suggestionsController = class SuggestionsController {
+var suggestionsController = {
 
     /**
      *
@@ -38,7 +37,7 @@ var suggestionsController = class SuggestionsController {
      * @params req {Request}
      * @params res {Response}
      * */
-    get(req, res) {
+    search : function(req, res) {
 
         res.status(200);
 
@@ -60,7 +59,7 @@ var suggestionsController = class SuggestionsController {
                         type: "Point" ,
                         coordinates: [ req.query.longitude , req.query.latitude ]
                     },
-                    $maxDistance: req.query.radius * 1000 || 50000,
+                    $maxDistance: req.query.radius || 50000,
                     $minDistance: 0
                 }
             }
@@ -92,10 +91,10 @@ var suggestionsController = class SuggestionsController {
 
                 // Send the results
                 return res.json({
-                    suggestions : suggestions
+                    suggestions : _.orderBy(suggestions, 'score', 'desc')
                 });
             });
     }
 };
 
-module.exports = new suggestionsController();
+module.exports = suggestionsController;

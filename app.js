@@ -4,6 +4,19 @@ var express     = require('express');
 var app         = express();
 var mongoose    = require('mongoose');
 
+// Set config for the view rendering
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
+
+// Modules loading
+// First, require the router
+var suggestionsRouter = require('./routers/suggestions');
+var defaultRouter     = require('./routers/default');
+
+// Then, use it
+app.use('/suggestions', suggestionsRouter);
+app.use('/', defaultRouter);
+
 // Connect to the mongo database
 // Once connected , emit the db:connected event
 mongoose.connect('mongodb://coding-challenge:busbud@ds019766.mlab.com:19766/heroku_z7p8f5ck', function(error) {
@@ -15,14 +28,6 @@ mongoose.connect('mongodb://coding-challenge:busbud@ds019766.mlab.com:19766/hero
 
     return app.emit('db:connected');
 });
-
-
-// Modules loading
-// First, require the router
-var suggestionsRouter = require('./modules/suggestions/router');
-
-// Then, use it
-app.use('/suggestions', suggestionsRouter);
 
 app.on('db:error', function(error) {
     console.log("The server can't be launched because the connection with the mongo database has failed");

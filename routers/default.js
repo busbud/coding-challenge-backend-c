@@ -1,8 +1,8 @@
 var express     = require('express');
-var controller  = require('./controller');
+var controller  = require('../controllers/default');
 
 var suggestions = express();
 
-suggestions.get('/', controller.get);
+suggestions.get('/', controller.index);
 
 module.exports = suggestions;
