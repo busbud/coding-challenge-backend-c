@@ -13,7 +13,7 @@ function getCityNameMatch(query, name, alt_names) {
   if (names.indexOf(query) !== -1) result = query;
   else {
     names.forEach((name) => {
-      if (name.indexOf(query) !== -1) result = name;
+      if ((new RegExp(query, 'i')).test(name)) result = name;
     });
   }
 
@@ -57,8 +57,8 @@ function calculateScore(query, latitude, longitude, match) {
 
   if (query === nameMatch) return 1.0;
   else {
-    score = Math.round(query.length / nameMatch.length * 10) / 10;
-    if (nameMatch.indexOf(query) > 0) {
+    score = query.length / nameMatch.length;
+    if (nameMatch.indexOf(query) !== 0) {
       score *= score;
     }
   }
@@ -73,6 +73,8 @@ function calculateScore(query, latitude, longitude, match) {
       score = (score + distance) / 2;
     }
   }
+
+  if (score < 0.1) score = 0.1;
 
   return score;
 }
