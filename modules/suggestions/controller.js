@@ -12,6 +12,7 @@ var transformCityToSuggestion = function(citiesSuggest) {
             name        : item.name,
             longitude   : item.long,
             latitude    : item.lat,
+            population  : item.population,
             score       : 1
         });
 
@@ -23,20 +24,19 @@ var transformCityToSuggestion = function(citiesSuggest) {
 
 var suggestionsController = class SuggestionsController {
 
-
     /**
      *
      * /suggestions
      *
      * @queryStringParams q {String}
-     * @queryStringParams latitude  {Float} - optionnal
-     * @queryStringParams longitude {Float} - optionnal
-     * @queryStringParams radius    {Float} - optionnal, radius use it if you want to return results in specific zone.
-     *                                        Used only if longitude & latitude are passed.
-     *                                        Default value is 5000 meters
+     * @queryStringParams latitude  {Float} - Optionnal - Latitude
+     * @queryStringParams longitude {Float} - Optionnal - Longitude
+     * @queryStringParams radius    {Float} - Optionnal, radius use it if you want to return results in specific zone.
+     *                                        Used only if longitude & latitude are passed. In kilometers.
+     *                                        Default value is 50 km
      *
-     * @params req
-     * @params res
+     * @params req {Request}
+     * @params res {Response}
      * */
     get(req, res) {
 
@@ -60,7 +60,7 @@ var suggestionsController = class SuggestionsController {
                         type: "Point" ,
                         coordinates: [ req.query.longitude , req.query.latitude ]
                     },
-                    $maxDistance: req.query.radius || 50000,
+                    $maxDistance: req.query.radius * 1000 || 50000,
                     $minDistance: 0
                 }
             }
@@ -79,11 +79,20 @@ var suggestionsController = class SuggestionsController {
                 if(citiesSuggest.length == 0)
                     res.status(404);
 
+                var suggestions = transformCityToSuggestion(citiesSuggest);
 
+                suggestions.map(function(suggestion) {
+                    suggestion.setScore({
+                        q           : queryParameter,
+                        longitude   : req.query.longitude,
+                        latitude    : req.query.latitude,
+                        radius      : req.query.radius
+                    })
+                });
 
                 // Send the results
                 return res.json({
-                    suggestions : transformCityToSuggestion(citiesSuggest)
+                    suggestions : suggestions
                 });
             });
     }

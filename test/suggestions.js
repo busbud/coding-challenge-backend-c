@@ -72,4 +72,5 @@ describe('GET /suggestions', function() {
       })
     });
   });
+
 });
