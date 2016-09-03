@@ -36,6 +36,7 @@ r.get('/suggestions', (ctx) => {
         suggestions
       }
     })
+    .catch(console.log)
 })
 
 export default r

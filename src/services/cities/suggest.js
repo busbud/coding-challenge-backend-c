@@ -7,7 +7,7 @@ const DEFAULT_OPTIONS = {
   scoring: {
     distance: 0.5,
     length: 0.2,
-    population: 0.3,
+    population: 0.3
   }
 }
 
