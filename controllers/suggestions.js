@@ -4,23 +4,6 @@ var City       = require('../models/city');
 var Suggestion = require('../models/suggestion');
 var _          = require('lodash');
 
-var transformCityToSuggestion = function(citiesSuggest) {
-    var suggestions = [];
-
-    citiesSuggest.map(function(item) {
-
-        var suggestion = new Suggestion({
-            name        : item.name,
-            longitude   : item.long,
-            latitude    : item.lat
-        });
-
-        suggestions.push(suggestion);
-    });
-
-    return suggestions;
-};
-
 var suggestionsController = {
 
     /**
@@ -42,13 +25,14 @@ var suggestionsController = {
         res.status(200);
 
         var queryParameter = req.query.q.toString();
+        var queryParameterRegex = new RegExp('^'+queryParameter, 'i');
 
         var query = City.find({});
         var where = {
             '$or' : [{
-                name : new RegExp(queryParameter, 'i')
+                name : queryParameterRegex
             }, {
-                alt_name : new RegExp(queryParameter, 'i')
+                alt_name : queryParameterRegex
             }]
         };
 
@@ -78,11 +62,15 @@ var suggestionsController = {
                 if(citiesSuggest.length == 0)
                     res.status(404);
 
-                var suggestions = transformCityToSuggestion(citiesSuggest);
+                var suggestions = [];
+
+                citiesSuggest.map(function(item) {
+                    suggestions.push(new Suggestion(item));
+                });
 
                 suggestions.map(function(suggestion) {
                     suggestion.setScore({
-                        q           : queryParameter,
+                        q           : req.query.q,
                         longitude   : req.query.longitude,
                         latitude    : req.query.latitude,
                         radius      : req.query.radius

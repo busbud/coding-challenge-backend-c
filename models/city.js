@@ -15,10 +15,10 @@ var City = mongoose.model('City', {
     alt_name    : String,
 
     // latitude in decimal degrees (wgs84)
-    lat : Number,
+    latitude : Number,
 
     // longitude in decimal degrees (wgs84)
-    long : Number,
+    longitude : Number,
 
     coords : { type: [Number], index: '2dsphere' },
 
