@@ -20,7 +20,9 @@
     "diacritics": "^1.2.3",
     "ioredis": "^2.3.0",
     "nconf": "^0.8.4",
-    "babel-cli": "^6.14.0"
+    "babel-cli": "^6.14.0",
+    "babel-polyfill": "^6.13.0",
+    "babel-preset-es2015": "^6.14.0"
   },
   "engines": {
     "node": "5.12"
@@ -28,8 +30,6 @@
   "devDependencies": {
     "babel-eslint": "^6.1.2",
     "babel-plugin-transform-regenerator": "^6.14.0",
-    "babel-polyfill": "^6.13.0",
-    "babel-preset-es2015": "^6.14.0",
     "chai": "^3.5.0",
     "chain": "^0.1.3",
     "eslint": "^3.4.0",
