@@ -21,14 +21,14 @@
             <form action="" class="form">
                 <div class="form-group">
                     <div class="checkbox">
-                        <label for="">
+                        <label for="use-location">
                             <input id="use-location" type="checkbox" name="use-location" value="1"/> Use coordinates
                         </label>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="">Radius (only if use-coordinates is checked)</label>
+                    <label for="radius">Radius in meters (only if use-coordinates is checked)</label>
                     <input id="radius" type="text" class="form-control">
                 </div>
 
@@ -38,12 +38,7 @@
             </form>
         </div>
     </div>
-
 </div>
-
-
-
-
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 <script defer async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDBOJ4sbatzQsvj_FlYoo2eb7DqRfn6J78&callback=init"></script>

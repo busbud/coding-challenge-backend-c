@@ -14,14 +14,23 @@ var SuggestionSchema = new Schema({
     latitude : Number,
 
     // Between 0 and 1 (inclusive) indicating confidence in the suggestion (1 is most confident)
-    score : Number,
-
-    // TMP
-    population : Number
+    score : Number
 });
 
 /**
  * setScore
+ *
+ * The score depending of two criterion for now :
+ *
+ * Of the stringMatchingRatio score between the name of the city and the name searched
+ *
+ * Of the distanceRatio between the centered point wanted by passing a longitude and a latitude and the city.
+ * If there is no longitude and latitude provided, this will not be taken in consideration.
+ *
+ * There is a lot of ways to improve the scoring algorithms :
+ * We can take the population as well a criteria
+ * We could change the coefficient for each criterion. For now, stringMatching and Distance
+ *  have the same coefficient. But the distance would be more important.
  *
  * @params defaultSearchCriteria                    {Object}
  * @params defaultSearchCriteria.q                  {String}    - the initial search criteria

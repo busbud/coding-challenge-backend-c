@@ -125,5 +125,24 @@ PORT=3456 npm start
 which should produce output similar to
 
 ```
-Server running at http://127.0.0.1:2345/suggestions
+Server running at http://127.0.0.1:3456/suggestions
 ```
+
+## Challenge
+
+To facilitate the search, we use a mongo DB database. There is a script to parse the file given and insert all data in
+this database.
+
+You can fill the database by running
+
+`npm run fixtures`
+
+This will empty the database and re fill again. You don't need to run mongoDB deamon on your local machine since
+the mongodb is hosted directly on heroku for dev & production environment.
+
+### Supplement
+
+You can go on the `/` to see a example page with a autocompeletion field that consume our API.
+
+You can pass to the endpoint API the new parameter `radius` to increase the precision of the results if longitude and
+latitude are passed

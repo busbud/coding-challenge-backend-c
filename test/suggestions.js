@@ -26,6 +26,30 @@ describe('GET /suggestions', function() {
     });
   });
 
+  describe('with parameter missing', function () {
+    var response;
+
+    before(function (done) {
+      request
+          .get('/suggestions')
+          .end(function (err, res) {
+            response = res;
+            response.json = JSON.parse(res.text);
+            done(err);
+          });
+    });
+
+    it('returns a 500', function () {
+      expect(response.statusCode).to.equal(500);
+    });
+
+    it('returns an error object', function () {
+      expect(response.json).to.be.an('object');
+      expect(response.json).to.have.property('type', 'parameterMissing');
+    });
+
+  });
+
   describe('with a valid city', function () {
     var response;
 
