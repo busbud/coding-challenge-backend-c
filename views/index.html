@@ -17,9 +17,25 @@
             <h1 class="page-header">
                 Please, try me
             </h1>
-            <select id="input-suggestions" style="width:100%;">
-                <option value="3620194" selected="selected">Please type here</option>
-            </select>
+
+            <form action="" class="form">
+                <div class="form-group">
+                    <div class="checkbox">
+                        <label for="">
+                            <input id="use-location" type="checkbox" name="use-location" value="1"/> Use coordinates
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="">Radius (only if use-coordinates is checked)</label>
+                    <input id="radius" type="text" class="form-control">
+                </div>
+
+                <select id="input-suggestions" style="width:100%;">
+                    <option value="3620194" selected="selected">Please type here</option>
+                </select>
+            </form>
         </div>
     </div>
 
@@ -30,12 +46,29 @@
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+<script defer async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDBOJ4sbatzQsvj_FlYoo2eb7DqRfn6J78&callback=init"></script>
 <script>
+
+    // Try HTML5 geolocation.
+    function init() {
+        if ( navigator.geolocation ) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                window.coords = {
+                    latitude : position.coords.latitude,
+                    longitude : position.coords.longitude
+                };
+            }, function(err) {
+                alert(err);
+            });
+        } else {
+            alert("your browser doesn't support Geolocation");
+        }
+    };
+
 
     function formatState (state) {
         return state.name;
     };
-
 
     $(document).ready(function() {
         $("#input-suggestions").select2({
@@ -45,9 +78,21 @@
                 dataType : 'json',
                 delay : 250,
                 data : function (params) {
-                    return {
+
+                    var requestParams = {
                         q : params.term
                     };
+
+                    if( $('#use-location')[0].checked ) {
+                        requestParams['latitude'] = window.coords.latitude;
+                        requestParams['longitude'] = window.coords.longitude;
+                    }
+
+                    if( $('#radius').val() ) {
+                        requestParams['radius'] = $('#radius').val();
+                    }
+
+                    return requestParams;
                 },
                 processResults : function (data, params) {
                     return {
