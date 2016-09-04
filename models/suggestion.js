@@ -52,8 +52,6 @@ function calculateScore(stringMatchRatio, distanceRatio) {
     var stringMatchCoefficient = 1;
     var distanceCoefficient    = 1;
 
-    this.defin
-
     return (stringMatchRatio * stringMatchCoefficient) * (distanceRatio * distanceCoefficient);
 };
 
@@ -83,7 +81,6 @@ SuggestionSchema.methods.defineDistanceRatio = function defineDistanceRatio(coor
 };
 
 var Suggestion = mongoose.model('Suggestion',SuggestionSchema);
-
 
 module.exports = Suggestion;
 

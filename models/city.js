@@ -61,8 +61,20 @@ var City = mongoose.model('City', {
     timezone : String,
 
     // date of last modification in yyyy-MM-dd format
-    modified_at : { type: Date }
+    modified_at : { type: Date },
+
+    // The country String
+    countryLong : String,
+
+    // The area name of the city
+    areaLong : String,
+
+    // The area code of the city
+    areaCode : String
 
 });
+
+City.collection.ensureIndex({ name: "text", alt_name : "text" });
+
 
 module.exports = City;

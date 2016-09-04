@@ -33,14 +33,7 @@
 <script>
 
     function formatState (state) {
-
-        console.log(state)
-
-        if (!state.id) { return state.name; }
-        var $state = $(
-                '<span>' + state.name + '</span>'
-        );
-        return $state;
+        return state.name;
     };
 
 
@@ -48,34 +41,20 @@
         $("#input-suggestions").select2({
             templateResult: formatState,
             ajax: {
-                url: "/suggestions",
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
+                url : "/suggestions",
+                dataType : 'json',
+                delay : 250,
+                data : function (params) {
                     return {
-                        q: params.term, // search term
-                        page: params.page
+                        q : params.term
                     };
                 },
-                processResults: function (data, params) {
-                    // parse the results into the format expected by Select2
-                    // since we are using custom formatting functions we do not need to
-                    // alter the remote JSON data, except to indicate that infinite
-                    // scrolling can be used
-                    params.page = params.page || 1;
-
-                    console.log('processResults');
-                    console.log(data.suggestions);
-                    console.log(params);
-
+                processResults : function (data, params) {
                     return {
-                        results: data.suggestions,
-//                        pagination: {
-//                            more: (params.page * 30) < data.total_count
-//                        }
+                        results: data.suggestions
                     };
                 },
-                cache: true
+                cache : true
             },
 
 

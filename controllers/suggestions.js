@@ -3,6 +3,18 @@
 var City       = require('../models/city');
 var Suggestion = require('../models/suggestion');
 var _          = require('lodash');
+var Q          = require('q');
+
+var NodeGeocoder = require('node-geocoder');
+
+var options = {
+    provider    : 'google',
+    apiKey      : 'AIzaSyDBOJ4sbatzQsvj_FlYoo2eb7DqRfn6J78'
+};
+
+var geocoder = NodeGeocoder(options);
+
+
 
 var suggestionsController = {
 
@@ -25,15 +37,17 @@ var suggestionsController = {
         res.status(200);
 
         var queryParameter = req.query.q.toString();
+
         var queryParameterRegex = new RegExp('^'+queryParameter, 'i');
 
         var query = City.find({});
+
         var where = {
-            '$or' : [{
-                name : queryParameterRegex
-            }, {
-                alt_name : queryParameterRegex
-            }]
+            '$or' : [
+                {'name' : queryParameterRegex },
+                {'ascii' : queryParameterRegex },
+                {'alt_name' : queryParameterRegex }
+            ]
         };
 
         if(req.query.longitude && req.query.latitude) {
@@ -51,6 +65,7 @@ var suggestionsController = {
 
         query
             .where(where)
+            .limit(5)
             .exec(function(error, citiesSuggest) {
 
                 // Return a 500 response with the error object
@@ -62,25 +77,46 @@ var suggestionsController = {
                 if(citiesSuggest.length == 0)
                     res.status(404);
 
-                var suggestions = [];
+                var promises = [];
 
-                citiesSuggest.map(function(item) {
-                    suggestions.push(new Suggestion(item));
-                });
+                citiesSuggest.map(function(city) {
+                    var suggestion = new Suggestion(city);
 
-                suggestions.map(function(suggestion) {
                     suggestion.setScore({
                         q           : req.query.q,
                         longitude   : req.query.longitude,
                         latitude    : req.query.latitude,
                         radius      : req.query.radius
-                    })
+                    });
+
+                    var promise = geocoder.reverse({ lat : suggestion.latitude, lon : suggestion.longitude })
+                        .then(function(res) {
+
+                            suggestion.name  =
+                                suggestion.name +
+                                ', ' +
+                                res[0].administrativeLevels.level1long +
+                                ', ' +
+                                res[0].country;
+
+                            return suggestion;
+                        })
+                        .catch(function(err) {
+                            console.log(err);
+                        });
+
+                    return promises.push(promise);
+
                 });
 
-                // Send the results
-                return res.json({
-                    suggestions : _.orderBy(suggestions, 'score', 'desc')
-                });
+                return Q.all(promises)
+                    .spread(function(suggestions) {
+
+                        // Send the results
+                        return res.json({
+                            suggestions: _.orderBy(arguments, 'score', 'desc')
+                        });
+                    });
             });
     }
 };

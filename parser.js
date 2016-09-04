@@ -4,6 +4,8 @@ var csv      = require("csv-stream");
 var mongoose = require('mongoose');
 var City     = require('./models/city');
 
+var fileLocation = "./data/cities_canada-usa.tsv";
+
 
 var launchCitiesInsertionScript = function() {
 
@@ -17,7 +19,7 @@ var launchCitiesInsertionScript = function() {
 
     var csvStream = csv.createStream(options);
 
-    var dataStream      = fs.createReadStream("./data/cities_canada-usa.tsv").pipe(csvStream);
+    var dataStream      = fs.createReadStream(fileLocation).pipe(csvStream);
     var numberInserted  = 0;
     var numberOfRecords = 0;
 
@@ -31,7 +33,8 @@ var launchCitiesInsertionScript = function() {
         city.longitude  = record.long;
         city.latitude   = record.lat;
         city.coords     = [city.longitude, city.latitude];
-        city.save(function(error) {
+
+        return city.save(function(error) {
 
             if(error)
                 return console.log(error);
