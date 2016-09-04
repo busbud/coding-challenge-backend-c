@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Busbud Challenge</title>
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+</head>
+<body>
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-8 col-sm-offset-2">
+            <h1 class="page-header">
+                Please, try me
+            </h1>
+
+            <form action="" class="form">
+                <div class="form-group">
+                    <div class="checkbox">
+                        <label for="use-location">
+                            <input id="use-location" type="checkbox" name="use-location" value="1"/>
+                            Search around you (you have to accept the geo localization)
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="radius">
+                           Radius in meters (only if use-coordinates is checked). If not filled, the radius will be 50 000 meters
+                    </label>
+                    <input id="radius" type="text" class="form-control">
+                </div>
+
+                <select id="input-suggestions" style="width:100%;">
+                    <option value="3620194" selected="selected">Please type here</option>
+                </select>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+<script defer async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDBOJ4sbatzQsvj_FlYoo2eb7DqRfn6J78&callback=init"></script>
+<script>
+
+    // Try HTML5 geolocation.
+    function init() {
+        if ( navigator.geolocation ) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                window.coords = {
+                    latitude : position.coords.latitude,
+                    longitude : position.coords.longitude
+                };
+            }, function(err) {
+                alert(err);
+            });
+        } else {
+            alert("your browser doesn't support Geolocation");
+        }
+    };
+
+
+    function formatState (state) {
+        return state.name;
+    };
+
+    $(document).ready(function() {
+        $("#input-suggestions").select2({
+            templateResult: formatState,
+            ajax: {
+                url : "/suggestions",
+                dataType : 'json',
+                delay : 250,
+                data : function (params) {
+
+                    var requestParams = {
+                        q : params.term
+                    };
+
+                    if( $('#use-location')[0].checked ) {
+                        requestParams['latitude'] = window.coords.latitude;
+                        requestParams['longitude'] = window.coords.longitude;
+                    }
+
+                    if( $('#radius').val() ) {
+                        requestParams['radius'] = $('#radius').val();
+                    }
+
+                    return requestParams;
+                },
+                processResults : function (data, params) {
+                    return {
+                        results: data.suggestions
+                    };
+                },
+                cache : true
+            },
+
+
+
+            escapeMarkup: function (markup) {
+
+                console.log(markup);
+
+                return markup;
+            }, // let our custom formatter work
+            minimumInputLength: 1
+        });
+    });
+
+</script>
+
+
+</body>
+</html>

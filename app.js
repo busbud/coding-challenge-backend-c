@@ -1,16 +1,49 @@
-var http = require('http');
-var port = process.env.PORT || 2345;
+var http        = require('http');
+var port        = process.env.PORT || 2345;
+var express     = require('express');
+var app         = express();
+var config      = require('./config/config');
+var mongoose    = require('mongoose');
 
-module.exports = http.createServer(function (req, res) {
-  res.writeHead(404, {'Content-Type': 'text/plain'});
+// Set config for the view rendering
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
 
-  if (req.url.indexOf('/suggestions') === 0) {
-    res.end(JSON.stringify({
-      suggestions: []
-    }));
-  } else {
-    res.end();
-  }
-}).listen(port, '127.0.0.1');
+// Modules loading
+// First, require the router
+var suggestionsRouter = require('./routers/suggestions');
+var defaultRouter     = require('./routers/default');
 
-console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+// Then, use it
+app.use('/suggestions', suggestionsRouter);
+app.use('/', defaultRouter);
+
+// Connect to the mongo database
+// Once connected , emit the db:connected event
+mongoose.connect(config.mongoUrl, function(error) {
+
+    if(error) {
+        app.emit('db:error', error);
+        return process.kill(0);
+    }
+
+    return app.emit('db:connected');
+});
+
+app.on('db:error', function(error) {
+    console.log("The server can't be launched because the connection with the mongo database has failed");
+    console.log(error.message);
+});
+
+// Listen for database connection before launch the server
+app.on('db:connected', function() {
+
+    // Finally launch the app
+    app.listen(port, '0.0.0.0');
+
+    // And tell to every one
+    console.log('Server running at http://0.0.0.1:%d/suggestions', port);
+});
+
+// For the tests
+module.exports = app;

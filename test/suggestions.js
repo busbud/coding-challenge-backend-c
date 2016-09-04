@@ -1,6 +1,7 @@
 var expect  = require('chai').expect;
 var app     = require('../app');
 var request = require('supertest')(app);
+var slug    = require('slug');
 
 describe('GET /suggestions', function() {
   describe('with a non-existent city', function () {
@@ -24,6 +25,30 @@ describe('GET /suggestions', function() {
       expect(response.json.suggestions).to.be.instanceof(Array);
       expect(response.json.suggestions).to.have.length(0);
     });
+  });
+
+  describe('with parameter missing', function () {
+    var response;
+
+    before(function (done) {
+      request
+          .get('/suggestions')
+          .end(function (err, res) {
+            response = res;
+            response.json = JSON.parse(res.text);
+            done(err);
+          });
+    });
+
+    it('returns a 500', function () {
+      expect(response.statusCode).to.equal(500);
+    });
+
+    it('returns an error object', function () {
+      expect(response.json).to.be.an('object');
+      expect(response.json).to.have.property('type', 'parameterMissing');
+    });
+
   });
 
   describe('with a valid city', function () {
@@ -50,8 +75,11 @@ describe('GET /suggestions', function() {
 
     it('contains a match', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
-        return suggestions.some(function (suggestion) {
-          return suggestion.name.test(/montreal/i);
+        return suggestions.every(function (suggestion) {
+
+          // because all results have accents for Montréal
+          // To avoid some errors, we slugify the suggestion.name to be sure;
+          return (/Montreal/i).test(slug(suggestion.name));
         });
       })
     });
@@ -72,4 +100,5 @@ describe('GET /suggestions', function() {
       })
     });
   });
+
 });
