@@ -1,6 +1,7 @@
 var expect  = require('chai').expect;
 var app     = require('../app');
 var request = require('supertest')(app);
+var slug    = require('slug');
 
 describe('GET /suggestions', function() {
   describe('with a non-existent city', function () {
@@ -74,8 +75,11 @@ describe('GET /suggestions', function() {
 
     it('contains a match', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
-        return suggestions.some(function (suggestion) {
-          return (/Montréal/i).test(suggestion.name);
+        return suggestions.every(function (suggestion) {
+
+          // because all results have accents for Montréal
+          // To avoid some errors, we slugify the suggestion.name to be sure;
+          return (/Montreal/i).test(slug(suggestion.name));
         });
       })
     });

@@ -1,9 +1,9 @@
-var City       = require('../models/city');
-var Q          = require('q');
-var NodeGeocoder = require('node-geocoder');
-var _ = require('lodash');
 var config  = require('../config/config');
+var City    = require('../models/city');
+var Q       = require('q');
+var _       = require('lodash');
 
+var NodeGeocoder = require('node-geocoder');
 var options = {
     provider    : 'google',
     apiKey      : config.googleAPIkey
@@ -23,6 +23,7 @@ module.exports = {
      * @param {float} [options.latitude]    the latitude
      * @param {float} [options.radius]      the radius
      *
+     * @return {promise}
      * */
     findSuggestedCities : function(name, options) {
         var queryParameterRegex = new RegExp('^'+name, 'i');
@@ -89,7 +90,7 @@ module.exports = {
                 });
 
                 return Q.all(promises);
-            })
+            });
     }
 
 

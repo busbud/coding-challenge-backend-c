@@ -22,13 +22,16 @@
                 <div class="form-group">
                     <div class="checkbox">
                         <label for="use-location">
-                            <input id="use-location" type="checkbox" name="use-location" value="1"/> Use coordinates
+                            <input id="use-location" type="checkbox" name="use-location" value="1"/>
+                            Search around you (you have to accept the geo localization)
                         </label>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="radius">Radius in meters (only if use-coordinates is checked)</label>
+                    <label for="radius">
+                           Radius in meters (only if use-coordinates is checked). If not filled, the radius will be 50 000 meters
+                    </label>
                     <input id="radius" type="text" class="form-control">
                 </div>
 

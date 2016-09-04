@@ -1,3 +1,14 @@
+
+
+
+// There is no differences between environments for the config
+// For this challenge, we took the same variables so the config file is not separated by environment
+// But we could have something like this. (but not usefull for now)
+// - config
+//    - default.js      // the basic config file
+//    - dev.js          // you can override all basic config information just for your dev env
+//    - staging.js      // you can override all basic config information just for your staging env
+//    - production.js   // you can override all basic config information just for your production env
 module.exports = {
 
 
