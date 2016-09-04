@@ -2,9 +2,8 @@ var Q        = require('q');
 var fs       = require('fs');
 var csv      = require("csv-stream");
 var mongoose = require('mongoose');
+var config   = require('./config/config');
 var City     = require('./models/city');
-
-var fileLocation = "./data/cities_canada-usa.tsv";
 
 
 var launchCitiesInsertionScript = function() {
@@ -19,7 +18,7 @@ var launchCitiesInsertionScript = function() {
 
     var csvStream = csv.createStream(options);
 
-    var dataStream      = fs.createReadStream(fileLocation).pipe(csvStream);
+    var dataStream      = fs.createReadStream(config.dataFileLocation).pipe(csvStream);
     var numberInserted  = 0;
     var numberOfRecords = 0;
 
@@ -60,7 +59,7 @@ var launchCitiesInsertionScript = function() {
 
     // Connect to the mongo database
     // Once connected , emit the db:connected event
-    mongoose.connect('mongodb://coding-challenge:busbud@ds019766.mlab.com:19766/heroku_z7p8f5ck', function(error) {
+    mongoose.connect(config.mongoUrl, function(error) {
 
         if(error) {
             app.emit('db:error', error);

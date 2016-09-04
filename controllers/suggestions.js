@@ -2,7 +2,6 @@
 
 var Suggestion = require('../models/suggestion');
 var _          = require('lodash');
-var Q          = require('q');
 var CityRepository = require('../repository/cityRepository');
 
 var suggestionsController = {

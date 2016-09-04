@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var mixins   = require('../mixins/mixins');
+var config   = require('../config/config');
 var Schema   = mongoose.Schema;
 
 var SuggestionSchema = new Schema({
@@ -79,7 +80,7 @@ SuggestionSchema.methods.defineStringMatchRatio = function defineStringMatchRati
  * @return {float} the distance ratio
  * */
 SuggestionSchema.methods.defineDistanceRatio = function defineDistanceRatio(coords, radius) {
-    radius = (radius || 50000);
+    radius = (radius || config.suggestions.radius);
 
     var distance = mixins.findDistanceBetweenTwoCoords(
         { lat : this.latitude, lon : this.longitude},

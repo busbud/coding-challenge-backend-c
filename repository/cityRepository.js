@@ -2,10 +2,11 @@ var City       = require('../models/city');
 var Q          = require('q');
 var NodeGeocoder = require('node-geocoder');
 var _ = require('lodash');
+var config  = require('../config/config');
 
 var options = {
     provider    : 'google',
-    apiKey      : 'AIzaSyDBOJ4sbatzQsvj_FlYoo2eb7DqRfn6J78'
+    apiKey      : config.googleAPIkey
 };
 
 var geocoder = NodeGeocoder(options);
@@ -49,7 +50,7 @@ module.exports = {
                         type: "Point" ,
                         coordinates: [ options.longitude , options.latitude ]
                     },
-                    $maxDistance: options.radius || 50000,
+                    $maxDistance: options.radius || config.suggestions.radius,
                     $minDistance: 0
                 }
             }

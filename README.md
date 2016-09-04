@@ -138,7 +138,7 @@ You can fill the database by running
 `npm run fixtures`
 
 This will empty the database and re fill again. You don't need to run mongoDB deamon on your local machine since
-the mongodb is hosted directly on heroku for dev & production environment.
+the mongodb is hosted directly on heroku for dev & production environment (just for the challenge)
 
 ### Supplement
 

@@ -2,6 +2,7 @@ var http        = require('http');
 var port        = process.env.PORT || 2345;
 var express     = require('express');
 var app         = express();
+var config      = require('./config/config');
 var mongoose    = require('mongoose');
 
 // Set config for the view rendering
@@ -19,7 +20,7 @@ app.use('/', defaultRouter);
 
 // Connect to the mongo database
 // Once connected , emit the db:connected event
-mongoose.connect('mongodb://coding-challenge:busbud@ds019766.mlab.com:19766/heroku_z7p8f5ck', function(error) {
+mongoose.connect(config.mongoUrl, function(error) {
 
     if(error) {
         app.emit('db:error', error);
