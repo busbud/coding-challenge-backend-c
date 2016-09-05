@@ -1,5 +1,4 @@
-var http = require('http');
-var url = require('url');
+var app = require('express')();
 var parse = require('csv-parse/lib/sync'); // we're gonna use syncronous method... it's slow, but we need the data before proceding anyway
 var functions = require('./functions');
 var fs = require('fs');
@@ -14,14 +13,17 @@ var cities = parse(
     columns: true
   });
 
-module.exports = http.createServer(function (req, res) {
-  if (req.url.indexOf('/suggestions') === 0) {
-    let params = url.parse(req.url, true).query
-      , query = params.q
-      , latitude = params.latitude || 0
-      , longitude = params.longitude || 0
-      , results = [];
+app.get('/suggestions', function (req, res) {
+  let query = req.query.q
+    , latitude = req.query.latitude || 0
+    , longitude = req.query.longitude || 0
+    , results = [];
 
+  if (typeof query === "undefined") {
+    res.status(422).json({
+      'error': "Missing the query parameter"
+    });
+  } else {
     cities.forEach((city) => {
       var regex = new RegExp(query, 'i');
 
@@ -45,14 +47,12 @@ module.exports = http.createServer(function (req, res) {
       }
     });
 
-    res.writeHead(results.length < 1 ? 404 : 200, {'Content-Type': 'text/json'});
-
-    res.end(JSON.stringify({
+    res.status(results.length < 1 ? 404 : 200).json({
       suggestions: results
-    }));
-  } else {
-    res.end();
+    });
   }
-}).listen(port, '127.0.0.1');
+});
 
-console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+module.exports = app.listen(port, function() {
+  console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+});
