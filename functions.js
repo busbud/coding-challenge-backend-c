@@ -53,7 +53,7 @@ function getCountryName(countryCode) {
 
 function calculateScore(query, latitude, longitude, match) {
   var score = 0.0;
-  var nameMatch = ""+getCityNameMatch(query, match.name, match.alt_name);
+  var nameMatch = getCityNameMatch(query, match.name, match.alt_name);
 
   if (query === nameMatch) return 1.0;
   else {
@@ -70,11 +70,9 @@ function calculateScore(query, latitude, longitude, match) {
     else {
       distanceScore = 1 - (1/distance);
 
-      score = (score + distance) / 2;
+      score = (score + distanceScore) / 2;
     }
   }
-
-  if (score < 0.1) score = 0.1;
 
   return score;
 }
