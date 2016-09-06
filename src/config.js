@@ -1,7 +1,8 @@
 import nconf from 'nconf'
 
 export const DEFAULT_CONF = {
-  APP_PORT: 8080
+  PORT: 8080,
+  REDIS_URL: process.env.REDIS_PORT
 }
 
 export default nconf

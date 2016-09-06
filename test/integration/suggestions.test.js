@@ -4,18 +4,6 @@ import app from '../../src/'
 import { flushDB, importDB } from '../utils'
 
 describe('GET /suggestions', () => {
-  before((done) => {
-    importDB()
-      .then(() => done())
-      .catch(done)
-  })
-
-  after((done) => {
-    flushDB()
-      .then(() => done())
-      .catch(done)
-  })
-
   describe('with a non-existent city', () => {
     let response
 
@@ -30,7 +18,7 @@ describe('GET /suggestions', () => {
         })
     })
 
-    it('returns a 404', () => {
+    it('returns a 200', () => {
       expect(response.statusCode).to.equal(200)
     })
 
@@ -65,7 +53,9 @@ describe('GET /suggestions', () => {
 
     it('contains a match', () => {
       expect(response.json.suggestions).to.satisfy((suggestions) => {
-        return suggestions.some((suggestion) => suggestion.name.test(/montreal/i))
+        return suggestions.some((suggestion) => {
+          return suggestion.name.match(/montr[ée]al/i)
+        })
       })
     })
 
@@ -81,7 +71,7 @@ describe('GET /suggestions', () => {
 
     it('contains scores between 0 and 1', () => {
       const validateScore = ({score}) => {
-        return score > 0 && score < 1
+        return score >= 0 && score <= 1
       }
 
       expect(response.json.suggestions).to.satisfy((suggestions) => {

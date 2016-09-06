@@ -3,7 +3,7 @@ import { concatReplies } from './utils'
 
 const DEFAULT_OPTIONS = {
   unit: 'km',
-  fromKey: 'fromKey',
+  fromKey: 'fromKey'
 }
 
 const getId = (long, lat, cities) => {

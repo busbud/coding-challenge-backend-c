@@ -1,13 +1,13 @@
 import complete from './complete'
 import geoDistFromCities from './redisGeoDistFromCities'
-import suggestScoring from './suggestScoring'
+import scoring from './suggestScoring'
 
 const DEFAULT_OPTIONS = {
-  population: 5000,
+  minPopulation: 5000,
   scoring: {
-    distance: 0.5,
-    length: 0.2,
-    population: 0.3
+    lexico: 0.2,
+    distance: 0.65,
+    population: 0.35
   }
 }
 
@@ -19,28 +19,20 @@ const filterByPopulationAbove = (limit) => (cities = []) => {
 }
 
 const compareScore = (a, b) => {
-  if (a.score && b.score) {
-    return b.score - a.score
-  }
-
-  if (a.name > b.name) {
-    return 1
-  }
-
-  if (a.name < b.name) {
-    return -1
-  }
+  return parseFloat(b.score) - parseFloat(a.score)
 }
 
 export default (q, long, lat, options = DEFAULT_OPTIONS) => {
+  const defineScoring = scoring(options.scoring)
+
   return complete(q)
-    .then(filterByPopulationAbove(options.population))
+    .then(filterByPopulationAbove(options.minPopulation))
     .then((cities) => {
       if (long && lat) {
         return geoDistFromCities(long, lat, cities)
       }
       return cities
     })
-    .then(suggestScoring(options.scoring))
+    .then(defineScoring)
     .then((cities) => cities.sort(compareScore))
 }

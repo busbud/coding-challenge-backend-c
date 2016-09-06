@@ -1,5 +1,59 @@
 # Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
 
+## Installation
+
+```
+npm install
+npm run build
+npm run importDb
+npm run start
+```
+
+I use redis 3.2 to store and query city, use `npm run importDb`
+before `npm run start`
+
+
+### Docker
+
+```
+docker-compose run web npm run importDb
+docker-compose up
+```
+
+##Search
+
+I use redis to quicky find a match and calculate distance.
+
+##Scoring
+
+Scoring is done by using weighted criteria to make decisions.
+Then I can rank the suggestion by the overall score to determine which is the best suggestions.
+
+
+## Todo
+- Use LRU cache with redis
+- Unit test 
+- Handling special character (alternates names)
+- use CQRS & Redis Cluster
+- ...
+
+This little project use redis 3.2 new Geo Command
+
+Design an API endpoint that provides auto-complete suggestions for large cities.
+The suggestions should be restricted to cities in the USA and Canada with a population above 5000 people.
+
+- the endpoint is exposed at `/suggestions`
+- the partial (or complete) search term is passed as a querystring parameter `q`
+- the caller's location can optionally be supplied via querystring parameters `latitude` and `longitude` to help improve relative scores
+- the endpoint returns a JSON response with an array of scored suggested matches
+    - the suggestions are sorted by descending score
+    - each suggestion has a score between 0 and 1 (inclusive) indicating confidence in the suggestion (1 is most confident)
+    - each suggestion has a name which can be used to disambiguate between similarly named locations
+    - each suggestion has a latitude and longitude
+- all functional tests should pass (additional tests may be implemented as necessary).
+- the final application should be [deployed to Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs).
+- feel free to add more features if you like!
+
 ## Requirements
 
 Design an API endpoint that provides auto-complete suggestions for large cities.
@@ -104,6 +158,7 @@ In the project directory run
 
 ```
 npm install
+npm run build
 ```
 
 ### Running the tests

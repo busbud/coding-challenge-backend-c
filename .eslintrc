@@ -8,5 +8,8 @@
   },
   "emcaFeatures": {
     "modules": true
+  },
+  "rules": {
+    "space-before-function-paren": "off"
   }
 }

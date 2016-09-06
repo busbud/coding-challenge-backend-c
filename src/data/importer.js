@@ -100,7 +100,7 @@ export const importManager = () => {
      * @param {File} file
      * @returns {Promise(ImportData)}
      */
-    processZip(file) {    
+    processZip(file) {
     }
   }
 }
