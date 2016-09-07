@@ -1,19 +1,20 @@
 module.exports = {
+  composeFullName: composeFullName,
   getCityNameMatch: getCityNameMatch,
   getStateSymbol: getStateSymbol,
   getCountryName: getCountryName,
   calculateScore: calculateScore
 };
 
-function getCityNameMatch(query, name, alt_names) {
+function getCityNameMatch(query, city) {
   let result = "";
-  let names = alt_names.split(',');
-  names.unshift(name);
+  let names = city.alt_names;
+  names.unshift(city.name);
 
-  if (names.indexOf(query) !== -1) result = query;
+  if (names.indexOf(query.search) !== -1) result = query.search;
   else {
     names.forEach((name) => {
-      if ((new RegExp(query, 'i')).test(name)) result = name;
+      if ((new RegExp(query.search, 'i')).test(name)) result = name;
     });
   }
 
@@ -42,29 +43,33 @@ function getStateSymbol(city) {
   }
 }
 
-function getCountryName(countryCode) {
+function getCountryName(city) {
   let map = {
     'CA': "Canada",
     'US': "USA"
   };
 
-  return map[countryCode];
+  return map[city.country];
 }
 
-function calculateScore(query, latitude, longitude, match) {
-  var score = 0.0;
-  var nameMatch = getCityNameMatch(query, match.name, match.alt_name);
+function composeFullName(query, city) {
+  return getCityNameMatch(query, city)+', '+city.state+', '+city.country
+}
 
-  if (query === nameMatch) return 1.0;
+function calculateScore(query, match) {
+  var score = 0.0;
+  var nameMatch = getCityNameMatch(query, match);
+
+  if (query.search === nameMatch) return 1.0;
   else {
-    score = query.length / nameMatch.length;
-    if (nameMatch.indexOf(query) !== 0) {
+    score = query.search.length / nameMatch.length;
+    if (nameMatch.indexOf(query.search) !== 0) {
       score *= score;
     }
   }
 
-  if (latitude && longitude) {
-    let distance = Math.sqrt(Math.pow(match.lat - latitude, 2) + Math.pow(match.long - longitude, 2));
+  if (query.latitude && query.longitude) {
+    let distance = Math.sqrt(Math.pow(match.latitude - query.latitude, 2) + Math.pow(match.longitude - query.longitude, 2));
 
     if (distance < 1) return 1.0;
     else {
