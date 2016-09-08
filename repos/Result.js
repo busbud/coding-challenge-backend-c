@@ -1,11 +1,9 @@
-var functions = require('../functions');
-
 var ResultModel = function(query, city) {
   return {
-    name: functions.composeFullName(query, city),
+    name: composeFullName(query, city),
     latitude: city.latitude,
     longitude: city.longitude,
-    score: functions.calculateScore(query, city)
+    score: calculateScore(query, city)
   };
 };
 
@@ -33,4 +31,49 @@ function sortByScore(query, results) {
       else return 0;
     }
   });
+}
+
+function composeFullName(query, city) {
+  return getCityNameMatch(query, city)+', '+city.state+', '+city.country
+}
+
+function calculateScore(query, match) {
+  var score = 0.0;
+  var nameMatch = getCityNameMatch(query, match);
+
+  if (query.search === nameMatch) return 1.0;
+  else {
+    score = query.search.length / nameMatch.length;
+    if (nameMatch.indexOf(query.search) !== 0) {
+      score *= score;
+    }
+  }
+
+  if (query.latitude && query.longitude) {
+    let distance = Math.sqrt(Math.pow(match.latitude - query.latitude, 2) + Math.pow(match.longitude - query.longitude, 2));
+
+    if (distance < 1) return 1.0;
+    else {
+      distanceScore = 1 - (1/distance);
+
+      score = (score + distanceScore) / 2;
+    }
+  }
+
+  return score;
+}
+
+function getCityNameMatch(query, city) {
+  let result = "";
+  let names = city.alt_names;
+  names.unshift(city.name);
+
+  if (names.indexOf(query.search) !== -1) result = query.search;
+  else {
+    names.forEach((name) => {
+      if ((new RegExp(query.search, 'i')).test(name)) result = name;
+    });
+  }
+
+  return result;
 }

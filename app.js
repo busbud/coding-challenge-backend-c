@@ -11,7 +11,7 @@ app.get('/suggestions', function (req, res) {
     });
   } else {
     let query = Query.make(req.query)
-      , results = Result.convertFromMatches(query, City.getByQuery(query.search));
+      , results = Result.convertFromMatches(query, City.getByQuery(query));
 
     res.status(results.length < 1 ? 404 : 200).json({
       suggestions: results

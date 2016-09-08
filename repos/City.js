@@ -1,15 +1,13 @@
-var functions = require('../functions');
 var cities = parseDataFile();
 
 var CityModel = function(source_city) {
   return {
     name: source_city.name,
     alt_names: source_city.alt_name.split(','),
-    country: functions.getCountryName(source_city),
-    state: functions.getStateSymbol(source_city),
+    country: getCountryName(source_city),
+    state: getStateSymbol(source_city),
     latitude: source_city.lat,
-    longitude: source_city.long,
-    score: 0
+    longitude: source_city.long
   };
 };
 
@@ -36,7 +34,7 @@ function getByQuery(query) {
   let results = [];
 
   cities.forEach(city => {
-    let regex = new RegExp(query, 'i');
+    let regex = new RegExp(query.search, 'i');
 
     if (regex.test(city.name) || regex.test(city.alt_name)) {
       results.push(CityModel(city));
@@ -44,4 +42,35 @@ function getByQuery(query) {
   });
 
   return results;
+}
+
+function getStateSymbol(city) {
+  if (city.country === "US") return city.admin1;
+  else {
+    let map = {
+      '01': "AB",
+      '02': "BC",
+      '03': "MB",
+      '04': "NB",
+      '05': "NL",
+      '07': "NS",
+      '08': "ON",
+      '09': "PE",
+      '10': "QC",
+      '11': "SK",
+      '12': "YT",
+      '13': "NT"
+    };
+
+    return map[city.admin1];
+  }
+}
+
+function getCountryName(city) {
+  let map = {
+    'CA': "Canada",
+    'US': "USA"
+  };
+
+  return map[city.country];
 }
