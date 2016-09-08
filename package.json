@@ -2,6 +2,10 @@
   "name": "coding-challenge-backend-c",
   "version": "0.0.0",
   "description": "coding challenge in Nodejs",
+  "engines": {
+    "node": "6.2.1",
+    "npm": "3.9.3"
+  },
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
@@ -11,10 +15,10 @@
   "license": "WTFPL",
   "dependencies": {
     "chai": "^1.9.1",
+    "csv-parse": "^1.1.7",
+    "express": "^4.14.0",
     "mocha": "^1.18.2",
-    "supertest": "^0.11.0"
-  },
-  "engines": {
-    "node": "0.10.26"
+    "supertest": "^0.11.0",
+    "rewire": "2.5.2"
   }
 }
