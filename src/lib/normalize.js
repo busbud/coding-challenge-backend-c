@@ -20,6 +20,6 @@ export default (inputs, scale = DEFAULT_SCALE) => {
   }
 
   minValue = inputs.min || Math.min(inputs.data)
-  maxValue = inputs.max || Math.min(inputs.data)
+  maxValue = inputs.max || Math.max(inputs.data)
   return normalize(inputs.value, minValue, maxValue, scale)
 }
