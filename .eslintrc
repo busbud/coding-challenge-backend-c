@@ -1,0 +1,15 @@
+{
+  "extends": "standard",
+  "parser": "babel-eslint",
+  "env": {
+    "node": true,
+    "es6": true,
+    "mocha": true
+  },
+  "emcaFeatures": {
+    "modules": true
+  },
+  "rules": {
+    "space-before-function-paren": "off"
+  }
+}

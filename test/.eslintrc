@@ -1,0 +1,9 @@
+{
+  "extends": "../.eslintrc",
+  "plugins": [
+    "mocha"
+  ],
+  "env": {
+    "mocha": true
+  }
+}

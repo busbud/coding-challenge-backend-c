@@ -1,0 +1,9 @@
+web:
+  build: ./
+  ports:
+    - 8080:8080
+  links:
+    - redis
+ 
+redis:
+  image: redis:3.2-alpine
