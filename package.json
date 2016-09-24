@@ -10,11 +10,13 @@
   "author": "",
   "license": "WTFPL",
   "dependencies": {
+    "csv-parse": "1.1.7",
+    "heap": "0.2.6",
     "chai": "^1.9.1",
     "mocha": "^1.18.2",
     "supertest": "^0.11.0"
   },
   "engines": {
-    "node": "0.10.26"
+    "node": "6.4.0"
   }
 }
