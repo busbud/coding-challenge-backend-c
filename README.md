@@ -2,13 +2,18 @@
 
 ## Design decisions
 
-- Use of a Mongo DB sandbox to store the data (Super unsafe username and password... usually in .env file)
+- Use of a Mongo DB sandbox to store the data
 - Calculate the score based on Pythagoras rule (Classification)
 - Query all the cities based on prefix
 - Heroku app can be found at https://floating-wave-87999.herokuapp.com/suggestions?q=montreal
 - Additional fields can be added such as https://floating-wave-87999.herokuapp.com/suggestions?q=london&latitude=45.508&longitude=-73.5871
 - Results are ordered in decreasing order of score and chronological order of name for similar scores
 
+## Server upgrades
+
+- Server went up to 10x faster than originally on (30 rps to 300rps)
+- Clustering feature of node js is used
+- Common cache among clusters is used
 
 ## Requirements
 

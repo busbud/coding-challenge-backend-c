@@ -51,8 +51,7 @@ describe('GET /suggestions', function() {
     it('contains a match', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.some(function (suggestion) {
-          // REMOVED .test(/montreal/i);
-          return suggestion.name;
+          return /montreal/i.test(suggestion.name);
         });
       })
     });

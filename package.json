@@ -4,7 +4,7 @@
   "description": "coding challenge in Nodejs",
   "main": "app.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "node app.js",
     "test": "./node_modules/.bin/mocha/ ./test/"
   },
   "author": "Eduardo Coronado",

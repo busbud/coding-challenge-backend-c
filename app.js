@@ -9,7 +9,6 @@ var Parser = require('./parser');
 var mongoose = require('mongoose');
 require('dotenv').config();
 
-// Usuallly use .env file for username and password
 var db = mongoose.connect('mongodb://'+
   process.env.DB_USERNAME + ':' +
   process.env.DB_PASSWORD +
@@ -86,7 +85,7 @@ var setupServer = function(){
                         if(result.err) {
                           console.log(result.err);
                         }
-                      })
+                      });
                       // Send the results
                       res.end(success(results));
                     }
@@ -106,7 +105,6 @@ var setupServer = function(){
         res.writeHead(404, {'Content-Type': 'application/json'});
         res.end(error("Try /suggestions"));
     }
-
   }).listen(port, '0.0.0.0');
 }
 
