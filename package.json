@@ -15,9 +15,10 @@
     "supertest": "^0.11.0",
     "csv-parse": "^1.1.7",
     "mongoose": "^4.6.3",
-    "cluster-node-cache":"^0.1.0"
+    "cluster-node-cache":"^0.1.0",
+    "dotenv":"^2.0.0"
   },
   "engines": {
-    "node": "0.4.9"
+    "node": "4.2.6"
   }
 }

@@ -7,9 +7,13 @@ var url = require('url');
 var City = require('./models/cities');
 var Parser = require('./parser');
 var mongoose = require('mongoose');
+require('dotenv').config();
 
 // Usuallly use .env file for username and password
-var db = mongoose.connect('mongodb://busbud:busbud@ds041939.mlab.com:41939/suggestions');
+var db = mongoose.connect('mongodb://'+
+  process.env.DB_USERNAME + ':' +
+  process.env.DB_PASSWORD +
+  '@ds041939.mlab.com:41939/suggestions');
 
 var setupServer = function(){
   http.createServer(function (req, res) {
