@@ -1,73 +1,125 @@
-var http = require('http');
+var cluster = require('cluster');
+var cache = require('cluster-node-cache')(cluster);
 var port = process.env.PORT || 2345;
+var numCPUs = require('os').cpus().length;
+var http = require('http');
 var url = require('url');
+var City = require('./models/cities');
 var Parser = require('./parser');
 var mongoose = require('mongoose');
-var City = require('./models/cities');
 
 // Usuallly use .env file for username and password
 var db = mongoose.connect('mongodb://busbud:busbud@ds041939.mlab.com:41939/suggestions');
 
-module.exports = http.createServer(function (req, res) {
-
-  if (req.url.indexOf('/suggestions') === 0) {
-    City.findOne({}, function(err, doc){
-      if(err){
-        // Database error
-        res.writeHead(404, {'Content-Type': 'application/json'});
-        res.end(error(err));
-      } else {
-        // Read data from file
-        if(!doc || doc.length == 0){
-          Parser.readFile();
-          // TODO Thread.sleep(15000);
-          // let the database be filled
-        }
-        // Take params from query
-        var query = url.parse(req.url, true).query;
-        var results = [];
-
-        if(query.q){
-          // Find in the database all cities matching the prefix from the query
-          City.find({
-            // regular expression matches all prefixes
-            ascii: {
-              $regex: '\\b' + query.q,
-              $options: 'i'
-            }
-          }, function(err, docs){
-            // Pass callback results
-            results = docs;
-            if(results.length == 0){
-              // If query does not match any city
-              res.writeHead(404, {'Content-Type': 'application/json'});
-              res.end(error("No suggestions were found"));
-            } else {
-              // Check for latitude and longitude in query to calculate score
+var setupServer = function(){
+  http.createServer(function (req, res) {
+    if (req.url.indexOf('/suggestions') === 0) {
+      // Take params from query
+      var query = url.parse(req.url, true).query;
+      // If parameter is properly defined, continue;
+      if(query.q){
+        // Check if this query has been cached in universal cache
+        cache.get(query.q).then(function(cachedObject){
+          if(cachedObject.err) console.log(cachedObject.err);
+          // If there is no error in fetching from cache
+          else {
+            // If lat and long match with query, then we have the results already
+            if(cachedObject.value[query.q] &&
+                query.latitude == cachedObject.value[query.q].latitude &&
+                query.longitude == cachedObject.value[query.q].longitude){
               res.writeHead(200, {'Content-Type': 'application/json'});
-              if(query.latitude && query.longitude){
-                results = calculateScores(results, query.latitude, query.longitude);
-              } else {
-                // Montreal coords are default
-                results = calculateScores(results, 45.5017, -73.5673);
-              }
-              // Send the results
-              res.end(success(results));
+              res.end(success(cachedObject.value[query.q].results));
             }
-          });
-        } else {
-          // Not giving the parameter 'q'
-          res.writeHead(404, {'Content-Type': 'application/json'});
-          res.end(error("Incomplete query. Be sure to add a value for q in GET request."));
-        }
+            // If it's not a match, then look in database
+            else {
+              City.findOne({}, function(err, doc){
+                if(err){
+                  // Database error
+                  console.log(err);
+                  res.writeHead(404, {'Content-Type': 'application/json'});
+                  res.end(error(err));
+                } else {
+                  // If doc does not exist, then populate db
+                  if(!doc || doc.length == 0){
+                    // TODO make this synchronous
+                    console.log("Reading file...");
+                    Parser.readFile();
+                    // let the database be filled
+                    console.log("Database is filled");
+                  }
+                  var results = [];
+                  // Find in the database all cities matching the prefix from the query
+                  City.find({
+                    // regular expression matches all prefixes
+                    ascii: {
+                      $regex: '\\b' + query.q,
+                      $options: 'i'
+                    }
+                  }, function(err, docs){
+                    // Pass callback results
+                    results = docs;
+                    if(results.length == 0){
+                      // If query does not match any city
+                      res.writeHead(404, {'Content-Type': 'application/json'});
+                      res.end(error("No suggestions were found"));
+                    } else {
+                      // Check for latitude and longitude in query to calculate score
+                      res.writeHead(200, {'Content-Type': 'application/json'});
+                      if(query.latitude && query.longitude){
+                        results = calculateScores(results, query.latitude, query.longitude);
+                      } else {
+                        // Montreal coords are default
+                        query.latitude = 45.5017;
+                        query.longitude = -73.5673;
+                        results = calculateScores(results, query.latitude, query.longitude);
+                      }
+                      var cacheObject = {};
+                      cacheObject.latitude = query.latitude;
+                      cacheObject.longitude = query.longitude;
+                      cacheObject.results = results;
+                      // Store results in cluster-node-cache
+                      cache.set(query.q, cacheObject).then(function(result){
+                        if(result.err) {
+                          console.log(result.err);
+                        }
+                      })
+                      // Send the results
+                      res.end(success(results));
+                    }
+                  });
+                }
+              });
+            }
+          }
+        });
+      } else {
+        // Not giving the parameter 'q'
+        res.writeHead(404, {'Content-Type': 'application/json'});
+        res.end(error("Incomplete query. Be sure to add a value for q in GET request."));
       }
-    })
-  } else {
-    // Not hitting the right endpoint
-    res.writeHead(404, {'Content-Type': 'application/json'});
-    res.end(error("Try /suggestions"));
-  }
-}).listen(port, '0.0.0.0');
+    } else {
+        // Not hitting the right endpoint
+        res.writeHead(404, {'Content-Type': 'application/json'});
+        res.end(error("Try /suggestions"));
+    }
+
+  }).listen(port, '0.0.0.0');
+}
+
+if(cluster.isMaster) {
+    for(var i=0; i < numCPUs; i++){
+      cluster.fork();
+    }
+    cluster.on('exit', function(worker, code, signal) {
+        console.log('Worker ' + worker.process.pid + ' died with code: ' + code + ', and signal: ' + signal);
+    });
+
+} else {
+    // each child process gets to listen on the same port
+    setupServer();
+    console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+    console.log('Process ' + process.pid + ' is listening to all incoming requests');
+}
 
 var calculateScores = function(results, lat, long){
   var cities = [];
@@ -76,7 +128,7 @@ var calculateScores = function(results, lat, long){
     var cityObject = {};
     cityObject.name = beautifulString(results[i]);
     cityObject.score = distanceScore(results[i], lat, long);
-//    if(cityObject.score == 0) continue;
+    if(cityObject.score == 0) continue;
     cityObject.latitude = "" + results[i].lat;
     cityObject.longitude = "" + results[i].long;
     cities.push(cityObject);
@@ -139,5 +191,3 @@ var error = function(errorMessage){
     error: errorMessage
   });
 }
-
-console.log('Server running at http://127.0.0.1:%d/suggestions', port);

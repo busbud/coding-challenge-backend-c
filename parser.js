@@ -2,6 +2,7 @@ var fs = require('fs');
 var csvParse = require('csv-parse/lib/sync');
 var City = require('./models/cities');
 
+// Do read file synchronously
 exports.readFile = function(){
   try{
     // TSV parser (Found in the web)
