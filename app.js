@@ -14,6 +14,27 @@ module.exports = http.createServer(function (req, res) {
 
   if (req.url.indexOf('/suggestions') === 0) {
     var options = querystring.parse(parsedUrl.query);
+    var errors = '';
+
+    var queryString = options.q || '';
+    if (!options.q) {
+      errors += 'q parameter is required and must be a string';
+    }
+    if (options.latitude != undefined && isNaN(parseFloat(options.latitude))) {
+      errors += 'latitude parameter must be numeric';
+    }
+    if (options.longitude != undefined && isNaN(parseFloat(options.longitude))) {
+      errors += 'longitude parameter must be numeric'
+    }
+
+    if (errors) {
+      res.writeHead(400);
+      res.end(JSON.stringify({
+        errors: errors,
+        suggestions: []
+      }));
+    }
+
     searchController.getSuggestions(data.cities, options, function(err, suggestions) {
       if(err) {
         res.writeHead(500);
