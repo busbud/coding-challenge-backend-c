@@ -73,6 +73,29 @@ describe('GET /suggestions', function() {
     });
   });
 
+  describe('valid city with non-ASCII characters (Québec)', function () {
+    var response;
+
+    before(function (done) {
+      request
+        .get('/suggestions?q=Québec')
+        .end(function (err, res) {
+          response = res;
+          response.json = JSON.parse(res.text);
+          done(err);
+        });
+    });
+
+    it('returns a 200', function () {
+      expect(response.statusCode).to.equal(200);
+    });
+
+    it('returns an array with 1 suggestion', function () {
+      expect(response.json.suggestions).to.be instanceof(Array);
+      expect(response.json.suggestions).to.have.length(1);
+    });
+  });
+
   describe('without a query parameter', function () {
     var response;
 
