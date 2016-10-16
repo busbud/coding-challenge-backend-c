@@ -1,4 +1,3 @@
-//var expect  = require('chai').expect;
 var assert  = require('chai').assert;
 var util     = require('../lib/util');
 
@@ -155,6 +154,5 @@ describe('util', function() {
       assert.operator(score, '<', 1);
     });
   });
-
 
 });
