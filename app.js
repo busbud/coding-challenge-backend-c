@@ -18,13 +18,13 @@ module.exports = http.createServer(function (req, res) {
 
     var queryString = options.q || '';
     if (!options.q) {
-      errors += 'q parameter is required and must be a string';
+      errors += 'q parameter is required and must be a string.';
     }
     if (options.latitude != undefined && isNaN(parseFloat(options.latitude))) {
-      errors += 'latitude parameter must be numeric';
+      errors += 'latitude parameter must be numeric.';
     }
     if (options.longitude != undefined && isNaN(parseFloat(options.longitude))) {
-      errors += 'longitude parameter must be numeric'
+      errors += 'longitude parameter must be numeric.'
     }
 
     if (errors) {
