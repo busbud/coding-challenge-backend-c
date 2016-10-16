@@ -73,6 +73,37 @@ describe('GET /suggestions', function() {
     });
   });
 
+  describe('with a valid city and geo coordinate', function () {
+    var response;
+
+    before(function (done) {
+      request
+        .get('/suggestions?q=Mont&latitude=45.50884&longitude=-73.58781')
+        .end(function (err, res) {
+          response = res;
+          response.json = JSON.parse(res.text);
+          done(err);
+        });
+    });
+
+    it('returns a 200', function () {
+      expect(response.statusCode).to.equal(200);
+    });
+
+    it('returns an array of suggestions', function () {
+      expect(response.json.suggestions).to.be.instanceof(Array);
+      expect(response.json.suggestions).to.have.length.above(0);
+    });
+
+    it('contains a match', function () {
+      expect(response.json.suggestions).to.satisfy(function (suggestions) {
+        return suggestions.some(function (suggestion) {
+          return suggestion.name.match(/mont-royal/i);
+        });
+      })
+    });
+  });
+
   describe('valid city with non-ASCII characters (Québec)', function () {
     var response;
 
@@ -115,10 +146,32 @@ describe('GET /suggestions', function() {
 
     it('returns an error message', function () {
       expect(response.json.errors).to.not.be.undefined;
-
       expect(response.json.suggestions).to.be.instanceof(Array);
       expect(response.json.suggestions).to.have.length(0);
     });
   });
 
+  describe('with an invalid geo parameter', function () {
+    var response;
+
+    before(function (done) {
+      request
+        .get('/suggestions?q=Mont&latitude=toto&longitude=-73.58781')
+        .end(function (err, res) {
+          response = res;
+          response.json = JSON.parse(res.text);
+          done(err);
+        });
+    });
+
+    it('returns a 400', function () {
+      expect(response.statusCode).to.equal(400);
+    });
+
+    it('returns an error message', function () {
+      expect(response.json.errors).to.not.be.undefined;
+      expect(response.json.suggestions).to.be.instanceof(Array);
+      expect(response.json.suggestions).to.have.length(0);
+    });
+  });
 });
