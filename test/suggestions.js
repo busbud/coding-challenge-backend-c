@@ -1,6 +1,11 @@
 var expect  = require('chai').expect;
-var app     = require('../app');
-var request = require('supertest')(app);
+
+var App = require('../app');
+var server = new App(true);
+var port = process.env.PORT || 2345;
+server.listen(port,'0.0.0.0');
+
+var request = require('supertest')(server);
 
 describe('GET /suggestions', function() {
   describe('with a non-existent city', function () {
@@ -51,7 +56,7 @@ describe('GET /suggestions', function() {
     it('contains a match', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.some(function (suggestion) {
-          return suggestion.name.test(/montreal/i);
+          return /montreal/i.test(suggestion.name);
         });
       })
     });
@@ -67,7 +72,8 @@ describe('GET /suggestions', function() {
     it('contains scores', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.every(function (suggestion) {
-          return suggestion.latitude && suggestion.longitude;
+          // Replaced this to check if score exists
+          return suggestion.score;
         });
       })
     });

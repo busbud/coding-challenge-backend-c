@@ -1,20 +1,24 @@
 {
   "name": "coding-challenge-backend-c",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "coding challenge in Nodejs",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
-    "test": "./node_modules/mocha/bin/mocha ./test/"
+    "start": "node server.js",
+    "test": "./node_modules/.bin/mocha/ ./test/"
   },
-  "author": "",
-  "license": "WTFPL",
+  "author": "Eduardo Coronado",
+  "license": "N/A",
   "dependencies": {
     "chai": "^1.9.1",
     "mocha": "^1.18.2",
-    "supertest": "^0.11.0"
+    "supertest": "^0.11.0",
+    "csv-parse": "^1.1.7",
+    "mongoose": "^4.6.3",
+    "cluster-node-cache":"^0.1.0",
+    "dotenv":"^2.0.0"
   },
   "engines": {
-    "node": "0.10.26"
+    "node": "4.2.6"
   }
 }
