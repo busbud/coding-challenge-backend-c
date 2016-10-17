@@ -1,35 +1,36 @@
 BusBud Challenge
 ======================
 ### Overview
-APP Deployed at: https://bb-cities.herokuapp.com/<br>
+APP Deployed on heroku: https://bb-cities.herokuapp.com/<br>
 API : https://bb-cities.herokuapp.com/suggestions<br>
-**Example:**  https://bb-cities.herokuapp.com/suggestions?q=montreal&latitude=44&longitude=-73
+**Example:**  https://bb-cities.herokuapp.com/suggestions?q=montreal&latitude=44&longitude=-73<br>
 <br>
-Repository:  https://github.com/rjacquemin/coding-challenge-backend-c<br>
-Build status: https://circleci.com/gh/rjacquemin/coding-challenge-backend-c
-
-The code is commented and the documentation below covers most of the high level concepts.
+Code Repository:  https://github.com/rjacquemin/coding-challenge-backend-c<br>
+Build status: https://circleci.com/gh/rjacquemin/coding-challenge-backend-c<br>
+<br>
+The code is commented and the documentation below covers most of the high level concepts.<br>
 For this challenge I tried to keep the API as simple as possible, fast and reliable and to structure the code for reusability and maintainability.
 Also make sure unit test cover modules.
 
 ### App Structure
-
-app.js
-doc.md
-package.json
-README.md
-  |data
-      |_ cities_canada-usa.tsv
-  |lib
-      |_ dataParser.js
-      |_ scorer.js
-      |_ search.js
-      |_ util.js
-  |test
-      |_ scorer.js
-      |_ suggestions.js
-      |_ util.js
-
+```
+.
++--app.js
++--doc.md
++--package.json
++--README.md
+  +--data
+  |    +-- cities_canada-usa.tsv
+  +--lib
+  |    +-- dataParser.js
+  |    +-- scorer.js
+  |    +-- search.js
+  |    +-- util.js
+  +--test
+  |    +--scorer.js
+  |    +-- suggestions.js
+  |    +--util.js
+```
 
 ### Loading Data
 lib/dataParser.js is processing the TSV file once when starting the server.  
