@@ -1,100 +1,173 @@
-var cluster = require('cluster');
-var cache = require('cluster-node-cache')(cluster);
-var port = process.env.PORT || 2345;
-var numCPUs = require('os').cpus().length;
 var http = require('http');
 var url = require('url');
 var City = require('./models/cities');
+require('dotenv').config();
 var Parser = require('./parser');
 var mongoose = require('mongoose');
-require('dotenv').config();
 
 var db = mongoose.connect('mongodb://'+
   process.env.DB_USERNAME + ':' +
   process.env.DB_PASSWORD +
   '@ds041939.mlab.com:41939/suggestions');
 
-var setupServer = function(){
-  http.createServer(function (req, res) {
+module.exports = function(testing,cache) {
+
+  return http.createServer(function (req, res) {
     if (req.url.indexOf('/suggestions') === 0) {
+      // Set timeout after request has not been processed
+      req.setTimeout(500, function(){
+        req.abort();
+        res.writeHead(404, {'Content-Type': 'application/json'});
+        res.end(error("Request timed out"));
+        console.log("Request timed out");
+      })
+
       // Take params from query
       var query = url.parse(req.url, true).query;
       // If parameter is properly defined, continue;
       if(query.q){
-        // Check if this query has been cached in universal cache
-        cache.get(query.q).then(function(cachedObject){
-          if(cachedObject.err) console.log(cachedObject.err);
-          // If there is no error in fetching from cache
-          else {
-            // If lat and long match with query, then we have the results already
-            if(cachedObject.value[query.q] &&
-                query.latitude == cachedObject.value[query.q].latitude &&
-                query.longitude == cachedObject.value[query.q].longitude){
-              res.writeHead(200, {'Content-Type': 'application/json'});
-              res.end(success(cachedObject.value[query.q].results));
-            }
-            // If it's not a match, then look in database
-            else {
-              City.findOne({}, function(err, doc){
+        // Test without cache implemented
+        if(testing){
+          City.findOne({}, function(err, doc){
+            if(err){
+              // Database error
+              console.log(err);
+              res.writeHead(404, {'Content-Type': 'application/json'});
+              res.end(error(err));
+            } else {
+              // If doc does not exist, then populate db
+              if(!doc || doc.length == 0){
+                // TODO make this synchronous
+                console.log("Reading file...");
+                Parser.readFile();
+                // let the database be filled
+                console.log("Database is filled");
+              }
+              var results = [];
+              // Find in the database all cities matching the prefix from the query
+              City.find({
+                // regular expression matches all prefixes
+                ascii: {
+                  $regex: '\\b' + query.q,
+                  $options: 'i'
+                }
+              }, function(err, docs){
                 if(err){
-                  // Database error
                   console.log(err);
                   res.writeHead(404, {'Content-Type': 'application/json'});
-                  res.end(error(err));
+                  res.end(error("Something went wrong when calling the database"));
+                }
+                // Pass callback results
+                results = docs;
+                if(results.length == 0){
+                  // If query does not match any city
+                  res.writeHead(404, {'Content-Type': 'application/json'});
+                  res.end(error("No suggestions were found"));
                 } else {
-                  // If doc does not exist, then populate db
-                  if(!doc || doc.length == 0){
-                    // TODO make this synchronous
-                    console.log("Reading file...");
-                    Parser.readFile();
-                    // let the database be filled
-                    console.log("Database is filled");
+                  // Check for latitude and longitude in query to calculate score
+                  if(query.latitude && query.longitude){
+                    results = calculateScores(results, query.latitude, query.longitude);
+                  } else {
+                    // Montreal coords are default
+                    query.latitude = 45.5017;
+                    query.longitude = -73.5673;
+                    results = calculateScores(results, query.latitude, query.longitude);
                   }
-                  var results = [];
-                  // Find in the database all cities matching the prefix from the query
-                  City.find({
-                    // regular expression matches all prefixes
-                    ascii: {
-                      $regex: '\\b' + query.q,
-                      $options: 'i'
-                    }
-                  }, function(err, docs){
-                    // Pass callback results
-                    results = docs;
-                    if(results.length == 0){
-                      // If query does not match any city
-                      res.writeHead(404, {'Content-Type': 'application/json'});
-                      res.end(error("No suggestions were found"));
-                    } else {
-                      // Check for latitude and longitude in query to calculate score
-                      res.writeHead(200, {'Content-Type': 'application/json'});
-                      if(query.latitude && query.longitude){
-                        results = calculateScores(results, query.latitude, query.longitude);
-                      } else {
-                        // Montreal coords are default
-                        query.latitude = 45.5017;
-                        query.longitude = -73.5673;
-                        results = calculateScores(results, query.latitude, query.longitude);
-                      }
-                      var cacheObject = {};
-                      cacheObject.latitude = query.latitude;
-                      cacheObject.longitude = query.longitude;
-                      cacheObject.results = results;
-                      // Store results in cluster-node-cache
-                      cache.set(query.q, cacheObject).then(function(result){
-                        if(result.err) {
-                          console.log(result.err);
-                        }
-                      });
-                      // Send the results
-                      res.end(success(results));
-                    }
-                  });
+                  res.writeHead(200, {'Content-Type': 'application/json'});
+                  res.end(success(results));
                 }
               });
             }
-          }
-        });
+          });
+        } else {
+          cache.get(query.q).then(function(cachedObject){
+            if(cachedObject.err){
+              console.log(cachedObject.err);
+              res.writeHead(404, {'Content-Type': 'application/json'});
+              res.end(error(cachedObject.err));
+            }
+            // If there is no error in fetching from cache
+            else {
+              // If lat and long match with query, then we have the results already
+              if(cachedObject.value[query.q] &&
+                  query.latitude == cachedObject.value[query.q].latitude &&
+                  query.longitude == cachedObject.value[query.q].longitude){
+                res.writeHead(200, {'Content-Type': 'application/json'});
+                res.end(success(cachedObject.value[query.q].results));
+                return;
+              }
+              // If it's not a match, then look in database
+              else {
+                City.findOne({}, function(err, doc){
+                  if(err){
+                    // Database error
+                    console.log(err);
+                    res.writeHead(404, {'Content-Type': 'application/json'});
+                    res.end(error(err));
+                  } else {
+                    // If doc does not exist, then populate db
+                    if(!doc || doc.length == 0){
+                      // TODO make this synchronous
+                      console.log("Reading file...");
+                      Parser.readFile();
+                      // let the database be filled
+                      console.log("Database is filled");
+                    }
+
+                    var results = [];
+                    // Find in the database all cities matching the prefix from the query
+                    City.find({
+                      // regular expression matches all prefixes
+                      ascii: {
+                        $regex: '\\b' + query.q,
+                        $options: 'i'
+                      }
+                    }, function(err, docs){
+                      results = docs;
+                      if(err){
+                        console.log(err);
+                        res.writeHead(404, {'Content-Type': 'application/json'});
+                        res.end(error("Something went wrong when calling the database"));
+                      }
+                      // Pass callback results
+                      else if(results.length == 0){
+                        // If query does not match any city
+                        res.writeHead(404, {'Content-Type': 'application/json'});
+                        res.end(error("No suggestions were found"));
+                      } else {
+                        // Check for latitude and longitude in query to calculate score
+                        if(query.latitude && query.longitude){
+                          results = calculateScores(results, query.latitude, query.longitude);
+                        } else {
+                          // Montreal coords are default
+                          query.latitude = 45.5017;
+                          query.longitude = -73.5673;
+                          results = calculateScores(results, query.latitude, query.longitude);
+                        }
+                        var cacheObject = {};
+                        cacheObject.latitude = query.latitude;
+                        cacheObject.longitude = query.longitude;
+                        cacheObject.results = results;
+                        // Store results in cluster-node-cache
+                        cache.set(query.q, cacheObject).then(function(result){
+                          if(result.err) {
+                            console.log(result.err);
+                            res.writeHead(404, {'Content-Type': 'application/json'});
+                            res.end(error("An error occured when saving to cache"));
+                          } else {
+                            // Saved the results, now send them
+                            res.writeHead(200, {'Content-Type': 'application/json'});
+                            res.end(success(results));
+                          }
+                        });
+                      }
+                    });
+                  }
+                });
+              }
+            }
+          });
+        }
       } else {
         // Not giving the parameter 'q'
         res.writeHead(404, {'Content-Type': 'application/json'});
@@ -105,22 +178,8 @@ var setupServer = function(){
         res.writeHead(404, {'Content-Type': 'application/json'});
         res.end(error("Try /suggestions"));
     }
-  }).listen(port, '0.0.0.0');
-}
+  });
 
-if(cluster.isMaster) {
-    for(var i=0; i < numCPUs; i++){
-      cluster.fork();
-    }
-    cluster.on('exit', function(worker, code, signal) {
-        console.log('Worker ' + worker.process.pid + ' died with code: ' + code + ', and signal: ' + signal);
-    });
-
-} else {
-    // each child process gets to listen on the same port
-    setupServer();
-    console.log('Server running at http://127.0.0.1:%d/suggestions', port);
-    console.log('Process ' + process.pid + ' is listening to all incoming requests');
 }
 
 var calculateScores = function(results, lat, long){

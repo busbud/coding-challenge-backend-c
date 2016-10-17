@@ -1,6 +1,11 @@
 var expect  = require('chai').expect;
-var app     = require('../app');
-var request = require('supertest')(app);
+
+var App = require('../app');
+var server = new App(true);
+var port = process.env.PORT || 2345;
+server.listen(port,'0.0.0.0');
+
+var request = require('supertest')(server);
 
 describe('GET /suggestions', function() {
   describe('with a non-existent city', function () {
