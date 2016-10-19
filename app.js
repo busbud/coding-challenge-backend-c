@@ -1,6 +1,8 @@
 var http = require('http');
 var port = process.env.PORT || 2345;
 var url = require('url');
+var express = require('express');
+var validator = require('express-validator');
 var querystring = require('querystring');
 var searchController = require('./lib/search');
 
@@ -8,8 +10,18 @@ var searchController = require('./lib/search');
 var DataParser = require('./lib/dataParser');
 var data = new DataParser({});
 
-module.exports = http.createServer(function (req, res) {
-  res.writeHead(404, {'Content-Type': 'text/plain'});
+var app = express();
+app.use(express.static(__dirname + '/public'));
+app.set('views', __dirname + '/views');
+app.engine('html', require('ejs').renderFile);
+app.use(validator());
+
+// Home
+app.get('/', function(req, res) {
+  res.render('index.html');
+});
+
+app.get('/suggestions', function(req, res) {
   var parsedUrl = url.parse(req.url);
 
   if (req.url.indexOf('/suggestions') === 0) {
@@ -52,6 +64,10 @@ module.exports = http.createServer(function (req, res) {
   } else {
     res.end();
   }
-}).listen(port);
+});
 
+// Run app
+app.listen(port);
 console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+
+module.exports = app;

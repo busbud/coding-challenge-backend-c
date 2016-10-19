@@ -11,6 +11,7 @@ Build status: https://circleci.com/gh/rjacquemin/coding-challenge-backend-c<br>
 The code is commented and the documentation below covers most of the high level concepts.<br>
 For this challenge I tried to keep the API as simple as possible, fast and reliable and to structure the code for reusability and maintainability.
 I focus on the backend part and also make sure unit test cover all the modules.
+Index page show simple input text that call the suggestion Api.
 
 ### App Structure
 ```
@@ -30,6 +31,14 @@ I focus on the backend part and also make sure unit test cover all the modules.
   |    +--scorer.js
   |    +--suggestions.js
   |    +--util.js
+  +--views
+  |    +--index.html
+  +--public
+  |    +--css
+  |       +--style.css
+  |    +--images
+  |       +--bg.jpg
+
 ```
 
 ### Loading Data
@@ -68,7 +77,6 @@ Unit tests, scorer and util modules are tested with separated unit test.<br>
 
 ### Possible improvements
 For this challenge I decide to keep the server as simple as possible but there are many improvement that can be done :
-  - Use express to build a small front end page with a textbox and using our suggestion endpoint
   - Use a nosql db to store the cities information (mongoDB / redis / ... )
   - Add limit parameter to the API to return max number of suggestions
   - Cache API results. The system could cache the full JSON response for a given request based on the parameters.
