@@ -2,7 +2,6 @@ var http = require('http');
 var port = process.env.PORT || 2345;
 var url = require('url');
 var express = require('express');
-var validator = require('express-validator');
 var querystring = require('querystring');
 var searchController = require('./lib/search');
 
@@ -14,7 +13,6 @@ var app = express();
 app.use(express.static(__dirname + '/public'));
 app.set('views', __dirname + '/views');
 app.engine('html', require('ejs').renderFile);
-app.use(validator());
 
 // Home
 app.get('/', function(req, res) {
@@ -33,18 +31,21 @@ app.get('/suggestions', function(req, res) {
       errors += 'q parameter is required and must be a string.';
     }
     if (options.latitude != undefined && isNaN(parseFloat(options.latitude))) {
-      errors += 'latitude parameter must be numeric.';
+      errors += 'latitude param must be numeric.';
     }
     if (options.longitude != undefined && isNaN(parseFloat(options.longitude))) {
-      errors += 'longitude parameter must be numeric.'
+      errors += 'longitude param must be numeric.'
+    }
+    if (options.limit != undefined && isNaN(parseInt(options.limit))) {
+      errors += 'limit param must be numeric.'
     }
 
     if (errors) {
-      res.writeHead(400);
-      res.end(JSON.stringify({
+      res.status(400).json({
         errors: errors,
         suggestions: []
-      }));
+      });
+      return;
     }
 
     searchController.getSuggestions(data.cities, options, function(err, suggestions) {

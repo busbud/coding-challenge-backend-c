@@ -14,7 +14,6 @@
     "geolib": "^2.0.18",
     "string-score":"^1.0.1",
     "express": "4.x",
-    "express-validator": "^2.3.0",
     "ejs": "^1.0.0",
     "chai": "^1.9.1",
     "mocha": "^1.18.2",

@@ -174,4 +174,53 @@ describe('GET /suggestions', function() {
       expect(response.json.suggestions).to.have.length(0);
     });
   });
+
+  describe('with a limit parameter', function () {
+    var response;
+
+    before(function (done) {
+      request
+        .get('/suggestions?q=va&limit=5')
+        .end(function (err, res) {
+          response = res;
+          response.json = JSON.parse(res.text);
+          done(err);
+        });
+    });
+
+    it('returns a 200', function () {
+      expect(response.statusCode).to.equal(200);
+    });
+
+    it('returns an array of size 5', function () {
+      expect(response.json.suggestions).to.be.instanceof(Array);
+      expect(response.json.suggestions).to.have.length(5);
+    });
+  });
+
+  describe('with an invalid limit parameter', function () {
+    var response;
+
+    before(function (done) {
+      request
+        .get('/suggestions?q=mon&limit=toto')
+        .end(function (err, res) {
+          response = res;
+          response.json = JSON.parse(res.text);
+          done(err);
+        });
+    });
+
+    it('returns a 400', function () {
+      expect(response.statusCode).to.equal(400);
+    });
+
+    it('returns an error message', function () {
+      expect(response.json.errors).to.not.be.undefined;
+      expect(response.json.suggestions).to.be.instanceof(Array);
+      expect(response.json.suggestions).to.have.length(0);
+    });
+  });
+
+
 });

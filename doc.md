@@ -11,7 +11,7 @@ Build status: https://circleci.com/gh/rjacquemin/coding-challenge-backend-c<br>
 The code is commented and the documentation below covers most of the high level concepts.<br>
 For this challenge I tried to keep the API as simple as possible, fast and reliable and to structure the code for reusability and maintainability.
 I focus on the backend part and also make sure unit test cover all the modules.
-Index page show simple input text that call the suggestion Api.
+Index page show simple input text with jquery autocomplete that call the suggestions Api.
 
 ### App Structure
 ```
@@ -48,9 +48,10 @@ For reading file and selecting column, I am using module d3-dsv (https://github.
 For performance purpose, it is important to not parse the TSV file at every request.
 
 ### Search
-lib/search.js is a controller called at every request, it return an array of city suggestion order by descending score.
+lib/search.js is a controller called at every request, it return an array of city suggestions order by descending score.
 Exclude all cities with population less than 5000.
-Return all the suggestion with a score > 0
+Return all the suggestions with a score > 0
+API support a limit parameter to return max number of suggestions
 
 ### Scorer
 lib/scorer.js is a scoring service, it is called for every city and calculate a pertinence score based on the criteria described below.
@@ -78,7 +79,6 @@ Unit tests, scorer and util modules are tested with separated unit test.<br>
 ### Possible improvements
 For this challenge I decide to keep the server as simple as possible but there are many improvement that can be done :
   - Use a nosql db to store the cities information (mongoDB / redis / ... )
-  - Add limit parameter to the API to return max number of suggestions
   - Cache API results. The system could cache the full JSON response for a given request based on the parameters.
     It should be considered for a really high traffic solution.
   - Use docker to encapsulate application
