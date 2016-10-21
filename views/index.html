@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+  <head>
+    <title>Busbud Coding Challenge</title>
+    <link href="css/style.css" rel="stylesheet" type="text/css"  media="all" />
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="wrap">
+      <div class="content">
+          <div class="content-header">
+          <h1><pre>Busbud Coding Challenge<pre></h1>
+        </div>
+        <div class="search" class="main clearfix column">
+          <input id="autocomplete" type="text" class="textbox" placeholder="Search City">
+        </div>
+        <div class="github">
+          <iframe src="https://ghbtns.com/github-btn.html?user=rjacquemin&repo=coding-challenge-backend-c&type=view&count=true&size=large&v=2" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
+        </div>
+        <div class="circleci">
+          <a target="blank" href="https://circleci.com/gh/rjacquemin/coding-challenge-backend-c" alt="CircleCI">
+            <img src="https://circleci.com/gh/rjacquemin/coding-challenge-backend-c.svg?style=svg">
+          </a>
+        </div>
+        </div>
+      </div>
+    </div>
+  </body>
+
+  <script>
+    $(function() {
+      $('#autocomplete').autocomplete({
+        source: function(request, response) {
+          $.getJSON("/suggestions?limit=10&q=" + request.term, function(data) {
+            response($.map(data.suggestions, function(city) {
+              return {
+                label: city.name,
+              };
+            }));
+          });
+        },
+        minLength: 2,
+        delay: 100
+      });
+    });
+  </script>
+</html>

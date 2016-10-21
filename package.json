@@ -1,15 +1,20 @@
 {
   "name": "coding-challenge-backend-c",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "coding challenge in Nodejs",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
     "test": "./node_modules/mocha/bin/mocha ./test/"
   },
-  "author": "",
+  "author": "Raphael Jacquemin",
   "license": "WTFPL",
   "dependencies": {
+    "d3": "^3.5.6",
+    "geolib": "^2.0.18",
+    "string-score":"^1.0.1",
+    "express": "4.x",
+    "ejs": "^1.0.0",
     "chai": "^1.9.1",
     "mocha": "^1.18.2",
     "supertest": "^0.11.0"
