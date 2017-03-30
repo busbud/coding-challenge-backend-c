@@ -49,10 +49,10 @@ importer
 
 //TODO: DIACRITICS
 
-/*curl -X DELETE  http://192.168.99.100:32771/locations*/
+/*curl -X DELETE  https://search-busbud-suggest-pltheberge-ixv7zancq2woftkbqrigmncsee.us-east-1.es.amazonaws.com/locations*/
 
 
-/*curl -X PUT  http://192.168.99.100:32771/locations/ -d'{
+/*curl -X PUT  https://search-busbud-suggest-pltheberge-ixv7zancq2woftkbqrigmncsee.us-east-1.es.amazonaws.com/locations -d'{
     "settings":{
         "analysis":{
             "analyzer":{
