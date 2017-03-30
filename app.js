@@ -42,8 +42,11 @@ app.use(function(req, res, next) {
 });
 
  
-app.listen(port);
+app.listen(port, '127.0.0.1', function(err, res) {
+	console.log(err);
+	console.log(res);
 
-console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+	console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+});
 
 module.exports = app;
