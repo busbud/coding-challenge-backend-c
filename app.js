@@ -34,6 +34,8 @@ app.use(function(err, req, res, next) {
 		return res.status(statusCode).send(err);		
 	}
 
+	console.log(err);
+
   	return res.status(statusCode).send(Boom.wrap(err.output));
 });
 
@@ -42,7 +44,7 @@ app.use(function(req, res, next) {
 });
 
  
-app.listen(port, '127.0.0.1', function(err, res) {
+app.listen(port, function(err, res) {
 	console.log(err);
 	console.log(res);
 
