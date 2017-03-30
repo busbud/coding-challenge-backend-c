@@ -30,6 +30,7 @@ var suggestionsRouter = new SuggestionsRouter({
 app.use('/suggestions', suggestionsRouter);
 
 app.use(function(err, req, res, next) {
+	console.error(err);
 	var statusCode = err.isBoom ? err.output.statusCode : 500;
 
 	if(err.isBoom) {
@@ -49,7 +50,3 @@ app.listen(port, function(err, res) {
 });
 
 module.exports = app;
-
-//TODO: Logging
-//APIb Documentation
-//More tests?
