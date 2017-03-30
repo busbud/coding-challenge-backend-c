@@ -12,7 +12,9 @@ var SuggestionsRouter = require('./routes/suggestions.js');
 
 var locationsDal = new LocationsDAL({
 	host: process.env.ES_HOST || "192.168.99.100:32771",
-	index: process.env.ES_INDEX || "locations"
+	index: process.env.ES_INDEX || "locations",
+	cacheLength: process.env.CACHE_LENGTH,
+	cacheAge: process.env.CACHE_AGE
 });
 
 var suggestionsController = new SuggestionsController({}, {
@@ -50,5 +52,4 @@ module.exports = app;
 
 //TODO: Logging
 //APIb Documentation
-//Start server on ES connect
 //More tests?
