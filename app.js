@@ -34,14 +34,14 @@ app.use(function(err, req, res, next) {
 	var statusCode = err.isBoom ? err.output.statusCode : 500;
 
 	if(err.isBoom) {
-		return res.status(statusCode).send(err);		
+		return res.status(statusCode).send(err.output);		
 	}
 
   	return res.status(statusCode).send(Boom.wrap(err));
 });
 
 app.use(function(req, res, next) {
-  	res.status(404).send(Boom.create(404, "Resource not found!"));
+  	res.status(404).send(Boom.create(404, "Resource not found!").output);
 });
 
  

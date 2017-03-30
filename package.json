@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "test": "./node_modules/mocha/bin/mocha ./test/"
+    "test": "./node_modules/mocha/bin/mocha ./test/",
+    "doc:generate": "aglio -i docs/api.apib -o docs/index.html"
   },
   "author": "",
   "license": "WTFPL",
@@ -17,6 +18,7 @@
     "express": "^4.15.0"
   },
   "devDependencies": {
+    "aglio": "^2.3.0",
     "chai": "^1.9.1",
     "geonames-importer": "0.0.6",
     "mocha": "^1.18.2",
