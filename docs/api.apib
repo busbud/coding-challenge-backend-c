@@ -1,0 +1,79 @@
+FORMAT: 1A
+
+# Location suggestion API
+This API provides functionnality in order to allow autocompletion of a city search by its
+prefix and a location hint. Currently, the data is limited to USA and Canada cities of
+over 5000 inhabitants.
+
+## Resources
++ [API endpoint](https://thawing-headland-71103.herokuapp.com/)
+
+# Notes [/suggestions/?q={q}&latitude={latitude}&longitude={longitude}]
+
++ Parameters
+
+    + q: Londo (required) - Prefix for search
+    + latitude: 43.216 - A latitude to use a hint. Cities close to this latitude will be prioritized
+    + longitude: `-74.332` - A longitude to use a hint. Cities close to this longitude will be prioritized
+
+## Suggest locations [GET]
+Gets a list of suggestions based on the query and coordinates
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+                suggestions: [
+                    {
+                        name: "London, KY, US",
+                        latitude: "37.12898",
+                        longitude: "-84.08326",
+                        score: 1
+                    },
+                    {
+                        name: "London, ON, CA",
+                        latitude: "42.98339",
+                        longitude: "-81.23304",
+                        score: 0.8882770018643394
+                    },
+                    {
+                        name: "London, OH, US",
+                        latitude: "39.88645",
+                        longitude: "-83.44825",
+                        score: 0.8863848534062916
+                    },
+                    {
+                        name: "New London, CT, US",
+                        latitude: "41.35565",
+                        longitude: "-72.09952",
+                        score: 0.8406455869039239
+                    },
+                    {
+                        name: "New London, WI, US",
+                        latitude: "44.39276",
+                        longitude: "-88.73983",
+                        score: 0.8384411219979255
+                    },
+                    {
+                        name: "Londonderry, NH, US",
+                        latitude: "42.86509",
+                        longitude: "-71.37395",
+                        score: 0.7666215278789524
+                    },
+                    {
+                        name: "Londontowne, MD, US",
+                        latitude: "38.93345",
+                        longitude: "-76.54941",
+                        score: 0.6782384012996701
+                    }
+                ]
+            }
+
++ Response 404 (application/json)
+
+    + Body
+
+            {
+                suggestions: []
+            }
