@@ -34,9 +34,7 @@ app.use(function(err, req, res, next) {
 		return res.status(statusCode).send(err);		
 	}
 
-	console.log(err);
-
-  	return res.status(statusCode).send(Boom.wrap(err.output));
+  	return res.status(statusCode).send(Boom.wrap(err));
 });
 
 app.use(function(req, res, next) {
@@ -45,10 +43,12 @@ app.use(function(req, res, next) {
 
  
 app.listen(port, function(err, res) {
-	console.log(err);
-	console.log(res);
-
 	console.log('Server running at http://127.0.0.1:%d/suggestions', port);
 });
 
 module.exports = app;
+
+//TODO: Logging
+//APIb Documentation
+//Start server on ES connect
+//More tests?
