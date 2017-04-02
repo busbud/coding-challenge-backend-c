@@ -1,5 +1,6 @@
-var express = require('express')
-var app = express()
+var express = require('express');
+var app = express();
+exports.app = app;
 var request = require('request');
 
 app.set('port', process.env.PORT || 2345);
@@ -13,15 +14,15 @@ app.get('/suggestions', function (req, res) {
     
     // check if they are defined and of the correct type
     if(q === undefined) {
-        res.send(JSON.stringify({'error' : 'q is not defined' }));
+        res.status(400).send(JSON.stringify({'error' : 'q is not defined' }));
         return;
     }
     if(latitude !== undefined && isNaN(latitude)) {
-        res.send(JSON.stringify({'error' : 'latitude is not a number' }));
+        res.status(400).send(JSON.stringify({'error' : 'latitude is not a number' }));
         return;
     }
     if(longitude !== undefined && isNaN(longitude)) {
-        res.send(JSON.stringify({'error' : 'longitude is not a number' }));
+        res.status(400).send(JSON.stringify({'error' : 'longitude is not a number' }));
         return;
     }
     
@@ -81,7 +82,13 @@ app.get('/suggestions', function (req, res) {
             suggestions.sort(function(a, b){return b.score-a.score});
         }
         
-        res.send(JSON.stringify({'suggestions' : suggestions }));
+        if(suggestions.length > 0) {
+            res.send(JSON.stringify({'suggestions' : suggestions }));
+        }
+        else {
+            //if there are no suggestions then return a 404
+            res.status(404).send(JSON.stringify({'suggestions' : suggestions }));
+        }
     });
 })
 
