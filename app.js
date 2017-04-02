@@ -16,19 +16,11 @@ app.get('/suggestions', function (req, res) {
         res.send(JSON.stringify({'error' : 'q is not defined' }));
         return;
     }
-    if(latitude === undefined) {
-        res.send(JSON.stringify({'error' : 'latitude is not defined' }));
-        return;
-    }
-    if(isNaN(latitude)) {
+    if(latitude !== undefined && isNaN(latitude)) {
         res.send(JSON.stringify({'error' : 'latitude is not a number' }));
         return;
     }
-    if(longitude === undefined) {
-        res.send(JSON.stringify({'error' : 'longitude is not defined' }));
-        return;
-    }
-    if(isNaN(longitude)) {
+    if(longitude !== undefined && isNaN(longitude)) {
         res.send(JSON.stringify({'error' : 'longitude is not a number' }));
         return;
     }
@@ -57,18 +49,27 @@ app.get('/suggestions', function (req, res) {
                     var locationLat = currentLocation.lat;
                     var locationLng = currentLocation.lng;
                     
-                    var distance = getDistanceFromLatLonInKm(latitude, longitude, locationLat, locationLng);
-                    
-                    // if it is further than 800km away then remove it from the results
-                    if(distance < 800) {
-                        // the score is based on the distance to the latitude-longitude point
-                        var score = (1 - (distance / 800)).toFixed(1);
+                    //make latitude and longitude optional
+                    if(latitude !== undefined && longitude !== undefined) {
+                        var distance = getDistanceFromLatLonInKm(latitude, longitude, locationLat, locationLng);
                         
+                        // if it is further than 800km away then remove it from the results
+                        if(distance < 800) {
+                            // the score is based on the distance to the latitude-longitude point
+                            var score = (1 - (distance / 800)).toFixed(1);
+                            
+                            suggestions.push({
+                                name: locationName,
+                                latitude: locationLat,
+                                longitude: locationLng,
+                                score: score
+                            });
+                        }
+                    } else {
                         suggestions.push({
                             name: locationName,
                             latitude: locationLat,
-                            longitude: locationLng,
-                            score: score
+                            longitude: locationLng
                         });
                     }
                 }
@@ -76,7 +77,9 @@ app.get('/suggestions', function (req, res) {
         }
         
         // sort based on highest score
-        suggestions.sort(function(a, b){return b.score-a.score});
+        if(latitude !== undefined && longitude !== undefined) {
+            suggestions.sort(function(a, b){return b.score-a.score});
+        }
         
         res.send(JSON.stringify({'suggestions' : suggestions }));
     });
