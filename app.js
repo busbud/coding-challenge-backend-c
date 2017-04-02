@@ -57,9 +57,11 @@ app.get('/suggestions', function (req, res) {
                     var locationLat = currentLocation.lat;
                     var locationLng = currentLocation.lng;
                     
+                    var distance = getDistanceFromLatLonInKm(latitude, longitude, locationLat, locationLng);
+                    
+                    // if it is further than 800km away then remove it from the results
                     if(distance < 800) {
                         // the score is based on the distance to the latitude-longitude point
-                        var distance = getDistanceFromLatLonInKm(latitude, longitude, locationLat, locationLng);
                         var score = (1 - (distance / 800)).toFixed(1);
                         
                         suggestions.push({
@@ -80,7 +82,11 @@ app.get('/suggestions', function (req, res) {
     });
 })
 
-app.listen(port)
+app.listen(app.get('port'),
+    function(){
+        console.log("Server listening on port " + app.get('port'));
+    }
+)
 
 // the Haversine formula for calculating the distance between two latitude-longitude points
 // taken from stack overflow: http://stackoverflow.com/questions/27928/calculate-distance-between-two-latitude-longitude-points-haversine-formula
