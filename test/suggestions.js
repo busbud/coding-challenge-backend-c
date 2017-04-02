@@ -52,7 +52,7 @@ describe('GET /suggestions', function() {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.some(function (suggestion) {
           var re = new RegExp("/montréal/i");
-          re.test(suggestion.name);
+          return re.test(suggestion.name);
         });
       })
     });
