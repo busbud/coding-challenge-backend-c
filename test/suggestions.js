@@ -1,6 +1,6 @@
-var expect  = require('chai').expect;
-var app     = require('../app');
-var request = require('supertest')(app);
+// var expect  = require('chai').expect;
+// var app     = require('../app');
+// var request = require('supertest')(app);
 
 // describe('GET /suggestions', function() {
 //   describe('with a non-existent city', function () {

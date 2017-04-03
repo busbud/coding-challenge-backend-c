@@ -1,4 +1,5 @@
 var _ = require("lodash");
+var Transform = require("stream").Transform;
 
 /**
  * This class is used to store and find cities by their names.

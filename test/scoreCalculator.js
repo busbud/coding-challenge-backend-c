@@ -1,5 +1,5 @@
+var es = require("event-stream");
 var expect = require("chai").expect;
-var MemoryStream = require("memorystream");
 var scoreCalculator = require("../business/scoreCalculator");
 
 describe("scoreCalculator tests : ", function() {
@@ -24,16 +24,14 @@ describe("scoreCalculator tests : ", function() {
                 {"name":"Londonderry","latitude":"42.86509","longitude":"-71.37395", expectedScore: 0.2}
             ];
 
-            var memStream = MemoryStream.createWriteStream();
-
-            scoreCalculator.computeScores(cities, "lon", null, memStream);
-            
-            memStream.on("finish", function() {
-                cities.forEach(function(city) {
+            var writer = es.writeArray(function (err, array) {
+                array.forEach(function(city) {
                     expect(city.score).to.equal(''+city.expectedScore);
                 });
                 done();
             });
+
+            scoreCalculator.computeScores(cities, "lon", null).pipe(writer);
         });
     });
     
@@ -57,16 +55,14 @@ describe("scoreCalculator tests : ", function() {
                 {"name":"Londonderry","latitude":"42.86509","longitude":"-71.37395", expectedScore: 0.8}
             ];
 
-            var memStream = MemoryStream.createWriteStream();
-
-            scoreCalculator.computeScores(cities, "lon", {"latitude": 42.86509, "longitude": -71.37395 }, memStream);
-            
-            memStream.on("finish", function() {                
-                cities.forEach(function(city) {
+            var writer = es.writeArray(function (err, array) {
+                array.forEach(function(city) {
                     expect(city.score).to.equal(''+city.expectedScore);
                 });
                 done();
             });
+
+            scoreCalculator.computeScores(cities, "lon", {"latitude": 42.86509, "longitude": -71.37395 }).pipe(writer);
         });
     });
 });

@@ -138,6 +138,7 @@ function loadAndStoreTo(cityIndex, file) {
  * @param {array} data 
  */
 function getCityObjectFrom(data) {
+    // Warning : following lines must be uncommented as soon as we have cities with a population greater than 5,000 people
     // var population = parseInt(data[14]);
     // if (population && population < 5000) {
     //     return null;

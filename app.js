@@ -1,19 +1,26 @@
-var cityIndex = require('./business/cityIndex');
-var cityLoader = require("./business/cityLoader");
+var citySearchEngine = require("./business/citySearchEngine");
+var es = require("event-stream");
 var http = require('http');
 var url = require('url');
 
-var cityStore = cityIndex.createIndex();
+var searchEngine = null;
 var port = process.env.PORT || 2345;
 var server = http.createServer();
 
+// handle incoming requests
 server.on("request", function (req, res) {
-    if (req.url.indexOf('/suggestions') === 0) {
-        var params = url.parse(req.url, true);
-        console.log("requestion with ", params.q);
-        var cities = cityStore.findCities(params.query.q);
-        res.end(JSON.stringify({ suggestions: cities }));
+    var urlInfo = url.parse(req.url, true);
+
+    if (urlInfo.pathname === '/suggestions') {
         res.writeHead(200, {'Content-Type': 'text/plain'});
+        searchEngine.searchStream(urlInfo.query)
+            .pipe(es.stringify())
+            .pipe(es.join(','))
+            .pipe(es.wait())
+            .pipe(es.mapSync(function(data){
+                return "{suggestions:[" + data + "]}";
+            }))
+            .pipe(res);
     }
     else {
         res.writeHead(404, {'Content-Type': 'text/plain'});
@@ -21,13 +28,14 @@ server.on("request", function (req, res) {
     }
 });
 
+// start server
 server.listen(port, '127.0.0.1', function() {
     console.log("Initializing...");
     
-    var readStream = cityLoader.loadAndStoreTo(cityStore);
-
-    readStream.on("end", function() {
-      console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+    // load and index cities in memory in order to speep up searches
+    citySearchEngine.init(/*"data/cities_canada-usa-lite.tsv",*/ function(engine) {
+        searchEngine = engine;
+        console.log('Server running at http://127.0.0.1:%d/suggestions', port);
     });
 });
 

@@ -6,13 +6,7 @@ var MemoryStream = require('memorystream');
 
 describe("cityLoader tests :", function(){
 
-    var memStream;
-
     describe("when loading cities, it", function() {
-
-        beforeEach(function(){
-            memStream = MemoryStream.createWriteStream();
-        });
 
         it("must write json file containing cities", function(done) {
             var outfile = fs.createWriteStream(__dirname + "/cities.json");
@@ -21,6 +15,7 @@ describe("cityLoader tests :", function(){
         });
 
         it("should load expected data", function(done) {
+            var memStream = MemoryStream.createWriteStream();
             var readStream = cityLoader.loadAndWriteTo(memStream);
 
             readStream.on("finish", function() {
@@ -43,24 +38,6 @@ describe("cityLoader tests :", function(){
             var readStream = cityLoader.loadAndStoreTo(index, "data/cities_canada-usa-lite.tsv");
 
             readStream.on("end", function() {
-                // var expectedCities = [
-                //     "Sooke, BC, CA",
-                //     "Sorel-Tracy, QC, CA",
-                //     "South Huron, ON, CA",
-                //     "Southside, AL, US",
-                //     "South Bradenton, FL, US",
-                //     "South Apopka, FL, US",
-                //     "South Daytona, FL, US",
-                //     "South Gate Ridge, FL, US",
-                //     "South Highpoint, FL, US",
-                //     "South Miami, FL, US",
-                //     "South Miami Heights, FL, US",
-                //     "South Patrick Shores, FL, US",
-                //     "South Venice, FL, US",
-                //     "Southchase, FL, US",
-                //     "Southgate, FL, US",
-                //     "Southwest Ranches, FL, US"
-                // ];
                 var expectedCities = [
                     "Sooke",
                     "Sorel-Tracy",

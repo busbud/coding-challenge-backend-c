@@ -7,7 +7,7 @@ var haversine = require("haversine");
  * @param {*} searchTerm - the search term
  * @param {Object} location - a {latitude, longitude} object
  */
-function computeScores(cities, searchTerm, location, res) {
+function computeScores(cities, searchTerm, location) {
     var refLength = searchTerm.length;
     
     var reader = es.readArray(cities)            
@@ -33,8 +33,9 @@ function computeScores(cities, searchTerm, location, res) {
                     : nameScore; // if no initial location has been provided, only the name score counts
                 
                 city.score = (city.score / 100).toFixed(1);
-            }))
-            .pipe(res);
+                return city;
+            }));
+    return reader;
 }
 
 module.exports.computeScores = computeScores;
