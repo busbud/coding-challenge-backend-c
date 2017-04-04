@@ -51,8 +51,7 @@ Engine.prototype.searchStream = function(query) {
                 name: [ city.name, city.state, city.country ].join(", "),
                 latitude: city.latitude,
                 longitude: city.longitude,
-                score: city.score,
-                distance: city.distance
+                score: city.score
             }
         }));
 };
