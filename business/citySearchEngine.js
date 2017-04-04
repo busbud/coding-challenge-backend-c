@@ -39,6 +39,9 @@ Engine.prototype.searchStream = function(query) {
     return scoreCalculator.computeScores(this.cityIndex.findCities(query.q), query.q, query)
         .pipe(sort(function(city1, city2) {
             if (city1.score == city2.score) {
+                if (city1.name.length == city2.name.length) {
+                    return city1.distance < city2.distance ? -1 : 1;
+                }
                 return city1.name.length < city2.name.length ? -1 : 1;
             }
             return city1.score < city2.score ? 1 : -1;

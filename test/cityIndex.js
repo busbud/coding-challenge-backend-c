@@ -114,12 +114,23 @@ describe("cityIndex tests:", function() {
             expect(cities).to.deep.equal([{ name: "AliFAx"}]);
         });
         
+        it("must find cities having diacritics in their name", function(){
+            index.addCity({ name: "Chicago"});
+            index.addCity({ name: "Atlanta"});
+            index.addCity({ name: "chicoutimi"});
+            index.addCity({ name: "Montréal"});
+
+            var cities = index.findCities("montreal");
+
+            expect(cities).to.deep.equal([{ name: "Montréal"}]);
+        });
+        
         it("must not find anything when there are no matches", function(){
             index.addCity({ name: "Chicago"});
             index.addCity({ name: "Atlanta"});
             index.addCity({ name: "chicoutimi"});
 
-            var cities = index.findCities("e");
+            var cities = index.findCities("car");
 
             expect(cities).to.not.be.null;
             expect(cities.length).to.equal(0);

@@ -1,4 +1,5 @@
 var _ = require("lodash");
+var removeDiacritics = require("diacritics").remove;
 var Transform = require("stream").Transform;
 
 /**
@@ -30,10 +31,12 @@ cityNode.prototype.addCity = function(city) {
     if (!city || !city.name)
         throw "Invalid city";
 
-    var prefix = city.name.charAt(this.level).toLowerCase();
-    
+    var prefix = city.name.charAt(this.level).toLowerCase();    
     var subNodeForPrefix;
+
     if (prefix) {
+        prefix = removeDiacritics(prefix);
+
         if (!this.subNodes) {
             this.subNodes = {};
         } else {
@@ -69,11 +72,11 @@ cityNode.prototype.findCities = function(search) {
         return _.clone(this.cities);
     }
 
-    var matchingSubNode = this.subNodes[prefix];
+    var matchingSubNode = this.subNodes[removeDiacritics(prefix)];
 
     return matchingSubNode
         ? matchingSubNode.findCities(search) // there is a matching node for the current prefix letter, so we can go deeper in the tree
-        : _.clone(this.cities); // no more matches, let's return the cities of the current node (we clone it to prevent modifying the original cities)
+        : [];//_.clone(this.cities); // no more matches, let's return the cities of the current node (we clone it to prevent modifying the original cities)
 };
 
 /**

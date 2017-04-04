@@ -2,7 +2,7 @@ var citySearchEngine = require("../business/citySearchEngine");
 var es = require("event-stream");
 var expect = require("chai").expect;
 
-describe.only("citySearchEngine tests:", function() {
+describe("citySearchEngine tests:", function() {
 
     describe("when searching cities with a term, it", function() {
 
