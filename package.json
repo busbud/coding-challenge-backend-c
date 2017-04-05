@@ -4,7 +4,7 @@
   "description": "coding challenge in Nodejs",
   "main": "app.js",
   "scripts": {
-    "start": "set PORT=3456 && node app.js",
+    "start": "node app.js",
     "test": "node ./node_modules/mocha/bin/mocha ./test/"
   },
   "author": "",

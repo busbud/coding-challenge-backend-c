@@ -1,0 +1,56 @@
+<html>
+    <head>
+        <style>
+            body {
+                background-color: #bbb;
+                font-family: sans-serif;
+                color:#555;
+            }
+            form {
+                min-width:500px;
+                max-width:500px;
+                margin: 3em auto;
+                background: #fff;
+                padding: 1em;
+                border: 1px solid grey;
+            }
+            form div {
+                display: block;
+                width: 100%;
+                padding: 0.5em;
+            }
+            form label {
+                width: 45%;
+                text-align: right;
+                display: inline-block;
+            }
+            form input[type=text] {
+                width:50%;
+                margin-left: 10px;
+            }
+            form input[type=submit] {
+                width:100px;
+                display: block;
+                margin: 1em auto 0;
+            }
+        </style>
+    </head>
+    <body>
+        <form method="GET" action="suggestions">
+            <div>
+                <label for="q">Which city are you looking for ?</label>
+                <input id="q" name="q" type="text" />
+            </div>
+            <div>
+                <label for="latitude">Latitude</label>
+                <input id="latitude" name="latitude" type="text" />
+            </div>
+            <div>
+                <label for="longitude">Longitude</label>
+                <input id="longitude" name="longitude" type="text" />
+            </div>
+            
+            <input type="submit" value="Search" />
+        </form>
+    </body>
+</html>

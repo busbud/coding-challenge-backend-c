@@ -1,6 +1,7 @@
 var citySearchEngine = require("./business/citySearchEngine");
 var es = require("event-stream");
 var events = require('events');
+var fs = require("fs");
 var http = require('http');
 var url = require('url');
 
@@ -16,14 +17,28 @@ server.on("request", function (req, res) {
     var urlInfo = url.parse(req.url, true);
 
     if (urlInfo.pathname === '/suggestions') {
-          
-        searchEngine.searchStream(urlInfo.query)
-            .pipe(es.stringify())
-            .pipe(es.join(',\n'))
-            .pipe(es.wait(function (err, data) {
-                res.writeHead(data ? 200 : 404, {'Content-Type': 'text/plain; charset=utf-8'});
-                res.end('{ "suggestions": [' + data + '] }');
-            }));    
+        if (urlInfo.query.q) {
+            searchEngine.searchStream(urlInfo.query)
+                .pipe(es.stringify())
+                .pipe(es.join(',\n'))
+                .pipe(es.wait(function (err, data) {
+                    res.writeHead(data ? 200 : 404, {'Content-Type': 'text/plain; charset=utf-8'});
+                    res.end('{ "suggestions": [' + data + '] }');
+                }));
+        }
+        else {
+            res.writeHead(404, {'Content-Type': 'text/plain; charset=utf-8'});
+            res.end('{ "suggestions": [] }');
+        }
+    }
+    else if (urlInfo.pathname === '/help') {
+        // provide a page that will help user
+        fs.createReadStream("suggestions.html")
+            .pipe(res)
+            .pipe(es.wait(function(err,cb){
+                res.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'});
+                res.end();
+            }));
     }
     else {
         res.writeHead(404, {'Content-Type': 'text/plain'});

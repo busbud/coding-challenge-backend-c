@@ -1,129 +1,111 @@
 # Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
 
-## Requirements
+## Implementation
 
-Design an API endpoint that provides auto-complete suggestions for large cities.
-The suggestions should be restricted to cities in the USA and Canada with a population above 5000 people.
+### Data storage and indexation
 
-- the endpoint is exposed at `/suggestions`
-- the partial (or complete) search term is passed as a querystring parameter `q`
-- the caller's location can optionally be supplied via querystring parameters `latitude` and `longitude` to help improve relative scores
-- the endpoint returns a JSON response with an array of scored suggested matches
-    - the suggestions are sorted by descending score
-    - each suggestion has a score between 0 and 1 (inclusive) indicating confidence in the suggestion (1 is most confident)
-    - each suggestion has a name which can be used to disambiguate between similarly named locations
-    - each suggestion has a latitude and longitude
-- all functional tests should pass (additional tests may be implemented as necessary).
-- the final application should be [deployed to Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs).
-- feel free to add more features if you like!
+Because the city set is relatively small, it would have been inefficient to put it in a database (mongodb for instance). Moreover, it wouldn't have helped me to compute scoring.
+So I choosed to read the cities file once, and put it in a tree structure in memory.
+Each node of the tree is a javascript object having a level (its depth in the tree) containing an array of cities and an object containing the subnodes. Each subnode beeing accessible by a property that is a letter. 
 
-#### Sample responses
-
-These responses are meant to provide guidance. The exact values can vary based on the data source and scoring algorithm
-
-**Near match**
-
-    GET /suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
+Graphically we could represent it like that (this is a very small sample):
 
 ```json
 {
-  "suggestions": [
-    {
-      "name": "London, ON, Canada",
-      "latitude": "42.98339",
-      "longitude": "-81.23304",
-      "score": 0.9
+  level:0,
+  cities:[],
+  subNodes: {
+    "c": {
+      level: 1,
+      cities: ['Chicago', 'Cheyenne'],
+      subNodes: {
+        "h": {
+          level: 2,
+          cities: ['Chicago', 'Cheyenne'],
+          subNodes: {
+            "e": {
+              level: 3,
+              cities: ['Cheyenne'],
+            },
+            "i": {
+              level: 3,
+              cities: ['Chicago'],
+              suNodes: { /* and so on */ }
+            }
+        }
+      }
     },
-    {
-      "name": "London, OH, USA",
-      "latitude": "39.88645",
-      "longitude": "-83.44825",
-      "score": 0.5
-    },
-    {
-      "name": "London, KY, USA",
-      "latitude": "37.12898",
-      "longitude": "-84.08326",
-      "score": 0.5
-    },
-    {
-      "name": "Londontowne, MD, USA",
-      "latitude": "38.93345",
-      "longitude": "-76.54941",
-      "score": 0.3
+    "m": {
+      level: 1,
+      cities: ['Montréal'],
+      subNodes: { /* and so on */ }
     }
-  ]
+  }
 }
 ```
 
-**No match**
+When asking for suggestions with the search term 'che', we start in the root by looking in the `subNodes` property if there is a property named `c`.
+If so, we step to this node and do the same action with the next character of the search term.
+The stop conditions are :
+- There is no subnode for the current character. This means that the customer is looking for something we don't have. So we return an empty array.
+- We've reached the end of the search term, then we just have to return the `cities` of the node we are on.
 
-    GET /suggestions?q=SomeRandomCityInTheMiddleOfNowhere
+For performance purpose, this index is built as the server is started. This way, we prevent any latency on customer requests, even for the very first one.
 
-```json
-{
-  "suggestions": []
-}
-```
+### Score calculation
 
+Score is calculated against 2 parameters : distance and name.
 
-### Non-functional
+- Distance : The best score can be obtained between 0 to 10 km from the provided location. Beyond, we decrease score by 0.2% each kilometer.
+- Name : I first wanted to decrease score by 10% each extra character of the city name compared to search term. Then I realized that it was too strong. So I decided to moderate it with a `loss factor` that equals 2 when a location is provided, 5 otherwise.
 
-- All code should be written in Javascript
-- Mitigations to handle high levels of traffic should be implemented
-- Work should be submitted as a pull-request to this repo
-- Documentation and maintainability is a plus
+Global score is calculated by multiplying the distance score with the name score.
+If no location was provided, the distance score equals 100.
 
-### References
+### Search engine
 
-- Geonames provides city lists Canada and the USA http://download.geonames.org/export/dump/readme.txt
-- http://www.nodejs.org/
-- http://ejohn.org/blog/node-js-stream-playground/
+The search engine must be initialized before you can use it.
+To do that you just call the `init` function with an optionnal file path (pointing to a .tsv city file) and a callback which will be called when data has been fetched and indexed.
+The search engine first create an `cityIndex` and give it to the `loadAndStoreTo` method of the `cityLoader` module.
 
+### City index
 
-## Getting Started
+The `cityIndex` module is responsible for holding cities in memory and to find cities by a search term.
 
-Begin by forking this repo and cloning your fork. GitHub has apps for [Mac](http://mac.github.com/) and
-[Windows](http://windows.github.com/) that make this easier.
+### City loader
 
-### Setting up a Nodejs environment
+The `cityLoader` module is used to read the .tsv file containing the cities used is this challenge.
 
-Get started by installing [nodejs](http://www.nodejs.org).
+## Performances
 
-For OS X users, use [Homebrew](http://brew.sh) and `brew install nvm`
+### Server
 
-Once that's done, from the project directory, run
+It takes approximatively between 50 to 200 milliseconds to index the 5000 cities and start the server.
 
-```
-nvm use
-```
+### Requests
 
-### Setting up the project
+Due to the choices I've made and explained above, requests are treated very quickly. Response time is between 5 and 20 ms.
 
-In the project directory run
+## Difficulties
 
-```
-npm install
-```
+### Tests
 
-### Running the tests
+As I choosed to load and index the cities at the server starting, I faced the problem of the tests running before my server was ready.
+To fix it, I simply add a custom EventEmitter on the server object, as well as as a `ready` property.
 
-The test suite can be run with
+Server side :
+Server initializes the index and when this is achieved, it triggers a `ready` event 
+Test side :
+When the test runs, it looks if the server is ready, if not it listens for a `ready` event to be triggered by the custom EventEmitter.
 
-```
-npm test
-```
+### Data
 
-### Starting the application
+The canadian territories and provinces are numbered and not named in the tsv file.
+Curiously, it's not the case for the american states.
+To fix that I've created a mapping array that I use only when the value of the `admin1` column is a number.
 
-To start a local server run
+## Get started
 
-```
-PORT=3456 npm start
-```
+Application can be tested [here](https://xmasclet-busbud-challenge.herokuapp.com/suggestions).
 
-which should produce output similar to
-
-```
-Server running at http://127.0.0.1:2345/suggestions
-```
+A basic form is available at `/help`. This is more friendly to use than typing an url.
