@@ -84,7 +84,9 @@ It takes approximatively between 50 to 200 milliseconds to index the 5000 cities
 
 ### Requests
 
-Due to the choices I've made and explained above, requests are treated very quickly. Response time is between 5 and 20 ms.
+Due to the choices I've made and explained above, requests are treated very quickly.
+Response time is between 5 and 20 ms on the local computer.
+However, these performances are not so great on heroku. It would be interesting to see if this is due to the network or a limitation on resource usage with the heroku free account.
 
 ## Difficulties
 
@@ -109,3 +111,8 @@ To fix that I've created a mapping array that I use only when the value of the `
 Application can be tested [here](https://xmasclet-busbud-challenge.herokuapp.com/suggestions).
 
 A basic form is available at `/help`. This is more friendly to use than typing an url.
+
+## Improvements
+
+- We could scale the application up by using cluster. This would make the application uses all availables cpu cores to handle more requests per second.
+- Make the app.js code more readable by using express http server.
