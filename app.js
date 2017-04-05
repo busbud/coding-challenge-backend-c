@@ -51,7 +51,7 @@ citySearchEngine.init(/*"data/cities_canada-usa-lite.tsv",*/ function(engine) {
     searchEngine = engine;
     
     // start server
-    server.listen(port, '127.0.0.1', function() {
+    server.listen(port, function() {
         console.log('Server running at http://127.0.0.1:%d/suggestions', port);
         server.isReady = true;
         server.customEvents.emit("ready");
