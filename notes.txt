@@ -1,0 +1,2 @@
+Convert tsv to json: http://codebeautify.org/tsv-to-json-converter
+Populate the database: mongoimport.exe --jsonArray --db busbudemi_api --collection cities --file C:\Users\eripoche\Downloads\cities.json
