@@ -1,20 +1,36 @@
 {
-  "name": "coding-challenge-backend-c",
-  "version": "0.0.0",
-  "description": "coding challenge in Nodejs",
+  "name": "emilien.ripoche_coding-challenge-backend-c",
+  "version": "1.0.0",
+  "description": "Coding Challenge in Nodejs for Busbud",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/emilien-r/coding-challenge-backend-c.git"
+  },
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
-    "test": "./node_modules/mocha/bin/mocha ./test/"
+    "start": "D:\\priv\\coding-challenge-backend-c\\node_modules\\.bin\\nodemon app.js",
+    "test": "mocha ./test/"
   },
-  "author": "",
-  "license": "WTFPL",
+  "author": "Émilien Ripoche",
+  "license": "ISC",
   "dependencies": {
+    "bunyan": "^1.8.10",
+    "bunyan-winston-adapter": "^0.2.0",
     "chai": "^1.9.1",
+    "geodist": "^0.2.1",
+    "geopoint": "^1.0.1",
     "mocha": "^1.18.2",
-    "supertest": "^0.11.0"
+    "mongoose": "^4.9.5",
+    "mongoose-double": "0.0.1",
+    "restify": "^4.3.0",
+    "string-score": "^1.0.1",
+    "supertest": "^0.11.0",
+    "winston": "^2.3.1"
   },
   "engines": {
-    "node": "0.10.26"
+    "node": "6.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
   }
 }
