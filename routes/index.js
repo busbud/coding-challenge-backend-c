@@ -5,9 +5,6 @@
  */
 const 
 	path  = require('path'),
-	score = require('string-score'),
-	geodist = require('geodist'),
-	GeoPoint = require('geopoint'),
 	utils = require('../lib/utils');
 
 /**
@@ -21,66 +18,82 @@ const City = require(path.join(__basedir, MODELS_DIR)).City;
 */
 server.get('/suggestions', (req, res, next) => {
 	
-	var nameQueryString = req.query.q;
-	var limit = Number(req.query.limit) || 10;
-	var lat = Number(req.query.latitude) || null;
-	var lon = Number(req.query.longitude) || null;
+	// Set the default response body: an empty list of suggestions.
+	var responseBody = {'suggestions': [] };
 
+	// Stop process if 'q' query param was not provided.
+	// Set response code as 404 - NotFound.
+	if (typeof req.query.q == 'undefined') {
+		res.send(404, responseBody);
+		return next();
+	}
+
+	// Set defaults for optional query params.
+	// Note: Advanced validation of query params could be done here.
+
+	// limit: maximum number of results to add in the response.
+	// Not used in the implementation.
+	//req.query.limit = Number(req.query.limit) || 10;
+	// latitude and longitude are converted into Number, or set as null if not provided.
+	req.query.latitude = Number(req.query.latitude) || null;
+	req.query.longitude = Number(req.query.longitude) || null;
+
+	// Search in database for documents with 'name' matching to the provided query string.
+	// Select only relevant fields:
+	//   - name, first level administration code and country to build full name
+	//   - latitude and longitude for scoring.
+	// Also, slect only cities with a population higher than 5000 inhabitants.
 	City
-	.find({ "name": new RegExp(nameQueryString, 'i') }, '-_id name admin1 country lat long')
+	.find({ "name": new RegExp(req.query.q, 'i') }, '-_id name admin1 country lat long')
 	.where('population').gt(5000)
 	.lean()
 	.exec((err, cities) => {
 		
-		let responseBody = {'suggestions': [] };
+		// Note:
+		// It is possible to add properties to the variable cities because the lean()
+		// mongoose function send it as a plain js objects.
 
+		// In case of an error during database query, send a 500 - InternalServerError code 
+		// along with the default response.
 		if (err) {
 			log.error(err);
 			res.send(500, responseBody);
 			return next();
 		}
 
+		// If no cities match, send 404 - NotFound with default response.
 		if (cities.length == 0) {
 			res.send(404, responseBody);
 			return next();
 		}
 
-		// Note: possible to add a property because they are plain js objects thanks to lean()
+		// Browse all matching cities
 		var len = cities.length;
 		while(len--) {
-			let city = cities[len];
+			var city = cities[len];
 
-			//1. Calculate score
-			//1.1 String score
-			city.score = score(city.name, nameQueryString);
+			// Add score for the current city
+			utils.scoreCity(city, req.query);
 
-			//1.2 Distance penalty
-			if (lat != null && lon != null) {
-				let querystringLocation = { lat: lat, lon: lon };
-				let cityLocation = { lat: city.lat, lon: city.long }
-				let geodistance = geodist(querystringLocation, cityLocation, { unit: 'km' });
-				city.geodistance = geodistance;
-				// TODO figure out a way to build a relevant modification of the score based on the distance
-			}
-
-			// Add the full city name while looping
+			// While looping, build a disambiguous name for the city
 			let state = utils.getStateCode(city.admin1, city.country);
 			let countryName = utils.getCountryName(city.country);
 			city.fullname = city.name + ', ' + state + ', ' + countryName;
 
 			// Delete the unecessary fields
+			// See ../notes.txt for comments
 			delete city.name;
 			delete city.admin1;
 			delete city.country;	
 		}
 
-		//2. Sort by descending score
+		// Sort by cities descending score
 		cities.sort((a, b) => { return a.score < b.score });
 			
-		//3. Truncate if necessary
+		// Page the list according to a limit if necessary
+		// Not implemented
 
-		let suggestions = cities;
-		res.send({'suggestions': suggestions});
+		res.send({'suggestions': cities});
 		next();
 	});
 });

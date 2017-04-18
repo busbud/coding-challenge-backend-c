@@ -4,7 +4,6 @@ global.__basedir = __dirname;
 global.MODELS_DIR = "models";
 global.ROUTES_DIR = "routes";
 
-
 /**
  * Module Dependencies
  */
@@ -44,13 +43,11 @@ global.server = restify.createServer({
  * Middleware
  */
 
-// From restify  
 // Accept header parsing
 server.use(restify.acceptParser(server.acceptable))
 // HTTP querystring parsing (in req.query and merged in req.params)
 server.use(restify.queryParser({ mapParams: true }))
-// Request body parsing
-// Commented because not useful for the one 'suggestions' endpoint 
+// Request body parsing. Commented because not useful for 'suggestions' endpoint 
 // server.use(restify.bodyParser());
 
 
@@ -62,22 +59,26 @@ server.on('uncaughtException', (req, res, route, err) => {
 	res.send(err);
 });
 
+
 server.listen(config.port, function() {
 	
+	// Log server startup
 	log.info('%s listening at %s', server.name, server.url);
 	
-	// In case of database connection error, log and exit
+	// In case of database connection error, log and exit.
 	mongoose.connection.on('error', function(err) {
 		log.error('Mongoose default connection error: ' + err);
 		process.exit(1);
 	});
 
 	mongoose.connection.on('open', function(err) {
+		// Log any error related to database connection, then exit.
 		if (err) {
 			log.error('Mongoose default connection error: ' + err);
 			process.exit(1);
 		}
 
+		// Log succesful database connection.
 		log.info(
 			'%s v%s ready to accept connections on port %s in %s environment.',
 			server.name,
@@ -86,7 +87,7 @@ server.listen(config.port, function() {
 			config.env
 		);
 
-		// When database connection is opened, make routes available
+		// Make routes available.
 		require('./routes');
 	});
 
@@ -95,18 +96,3 @@ server.listen(config.port, function() {
 });
 
 module.exports = server;
-/*
-module.exports = http.createServer(function (req, res) {
-  res.writeHead(404, {'Content-Type': 'text/plain'});
-
-  if (req.url.indexOf('/suggestions') === 0) {
-    res.end(JSON.stringify({
-      suggestions: []
-    }));
-  } else {
-    res.end();
-  }
-}).listen(port, '127.0.0.1');
-
-console.log('Server running at http://127.0.0.1:%d/suggestions', port);
-*/

@@ -1,2 +1,7 @@
 Convert tsv to json: http://codebeautify.org/tsv-to-json-converter
 Populate the database: mongoimport.exe --jsonArray --db busbudemi_api --collection cities --file C:\Users\eripoche\Downloads\cities.json
+
+Improvments:
+- Consider population size in scoring
+- Build a response object to avoid removing database field which are useful for processing the request, but we don't want them in the json response
+- Page suggestions (implement limit and offset)
