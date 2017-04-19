@@ -1,14 +1,15 @@
 'use strict'
 
-global.__basedir = __dirname;
-global.MODELS_DIR = "models";
-global.ROUTES_DIR = "routes";
+global.__basedir 	= __dirname;
+global.MODELS_DIR 	= "models";
+global.ROUTES_DIR 	= "routes";
 
 /**
  * Module Dependencies
  */
 const 
 	config			= require('./config'),
+	toobusy 		= require('toobusy-js'),
 	restify			= require('restify'),
 	bunyan			= require('bunyan'),
 	winston			= require('winston'),
@@ -40,13 +41,26 @@ global.server = restify.createServer({
 })
 
 /**
- * Middleware
+ * Middlewares
  */
+
+// The first middleware to register. It blocks requests before spending any time 
+// on them when the server is too busy.
+server.use(function(req, res, next) {
+	if (toobusy()) {
+		// If node process is too busy, send 503 - Service Unavailable.
+		res.send(503, "Too busy right now.");
+	} else {
+		next();	
+	}
+});
 
 // Accept header parsing
 server.use(restify.acceptParser(server.acceptable))
+
 // HTTP querystring parsing (in req.query and merged in req.params)
 server.use(restify.queryParser({ mapParams: true }))
+
 // Request body parsing. Commented because not useful for 'suggestions' endpoint 
 // server.use(restify.bodyParser());
 
@@ -93,6 +107,14 @@ server.listen(config.port, function() {
 
 	// Make the database connection available in the app
 	global.db = mongoose.connect(config.db.uri);
+});
+
+// SIGINT handler to exit the process gracefully.
+process.on('SIGINT', function() {
+	server.close();
+	// calling .shutdown allows your process to exit normally 
+	toobusy.shutdown();
+	process.exit();
 });
 
 module.exports = server;
