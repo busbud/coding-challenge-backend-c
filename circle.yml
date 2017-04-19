@@ -1,0 +1,17 @@
+machine:
+  node:
+    version: 6.10.1
+database:
+  override:
+    - npm run reset-data -s
+test:
+  override:
+    - npm run lint -s
+    - npm run security-check -s
+    - npm run cover -s
+  post:
+      - bash <(curl -s https://codecov.io/bash)
+general:
+  artifacts:
+    - "coverage" # relative to the build directory
+

@@ -1,0 +1,22 @@
+{
+  "root": true,
+  "extends": [
+    "eslint:recommended",
+    "airbnb-base",
+    "plugin:import/errors",
+    "plugin:import/warnings"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module"
+  },
+  "env": {
+    "node": true,
+    "mocha": true
+  },
+  "rules": {
+    "linebreak-style": 0,
+    "no-restricted-syntax": 0,
+    "no-console": 1
+  }
+}
