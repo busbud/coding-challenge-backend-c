@@ -106,7 +106,7 @@ server.listen(config.port, function() {
 	});
 
 	// Make the database connection available in the app
-	global.db = mongoose.connect(config.db.uri);
+	global.db = mongoose.connect(config.db.uri, config.db.options);
 });
 
 // SIGINT handler to exit the process gracefully.
