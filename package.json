@@ -8,7 +8,7 @@
   },
   "main": "app.js",
   "scripts": {
-    "start": "D:\\priv\\coding-challenge-backend-c\\node_modules\\.bin\\nodemon app.js",
+    "start": "node app.js",
     "test": "mocha ./test/"
   },
   "author": "Émilien Ripoche",
