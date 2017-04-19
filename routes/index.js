@@ -44,7 +44,7 @@ server.get('/suggestions', (req, res, next) => {
 	//   - latitude and longitude for scoring.
 	// Also, slect only cities with a population higher than 5000 inhabitants.
 	City
-	.find({ "name": new RegExp(req.query.q, 'i') }, '-_id name admin1 country lat long')
+	.find({ "ascii": { $regex: new RegExp(req.query.q, 'i') } }, '-_id name ascii admin1 country lat long')
 	.where('population').gt(5000)
 	.lean()
 	.exec((err, cities) => {
@@ -78,11 +78,17 @@ server.get('/suggestions', (req, res, next) => {
 			// While looping, build a disambiguous name for the city
 			let state = utils.getStateCode(city.admin1, city.country);
 			let countryName = utils.getCountryName(city.country);
-			city.fullname = city.name + ', ' + state + ', ' + countryName;
+			city.name = city.ascii + ', ' + state + ', ' + countryName;
+
+			// Format response properties name
+			city.latitude = city.lat;
+			city.longitude = city.long;
 
 			// Delete the unecessary fields
 			// See ../notes.txt for comments
-			delete city.name;
+			delete city.ascii;
+			delete city.lat;
+			delete city.long;
 			delete city.admin1;
 			delete city.country;	
 		}

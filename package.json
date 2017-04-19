@@ -18,17 +18,17 @@
     "bunyan-winston-adapter": "^0.2.0",
     "chai": "^1.9.1",
     "geodist": "^0.2.1",
-    "geopoint": "^1.0.1",
     "mocha": "^1.18.2",
     "mongoose": "^4.9.5",
     "mongoose-double": "0.0.1",
     "restify": "^4.3.0",
     "string-score": "^1.0.1",
     "supertest": "^0.11.0",
+    "toobusy-js": "^0.5.1",
     "winston": "^2.3.1"
   },
   "engines": {
-    "node": "6.10.0"
+    "node": ">=0.9.1"
   },
   "devDependencies": {
     "nodemon": "^1.11.0"
