@@ -7,7 +7,7 @@ module.exports = {
     port: process.env.PORT || 2345,
     base_url: process.env.BASE_URL || 'http://localhost:2345',
     db: {
-        uri: 'mongodb://127.0.0.1:27017/busbudemi_api',
+        uri: 'mongodb://ds111441.mlab.com:11441/heroku_w5b0rm2r',
         options: {
         	user: 'busbudemi',
   			pass: 'alamakota217'
