@@ -94,8 +94,8 @@ server.get('/suggestions', (req, res, next) => {
 		}
 
 		// Sort by cities descending score
-		cities.sort((a, b) => { return a.score < b.score });
-			
+		cities = cities.sort((a, b) => { return  b.score - a.score });
+
 		// Page the list according to a limit if necessary
 		// Not implemented
 
