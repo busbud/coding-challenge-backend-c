@@ -1,5 +1,18 @@
 # Busbud Coding Challenge - Émilien Ripoche
 
+## Result
+
+https://busbudemi-api.herokuapp.com/suggestions?q=montr&latitude=40.71427&longitude=-74.00597
+https://busbudemi-api.herokuapp.com/suggestions?q=montr&latitude=45.56995&longitude=-73.692
+
+## Improvments
+- Consider population size in scoring
+- Build a response object to avoid removing database field which are useful for processing the request, but not for the json response
+- Implement suggestions paging (limit and offset)
+- Use a better mathematical model for location-based score improvment (non-linear)
+- Add authentication (passport)
+- Consider accents in string search (currently, Montréal gives 0 results, Montreal does)
+
 ## Requirements
 
 Design an API endpoint that provides auto-complete suggestions for large cities.
