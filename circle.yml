@@ -5,6 +5,8 @@ database:
   override:
     - npm run reset-data -s
 test:
+  pre:
+    - npm run setup-ci-env
   override:
     - npm run lint -s
     - npm run security-check -s

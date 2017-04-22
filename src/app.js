@@ -65,6 +65,6 @@ module.exports = http.createServer((req, res) => {
     res.writeHead(404);
     res.end();
   }
-}).listen(port);
+}).listen(port, ip);
 
 console.log(`Server running at http://${ip}:${port}/suggestions`);
