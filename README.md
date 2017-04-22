@@ -127,3 +127,40 @@ which should produce output similar to
 ```
 Server running at http://127.0.0.1:2345/suggestions
 ```
+
+## Solution infos
+
+After having completed the initial setup mentioned above
+(nvm, node.js install, `npm install`), run the following:
+
+```
+npm run reset-data -s  # Only need to run once, but can run any number of times
+```
+
+### Running locally
+
+```
+npm start
+```
+
+### Linting the code
+
+```
+npm run lint -s
+```
+
+### Running the tests
+
+```
+npm test
+```
+
+### Running the tests' coverage report
+
+```
+npm run cover
+npm run cover:open  # Opens the local HTML report in the browser
+```
+
+### In production, on Heroku
+
