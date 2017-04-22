@@ -1,4 +1,4 @@
-# Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
+# Busbud Coding Challenge [![CircleCI](https://circleci.com/gh/ginmrt/coding-challenge-backend-c.svg?style=svg)](https://circleci.com/gh/ginmrt/coding-challenge-backend-c) [![codecov](https://codecov.io/gh/ginmrt/coding-challenge-backend-c/branch/master/graph/badge.svg)](https://codecov.io/gh/ginmrt/coding-challenge-backend-c)
 
 ## Requirements
 
@@ -127,3 +127,46 @@ which should produce output similar to
 ```
 Server running at http://127.0.0.1:2345/suggestions
 ```
+
+## Solution infos
+
+After having completed the initial setup mentioned above
+(nvm, node.js install, `npm install`), run the following:
+
+```
+npm run reset-data -s  # Only need to run once, but can run any number of times
+```
+
+### Running locally
+
+```
+npm start
+```
+
+### Linting the code
+
+```
+npm run lint -s
+```
+
+### Running the tests
+
+```
+npm test
+```
+
+### Running the tests' coverage report
+
+```
+npm run cover
+npm run cover:open  # Opens the local HTML report in the browser
+```
+
+### In production, on Heroku
+
+Visit the application  [here](http://ginmrt-coding-challenge-c.herokuapp.com/suggestions)
+and use the API as described above.
+
+### Load testing from production
+
+![Load testing](/test/LoadTest.png?raw=true "Load testing with loader.io")
