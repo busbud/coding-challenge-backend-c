@@ -10,7 +10,6 @@ const setSuggestionsInCache = require('./cache/api').setSuggestionsInCache;
 const getSuggestions = require('./suggestions/api').default;
 
 const port = process.env.PORT || 80;
-const ip = process.env.SERVER_IP || '127.0.0.1';
 
 module.exports = http.createServer((req, res) => {
   function respondEmpty(response) {
@@ -65,6 +64,4 @@ module.exports = http.createServer((req, res) => {
     res.writeHead(404);
     res.end();
   }
-}).listen(port, ip);
-
-console.log(`Server running at http://${ip}:${port}/suggestions`);
+}).listen(port);

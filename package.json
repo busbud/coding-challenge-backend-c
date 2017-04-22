@@ -10,7 +10,7 @@
     "lint": "esw --color",
     "reset-data": "babel-node app_scripts/create_city_db_from_tsv.js",
     "security-check": "nsp check",
-    "start": "cross-env PORT=8000 SERVER_IP=0.0.0.0 babel-node ./src/app.js",
+    "start": "babel-node ./src/app.js",
     "test": "mocha --compilers js:babel-core/register --colors ./test/*/*.js",
     "test-geo-libs": "babel-node app_scripts/test_geo_distance_libs.js"
   },
