@@ -164,3 +164,9 @@ npm run cover:open  # Opens the local HTML report in the browser
 
 ### In production, on Heroku
 
+Visit the application  [here](http://ginmrt-coding-challenge-c.herokuapp.com/suggestions)
+and use the API as described above.
+
+### Load testing from production
+
+![Load testing](/test/LoadTest.png?raw=true "Load testing with loader.io")
