@@ -1,4 +1,4 @@
-# Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
+# Busbud Coding Challenge [![CircleCI](https://circleci.com/gh/ginmrt/coding-challenge-backend-c.svg?style=svg)](https://circleci.com/gh/ginmrt/coding-challenge-backend-c) [![codecov](https://codecov.io/gh/ginmrt/coding-challenge-backend-c/branch/master/graph/badge.svg)](https://codecov.io/gh/ginmrt/coding-challenge-backend-c)
 
 ## Requirements
 
