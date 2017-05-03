@@ -4,6 +4,7 @@
  * ------------------------------
  */
 var _ = require('lodash');
+var async = require('async');
 var citiesController = require('../controllers/cities.server.routes.controller');
 
 module.exports.get = function(req, res) {
@@ -15,7 +16,7 @@ module.exports.get = function(req, res) {
 	}
 
 	// Validate optional lat/lng params
-	var hasOptLatLng = false;
+	var hasValidCoordinatesParams = false;
 	if (req.query.latitude || req.query.longitude) {
 		if (req.query.latitude && !req.query.longitude) {
 			statusMessages.push('Query parameter latitude was provided with no corresponding longitude.');
@@ -27,18 +28,23 @@ module.exports.get = function(req, res) {
 
 		if (req.query.latitude && req.query.longitude) {
 			if (validateLat(req.query.latitude) && validateLng(req.query.longitude)) {
-				hasOptLatLng = true;
+				hasValidCoordinatesParams = true;
 			} else {
 				statusMessages.push('Invalid latitude and/or longitude parameter(s).');
 			}
 		}
 
-		if (!hasOptLatLng) statusMessages.push('Coordinates were ignored.');
+		if (!hasValidCoordinatesParams) statusMessages.push('Coordinates were ignored.');
 	}
 
-	citiesController.find(req, function(err, results){
-		// le status: true devrait pas work.. pas le choice apiError
-		return res.apiSuccess(results, statusMessages);
+	(hasValidCoordinatesParams
+	  ? citiesController.findNear(req)
+	  : citiesController.find(req))
+	.then(function(suggestions) {
+		if (!suggestions || suggestions.length < 1) {
+			return res.apiError("NotFound", new Error('No matching results'), null, 404);
+		}
+		return res.apiSuccess(suggestions, statusMessages);
 	});
 };
 
