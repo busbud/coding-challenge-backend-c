@@ -1,27 +1,39 @@
-	module.exports = function() {
-	var _ = require('lodash'),
+var _ = require('lodash'),
 	fs = require('fs'),
-	csv = require('csv-streamify'),
-	parser = csv({ objectMode: true, columns: true, delimiter: '\t', quote: 'none' });
+	csv = require('fast-csv'),
+	Promise = require('bluebird'),
+	mongoose = require('mongoose'),
+	City = mongoose.model('CitySchema')
 
-	var mongoose = require('mongoose');
-	var City = mongoose.model('CitySchema');
-
-	parser.on('data', function (city) {
-		City.create(_.extend({latLng : {
-			type: "Point",
-			coordinates: [ city.long, city.lat ]
-		}}, city), function(err){
-			if(err) console.log(err);
-		});
-	});
-
-	City.find().exec(function(err, results){
-		if (err) throw err;
-		if (results.length < 1) {
+module.exports = function() {
+ 	return new Promise(function (resolve, reject) {
+		City.findAsync()
+		.then(function(results) {
+			if (results.length > 0) {
+				return resolve();
+			}
 			console.log('Seeding cities...');
-			fs.createReadStream('./data/cities_canada-usa.tsv').pipe(parser);
-		}
-	});
+			var stream = fs.createReadStream('./data/cities_canada-usa.tsv');
+			csv
+			 .fromStream(stream, {
+			 	headers : true,
+			 	objectMode: true,
+			 	ignoreEmpty: true,
+			 	delimiter: '\t',
+			 	quote: null
+			 }).transform(function(city, next){
+			     City.createAsync(_.extend({latLng : {
+						type: "Point",
+						coordinates: [city.long, city.lat]
+					}}, city)
+			     ).catch(function(err){
+			     	console.log(err);
+			     })
+			 }).on("end", function(){
+			 	console.log('Done seeding.');
+			 	resolve();
+			 });
+		}).catch(reject);
+    });
 }
 

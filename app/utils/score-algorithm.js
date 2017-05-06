@@ -1,7 +1,7 @@
 var constants = require('./constants');
 
 module.exports.geoScore = function(bins, targetScoreKey) {
-    var binScoreStep = constants.findNearStartsWithGeoWeight / (bins.length + 1),
+    var binScoreStep = 1 / (constants.geoRadiusBoundaries.length + 1),
     	binScoreStepValue = 0,
     	innerBinScoreStep = 0,
     	innerBinScoreValue = 0,
@@ -9,7 +9,7 @@ module.exports.geoScore = function(bins, targetScoreKey) {
     	suggestion = null;
     for(var i = 0, len=bins.length; i<len; ++i) {
         bin = bins[i];
-        binScoreStepValue = constants.findNearStartsWithGeoWeight -
+        binScoreStepValue = 1 -
         	(constants.geoRadiusBoundaries.indexOf(bin._id) -
         	 constants.geoRadiusBoundaries.indexOf(bins[0]._id))*binScoreStep;
         innerBinScoreStep = binScoreStep/(bin.count + 1);

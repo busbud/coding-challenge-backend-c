@@ -16,7 +16,8 @@ var middlewares = {
 module.exports = function(app) {
 	app.use(middlewares.initApiHandlers);
 
-	app.get('/suggestions', middlewares.requestValidator.validateQueryParams, routes.suggestions.get);
+	app.get('/suggestions', middlewares.requestValidator.validateQueryParams,
+		routes.suggestions.get);
 
 	app.get('*', function(req, res){
 		return res.apiNotFound();

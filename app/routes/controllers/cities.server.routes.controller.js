@@ -7,13 +7,11 @@ const nameCompletionScoreKey = 'nameCompletionScore';
 const nameScoreKey = 'nameScore';
 const geoScoreKey = 'geoScore';
 
-var _ = require('lodash');
-var Promise = require('bluebird');
-var mongoose = require('mongoose');
-Promise.promisifyAll( mongoose );
-var constants = require('../../utils/constants');
-var scoreUtils = require('../../utils/score-algorithm');
-var City = mongoose.model('CitySchema');
+var _ = require('lodash'),
+    mongoose = require('mongoose'),
+    constants = require('../../utils/constants'),
+    scoreUtils = require('../../utils/score-algorithm'),
+    City = mongoose.model('CitySchema');
 
 module.exports.findStartsWith = function(req) {
     var q = new RegExp("^" + req.query.q.toLowerCase(), "i");
@@ -39,7 +37,7 @@ module.exports.findNearStartsWith = function(req) {
     var q = new RegExp("^" + req.query.q.toLowerCase(), "i");
     req.query.latitude = parseFloat(req.query.latitude);
     req.query.longitude = parseFloat(req.query.longitude);
-    
+
     return City.aggregateAsync([
         {
             $geoNear: {
