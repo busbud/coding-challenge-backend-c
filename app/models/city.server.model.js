@@ -10,10 +10,6 @@ var mongoose = require('mongoose'),
  * City Schema
  */
 var CitySchema = new Schema({
-    id: {
-        $type: Number,
-        required: true
-    },
     name: {
         $type: String,
         trim: true,

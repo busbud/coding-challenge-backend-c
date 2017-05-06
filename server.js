@@ -34,6 +34,7 @@ config.getGlobbedFiles('./app/models/**/*.js').forEach(function(modelPath) {
     require(path.resolve(modelPath));
 });
 
+// Seeding data
 require('./seed')();
 
 var app = require('express')();

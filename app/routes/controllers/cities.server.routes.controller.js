@@ -3,6 +3,10 @@
  * cities.server.routes.controller.js
  * ------------------------------
  */
+const nameCompletionScoreKey = 'nameCompletionScore';
+const nameScoreKey = 'nameScore';
+const geoScoreKey = 'geoScore';
+
 var _ = require('lodash');
 var Promise = require('bluebird');
 var mongoose = require('mongoose');
@@ -19,24 +23,23 @@ module.exports.findStartsWith = function(req) {
     },
     {
         $project: {
+            _id : 0,
             name: { $concat: [ "$ascii", ", ", "$admin1", ", ", "$country" ] },
-            score: { $divide: [ req.query.q.length, { $strLenCP: "$ascii" }] },
+            [nameCompletionScoreKey]: {$divide: [ req.query.q.length, { $strLenCP: "$ascii" }] },
             latitude: { $arrayElemAt: [ "$latLng.coordinates", 1 ] },
             longitude: { $arrayElemAt: [ "$latLng.coordinates", 0 ] }
         }
-    },
-    { $sort: { score: -1}}
-    ]).then(function(suggestions){
-        for(var i = 0, len=suggestions.length; i<len; ++i) {
-            var suggestion = suggestions[i];
-            suggestion.score = (Math.round(suggestion.score * 100) / 100);
-        }
-        return suggestions;
+    }
+    ]).then(function(suggestions) {
+        return _.orderBy(scoreUtils.nameScore(suggestions, nameCompletionScoreKey, 'score'), 'score', 'desc');
     });
 };
 
 module.exports.findNearStartsWith = function(req) {
     var q = new RegExp("^" + req.query.q.toLowerCase(), "i");
+    req.query.latitude = parseFloat(req.query.latitude);
+    req.query.longitude = parseFloat(req.query.longitude);
+    
     return City.aggregateAsync([
         {
             $geoNear: {
@@ -57,29 +60,37 @@ module.exports.findNearStartsWith = function(req) {
                 default: "irrelevant",
                 output: {
                     count: { $sum: 1 },
-                    cities: { $push:
+                    suggestions: { $push:
                         {
                             name: { $concat: [ "$ascii", ", ", "$admin1", ", ", "$country" ] },
                             latitude: { $arrayElemAt: [ "$latLng.coordinates", 1 ] },
                             longitude: { $arrayElemAt: [ "$latLng.coordinates", 0 ] },
                             distance:"$distance",
-                            nameScore: {$multiply: [{ $divide: [ req.query.q.length, { $strLenCP: "$ascii" }] }, (1 - constants.geoScoreMax)]},
+                            [nameCompletionScoreKey]: { $divide: [ req.query.q.length, { $strLenCP: "$ascii" }]},
                         }
                     }
                 }
             }
         }
     ]).then(function(bins) {
-        // Compute geo score
-        bins = scoreUtils.geoScore(bins);
-        var suggestions = _.flatten(_.map(bins, 'cities'))
-        // Format and sum scores
+        // Compute geo scores within bins and flatten results
+        var suggestions = _.flatten(_.map(scoreUtils.geoScore(bins, geoScoreKey), 'suggestions'));
+
+        // Compute name scoring
+        scoreUtils.nameScore(suggestions, nameCompletionScoreKey, nameScoreKey);
+
+        // Sum both scores by relative weight
         for(var i = 0, len=suggestions.length; i<len; ++i) {
             var suggestion = suggestions[i];
-            suggestion.nameScore = Math.round(suggestion.nameScore * 100) / 100;
-            suggestion.geoScore = Math.round(suggestion.geoScore * 100) / 100;
-            suggestion.score = Math.round((suggestion.geoScore + suggestion.nameScore) * 100) / 100;
+            suggestion.score = Math.round((suggestion[geoScoreKey]*constants.findNearStartsWithGeoWeight
+                + suggestion[nameScoreKey]*constants.findNearStartsWithNameWeight) * 100) / 100;
         }
+
+        // Only case of absolute confidence
+        if (suggestions.length === 1) {
+            suggestions[0].score = 1;
+        }
+
         return _.orderBy(suggestions, 'score', 'desc');
     });
 };
