@@ -10,8 +10,9 @@
   "author": "Joel J Langlois",
   "license": "WTFPL",
   "dependencies": {
-    "async": "^2.4.0",
     "bluebird": "^3.5.0",
+    "cache-manager": "^2.4.0",
+    "cache-manager-mongodb": "^0.1.7",
     "chai": "^1.9.1",
     "chalk": "^1.1.3",
     "express": "^4.15.2",
