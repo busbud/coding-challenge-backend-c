@@ -49,6 +49,7 @@ mongoose.connect(config.db.uri, config.db.options)
     module.exports = app;
 }).catch(function(err) {
     console.error(chalk.red(err.stack || err));
+    process.exit(1);
 });
 
 process.on('uncaughtException', function(e) {

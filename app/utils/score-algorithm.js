@@ -27,7 +27,7 @@ module.exports.nameScore = function(suggestions, nameCompletionScoreKey, targetS
     // Case of absolute confidence
     if (suggestions.length === 1) {
         suggestions[0][targetScoreKey] = 1;
-        suggestions[0][nameCompletionScoreKey] = undefined;
+        delete suggestions[0][nameCompletionScoreKey];
         return suggestions;
     }
 	// compute the factor inversely proportional to the number of matches
@@ -43,7 +43,7 @@ module.exports.nameScore = function(suggestions, nameCompletionScoreKey, targetS
         suggestions[i][targetScoreKey] = Math.round((numberOfMatchesConfidenceFactor +
         	nameCompletionConfidenceFactor) * 100) / 100;
 
-        suggestions[i][nameCompletionScoreKey] = undefined;
+        delete suggestions[i][nameCompletionScoreKey];
     }
     return suggestions;
 }

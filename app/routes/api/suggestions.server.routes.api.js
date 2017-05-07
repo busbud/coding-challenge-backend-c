@@ -8,7 +8,7 @@ var citiesController = require('../controllers/cities.server.routes.controller')
 
 module.exports.get = function(req, res) {
 	var cacheKey = JSON.stringify(req.query);
-	multiCache.wrap(cacheKey => {
+	multiCache.wrap(cacheKey, () => {
     	return req.query.latitude && req.query.longitude
 		  ? citiesController.findNearStartsWith(req)
 	  	  : citiesController.findStartsWith(req);
