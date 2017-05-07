@@ -28,7 +28,7 @@ module.exports.findStartsWith = function(req) {
             longitude: { $arrayElemAt: [ "$latLng.coordinates", 0 ] }
         }
     }
-    ]).then(function(suggestions) {
+    ]).then(suggestions => {
         return _.orderBy(scoreUtils.nameScore(suggestions, nameCompletionScoreKey, 'score'), 'score', 'desc');
     });
 };
@@ -70,7 +70,7 @@ module.exports.findNearStartsWith = function(req) {
                 }
             }
         }
-    ]).then(function(bins) {
+    ]).then(bins => {
         // Compute geo scores within bins and flatten results
         var suggestions = _.flatten(_.map(scoreUtils.geoScore(bins, geoScoreKey), 'suggestions'));
 

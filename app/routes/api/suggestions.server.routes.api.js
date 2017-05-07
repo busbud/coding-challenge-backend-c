@@ -12,7 +12,7 @@ module.exports.get = function(req, res) {
     	return req.query.latitude && req.query.longitude
 		  ? citiesController.findNearStartsWith(req)
 	  	  : citiesController.findStartsWith(req);
-    }).then(function(suggestions) {
+    }).then(suggestions => {
 		if (!suggestions || suggestions.length < 1) {
 			return res.apiError("NotFound", new Error('No matching results'), null, 404);
 		}
