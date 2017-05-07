@@ -1,13 +1,13 @@
 'use strict';
 /**
  * config.js
- * ------------------------------
- * Taken from the MEAN stack
+ * From the MEAN stack
  */
 
 /**
  * Module dependencies.
  */
+
 var _ = require('lodash'),
     glob = require('glob'),
     fs = require('fs');

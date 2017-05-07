@@ -3,7 +3,6 @@
 module.exports = {
     db: {
         uri: process.env.MONGOLAB_URI,
-        cacheUri: process.env.MONGOLAB_CACHE_URI,
         options: {
             server: {
                 socketOptions: {

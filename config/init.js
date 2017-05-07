@@ -1,4 +1,9 @@
 'use strict';
+/**
+ * init.js
+ * From the MEAN stack
+ *
+ */
 
 /**
  * Module dependencies.

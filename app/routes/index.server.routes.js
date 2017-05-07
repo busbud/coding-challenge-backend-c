@@ -1,9 +1,8 @@
 'use strict';
 /**
- * index.server.routes.js
- * ------------------------------
- * Setup the routes & middlewares
+ * Module dependencies.
  */
+
 var routes = {
     suggestions: require('./api/suggestions.server.routes.api')
 };
@@ -12,7 +11,13 @@ var middlewares = {
 	initApiHandlers: require('./middlewares/initApiHandlers'),
 	requestValidator: require('./middlewares/requestValidator')
 };
-// Setup Route Bindings
+
+/**
+* Set routes and middlewares
+*
+* @param {Object} app - express app
+*/
+
 module.exports = function(app) {
 	app.use(middlewares.initApiHandlers);
 

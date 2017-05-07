@@ -1,4 +1,16 @@
+'use strict';
+/**
+ * Module dependencies.
+ */
 var constants = require('./constants');
+
+/**
+* Computes geo scores for suggestions contained in bins
+*
+* @param {Object[]} bins - the bins containing the suggestions
+* @param {string} targetScoreKey - key in which to store the scores in suggestions
+* @return {Object[]} bins
+*/
 
 module.exports.geoScore = function(bins, targetScoreKey) {
     var binScoreStep = 1 / (constants.geoRadiusBoundaries.length + 1),
@@ -22,6 +34,15 @@ module.exports.geoScore = function(bins, targetScoreKey) {
     }
     return bins;
 }
+
+/**
+* Computes name scores for suggestions
+*
+* @param {Object[]} suggestions without scores
+* @param {string} nameCompletionScoreKey - key where the name completion scores are located
+* @param {string} targetScoreKey - key in which to store the scores in suggestions
+* @return {Object[]} suggestions with scores
+*/
 
 module.exports.nameScore = function(suggestions, nameCompletionScoreKey, targetScoreKey) {
     // Case of absolute confidence

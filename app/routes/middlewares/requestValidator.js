@@ -1,6 +1,18 @@
+'use strict';
+/**
+ * Module dependencies.
+ */
 var Joi = require('joi');
 
 module.exports = {
+	/**
+	* Validates the query parameters for a request based on its path
+	*
+	* @param {Object} req
+	* @param {Object} res
+	* @callback next
+	*/
+
 	validateQueryParams: function(req, res, next) {
 		var result = null;
 		switch(req.path) {

@@ -1,17 +1,28 @@
 'use strict';
-/**
- * cities.server.routes.controller.js
- * ------------------------------
- */
+
 const nameCompletionScoreKey = 'nameCompletionScore';
 const nameScoreKey = 'nameScore';
 const geoScoreKey = 'geoScore';
+
+/**
+* Module dependencies.
+*/
 
 var _ = require('lodash'),
     mongoose = require('mongoose'),
     constants = require('../../utils/constants'),
     scoreUtils = require('../../utils/score-algorithm'),
     City = mongoose.model('CitySchema');
+
+/**
+* Find and score city matches based on a search string
+*
+* @param {Object} req - request
+* @param {Object} req.query - request query param(s)
+* @param {string} req.query.q - city name to match
+* @return {Promise}
+* @resolve {Object[]} suggested cities
+*/
 
 module.exports.findStartsWith = function(req) {
     var q = new RegExp("^" + req.query.q.toLowerCase(), "i");
@@ -32,6 +43,19 @@ module.exports.findStartsWith = function(req) {
         return _.orderBy(scoreUtils.nameScore(suggestions, nameCompletionScoreKey, 'score'), 'score', 'desc');
     });
 };
+
+/**
+* Find and score city matches based on a search string
+* and geographic coordinates
+*
+* @param {Object} req - request
+* @param {Object} req.query - request query param(s)
+* @param {string} req.query.q - city name to match
+* @param {string} req.query.latitude - city name to match
+* @param {string} req.query.longitude - city name to match
+* @return {Promise}
+* @resolve {Object[]} suggested cities
+*/
 
 module.exports.findNearStartsWith = function(req) {
     var q = new RegExp("^" + req.query.q.toLowerCase(), "i");

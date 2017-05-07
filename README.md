@@ -1,10 +1,10 @@
 # Busbud Coding Challenge
 
-So here we are. My take on the Busbud backend coding challenged as presented in [CHALLENGE.md](CHALLENGE.md). I did not intent to develop a world-changing solution for this problem. After all, aren't scoring algorithms the holy grail of imperfect solutions ? I sure could have gone ahead and used scoring libraries or more widely-used solutions such as an ElasticSearch service. Instead, I thought it would be interesting to face this problem on an new angle that represents who I am.
+Here's my take on the Busbud backend coding challenged as presented in [CHALLENGE.md](CHALLENGE.md). I did not intend to develop a world-changing solution for this problem. After all, aren't scoring algorithms the holy grail of imperfect solutions ? I sure could have gone ahead and used scoring libraries or more widely-used solutions such as an ElasticSearch service. Instead, I thought it would be interesting to face this problem on an new angle that represents who I am.
 
 ## Solution
 
-The solution was based on a framework I love which is ExpressJs. I used MongoDB for storage as well as for high TTL caching storage. Some might argue that using a database for such a small amount of data would only lead to more overhead work but I tried to keep scalability in mind. That being said, I delegated a significant part of the necessary computations through the MongoDB aggregation pipeline, from which we got a bunch of new and exciting features in [3.4](https://docs.mongodb.com/manual/release-notes/3.4/#aggregation). Of course there is still some calculations done on the server's side but I tried to keep it lightweight which can be challenging at times when aiming for availability on a single-threaded server.
+The solution was based on a framework I love which is ExpressJs. I used MongoDB for storage. Some might argue that using a database for such a small amount of data would only lead to more overhead work but I tried to keep scalability in mind. That being said, I delegated a significant part of the necessary computations through the MongoDB aggregation pipeline, from which we got a bunch of new and exciting features in [3.4](https://docs.mongodb.com/manual/release-notes/3.4/#aggregation). Of course there is still some calculations done on the server's side but I tried to keep it lightweight which can be challenging at times when aiming for availability on a single-threaded server.
 
 ### Application structure
 
@@ -52,7 +52,7 @@ My initial intuition was to test the partial query's length against the result's
 
 #### Number of matches scoring
 
-I went ahead and added a number of matches name scoring weight, which is as you might have guessed a score inversely proportional to the total number of results. It seems it makes a whole lot of sense to base a confidence level on the actual number of returned results: the more there are, the less confident we are about the validity of each and every one of those. I had good results at a weighted 90% with the remaining 10% portion established from the completion scoring explained above.
+I went ahead and added a number of matches name scoring weight, which is as you might have guessed a score inversely proportional to the total number of results. It seems it makes a whole lot of sense to base a confidence level on the actual number of returned results: the more there are, the less confident we are about the validity of each and every one of those. I got good results at a weighted 90% with the remaining 10% portion established from the completion scoring explained above.
 
 #### Optional geographic coordinates
 
@@ -66,9 +66,9 @@ Since the optional geographic coordinates reference are especially relevant to s
 
 ### High availability
 
-I tried to fulfill the high-availability requirements through memory first and then database response caching. Moreover, having delegated much of the spherical coordinates calculations to my database, my server is left with little processing to do which is always a significant availability factor working with NodeJS. Of course, having some real-world usage plans for this server could lead to many deployment improvements. To name a few, we could do load balancing and elastic cloud. Furthermore, since our database is not really subject to frequent changes, we sure could use intermediary caching proxies of very high TTL to reduce load. A choice of geographic zones based on demand for our servers locations could equally improve performances.
+I tried to fulfill the high-availability requirements through memory caching. Future work might include a second layer of high TTL caching in database. Moreover, having delegated much of the spherical coordinates calculations to my database, my server has little processing to do which is always a significant availability factor working with NodeJS. Of course, having some real-world usage plans for this server could lead to many deployment improvements. To name a few, we could do load balancing and elastic cloud. Furthermore, since our database is not really subject to frequent changes, we sure could use intermediary caching proxies of very high TTL to reduce load. A choice of geographic zones based on demand for our servers locations could equally improve performances.
 
 ### Notes
 
-- I did not restrict the number of results since the API usage is unknown
-- See https://coding-challenge-c.herokuapp.com/ for production
+- I did not restrict the number of results since the API usage context is unknown
+- See https://coding-challenge-c.herokuapp.com/suggestions for production

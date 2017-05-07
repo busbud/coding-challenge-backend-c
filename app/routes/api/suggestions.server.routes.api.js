@@ -1,18 +1,25 @@
 'use strict';
 /**
- * suggestions.server.routes.api.js
- * ------------------------------
+ * Module dependencies.
  */
-var multiCache = require('../../utils/multicache');
+
+var cacheManager = require('cache-manager');
+var memoryCache = cacheManager.caching({store: 'memory', max: 100, ttl: 60});
 var citiesController = require('../controllers/cities.server.routes.controller');
 
+/**
+* Handles a validated get request
+*
+* @param {Object} request object
+* @param {Object} response object
+*/
+
 module.exports.get = function(req, res) {
-	var cacheKey = JSON.stringify(req.query);
-	multiCache.wrap(cacheKey, () => {
-    	return req.query.latitude && req.query.longitude
+	memoryCache.wrap(JSON.stringify(req.query), () => {
+		return req.query.latitude && req.query.longitude
 		  ? citiesController.findNearStartsWith(req)
 	  	  : citiesController.findStartsWith(req);
-    }).then(suggestions => {
+	}).then(suggestions => {
 		if (!suggestions || suggestions.length < 1) {
 			return res.apiError("NotFound", new Error('No matching results'), null, 404);
 		}
