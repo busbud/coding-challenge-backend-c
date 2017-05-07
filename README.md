@@ -71,7 +71,7 @@ I tried to fulfill the high-availability requirements through memory caching. Fu
 ### Notes
 
 - I did not restrict the number of results since the API usage context is unknown
-- See https://coding-challenge-c.herokuapp.com/suggestions for production
+- See http://coding-challenge-c.herokuapp.com/suggestions for production
 
 ### Sample responses
 
