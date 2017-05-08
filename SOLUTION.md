@@ -1,46 +1,12 @@
 # Solution
 
-I did not intend to develop a world-changing solution for this problem. After all, aren't scoring algorithms the holy grail of imperfect solutions ? I sure could have gone ahead and used scoring libraries or more widely-used solutions such as an ElasticSearch service. Instead, I thought it would be interesting to face this problem on an new angle that represents who I am. 
+My intent was obviously not to develop a world-changing solution for this problem. After all, aren't scoring algorithms the holy grail of *imperfect* solutions ? I sure could have gone ahead and used scoring libraries or more widely-used solutions such as an ElasticSearch service. Instead, I thought it would be interesting to face this problem on an new angle that represents who I am.
 
 The solution was based on a framework I love which is ExpressJs. I used MongoDB for storage. Some might argue that using a database for such a small amount of data would only lead to more overhead work but I tried to keep scalability in mind. That being said, I delegated a significant part of the necessary computations through the MongoDB aggregation pipeline, from which we got a bunch of new and exciting features in [3.4](https://docs.mongodb.com/manual/release-notes/3.4/#aggregation). Of course there is still some calculations done on the server's side but I tried to keep it lightweight which can be challenging at times when aiming for availability on a single-threaded server.
 
-## Application structure
-
-I embrace modularity as much as I can; for maintenance purposes and especially for my own sanity; so here is how it goes:
-
-* **app:**
-    App files
-
-* **app.models:**
-    Mongoose's models definitions
-
-* **app.routes:**
-    Main routing logic
-
-* **app.routes.api:**
-    Implementation of the API routing functions
-
-* **app.routes.controllers:**
-    Core of the requests processing
-
-* **app.routes.middlewares:**
-    Middlewares such as response handlers and request validation
-
-* **app.utils:**
-    Miscellanous utility functions
-
-* **config:**
-    Talks for itself
-
-* **data:**
-    Cities data for seeding purposes
-
-* **test:**
-    Test cases
-
 ## Name scoring
 
-I originally intended to improve the implicit requirements asking for a 'name starts with' searching feature with a 'name contains' but eventually found out that it could not be used along Mongo's powerful indexing features, so I stayed along the requirements' lines.
+I originally intended to improve the implicit requirements asking for a 'name starts with' searching feature with a 'name contains' but eventually found out that it could not be used along Mongo's powerful indexing and $near features, so I stayed along the requirements' lines.
 
 So how could one give a confidence score on a bunch of partially matched city names' results ?
 

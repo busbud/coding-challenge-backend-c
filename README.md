@@ -1,3 +1,5 @@
+# Busbud Coding Challenge
+
 This repository is for my take on the javascript API coding challenge from Busbud, built on
 [ExpressJs](https://expressjs.com/) backed by a MongoDB database with some configuration files being based off [MEAN.JS](https://github.com/meanjs/mean).
 
@@ -53,6 +55,38 @@ Before pushing anything on the repository, make sure that all tests are passing:
 ```bash
 $ npm test
 ```
+
+### Application structure
+
+* **app:**
+    App files
+
+* **app.models:**
+    Mongoose's models definitions
+
+* **app.routes:**
+    Main routing logic
+
+* **app.routes.api:**
+    Implementation of the API routing functions
+
+* **app.routes.controllers:**
+    Core of the requests processing
+
+* **app.routes.middlewares:**
+    Middlewares such as response handlers and request validation
+
+* **app.utils:**
+    Miscellanous utility functions
+
+* **config:**
+    Talks for itself
+
+* **data:**
+    Cities data for seeding purposes
+
+* **test:**
+    Test cases
 
 ### Sample responses
 
