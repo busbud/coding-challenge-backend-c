@@ -3,18 +3,20 @@
 This repository is for my take on the javascript API coding challenge from Busbud, built on
 [ExpressJs](https://expressjs.com/) backed by a MongoDB database with some configuration files being based off [MEAN.JS](https://github.com/meanjs/mean).
 
-The implemented solution is explained in [SOLUTION.md](SOLUTION.md) and  the challenge description can be found in [CHALLENGE.md](CHALLENGE.md)
+The implemented solution is explained in [SOLUTION.md](SOLUTION.md) and the challenge description can be found in [CHALLENGE.md](CHALLENGE.md)
 
 ## Prerequisites
 Make sure you have installed all of the following prerequisites on your development machine:
 
 * Node.js - [Download & Install Node.js](http://www.nodejs.org/download/) and the npm package manager.
-You need to update npm to a 3.X.X version
+
 To update to the latest npm version:
 
 ```bash
 $ npm install -g npm
 ```
+
+You will also need a MongoDB cluster running on version [3.4](https://docs.mongodb.com/manual/) or above.
 
 ## Setup the application
 Clone this repository, go to the coding-challenge-backend-c Express application folder and install the dependencies:
@@ -25,32 +27,24 @@ $ cd coding-challenge-backend-c
 $ npm install
 ```
 
-This command does a few things:
-
-* First it will install the dependencies needed for the application to run.
-
-* If you're running in a development environment, it will then also install development dependencies needed for testing and running the application.
-
-You will also need a MongoDB cluster running on version 3.4 or above and setup up your connection by placing your uri inside `config/env.js`
+Then, make sure you place your MongoDB cluster connection uri inside `config/env.js`
 
 ```bash
 process.env.MONGOLAB_URI = 'REPLACE_WITH_URI'
 ```
 
+On your first run, you will need to seed your database from the TSV data by uncommenting the seed function inside `server.js`
 
 ## Running the application
-After the install process is over, you'll be able to run the application using NPM:
 
 ```bash
 $ npm start
 ```
-On your first run, you will need to seed your database by uncommenting the seed function inside `server.js`
 
 The application should run on port 2345, so in your browser just go to [http://localhost:2345](http://localhost:2345).
 
 
-## Before pushing
-Before pushing anything on the repository, make sure that all tests are passing:
+## Running the tests
 
 ```bash
 $ npm test
@@ -88,7 +82,7 @@ $ npm test
 * **test:**
     Test cases
 
-### Sample responses
+## Usage
 
 **Match with name**
 
