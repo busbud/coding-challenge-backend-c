@@ -1,129 +1,225 @@
-# Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
+# Busbud Coding Challenge
 
-## Requirements
+This repository is for my take on the javascript API coding challenge from Busbud, built on
+[ExpressJs](https://expressjs.com/) backed by a MongoDB database with some configuration files being based off [MEAN.JS](https://github.com/meanjs/mean).
 
-Design an API endpoint that provides auto-complete suggestions for large cities.
-The suggestions should be restricted to cities in the USA and Canada with a population above 5000 people.
+The implemented solution is explained in [SOLUTION.md](SOLUTION.md) and the challenge description can be found in [CHALLENGE.md](CHALLENGE.md)
 
-- the endpoint is exposed at `/suggestions`
-- the partial (or complete) search term is passed as a querystring parameter `q`
-- the caller's location can optionally be supplied via querystring parameters `latitude` and `longitude` to help improve relative scores
-- the endpoint returns a JSON response with an array of scored suggested matches
-    - the suggestions are sorted by descending score
-    - each suggestion has a score between 0 and 1 (inclusive) indicating confidence in the suggestion (1 is most confident)
-    - each suggestion has a name which can be used to disambiguate between similarly named locations
-    - each suggestion has a latitude and longitude
-- all functional tests should pass (additional tests may be implemented as necessary).
-- the final application should be [deployed to Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs).
-- feel free to add more features if you like!
+## Prerequisites
+Make sure you have installed all of the following prerequisites on your development machine:
 
-#### Sample responses
+* Node.js - [Download & Install Node.js](http://www.nodejs.org/download/) and the npm package manager.
 
-These responses are meant to provide guidance. The exact values can vary based on the data source and scoring algorithm
+To update to the latest npm version:
 
-**Near match**
+```bash
+$ npm install -g npm
+```
 
-    GET /suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
+You will also need a MongoDB cluster running on version [3.4](https://docs.mongodb.com/manual/) or above.
+
+## Setup the application
+Clone this repository, go to the coding-challenge-backend-c Express application folder and install the dependencies:
+
+```bash
+$ git clone hhttps://github.com/j-langlois/coding-challenge-backend-c
+$ cd coding-challenge-backend-c
+$ npm install
+```
+
+Then, make sure you place your MongoDB cluster connection uri inside `config/env.js`
+
+```bash
+process.env.MONGOLAB_URI = 'REPLACE_WITH_URI'
+```
+
+On your first run, you will need to seed your database from the TSV data by uncommenting the seed function inside `server.js`
+
+## Running the application
+
+```bash
+$ npm start
+```
+
+The application should run on port 2345, so in your browser just go to [http://localhost:2345](http://localhost:2345).
+
+
+## Running the tests
+
+```bash
+$ npm test
+```
+
+### Application structure
+
+* **app:**
+    App files
+
+* **app.models:**
+    Mongoose's models definitions
+
+* **app.routes:**
+    Main routing logic
+
+* **app.routes.api:**
+    Implementation of the API routing functions
+
+* **app.routes.controllers:**
+    Core of the requests processing
+
+* **app.routes.middlewares:**
+    Middlewares such as response handlers and request validation
+
+* **app.utils:**
+    Miscellanous utility functions
+
+* **config:**
+    Talks for itself
+
+* **data:**
+    Cities data for seeding purposes
+
+* **test:**
+    Test cases
+
+## Usage
+
+**Match with name**
+
+    GET /suggestions?q=Tuc
 
 ```json
 {
-  "suggestions": [
-    {
-      "name": "London, ON, Canada",
-      "latitude": "42.98339",
-      "longitude": "-81.23304",
-      "score": 0.9
+    "status": {
+        "success": true
     },
-    {
-      "name": "London, OH, USA",
-      "latitude": "39.88645",
-      "longitude": "-83.44825",
-      "score": 0.5
-    },
-    {
-      "name": "London, KY, USA",
-      "latitude": "37.12898",
-      "longitude": "-84.08326",
-      "score": 0.5
-    },
-    {
-      "name": "Londontowne, MD, USA",
-      "latitude": "38.93345",
-      "longitude": "-76.54941",
-      "score": 0.3
-    }
-  ]
+    "suggestions": [{
+            "name": "Tucker, GA, US",
+            "latitude": 33.85455,
+            "longitude": -84.21714,
+            "score": 0.2
+        }, {
+            "name": "Tucson, AZ, US",
+            "latitude": 32.22174,
+            "longitude": -110.92648,
+            "score": 0.2
+        }, {
+            "name": "Tuckahoe, VA, US",
+            "latitude": 37.59015,
+            "longitude": -77.55638,
+            "score": 0.19
+        }, {
+            "name": "Tuckahoe, NY, US",
+            "latitude": 40.95038,
+            "longitude": -73.82736,
+            "score": 0.19
+        }, {
+            "name": "Tucumcari, NM, US",
+            "latitude": 35.17172,
+            "longitude": -103.72497,
+            "score": 0.18
+        }, {
+            "name": "Tucson Estates, AZ, US",
+            "latitude": 32.18758,
+            "longitude": -111.09093,
+            "score": 0.17
+        }
+    ]
 }
+
 ```
 
-**No match**
+**Near match with name**
 
-    GET /suggestions?q=SomeRandomCityInTheMiddleOfNowhere
+    GET /suggestions?q=Van&latitude=48.4284&longitude=-123.3656
 
 ```json
 {
-  "suggestions": []
+    "status": {
+        "success": true
+    },
+    "suggestions": [{
+            "name": "Vancouver, BC, CA",
+            "latitude": 49.24966,
+            "longitude": -123.11934,
+            "distance": 93.18501258116879,
+            "geoScore": 1,
+            "nameScore": 0.12,
+            "score": 0.91
+        }, {
+            "name": "Vancouver, WA, US",
+            "latitude": 45.63873,
+            "longitude": -122.66149,
+            "distance": 315.100342960414,
+            "geoScore": 0.83,
+            "nameScore": 0.12,
+            "score": 0.76
+        }, {
+            "name": "Vandenberg Village, CA, US",
+            "latitude": 34.70832,
+            "longitude": -120.46766,
+            "distance": 1545.9507699446865,
+            "geoScore": 0.64,
+            "nameScore": 0.11,
+            "score": 0.59
+        }, {
+            "name": "Van Nuys, CA, US",
+            "latitude": 34.18667,
+            "longitude": -118.44897,
+            "distance": 1636.9153741557227,
+            "geoScore": 0.61,
+            "nameScore": 0.13,
+            "score": 0.56
+        }, {
+            "name": "Van Buren, AR, US",
+            "latitude": 35.43676,
+            "longitude": -94.34827,
+            "distance": 2779.487117658044,
+            "geoScore": 0.57,
+            "nameScore": 0.12,
+            "score": 0.53
+        }, {
+            "name": "Vandalia, IL, US",
+            "latitude": 38.9606,
+            "longitude": -89.09368,
+            "distance": 2923.2665630026204,
+            "geoScore": 0.56,
+            "nameScore": 0.13,
+            "score": 0.52
+        }, {
+            "name": "Van Wert, OH, US",
+            "latitude": 40.86949,
+            "longitude": -84.58412,
+            "distance": 3147.494805887777,
+            "geoScore": 0.55,
+            "nameScore": 0.13,
+            "score": 0.51
+        }, {
+            "name": "Vandalia, OH, US",
+            "latitude": 39.89061,
+            "longitude": -84.19883,
+            "distance": 3229.518279221104,
+            "geoScore": 0.54,
+            "nameScore": 0.13,
+            "score": 0.5
+        }, {
+            "name": "Vandergrift, PA, US",
+            "latitude": 40.60284,
+            "longitude": -79.56477,
+            "distance": 3532.5123847858163,
+            "geoScore": 0.52,
+            "nameScore": 0.12,
+            "score": 0.48
+        }, {
+            "name": "Vancleave, MS, US",
+            "latitude": 30.54047,
+            "longitude": -88.68752,
+            "distance": 3536.959872190803,
+            "geoScore": 0.51,
+            "nameScore": 0.12,
+            "score": 0.47
+        }
+    ]
 }
-```
 
-
-### Non-functional
-
-- All code should be written in Javascript
-- Mitigations to handle high levels of traffic should be implemented
-- Work should be submitted as a pull-request to this repo
-- Documentation and maintainability is a plus
-
-### References
-
-- Geonames provides city lists Canada and the USA http://download.geonames.org/export/dump/readme.txt
-- http://www.nodejs.org/
-- http://ejohn.org/blog/node-js-stream-playground/
-
-
-## Getting Started
-
-Begin by forking this repo and cloning your fork. GitHub has apps for [Mac](http://mac.github.com/) and
-[Windows](http://windows.github.com/) that make this easier.
-
-### Setting up a Nodejs environment
-
-Get started by installing [nodejs](http://www.nodejs.org).
-
-For OS X users, use [Homebrew](http://brew.sh) and `brew install nvm`
-
-Once that's done, from the project directory, run
-
-```
-nvm use
-```
-
-### Setting up the project
-
-In the project directory run
-
-```
-npm install
-```
-
-### Running the tests
-
-The test suite can be run with
-
-```
-npm test
-```
-
-### Starting the application
-
-To start a local server run
-
-```
-PORT=3456 npm start
-```
-
-which should produce output similar to
-
-```
-Server running at http://127.0.0.1:2345/suggestions
 ```
