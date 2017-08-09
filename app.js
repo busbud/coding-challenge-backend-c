@@ -1,5 +1,6 @@
 var http = require('http');
 var url = require('url');
+var fs = require('fs');
 var _ = require('lodash');
 var cities = require('./cities/usa-ca.json');
 
@@ -10,7 +11,28 @@ module.exports = http.createServer(function (req, res) {
   var url_parts = url.parse(req.url, true);
   var query = url_parts.query;
 
-  if (req.url.indexOf('/suggestions') === 0) {
+  // Case to handle static file favicon.ico to prevent heroku app to crash
+  if (req.url.indexOf('/favicon.ico') === 0) {
+    fs.readFile('./favicon.ico', function (err,data) {
+      if (err) {
+        res.end(JSON.stringify(err));
+        return;
+      }
+      res.writeHead(200);
+      res.end(data);
+    });
+  }
+   // Case to handle static file robots.txt to prevent heroku app to crash
+  else if(req.url.indexOf('/robots.txt') === 0) {
+    fs.readFile('./robots.txt', function (err,data) {
+      if (err) {
+        res.end(JSON.stringify(err));
+        return;
+      }
+      res.writeHead(200);
+      res.end(data);
+    });
+  }else if (req.url.indexOf('/suggestions') === 0) {
     
     if(query && query.q){
       var requestedCity = query.q;
@@ -61,7 +83,7 @@ module.exports = http.createServer(function (req, res) {
   } else {
     res.end();
   }
-}).listen(port, '127.0.0.1');
+}).listen(port);
  
 var cleanPartialCityName = function(myString){
   myString = removeAccent(myString);
