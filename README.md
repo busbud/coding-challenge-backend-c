@@ -1,129 +1,37 @@
 # Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
 
-## Requirements
+## Work accomplished
 
-Design an API endpoint that provides auto-complete suggestions for large cities.
-The suggestions should be restricted to cities in the USA and Canada with a population above 5000 people.
+- Add Gulp to have a livereload on dev environment
+- Add a script (convertJson.js at root folder) to generate a json file for cities data from the dump of geonames.org or data/cities_canada-usa.tsv file
+- Add logic to retrieve matching cities with latitude, longitude and a score. Score is calculated by the percentage of the request variable compared to the full name city if there are no latitude and longitude submitted. If latitude and longitude are submitted, score is calculated acording to the distance from the user.
 
-- the endpoint is exposed at `/suggestions`
-- the partial (or complete) search term is passed as a querystring parameter `q`
-- the caller's location can optionally be supplied via querystring parameters `latitude` and `longitude` to help improve relative scores
-- the endpoint returns a JSON response with an array of scored suggested matches
-    - the suggestions are sorted by descending score
-    - each suggestion has a score between 0 and 1 (inclusive) indicating confidence in the suggestion (1 is most confident)
-    - each suggestion has a name which can be used to disambiguate between similarly named locations
-    - each suggestion has a latitude and longitude
-- all functional tests should pass (additional tests may be implemented as necessary).
-- the final application should be [deployed to Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs).
-- feel free to add more features if you like!
+## Commands
 
-#### Sample responses
+- `npm i` : Only once on the first time to install libraries dependacies
+- `npm i -g gulp` : Only once on the first time, Gulp seems to be installed globally
+- `npm run dump` : to build json file for cities data from the dump of geonames.org or the one furnished on the test (Only once or every day with a task to download new source file daily for example)
+- `gulp` : launch development server on [http://localhost:2345](http://localhost:2345) with livereload On
+- `npm start` : launch server available on [http://localhost:2345](http://localhost:2345)
+- `npm test` : to execute unit test that must pass
 
-These responses are meant to provide guidance. The exact values can vary based on the data source and scoring algorithm
+## Tools Used
 
-**Near match**
+- lodash for useful functions
+- (dev) gulp and gulp-livereload to have a live reload on development environment
+- (dev)jsonfile and line-reader for the dump data source script
 
-    GET /suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
+## Heroku Url
 
-```json
-{
-  "suggestions": [
-    {
-      "name": "London, ON, Canada",
-      "latitude": "42.98339",
-      "longitude": "-81.23304",
-      "score": 0.9
-    },
-    {
-      "name": "London, OH, USA",
-      "latitude": "39.88645",
-      "longitude": "-83.44825",
-      "score": 0.5
-    },
-    {
-      "name": "London, KY, USA",
-      "latitude": "37.12898",
-      "longitude": "-84.08326",
-      "score": 0.5
-    },
-    {
-      "name": "Londontowne, MD, USA",
-      "latitude": "38.93345",
-      "longitude": "-76.54941",
-      "score": 0.3
-    }
-  ]
-}
-```
+[Website on Heroku](https://desolate-river-12046.herokuapp.com/suggestions)
+Ex: [With partial text londo](https://desolate-river-12046.herokuapp.com/suggestions/?q=londo)
 
-**No match**
+## Mitigations to handle high levels of traffic
 
-    GET /suggestions?q=SomeRandomCityInTheMiddleOfNowhere
+- We could use PM2 with a cluster system to handle high traffic
+- We could deploy this app using Docker behind a load balancer, scaled with Kubernetes as in schema below:
+![Infrastructure](/docs/docker-kubernetes.png)
 
-```json
-{
-  "suggestions": []
-}
-```
+## Remarks
 
-
-### Non-functional
-
-- All code should be written in Javascript
-- Mitigations to handle high levels of traffic should be implemented
-- Work should be submitted as a pull-request to this repo
-- Documentation and maintainability is a plus
-
-### References
-
-- Geonames provides city lists Canada and the USA http://download.geonames.org/export/dump/readme.txt
-- http://www.nodejs.org/
-- http://ejohn.org/blog/node-js-stream-playground/
-
-
-## Getting Started
-
-Begin by forking this repo and cloning your fork. GitHub has apps for [Mac](http://mac.github.com/) and
-[Windows](http://windows.github.com/) that make this easier.
-
-### Setting up a Nodejs environment
-
-Get started by installing [nodejs](http://www.nodejs.org).
-
-For OS X users, use [Homebrew](http://brew.sh) and `brew install nvm`
-
-Once that's done, from the project directory, run
-
-```
-nvm use
-```
-
-### Setting up the project
-
-In the project directory run
-
-```
-npm install
-```
-
-### Running the tests
-
-The test suite can be run with
-
-```
-npm test
-```
-
-### Starting the application
-
-To start a local server run
-
-```
-PORT=3456 npm start
-```
-
-which should produce output similar to
-
-```
-Server running at http://127.0.0.1:2345/suggestions
-```
+- Add `robots.txt`, `favicon.ico` files and a method to serve those static files to prevent Heroku app to crash

@@ -6,7 +6,10 @@ var lineReader = require('line-reader');
  * Source file (dump from http://download.geonames.org/export/dump/cities5000.zip)
  * all cities with a population > 5000
  */ 
-var sourceFilePath='./cities/cities5000.txt';
+// Import dumpfile from geonames.org 
+// var sourceFilePath='./data/cities/cities5000.txt';
+// Import from TSV file furnished by busbud
+var sourceFilePath='./data/cities_canada-usa.tsv';
 
 // Variable to store datas we will export as json file
 var myJson = [];
