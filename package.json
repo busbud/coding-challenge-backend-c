@@ -5,16 +5,26 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "test": "./node_modules/mocha/bin/mocha ./test/"
+    "test": "./node_modules/mocha/bin/mocha ./test/",
+    "dump": "node ./convertJson.js"
   },
   "author": "",
   "license": "WTFPL",
   "dependencies": {
     "chai": "^1.9.1",
     "mocha": "^1.18.2",
-    "supertest": "^0.11.0"
+    "supertest": "^0.11.0",
+    "lodash": "^4.17.4"
   },
   "engines": {
     "node": "0.10.26"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-develop-server": "^0.5.2",
+    "gulp-livereload": "^3.8.1",
+    "gulp-plumber": "^1.1.0",
+    "jsonfile": "^3.0.1",
+    "line-reader": "^0.4.0"
   }
 }
