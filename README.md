@@ -71,7 +71,7 @@ These responses are meant to provide guidance. The exact values can vary based o
 
 - All code should be written in Javascript
 - Mitigations to handle high levels of traffic should be implemented
-- Work should be submitted as a pull-request to this repo
+- Challenge is submitted as pull request against this repo ([fork it](https://help.github.com/articles/fork-a-repo/) and [create a pull request](https://help.github.com/articles/creating-a-pull-request-from-a-fork/).
 - Documentation and maintainability is a plus
 
 ### References
