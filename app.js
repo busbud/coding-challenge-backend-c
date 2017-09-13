@@ -58,4 +58,4 @@ app.get('*', function(req, res){
 
 module.exports = http.createServer(app).listen(app.get('port'));
 
-console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+console.log('Server running at http://127.0.0.1:%d/suggestions', app.get('port'));
