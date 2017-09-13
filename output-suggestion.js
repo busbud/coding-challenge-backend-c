@@ -1,14 +1,30 @@
+var regionsCanada = {
+    "10" : "AB",
+    "02" : "BC", 
+    "03" : "MB", 
+    "04" : "NB",
+    "13" : "NT", 
+    "07" : "NS",
+    "14" : "NU", 
+    "08" : "ON", 
+    "09" : "PE",
+    "10" : "QC", 
+    "11" : "SK", 
+    "12" : "YT", 
+    "05" : "NL" 
+}
+
 function outputSuggestion (searchResults, inputLng, inputLat, query){
     var suggestions = [];
     var query = query.toLowerCase();
    
     for (city in searchResults) {
         var cityData = searchResults[city];
-        var cityLat = cityData["lat"];
-        var cityLng = cityData["lng"];
-        var forComparisonCityName = cityData["name"].toLowerCase();
+        var cityLat = cityData["latitude"];
+        var cityLng = cityData["longitude"];
+        var admin1code = cityData["countrycode"] == "CA" ? regionsCanada[cityData["admin1code"]] : cityData["admin1code"];
         var cityObj = { 
-            name: cityData["name"] + ", " + cityData["adminName1"] + " - " + cityData["countryCode"],
+            name: cityData["name"] + ", " + admin1code + " - " + cityData["countrycode"],
             latitude: cityLat,
             longitude: cityLng,
             score: confidenceScore(getDistanceFromLatLonInKm(cityLat, cityLng, inputLat, inputLng))
@@ -17,6 +33,8 @@ function outputSuggestion (searchResults, inputLng, inputLat, query){
     }
     return suggestions;
 }
+
+
 
 function confidenceScore ( distanceFromLatLon ){
     /* Part of score will be calculated using information of 

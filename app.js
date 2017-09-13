@@ -3,6 +3,11 @@ var express = require('express');
 var request = require('request');
 var app = express();
 var outputSuggestion = require("./output-suggestion.js");
+// var outputSuggestion = require("./convert-data.js");
+
+var jsonQuery = require('json-query')
+var data = require('./data/cities_canada-usa.json');
+
 var port = process.env.PORT || 2345;
 
 app.get('/suggestions', function(req, res){
@@ -11,17 +16,17 @@ app.get('/suggestions', function(req, res){
   var latitude = req.query.latitude ? req.query.latitude : null;
   var suggestions = [];
   if( country ){
-    var geonames = 'http://api.geonames.org/searchJSON?name_startsWith=' + country + '&country=US&country=CA&cities=cities5000&username=crondinini&style=LONG&featureClass=P&lang=en';
-    request(geonames, function (error, response, body) {
-      res.status(200)
-      var searchResults = JSON.parse(body);
-      searchResults = searchResults["geonames"];
-      var suggestionResults = outputSuggestion(searchResults, longitude, latitude, country);
-    
-      res.json( {
-        suggestions: suggestionResults
-      } );
-    });
+    var result = jsonQuery('cities[*asciiname~/^'+country+'/i]', {
+      data: data,
+      allowRegexp: true
+    }).value;
+    console.log(result );
+    res.status(200)
+    var searchResults = result;
+    var suggestionResults = outputSuggestion(searchResults, longitude, latitude, country);
+    res.json( {
+      suggestions: suggestionResults
+    } );
   } else{
     res.status(404).json(
        {
