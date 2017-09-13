@@ -11,7 +11,7 @@ var data = require('./data/cities_canada-usa.json');
 var port = process.env.PORT || 2345;
 
 app.get('/suggestions', function(req, res){
-  var city = removeAccents(req.query.q);
+  var city = req.query.q !== undefined ? removeAccents(req.query.q) : "";
   var longitude = req.query.longitude ? req.query.longitude : null;
   var latitude = req.query.latitude ? req.query.latitude : null;
   var suggestions = [];
