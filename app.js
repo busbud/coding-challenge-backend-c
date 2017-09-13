@@ -16,17 +16,26 @@ app.get('/suggestions', function(req, res){
   var latitude = req.query.latitude ? req.query.latitude : null;
   var suggestions = [];
   if( city ){
-    var result = jsonQuery('cities[*asciiname~/^' + city + '/i]', {
+    var searchResults = jsonQuery('cities[*asciiname~/^' + city + '/i]', {
       data: data,
       allowRegexp: true
     }).value;
-    console.log(result );
-    res.status(200)
-    var searchResults = result;
+
     var suggestionResults = outputSuggestion(searchResults, longitude, latitude, city);
-    res.json( {
-      suggestions: suggestionResults
-    } );
+
+    if(suggestionResults.length > 0){
+      res.status(200)
+      res.json( {
+        suggestions: suggestionResults
+      } );
+    } else {
+      res.status(404).json(
+        {
+         suggestions: suggestions
+       } 
+     );
+    }
+    
   } else{
     res.status(404).json(
        {

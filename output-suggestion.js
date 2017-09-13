@@ -16,10 +16,9 @@ var regionsCanada = {
 
 function outputSuggestion (searchResults, inputLng, inputLat, query){
     var suggestions = [];
-    var query = query.toLowerCase();
-   
     for (city in searchResults) {
         var cityData = searchResults[city];
+        var cityNameASCII = cityData["asciiname"];
         var cityLat = cityData["latitude"];
         var cityLng = cityData["longitude"];
         var admin1code = cityData["countrycode"] == "CA" ? regionsCanada[cityData["admin1code"]] : cityData["admin1code"];
@@ -27,25 +26,41 @@ function outputSuggestion (searchResults, inputLng, inputLat, query){
             name: cityData["name"] + ", " + admin1code + " - " + cityData["countrycode"],
             latitude: cityLat,
             longitude: cityLng,
-            score: confidenceScore(getDistanceFromLatLonInKm(cityLat, cityLng, inputLat, inputLng))
+            score: confidenceScore( cityNameASCII, query, getDistanceFromLatLonInKm(cityLat, cityLng, inputLat, inputLng))
         };
         suggestions.push(cityObj);
     }
-    return suggestions;
+    var sortedSuggestions = suggestions.sort( function(a, b){  return b["score"]-a["score"] });
+    var matchedSuggestion = sortedSuggestions.filter(function(city){ return city["score"] == 1 });
+    
+    if ( matchedSuggestion.length == 1){
+        return matchedSuggestion;
+    } else {
+        return sortedSuggestions;
+    }
 }
 
 
 
-function confidenceScore ( distanceFromLatLon ){
+function confidenceScore ( cityNameASCII, query, distanceFromLatLon ){
     /* Part of score will be calculated using information of 
     * distance between latitude and longitude given in query 
     * and a city in the list.
     */
-    var earthRadius = 6371;
-    var score =   distanceFromLatLon / 6371;
-    return score.toFixed(2);
-
-    // Need to include calculation based on name. 
+    var numberOfCharacters =  query.length / cityNameASCII.length;
+    if( cityNameASCII.toLowerCase() === query.toLowerCase() ){
+        return +(numberOfCharacters);
+    }
+   
+    if(distanceFromLatLon === null ){
+        return +(numberOfCharacters.toFixed(1));
+    }
+    if (distanceFromLatLon >= 0 ){
+        var earthRadius = 6371;
+        var distanceFromLatLon = 6371 - distanceFromLatLon;
+        var score = distanceFromLatLon / 6371;
+        return +(score.toFixed(1));
+    }
 }
 
 /* 
@@ -56,7 +71,7 @@ function confidenceScore ( distanceFromLatLon ){
 */
 function getDistanceFromLatLonInKm(cityLat,cityLng,inputLat,inputLng) {
     if(inputLat === null || inputLng == null ){
-        return 0; 
+        return null; 
     }
     var Radius = 6371; // Radius of the earth in km
 
