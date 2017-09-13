@@ -1,4 +1,36 @@
-# Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
+
+# Solution Explanation 
+My aim at this challenge was to keep the solution as simple as possible. More specifically: 
+- I chose to use express for that  reason, as I find it easier to handle routes with it.
+- For the data, I used the tsv provided in the original challenge code and used event-stream to transform it to JSON. The code used for the conversion is included, but is not referenced in the final code. It could be used manually as the need to update the JSON arises. My assumption is that a database of cities does not change frequently, so I did not believe it was appropriate to create a cron job to constantly check the zip file. 
+- To search for the data I used a json-query search module. I choose not to use a database  because I didn't think the data set was big enough to justify its use. 
+- For the score, I initially only used the distance in km between the coordinates given and the city. As I confirmed that the name itself needed to influence the score, I created a very simple calculation to check how many letters from a city's name have been given already. A better approach would be to calculate the score based on the total number of cities in the database and the frequency that the word is searched by users.
+- Taking into account high traffic, I included a redis cache that stores the URL. Because I am using the free version, I set the expiration to be 10 min only.
+
+You can see the working solution deployed at [https://crondinini-coding-challenge.herokuapp.com/suggestions?q=montreal](https://crondinini-coding-challenge.herokuapp.com/suggestions?q=montreal).
+
+# How to run the solution on your machine
+**Assuming you already have git installed, these are the steps:** 
+>> Clone repository 
+```
+git clone https://github.com/crondinini/coding-challenge-backend-c.git
+```
+
+>> Run npm install to download dependencies 
+```
+npm install
+```
+
+>> Start the server
+```
+npm start
+```
+>> Access URL 
+http://127.0.0.1:2345/suggestions?q=montreal
+
+
+# Original Text: 
+# Busbud Coding Challenge 
 
 ## Requirements
 

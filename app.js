@@ -3,7 +3,6 @@ var express = require('express');
 var app = express();
 var removeAccents = require("remove-accents");
 var outputSuggestion = require("./output-suggestion.js");
-// var outputSuggestion = require("./convert-data.js");
 
 var cache = require('express-redis-cache')({
   host: 'redis-18604.c10.us-east-1-4.ec2.cloud.redislabs.com', 

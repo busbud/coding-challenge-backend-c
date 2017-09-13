@@ -1,3 +1,8 @@
+/*
+* This is a manually created list of abrreviated regions 
+* in Canada. The purpose is to ensure consistency with US states. 
+* If a new region is created, it should be added to the object below. 
+*/
 var regionsCanada = {
     "10" : "AB",
     "02" : "BC", 
@@ -13,6 +18,18 @@ var regionsCanada = {
     "12" : "YT", 
     "05" : "NL" 
 }
+
+/*  
+* This is the main function used in the API. Its purpose is to loop over results 
+* and organize the data in the appropriate way. 
+*
+* If there is a match that returns 1, then only that result should be returned. 
+* 
+* Asciiname column was used instead of name to avoid outputting characters with accent
+* admin1code is the region (Canada) or state (US)
+* countrycode is the abbreviation of country
+*
+*/
 
 function outputSuggestion (searchResults, inputLng, inputLat, query){
     var suggestions = [];
@@ -41,14 +58,24 @@ function outputSuggestion (searchResults, inputLng, inputLat, query){
 }
 
 
-
-function confidenceScore ( cityNameASCII, query, distanceFromLatLon ){
-    /* Part of score will be calculated using information of 
-    * distance between latitude and longitude given in query 
-    * and a city in the list.
-    */
-    var numberOfCharacters =  query.length / cityNameASCII.length;
-    if( cityNameASCII.toLowerCase() === query.toLowerCase() ){
+/* 
+* Function: Confidence Score 
+* Output: Number with only one decimal 
+*
+* The score is calculated as follows: 
+* The first calculation is the number of characters in the query divided 
+* by the number of characters in the city name. If cityname is the same as 
+* the query, then number to be returned is 1 as it should be a match. 
+* 
+* If it's not a match, and latitude and longitude are also not provided, 
+* then the calculation will be returned. 
+*
+* If latitude and longitude are provided, the distanceFromLatLon
+* is used to calculate how far the coordinates are of a certain city.
+*/
+function confidenceScore ( cityName, query, distanceFromLatLon ){
+    var numberOfCharacters =  query.length / cityName.length;
+    if( cityName.toLowerCase() === query.toLowerCase() ){
         return +(numberOfCharacters);
     }
    
