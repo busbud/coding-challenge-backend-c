@@ -18,21 +18,21 @@ function outputSuggestion (searchResults, inputLng, inputLat, query){
     var suggestions = [];
     for (city in searchResults) {
         var cityData = searchResults[city];
-        var cityNameASCII = cityData["asciiname"];
+        var cityName = cityData["asciiname"];
         var cityLat = cityData["latitude"];
         var cityLng = cityData["longitude"];
         var admin1code = cityData["countrycode"] == "CA" ? regionsCanada[cityData["admin1code"]] : cityData["admin1code"];
         var cityObj = { 
-            name: cityData["name"] + ", " + admin1code + " - " + cityData["countrycode"],
+            name: cityName + ", " + admin1code + " - " + cityData["countrycode"],
             latitude: cityLat,
             longitude: cityLng,
-            score: confidenceScore( cityNameASCII, query, getDistanceFromLatLonInKm(cityLat, cityLng, inputLat, inputLng))
+            score: confidenceScore( cityName, query, getDistanceFromLatLonInKm(cityLat, cityLng, inputLat, inputLng))
         };
         suggestions.push(cityObj);
     }
     var sortedSuggestions = suggestions.sort( function(a, b){  return b["score"]-a["score"] });
     var matchedSuggestion = sortedSuggestions.filter(function(city){ return city["score"] == 1 });
-    
+
     if ( matchedSuggestion.length == 1){
         return matchedSuggestion;
     } else {
@@ -58,8 +58,10 @@ function confidenceScore ( cityNameASCII, query, distanceFromLatLon ){
     if (distanceFromLatLon >= 0 ){
         var earthRadius = 6371;
         var distanceFromLatLon = 6371 - distanceFromLatLon;
-        var score = distanceFromLatLon / 6371;
+        var distanceScore = distanceFromLatLon / 6371;
+        var score = (numberOfCharacters * 2 + distanceScore * 8 ) / 10;
         return +(score.toFixed(1));
+       
     }
 }
 
