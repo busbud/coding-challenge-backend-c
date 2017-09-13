@@ -11,10 +11,17 @@
   "license": "WTFPL",
   "dependencies": {
     "chai": "^1.9.1",
+    "event-stream": "^3.3.4",
+    "express": "^4.15.4",
     "mocha": "^1.18.2",
+    "request": "^2.81.0",
+    "sprintf": "^0.1.5",
     "supertest": "^0.11.0"
   },
   "engines": {
     "node": "0.10.26"
+  },
+  "devDependencies": {
+    "nodemon": "^1.12.0"
   }
 }
