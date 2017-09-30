@@ -8,6 +8,7 @@ let uristring = process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'mongodb:
 
 let mongoConnect = () => {
 
+    // Connection to DB
     mongoose.connect(uristring, { useMongoClient: true }, (err, res) => {
         if (err) {
             console.log('ERROR connecting to: ' + uristring + '. ' + err);
@@ -40,4 +41,3 @@ let mongoConnect = () => {
 }
 
 module.exports = mongoConnect();
-

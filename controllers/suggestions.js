@@ -1,33 +1,42 @@
 const url = require('url');
-let previousQueries = [];
+const cityModel = require('./../models/city');
 
 // Pass request and response
-let handleRequest = (req, res, data) => {
+let handleRequest = (req, res) => {
 
     let queryParams = getQueryStringParams(req);
-    let search = queryParams.q.toLowerCase();
+    let results = [];
 
-    // Check is search was made in the past
-    // Could have an expirationDate to avoid keeping the data for too long
-    let previousResults = previousQueries[search];
+    if(queryParams.q) {
+        let search = queryParams.q;
+        cityModel.find({ name: new RegExp(`^${search}`, 'i') }).then(cities => {
+            results = cities;
 
-    // If no search in the past
-    if(!previousResults) {
-        results = data.filter(city => {
-            // @todo : pattern / Regex instead
-            return city.name.toLowerCase() == queryParams.q.toLowerCase()
-        });
+                        // Check is search was made in the past
+            // Could have an expirationDate to avoid keeping the data for too long
+            // CREATE new result for later request
+        
 
-        previousQueries[search] = results;
+            return returnResponse(res, results);
+        })
+        
+
+    }
+    else {
+        returnResponse(res, results);        
     }
 
-    res.end(JSON.stringify({
-        suggestions: previousResults || results
+
+}
+
+let returnResponse = (res, results) => {
+    return res.end(JSON.stringify({
+        suggestions: results
     }));
 }
 
 // Returns query params
-let getQueryStringParams = (req) => {
+let getQueryStringParams = req => {
     return url.parse(req.url, true).query;
 }
 

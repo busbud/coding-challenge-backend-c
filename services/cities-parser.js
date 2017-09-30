@@ -21,6 +21,7 @@ var getData = (fileName) => {
                     line =  line.split("\t");
                     // Get needed fields
                     let name = line[1];
+                    let location = [parseFloat(line[4]), parseFloat(line[5])]
                     // let latitude = parseFloat(line[4]);
                     // let longitude = parseFloat(line[5]);
                     // Create object line by line

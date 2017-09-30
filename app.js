@@ -1,15 +1,15 @@
-var http = require('http');
-var port = process.env.PORT || 2345;
+const http = require('http');
+const port = process.env.PORT || 2345;
 
 // Thom
-var suggestionsController = require('./controllers/suggestions');
+const suggestionsController = require('./controllers/suggestions');
 require('./mongo-init');
 
 module.exports = http.createServer(function (req, res) {
     res.writeHead(404, { 'Content-Type': 'text/plain' });
 
     if (req.url.indexOf('/suggestions') === 0) {
-        return suggestionsController(req, res, data);
+        return suggestionsController(req, res);
     } else {
         res.end();
     }
