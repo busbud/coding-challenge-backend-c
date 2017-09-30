@@ -3,11 +3,10 @@ var port = process.env.PORT || 2345;
 
 // Thom
 var suggestionsController = require('./controllers/suggestions');
-const dataFileName        = 'cities_canada-usa';
-var parser                = require('./services/parser');
+const dataFileName        = process.env.CITIES_FILE_NAME || 'cities_canada-usa';
+var parser                = require('./services/cities-parser');
 
-
-// Get needed data
+// Generate data at server start
 var data;
 parser(dataFileName).then(fileData => {
   data = fileData;
