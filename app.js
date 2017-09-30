@@ -1,13 +1,23 @@
 var http = require('http');
 var port = process.env.PORT || 2345;
 
+// Thom
+var suggestionsController = require('./controllers/suggestions');
+const dataFileName        = 'cities_canada-usa';
+var parser                = require('./services/parser');
+
+
+// Get needed data
+var data;
+parser(dataFileName).then(fileData => {
+  data = fileData;
+});
+
 module.exports = http.createServer(function (req, res) {
   res.writeHead(404, {'Content-Type': 'text/plain'});
 
   if (req.url.indexOf('/suggestions') === 0) {
-    res.end(JSON.stringify({
-      suggestions: []
-    }));
+    return suggestionsController(req, res, data);
   } else {
     res.end();
   }
