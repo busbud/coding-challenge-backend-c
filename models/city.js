@@ -1,6 +1,6 @@
-let mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-let cityModel = mongoose.model('City', {
+const cityModel = mongoose.model('City', {
     ident: {
         type: String,
         trim: true

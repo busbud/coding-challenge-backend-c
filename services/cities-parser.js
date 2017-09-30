@@ -15,6 +15,8 @@ var getData = (fileName) => {
             // Split Strings into Array
             .pipe(es.mapSync(line => {
 
+                // @todo : skip first line / header
+
                 // Get rid of non-sense / corrupt data
                 if(line.length >= 1) {
                     // Format line in a array

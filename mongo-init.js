@@ -4,17 +4,17 @@ let mongoose = require('mongoose');
 var parser = require('./services/cities-parser');
 
 mongoose.Promise = global.Promise;
-let uristring = process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/busbud-challenge';
+let mongoUrl = process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/busbud-challenge';
 
 let mongoConnect = () => {
 
     // Connection to DB
-    mongoose.connect(uristring, { useMongoClient: true }, (err, res) => {
+    mongoose.connect(mongoUrl, { useMongoClient: true }, (err, res) => {
         if (err) {
-            console.log('ERROR connecting to: ' + uristring + '. ' + err);
+            console.log('ERROR connecting to: ' + mongoUrl + '. ' + err);
         } else {
     
-            console.log('Succeeded connected to: ' + uristring);
+            console.log('Succeeded connected to: ' + mongoUrl);
             
             // When connected, check if cities collection exists and has documents
             cityModel.find()
