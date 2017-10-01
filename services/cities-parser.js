@@ -1,7 +1,7 @@
 var fs = require('fs');
 var es = require('event-stream');
 
-var getData = (fileName) => {
+exports.getData = function(fileName) {
 
     // Return promise, async handling so we have the final data
     return new Promise((resolve, reject) => {
@@ -14,29 +14,70 @@ var getData = (fileName) => {
             .pipe(es.split("\n"))
             // Split Strings into Array
             .pipe(es.mapSync(line => {
-
-                // @todo : skip first line / header
-
-                // Get rid of non-sense / corrupt data
+                // Skip fucked-up line
                 if(line.length >= 1) {
                     // Format line in a array
                     line =  line.split("\t");
-                    // Get needed fields
-                    let name = line[1];
-                    let location = [parseFloat(line[4]), parseFloat(line[5])]
-                    // let latitude = parseFloat(line[4]);
-                    // let longitude = parseFloat(line[5]);
-                    // Create object line by line
-                    // line = { name, latitude, longitude };
-                    line = { name };
-                    data.push(line);
-                }
+                    
+                    if(lineIsValid(line)) {
+                        // Get needed fields
+                        let name = line[1];
+                        let location = [parseFloat(line[4]), parseFloat(line[5])]
+                        let country = line[8];
+                        let state = country == 'CA' ? getState(parseInt(line[10])) : line[10];
 
+                        line = { name, location, state, country };
+                        data.push(line);
+                    }
+                }
             }))
+            .on('error', error => {
+                reject(error);
+            })
             .on('close', () => {
                 resolve(data);
             });
     });
-  }
+}
 
-module.exports = getData;
+function getState(stateCode) {
+
+    var provinces = {
+        1:'AB',
+        2:'BC',
+        3:'MB',
+        4:'NB',
+        5:'NL',
+        7:'NS',
+        8:'ON',
+        9:'PE',
+        10:'QC',
+        11:'SK',
+        12:'YT',
+        13:'NT',
+        14:'NU'
+    }
+
+    return provinces[stateCode] || '';
+}
+
+function lineIsValid(line) {
+    
+    // Check both latitude and longitude
+    function locationIsvalid(line) {
+
+        if(
+            line[4] && line[5] && 
+            !isNaN(parseFloat(line[4])) && !isNaN(parseFloat(line[4])) && 
+            parseFloat(line[4]) <= 180 && parseFloat(line[5]) <= 180 && 
+            parseFloat(line[4]) >= -180 && parseFloat(line[5]) >= -180
+        ) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    return locationIsvalid(line)
+}

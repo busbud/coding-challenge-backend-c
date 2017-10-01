@@ -6,7 +6,7 @@ var parser = require('./services/cities-parser');
 mongoose.Promise = global.Promise;
 let mongoUrl = process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/busbud-challenge';
 
-let mongoConnect = () => {
+function mongoConnect() {
 
     // Connection to DB
     mongoose.connect(mongoUrl, { useMongoClient: true }, (err, res) => {
@@ -23,7 +23,7 @@ let mongoConnect = () => {
                     if(cities.length == 0) {
                         // Get cities from TSV file
                         const dataFileName = process.env.CITIES_FILE_NAME || 'cities_canada-usa';
-                        parser(dataFileName).then(cities => {
+                        parser.getData(dataFileName).then(cities => {
                             // Import data in DB
                             return cityModel.insertMany(cities);
                         })
