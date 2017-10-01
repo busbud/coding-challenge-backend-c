@@ -46,7 +46,7 @@ function formatCities(cities, queryParams) {
         suggestions = cities.map((city, index) => {
 
             var suggestion = {
-                name : `${city.name}, ${city.admin1}, ${city.country}`,
+                name : `${city.name}, ${city.admin1}, ${getCountryName(city.country)}`,
                 latitude: city.location[0],
                 longitude: city.location[1]
             }
@@ -65,4 +65,14 @@ function formatCities(cities, queryParams) {
 
 function sortSuggestions(suggestions) {
     return suggestions.sort((a,b) => b.score - a.score);
+}
+
+function getCountryName(countryCode) {
+
+    let countries = {
+        'CA' : 'Canada',
+        'US': 'USA'
+    }
+
+    return countries[countryCode] || countryCode;
 }
