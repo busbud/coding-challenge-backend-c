@@ -44,7 +44,7 @@ exports.getData = function(fileName) {
 
 function getProvince(provinceCode) {
 
-    var provinces = {
+    const provinces = {
         1:'AB',
         2:'BC',
         3:'MB',

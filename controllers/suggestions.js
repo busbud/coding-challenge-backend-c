@@ -52,7 +52,7 @@ function formatCities(cities, queryParams) {
             }
             
             if(!hasLocationParams) {
-                suggestion.score = levenshtein.compare(queryParams.q, city.name);
+                suggestion.score = parseFloat(levenshtein.compare(queryParams.q, city.name).toFixed(1));
             }
 
             return suggestion;
@@ -69,7 +69,7 @@ function sortSuggestions(suggestions) {
 
 function getCountryName(countryCode) {
 
-    let countries = {
+    const countries = {
         'CA' : 'Canada',
         'US': 'USA'
     }
