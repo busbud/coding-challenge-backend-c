@@ -1,35 +1,27 @@
 const url = require('url');
 const cityModel = require('./../models/city');
+const validator = require('./../services/validator');
+const levenshtein = require('./../services/levenshtein-distance');
 
-// Pass request and response
-function handleRequest(req, res) {
+exports.handleRequest = (req, res) => {
 
     let queryParams = getQueryStringParams(req);
-    let results = [];
 
     if(queryParams.q) {
         let search = queryParams.q;
         cityModel.find({ name: new RegExp(`^${search}`, 'i') }).then(cities => {
-            results = cities;
-
-            // Check is search was made in the past
-            // Could have an expirationDate to avoid keeping the data for too long
-            // CREATE new result for later request
-        
-
-            return returnResponse(res, results);
-        })
-        
-
+            let suggestions = formatCities(cities, queryParams);
+            return sendResponse(res, suggestions);
+        });
     }
     else {
-        returnResponse(res, results);        
+        sendResponse(res, []);        
     }
-
-
 }
 
-function returnResponse(res, results) {
+function sendResponse(res, results) {
+    res.setHeader('Content-Type', 'application/json');
+    res.statusCode = results.length ? 200 : 404;
     return res.end(JSON.stringify({
         suggestions: results
     }));
@@ -41,8 +33,36 @@ function getQueryStringParams(req) {
 }
 
 function hasLocation(queryParams) {
-    return queryParams.latitude && queryParams.longitude ? true : false;
+    return validator.coordinateIsValid(queryParams.latitude) && validator.coordinateIsValid(queryParams.longitude);
 }
 
-module.exports = handleRequest;
+function formatCities(cities, queryParams) {
 
+    let suggestions = [];
+    let hasLocationParams = hasLocation(queryParams);
+
+    if(cities.length > 0) {    
+        
+        suggestions = cities.map((city, index) => {
+
+            var suggestion = {
+                name : `${city.name}, ${city.admin1}, ${city.country}`,
+                latitude: city.location[0],
+                longitude: city.location[1]
+            }
+            
+            if(!hasLocationParams) {
+                suggestion.score = levenshtein.compare(queryParams.q, city.name);
+            }
+
+            return suggestion;
+
+        });
+    }
+
+    return sortSuggestions(suggestions);
+}
+
+function sortSuggestions(suggestions) {
+    return suggestions.sort((a,b) => b.score - a.score);
+}

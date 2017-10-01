@@ -13,7 +13,7 @@ let citySchema = new mongoose.Schema({
         type : String,
         trim: true
     },
-    state : {
+    admin1 : {
         type: String,
         trim: true
     }

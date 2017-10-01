@@ -1,5 +1,7 @@
-var fs = require('fs');
-var es = require('event-stream');
+const fs = require('fs');
+const es = require('event-stream');
+const validator = require('./../services/validator');
+
 
 exports.getData = function(fileName) {
 
@@ -14,7 +16,7 @@ exports.getData = function(fileName) {
             .pipe(es.split("\n"))
             // Split Strings into Array
             .pipe(es.mapSync(line => {
-                // Skip fucked-up line
+                // Skip potentials fucked-up lines and first line / header
                 if(line.length >= 1) {
                     // Format line in a array
                     line =  line.split("\t");
@@ -24,9 +26,9 @@ exports.getData = function(fileName) {
                         let name = line[1];
                         let location = [parseFloat(line[4]), parseFloat(line[5])]
                         let country = line[8];
-                        let state = country == 'CA' ? getState(parseInt(line[10])) : line[10];
+                        let admin1 = country == 'CA' ? getProvince(parseInt(line[10])) : line[10];
 
-                        line = { name, location, state, country };
+                        line = { name, location, admin1, country };
                         data.push(line);
                     }
                 }
@@ -40,7 +42,7 @@ exports.getData = function(fileName) {
     });
 }
 
-function getState(stateCode) {
+function getProvince(provinceCode) {
 
     var provinces = {
         1:'AB',
@@ -58,26 +60,10 @@ function getState(stateCode) {
         14:'NU'
     }
 
-    return provinces[stateCode] || '';
+    return provinces[provinceCode] || '';
 }
 
 function lineIsValid(line) {
-    
-    // Check both latitude and longitude
-    function locationIsvalid(line) {
-
-        if(
-            line[4] && line[5] && 
-            !isNaN(parseFloat(line[4])) && !isNaN(parseFloat(line[4])) && 
-            parseFloat(line[4]) <= 180 && parseFloat(line[5]) <= 180 && 
-            parseFloat(line[4]) >= -180 && parseFloat(line[5]) >= -180
-        ) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-
-    return locationIsvalid(line)
+    // Only checks both latitude and longitude for now
+    return validator.coordinateIsValid(line[4]) && validator.coordinateIsValid(line[5]);
 }
