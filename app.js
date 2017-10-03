@@ -8,14 +8,14 @@ mongo.connect();
 module.exports = http.createServer(function (req, res) {
 
     // Settings with a small library for high traffic volume
-    toobusy.maxLag(10);
-    toobusy.interval(250);
-    toobusy.onLag((currentLag) => {
-        res.statusCode = 503;
-        return res.end(JSON.stringify({
-            suggestions: []
-        }));
-      });
+    // toobusy.maxLag(10);
+    // toobusy.interval(250);
+    // toobusy.onLag((currentLag) => {
+    //     res.statusCode = 503;
+    //     return res.end(JSON.stringify({
+    //         suggestions: []
+    //     }));
+    //   });
     
 
     if (req.url.indexOf('/suggestions') === 0) {
