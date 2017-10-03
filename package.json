@@ -14,7 +14,8 @@
     "event-stream": "3.3.4",
     "mocha": "^1.18.2",
     "mongoose": "4.11.13",
-    "supertest": "^0.11.0"
+    "supertest": "^0.11.0",
+    "toobusy-js": "0.5.1"
   },
   "engines": {
     "node": "0.10.26"
