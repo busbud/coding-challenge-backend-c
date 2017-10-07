@@ -1,5 +1,7 @@
 # Cities Suggestion Engine
 
+![Travis Badge](https://travis-ci.org/barodeur/cities-suggestion-engine.svg?branch=master)
+
 > ⚠️ This project is a work in progress, there is no stable version at the moment.
 
 _This project is an implementation of the [Busbud coding challenge](https://github.com/busbud/coding-challenge-backend-c)._
