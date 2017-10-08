@@ -2,21 +2,23 @@
 * This is a manually created list of abrreviated regions 
 * in Canada. The purpose is to ensure consistency with US states. 
 * If a new region is created, it should be added to the object below. 
+* Regions were taken from the following table: 
+* http://www.geonames.org/CA/administrative-division-canada.html
 */
 var regionsCanada = {
-    "10" : "AB",
+    "01" : "AB",
     "02" : "BC", 
     "03" : "MB", 
     "04" : "NB",
-    "13" : "NT", 
+    "05" : "NL", 
     "07" : "NS",
-    "14" : "NU", 
-    "08" : "ON", 
+    "08" : "ON",
     "09" : "PE",
     "10" : "QC", 
     "11" : "SK", 
     "12" : "YT", 
-    "05" : "NL" 
+    "13" : "NT", 
+    "14" : "NU"
 }
 
 /*  
