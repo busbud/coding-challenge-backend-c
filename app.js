@@ -18,7 +18,7 @@ app.get("/suggestions", cache.route({ expire: 60 * 10 }),  function (req, res) {
   const longitude = req.query.longitude ? req.query.longitude : null;
   const latitude = req.query.latitude ? req.query.latitude : null;
   if( city ){
-    const searchResults = jsonQuery(`cities[*asciiname~/^${city}/i]`, {
+    const searchResults = jsonQuery(`cities[*asciiname~/\\b(${city})/i]`, {
       data,
       allowRegexp: true
     }).value;
