@@ -5,7 +5,7 @@
 * Regions were taken from the following table: 
 * http://www.geonames.org/CA/administrative-division-canada.html
 */
-var regionsCanada = {
+const regionsCanada = {
     "01" : "AB",
     "02" : "BC", 
     "03" : "MB", 
@@ -33,30 +33,27 @@ var regionsCanada = {
 *
 */
 
-function outputSuggestion (searchResults, inputLng, inputLat, query){
-    var suggestions = [];
+function outputSuggestion ( searchResults, inputLng, inputLat, query ){
+    const suggestions = [];
     for (city in searchResults) {
-        var cityData = searchResults[city];
-        var cityName = cityData["asciiname"];
-        var cityLat = cityData["latitude"];
-        var cityLng = cityData["longitude"];
-        var admin1code = cityData["countrycode"] == "CA" ? regionsCanada[cityData["admin1code"]] : cityData["admin1code"];
-        var cityObj = { 
-            name: cityName + ", " + admin1code + " - " + cityData["countrycode"],
+        const cityData = searchResults[city];
+        const cityName = cityData["asciiname"];
+        const cityLat = cityData["latitude"];
+        const cityLng = cityData["longitude"];
+        const admin1code = cityData["countrycode"] == "CA" ? regionsCanada[cityData["admin1code"]] : cityData["admin1code"];
+        const cityObj = { 
+            name: `${cityName} , ${admin1code} - ${cityData["countrycode"]}`,
             latitude: cityLat,
             longitude: cityLng,
             score: confidenceScore( cityName, query, getDistanceFromLatLonInKm(cityLat, cityLng, inputLat, inputLng))
         };
         suggestions.push(cityObj);
     }
-    var sortedSuggestions = suggestions.sort( function(a, b){  return b["score"]-a["score"] });
-    var matchedSuggestion = sortedSuggestions.filter(function(city){ return city["score"] == 1 });
 
-    if ( matchedSuggestion.length == 1){
-        return matchedSuggestion;
-    } else {
-        return sortedSuggestions;
-    }
+    const sortedSuggestions = suggestions.sort( (a, b) =>  b["score"]- a["score"] );
+    const matchedSuggestion = sortedSuggestions.filter( (city) =>  city["score"] == 1 );
+    
+    return matchedSuggestion.length == 1 ? matchedSuggestion : sortedSuggestions;
 }
 
 
@@ -76,7 +73,7 @@ function outputSuggestion (searchResults, inputLng, inputLat, query){
 * is used to calculate how far the coordinates are of a certain city.
 */
 function confidenceScore ( cityName, query, distanceFromLatLon ){
-    var numberOfCharacters =  query.length / cityName.length;
+    const numberOfCharacters =  query.length / cityName.length;
     if( cityName.toLowerCase() === query.toLowerCase() ){
         return +(numberOfCharacters);
     }
@@ -85,10 +82,10 @@ function confidenceScore ( cityName, query, distanceFromLatLon ){
         return +(numberOfCharacters.toFixed(1));
     }
     if (distanceFromLatLon >= 0 ){
-        var earthRadius = 6371;
-        var distanceFromLatLon = 6371 - distanceFromLatLon;
-        var distanceScore = distanceFromLatLon / 6371;
-        var score = (numberOfCharacters * 2 + distanceScore * 8 ) / 10;
+        const earthRadius = 6371;
+        const distanceFromLatLon = 6371 - distanceFromLatLon;
+        const distanceScore = distanceFromLatLon / 6371;
+        const score = (numberOfCharacters * 2 + distanceScore * 8 ) / 10;
         return +(score.toFixed(1));
        
     }
@@ -100,21 +97,21 @@ function confidenceScore ( cityName, query, distanceFromLatLon ){
 * Considering I was not familiar with the Haversine formula, I have decided to use it practically as is, 
 * instead of trying to replicate with my own code.
 */
-function getDistanceFromLatLonInKm(cityLat,cityLng,inputLat,inputLng) {
+function getDistanceFromLatLonInKm( cityLat, cityLng, inputLat, inputLng) {
     if(inputLat === null || inputLng == null ){
         return null; 
     }
-    var Radius = 6371; // Radius of the earth in km
+    const Radius = 6371; // Radius of the earth in km
 
-    var dLat = deg2rad(inputLat-cityLat);  // deg2rad below
-    var dLon = deg2rad(inputLng-cityLng); 
-    var a = 
+    const dLat = deg2rad(inputLat-cityLat);  // deg2rad below
+    const dLon = deg2rad(inputLng-cityLng); 
+    const a = 
       Math.sin(dLat/2) * Math.sin(dLat/2) +
       Math.cos(deg2rad(cityLat)) * Math.cos(deg2rad(inputLat)) * 
       Math.sin(dLon/2) * Math.sin(dLon/2)
       ; 
-    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
-    var d = Radius * c; // Distance in km
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+    const d = Radius * c; // Distance in km
     return d;
   }
   

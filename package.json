@@ -21,7 +21,7 @@
     "supertest": "^0.11.0"
   },
   "engines": {
-    "node": "0.10.26"
+    "node": "6.11.4"
   },
   "devDependencies": {
     "nodemon": "^1.12.0"
