@@ -11,6 +11,7 @@
   "license": "WTFPL",
   "dependencies": {
     "chai": "^1.9.1",
+    "elasticsearch": "^13.3.1",
     "mocha": "^1.18.2",
     "pg": "^6.4.2",
     "sequelize": "^4.13.5",
