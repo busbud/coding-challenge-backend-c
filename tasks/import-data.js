@@ -1,11 +1,15 @@
+#!/usr/bin/env node
+
 const fs = require('fs');
 const path = require('path');
 const readline = require('readline');
 const throat = require('throat');
 
-const db = require('../models');
+const db = require('../services/db');
 
-const readStream = fs.createReadStream(path.join(__dirname, '..', 'data', 'cities_canada-usa.sample.tsv'));
+const sample = process.argv[2] === 'sample';
+
+const readStream = fs.createReadStream(path.join(__dirname, '..', 'data', `cities_canada-usa${sample ? '.sample' : ''}.tsv`));
 
 readline
   .createInterface({
