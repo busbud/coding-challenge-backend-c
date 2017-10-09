@@ -11,6 +11,10 @@ services:
     environment:
       PGDATA : /var/lib/postgresql/data
       POSTGRES_DB: coding_challenge_dev
+  elasticsearch:
+    image: elasticsearch
+    ports:
+      - 9200:9200
 
 volumes:
   postgres-data:
