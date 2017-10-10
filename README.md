@@ -2,8 +2,6 @@
 
 ![Travis Badge](https://travis-ci.org/barodeur/cities-suggestion-engine.svg?branch=master)
 
-> ⚠️ This project is a work in progress, there is no stable version at the moment.
-
 _This project is an implementation of the [Busbud coding challenge](https://github.com/busbud/coding-challenge-backend-c)._
 
 ## API Documentation
@@ -80,10 +78,21 @@ GET /suggestions?q=SomeRandomCityInTheMiddleOfNowhere
 
 ## Implementation details
 
-TODO
+- This suggestion engine relies heavily on elasticsearch
+- The results are filtered using a prefix query on the name of the cities
+- then the score is calculated using a gaussian of the distance to the search location
 
 
 ## Contribute
 
-- Make sure you're running node 8 and you use npm 5
+### Requirements
+- node 8
+- npm 5
+- postgresql
+- elasticsearch
+
+### Start
 - Run `npm install`
+- Import a sample of the cities into the postgresql database by running `./tasks/import-data.js`
+- Create or Recreate the elasticsearch index and the index the cities with `./tasks/index-cities.js`
+- You can now start the server: `node app.js`
