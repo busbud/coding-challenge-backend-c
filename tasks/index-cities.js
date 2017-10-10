@@ -31,7 +31,7 @@ const createElasticsearchClient = require('../services/elasticsearch');
             analyzer: {
               city_name_analyzer: {
                 tokenizer: 'standard',
-                filter: ['standard', 'lowercase'],
+                filter: ['standard', 'lowercase', 'asciifolding'],
               },
             },
           },

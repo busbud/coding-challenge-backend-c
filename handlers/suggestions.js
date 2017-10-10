@@ -38,7 +38,10 @@ function search(esClient, q, location) {
         function_score: {
           query: {
             bool: {
-              should: [{ prefix: { name: q } }, { prefix: { alternative_names: q } }],
+              should: [
+                { match_phrase_prefix: { name: q } },
+                { match_phrase_prefix: { alternative_names: q } },
+              ],
             },
           },
           functions: location
