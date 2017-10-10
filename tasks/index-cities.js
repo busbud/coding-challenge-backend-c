@@ -1,10 +1,12 @@
 #!/usr/bin/env node
 
 const db = require('../services/db');
-const esClient = require('../services/elasticsearch');
+const createElasticsearchClient = require('../services/elasticsearch');
 
 (async () => {
   try {
+    const esClient = createElasticsearchClient();
+
     let indexExists;
     try {
       await esClient.indices.get({ index: 'cities' });

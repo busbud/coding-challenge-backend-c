@@ -1,7 +1,5 @@
 const url = require('url');
 
-const esClient = require('../services/elasticsearch');
-
 const CANADA_PROVINCES = {
   1: 'AB',
   2: 'BC',
@@ -32,7 +30,7 @@ function formatCityName({ name, adminCode, countryCode }) {
   return `${name}, ${admin}, ${COUNTRIES[countryCode]}`;
 }
 
-function search(q, location) {
+function search(esClient, q, location) {
   return esClient.search({
     index: 'cities',
     body: {
@@ -62,11 +60,12 @@ function search(q, location) {
   });
 }
 
-module.exports = async (req) => {
+module.exports = ({ esClient }) => async (req) => {
   try {
     const { q, latitude, longitude } = url.parse(req.url, true).query;
 
     const results = await search(
+      esClient,
       q,
       latitude && longitude ? { lat: parseFloat(latitude), lon: parseFloat(longitude) } : undefined,
     );
@@ -80,20 +79,22 @@ module.exports = async (req) => {
 
     return {
       status: 200,
-      body: results.hits.hits.map(({
-        _score: score,
-        _source: {
-          name,
-          admin_code: adminCode,
-          country_code: countryCode,
-          location: { lat, lon },
-        },
-      }) => ({
-        name: formatCityName({ name, adminCode, countryCode }),
-        latitude: lat,
-        longitude: lon,
-        score,
-      })),
+      body: {
+        suggestions: results.hits.hits.map(({
+          _score: score,
+          _source: {
+            name,
+            admin_code: adminCode,
+            country_code: countryCode,
+            location: { lat, lon },
+          },
+        }) => ({
+          name: formatCityName({ name, adminCode, countryCode }),
+          latitude: lat,
+          longitude: lon,
+          score,
+        })),
+      },
     };
   } catch (err) {
     return {
