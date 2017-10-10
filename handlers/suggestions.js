@@ -2,8 +2,34 @@ const url = require('url');
 
 const esClient = require('../services/elasticsearch');
 
-function formatCityName(name) {
-  return name;
+const CANADA_PROVINCES = {
+  1: 'AB',
+  2: 'BC',
+  3: 'MB',
+  4: 'NB',
+  5: 'NL',
+  7: 'NS',
+  8: 'ON',
+  9: 'PE',
+  10: 'QC',
+  11: 'SK',
+  12: 'YT',
+  13: 'NT',
+  14: 'NU',
+};
+
+const COUNTRIES = {
+  CA: 'Canada',
+  US: 'USA',
+};
+
+function formatCityName({ name, adminCode, countryCode }) {
+  let admin = adminCode;
+  if (countryCode === 'CA') {
+    admin = CANADA_PROVINCES[parseInt(adminCode, 10)];
+  }
+
+  return `${name}, ${admin}, ${COUNTRIES[countryCode]}`;
 }
 
 function search(q, location) {
@@ -54,8 +80,16 @@ module.exports = async (req) => {
 
     return {
       status: 200,
-      body: results.hits.hits.map(({ _score: score, _source: { name, location: { lat, lon } } }) => ({
-        name: formatCityName(name),
+      body: results.hits.hits.map(({
+        _score: score,
+        _source: {
+          name,
+          admin_code: adminCode,
+          country_code: countryCode,
+          location: { lat, lon },
+        },
+      }) => ({
+        name: formatCityName({ name, adminCode, countryCode }),
         latitude: lat,
         longitude: lon,
         score,
