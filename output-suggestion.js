@@ -36,23 +36,30 @@ const regionsCanada = {
 function outputSuggestion ( searchResults, inputLng, inputLat, query ){
     const suggestions = [];
     for (city in searchResults) {
+
         const cityData = searchResults[city];
-        const cityName = cityData["asciiname"];
-        const cityLat = cityData["latitude"];
-        const cityLng = cityData["longitude"];
-        const admin1code = cityData["countrycode"] == "CA" ? regionsCanada[cityData["admin1code"]] : cityData["admin1code"];
+
+        const { asciiname: cityName, 
+                latitude: cityLat, 
+                longitude: cityLng,
+                countrycode: country } = cityData;
+
+        let {  admin1code: regionCode } = cityData;
+        regionCode = country == "CA" ? regionsCanada[regionCode] : regionCode; //US region code is human-friendly
+
         const cityObj = { 
-            name: `${cityName} , ${admin1code} - ${cityData["countrycode"]}`,
+            name: `${cityName} , ${regionCode} - ${country}`,
             latitude: cityLat,
             longitude: cityLng,
             score: confidenceScore( cityName, query, getDistanceFromLatLonInKm(cityLat, cityLng, inputLat, inputLng))
         };
+
         suggestions.push(cityObj);
     }
 
-    const sortedSuggestions = suggestions.sort( (a, b) =>  b["score"]- a["score"] );
+    const sortedSuggestions = suggestions.sort( (a, b) =>  b["score"] - a["score"] );
     const matchedSuggestion = sortedSuggestions.filter( (city) =>  city["score"] == 1 );
-    
+
     return matchedSuggestion.length == 1 ? matchedSuggestion : sortedSuggestions;
 }
 
@@ -73,20 +80,19 @@ function outputSuggestion ( searchResults, inputLng, inputLat, query ){
 * is used to calculate how far the coordinates are of a certain city.
 */
 function confidenceScore ( cityName, query, distanceFromLatLon ){
-    const numberOfCharacters =  query.length / cityName.length;
+    const numberOfCharactersScore =  query.length / cityName.length;
     if( cityName.toLowerCase() === query.toLowerCase() ){
-        return +(numberOfCharacters);
+        return +(numberOfCharactersScore);
     }
    
     if(distanceFromLatLon === null ){
-        return +(numberOfCharacters.toFixed(1));
+        return +(numberOfCharactersScore.toFixed(1));
     }
     if (distanceFromLatLon >= 0 ){
         const earthRadius = 6371;
-        const distanceFromLatLon = 6371 - distanceFromLatLon;
-        const distanceScore = distanceFromLatLon / 6371;
-        const score = (numberOfCharacters * 2 + distanceScore * 8 ) / 10;
-        return +(score.toFixed(1));
+        const distanceScore = (6371 - distanceFromLatLon) / 6371;
+        const combinedScore = (numberOfCharactersScore * 2 + distanceScore * 8 ) / 10;
+        return +(combinedScore.toFixed(1));
        
     }
 }

@@ -14,10 +14,12 @@ const cache = require("express-redis-cache")({
 const port = process.env.PORT || 2345;
 
 app.get("/suggestions", cache.route({ expire: 60 * 10 }),  function (req, res) {
-  const city = req.query.q !== undefined ? removeAccents(req.query.q) : "";
-  const longitude = req.query.longitude ? req.query.longitude : null;
-  const latitude = req.query.latitude ? req.query.latitude : null;
+
+  const { latitude = null, longitude = null } = req.query;
+  let { q: city = "" } = req.query
+  
   if( city ){
+    city = removeAccents(city);
     const searchResults = jsonQuery(`cities[*asciiname~/\\b(${city})/i]`, {
       data,
       allowRegexp: true
