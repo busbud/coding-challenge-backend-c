@@ -66,7 +66,7 @@ GET /suggestions?q=SomeRandomCityInTheMiddleOfNowhere
 **RESPONSE**
 
 ```
-200
+404
 ```
 
 ```json
