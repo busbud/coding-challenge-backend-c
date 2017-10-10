@@ -14,7 +14,7 @@ const createApp = ({ esClient } = {}) => {
       if (req.url.indexOf('/suggestions') === 0) {
         const { status = 404, headers = {}, body = {} } = await suggestionsHanlder(req);
 
-        res.writeHead(status, { ...headers, 'Content-Type': 'application/json' });
+        res.writeHead(status, { ...headers, 'Content-Type': 'application/json; charset=utf-8' });
         res.end(JSON.stringify(body));
       } else {
         res.writeHead(404, { 'Content-Type': 'text/plain' });
