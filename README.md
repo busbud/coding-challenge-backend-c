@@ -1,29 +1,28 @@
-# Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
+# Cities Suggestion Engine
 
-## Requirements
+![Travis Badge](https://travis-ci.org/barodeur/cities-suggestion-engine.svg?branch=master)
 
-Design an API endpoint that provides auto-complete suggestions for large cities.
-The suggestions should be restricted to cities in the USA and Canada with a population above 5000 people.
+_This project is an implementation of the [Busbud coding challenge](https://github.com/busbud/coding-challenge-backend-c)._
 
-- the endpoint is exposed at `/suggestions`
-- the partial (or complete) search term is passed as a querystring parameter `q`
-- the caller's location can optionally be supplied via querystring parameters `latitude` and `longitude` to help improve relative scores
-- the endpoint returns a JSON response with an array of scored suggested matches
-    - the suggestions are sorted by descending score
-    - each suggestion has a score between 0 and 1 (inclusive) indicating confidence in the suggestion (1 is most confident)
-    - each suggestion has a name which can be used to disambiguate between similarly named locations
-    - each suggestion has a latitude and longitude
-- all functional tests should pass (additional tests may be implemented as necessary).
-- the final application should be [deployed to Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs).
-- feel free to add more features if you like!
+## API Documentation
 
-#### Sample responses
+- The API is public, there is no authentication required to access the endpoint.
+- There is nly a single endpoint available 
+- The API only replies in `application/json`
 
-These responses are meant to provide guidance. The exact values can vary based on the data source and scoring algorithm
+### Request with matching results
 
-**Near match**
+**REQUEST**
 
-    GET /suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
+```
+GET /suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
+```
+
+**RESPONSE**
+
+```
+200
+```
 
 ```json
 {
@@ -56,9 +55,19 @@ These responses are meant to provide guidance. The exact values can vary based o
 }
 ```
 
-**No match**
+### Request without matching results
 
-    GET /suggestions?q=SomeRandomCityInTheMiddleOfNowhere
+**REQUEST**
+
+```
+GET /suggestions?q=SomeRandomCityInTheMiddleOfNowhere
+```
+
+**RESPONSE**
+
+```
+404
+```
 
 ```json
 {
@@ -67,63 +76,23 @@ These responses are meant to provide guidance. The exact values can vary based o
 ```
 
 
-### Non-functional
+## Implementation details
 
-- All code should be written in Javascript
-- Mitigations to handle high levels of traffic should be implemented
-- Challenge is submitted as pull request against this repo ([fork it](https://help.github.com/articles/fork-a-repo/) and [create a pull request](https://help.github.com/articles/creating-a-pull-request-from-a-fork/)).
-- Documentation and maintainability is a plus
-
-### References
-
-- Geonames provides city lists Canada and the USA http://download.geonames.org/export/dump/readme.txt
-- http://www.nodejs.org/
-- http://ejohn.org/blog/node-js-stream-playground/
+- This suggestion engine relies heavily on elasticsearch
+- The results are filtered using a prefix query on the name of the cities
+- then the score is calculated using a gaussian of the distance to the search location
 
 
-## Getting Started
+## Contribute
 
-Begin by forking this repo and cloning your fork. GitHub has apps for [Mac](http://mac.github.com/) and
-[Windows](http://windows.github.com/) that make this easier.
+### Requirements
+- node 8
+- npm 5
+- postgresql
+- elasticsearch
 
-### Setting up a Nodejs environment
-
-Get started by installing [nodejs](http://www.nodejs.org).
-
-For OS X users, use [Homebrew](http://brew.sh) and `brew install nvm`
-
-Once that's done, from the project directory, run
-
-```
-nvm use
-```
-
-### Setting up the project
-
-In the project directory run
-
-```
-npm install
-```
-
-### Running the tests
-
-The test suite can be run with
-
-```
-npm test
-```
-
-### Starting the application
-
-To start a local server run
-
-```
-PORT=3456 npm start
-```
-
-which should produce output similar to
-
-```
-Server running at http://127.0.0.1:2345/suggestions
-```
+### Start
+- Run `npm install`
+- Import a sample of the cities into the postgresql database by running `./tasks/import-data.js`
+- Create or Recreate the elasticsearch index and the index the cities with `./tasks/index-cities.js`
+- You can now start the server: `node app.js`

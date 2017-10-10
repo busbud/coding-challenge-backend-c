@@ -1,0 +1,102 @@
+id	name	ascii	alt_name	lat	long	feat_class	feat_code	country	cc2	admin1	admin2	admin3	admin4	population	elevation	dem	tz	modified_at
+5881791	Abbotsford	Abbotsford	Abbotsford,YXX,Абботсфорд	49.05798	-122.25257	P	PPL	CA		02	5957659			151683		114	America/Vancouver	2013-04-22
+5882142	Acton Vale	Acton Vale		45.65007	-72.56582	P	PPL	CA		10	16			5135		90	America/Montreal	2008-04-11
+5882799	Airdrie	Airdrie	Erdri,ai er de li,ayrdray,ayrdry,eeodeuli,Ердри,إيردراي,ائرڈرائ,ایردری,艾尔德里,에어드리	51.30011	-114.03528	P	PPL	CA		01				24673		1086	America/Edmonton	2008-04-11
+5882873	Ajax	Ajax	Adzhaks,Ehjdzhaks,Ejdzaks,ajaks, awntaryw,eijegseu,Аджакс,Ејџакс,Эйджакс,أجاكس، أونتاريو,에이젝스	43.85012	-79.03288	P	PPL	CA		08				90167		97	America/Toronto	2011-12-30
+5884083	Alma	Alma	Al'ma,Alma,YTF,alma,alma, kbk,alma, kybk,Алма,Альма,آلما,آلما، کبک,ألما، كيبك	48.55009	-71.6491	P	PPL	CA		10	02			29526		90	America/Montreal	2010-01-29
+5884467	Amherst	Amherst		45.83345	-64.19874	P	PPL	CA		07				9336		20	America/Halifax	2008-04-11
+5884473	Amherstburg	Amherstburg		42.11679	-83.04985	P	PPL	CA		08				11459		183	America/Toronto	2006-01-22
+5884588	Amos	Amos	Amos,YEY,amws,amws, kbk,amws, kybk,Амос,آموس، کبک,أموس، كيبك,اموس	48.56688	-78.11624	P	PPL	CA		10	08			17918		298	America/Montreal	2010-09-22
+5885280	Angus	Angus		44.31681	-79.88295	P	PPLL	CA		08				10269		193	America/Toronto	2006-01-27
+5885383	Anmore	Anmore		49.31637	-122.85263	P	PPL	CA		02	5915			126456		183	America/Vancouver	2013-08-28
+5886182	Antigonish	Antigonish		45.61685	-61.99858	P	PPL	CA		07				5003		17	America/Halifax	2008-04-11
+5887214	Arnprior	Arnprior		45.43341	-76.34939	P	PPL	CA		08				9607		72	America/Toronto	2008-04-11
+5887470	Asbestos	Asbestos		45.76678	-71.9324	P	PPL	CA		10	05			7190		252	America/Montreal	2008-04-11
+5888716	Aylmer	Aylmer		42.76679	-80.98302	P	PPL	CA		08				7527		229	America/Toronto	2008-04-11
+5889745	Baie-Comeau	Baie-Comeau	Baie-Comeau,Be Komo,Be-Komo,YBC,bay kamyw,bh-kwmw,byh kwmw, kybk,Бе Комо,Бе-Комо,بائ کامیو,به-کومو,بيه كومو، كيبك	49.21679	-68.14894	P	PPL	CA		10	09			29808		76	America/Montreal	2013-08-17
+5892532	Banff	Banff	Banf,Banfas,Banff,YBA,baenpeu,ban fu,banfu,banpi,bnf,Банф,Банфф,بنف,ბანფი,バンフ,班夫,밴프	51.17622	-115.56982	P	PPL	CA		01				7502		1388	America/Edmonton	2010-06-24
+5894171	Barrie	Barrie	Bari,Baris,Barri,Barrie,Berri,YLK,ba li,baeli,bari,bary,bry,Бари,Барри,Беррі,باري,باری,باری، اونٹاریو,بری,バリー,巴里,배리	44.40011	-79.66634	P	PPL	CA		08				182041		269	America/Toronto	2013-09-22
+5895424	Bay Roberts	Bay Roberts		47.59989	-53.26478	P	PPL	CA		05				13737		9	America/St_Johns	2006-01-22
+5895650	Beaconsfield	Beaconsfield		45.43341	-73.86586	P	PPL	CA		10				19194		33	America/Montreal	2010-09-22
+5896495	Beauharnois	Beauharnois		45.31341	-73.8725	P	PPL	CA		10	16			11918		37	America/Montreal	2013-11-10
+5896522	Beaumont	Beaumont		53.35013	-113.41871	P	PPL	CA		01				7366		716	America/Edmonton	2008-04-11
+5897209	Bécancour	Becancour	Bekankur,bkankwr, kbk,bykankwr, kybk,byknkwr,Беканкур,بيكانكور، كيبك,بکانکور، کبک,بیکنکور	46.33336	-72.43241	P	PPL	CA		10	04			11134		10	America/Montreal	2010-09-22
+5897884	Belleville	Belleville	Bel'vil',Belvil,Bilivailas,belbil,berubiru,bylfy, awntaryw,Белвил,Бельвиль,بيلفي، أونتاريو,بیلول، اونٹاریو,بیلی ولے,ベルビル,벨빌	44.16682	-77.38277	P	PPL	CA		08				49454		93	America/Toronto	2013-04-25
+5898070	Bells Corners	Bells Corners	Bells Corners,Ottawa Bells Corners	45.31588	-75.83012	P	PPL	CA		08				9977		96	America/Toronto	2010-03-18
+5898138	Beloeil	Beloeil		45.56678	-73.19915	P	PPL	CA		10	16			18927		4	America/Montreal	2010-09-22
+5903510	Blainville	Blainville		45.66678	-73.88249	P	PPL	CA		10	15			46493		73	America/Montreal	2010-09-22
+5904501	Bluewater	Bluewater		43.46679	-81.59977	P	PPL	CA		08				7044		249	America/Toronto	2013-05-05
+5905132	Boisbriand	Boisbriand		45.61678	-73.83249	P	PPL	CA		10	15			26483		30	America/Montreal	2010-09-22
+5905152	Bois-des-Filion	Bois-des-Filion		45.66678	-73.74918	P	PPL	CA		10				8383		17	America/Montreal	2010-09-22
+5905616	Bonnyville	Bonnyville	Bonivil,YBY,Бонивил	54.26684	-110.73505	P	PPL	CA		01				6003		555	America/Edmonton	2008-04-11
+5906267	Boucherville	Boucherville	Bushervil,Bushervil',bushavu~iru,bwshyfyl, kybk,Бушервил,Бушервиль,باؤچرولے,بوشيفيل، كيبك,ブーシャーヴィル	45.59104	-73.43605	P	PPL	CA		10	16			39062		16	America/Montreal	2010-09-22
+5907092	Bracebridge	Bracebridge		45.03341	-79.31633	P	PPL	CA		08				8238		240	America/Toronto	2006-01-22
+5907180	Bradford West Gwillimbury	Bradford West Gwillimbury		44.11681	-79.61633	P	PPL	CA		08				18811		264	America/Toronto	2008-04-11
+5907364	Brampton	Brampton	Brampton,Bramptonas,Bramptono,Bramptun,XPN,barampatana,beulaemteon,braimpatana,brambtwn,bramptan,bramtana,bu lan pu dun,buranputon,piramptan,Брамптон,Брамптън,برامبتون,برامپٹن، انٹاریو,بریمپٹن,ब्राम्टन,ब्रैंपटन,ਬਰਾਂਪਟਨ,பிராம்ப்டன்,బ్రాంప్టన్,ബ്രംപ്ടൺ,බ්‍රැම්ටන්,ブランプトン,布兰普顿,브램턴	43.68341	-79.76633	P	PPL	CA		08				433806		221	America/Toronto	2010-09-22
+5907896	Brandon	Brandon	Brandon,Branton,Brehndon,Brendon,YBR,bu lan deng,burandon,Μπράντον,Брандон,Брендон,Брэндон,برینڈن,ブランドン,布兰登	49.84692	-99.95306	P	PPL	CA		03				26234		383	America/Winnipeg	2010-01-29
+5907983	Brant	Brant		43.1334	-80.34967	P	PPL	CA		08				34415		245	America/Toronto	2010-09-22
+5907990	Brantford	Brantford	Brantford,Brantfordas,XFV,beulaenteupeodeu,brantfwrd, awntaryw,burantofodo,Брантфорд,برانتفورد، أونتاريو,برانٹفورڈ,برینٹفورڈ,ブラントフォード,브랜트퍼드	43.1334	-80.26636	P	PPL	CA		08				87759		200	America/Toronto	2008-04-11
+5908723	Bridgewater	Bridgewater		44.38345	-64.51546	P	PPL	CA		07				8070		27	America/Halifax	2008-04-11
+5909294	Brockville	Brockville	Brokvil,Brokvill,Brukvailas,Gorad Brokvil,XBR,brwk-wl,brwkfyl, awntaryw,burokkubiru,Броквил,Броквилл,Горад Броквіл,بروكفيل، أونتاريو,بروک ولے,بروک-ول,ブロックビル	44.59132	-75.68705	P	PPL	CA		08				23886		93	America/Toronto	2013-05-16
+5909403	Bromont	Bromont	ZBM	45.31678	-72.64912	P	PPL	CA		10	16			6049		126	America/Montreal	2010-09-22
+5909514	Brooks	Brooks	Broks,Bruks,beulugseu,brwks,Брукс,بروکس,ბროკსი,브룩스	50.58341	-111.88509	P	PPL	CA		01				12744		748	America/Edmonton	2008-04-11
+5909629	Brossard	Brossard	Brosar,brwsar,burosado,Бросар,بروسار,بروسارڈ,ブロサード	45.45008	-73.46583	P	PPL	CA		10	16			69575		17	America/Montreal	2008-04-11
+5909969	Brownsburg-Chatham	Brownsburg-Chatham		45.68342	-74.4159	P	PPL	CA		10	15			6664		157	America/Montreal	2010-09-22
+5911592	Burlington	Burlington	Berlington,barinton,beollingteon,byrlynjtwn, awntaryw,Берлингтон,Берлінгтон,برلنگٹن,بيرلينجتون، أونتاريو,バーリントン,벌링턴	43.38621	-79.83713	P	PPL	CA		08				164415		165	America/Toronto	2010-09-22
+5911606	Burnaby	Burnaby	Barnabis,Bernabi,Bjornabi,Burnabi,Burnaby,banabi,banabi shi,ben na bi,beonabi,brnyby,bwrnby,Бернаби,Бернабі,Бърнаби,Бёрнаби,Бөрнаби,برنابے، برٹش کولمبیا,برنیبی,بورنبي,バーナビー,バーナビー市,本那比,버나비	49.26636	-122.95263	P	PPL	CA		02				202799		87	America/Vancouver	2010-09-22
+5913490	Calgary	Calgary	Calgaria,Calgary,Gorad Kalgary,Kalgari,Kalgario,Kalgaris,Kalnkari,Kalqari,Kelgery,YYC,ka er jia li,kaelgeoli,kailagari,kalgari,kalghary,kalgry,kalkari,karugari,kelgari,kyalgari,qlgry,Κάλγκαρι,Горад Калгары,Калгари,Калгарі,Կալգարի,קלגרי,كالغاري,کالگری,कॅल्गारी,कैलगरी,கால்கரி,కాల్గరీ,ಕ್ಯಾಲ್ಗರಿ,แคลกะรี,ကယ်လ်ဂရီမြို့,კალგარი,カルガリー,卡尔加里,캘거리	51.05011	-114.08529	P	PPL	CA		01				1019942	1048	1042	America/Edmonton	2012-07-01
+5913695	Cambridge	Cambridge	Kembridz,Kembridzh,jian qiao,kambrydj, awntaryw,kenburijji,kymbrj,Кембридж,Кембриџ,كامبريدج، أونتاريو,کیمبرج,ケンブリッジ,剑桥	43.3601	-80.31269	P	PPL	CA		08				120372		272	America/Toronto	2010-04-28
+5913934	Camlachie	Camlachie		43.03596	-82.1616	P	PPL	CA		08				7506		200	America/Toronto	2011-11-27
+5914132	Campbell River	Campbell River	Kehmpbell-River,Kembel River,Kembell-River,YBL,kaembellibeo,kambl ryfr, kwlwmbya albrytanyt,kan bei er he,kyanberuriba,Кембел Ривер,Кембелл-Ривер,Кэмпбелл-Ривер,كامبل ريفر، كولومبيا البريطانية,キャンベルリバー,坎贝尔河,캠벨리버	50.01634	-125.24459	P	PPL	CA		02				33430		65	America/Vancouver	2008-04-11
+5914653	Camrose	Camrose	Kamrouz,Keimrozas,kmrwz,kym rwz,Камроуз,کمروز,کیم روز	53.01684	-112.83525	P	PPL	CA		01				15686		739	America/Edmonton	2008-04-11
+5914826	Candiac	Candiac		45.38338	-73.51587	P	PPL	CA		10	16			15947		25	America/Montreal	2010-09-22
+5914894	Canmore	Canmore	Kanmor,kan mo er,Канмор,坎莫尔	51.08335	-115.35206	P	PPL	CA		01				12288		1309	America/Edmonton	2008-04-11
+5916722	Carbonear	Carbonear		47.73319	-53.21478	P	PPL	CA		05				6814		11	America/St_Johns	2006-01-22
+5917117	Carignan	Carignan		45.45008	-73.29916	P	PPL	CA		10	16			7426		10	America/Montreal	2010-09-22
+5917158	Carleton Place	Carleton Place		45.13341	-76.14938	P	PPL	CA		08				9743		144	America/Toronto	2008-04-11
+5918118	Castlegar	Castlegar	Kaslgar,YCG,ka si er jia,kaslghar, kwlwmbya albrytanyt,Каслгар,كاسلغار، كولومبيا البريطانية,卡斯尔加	49.29984	-117.66894	P	PPL	CA		02				8715		613	America/Vancouver	2008-04-11
+5919566	Chambly	Chambly	Shambli,chymbly,shambly, kbk,shwmbly, kybk,Шамбли,Шамблі,شامبلی، کبک,شومبلي، كيبك,چیمبلی	45.45008	-73.28246	P	PPL	CA		10	16			22608		4	America/Montreal	2010-09-23
+5920089	Charlemagne	Charlemagne		45.71678	-73.48247	P	PPL	CA		10	14			5594		7	America/Montreal	2010-09-23
+5920288	Charlottetown	Charlottetown	Baile Shearlot,Baile Sheàrlot,Carlotauno,Carolinapolis,Charlottetown,Sarlotetaunas,Sarlottaoun,Sarlottaun,Sharlottaun,Sharluttaun,YYG,carlattavun,sharottotaun,syalleostaun,xia luo te dun,Ĉarlotaŭno,Şarlottaun,Šarlotetaunas,Σαρλοττάουν,Шарлоттаун,Шарлъттаун,שרלוטטאון,شارلوت‌تاون,சார்லட்டவுன்,შარლოტტაუნი,シャーロットタウン,夏洛特顿,샬럿타운	46.23525	-63.12671	P	PPLA	CA		09				42402		12	America/Halifax	2010-07-29
+5920433	Châteauguay	Chateauguay		45.38338	-73.74919	P	PPL	CA		10	16			42786		19	America/Montreal	2010-09-22
+5921147	Chibougamau	Chibougamau	YMT	49.91684	-74.36586	P	PPL	CA		10	10			7563		407	America/Montreal	2010-09-23
+5921356	Chilliwack	Chilliwack	YCW	49.16638	-121.95257	P	PPLA2	CA		02	5909			77000		11	America/Vancouver	2013-07-27
+5923101	Clarence-Rockland	Clarence-Rockland		45.5501	-75.29101	P	PPL	CA		08				20790		55	America/Toronto	2010-09-22
+5924417	Coaldale	Coaldale		49.7167	-112.61854	P	PPL	CA		01				6317		865	America/Edmonton	2008-04-11
+5924500	Coaticook	Coaticook		45.13339	-71.79907	P	PPL	CA		10	05			7021		289	America/Montreal	2008-04-11
+5924579	Cobourg	Cobourg	Cobourg,Koburg,XGJ,ke bao,kwbwrgh, awntaryw,Кобург,كوبورغ، أونتاريو,科堡	43.95977	-78.16515	P	PPL	CA		08				18099		82	America/Toronto	2013-11-02
+5924618	Cochrane	Cochrane	Kokran,Кокран	51.18341	-114.46871	P	PPL	CA		01				16365		1143	America/Edmonton	2008-04-11
+5925024	Cold Lake	Cold Lake	Kold Leikas,Kold Lejk,Kold Leyk,Kold-Lejk,YOD,kld lyk,leng hu shi,Колд Лейк,Колд Лејк,Колд-Лейк,کلد لیک,کولڈ لیک,冷湖市	54.46525	-110.18154	P	PPL	CA		01				11595		555	America/Edmonton	2013-09-22
+5925975	Collingwood	Collingwood	Kolingvud,kwlynjwwd, awntaryw,Колингвуд,كولينجوود، أونتاريو	44.4834	-80.21638	P	PPL	CA		08				15809		194	America/Toronto	2008-04-11
+5926268	Colwood	Colwood	Kolvud,kwlwwd, kwlwmbya albrytanyt,Колвуд,كولوود، كولومبيا البريطانية	48.43293	-123.48591	P	PPL	CA		02				14687		95	America/Vancouver	2010-09-22
+5926511	Conception Bay South	Conception Bay South		47.49989	-52.99806	P	PPL	CA		05				17087		48	America/St_Johns	2008-04-11
+5926526	Concord	Concord		43.80011	-79.48291	P	PPL	CA		08				8255		188	America/Toronto	2012-03-01
+5927689	Coquitlam	Coquitlam	Coquitlam,kokittoramu,kokittoramu shi,kokuittoramu,コキットラム,コキットラム市,コクイットラム	49.28297	-122.75262	P	PPL	CA		02				114565		33	America/Vancouver	2010-09-22
+5927969	Corner Brook	Corner Brook	YNF	48.95001	-57.95202	P	PPL	CA		05				18693		4	America/St_Johns	2013-08-10
+5928065	Cornwall	Cornwall	Kornvol,YCC,kang wo er,karnwal,kwrnwal, awntaryw,Корнвол,كورنوال، أونتاريو,کارنوال,康沃尔	45.01809	-74.72815	P	PPL	CA		08				48821		59	America/Toronto	2009-07-31
+5928488	Côte-Saint-Luc	Cote-Saint-Luc		45.46536	-73.66585	P	PPL	CA		10				31395		47	America/Montreal	2010-09-23
+5930890	Courtenay	Courtenay	Courtenay,Kortenej,Kortni,Kurteneh,YCA,kwrtynay, kwlwmbya albrytanyt,Кортеней,Кортни,Куртенэ,كورتيناي، كولومبيا البريطانية,کورٹینی، برٹش کولمبیا	49.68657	-124.9936	P	PPL	CA		02				32793		13	America/Vancouver	2013-10-27
+5931074	Cowansville	Cowansville		45.20008	-72.74913	P	PPL	CA		10	16			10887		117	America/Montreal	2008-04-11
+5931800	Cranbrook	Cranbrook	Kranbruk,YXC,kranbrwk, kwlwmbya albrytanyt,Кранбрук,كرانبروك، كولومبيا البريطانية	49.49991	-115.76879	P	PPL	CA		02				18610		949	America/Edmonton	2008-04-11
+5935277	Dartmouth	Dartmouth	ഡാർട്മൗത്	44.67134	-63.57719	P	PPL	CA		07				101343		35	America/Halifax	2010-09-22
+5935341	Dauphin	Dauphin	Dofen,Dofin,YDN,Дофен,Дофін,ڈافن، مینی ٹوبا,ڈوفن	51.14941	-100.05023	P	PPL	CA		03				8418		294	America/Winnipeg	2008-04-11
+5935804	Dawson Creek	Dawson Creek	Doson Krik,Doson-Krik,YDQ,dao sen ke li ke,doseunkeulig,dwsn kryk,dxw san kh rik,Досон Крик,Досон-Крик,دوسن كريك,ڈاسنکریک,ดอว์สันครีก,道森克里克,도슨크릭	55.7666	-120.23616	P	PPL	CA		02				10802		685	America/Dawson_Creek	2008-04-11
+5937612	Delson	Delson		45.36678	-73.54917	P	PPL	CA		10	16			7322		27	America/Montreal	2010-09-23
+5937615	Delta	Delta	Del'ta,Дельта	49.14399	-122.9068	P	PPL	CA		02				101668		81	America/Vancouver	2010-02-27
+5938513	Deux-Montagnes	Deux-Montagnes		45.53455	-73.90168	P	PPL	CA		10	15			17402		29	America/Montreal	2010-09-23
+5938801	Devon	Devon		53.36683	-113.73533	P	PPL	CA		01				5225		695	America/Edmonton	2008-04-11
+5939219	Dieppe	Dieppe	D'ep,dieppu,Дьеп,ڈیپی,ディエップ	46.07844	-64.68735	P	PPL	CA		04				18565		42	America/Moncton	2010-09-22
+5940934	Dolbeau-Mistassini	Dolbeau-Mistassini	Dolbeau-Mistassini,YDO	48.8786	-72.23142	P	PPL	CA		10	02			12916		98	America/Montreal	2013-08-17
+5940956	Dollard-Des Ormeaux	Dollard-Des Ormeaux		45.49452	-73.82419	P	PPL	CA		10				48930		34	America/Montreal	2010-09-22
+5941761	Dorchester	Dorchester		42.98339	-81.06643	P	PPL	CA		08				9329		260	America/Toronto	2013-07-17
+5941925	Dorval	Dorval		45.4473	-73.75335	P	PPL	CA		10				18088		27	America/Montreal	2010-09-23
+5942547	Drayton Valley	Drayton Valley	YDC	53.21682	-114.98544	P	PPL	CA		01				6099		846	America/Edmonton	2008-04-11
+5942845	Drummondville	Drummondville	Drammondvill,Drammonvil',Dramondvil,XDM,doramonbiru,drwmwndwyl,drwmwnfyl,Драммонвіль,Драммондвилл,Драмондвил,دروموندویل,درومونفيل,ڈرمنڈولے,ドラモンビル	45.88336	-72.48241	P	PPL	CA		10	17			59489		89	America/Montreal	2013-01-19
+5942913	Dryden	Dryden	YHD	49.78334	-92.75032	P	PPL	CA		08				8195		387	America/Winnipeg	2010-09-22
+5943865	Duncan	Duncan	DUQ,Duncan,Dunkan,Дункан	48.78293	-123.70266	P	PPL	CA		02				22199		14	America/Vancouver	2013-07-21
+5946768	Edmonton	Edmonton	Edmonton,Edmontona,Edmontonas,Edmontono,Edmundopolis,Edmuntun,Ehdmonton,Entmonton,Gorad Ehdmantan,YEA,admwntwn,ai de meng dun,edamantana,edeumeonteon,edomonton,etmantan,Édmonton,Έντμοντον,Горад Эдмантан,Едмонтон,Едмънтън,Эдмонтон,אדמונטון,إدمونتون,ادمونتون,ایڈمنٹن,एडमंटन,எட்மன்டன்,ཨེ་ཏི་མོན་ཐོན།,ედმონტონი,ᐊᒥᐢᑲᐧᒋᐊᐧᐢᑲᐦᐃᑲᐣ,エドモントン,埃德蒙顿,에드먼턴	53.55014	-113.46871	P	PPLA	CA		01				712391	668	610	America/Edmonton	2010-07-24
+5946820	Edson	Edson	Edson,YET,Едсон	53.58345	-116.43559	P	PPL	CA		01				7975		913	America/Edmonton	2008-04-11
+5947866	Elliot Lake	Elliot Lake	Eliot Lejk,YEL,alywt layk,eriottoreiku,Елиот Лејк,إليوت لايك,الیٹ لیک,エリオットレイク	46.38336	-82.63315	P	PPL	CA		08				12508		310	America/Toronto	2008-04-11
+5949568	Estevan	Estevan	YEN	49.13337	-102.98422	P	PPL	CA		11				9904		563	America/Regina	2008-04-11
+5950267	Etobicoke	Etobicoke	Ehtobiko,Etobiko,etobiko,yi tao bi gu,Етобіко,Этобико,エトビコ,怡陶碧谷,에토비코	43.65421	-79.56711	P	PPL	CA		08				347948		148	America/Toronto	2012-02-22
+6077243	Montréal	Montreal	Lungsod ng Montreal,Lungsod ng Montréal,Monreal,Monreal',Monreala,Monrealis,Monreyal,Monreāla,Mons Regius,Mont-real,Montreal,Montreal - Montreal,Montreal - Montréal,Montreal City,Montreali,Montrealo,Montréal,YMQ,meng te li er,monreali,monteuliol,montorioru,mwntral,mwntryal,Μοντρεαλ,Μόντρεαλ,Монреал,Монреаль,Монтреал,מונטריאול,مونترآل,مونتریال,مونترېئال,მონრეალი,ᒧᕆᐊᓪ,モントリオール,蒙特利尔,몬트리올	45.50884	-73.58781	P	PPLA2	CA		10	06			3268513		216	America/Montreal	2012-08-02

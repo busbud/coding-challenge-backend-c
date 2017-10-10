@@ -1,16 +1,33 @@
-var http = require('http');
-var port = process.env.PORT || 2345;
+const http = require('http');
+const createSuggestionsHanlder = require('./handlers/suggestions');
+const createElasticsearchClient = require('./services/elasticsearch');
 
-module.exports = http.createServer(function (req, res) {
-  res.writeHead(404, {'Content-Type': 'text/plain'});
+const port = process.env.PORT || 2345;
 
-  if (req.url.indexOf('/suggestions') === 0) {
-    res.end(JSON.stringify({
-      suggestions: []
-    }));
-  } else {
-    res.end();
-  }
-}).listen(port, '127.0.0.1');
+const createApp = ({ esClient } = {}) => {
+  const suggestionsHanlder = createSuggestionsHanlder({
+    esClient: esClient || createElasticsearchClient(),
+  });
 
-console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+  return http
+    .createServer(async (req, res) => {
+      if (req.url.indexOf('/suggestions') === 0) {
+        const { status = 404, headers = {}, body = {} } = await suggestionsHanlder(req);
+
+        res.writeHead(status, { ...headers, 'Content-Type': 'application/json; charset=utf-8' });
+        res.end(JSON.stringify(body));
+      } else {
+        res.writeHead(404, { 'Content-Type': 'text/plain' });
+        res.end();
+      }
+    })
+    .listen(port, '0.0.0.0', () => {
+      console.log('Server running at http://0.0.0.0:%d/suggestions', port);
+    });
+};
+
+if (require.main === module) {
+  createApp();
+} else {
+  module.exports = createApp;
+}
