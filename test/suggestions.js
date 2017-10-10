@@ -51,7 +51,8 @@ describe('GET /suggestions', function() {
     it('contains a match', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.some(function (suggestion) {
-          return suggestion.name.test(/montreal/i);
+          var regex = /montreal/i;
+          return regex.test(suggestion.name)
         });
       })
     });
@@ -72,4 +73,29 @@ describe('GET /suggestions', function() {
       })
     });
   });
+
+  describe('with accents', function () {
+    var response;
+
+    before(function (done) {
+      request
+        .get('/suggestions?q=Montréal')
+        .end(function (err, res) {
+          response = res;
+          response.json = JSON.parse(res.text);
+          done(err);
+        });
+    });
+
+    it('contains a match', function () {
+      expect(response.json.suggestions).to.satisfy(function (suggestions) {
+        return suggestions.some(function (suggestion) {
+          var regex = /montreal/i;
+          return regex.test(suggestion.name)
+        });
+      })
+    });
+
+  });
+
 });
