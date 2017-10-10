@@ -11,8 +11,13 @@
   "license": "WTFPL",
   "dependencies": {
     "chai": "^1.9.1",
+    "elasticsearch": "^13.3.1",
     "mocha": "^1.18.2",
-    "supertest": "^0.11.0"
+    "pg": "^6.4.2",
+    "sequelize": "^4.13.5",
+    "sequelize-cli": "^3.0.0",
+    "supertest": "^0.11.0",
+    "throat": "^4.1.0"
   },
   "engines": {
     "node": "8.6.0"
