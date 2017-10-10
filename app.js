@@ -4,7 +4,7 @@ const createElasticsearchClient = require('./services/elasticsearch');
 
 const port = process.env.PORT || 2345;
 
-module.exports = ({ esClient }) => {
+const createApp = ({ esClient } = {}) => {
   const suggestionsHanlder = createSuggestionsHanlder({
     esClient: esClient || createElasticsearchClient(),
   });
@@ -21,7 +21,13 @@ module.exports = ({ esClient }) => {
         res.end();
       }
     })
-    .listen(port, '0.0.0.0');
+    .listen(port, '0.0.0.0', () => {
+      console.log('Server running at http://0.0.0.0:%d/suggestions', port);
+    });
 };
 
-console.log('Server running at http://0.0.0.0:%d/suggestions', port);
+if (require.main === module) {
+  createApp();
+} else {
+  module.exports = createApp;
+}
