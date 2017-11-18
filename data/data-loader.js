@@ -57,7 +57,7 @@ export default function loadData() {
   });
 }
 
-export function findMatches(prefix) {
+export function findMatches(prefix, latitude, longitude) {
 	if (!prefix) {
 		return [];
 	}
@@ -68,13 +68,17 @@ export function findMatches(prefix) {
 			name: data.name + ' ' + data.state + ' ' + data.country,
 			latitude: data.lat,
 			longitude: data.long,
-			score: calculateScore(data.lat, data.long),
+			score: calculateScore(latitude, longitude, data.lat, data.long),
 		};
 	});
 }
 
 // TODO
-function calculateScore(latitude, longitude) {
+// Naive approach:
+// 1 - (distance of a suggested place from the origin divided by max distance of all suggested places)
+// More sophisticated approach: decay function (e.g. linear, exponential, gaussian)
+// But which one fits the best for our problem?
+function calculateScore(originLat, originLong, suggestionLat, suggestionLong) {
 	return 0.5;
 }
 
