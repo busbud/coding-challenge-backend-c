@@ -14,8 +14,9 @@ var server = http.createServer(function (req, res) {
 	}
 });
 
-loadData().then(() => {
-  console.log('Finished loading data.')
+loadData().then((cityTree) => {
+  server.cityTree = cityTree;
+  console.log('Finished loading data.');
   server.listen(port, '127.0.0.1');
   console.log('Server running at http://127.0.0.1:%d/suggestions', port);
 }).catch((err) => {

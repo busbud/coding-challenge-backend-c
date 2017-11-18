@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as csv from 'fast-csv';
+import PrefixTree from "./prefix-tree";
 
 const DATA_FILENAME = 'cities_canada-usa.tsv';
 const MIN_POPULATION = 5001;
@@ -12,6 +13,8 @@ export default function loadData() {
     let maxCharCount = 0;
     let longestName = null;
     let moreThan20CharNameCount = 0;
+    const cityTree = new PrefixTree();
+
     csv
       .fromStream(stream, { headers : true, delimiter: '\t', quote: null })
       .on("data", function(data){
@@ -32,13 +35,23 @@ export default function loadData() {
 							moreThan20CharNameCount++;
 						}
 					});
+
+					allNames.forEach((name) => {
+						cityTree.add(name.toLowerCase(), {
+							name,
+							lat,
+							long,
+							state: admin1,
+							country,
+						});
+					});
 				}
       })
       .on("end", function(){
 				console.log(`Total ${totalCity} city names (including ASCII and alternate names) with above ${MIN_POPULATION-1} population.`);
 				console.log(`Only ${moreThan20CharNameCount} names have more than 20 characters.`);
 				console.log(`Longest name \"${longestName}\" has ${maxCharCount} characters`);
-				return resolve();
+				return resolve(cityTree);
       });
   });
 }
