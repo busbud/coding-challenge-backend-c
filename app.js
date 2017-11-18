@@ -19,7 +19,7 @@ var server = http.createServer(function (req, res) {
 
 		res.end(JSON.stringify({
 			suggestions
-		}));
+		}, null, 4));
 	} else {
 		res.end();
 	}
