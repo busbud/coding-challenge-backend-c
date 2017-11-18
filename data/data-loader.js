@@ -1,10 +1,12 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as csv from 'fast-csv';
+import * as _ from 'lodash';
 import PrefixTree from "./prefix-tree";
 
 const DATA_FILENAME = 'cities_canada-usa.tsv';
 const MIN_POPULATION = 5001;
+const cityTree = new PrefixTree();
 
 export default function loadData() {
   return new Promise((resolve, reject) => {
@@ -13,7 +15,6 @@ export default function loadData() {
     let maxCharCount = 0;
     let longestName = null;
     let moreThan20CharNameCount = 0;
-    const cityTree = new PrefixTree();
 
     csv
       .fromStream(stream, { headers : true, delimiter: '\t', quote: null })
@@ -51,9 +52,30 @@ export default function loadData() {
 				console.log(`Total ${totalCity} city names (including ASCII and alternate names) with above ${MIN_POPULATION-1} population.`);
 				console.log(`Only ${moreThan20CharNameCount} names have more than 20 characters.`);
 				console.log(`Longest name \"${longestName}\" has ${maxCharCount} characters`);
-				return resolve(cityTree);
+				return resolve();
       });
   });
+}
+
+export function findMatches(prefix) {
+	if (!prefix) {
+		return [];
+	}
+
+	const matches = cityTree.findMatches(prefix.toLowerCase());
+	return _.map(matches, (data) => {
+		return {
+			name: data.name + ' ' + data.state + ' ' + data.country,
+			latitude: data.lat,
+			longitude: data.long,
+			score: calculateScore(data.lat, data.long),
+		};
+	});
+}
+
+// TODO
+function calculateScore(latitude, longitude) {
+	return 0.5;
 }
 
 // maxCharCount: Current maximum number of characters in a name

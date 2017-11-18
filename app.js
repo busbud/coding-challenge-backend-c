@@ -1,21 +1,31 @@
 var http = require('http');
-import loadData from './data/data-loader';
+var url = require('url');
+
+import loadData, { findMatches } from './data/data-loader';
+
 var port = process.env.PORT || 2345;
 
 var server = http.createServer(function (req, res) {
-	res.writeHead(404, {'Content-Type': 'text/plain'});
 
 	if (req.url.indexOf('/suggestions') === 0) {
+		const { query } = url.parse(req.url, true);
+		const suggestions = findMatches(query.q);
+
+		if (suggestions.length) {
+			res.writeHead(200, {'Content-Type': 'application/json'});
+		} else {
+			res.writeHead(404, {'Content-Type': 'text/plain'});
+		}
+
 		res.end(JSON.stringify({
-			suggestions: []
+			suggestions
 		}));
 	} else {
 		res.end();
 	}
 });
 
-loadData().then((cityTree) => {
-  server.cityTree = cityTree;
+loadData().then(() => {
   console.log('Finished loading data.');
   server.listen(port, '127.0.0.1');
   console.log('Server running at http://127.0.0.1:%d/suggestions', port);
