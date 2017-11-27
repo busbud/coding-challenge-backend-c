@@ -125,5 +125,5 @@ PORT=3456 npm start
 which should produce output similar to
 
 ```
-Server running at http://127.0.0.1:2345/suggestions
+Server running at http://127.0.0.1:3456/suggestions
 ```
