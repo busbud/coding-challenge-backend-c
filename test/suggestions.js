@@ -8,7 +8,7 @@ describe('GET /suggestions', function() {
 
     before(function (done) {
       request
-        .get('/suggestions?q=SomeRandomCityInTheMiddleOfNowhere')
+        .get('/suggestions?q=SomeRandomStringThatIsntACityEvenInTheMiddleOfNowhere')
         .end(function (err, res) {
           response = res;
           response.json = JSON.parse(res.text);
@@ -16,8 +16,9 @@ describe('GET /suggestions', function() {
         });
     });
 
-    it('returns a 404', function () {
-      expect(response.statusCode).to.equal(404);
+    // Empty response should return a 404 ? => Not finding a result is different from not finding a resource
+    it('returns a 200', function () {
+      expect(response.statusCode).to.equal(200);
     });
 
     it('returns an empty array of suggestions', function () {
@@ -51,7 +52,7 @@ describe('GET /suggestions', function() {
     it('contains a match', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.some(function (suggestion) {
-          return suggestion.name.test(/montreal/i);
+          return /montreal/i.test(suggestion.name);
         });
       })
     });
