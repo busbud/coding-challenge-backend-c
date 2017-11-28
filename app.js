@@ -1,48 +1,52 @@
 var http = require('http');
-var url = require('url');
-var search = require('./search.js');
-var Readable = require('stream').Readable;
+var search = require("./search.js");
 
 var port = process.env.PORT || 2345;
 
-// we replace JSON stringify by string chunks. For fun, it is made with streams, not sure if that part is optimum though
-var resFormatter = function(items) {
-  var readable = new Readable();
-  readable._read = function noop() {console.log("_read")}; // https://stackoverflow.com/questions/12755997/how-to-create-streams-from-string-in-node-js
-  readable.push('{"suggestions": [');
-  readable.push('"' + items.join('","') + '"');
-  readable.push(']}');
-  readable.push(null);
-  return readable;
-}
+// WARNING there is no sanity check on parameters parsing!
+
+var basePath = "/suggestions?q=";
+var latParam = "latitude=";
+var lonParam = "longitude=";
 
 // Server start
-var server = http.createServer(function (req, res) {
-  var urlData = url.parse(req.url, true); // Possibility of manual parsing of url, but lack of time for this. Not sure of performance of this.
+module.exports = http.createServer(function (req, res) {
+	try {
+		var urlChunks = req.url.split("&");
+		var q = decodeURIComponent(urlChunks[0]);
 
-  if (urlData.pathname === "/suggestions") { // indexOf === 0 was a problem in case of mismatch, it would have parsed the whole string
+		if (!q.startsWith(basePath) || q.length == basePath.length) {
 
-    if (!urlData.query.q) {
+			res.writeHead(400, { 'Content-Type': 'text/plain; charset=utf-8' });
+			res.end("Service only responds on query beginning with " + basePath);
 
-      res.writeHead(400, { 'Content-Type': 'text/plain' });
-      res.end("Query is empty! Please add a 'q' query parameter to get suggestions");
+		} else {
 
-    } else {
+			var query = q.substring(basePath.length).toLowerCase();
+			var result = search(query, () => parseLatLon(urlChunks));
 
-      res.writeHead(400, { 'Content-Type': 'text/json' });
-      resFormatter(search.perform(urlData.query.q.toLowerCase()))
-        // .pipe to gzip ? => Note: also needs a check of accept header
-        .pipe(res);
+			if (!result) {
+				res.writeHead(404, { 'Content-Type': 'text/json; charset=utf-8' });
+				res.end('{"suggestions": []}');
+			} else {
+				res.writeHead(200, { 'Content-Type': 'text/json; charset=utf-8' });
+				result
+					// could .pipe to gzip (Note: this needs a check of the accept header)
+					.pipe(res);
+			}
+		}
+	} catch (e) {
+		res.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' });
+		res.end("(✖╭╮✖) Unexpected error :" + e.message);
+	}
+}).listen(port, () => console.log('Server running at http://0.0.0.0:%d/suggestions', port));
 
-    }
-  } else {
-
-    res.writeHead(404, { 'Content-Type': 'text/plain' });
-    res.end("Path not handled!");
-
-  }
-}).listen(port, '127.0.0.1');
-
-console.log('Server running at http://127.0.0.1:%d/suggestions', port); // is listen synchronous ? is this log on the right place ?
-
-module.exports = server;
+var parseLatLon = function (urlChunks) {
+	if (urlChunks.length == 3) {
+		var lat, lon;
+		if (urlChunks[1].startsWith(latParam)) lat = parseFloat(urlChunks[1].substring(latParam.length));
+		if (urlChunks[2].startsWith(lonParam)) lon = parseFloat(urlChunks[2].substring(lonParam.length));
+		if (!isNaN(lat) && !isNaN(lon))
+			return [lat, lon];
+	}
+}
