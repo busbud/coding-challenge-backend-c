@@ -10,6 +10,8 @@ const http = require('http');
 
 const port = process.env.PORT || 2345;
 
+console.log('Start busbud API');
+
 // some initialization
 if (process.env.NODE_ENV !== 'production') {
   const result = require('dotenv').load();
