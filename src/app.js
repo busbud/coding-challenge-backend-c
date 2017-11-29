@@ -77,7 +77,7 @@ app.get('/suggestions', async (req, res) => {
   }
 });
 
-app.listen(port, '0.0.0.0', function() {
+app.listen(port, function() {
   console.log(`Busbud API server ${port}!`);
 });
 
