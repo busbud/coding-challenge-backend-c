@@ -5,7 +5,7 @@ const querystring = require('querystring');
 const cityRequester = require("./modules/city-requester");
 
 module.exports = http.createServer(function(req, res) {
-    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
     if (req.url.indexOf('/suggestions') === 0) {
         const requestQuery = querystring.parse(url.parse(req.url).query);
         const suggestionsQuery = {
