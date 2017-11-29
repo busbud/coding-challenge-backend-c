@@ -1,4 +1,4 @@
-# Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
+# Busbud Coding Challenge [![Build Status](https://circleci.com/gh/alexandre-ta/coding-challenge-backend-c/tree/master.png?circle-token=a622f20004eff7250ab70a13c770046407a5d816)](https://circleci.com/gh/alexandre-ta/coding-challenge-backend-c)
 
 ## Requirements
 
@@ -17,13 +17,25 @@ The suggestions should be restricted to cities in the USA and Canada with a popu
 - the final application should be [deployed to Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs).
 - feel free to add more features if you like!
 
+## Score calculation
+
+The score calculation is based on the popularity of the city and the location.
+The popularity is computed as follow :
+- the number of time the city is called during the lifetime of the application (global popularity)
+- the number of time the city is called during the last hour, concretely, if during the last hour a huge number of people search a particular city, this city will be on the top of the list (instant popularity)
+
+The score is also based on the location, the closest city from the current location will have a better score.
+
+Once we retrieve all these scores, we can calculate the score :
+Score = global popularity + instant popularity + location score
+
 #### Sample responses
 
 These responses are meant to provide guidance. The exact values can vary based on the data source and scoring algorithm
 
 **Near match**
 
-    GET /suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
+    POST /suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
 
 ```json
 {
@@ -58,7 +70,7 @@ These responses are meant to provide guidance. The exact values can vary based o
 
 **No match**
 
-    GET /suggestions?q=SomeRandomCityInTheMiddleOfNowhere
+    POST /suggestions?q=SomeRandomCityInTheMiddleOfNowhere
 
 ```json
 {

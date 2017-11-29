@@ -1,6 +1,6 @@
 {
   "name": "coding-challenge-backend-c",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "coding challenge in Nodejs",
   "main": "app.js",
   "scripts": {
@@ -10,9 +10,15 @@
   "author": "",
   "license": "WTFPL",
   "dependencies": {
-    "chai": "^1.9.1",
-    "mocha": "^1.18.2",
-    "supertest": "^0.11.0"
+    "chai": "^1.10.0",
+    "event-stream": "^3.3.4",
+    "express": "^4.16.2",
+    "geopoint": "^1.0.1",
+    "mocha": "^1.21.5",
+    "sort-by": "^1.2.0",
+    "sprintf": "^0.1.5",
+    "supertest": "^0.11.0",
+    "toobusy-js": "^0.5.1"
   },
   "engines": {
     "node": "0.10.26"
