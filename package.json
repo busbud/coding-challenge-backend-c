@@ -36,7 +36,7 @@
     "utf8": "^2.1.2"
   },
   "engines": {
-    "node": "0.10.26"
+    "node": "6.10.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0-beta.32",
