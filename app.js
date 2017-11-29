@@ -775,7 +775,9 @@ const JSONStream$1 = require('JSONStream');
 
 const Pool = require('pg-pool');
 
-const url = require('url');
+const {
+  URL
+} = require('url');
 
 class Database$1 {
   constructor(connectionString) {
@@ -820,7 +822,7 @@ class Database$1 {
       }()
     });
     console.log('connectionstring', connectionString);
-    const params = url.parse(connectionString);
+    const params = new URL(connectionString);
     const config = {
       user: params.username,
       password: params.password,
@@ -828,6 +830,7 @@ class Database$1 {
       port: params.port,
       database: params.pathname.split('/')[1]
     };
+    console.log('PostgreSql config parsed', JSON.stringify(config));
     this.pool = new Pool(config);
   }
 
