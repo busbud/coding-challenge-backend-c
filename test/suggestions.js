@@ -55,7 +55,7 @@ var checkValid = function (query, regex) {
 				.get(query)
 				.end(function (err, res) {
 					response = res;
-					response.json = JSON.parse(res.text);
+					if (res.text.startsWith('{')) response.json = JSON.parse(res.text);
 					done(err);
 				});
 		});
@@ -100,7 +100,7 @@ describe('GET /suggestions', function () {
 
 	describe('with an empty city name', checkStatus('/suggestions?q=', 400));
 
-	describe('with empty geo position', checkStatus('/suggestions?q=a&latitude=&longitude=', 200));
+	describe('with empty geo position', checkValid('/suggestions?q=a&latitude=&longitude=', /^a/i));
 
 	describe('with invalid geo position', checkStatus('/suggestions?q=a&latitude=a&longitude=a', 200)); // Now working, TODO find other case to trigger a 500
 	
