@@ -14,7 +14,7 @@ module.exports = (() => {
                 if (chunk.population && parseInt(chunk.population, 10) > 5000) {
                     //filter by city name
                     if (chunk.name.toLowerCase().includes(filter)) {
-                        this.push({
+                        const city = {
                             id: chunk.id,
                             rawName: chunk.name,
                             name: `${chunk.name}, ${chunk.admin1}, ${chunk.country}`,
@@ -22,7 +22,8 @@ module.exports = (() => {
                             longitude: chunk.long,
                             country: chunk.country,
                             code: chunk.admin1
-                        });
+                        };
+                        this.push(city);
                     }
                 }
                 callback();
@@ -36,7 +37,17 @@ module.exports = (() => {
         filter = filter.toLowerCase();
         return new Promise((resolve, reject) => {
             const suggestions = [];
-            const stream = fs.createReadStream(dataFilename)
+            //filter data with city name
+            const filterDataTransformer = filterData(filter);
+            //cumulate data to return
+            const cumulateDataTransformer =
+                es.mapSync((data) => {
+                    suggestions.push(data);
+                });
+            //pipe transformers
+            pipeTransformers([filterDataTransformer, ...transformers, cumulateDataTransformer]);
+            //read stream and go !
+            fs.createReadStream(dataFilename)
                 .on("end", () => {
                     resolve(suggestions);
                 })
@@ -48,17 +59,14 @@ module.exports = (() => {
                     //string that can't be find in the file (a bit weird yes, but file contains " and it breaks the process...)
                     quote: "@;#&%"
                 }))
-                .pipe(filterData(filter));
-
-            //Pipe others transformers
-            transformers.forEach((transformer) => {
-                stream.pipe(transformer);
-            });
-            //cumulate data to return
-            stream.pipe(es.mapSync((data) => {
-                suggestions.push(data);
-            }))
+                .pipe(filterDataTransformer);
         });
+    };
+
+    const pipeTransformers = (transformers) => {
+        for (let i = 0; i < transformers.length - 1; i++) {
+            transformers[i].pipe(transformers[i + 1]);
+        }
     };
 
     return {

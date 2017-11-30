@@ -11,8 +11,9 @@ module.exports = (() => {
         return miss.through(
             {objectMode: true},
             function(chunk, encode, callback) {
-                chunk.score = chunk.name.score(stringToMatch);
-                callback(null, chunk);
+                chunk.score = chunk.rawName.score(stringToMatch);
+                this.push(chunk);
+                callback();
             },
             (callback) => {
                 callback();
@@ -30,7 +31,8 @@ module.exports = (() => {
                     lat: chunk.latitude,
                     lon: chunk.longitude
                 });
-                callback(null, chunk);
+                this.push(chunk);
+                callback();
             },
             (callback) => {
                 callback();
