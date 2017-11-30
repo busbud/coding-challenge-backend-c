@@ -21,7 +21,7 @@ util.inherits(Mapper, Transform);
 
 Mapper.prototype._transform = function(chunk, enc, cb) {
   this.push({
-    name: `${chunk.name}, ${geocode.getRegion(
+    name: `${chunk.asciiname}, ${geocode.getRegion(
       chunk.country,
       chunk.region
     )}, ${geocode.getCountry(chunk.country)}`,
