@@ -1,75 +1,122 @@
-var expect  = require('chai').expect;
-var app     = require('../app');
-var request = require('supertest')(app);
+const expect = require('chai').expect;
+const app = require('../app');
+const request = require('supertest')(app);
 
-describe('GET /suggestions', function() {
-  describe('with a non-existent city', function () {
-    var response;
+describe('GET with bad request', () => {
+    it('returns a 404 if bad url', done => {
+        request
+            .get('/foo')
+            .end((err, res) => {
+                expect(res.statusCode).to.equal(404);
+                done();
+            });
+    });
+    it('returns a 400 if no query', done => {
+        request
+            .get('/suggestions')
+            .end((err, res) => {
+                expect(res.statusCode).to.equal(400);
+                done();
+            });
+    });
+    it('returns a 400 if not enough chars', done => {
+        request
+            .get('/suggestions?q=a')
+            .end((err, res) => {
+                expect(res.statusCode).to.equal(400);
+                done();
+            });
+    });
+});
 
-    before(function (done) {
-      request
-        .get('/suggestions?q=SomeRandomCityInTheMiddleOfNowhere')
-        .end(function (err, res) {
-          response = res;
-          response.json = JSON.parse(res.text);
-          done(err);
+describe('GET /suggestions', () => {
+    describe('with a non-existent city', () => {
+        let response;
+        before(done => {
+            request
+                .get('/suggestions?q=SomeRandomCityInTheMiddleOfNowhere')
+                .end((err, res) => {
+                    response = res;
+                    response.json = JSON.parse(res.text);
+                    done(err);
+                });
+        });
+
+        it('returns an empty array of suggestions', () => {
+            expect(response.json.suggestions).to.be.instanceof(Array);
+            expect(response.json.suggestions).to.have.length(0);
         });
     });
 
-    it('returns a 404', function () {
-      expect(response.statusCode).to.equal(404);
-    });
+    describe('with a valid city', () => {
+        let response;
 
-    it('returns an empty array of suggestions', function () {
-      expect(response.json.suggestions).to.be.instanceof(Array);
-      expect(response.json.suggestions).to.have.length(0);
-    });
-  });
+        before(done => {
+            request
+                .get('/suggestions?q=Montréal')
+                .end((err, res) => {
+                    response = res;
+                    response.json = JSON.parse(res.text);
+                    done(err);
+                });
+        });
 
-  describe('with a valid city', function () {
-    var response;
+        it('returns a 200', () => {
+            expect(response.statusCode).to.equal(200);
+        });
 
-    before(function (done) {
-      request
-        .get('/suggestions?q=Montreal')
-        .end(function (err, res) {
-          response = res;
-          response.json = JSON.parse(res.text);
-          done(err);
+        it('returns an array of suggestions', () => {
+            expect(response.json.suggestions).to.be.instanceof(Array);
+            expect(response.json.suggestions).to.have.length.above(0);
+        });
+
+        it('contains a match', () => {
+            expect(response.json.suggestions).to.satisfy(suggestions => {
+                return suggestions.some(suggestion => {
+                    return /montréal/i.test(suggestion.name);
+                });
+            })
+        });
+
+        it('contains latitudes and longitudes', () => {
+            expect(response.json.suggestions).to.satisfy(suggestions => {
+                return suggestions.every(suggestion => {
+                    return suggestion.latitude && suggestion.longitude;
+                });
+            })
+        });
+
+        it('contains scores', () => {
+            expect(response.json.suggestions).to.satisfy(suggestions => {
+                return suggestions.every(suggestion => {
+                    return suggestion.latitude && suggestion.longitude;
+                });
+            })
         });
     });
 
-    it('returns a 200', function () {
-      expect(response.statusCode).to.equal(200);
-    });
+    describe("with lat and long", () => {
+        let responseWithoutLatLong;
 
-    it('returns an array of suggestions', function () {
-      expect(response.json.suggestions).to.be.instanceof(Array);
-      expect(response.json.suggestions).to.have.length.above(0);
-    });
-
-    it('contains a match', function () {
-      expect(response.json.suggestions).to.satisfy(function (suggestions) {
-        return suggestions.some(function (suggestion) {
-          return suggestion.name.test(/montreal/i);
+        before(done => {
+            request
+                .get('/suggestions?q=paris')
+                .end((err, res) => {
+                    responseWithoutLatLong = res;
+                    responseWithoutLatLong.json = JSON.parse(res.text);
+                    done(err);
+                });
         });
-      })
-    });
 
-    it('contains latitudes and longitudes', function () {
-      expect(response.json.suggestions).to.satisfy(function (suggestions) {
-        return suggestions.every(function (suggestion) {
-          return suggestion.latitude && suggestion.longitude;
+        it('change scores', (done) => {
+            require('supertest')(app)
+                .get('/suggestions?q=paris&latitude=38.50815&longitude=-84.1663')
+                .end((err, res) => {
+                    res.json = JSON.parse(res.text);
+                    expect(responseWithoutLatLong.json.suggestions.length).to.equal(res.json.suggestions.length);
+                    expect(responseWithoutLatLong.text).to.not.equal(res.text);
+                    done(err);
+                });
         });
-      })
     });
-
-    it('contains scores', function () {
-      expect(response.json.suggestions).to.satisfy(function (suggestions) {
-        return suggestions.every(function (suggestion) {
-          return suggestion.latitude && suggestion.longitude;
-        });
-      })
-    });
-  });
 });
