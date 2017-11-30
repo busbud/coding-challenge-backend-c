@@ -1,48 +1,40 @@
 require("string_score");
 const geodist = require("geodist");
+const miss = require("mississippi");
 
 module.exports = (() => {
+
     /*
     * calculate score from city name and asked label
     * */
     const scoreStringsByName = stringToMatch => {
-        return objArray => {
-            return new Promise((resolve, reject) => {
-                try {
-                    objArray.forEach((element) => {
-                        element.score = element.name.score(stringToMatch);
-                    });
-                    resolve(objArray);
-                } catch (ex) {
-                    reject(ex);
-                }
+        return miss.through(
+            {objectMode: true},
+            function(chunk, encode, callback) {
+                chunk.score = chunk.name.score(stringToMatch);
+                callback(null, chunk);
+            },
+            (callback) => {
+                callback();
             });
-        };
     };
 
     /*
-    * Add distance between cities and asked lat/long
-    * */
+   * Add distance between cities and asked lat/long
+   * */
     const setDistance = (latitude, longitude) => {
-        return objArray => {
-            return new Promise((resolve, reject) => {
-                try {
-                    if (!latitude || !longitude) {
-                        resolve(objArray);
-                        return;
-                    }
-                    objArray.forEach(element => {
-                        element.dist = geodist({lat: latitude, lon: longitude}, {
-                            lat: element.latitude,
-                            lon: element.longitude
-                        });
-                    });
-                    resolve(objArray);
-                } catch (ex) {
-                    reject(ex);
-                }
+        return miss.through(
+            {objectMode: true},
+            function(chunk, encode, callback) {
+                chunk.dist = geodist({lat: latitude, lon: longitude}, {
+                    lat: chunk.latitude,
+                    lon: chunk.longitude
+                });
+                callback(null, chunk);
+            },
+            (callback) => {
+                callback();
             });
-        };
     };
 
     /*

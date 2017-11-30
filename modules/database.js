@@ -32,26 +32,32 @@ module.exports = (() => {
             });
     };
 
-    const queryData = filter => {
+    const queryData = (filter, transformers) => {
         filter = filter.toLowerCase();
         return new Promise((resolve, reject) => {
             const suggestions = [];
-            fs.createReadStream(dataFilename)
-                .pipe(csv({
-                    separator: '\t',
-                    //string that can't be find in the file (a bit weird yes, but file contains " and it breaks the process...)
-                    quote: "@;#&%"
-                }))
-                .pipe(filterData(filter))
-                .pipe(es.mapSync((data) => {
-                    suggestions.push(data);
-                }))
+            const stream = fs.createReadStream(dataFilename)
                 .on("end", () => {
                     resolve(suggestions);
                 })
                 .on("error", (err) => {
                     reject(err);
-                });
+                })
+                .pipe(csv({
+                    separator: '\t',
+                    //string that can't be find in the file (a bit weird yes, but file contains " and it breaks the process...)
+                    quote: "@;#&%"
+                }))
+                .pipe(filterData(filter));
+
+            //Pipe others transformers
+            transformers.forEach((transformer) => {
+                stream.pipe(transformer);
+            });
+            //cumulate data to return
+            stream.pipe(es.mapSync((data) => {
+                suggestions.push(data);
+            }))
         });
     };
 

@@ -103,6 +103,7 @@ describe('GET /suggestions', () => {
                 .get('/suggestions?q=paris')
                 .end((err, res) => {
                     responseWithoutLatLong = res;
+                    responseWithoutLatLong.json = JSON.parse(res.text);
                     done(err);
                 });
         });
@@ -111,6 +112,8 @@ describe('GET /suggestions', () => {
             require('supertest')(app)
                 .get('/suggestions?q=paris&latitude=38.50815&longitude=-84.1663')
                 .end((err, res) => {
+                    res.json = JSON.parse(res.text);
+                    expect(responseWithoutLatLong.json.suggestions.length).to.equal(res.json.suggestions.length);
                     expect(responseWithoutLatLong.text).to.not.equal(res.text);
                     done(err);
                 });

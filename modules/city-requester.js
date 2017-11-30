@@ -39,15 +39,17 @@ module.exports = (() => {
     const getSuggestions = query => {
         return new Promise((resolve, reject) => {
             //some basic tests about query content and length
-            if(!query || !query.destination) {
+            if (!query || !query.destination) {
                 reject({status: 400, error: "bad request, not destination provided"});
                 return;
-            } else if(query.destination.length < MIN_CHARS) {
+            } else if (query.destination.length < MIN_CHARS) {
                 reject({status: 400, error: "bad request, please use at least two chars"});
             }
-            database.queryData(query.destination)
-                .then(score.scoreStringsByName(query.destination))
-                .then(score.setDistance(query.latitude, query.longitude))
+            const transformers = [score.scoreStringsByName(query.destination)];
+            if (query.latitude && query.longitude) {
+                transformers.push(score.setDistance(query.latitude, query.longitude));
+            }
+            database.queryData(query.destination, transformers)
                 .then(score.scoreFromNameAndDistance)
                 .then(sortSuggestionsByScore)
                 .then(purgeData)
