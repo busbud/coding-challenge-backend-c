@@ -22,3 +22,7 @@ As I don't know streams yet, I'm not sure of the overhead and of the use of map/
 
 #Score
 Score is poorly implemented, by a lack of idea on how to tackle this part.
+
+#Update
+JSONStream for output
+Cleaning

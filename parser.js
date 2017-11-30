@@ -6,25 +6,23 @@ var es = require("event-stream");
  * - input sanitizing can be improved
  */
 module.exports = function (sourceFile) {
-    var isFirstLine = true;
+    var isFirstLine = true; // We skip header 
     var lineNumber = 0;
 
     // Based on: https://johnresig.com/blog/node-js-stream-playground/
     return fs.createReadStream(sourceFile)
         .pipe(es.split("\n")) // Split Lines
         .pipe(es.mapSync(function (data) { // not sure for the need of sync here. It was in the example, I should check it (perf on denormalize is not a priority)
-            if (!isFirstLine && data) { // We skip header 
-                var fields = data.split("\t");
-                var entry = createEntry(lineNumber++, ...fields);
-                disambiguateEntry(entry);
-                return entry;
+            if (!isFirstLine && data) {
+                return createEntry(lineNumber++, ...data.split("\t"));
             }
             isFirstLine = false;
         }))
 }
 
+/** Cities creation ***************************************************************/ 
 var createEntry = function (id, geonameid, name, asciiname, alternatenames, latitude, longitude, feature_class, feature_code, country_code, cc2, admin1_code, admin2_code, admin3_code, admin4_code, population, elevation, dem, timezone, modification_date) {
-    // when opening in excel I saw bad lines, so I added sanity checks, but it was actually a bad rendering
+    // when opening TSV in excel I saw bad lines, so I added sanity checks, but it was actually a bad rendering
     if (!latitude || !longitude || isNaN(latitude) || isNaN(longitude)) {
         console.log("Invalid lat/lon detected for: " + name);
     } else {
@@ -39,25 +37,12 @@ var createEntry = function (id, geonameid, name, asciiname, alternatenames, lati
 
             // Note that those do not have to be in the data file. they are in it just for debug purpose
             ascii: cleanName(asciiname),
-            altNames: alternatenames.split(",").map(cleanName).filter(Boolean), // https://stackoverflow.com/questions/34371145/how-to-split-string-without-getting-empty-values-to-the-output-array
+            altNames: alternatenames.split(",").map(cleanName).filter(Boolean), // https://stackoverflow.com/questions/34371145/how-to-split-string-without-getting-empty-values-to-the-output-array (in C# it is an option of string.split, so I was confused..)
         }
     }
 }
 
-var cleanName = function (str) {
-    return str.trim().toLowerCase().replace(/"/g, '\\"')
-}
-
-var ambiguousNamesMap = {};
-var disambiguateEntry = function (entry) {
-    var ambiguousEntry = ambiguousNamesMap[entry.name];
-    if (ambiguousEntry) {
-        entry.isAmbiguous = true;
-        ambiguousEntry.isAmbiguous = true;
-    } else {
-        ambiguousNamesMap[entry.name] = entry;
-    }
-}
+var cleanName = (str) => str.trim().toLowerCase().replace(/"/g, '\\"')
 
 // Mostly taken from https://raw.githubusercontent.com/barodeur/cities-suggestion-engine/06ce7d3997f6208627052f17be218014400387a0/handlers/suggestions.js
 const CANADA_PROVINCES = {

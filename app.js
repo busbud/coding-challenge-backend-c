@@ -12,18 +12,16 @@ var lonParam = "longitude=";
 // Server start
 module.exports = http.createServer(function (req, res) {
 	try {
-		var urlChunks = req.url.split("&");
-		var q = decodeURIComponent(urlChunks[0]);
-
-		if (!q.startsWith(basePath) || q.length == basePath.length) {
+		if (!req.url.startsWith(basePath) || req.url.length == basePath.length) {
 
 			res.writeHead(400, { 'Content-Type': 'text/plain; charset=utf-8' });
-			res.end("Service only responds on query beginning with " + basePath);
+			res.end("Service only responds on non empty query beginning with " + basePath);
 
 		} else {
-
-			var query = q.substring(basePath.length).toLowerCase();
-			var result = search(query, () => parseLatLon(urlChunks));
+			var urlChunks = req.url.split("&"); // split creates up to 3 new strings, can this be avoided ? (with Buffer for example)
+			
+			var query = decodeURIComponent(urlChunks[0].substring(basePath.length)).toLowerCase();
+			var result = search(query, () => parseLatLon(...urlChunks)); // we pass an arrow function in order to avoid lat/lon parsing if it is not needed (cleaneness can be improved)
 
 			if (!result) {
 				res.writeHead(404, { 'Content-Type': 'text/json; charset=utf-8' });
@@ -41,12 +39,11 @@ module.exports = http.createServer(function (req, res) {
 	}
 }).listen(port, () => console.log('Server running at http://0.0.0.0:%d/suggestions', port));
 
-var parseLatLon = function (urlChunks) {
-	if (urlChunks.length == 3) {
-		var lat, lon;
-		if (urlChunks[1].startsWith(latParam)) lat = parseFloat(urlChunks[1].substring(latParam.length));
-		if (urlChunks[2].startsWith(lonParam)) lon = parseFloat(urlChunks[2].substring(lonParam.length));
-		if (!isNaN(lat) && !isNaN(lon))
-			return [lat, lon];
-	}
+var parseGeoParam = (str, paramPrefix) => str.startsWith(paramPrefix) && parseFloat(str.substring(paramPrefix.length));
+
+var parseLatLon = function (query, latStr, lonStr) {
+	var lat = latStr && parseGeoParam(latStr, latParam);
+	var lon = lonStr && parseGeoParam(lonStr, lonParam);
+	if (lat && lon && !isNaN(lat) && !isNaN(lon))
+		return [lat, lon];
 }
