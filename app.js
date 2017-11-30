@@ -27,6 +27,6 @@ module.exports = http.createServer(function(req, res) {
             res.end(JSON.stringify({'error': err.error || err.message}));
         });
 
-}).listen(port, '127.0.0.1');
+}).listen(port, process.env.PROD ? null : '127.0.0.1');
 
 console.log('Server running at http://127.0.0.1:%d/suggestions', port);
