@@ -847,17 +847,17 @@ class QueryBuilder {
 
         if (params && params.q && params.latitude && params.longitude) {
           return {
-            sql: 'SELECT ASCIINAME AS NAME, ADMIN1 as REGION, COUNTRY, LATITUDE, LONGITUDE, levenshtein(LOWER($1), LOWER(NAME)) as SCORE, GREATEST(char_length(NAME), char_length($1)) as length FROM GEONAME WHERE NAME like $2 ORDER BY POINT(latitude, longitude) <-> POINT($3, $4) ASC',
+            sql: 'SELECT ASCIINAME AS NAME, ADMIN1 as REGION, COUNTRY, LATITUDE, LONGITUDE, scoring_latlng_name(LOWER($1), LOWER(NAME), LATITUDE::numeric, LONGITUDE::numeric, $3::numeric, $4::numeric) as SCORE FROM GEONAME WHERE lower(unaccent(NAME)) ILIKE lower(unaccent($2)) ORDER BY SCORE DESC',
             params: [params.q, params.q + '%', params.latitude, params.longitude]
           };
         } else if (params && params.latitude && params.longitude) {
           return {
-            sql: 'SELECT ASCIINAME AS NAME, ADMIN1 as REGION, COUNTRY, LATITUDE, LONGITUDE FROM GEONAME ORDER BY POINT(latitude, longitude) <-> POINT($1, $2) ASC',
+            sql: 'SELECT ASCIINAME AS NAME, ADMIN1 as REGION, COUNTRY, LATITUDE, LONGITUDE, scoring_latlng(LATITUDE::numeric, LONGITUDE::numeric, $1::numeric, $2::numeric) as SCORE FROM GEONAME ORDER BY SCORE DESC',
             params: [params.latitude, params.longitude]
           };
         } else if (params && params.q) {
           return {
-            sql: 'SELECT ASCIINAME AS NAME, ADMIN1 as REGION, COUNTRY, LATITUDE, LONGITUDE, levenshtein(LOWER($1), LOWER(NAME)) as SCORE, GREATEST(char_length(NAME), char_length($1)) as length FROM GEONAME WHERE lower(unaccent(NAME)) ILIKE lower(unaccent($2))',
+            sql: 'SELECT ASCIINAME AS NAME, ADMIN1 as REGION, COUNTRY, LATITUDE, LONGITUDE, levenshtein(LOWER($1), LOWER(NAME)) as SCORE FROM GEONAME WHERE lower(unaccent(NAME)) ILIKE lower(unaccent($2)) ORDER BY SCORE DESC',
             params: [params.q, params.q + '%']
           };
         } else {
@@ -904,6 +904,14 @@ class ArgSanitizer {
   sanitize(query) {
     if (query && query.q) {
       query.q = utf8.decode(query.q);
+    }
+
+    if (query && query.latitude) {
+      query.latitude = parseFloat(query.latitude);
+    }
+
+    if (query && query.longitude) {
+      query.longitude = parseFloat(query.longitude);
     }
   }
 

@@ -1,11 +1,13 @@
 CREATE OR REPLACE FUNCTION levenshtein(s text, t text) 
-RETURNS integer AS $$
+RETURNS DECIMAL AS $$
 DECLARE i integer;
 DECLARE j integer;
 DECLARE m integer;
 DECLARE n integer;
 DECLARE d integer[];
 DECLARE c integer;
+DECLARE result integer;
+DECLARE max_len integer;
 
 BEGIN
 	m := char_length(s);
@@ -33,6 +35,9 @@ BEGIN
 		END LOOP;
 	END LOOP;
  
-	return d[m*(n+1)+n];	
+	result := d[m*(n+1)+n];
+	max_len := GREATEST(m, n);
+
+	return round ((max_len - result)::decimal/max_len, 2)::decimal;
 END;
 $$ LANGUAGE plpgsql IMMUTABLE

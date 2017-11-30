@@ -5,5 +5,13 @@ export default class ArgSanitizer {
     if (query && query.q) {
       query.q = utf8.decode(query.q);
     }
+
+    if (query && query.latitude) {
+      query.latitude = parseFloat(query.latitude);
+    }
+
+    if (query && query.longitude) {
+      query.longitude = parseFloat(query.longitude);
+    }
   }
 }
