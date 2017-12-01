@@ -110,6 +110,5 @@ describe('GET /suggestions', function () {
 
 	describe('with a partial city name', checkValid('/suggestions?q=lon', /London/i));
 
-	// Note this works in a browser, but the test fails with a 404 => problem with local encoding ?
-	// describe('with a unicode city name', checkValid('/suggestions?q=몬트리올', /Montréal/i)); // 몬트리올 is an alternate name
+	describe('with a unicode city name', checkValid(encodeURI('/suggestions?q=몬트리올'), /Montréal/i)); // 몬트리올 is an alternate name for Montréal
 });
