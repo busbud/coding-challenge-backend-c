@@ -65,7 +65,7 @@ var addToMap = function (str, id) {
 }
 
 /** Disambiguation ***************************************************************/
-// TODO check for optimizations
+// TODO check for optimizations. It could be also sorted to be compared. This would have been more costly, but more useful on the logging part
 var ambiguousNamesMap = {};
 var checkAmbiguousEntries = function (entry) {
 	var ambiguousEntry = ambiguousNamesMap[entry.name];
@@ -79,7 +79,7 @@ var checkAmbiguousEntries = function (entry) {
 
 var handleNameCollisions = function (entry) {
 	if (entry.isAmbiguous) {
-		console.log("Name collision on " + entry.name);
+		console.log("Name collision on **" + entry.name + "** => replaced by **" + entry.disambiguationName + "**");
 		entry.name = entry.disambiguationName;
 	}
 	// not sure of the cost of delete here
