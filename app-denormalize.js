@@ -4,7 +4,7 @@ var es = require("event-stream");
 var through = require("through");
 var tsvParser = require("./parser");
 
-const sourceFile = "data/cities_canada-usa.tsv";
+const sourceFile = "data/cities5000.txt";
 const dataFile = "data/data";
 
 var mapForCities = [];
