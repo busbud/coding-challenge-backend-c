@@ -1,6 +1,6 @@
 const express = require('express'),
     app = express();
-const port = process.env.PORT || 80;
+const port = process.env.PORT || 5000;
 
 //Load cities
 const cityManager = require('./api/modules/cityManagerModule');
@@ -14,7 +14,7 @@ app.listen(port);
 const routes = require('./api/routes/suggestionsRoutes');
 routes(app);
 
-console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+console.log('Server running on port %d', port);
 
 //In order to use it in the tests
 module.exports = app;
