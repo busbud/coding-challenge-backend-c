@@ -13,9 +13,11 @@ exports.getSuggestions = function(req, res) {
         res.statusCode = 404;
     }
     else {
-        for(let i = 0; i < suggestions.length;i++) {
-            //console.log(suggestions[i].name);
-        }
+
+        suggestions.sort((a,b) => {
+            return b.score - a.score;
+        });
+
     }
 
     res.json({suggestions : suggestions});
