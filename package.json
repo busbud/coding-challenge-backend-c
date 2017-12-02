@@ -15,7 +15,7 @@
     "fuzzball": "^0.14.0"
   },
   "engines": {
-    "node": "0.10.26"
+    "node": "8.9.1"
   },
   "devDependencies": {
     "chai": "^1.10.0",
