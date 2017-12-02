@@ -1,6 +1,6 @@
 const express = require('express'),
     app = express();
-const port = process.env.PORT || 2345;
+const port = process.env.PORT || 80;
 
 //Load cities
 const cityManager = require('./api/modules/cityManagerModule');
