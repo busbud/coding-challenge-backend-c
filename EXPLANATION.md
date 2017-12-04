@@ -20,7 +20,7 @@ For the auto-complete process, cities' global variable is only used with read ac
 
 ### Suggestions
 
-Note that suggestions are case insensitive and string are normalize in order to avoid side effects with accents
+Note that suggestions are case insensitive and string are normalized in order to avoid side effects with accents
 
 
     GET /suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
@@ -67,7 +67,7 @@ Note that suggestions are case insensitive and string are normalize in order to 
 }
 ```
 
-Results are sorted by score desc, then when two score are equals, they are stored by distance asc (if longitude and latitude were provided in the request)
+Results are sorted by score desc, then when two score are equals, they are sorted by distance asc (if longitude and latitude were provided in the request)
 
 **Additional parameters availables**
 
@@ -99,6 +99,22 @@ Could be used to verify if everything is ok with the cities
     GET /countCities
 
 
+## Possible improvements
+
+**Suggestion algorithm**
+
+The algorithm used to retrieve results could be optimized if we want to customize the way it retrieves results.
+
+Maybe Elasticsearch could be used because it offers lots of possibilities to search strings with many customizations available.
+Another advantage of Elasticsearch would be that it can handle a very higher number of cities than the in-memory solution I created.
+The disadvantage is that it'll need more servers (at least 2 or 3 for one elasticsearch cluster)
+
+**City loading**
+
+The way I decided to load the cities from the url is specific (url, file, format).
+In a production purpose, we'll have to make it more customizable to handle differents urls, file formats, ... in order to re-use it for other needs.
+
+
 
 
 ## Tests
@@ -120,21 +136,6 @@ For example :
     https://jo-busbud-challenge.herokuapp.com/suggestions?q=Mont
 
 
-
-## Possible improvements
-
-**Suggestion algorithm**
-
-The algorithm used to retrieve results could be optimized if we want to customize the way it retrieves results.
-
-Maybe Elasticsearch could be used because it offers lots of possibilities to search strings with lots of customizations available.
-Another advantage of Elasticsearch would be that it can handle a very higher number of cities than the in-memory solution I created.
-The disadvantage is that it'll need more servers (at least 2 or 3 for one elasticsearch cluster)
-
-**City loading**
-
-The way I decided to load the cities from the url is specific (url, file, format).
-In a production purpose, we'll have to make it more customizable to handle differents urls, file formats, ... in order to re-use it for other needs.
 
 
 
