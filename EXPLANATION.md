@@ -20,7 +20,7 @@ For the auto-complete process, cities' global variable is only used with read ac
 
 ### Suggestions
 
-Note that suggestions are case insensitive and string are normalized in order to avoid side effects with accents
+Note that suggestions are case insensitive and strings are normalized in order to avoid side effects with accents
 
 
     GET /suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
