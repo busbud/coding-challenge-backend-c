@@ -61,6 +61,9 @@ exports.loadCities = function() {
 
     // Retrieve cities list, asynchronously
     request('http://download.geonames.org/export/dump/cities5000.zip')
+        .on("error", function() {
+            console.log("Remote server unreachable");
+        })
         .pipe(unzip.Parse())
         .on('entry', function(entry) {
             var fileName = entry.path;
@@ -78,6 +81,9 @@ exports.loadCities = function() {
             } else {
                 entry.autodrain();
             }
+        })
+        .on("error", function() {
+            console.log("error during city file loading");
         })
         .on("close", function() {
             global.cities = newCities;

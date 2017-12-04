@@ -27,8 +27,7 @@ These responses are meant to provide guidance. The exact values can vary based o
 
 ```json
 {
-  "suggestions": [
-    {
+  "suggestions": [{
       "name": "London, ON, Canada",
       "latitude": "42.98339",
       "longitude": "-81.23304",

@@ -1,6 +1,6 @@
 const cityManager = require('../modules/cityManagerModule');
-const minimumScore = 0.3;
-const maxResults = 10;
+const minimumScore = 0.5;
+const maxResults = 5;
 
 /**
  * getSuggestions delegate the functional search, but it is his responsability to order results the way we want to get them back to the user

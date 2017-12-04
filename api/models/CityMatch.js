@@ -12,7 +12,7 @@ class CityMatch  {
      * @param distance expressed in kilometers
      */
     constructor(city, score, distance) {
-        this.name= "".concat(city.name, " (",city.country, "), ",city.tz);
+        this.name= "".concat(city.name, " (",city.country, "), ",city.tz.replace("America/",""));
         this.longitude=city.longitude;
         this.latitude=city.latitude;
         this.score=score;
