@@ -2,17 +2,29 @@ const express = require('express'),
     app = express();
 const port = process.env.PORT || 5000;
 
-//Load cities
+//Define global var cities
+global.cities = [];
+
+//Init cities from local storage then load from remote
 const cityManager = require('./api/modules/cityManagerModule');
-cityManager.loadCities('data/cities_canada-usa.tsv', "\t");
+cityManager.initCities();
+cityManager.loadCities();
 
 //Start the server
 app.listen(port);
 
 
 //register the routes
-const routes = require('./api/routes/suggestionsRoutes');
-routes(app);
+const configurationRoutes = require('./api/routes/configurationRoutes');
+configurationRoutes(app);
+
+const suggestionsRoutes = require('./api/routes/suggestionsRoutes');
+suggestionsRoutes(app);
+
+//Send 404 error on all undefined routes
+app.use(function(req, res){
+    res.sendStatus(404);
+});
 
 console.log('Server running on port %d', port);
 

@@ -7,9 +7,10 @@ class City {
    constructor(informations) {
         this.id=informations.id;
         this.name=informations.name;
+        this.normalizedName=informations.normalizedName;
         this.country=informations.country;
-        this.longitude=informations.long;
-        this.latitude=informations.lat;
+        this.longitude=informations.longitude;
+        this.latitude=informations.latitude;
         this.tz=informations.tz;
         this.population=informations.population;
     }
