@@ -32,7 +32,7 @@ var createEntry = function (geonameid, name, asciiname, alternatenames, latitude
             name: formatCityName(name, country_code, admin1_code),
             latlon: [latitude, longitude],
 
-            // Note: here for quick demo. This is not a robust nor an optimal solution. Some cities are very close and seem to be duplicates => check Bay Point
+            // Note: here for quick demo. This is not a robust nor an optimal solution. Some cities are very close and seem to be duplicates => check Bay Point in the provided TSV file
             disambiguationName: formatCityName(name + " (Pop: " + population + ")", country_code, admin1_code),
             isAmbiguous: false,
 
@@ -47,7 +47,7 @@ var nameCleaner = (str) => str.trim().toLowerCase().replace(/"/g, '\\"')
 
 // Mostly taken from https://raw.githubusercontent.com/barodeur/cities-suggestion-engine/06ce7d3997f6208627052f17be218014400387a0/handlers/suggestions.js
 const CANADA_PROVINCES = {
-    '00': '', // TODO handle proper comma formatting if this case happens
+    '00': '', // TODO handle proper comma formatting if this case happens (it doesn't for now)
     '01': 'AB',
     '02': 'BC',
     '03': 'MB',
