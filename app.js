@@ -7,8 +7,8 @@ global.cities = [];
 
 //Init cities from local storage then load from remote
 const cityManager = require('./api/modules/cityManagerModule');
-cityManager.initCities();
-cityManager.loadCities();
+cityManager.initCities(); //from local storage
+cityManager.loadCities(); //from remote
 
 //Start the server
 app.listen(port);
