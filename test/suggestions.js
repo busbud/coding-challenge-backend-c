@@ -1,8 +1,14 @@
 var expect  = require('chai').expect;
 var app     = require('../app');
-var request = require('supertest')(app);
+var request;
 
 describe('GET /suggestions', function() {
+  before(function(done) {
+    app.then(appReady => {
+      request = require('supertest')(appReady);
+      done()
+    })
+  })
   describe('with a non-existent city', function () {
     var response;
 
@@ -51,7 +57,8 @@ describe('GET /suggestions', function() {
     it('contains a match', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.some(function (suggestion) {
-          return suggestion.name.test(/montreal/i);
+          console.log(suggestion)
+          return /montreal/i.test(suggestion.name);
         });
       })
     });
@@ -67,7 +74,7 @@ describe('GET /suggestions', function() {
     it('contains scores', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.every(function (suggestion) {
-          return suggestion.latitude && suggestion.longitude;
+          return suggestion.score;
         });
       })
     });
