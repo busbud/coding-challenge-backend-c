@@ -88,7 +88,7 @@ var checkValid = function (query, regex) {
 		it('contains scores', function () {
 			expect(response.json.suggestions).to.satisfy(function (suggestions) {
 				return suggestions.every(function (suggestion) {
-					return suggestion.score;
+					return !isNaN(suggestion.score);
 				});
 			})
 		});

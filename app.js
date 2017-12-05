@@ -1,9 +1,13 @@
 'use strict';
 var http = require('http');
-var search = require("./search");
+var search = require("./lib/search");
 
 const port = process.env.PORT || 2345;
 
+/**
+ * Entry of application
+ * Creates a server that responds on /suggestions
+ */
 module.exports = http.createServer(function (req, res) {
 	try {
 		// One step URL parser with regex. Returns lat & lon only if both are valid
