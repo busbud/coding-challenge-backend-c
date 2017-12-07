@@ -35,6 +35,22 @@ jobs:
         
       # run tests!
       - run: yarn test
+
+      - run:
+          name: Run setup script
+          command: bash .circleci/setup-heroku.sh
+
+      - add_ssh_keys:
+          fingerprints:
+            - "8b:f4:cc:40:2f:fd:31:48:6b:92:26:d1:6e:f0:a3:30"
+
+      - run:
+          name: Deploy Master to Heroku
+          command: |
+            git push --force git@heroku.com:$HEROKU_APP_NAME.git HEAD:refs/heads/master
+            heroku restart
+
+
 deployment:
   staging:
     branch: master
