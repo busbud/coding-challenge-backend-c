@@ -25,7 +25,9 @@
                     <div class="form-group">
                         <div class="input-group">
                             <input type="text" class="form-control" placeholder="Type your search terms here" required id="s" name="s" value="" autocomplete="off">
-                            <span class="input-group-btn"><button class="btn btn-warning" type="reset">Reset »</button></span>
+                            <input type="hidden" name="latitude"  id="latitude"  value="">
+                            <input type="hidden" name="longitude" id="longitude" value="">
+                            <span class="input-group-btn"><button class="btn btn-warning" type="button" id="geo">Use Current Location »</button></span>
                         </div>
                     </div>
                     <p>&nbsp;</p>
@@ -61,11 +63,35 @@
         </script>
         <script>
             $(document).ready(function () {
-                var wikiapi = "http://127.0.0.1:2345/suggestions";
+                var lat = $("#latitude");
+                var lon = $("#longitude");
+
+                $("#geo").each(function() {
+                    $(this).click(function(e) {
+                        $(this).text("Using GEO Position");
+                        $(this).attr("disabled", "disabled");
+                        if (navigator.geolocation) {
+                            navigator.geolocation.getCurrentPosition(function(location) {
+                                lat.val(location.coords.latitude);
+                                lon.val(location.coords.longitude);
+                            });
+                        } else {
+                            lat.val("");
+                            lon.val("");
+                        }
+                    });
+                });
+                
+                var wikiapi = $(location).attr("href") + "suggestions";
 
                 var autoinp = $("#s");
                 autoinp.typeahead({source: function (request, response) {
-                        $.ajax({url: wikiapi, dataType: "json", data: {"q": request}, success: function (data) {
+                        var reqdata = {"q": request};
+                        if(lat.val() != "" && lon.val() != "") {
+                            reqdata.latitude = lat.val();
+                            reqdata.longitude = lon.val();
+                        }
+                        $.ajax({url: wikiapi, dataType: "json", data: reqdata, success: function (data) {
                                 if ("undefined" !== typeof data.suggestions) {
                                     response(data.suggestions);
                                 }
