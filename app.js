@@ -79,6 +79,6 @@ server.on('request', function (request, response) {
  */
 var gn = new GeoNames('./data/cities_canada-usa.tsv', GeoMinLn, GeoMaxRs, function (geonames) {
     server.listen(port, host, function () {
-        console.log('Server running at http://' + host + ':' + port + '/');
+        console.log('Server running at http://' + host + ':' + port + '/.');
     });
 });
