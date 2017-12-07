@@ -35,5 +35,8 @@ jobs:
         
       # run tests!
       - run: yarn test
-
-
+deployment:
+  staging:
+    branch: master
+    heroku:
+      appname: coding-challenge-backend-c-ben
