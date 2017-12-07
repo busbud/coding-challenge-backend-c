@@ -12,7 +12,10 @@ let promise = new Promise((resolve, reject) => {
 
   const httpServer = http.createServer(function (req, res) {
 
-    if (req.url.indexOf('/suggestions') === 0) {
+    if(req.url.indexOf('/hello') === 0) {
+      res.writeHead(200, { 'Content-Type': 'text/plain' });
+      res.end('Hello CI and CD :)')
+    }else if (req.url.indexOf('/suggestions') === 0) {
       var parsedUrl = url.parse(req.url, true); // true to get query as object
       var queryAsObject = parsedUrl.query;
       console.log('QUERY', queryAsObject)
