@@ -127,3 +127,11 @@ which should produce output similar to
 ```
 Server running at http://127.0.0.1:3456/suggestions
 ```
+
+## Challange Response and Demo
+
+- developped the aps.js (process requests, load GeoNames module and starts the server)
+- developped the geonames.js module (the core of the autocoplemete search)
+- developped index.html frontend demo for quering the API via a web browser
+- included a JS Docs for each function in both files js files
+- deployed the appllication at Heroku : https://geonamesac.herokuapp.com/
