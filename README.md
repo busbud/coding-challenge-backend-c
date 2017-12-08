@@ -134,4 +134,4 @@ Server running at http://127.0.0.1:3456/suggestions
 - developped the geonames.js module (the core of the autocoplemete search)
 - developped index.html frontend demo for quering the API via a web browser
 - included a JS Docs for each function in both files js files
-- deployed the appllication at Heroku : https://geonamesac.herokuapp.com:3456/
+- deployed the appllication at Heroku : https://geonamesac.herokuapp.com/
