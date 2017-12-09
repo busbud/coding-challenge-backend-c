@@ -43,6 +43,12 @@ let promise = new Promise((resolve, reject) => {
       }
 
       let matchedCities = suggest(cities, queryAsObject.q, latitude, longitude)
+        .map(city => ({
+          name: [city.name, city.adminCode1, city.countryCode].join(', '),
+          latitude: city.latitude,
+          longitude: city.longitude,
+          score: city.score
+        }))
       
       if (matchedCities.length === 0) {
         res.writeHead(404, { 'Content-Type': 'text/plain' });

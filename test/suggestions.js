@@ -98,9 +98,9 @@ describe('GET /suggestions', function() {
 
     it('contains a match', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
-        return suggestions.some(function (suggestion) {
+        return suggestions.every(function (suggestion) {
           console.log(suggestion)
-          return /montreal/i.test(suggestion.asciiname);
+          return /Montréal/i.test(suggestion.name);
         });
       })
     });
