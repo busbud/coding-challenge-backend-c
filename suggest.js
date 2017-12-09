@@ -4,6 +4,13 @@ const normalize = (string) =>
   .replace(/[\u0300-\u036f]/g, "")
   .toLowerCase()
 
+// to be sure that score is between 0 and 1
+const normalizeScore = score => {
+  if (score > 1) return 1
+  if (score < 0) return 0
+  return score
+}
+
 const deg2rad = (deg) => deg * (Math.PI/180)
 
 // based on Haversine formula : https://stackoverflow.com/questions/27928/calculate-distance-between-two-latitude-longitude-points-haversine-formula
@@ -21,26 +28,31 @@ const getDistanceFromLatLonInKm = (lat1,lon1,lat2,lon2) => {
   return distance;
 }
 
-const calculateScoreFromName = (city, normalizedSearch) =>
-  1 - (city.asciiname.length - normalizedSearch.length) * 0.1
+const calculateScoreFromName = (city, normalizedSearch) => {
+  const score = 1 - (city.asciiname.length - normalizedSearch.length) * 0.1
+  return normalizeScore(score)
+}
 
 const calculateScoreFromDistance = (lat1,lon1,lat2,lon2) => {
-  // 6000 km is roughly the max distance between two points on the US and CA
+  // earth radius is roughly the max distance between two points
   // for now we just make a simple linear fonction
-  return 1 - getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) / 6000
+  const score = 1 - getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) / 6371 * 2
+  return normalizeScore(score)
 }
 
 const calculateScore = (city, normalizedSearch, lat, lon) => {
+  let score
   if (lat && lon) {
     const nameWeight = 1
     const distanceWeight = 1
-    return (
+    score = (
       calculateScoreFromName(city, normalizedSearch) * nameWeight
       + calculateScoreFromDistance(city.latitude, city.longitude, lat, lon) * distanceWeight
     ) / (nameWeight + distanceWeight)
   } else {
-    return calculateScoreFromName(city, normalizedSearch)
+    score = calculateScoreFromName(city, normalizedSearch)
   }
+  return normalizeScore(score)
 }
 
 function suggest(cities, search, lat, lon) {

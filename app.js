@@ -31,7 +31,18 @@ let promise = new Promise((resolve, reject) => {
         return;
       }
 
-      let matchedCities = suggest(cities, queryAsObject.q)
+      let qLatitude = parseFloat(queryAsObject.latitude)
+      let qLongitude = parseFloat(queryAsObject.longitude)
+      let latitude = undefined
+      let longitude = undefined
+      if (qLatitude > -90 && qLatitude < 90) {
+        latitude = qLatitude
+      }
+      if (qLongitude > -180 && qLongitude < 180) {
+        longitude = qLongitude
+      }
+
+      let matchedCities = suggest(cities, queryAsObject.q, latitude, longitude)
       
       if (matchedCities.length === 0) {
         res.writeHead(404, { 'Content-Type': 'text/plain' });
