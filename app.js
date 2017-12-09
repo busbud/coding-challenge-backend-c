@@ -1,5 +1,6 @@
 var http = require('http');
 var url = require("url");
+var suggest = require('./suggest')
 var port = process.env.PORT || 2345;
 
 var csv = require("fast-csv");
@@ -20,7 +21,7 @@ let promise = new Promise((resolve, reject) => {
       var queryAsObject = parsedUrl.query;
       console.log('QUERY', queryAsObject)
 
-      let matchedCities = cities.filter(city => city.name.indexOf(queryAsObject.q) !== -1)
+      let matchedCities = suggest(cities, queryAsObject.q)
       
       if (matchedCities.length === 0) {
         res.writeHead(404, { 'Content-Type': 'text/plain' });
@@ -30,7 +31,7 @@ let promise = new Promise((resolve, reject) => {
       } else {
         res.writeHead(200, { 'Content-Type': 'text/plain' });
         res.end(JSON.stringify({
-          suggestions: matchedCities.map(city => Object.assign(city, {score: 1}))
+          suggestions: matchedCities
         }));
       }
     } else {
@@ -49,12 +50,18 @@ let promise = new Promise((resolve, reject) => {
       longitude,
       featureClass,
       featureCode,
-      countryCode
+      countryCode,
+      countryCode2,
+      adminCode1
     ]) {
       let city = {
-        name: asciiname,
+        asciiname,
+        name,
+        alternatenames,
         latitude,
-        longitude
+        longitude,
+        countryCode,
+        adminCode1
       }
       cities.push(city)
       console.log(city);
