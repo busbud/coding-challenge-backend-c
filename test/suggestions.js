@@ -90,6 +90,10 @@ describe('GET /suggestions', function() {
     it('returns a 200', function () {
       expect(response.statusCode).to.equal(200);
     });
+    
+    it('returns a a json response', function () {
+      expect(response.type).to.equal('application/json');
+    });
 
     it('returns an array of suggestions', function () {
       expect(response.json.suggestions).to.be.instanceof(Array);

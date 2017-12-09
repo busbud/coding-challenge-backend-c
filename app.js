@@ -23,7 +23,7 @@ let promise = new Promise((resolve, reject) => {
 
       if (!queryAsObject.q || typeof queryAsObject.q != 'string' ||
           queryAsObject.q.length < 3) {
-        res.writeHead(400, { 'Content-Type': 'text/plain' });
+        res.writeHead(400, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({
           error: 'q parameter is required and has to have at least 3 chars'
         }));
@@ -51,12 +51,12 @@ let promise = new Promise((resolve, reject) => {
         }))
       
       if (matchedCities.length === 0) {
-        res.writeHead(404, { 'Content-Type': 'text/plain' });
+        res.writeHead(404, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({
           suggestions: []
         }));
       } else {
-        res.writeHead(200, { 'Content-Type': 'text/plain' });
+        res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({
           suggestions: matchedCities
         }));
