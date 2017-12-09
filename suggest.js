@@ -4,7 +4,7 @@ const normalize = (string) =>
   .replace(/[\u0300-\u036f]/g, "")
   .toLowerCase()
 
-const calculateScrore = (city, normalizedSearch) =>
+const calculateScore = (city, normalizedSearch) =>
   1 - (city.asciiname.length - normalizedSearch.length) * 0.1
 
 function suggest(cities, search) {
@@ -14,7 +14,7 @@ function suggest(cities, search) {
       normalize(city.asciiname).indexOf(normalizedSearch) == 0
     )
     .map(city => 
-      Object.assign(city, {score: calculateScrore(city, normalizedSearch)})
+      Object.assign(city, {score: calculateScore(city, normalizedSearch)})
     )
     .sort((a,b) => b.score - a.score)
 }
