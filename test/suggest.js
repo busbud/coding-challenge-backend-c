@@ -54,6 +54,9 @@ describe('suggestions algorithm', function() {
     it('returns the two', () => {
       expect(suggestions.length).to.eql(2)
     })
+    it('sorts by descending score', () => {
+      expect(suggestions[0].score).to.be.above(suggestions[1].score)
+    })
     describe('the more chars match more the score is high', () => {
       it("works", () => {
         montCity = suggestions.find(city => city.name === 'Mont')

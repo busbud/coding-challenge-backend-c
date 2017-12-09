@@ -16,6 +16,7 @@ function suggest(cities, search) {
     .map(city => 
       Object.assign(city, {score: calculateScrore(city, normalizedSearch)})
     )
+    .sort((a,b) => b.score - a.score)
 }
 
 module.exports = suggest
