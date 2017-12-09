@@ -75,4 +75,33 @@ describe('suggestions algorithm', function() {
       expect(suggestions).to.be.empty
     })
   })
+  describe('latitude and longitude are filled', () => {
+    it('influents the results', () => {
+      let cities = [{
+        name: 'London, OH, USA',
+        asciiname: 'London',
+        latitude: 39.88645,
+        longitude: -83.44825
+      }, {
+        name: 'London, KY, USA',
+        asciiname: 'London',
+        latitude: 37.12898,
+        longitude: -84.08326
+      },
+      { // we are near hear
+        name: 'London, ON, Canada',
+        asciiname: 'London',
+        latitude: 42.98339,
+        longitude: -81.23304
+      }, {
+        name: 'Londontowne, MD, USA',
+        asciiname: 'Londontown',
+        latitude: 38.93345,
+        longitude: -76.54941
+      },]
+      let suggestions = suggest(cities, 'Londo', 43.70011, -79.4163)
+      expect(suggestions[0].name).to.eql('London, ON, Canada')
+      expect(suggestions[0].score).to.be.above(suggestions[1].score)
+    })
+  })
 })
