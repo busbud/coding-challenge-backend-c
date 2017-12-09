@@ -21,6 +21,16 @@ let promise = new Promise((resolve, reject) => {
       var queryAsObject = parsedUrl.query;
       console.log('QUERY', queryAsObject)
 
+      if (!queryAsObject.q || typeof queryAsObject.q != 'string' ||
+          queryAsObject.q.length < 3) {
+        res.writeHead(400, { 'Content-Type': 'text/plain' });
+        res.end(JSON.stringify({
+          error: 'q parameter is required and has to have at least 3 chars'
+        }));
+        res.end()
+        return;
+      }
+
       let matchedCities = suggest(cities, queryAsObject.q)
       
       if (matchedCities.length === 0) {
