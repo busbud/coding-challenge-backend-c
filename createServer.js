@@ -1,5 +1,6 @@
 const http = require('http')
 const url = require("url")
+const fs = require('fs')
 /**
  * Returns true if the url of the requets match the patch
  * 
@@ -50,7 +51,7 @@ const getSuggestionsParameters = (req) => {
     latitude: qLatitude > -90 && qLatitude < 90 ?
       qLatitude : undefined,
     longitude: qLongitude > -180 && qLongitude < 180 ?
-    qLongitude : undefined
+      qLongitude : undefined
   }
 }
 /**
@@ -68,6 +69,10 @@ module.exports = function createServer({cities, suggest}, {port}) {
 
     if (routeIs('/hello', req)) {
       respondText('Hello CI and CD :)', res)
+    }
+
+    else if (routeIs('/index.html', req)) {
+      fs.createReadStream('./public/index.html').pipe(res)
     }
 
     else if (routeIs('/suggestions', req)) {

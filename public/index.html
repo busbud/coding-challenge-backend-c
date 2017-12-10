@@ -1,0 +1,74 @@
+<html>
+  <head>
+    <title>Demo of the API  with autocomplete</title>
+    <script src="https://unpkg.com/rxjs/bundles/Rx.min.js"></script>
+  </head>
+  <body>
+    <h1>Welcome and search some US and Canadian cities :)</h1>
+    <form onsubmit="formSubmit()">
+        <label for="checkbox">Auto submit : </label>
+        <input name="checkbox" type="checkbox" onchange="checkboxChange()">
+        <br/>
+        <label for="search">Recherche : </label>
+        <input type="text" name="search" />
+        <input type="submit" name="submit" value="OK" />
+    </form>
+    <div id="results"></div>
+
+    <script>
+      function getSuggestions(search) {
+        return fetch(`/suggestions?q=${search}`)
+          .then(response => response.json())
+      }
+      var resultsNode = document.querySelector('#results')
+      var form = document.querySelector('form')
+      var autoSubmit = false
+
+      // Get all distinct key up events from the input and only fire if long enough and distinct
+      var keyup = Rx.Observable.fromEvent(form.elements.search, 'keyup')
+        .filter(() => autoSubmit) // if autoSubmit = false it ends here
+        .map(e => e.target.value) 
+        .filter(text => text.length > 3)
+        .debounceTime(750) // pause for 750ms
+        .distinctUntilChanged() // Only if the value has changed
+        // debounce + distinctUntilChanged avoid the spaming on the API
+        
+      var searcher = keyup.switchMap(getSuggestions)
+
+      const htmlFromResponse = (response) => {
+        var suggestions = response.suggestions || []
+        var citiesList = suggestions.map(city =>
+          `<li>${city.name}</li>`
+        )
+        if (citiesList.length === 0) {
+          citiesList = '<li> No city found :/ </li>'
+        }
+        return [
+          '<ul>',
+          ...citiesList,
+          '</ul>'
+        ].join('')
+      }
+    
+      searcher.subscribe(data => {
+        resultsNode.innerHTML = htmlFromResponse(data)
+      })
+
+      function checkboxChange() {
+        autoSubmit = form.elements.checkbox.checked
+        form.elements.submit.style.display = 
+          autoSubmit ?
+          'none' : ''
+      }
+
+      function formSubmit() {
+        event.preventDefault()
+        const searchInput = event.target.elements.search
+        getSuggestions(searchInput.value)
+          .then(json => {
+            resultsNode.innerHTML = htmlFromResponse(json)
+          })
+      }
+    </script>
+  </body>
+</html>
