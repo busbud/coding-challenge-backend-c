@@ -1,6 +1,7 @@
 const http = require('http')
 const url = require("url")
 const fs = require('fs')
+const { Readable, Writable, Transform } = require('stream')
 /**
  * Returns true if the url of the requets match the patch
  * 
@@ -99,6 +100,81 @@ module.exports = function createServer({cities, suggest}, {port}) {
       response.suggestions.length === 0 ?
         respondJSon(response, res, {statusCode: 404}) :
         respondJSon(response, res, {statusCode: 200})
+    }
+
+    else if (routeIs('/streamsuggestions', req)) {
+      // stream playground :)
+      const getParams = new Transform({
+        readableObjectMode: true,
+        transform(chunk, encoding, callback) {
+          const url = chunk.toString()
+          const params = getSuggestionsParameters({url})
+          this.push(
+            params
+          )
+          callback()
+        }
+      })
+
+      const validateParams = new Transform({
+        writableObjectMode: true,
+        readableObjectMode: true,
+        transform(params, encoding, callback) {
+          if (params.q.length < 3) {
+            this.push(null)
+            callback(new Error('q'))
+            return
+          }
+          this.push(params)
+          callback()
+        }
+      })
+
+      const getSuggestions = new Transform({
+        writableObjectMode: true,
+        readableObjectMode: true,
+        transform(params, encoding, callback) {
+          const suggestions = suggest(cities, params.q,params.latitude, params.longitude)
+            // format the suggestions
+            .map(city => ({
+              name: [city.name, city.adminCode1, city.countryCode].join(', '),
+              latitude: city.latitude,
+              longitude: city.longitude,
+              score: city.score
+            }))
+          this.push(suggestions)
+          callback()
+        }
+      })
+
+      const respond = new Writable({
+        objectMode: true,
+        write(suggestions, encoding, callback) {
+          suggestions.length === 0 ?
+            respondJSon({suggestions}, res, {statusCode: 404}) :
+            respondJSon({suggestions}, res, {statusCode: 200})
+          callback()
+        }
+      })
+
+      const inStream = new Readable({
+        read(size) {
+          this.push(null)
+        }
+      })
+
+      inStream
+      .pipe(getParams)
+      .pipe(validateParams)
+      .on('error', (err) => {
+        respondJSon({
+          error: 'q parameter is required and has to have at least 3 chars'
+        }, res, {statusCode: 400})
+      })
+      .pipe(getSuggestions)
+      .pipe(respond)
+      
+      inStream.push(req.url)
     }
     
     else {
