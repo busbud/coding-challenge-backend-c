@@ -1,3 +1,9 @@
+/**
+ * Returns the cities array from the tsv (string)
+ * 
+ * @param {String} string 
+ * @returns 
+ */
 module.exports = function getCitiesFromString (string) {
   return string
     .split('\n')
