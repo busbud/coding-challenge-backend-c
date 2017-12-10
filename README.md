@@ -1,4 +1,16 @@
-# Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
+# Busbud Coding Challenge [![CircleCI](https://circleci.com/gh/Benoit-Vasseur/coding-challenge-backend-c.svg?style=svg)](https://circleci.com/gh/Benoit-Vasseur/coding-challenge-backend-c)
+
+The app is hosted on Heroku : https://coding-challenge-backend-c-ben.herokuapp.com/index.html
+
+Suggestions endpoint : https://coding-challenge-backend-c-ben.herokuapp.com/suggestions?q=mont
+
+## What I did
+
+- two endpoints `/suggestions` and `/streamsuggestions`
+- add some tests
+- add CI and CD with CircleCI and Heroku
+- make a simple demo page of the API (RxJS : streams for client too ;))
+- respect all the requirements
 
 ## Requirements
 
