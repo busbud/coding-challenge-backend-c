@@ -21,7 +21,7 @@ const routeIs = (path, req) =>
  */
 const respondText = (text, res, {statusCode = 200} = {}) => {
   res.writeHead(statusCode, { 'Content-Type': 'text/plain' })
-  res.end(test)
+  res.end(text)
 }
 /**
  * Responds a Json.
@@ -102,7 +102,7 @@ module.exports = function createServer({cities, suggest}, {port}) {
     }
     
     else {
-      respondText('Route not found :/', res, {statusCode: 404})
+      respondText('Not found :/', res, {statusCode: 404})
     }
   })
   httpServer.listen(port, '0.0.0.0')
