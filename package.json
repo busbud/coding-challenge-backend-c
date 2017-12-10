@@ -2,16 +2,15 @@
   "name": "coding-challenge-backend-c",
   "version": "0.0.0",
   "description": "coding challenge in Nodejs",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "node index.js",
     "test": "./node_modules/mocha/bin/mocha ./test/",
     "test:suggest": "./node_modules/mocha/bin/mocha ./test/suggest.js"
   },
   "author": "",
   "license": "WTFPL",
   "dependencies": {
-    "fast-csv": "^2.4.1"
   },
   "devDependencies": {
     "chai": "^1.9.1",

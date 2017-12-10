@@ -1,14 +1,8 @@
 var expect  = require('chai').expect;
-var app     = require('../app');
-var request;
+var app     = require('../index');
+var request = require('supertest')(app);
 
 describe('GET /suggestions', function() {
-  before(function(done) {
-    app.then(appReady => {
-      request = require('supertest')(appReady);
-      done()
-    })
-  })
   describe('with no city', function () {
     var response;
     
