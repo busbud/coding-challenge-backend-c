@@ -37,6 +37,44 @@ J'ai installé 2 extensions :
 - unaccent pour gérer la recherche avec accent
 - postgis pour faire le calcul de distance
 
+
+Installation d'une base de données locale
+-----------------------------------------
+
+
+Cette installation est valable pour postgresql sous MacOS
+Telecharger le binaire qui se trouve à cette URL :
+http://postgresapp.com/ et suivre les instructions.
+
+Une fois installé, il faut lancer un nouveau terminal pour prendre en compte les nouveaux binaires.
+
+Ensuite à la racine de votre checkout du coding challenge
+
+```bash
+cd seeders
+chmod +x ./setup.sh
+./setup.sh
+```
+
+On peut egalement surcharger les valeurs du setup.sh
+```bash
+./setup.sh -d atalidb -u ataliuser -e password -p 5432 -h localhost
+```
+
+-d <database name>
+-u <database user>
+-e <database password>
+-p <database port>
+-h <database host>
+
+Un fichier d'environnement .env est créé avec la variable d'environnement DATABASE_URL à la racine du répertoire.
+
+Vous pouvez lancer les tests fonctionelles:
+```bash
+npm run test
+```
+
+
 Script de base de données
 -------------------------
 

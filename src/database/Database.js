@@ -6,7 +6,6 @@ const { URL } = require('url');
 
 export default class Database {
   constructor(connectionString) {
-    console.log('connectionstring', connectionString);
     const params = new URL(connectionString);
     const config = {
       user: params.username,
@@ -15,13 +14,10 @@ export default class Database {
       port: params.port,
       database: params.pathname.split('/')[1]
     };
-
-    console.log('PostgreSql config parsed', JSON.stringify(config));
     this.pool = new Pool(config);
   }
 
   runQuery = async query => {
-    console.log('run query ', query);
     const client = await this.pool.connect();
     try {
       return client.query(new QueryStream(query.sql, query.params));

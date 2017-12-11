@@ -18,14 +18,12 @@ if (process.env.NODE_ENV !== 'production') {
   if (result.error) {
     throw result.error;
   }
-  console.log(result.parsed);
 }
 
 const database = new Database(process.env.DATABASE_URL);
 
 app.get('/suggestions', async (req, res) => {
   try {
-    console.log('receive a new query with params: ', req.query);
     const query = {
       q: req.query.q,
       latitude: req.query.latitude,

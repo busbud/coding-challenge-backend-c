@@ -6,14 +6,8 @@ CREATE INDEX IF NOT EXISTS GEONAME_IDX ON geoname (name);
 CREATE INDEX IF NOT EXISTS NAME_LAT_LON_IDX ON geoname (name, latitude, longitude);
 CREATE INDEX ON geoname USING gist (POINT(latitude, longitude));
 
-\copy geoname (geonameid,name,asciiname,alternatenames,latitude,longitude,fclass,fcode,country,cc2, admin1,admin2,admin3,admin4,population,elevation,gtopo30,timezone,moddate) from './data/cities_canada-usa.tsv' with CSV HEADER QUOTE E'\b'  DELIMITER E'\t' null as '';
-
 CREATE EXTENSION unaccent;
 CREATE EXTENSION postgis;
 
--- create scoring function
---psql -p 5432 -d atali -U atali -f ./setup/scoring.sql
-cat scoring_latlng.sql | heroku pg:psql
-cat scoring_name.sql | heroku pg:psql
-cat scoring_latlng_name.sql | heroku pg:psql
+\copy geoname (geonameid,name,asciiname,alternatenames,latitude,longitude,fclass,fcode,country,cc2, admin1,admin2,admin3,admin4,population,elevation,gtopo30,timezone,moddate) from '../data/cities_canada-usa.tsv' with CSV HEADER QUOTE E'\b'  DELIMITER E'\t' null as '';
 

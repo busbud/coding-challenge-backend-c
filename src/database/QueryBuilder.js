@@ -1,6 +1,5 @@
 export default class QueryBuilder {
   build = params => {
-    console.log('params', params);
     if (params && params.q && params.latitude && params.longitude) {
       return {
         sql:
