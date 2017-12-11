@@ -1,0 +1,33 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "modules": false
+      }
+    ]
+  ],
+  "plugins": [
+    "@babel/plugin-proposal-object-rest-spread",
+    "@babel/transform-arrow-functions",
+    "@babel/proposal-class-properties",
+    "@babel/transform-regenerator",
+    "@babel/transform-async-to-generator"
+  ],
+  "env": {
+    "test": {
+      "presets": [
+        [
+          "@babel/preset-env"
+        ]
+      ],
+      "plugins": [
+        "@babel/plugin-proposal-object-rest-spread",
+        "@babel/transform-arrow-functions",
+        "@babel/proposal-class-properties",
+        "@babel/transform-regenerator",
+        "@babel/transform-async-to-generator"
+      ]
+    }
+  }
+}
