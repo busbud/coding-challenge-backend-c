@@ -1,3 +1,4 @@
+'use strict';
 const cityManager = require('../modules/cityManagerModule');
 const minimumScore = 0.5;
 const maxResults = 5;

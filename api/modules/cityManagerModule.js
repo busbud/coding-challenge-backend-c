@@ -1,3 +1,4 @@
+'use strict';
 const City = require('../models/City');
 const CityMatch = require('../models/CityMatch');
 const geodist = require('geodist');
