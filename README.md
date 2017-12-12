@@ -1,4 +1,4 @@
-# Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
+# Busbud Coding Challenge [![CircleCI](https://circleci.com/gh/githubjul/coding-challenge-backend-c.svg?style=svg)](https://circleci.com/gh/githubjul/coding-challenge-backend-c)
 
 ## Requirements
 
@@ -27,8 +27,7 @@ These responses are meant to provide guidance. The exact values can vary based o
 
 ```json
 {
-  "suggestions": [
-    {
+  "suggestions": [{
       "name": "London, ON, Canada",
       "latitude": "42.98339",
       "longitude": "-81.23304",
