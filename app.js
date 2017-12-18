@@ -1,27 +1,29 @@
+'use strict';
 var http = require('http');
-var search = require("./search.js");
+var search = require("./lib/search");
 
-var port = process.env.PORT || 2345;
+const port = process.env.PORT || 2345;
 
-// WARNING there is no sanity check on parameters parsing!
-
-var basePath = "/suggestions?q=";
-var latParam = "latitude=";
-var lonParam = "longitude=";
-
-// Server start
+/**
+ * Entry of application
+ * Creates a server that responds on /suggestions
+ */
 module.exports = http.createServer(function (req, res) {
 	try {
-		if (!req.url.startsWith(basePath) || req.url.length == basePath.length) {
+		// One step URL parser with regex. Returns lat & lon only if both are valid
+		// Here for demo purposes. A benchmark should be done to assess speed
+		// According to the following page, literal syntax Regex is compiled once at parse time : https://stackoverflow.com/questions/9750338/dynamic-vs-inline-regexp-performance-in-javascript
+		var urlParserRegex = /^\/suggestions\?q=([^&\s]+)(?:&latitude=([+-]?(?:[0-9]*[.])?[0-9]+)&longitude=([+-]?(?:[0-9]*[.])?[0-9]+))?/g;
+		
+		var matches = urlParserRegex.exec(req.url);
+
+		if (!matches) {
 
 			res.writeHead(400, { 'Content-Type': 'text/plain; charset=utf-8' });
-			res.end("Service only responds on non empty query beginning with " + basePath);
+			res.end("Please format your query accordingly to " + urlParserRegex);
 
 		} else {
-			var urlChunks = req.url.split("&"); // split creates up to 3 new strings, can this be avoided ? (with Buffer for example)
-			
-			var query = decodeURIComponent(urlChunks[0].substring(basePath.length)).toLowerCase();
-			var result = search(query, () => parseLatLon(...urlChunks)); // we pass an arrow function in order to avoid lat/lon parsing if it is not needed (cleaneness can be improved)
+			var result = search(decodeURIComponent(matches[1]).toLowerCase(), () => parseFloat(matches[2]), () => parseFloat(matches[3])); // Arrow function is used so that we parse lat & lon only if we have found records
 
 			if (!result) {
 				res.writeHead(404, { 'Content-Type': 'text/json; charset=utf-8' });
@@ -29,7 +31,7 @@ module.exports = http.createServer(function (req, res) {
 			} else {
 				res.writeHead(200, { 'Content-Type': 'text/json; charset=utf-8' });
 				result
-					// could .pipe to gzip (Note: this needs a check of the accept header)
+					// TODO could .pipe to gzip (Note: this needs a check of the accept header)
 					.pipe(res);
 			}
 		}
@@ -38,12 +40,3 @@ module.exports = http.createServer(function (req, res) {
 		res.end("(✖╭╮✖) Unexpected error :" + e.message);
 	}
 }).listen(port, () => console.log('Server running at http://0.0.0.0:%d/suggestions', port));
-
-var parseGeoParam = (str, paramPrefix) => str.startsWith(paramPrefix) && parseFloat(str.substring(paramPrefix.length));
-
-var parseLatLon = function (query, latStr, lonStr) {
-	var lat = latStr && parseGeoParam(latStr, latParam);
-	var lon = lonStr && parseGeoParam(lonStr, lonParam);
-	if (lat && lon && !isNaN(lat) && !isNaN(lon))
-		return [lat, lon];
-}

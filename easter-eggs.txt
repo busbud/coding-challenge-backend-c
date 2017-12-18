@@ -1,0 +1,62 @@
+### Released
+## Asked
+- /suggestions endpoint (partial/complete/lat-lon)
+- Functional tests
+- Sort with score => score is poorly implemented. And a Levensthein is useless since we don't do approximate match
+- Deployed on Heroku
+- All in JS
+- Pull request
+
+## Not explicitly asked
+- error codes
+- Unicode handling
+
+### Performance
+- The code is not done to get the maximum performance, but it has a design in that direction.
+ - Search is done through a denormalized object where each prefix is precomputed (since the quantity of data is low, this a viable solution), the speed then relies on the JS internal `object["str"]` performance, which is hopefully fast since this one the most used feature in JS. (Actually, I'm not aware of the real internal behavior, but I suspect it to be fast...). The data has been sharded by `prefix.length`, this is mostly to search in smaller objects rather than in a big object containing everything, but the impact on performance has not been tested.
+ - Other part that may have an impact have not been particularly optimized (sorting, serialization, url parsing)
+ - Scoring is poorly done so, at least, it has been made to be fast. Therefore a score is computed on a single object. If we had to score objects relatively to each other, it would have had a potential impact
+
+- The program has been split into a denormalization step, and a server module because parsing the source file is costly, and should not be done at each server startup. The speed of this part is then less important. The load of the file can be done in a better manner, but that is part of the improvments.
+
+### Improvments
+- Score
+- Load of JSON data file
+- GZip => can be provided with a simple pipe to zlib
+- Remote fetch of source in order to get fresh data
+- Approximate search
+- Performance tuning
+- Improve disambuiguation
+
+###Found "Easter eggs"
+
+#README.md
+- Different ports => was not intentional ?
+- SomeRandomCityInTheMiddleOfNowhere => if we look for a city, we should find it even if it is in the middle of nowhere ;-)
+- Misspelling "in Geonames provides..."
+
+#app.js
+- Writes 404 unconditionally
+- indexOf === 0 is fine when there is a match, but parses all the string if no match
+- json response without proper header
+- listen on 127.0.0.1 does not work on Heroku => this one was a bit sadistic :-p
+- console.log written before the server has started listening
+
+#.nvmrc
+- ... => had trouble with nvm, I'm on windows
+
+#package.json
+- old versions
+- dependencies not separated from devDependencies (I found this while reading another pull request)
+- npm test does not work because of the 'node' command  missing (I found this while reading another pull request)
+=> Note: I still use 6.12, because I had trouble with 8.9.1 on Windows. I had a similar error than this one: https://github.com/remy/nodemon/issues/1124
+
+#test/suggestions.js
+- regex interverted with tested string
+- SomeRandomCityInTheMiddleOfNowhere also here
+- unprotected JSON.Parse heavily crashes the tests if the response is not JSON  =>(at least my VS code does not like it...)
+
+#data/README.md & data/cities_canada-usa.tsv
+- alternate names are quite a mess with unicode names...
+- Almost similar cities...
+=> Also I realize that the real cities file is as messy as the one from the challenge :-p

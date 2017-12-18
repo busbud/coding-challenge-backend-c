@@ -55,7 +55,7 @@ var checkValid = function (query, regex) {
 				.get(query)
 				.end(function (err, res) {
 					response = res;
-					response.json = JSON.parse(res.text);
+					if (res.text.startsWith('{')) response.json = JSON.parse(res.text);
 					done(err);
 				});
 		});
@@ -88,7 +88,7 @@ var checkValid = function (query, regex) {
 		it('contains scores', function () {
 			expect(response.json.suggestions).to.satisfy(function (suggestions) {
 				return suggestions.every(function (suggestion) {
-					return suggestion.score;
+					return !isNaN(suggestion.score);
 				});
 			})
 		});
@@ -100,7 +100,7 @@ describe('GET /suggestions', function () {
 
 	describe('with an empty city name', checkStatus('/suggestions?q=', 400));
 
-	describe('with empty geo position', checkStatus('/suggestions?q=a&latitude=&longitude=', 200));
+	describe('with empty geo position', checkValid('/suggestions?q=a&latitude=&longitude=', /^a/i));
 
 	describe('with invalid geo position', checkStatus('/suggestions?q=a&latitude=a&longitude=a', 200)); // Now working, TODO find other case to trigger a 500
 	
@@ -110,6 +110,5 @@ describe('GET /suggestions', function () {
 
 	describe('with a partial city name', checkValid('/suggestions?q=lon', /London/i));
 
-	// Note this works in a browser, but the test fails with a 404 => problem with local encoding ?
-	// describe('with a unicode city name', checkValid('/suggestions?q=몬트리올', /Montréal/i)); // 몬트리올 is an alternate name
+	describe('with a unicode city name', checkValid(encodeURI('/suggestions?q=몬트리올'), /Montréal/i)); // 몬트리올 is an alternate name for Montréal
 });
