@@ -24,13 +24,13 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceFolder}\\app.js"
+            "program": "${workspaceFolder}/app.js"
         },
         {
             "type": "node",
             "request": "launch",
             "name": "Launch Denormalize",
-            "program": "${workspaceFolder}\\app-denormalize.js"
+            "program": "${workspaceFolder}/app-denormalize.js"
         }
     ]
 }
