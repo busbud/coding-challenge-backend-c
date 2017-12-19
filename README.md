@@ -58,7 +58,7 @@ These responses are meant to provide guidance. The exact values can vary based o
 
 **No match**
 
-    GET /suggestions?q=SomeRandomCityInTheMiddleOfNowhere
+    GET /suggestions?q=SomeRandomStringThatIsntACity
 
 ```json
 {
@@ -76,7 +76,7 @@ These responses are meant to provide guidance. The exact values can vary based o
 
 ### References
 
-- Geonames provides city lists Canada and the USA http://download.geonames.org/export/dump/readme.txt
+- Geonames provides city lists for the Canada and the USA http://download.geonames.org/export/dump/readme.txt
 - http://www.nodejs.org/
 - http://ejohn.org/blog/node-js-stream-playground/
 

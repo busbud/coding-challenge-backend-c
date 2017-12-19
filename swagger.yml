@@ -1,0 +1,68 @@
+swagger: "2.0"
+info:
+  description: "This is a demo server for autocomplete."
+  version: "0.0.0"
+  title: "BusBud Challenge Demo"
+  contact:
+    email: "github@clorr.fr"
+host: "tranquil-chamber-64444.herokuapp.com"
+basePath: "/"
+schemes:
+- "http"
+paths:
+  /suggestions:
+    get:
+      summary: "Returns city suggestions"
+      description: ""
+      operationId: "getSuggestions"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "q"
+        in: "query"
+        description: "String to get autocomplete/suggestions from"
+        required: true
+        type: "string"
+      - name: "latitude"
+        in: "query"
+        description: "Latitude to refine suggestions"
+        required: false
+        type: "number"
+        format: "double"
+      - name: "longitude"
+        in: "query"
+        description: "Longitude to refine suggestions"
+        required: false
+        type: "number"
+        format: "double"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/City"
+        400:
+          description: "Invalid query format"
+        404:
+          description: "Nothing found"
+        500:
+          description: "Server error"
+definitions:
+  City:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+      latitude:
+        type: "string"
+        format: "double"
+      longitude:
+        type: "string"
+        format: "double"
+      score:
+        type: "number"
+        format: "float"

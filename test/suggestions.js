@@ -1,75 +1,114 @@
-var expect  = require('chai').expect;
-var app     = require('../app');
+var expect = require('chai').expect;
+var app = require('../app');
 var request = require('supertest')(app);
 
-describe('GET /suggestions', function() {
-  describe('with a non-existent city', function () {
-    var response;
+var checkStatus = function (query, statusCode) {
+	return function () {
+		var response;
 
-    before(function (done) {
-      request
-        .get('/suggestions?q=SomeRandomCityInTheMiddleOfNowhere')
-        .end(function (err, res) {
-          response = res;
-          response.json = JSON.parse(res.text);
-          done(err);
-        });
-    });
+		before(function (done) {
+			request
+				.get(query)
+				.end(function (err, res) {
+					response = res;
+					done(err);
+				});
+		});
 
-    it('returns a 404', function () {
-      expect(response.statusCode).to.equal(404);
-    });
+		it('returns a ' + statusCode, function () {
+			expect(response.statusCode).to.equal(statusCode);
+		});
+	}
+}
 
-    it('returns an empty array of suggestions', function () {
-      expect(response.json.suggestions).to.be.instanceof(Array);
-      expect(response.json.suggestions).to.have.length(0);
-    });
-  });
+var checkNotFound = function (query) {
+	return function () {
+		var response;
 
-  describe('with a valid city', function () {
-    var response;
+		before(function (done) {
+			request
+				.get(query)
+				.end(function (err, res) {
+					response = res;
+					response.json = JSON.parse(res.text);
+					done(err);
+				});
+		});
 
-    before(function (done) {
-      request
-        .get('/suggestions?q=Montreal')
-        .end(function (err, res) {
-          response = res;
-          response.json = JSON.parse(res.text);
-          done(err);
-        });
-    });
+		it('returns a 404', function () {
+			expect(response.statusCode).to.equal(404);
+		});
 
-    it('returns a 200', function () {
-      expect(response.statusCode).to.equal(200);
-    });
+		it('returns an empty array of suggestions', function () {
+			expect(response.json.suggestions).to.be.instanceof(Array);
+			expect(response.json.suggestions).to.have.length(0);
+		});
+	}
+}
 
-    it('returns an array of suggestions', function () {
-      expect(response.json.suggestions).to.be.instanceof(Array);
-      expect(response.json.suggestions).to.have.length.above(0);
-    });
+var checkValid = function (query, regex) {
+	return function () {
+		var response;
 
-    it('contains a match', function () {
-      expect(response.json.suggestions).to.satisfy(function (suggestions) {
-        return suggestions.some(function (suggestion) {
-          return suggestion.name.test(/montreal/i);
-        });
-      })
-    });
+		before(function (done) {
+			request
+				.get(query)
+				.end(function (err, res) {
+					response = res;
+					if (res.text.startsWith('{')) response.json = JSON.parse(res.text);
+					done(err);
+				});
+		});
 
-    it('contains latitudes and longitudes', function () {
-      expect(response.json.suggestions).to.satisfy(function (suggestions) {
-        return suggestions.every(function (suggestion) {
-          return suggestion.latitude && suggestion.longitude;
-        });
-      })
-    });
+		it('returns a 200', function () {
+			expect(response.statusCode).to.equal(200);
+		});
 
-    it('contains scores', function () {
-      expect(response.json.suggestions).to.satisfy(function (suggestions) {
-        return suggestions.every(function (suggestion) {
-          return suggestion.latitude && suggestion.longitude;
-        });
-      })
-    });
-  });
+		it('returns an array of suggestions', function () {
+			expect(response.json.suggestions).to.be.instanceof(Array);
+			expect(response.json.suggestions).to.have.length.above(0);
+		});
+
+		it('contains a match', function () {
+			expect(response.json.suggestions).to.satisfy(function (suggestions) {
+				return suggestions.some(function (suggestion) {
+					return regex.test(suggestion.name);
+				});
+			})
+		});
+
+		it('contains latitudes and longitudes', function () {
+			expect(response.json.suggestions).to.satisfy(function (suggestions) {
+				return suggestions.every(function (suggestion) {
+					return suggestion.latitude && suggestion.longitude;
+				});
+			})
+		});
+
+		it('contains scores', function () {
+			expect(response.json.suggestions).to.satisfy(function (suggestions) {
+				return suggestions.every(function (suggestion) {
+					return !isNaN(suggestion.score);
+				});
+			})
+		});
+	}
+}
+
+describe('GET /suggestions', function () {
+	describe('with an invalid request', checkStatus('/suggestion', 400));
+
+	describe('with an empty city name', checkStatus('/suggestions?q=', 400));
+
+	describe('with empty geo position', checkValid('/suggestions?q=a&latitude=&longitude=', /^a/i));
+
+	describe('with invalid geo position', checkStatus('/suggestions?q=a&latitude=a&longitude=a', 200)); // Now working, TODO find other case to trigger a 500
+	
+	describe('with a non-existent city', checkNotFound('/suggestions?q=SomeRandomStringThatIsntACity'));
+
+	describe('with a valid city', checkValid('/suggestions?q=Montreal', /Montréal/i));
+
+	describe('with a partial city name', checkValid('/suggestions?q=lon', /London/i));
+
+	describe('with a unicode city name', checkValid(encodeURI('/suggestions?q=몬트리올'), /Montréal/i)); // 몬트리올 is an alternate name for Montréal
 });
