@@ -25,3 +25,5 @@ dem               : digital elevation model, srtm3 or gtopo30, average elevation
 timezone          : the timezone id (see file timeZone.txt) varchar(40)
 modification date : date of last modification in yyyy-MM-dd format
 ```
+
+Source: [GeoNames dump](http://download.geonames.org/export/dump/)
