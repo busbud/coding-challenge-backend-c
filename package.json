@@ -11,10 +11,18 @@
   "license": "WTFPL",
   "dependencies": {
     "chai": "^1.9.1",
+    "d3-dsv": "^1.0.8",
+    "express": "^4.16.2",
+    "express-rate-limit": "^2.11.0",
+    "fs": "0.0.1-security",
+    "geodist": "^0.2.1",
     "mocha": "^1.18.2",
-    "supertest": "^0.11.0"
+    "string_score": "^0.1.22",
+    "supertest": "^0.11.0",
+    "trie-search": "^1.0.9"
   },
   "engines": {
-    "node": "0.10.26"
-  }
+    "node": "8.9.4"
+  },
+  "devDependencies": {}
 }
