@@ -13,6 +13,7 @@
     "chai": "^1.9.1",
     "d3-dsv": "^1.0.8",
     "express": "^4.16.2",
+    "express-rate-limit": "^2.11.0",
     "fs": "0.0.1-security",
     "geodist": "^0.2.1",
     "mocha": "^1.18.2",
