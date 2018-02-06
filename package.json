@@ -11,12 +11,15 @@
   "license": "WTFPL",
   "dependencies": {
     "chai": "^1.9.1",
+    "d3-dsv": "^1.0.8",
     "express": "^4.16.2",
+    "fs": "0.0.1-security",
     "mocha": "^1.18.2",
     "supertest": "^0.11.0",
     "triejs": "^0.1.5"
   },
   "engines": {
     "node": "0.10.26"
-  }
+  },
+  "devDependencies": {}
 }
