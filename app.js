@@ -27,14 +27,14 @@ app.get('/suggestions', (req, res) => {
 
   let result = [];
   if (queryParam) {
-    result = trie.find(queryParam);
+    result = trie.find(queryParam.toLowerCase());
   }
 
   if (result) {
     result = scoreCalculator.calculateScore(result, queryParam, latitude, longitude);
   }
 
-  res.send(JSON.stringify({
+  res.status(result ? 200 : 404).send(JSON.stringify({
     suggestions: result || []
   }))
 })

@@ -14,7 +14,7 @@ let loadData = (trie) => {
     for (let i = 0; i < data.length; i++) {
       const cityInfo = data[i];
       if (cityInfo.population > MINIMUM_POPULATION) {
-        trie.add(cityInfo.name, {
+        trie.add(cityInfo.name.toLowerCase(), {
           name: cityInfo.name + " , " + cityInfo.admin1 + " , " + cityInfo.country,
           latitude: cityInfo.lat,
           longitude: cityInfo.long,
