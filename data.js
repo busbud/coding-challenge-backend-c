@@ -4,12 +4,10 @@
 
 const fs = require('fs');
 const d3 = require("d3-dsv");
-const Triejs = require('triejs');
-const trie = new Triejs();
 
 const MINIMUM_POPULATION = 5000;
 
-let loadData = () => {
+let loadData = (trie) => {
   console.log("Loading data..");
   fs.readFile('./data/cities_canada-usa.tsv', 'utf8', (err, contents) => { // read the input data file
     let data = d3.tsvParse(contents); // parse tsv to json object
@@ -24,7 +22,6 @@ let loadData = () => {
         });
       }
     }
-    console.log(trie.find("Londo"));
   });
 }
 
