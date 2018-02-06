@@ -1,16 +1,15 @@
-var http = require('http');
-var port = process.env.PORT || 2345;
+const express = require('express');
+const app = express();
 
-module.exports = http.createServer(function (req, res) {
-  res.writeHead(404, {'Content-Type': 'text/plain'});
+const port = process.env.PORT || 2345;
+app.listen(port, () => console.log('App listening on port' + port));
 
-  if (req.url.indexOf('/suggestions') === 0) {
-    res.end(JSON.stringify({
-      suggestions: []
-    }));
-  } else {
-    res.end();
-  }
-}).listen(port, '127.0.0.1');
+app.get('/', (req, res) => {
+  res.send('BusBud AutoSugest API!');
+})
 
-console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+app.get('/suggestions', (req, res) => {
+  res.send(JSON.stringify({
+    suggestions: []
+  }))
+})
