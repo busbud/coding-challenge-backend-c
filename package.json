@@ -14,7 +14,9 @@
     "d3-dsv": "^1.0.8",
     "express": "^4.16.2",
     "fs": "0.0.1-security",
+    "geodist": "^0.2.1",
     "mocha": "^1.18.2",
+    "string_score": "^0.1.22",
     "supertest": "^0.11.0",
     "triejs": "^0.1.5"
   },

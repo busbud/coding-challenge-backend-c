@@ -3,6 +3,7 @@ const app = express();
 
 const port = process.env.PORT || 2345;
 const data = require('./data');
+const scoreCalculator = require('./scoreCalculator');
 
 const Triejs = require('triejs');
 const trie = new Triejs();
@@ -29,7 +30,13 @@ app.get('/suggestions', (req, res) => {
     result = trie.find(queryParam);
   }
 
+  if (result) {
+    result = scoreCalculator.calculateScore(result, queryParam, latitude, longitude);
+  }
+
   res.send(JSON.stringify({
-    suggestions: result
+    suggestions: result || []
   }))
 })
+
+module.exports = app;
