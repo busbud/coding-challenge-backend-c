@@ -18,7 +18,7 @@
     "mocha": "^1.18.2",
     "string_score": "^0.1.22",
     "supertest": "^0.11.0",
-    "triejs": "^0.1.5"
+    "trie-search": "^1.0.9"
   },
   "engines": {
     "node": "0.10.26"

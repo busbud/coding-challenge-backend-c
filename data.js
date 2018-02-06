@@ -11,17 +11,22 @@ let loadData = (trie) => {
   console.log("Loading data..");
   fs.readFile('./data/cities_canada-usa.tsv', 'utf8', (err, contents) => { // read the input data file
     let data = d3.tsvParse(contents); // parse tsv to json object
+    let cities = {};
+
     for (let i = 0; i < data.length; i++) {
       const cityInfo = data[i];
       if (cityInfo.population > MINIMUM_POPULATION) {
-        trie.add(cityInfo.name.toLowerCase(), {
+        let cityName = (cityInfo.name + " , " + cityInfo.admin1 + " , " + cityInfo.country).toLowerCase();
+        let city = {
           name: cityInfo.name + " , " + cityInfo.admin1 + " , " + cityInfo.country,
           latitude: cityInfo.lat,
           longitude: cityInfo.long,
           score: 0
-        });
+        };
+        cities[cityName] = city;
       }
     }
+    trie.addFromObject(cities);
   });
 }
 

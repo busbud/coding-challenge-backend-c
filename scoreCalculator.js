@@ -12,7 +12,7 @@ let calculateScore = (data, queryParam, latitude, longitude) => {
 let findMaxMinDistance = (data, latitude, longitude) => {
   let minMaxDistance = {};
   for (let i = 0; i < data.length; i++) {
-    let cityInfo = data[i];
+    let cityInfo = data[i].value;
     const distance = geodist({
       lat: cityInfo.latitude,
       lon: cityInfo.longitude
@@ -31,8 +31,9 @@ let findMaxMinDistance = (data, latitude, longitude) => {
 }
 
 let findScore = (data, queryParam, latitude, longitude, minMaxDistance) => {
+  let result = [];
   for (let i = 0; i < data.length; i++) {
-    const cityInfo = data[i];
+    const cityInfo = data[i].value;
     let stringScore = findStringScore(cityInfo, queryParam);
     let distanceScore;
     let score;
@@ -44,8 +45,9 @@ let findScore = (data, queryParam, latitude, longitude, minMaxDistance) => {
     }
 
     cityInfo.score = score;
+    result.push(cityInfo);
   }
-  return data.sort(function(obj1, obj2) {
+  return result.sort(function(obj1, obj2) {
     return obj2.score - obj1.score;
   });
 }

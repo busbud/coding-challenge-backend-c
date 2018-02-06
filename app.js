@@ -5,8 +5,8 @@ const port = process.env.PORT || 2345;
 const data = require('./data');
 const scoreCalculator = require('./scoreCalculator');
 
-const Triejs = require('triejs');
-const trie = new Triejs();
+var TrieSearch = require('trie-search');
+const trie = new TrieSearch();
 
 let cityData;
 
@@ -25,16 +25,16 @@ app.get('/suggestions', (req, res) => {
   const longitude = req.query.longitude;
   const latitude = req.query.latitude;
 
-  let result = [];
+  let result;
   if (queryParam) {
-    result = trie.find(queryParam.toLowerCase());
+    result = trie.get(queryParam.toLowerCase());
   }
 
   if (result) {
     result = scoreCalculator.calculateScore(result, queryParam, latitude, longitude);
   }
 
-  res.status(result ? 200 : 404).send(JSON.stringify({
+  res.status(result && result.length > 0 ? 200 : 404).send(JSON.stringify({
     suggestions: result || []
   }))
 })
