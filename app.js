@@ -6,9 +6,9 @@ const data = require('./data');
 const scoreCalculator = require('./scoreCalculator');
 
 var TrieSearch = require('trie-search');
-const trie = new TrieSearch();
+const trie = new TrieSearch(); // used to load and search data using trie ds
 
-var RateLimit = require('express-rate-limit');
+var RateLimit = require('express-rate-limit'); // rate limitter for limiting too many requests from an IP
 
 app.enable('trust proxy');
 
@@ -21,12 +21,11 @@ var limiter = new RateLimit({
 //  apply to all requests
 app.use(limiter);
 
-
 let cityData;
 
 app.listen(port, () => {
   console.log('App listening on port : ' + port);
-  cityData = data.loadData(trie); // load cities..
+  cityData = data.loadData(trie); // load cities on startup..
 });
 
 app.get('/', (req, res) => {
@@ -41,11 +40,11 @@ app.get('/suggestions', (req, res) => {
 
   let result;
   if (queryParam) {
-    result = trie.get(queryParam.toLowerCase());
+    result = trie.get(queryParam.toLowerCase()); //finds the suggestions
   }
 
   if (result) {
-    result = scoreCalculator.calculateScore(result, queryParam, latitude, longitude);
+    result = scoreCalculator.calculateScore(result, queryParam, latitude, longitude); //calculates score
   }
 
   res.status(result && result.length > 0 ? 200 : 404).send(JSON.stringify({

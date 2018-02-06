@@ -5,7 +5,7 @@
 const fs = require('fs');
 const d3 = require("d3-dsv");
 
-const MINIMUM_POPULATION = 5000;
+const MINIMUM_POPULATION = 5000; //minmum population requiement
 
 let loadData = (trie) => {
   console.log("Loading data..");
@@ -23,10 +23,10 @@ let loadData = (trie) => {
           longitude: cityInfo.long,
           score: 0
         };
-        cities[cityName] = city;
+        cities[cityName] = city; //building the json object
       }
     }
-    trie.addFromObject(cities);
+    trie.addFromObject(cities); // add to the ds
   });
 }
 

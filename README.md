@@ -49,3 +49,16 @@ Sample output
       }
    ]
 }
+
+
+Running the tests
+The test suite can be run with
+
+npm test
+Starting the application
+To start a local server run
+
+PORT=3456 npm start
+which should produce output similar to
+
+Server running at http://127.0.0.1:3456/suggestions
