@@ -22,7 +22,7 @@
     "trie-search": "^1.0.9"
   },
   "engines": {
-    "node": "0.10.26"
+    "node": "8.9.4"
   },
   "devDependencies": {}
 }
