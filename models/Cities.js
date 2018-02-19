@@ -1,6 +1,5 @@
 const url = require('url');
 const _ = require('lodash');
-const { normalize } = require('../utility/normalizer');
 
 class Cities {
   static formatHitToCity(hit) {
@@ -19,7 +18,7 @@ class Cities {
         'bool': {
           'should': [
             {
-              'prefix': {
+              'prefix': { // gives higher score to cities beginning with the search term
                 'rawName': opts.term
               }
             },
@@ -46,6 +45,7 @@ class Cities {
       };
     }
 
+    // if lat long is provided, a higher score is given to closer cities from the pin
     if (opts.pin && !_.isNaN(Number(opts.pin.lat)) && !_.isNaN(Number(opts.pin.long))) {
       return {
         'size': opts.limit,

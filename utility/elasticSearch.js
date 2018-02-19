@@ -51,6 +51,7 @@ function importCities(esClient) {
   }));
 
   return new Promise((resolve, reject) => {
+    // format stream to es bulk query and process by chunk of 2000 rows
     h(fileStream)
       .flatMap((row) => {
         return [
@@ -76,10 +77,9 @@ function createCitiesIndex(esClient, esConfig) {
       return esClient.indices.create({
         index: 'cities',
         body: esConfig.indexes.cities
-      }).then(() => importCities(esClient))
-        .then(() => {
-          console.log('done indexing cities');
-        });
+      }).then(() => importCities(esClient)).then(() => {
+        console.log('done indexing cities');
+      });
     }
   });
 }

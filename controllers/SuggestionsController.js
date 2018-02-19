@@ -30,7 +30,7 @@ class SuggestionsController {
     Cities.getSuggestions(this.esClient, opts).then(suggestedCities => {
       if (suggestedCities.length) {
         return suggestedCities;
-      } else {
+      } else { // if no result, try fuzzy searching
         return Cities.getSuggestions(this.esClient, _.merge({}, opts, { fuzzy: true }))
       }
     }).then(suggestions => {
@@ -38,12 +38,12 @@ class SuggestionsController {
       if (suggestions.length) {
         res.writeHead(200, {'Content-Type': 'application/json'})
       } else {
+        // no result found!
         res.writeHead(404, {'Content-Type': 'text/plain'});
       }
 
       res.end(JSON.stringify({ suggestions }))
-    })
-      .catch(() => {
+    }).catch(() => {
       res.writeHead(500, {'Content-Type': 'text/plain'});
       res.end('Internal Server Error');
     });
