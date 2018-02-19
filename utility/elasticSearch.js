@@ -40,8 +40,8 @@ function importCities(esClient) {
   }))
   .pipe(eStream.mapSync(function(data) {
     return {
-      name: data[1],
-      rawName: data[1], // not analyzed in ES
+      name: data[2],
+      rawName: data[2], // not analyzed in ES
       location: {
         lat: data[4],
         lon: data[5]
