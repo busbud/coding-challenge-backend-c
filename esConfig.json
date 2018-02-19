@@ -1,0 +1,52 @@
+{
+  "apiVersion": "5.3",
+  "host": "http://localhost:9200",
+  "indexes": {
+    "cities": {
+      "settings": {
+        "analysis": {
+          "filter": {
+            "autocomplete": {
+              "type": "edge_ngram",
+              "min_gram": 2,
+              "max_gram": 10
+            }
+          },
+          "analyzer": {
+            "autocomplete": {
+              "tokenizer": "standard",
+              "filter": [
+                "lowercase",
+                "autocomplete"
+              ]
+            },
+            "autocomplete_search": {
+              "tokenizer": "lowercase"
+            },
+            "keyword_lowercase": {
+              "tokenizer": "keyword",
+              "filter": [
+                "lowercase"
+              ]
+            }
+          }
+        }
+      },
+      "mappings": {
+        "city": {
+          "properties": {
+            "name": {
+              "type": "text",
+              "analyzer": "autocomplete",
+              "search_analyzer": "autocomplete_search"
+            },
+            "rawName": {
+              "type": "text",
+              "analyzer": "keyword_lowercase"
+            }
+          }
+        }
+      }
+    }
+  }
+}

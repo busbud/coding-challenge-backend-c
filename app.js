@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const http = require('http');
 const port = process.env.PORT || 2345;
 const host = process.env.HOST || '127.0.0.1';
@@ -5,12 +6,14 @@ const host = process.env.HOST || '127.0.0.1';
 const { connectToES } = require('./utility/elasticSearch');
 const SuggestionsController = require('./controllers/SuggestionsController');
 
-const esOptions = {
-    apiVersion: process.env.ES_VERSION || "5.3",
-    host: process.env.BONSAI_URL || "http://localhost:9200"
-};
+const esConfig = require('./esConfig.json');
+const _esConfig = _.merge({}, esConfig, {
+  apiVersion: process.env.ES_VERSION || esConfig.apiVersion,
+  host: process.env.BONSAI_URL || esConfig.host
+});
 
-connectToES(esOptions).then(esClient => {
+
+connectToES(_esConfig).then(esClient => {
 // server definition
   const suggestionsController = new SuggestionsController(esClient);
 
