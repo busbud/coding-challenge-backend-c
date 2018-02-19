@@ -44,8 +44,8 @@ function importCities(esClient) {
       rawName: data[2], // not analyzed in ES
       country: data[8],
       location: {
-        lat: data[4],
-        lon: data[5]
+        lat: Number(data[4]),
+        lon: Number(data[5])
       }
     }
   }));
