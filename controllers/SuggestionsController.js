@@ -11,6 +11,8 @@ class SuggestionsController {
   getCities(req, res) {
     const query = url.parse(req.url, true).query;
     const searchTerm = _.get(query, 'q', '');
+    const lat = query.latitude;
+    const long = query.longitude;
     const normalizedSearchTerm = normalize(searchTerm);
 
     if (!normalizedSearchTerm) {
@@ -21,7 +23,8 @@ class SuggestionsController {
 
     const opts = {
       term: normalizedSearchTerm,
-      limit: 20 // limit the number of results returned
+      limit: 20, // limit the number of results returned
+      pin: { lat, long }
     };
 
     Cities.getSuggestions(this.esClient, opts).then(suggestedCities => {

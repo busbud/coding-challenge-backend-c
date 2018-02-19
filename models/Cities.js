@@ -45,10 +45,35 @@ class Cities {
         }
       };
     }
-    return {
-      'size': opts.limit,
-      'query': termQuery
-    };
+
+    if (opts.pin && !_.isNaN(Number(opts.pin.lat)) && !_.isNaN(Number(opts.pin.long))) {
+      return {
+        'size': opts.limit,
+        'query': {
+          'function_score': {
+            'functions': [
+              {
+                'gauss': {
+                  'location': {
+                    'origin': {
+                      'lat': Number(opts.pin.lat),
+                      'lon': Number(opts.pin.long)
+                    },
+                    'scale': '1000km'
+                  }
+                }
+              }
+            ],
+            'query': termQuery
+          }
+        }
+      };
+    } else {
+      return {
+        'size': opts.limit,
+        'query': termQuery
+      };
+    }
   }
 
   static getSuggestions(esClient, opts) {
