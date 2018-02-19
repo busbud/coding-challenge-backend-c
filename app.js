@@ -19,7 +19,7 @@ connectToES(_esConfig).then(esClient => {
 
   const server = http.createServer((req, res) => {
     if (req.url.indexOf('/suggestions') === 0) {
-      if (req.method === 'GET') suggestionsController.get(req, res);
+      if (req.method === 'GET') suggestionsController.getCities(req, res);
     } else {
       res.writeHead(404, {'Content-Type': 'text/plain'});
       res.end();
