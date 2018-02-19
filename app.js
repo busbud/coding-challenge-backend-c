@@ -12,12 +12,11 @@ const _esConfig = _.merge({}, esConfig, {
   host: process.env.BONSAI_URL || esConfig.host
 });
 
-
-connectToES(_esConfig).then(esClient => {
+module.exports = connectToES(_esConfig).then(esClient => {
 // server definition
   const suggestionsController = new SuggestionsController(esClient);
 
-  const server = http.createServer((req, res) => {
+  const httpServer = http.createServer((req, res) => {
     if (req.url.indexOf('/suggestions') === 0) {
       if (req.method === 'GET') suggestionsController.getCities(req, res);
     } else {
@@ -27,7 +26,7 @@ connectToES(_esConfig).then(esClient => {
   });
 
 // start the server
-  server.listen(port, host, () => {
+  return Promise.resolve(httpServer.listen(port, host, () => {
     console.log('Server running at http://%s:%d/suggestions', host, port);
-  });
+  }));
 });

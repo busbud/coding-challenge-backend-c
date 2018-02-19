@@ -26,13 +26,11 @@ class SuggestionsController {
     };
 
     Cities.getSuggestions(this.esClient, opts).then(suggestedCities => {
-      suggestions = suggestedCities;
-
-      // no result found!
-      if (!suggestions.length) {
-        res.writeHead(404, {'Content-Type': 'text/plain'});
-      } else {
+      if (suggestedCities.length) {
         res.writeHead(200, {'Content-Type': 'application/json'})
+        suggestions = suggestedCities;
+      } else { // no result found!
+        res.writeHead(404, {'Content-Type': 'text/plain'});
       }
 
       res.end(JSON.stringify({ suggestions }))

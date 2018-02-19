@@ -31,13 +31,12 @@ class Cities {
       index: 'cities',
       body: query
     })).then(result => result.hits.hits).then(hits => {
-      return _.chain(hits)
-        .map(hit => ({
-          name: hit._source.name,
-          latitude: hit._source.location.lat,
-          longitude: hit._source.location.lon,
-          score: hit._score
-        }))
+      return _.map(hits, hit => ({
+        name: hit._source.name,
+        latitude: hit._source.location.lat,
+        longitude: hit._source.location.lon,
+        score: hit._score
+      }));
     });
   }
 }
