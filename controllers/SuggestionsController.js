@@ -27,8 +27,8 @@ class SuggestionsController {
     Cities.getSuggestions(this.esClient, opts).then(suggestedCities => {
       if (suggestedCities.length) {
         return suggestedCities;
-      } else { // if no result, try fuzzy search
-        return Cities.getFuzzySuggestions(this.esClient, opts)
+      } else {
+        return Cities.getSuggestions(this.esClient, _.merge({}, opts, { fuzzy: true }))
       }
     }).then(suggestions => {
       // no result found!
