@@ -12,6 +12,8 @@
   "dependencies": {
     "chai": "^4.1.2",
     "elasticsearch": "^14.1.0",
+    "event-stream": "^3.3.4",
+    "highland": "^2.11.1",
     "lodash": "^4.17.5",
     "mocha": "^5.0.1",
     "supertest": "^3.0.0"

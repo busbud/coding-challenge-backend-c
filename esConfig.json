@@ -43,6 +43,9 @@
             "rawName": {
               "type": "text",
               "analyzer": "keyword_lowercase"
+            },
+            "location": {
+              "type": "geo_point"
             }
           }
         }
