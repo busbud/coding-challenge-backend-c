@@ -44,6 +44,10 @@
               "type": "text",
               "analyzer": "keyword_lowercase"
             },
+            "country": {
+              "type": "text",
+              "analyzer": "keyword"
+            },
             "location": {
               "type": "geo_point"
             }

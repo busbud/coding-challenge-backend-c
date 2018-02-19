@@ -59,7 +59,7 @@ class Cities {
       body: query
     })).then(result => result.hits.hits).then(hits => {
       return _.map(hits, hit => ({
-        name: hit._source.name,
+        name: `${hit._source.name}, ${hit._source.country}`,
         latitude: hit._source.location.lat,
         longitude: hit._source.location.lon,
         score: hit._score
