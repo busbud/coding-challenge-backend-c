@@ -1,5 +1,48 @@
 # Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
 
+## Implementation
+
+Endpoint available here:
+https://busbud-backend-challenge.herokuapp.com/suggestions
+
+Search 'lon' from Montreal: 
+https://busbud-backend-challenge.herokuapp.com/suggestions?q=lon&latitude=45.5017&longitude=-73.5673
+
+
+#### Approaches and algorithm to achieve autocomplete suggestions
+- Dedicated data structures such as tries
+- Tokenizing (n-grams)
+- Similarity algorithm or string distance. Most common ones: Levenshtein, Jaro-Winkler, Soundex, q-grams, Jaccard
+ 
+#### Some considerations
+- match substrings as well?
+- support fuzzy searching?
+- how is confidence being determined? similarity, geolocation?
+- where is the data currently stored? chosen data store (PostgreSQL, Redis, Elasticsearch...) will include built-in features 
+that will define the granularity of our code.
+
+#### Current implementation 
+
+This implementation uses Elasticsearch. Having a separate data store generates management, machine resources and maintenance 
+but quite a valuable approach in the case of a static set of data like cities. 
+
+Implemented features: 
+- geolocation based scoring
+- fuzzy search   
+
+Not implemented: 
+- Support for alternate names but can be done with ease. 
+
+Pros: less code to write, easy queries
+
+Cons: scores are finicky to work with, not easy to understand and can't be set between 0 and 1 (which doesn't meet the requirements here!)
+
+Autocomplete suggestions is achieved using the [index-time search-as-you-type](https://www.elastic.co/guide/en/elasticsearch/guide/master/_index_time_search_as_you_type.html) configuration
+paired with a [prefix query](https://www.elastic.co/guide/en/elasticsearch/guide/master/prefix-query.html) to give more importance to the beginning of the city name.
+
+Note: PostgreSQL is surely just as good for this use case => support for fuzzy searching and similarity ranking.  
+No support for geolocation natively (though it seems to be possible using the PostGIS extension), but could be done in the code as a post query step.
+
 ## Requirements
 
 Design an API endpoint that provides auto-complete suggestions for large cities.
