@@ -40,7 +40,7 @@ async function loadData (fileName = 'cities_canada-usa.tsv') {
 function match (params) {
   let location
   if (params.latitude !== undefined && params.longitude !== undefined) {
-    location = { latitude: parseFloat(params.latitude), longitude: parseFloat(params.longitude) };
+    location = { latitude: parseFloat(params.latitude), longitude: parseFloat(params.longitude) }
   }
 
   function deg2rad (deg) {
@@ -99,7 +99,5 @@ function match (params) {
       res.writeHead(404, { 'Content-Type': 'text/plain' })
       res.end()
     }
-  }).listen(port, '127.0.0.1')
-
-  console.log('Server running at http://127.0.0.1:%d/suggestions', port)
+  }).listen(port)
 })()
