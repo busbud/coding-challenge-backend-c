@@ -104,7 +104,7 @@ module.exports = http.createServer(function (req, res) {
   if (req.url.indexOf('/suggestions') === 0) {
     const queryParams = req.url.indexOf('?') ? querystring.parse(req.url.split('?')[1]) : {}
 
-    if (queryParams.q.length < MIN_SEARCH_INPUT_LENGTH) {
+    if (queryParams.q && queryParams.q.length < MIN_SEARCH_INPUT_LENGTH) {
       res.writeHead(413, { 'Content-Type': 'text/plain' })
       res.end('too much results, please provide at least 3 char to perform a search')
     } else {
