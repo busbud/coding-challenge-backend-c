@@ -8,7 +8,6 @@ const port = process.env.PORT || 2345
 // some constants used to tune the suggestion engine
 const MIN_CITY_SIZE = 5000 // we don't considered city with less than MIN_CITY_SIZE habitants
 const MIN_SEARCH_INPUT_LENGTH = 3 // at least 3 char required to trigger a search
-const MAX_RESULT_RETURNED = 20 // max results returned by the suggestion engine
 const MAX_DISTANCE_PENALTY = 0.5 // maximum penalty that can be given because of distance with user
 const MAX_POPULATION_PENALTY = 0.5 // maximum penalty that can be given because of the size of the city
 const DISTANCE_RADIUS_PENALTY = 500 // radius used to incease the distance penalty (in KM)
@@ -50,7 +49,7 @@ async function loadData (fileName = 'cities_canada-usa.tsv') {
 function match (params) {
   let location
   if (params.latitude !== undefined && params.longitude !== undefined) {
-    location = { latitude: parseFloat(params.latitude), longitude: parseFloat(params.longitude) };
+    location = { latitude: parseFloat(params.latitude), longitude: parseFloat(params.longitude) }
   }
 
   function deg2rad (deg) {
@@ -94,7 +93,6 @@ function match (params) {
     .map(applyDistanceScoringRule)
     .map(applyPopulationScoringRule)
     .map(({ displayName, longitude, latitude, population, score }) => ({ name: displayName, longitude, latitude, score }))
-    .slice(0, MAX_RESULT_RETURNED)
     .sort((a, b) => b.score - a.score)
 }
 
