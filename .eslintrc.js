@@ -1,3 +1,9 @@
 module.exports = {
-    "extends": "standard"
+    "extends": "standard",
+    "plugins": [
+        "mocha"
+      ],
+      "rules": {
+        "mocha/no-exclusive-tests": "error"
+      }
 };
