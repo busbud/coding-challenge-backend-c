@@ -41,7 +41,7 @@ pathExists(outputPath).then(function(exists) {
 });
 
 app.use(function restrictAccess(req, res, next) {
-  if (req.url.match("suggestions")) {
+  if (req.url.match("suggestions") || req.url == "/") {
     next();
   }
   else {
