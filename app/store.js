@@ -39,7 +39,7 @@ Store.prototype.query = function(query) {
     var storedCitiesStartingWithLetter = [];
     
     if(!this.store[firstLetterOfTerm]) {
-        this.store[firstLetterOfTerm] = this.fetch(firstLetterOfTerm).data;
+        this.fetch(firstLetterOfTerm);
     }
     
     storedCitiesStartingWithLetter = this.store[firstLetterOfTerm];
@@ -70,11 +70,8 @@ Store.prototype.fetch = function(letter) {
         }
     });
     
-    var storeEntry  = {};
-    storeEntry.data = citiesStartingWithLetter;
     
-    this.store[letter] = storeEntry;
-    return storeEntry;
+    this.store[letter] = citiesStartingWithLetter;
 }
 
 module.exports = new Store();
