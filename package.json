@@ -12,9 +12,16 @@
   "dependencies": {
     "chai": "^1.9.1",
     "mocha": "^1.18.2",
+    "radix-trie-js": "^1.0.3",
     "supertest": "^0.11.0"
   },
-  "engines": {
-    "node": "0.10.26"
+  "devDependencies": {
+    "eslint": "^4.18.1",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-plugin-import": "^2.9.0",
+    "eslint-plugin-mocha": "^4.11.0",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-standard": "^3.0.1"
   }
 }
