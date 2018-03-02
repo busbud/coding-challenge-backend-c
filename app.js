@@ -80,7 +80,6 @@ app.get("/suggestions", function(req, res) {
     res.end(JSON.stringify({
       suggestions: suggestions
     }));
-
   }
 });
 

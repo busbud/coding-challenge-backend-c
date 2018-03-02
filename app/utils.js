@@ -115,13 +115,13 @@ exports.computeSuggestions = function(source, query) {
         else {
             latScore = absLat / absCityLat;
         }
-
+        
         geoScore    = (lnScore + latScore) / 2;
         termScore   = term.length > this.name.length ? 0.1 : term.length / this.name.length;
         
         populationScore = parseInt(this.population) / parseInt(highestPopulation.population);
         
-        if (geoScore > 0.5 && ln && lat) {
+        if (geoScore > 0.5) {
             this.score = parseFloat(geoScore.toFixed(1));
         }
         else {

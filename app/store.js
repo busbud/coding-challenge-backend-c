@@ -22,7 +22,6 @@ Store.prototype.init = function(source) {
 //using the query term as key
 Store.prototype.query = function(query) {
     var firstLetterOfTerm = query.term[0];
-
     if (!firstLetterOfTerm) {
         return [];
     }
@@ -37,7 +36,7 @@ Store.prototype.query = function(query) {
     //with the first letter of the query
     //and filter the set by matching the full query term
     //to the city's name
-    var storedCitiesStartingWithLetter = this.store[firstLetterOfTerm] ? this.store[firstLetterOfTerm].data : this.fetch(firstLetterOfTerm);
+    var storedCitiesStartingWithLetter = this.store[firstLetterOfTerm] ? this.store[firstLetterOfTerm].data : (this.store[firstLetterOfTerm] = this.fetch(firstLetterOfTerm).data);
     var citiesStartingWithQuery = storedCitiesStartingWithLetter.filter(function(city) {
         if (city.ascii.match(query.term)) {
             return city;
@@ -45,7 +44,11 @@ Store.prototype.query = function(query) {
     });
 
     var suggestions = citiesStartingWithQuery.length > 0 ? utils.computeSuggestions(citiesStartingWithQuery, query) : [];
-    this.cache[query.term] = suggestions;
+    this.cache[query.term] = suggestions.sort(function(a, b){
+        if(a.score > b.score) return -1;
+        if(a.score < b.score) return 1;
+        return 0;
+    });
     return this.cache[query.term];
 }
 
