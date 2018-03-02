@@ -27,8 +27,8 @@ Store.prototype.query = function(query) {
     }
     //if the query term has been cached
     //return the cached suggestions
-    if (this.cache[query.term]) {
-        return this.cache[query.term];
+    if (this.cache[query.term.toUpperCase()]) {
+        return this.cache[query.term.toUpperCase()];
     }
     
     //when a query is received
@@ -38,8 +38,7 @@ Store.prototype.query = function(query) {
     //to the city's name
     var storedCitiesStartingWithLetter = this.store[firstLetterOfTerm] ? this.store[firstLetterOfTerm].data : (this.store[firstLetterOfTerm] = this.fetch(firstLetterOfTerm).data);
     var citiesStartingWithQuery = storedCitiesStartingWithLetter.filter(function(city) {
-        var capitalized = query.term[0].toUpperCase().concat(query.term.slice(1));
-        if (city.ascii.match(capitalized)) {
+        if (city.ascii.toUpperCase().match(query.term.toUpperCase())) {
             return city;
         }
     });
