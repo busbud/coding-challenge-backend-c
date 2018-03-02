@@ -38,7 +38,7 @@ Store.prototype.query = function(query) {
     //to the city's name
     var storedCitiesStartingWithLetter = this.store[firstLetterOfTerm] ? this.store[firstLetterOfTerm].data : (this.store[firstLetterOfTerm] = this.fetch(firstLetterOfTerm).data);
     var citiesStartingWithQuery = storedCitiesStartingWithLetter.filter(function(city) {
-        if (city.ascii.match(query.term)) {
+        if (city.ascii.match(query.term.toUpperCase())) {
             return city;
         }
     });
