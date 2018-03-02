@@ -51,7 +51,7 @@ app.use(function restrictAccess(req, res, next) {
 });
 
 app.get("/", function(req, res) {
-  
+  res.sendFile(path.resolve("index.html"));
 });
 
 app.get("/suggestions", function(req, res) {

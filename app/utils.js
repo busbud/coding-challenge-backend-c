@@ -128,7 +128,6 @@ exports.computeSuggestions = function(source, query) {
             var score = geoScore * termScore * populationScore;
             this.score = score < 0.1 ? 0.1 : parseFloat(score.toFixed(1));
         }
-        delete this.population;
         return this;
     }
     

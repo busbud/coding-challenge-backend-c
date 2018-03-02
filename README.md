@@ -37,12 +37,15 @@ name of the city, the score is dropped 0.1 to indicate a loss of relevance in th
 ratio of the city's population to the city in the result set with the highest population. Score is biased to city with higher population in
 case cities share the same name.
 
+The final score is the product of the three scores above. There is a partiality towards the geoScore. If the geoScore is greater than 0.5, then
+that value is used as the final score
+
 ## Installation
 
 Once the repository is cloned, run `npm install` to install the dependencies.
 
-The server can be started by running the following command" `npm run start`
+The server can be started by running the following command `npm run start`
 
-Once the server is started, a new file `cities_canada-usa.json` should be created, if it does not already exist.
+Once the server is started, a new file `cities_canada-usa.json` should be created in the data directory, if it does not already exist.
 
 To run tests, `npm run test`

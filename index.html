@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+    <div class="container">
+        <div class="wrap">
+            <input type="text" name="city" id="city" />
+        </div>
+        <div class="wrap">
+            <div id="suggestions">
+            </div>
+        </div>
+    </div>
+    <script src="https://rawgit.com/WoleObayomi/tplbldr/master/js/helpers.js"></script>
+    <script src="https://rawgit.com/WoleObayomi/tplbldr/master/js/tplbuilder.js"></script>
+    <script>
+        (function() {
+            var suggestionsUrl = "/suggestions/q=";
+            var getRequest = helpers.makeRequest("GET");
+            var lastQueryTerm = "";
+
+            var suggestionTpl = {
+                wrapper: {
+                    classList: ["suggestion"],
+                    el: "div",
+                    tpl:
+                        (
+                            "<div class='wrap'><span class='with-attr' data-attr='name' id='name'></span></div>" +
+                            "<div class='wrap'><span class='with-attr' data-attr='longitude'></span><span class='with-attr' data-attr='latitude'></span></div>" +
+                            "<div class='wrap'><span class='with-attr' data-attr='population'</div>"
+                        )
+                }
+            }
+
+            function debounce(f, duration) {
+                return function(e) {
+                    setTimeout(function() {
+                        f(e);
+                    }, duration);
+                }
+            }
+
+            function getSuggestions(term) {
+                if (term == lastQueryTerm) {
+                    return;
+                }
+                getRequest(suggestionsUrl + term).then(function(data) {
+                    TplBuilder.getBuiltTemplate(suggestionTpl, data.suggestions, "#suggestions", {}, true);
+                });
+            }
+
+            var cityInput = document.getElementById("city");
+            var debouncedGetSuggestions = debounce(getSuggestions, 2000);
+            
+            cityInput.addEventListener("keyup", function(e) {
+                debouncedGetSuggestions(e);
+            })
+        })();
+    </script>
+</body>
+
+</html>
