@@ -51,12 +51,12 @@ Store.prototype.query = function(query) {
     });
 
     var suggestions = citiesStartingWithQuery.length > 0 ? utils.computeSuggestions(citiesStartingWithQuery, query) : [];
-    this.cache[query.term] = suggestions.sort(function(a, b){
+    this.cache[query.term.toUpperCase()] = suggestions.sort(function(a, b){
         if(a.score > b.score) return -1;
         if(a.score < b.score) return 1;
         return 0;
     });
-    return this.cache[query.term];
+    return this.cache[query.term.toUpperCase()];
 }
 
 //for getting city data
