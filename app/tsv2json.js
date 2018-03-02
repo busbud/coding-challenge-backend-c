@@ -9,6 +9,9 @@ function parseToJSON() {
     var tabRegex = new RegExp(/\t/);
 
     return function parseHelper(line) {
+        //runs the first time this function is called.
+        //the data chunk received from the stream
+        //is the column headers
         if (isColumnNames) {
             columnNames = line.split(tabRegex);
             isColumnNames = false;
@@ -17,7 +20,7 @@ function parseToJSON() {
         else {
             var cityInfo = line.split(tabRegex);
             var _cityInfo = {};
-
+            //create the city info JSON object
             for (var index = 0; index < columnNames.length; index++) {
                 var columnName = columnNames[index];
                 _cityInfo[columnName] = cityInfo[index] == undefined || cityInfo[index] == "" ? JSON.stringify(null) : cityInfo[index];
@@ -47,7 +50,7 @@ module.exports = function tsv2JSON(pathToFile, outputFileName) {
             }, []))
             .on("data", function(cities) {
                 var citiesData =
-                    cities.slice(1, cities.length - 1)
+                    cities.slice(1, cities.length - 1) //remove the record containing the tsv column headers and the last record containing undefined values
                     .filter(function(city) {
                         if ((city.country == "US" || city.country == "CA") && parseInt(city.population) > 5000) {
                             return city;
@@ -57,7 +60,7 @@ module.exports = function tsv2JSON(pathToFile, outputFileName) {
                 var stringifiedCities = JSON.stringify(citiesData, null, 2);
 
                 writeStream.write(stringifiedCities);
-                
+
                 writeStream.end(function() {
                     resolve("Done writing");
                 });
