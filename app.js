@@ -31,7 +31,10 @@ pathExists(outputPath).then(function(exists) {
 module.exports = http.createServer(function(req, res) {
   if (req.url.indexOf('/suggestions') === 0) {
     var query = url.parse(req.url, true).query;
-    console.log(url.parse(req.url),true);
+    if(!query.q){
+      res.writeHead(200, { 'Content-Type': 'text/plain' });
+      res.end();
+    }
     var suggestions = store.query({ 
       term: query.q, 
       longitude: (query.longitude ? query.longitude : "-73.58781"), 
