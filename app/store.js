@@ -14,7 +14,6 @@ Store.prototype.init = function(source) {
     utils.mergeCitiesByLetterFrequency(source, letterFrequencies, (mergedCities) => {
         this.store = Object.assign({}, mergedCities);
     })
-    console.log(JSON.stringify(this.store, null ,2))
     return this;
 }
 
@@ -40,11 +39,14 @@ Store.prototype.query = function(query) {
     var storedCitiesStartingWithLetter = [];
     
     if(!this.store[firstLetterOfTerm]) {
-        this.fetch(firstLetterOfTerm);
+        var cities = this.fetch(firstLetterOfTerm);
+        this.store[firstLetterOfTerm] = {
+            data: cities.data
+        };
     }
     
-    storedCitiesStartingWithLetter = this.store[firstLetterOfTerm];
-    console.log(storedCitiesStartingWithLetter);
+    storedCitiesStartingWithLetter = this.store[firstLetterOfTerm].data;
+  
     var citiesStartingWithQuery = storedCitiesStartingWithLetter.filter(function(city) {
         if (city.ascii.toUpperCase().match(query.term.toUpperCase())) {
             return city;
@@ -70,9 +72,11 @@ Store.prototype.fetch = function(letter) {
             return city;
         }
     });
-    
-    
-    this.store[letter] = citiesStartingWithLetter;
+
+    return {
+        letter: letter,
+        data: citiesStartingWithLetter
+    };
 }
 
 module.exports = new Store();

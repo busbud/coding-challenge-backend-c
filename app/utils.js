@@ -29,9 +29,9 @@ exports.findFirstLetterFrequencies = function(source, key) {
 exports.mergeCitiesByLetterFrequency = function(cities, frequencies, cb) {
     var mergedCities = {};
     //get the city data for the cities
-    //starting with the top 10 most frequent letters
+    //starting with the top 3 most frequent letters
     //this data will be used to initialize the store
-    frequencies.slice(0, 10).map(function(frequency) {
+    frequencies.slice(0, 3).map(function(frequency) {
         cities.filter(function(city) {
             if (city.name[0] == frequency.letter) {
                 mergedCities[frequency.letter] = !mergedCities[frequency.letter] ? (mergedCities[frequency.letter] = { data: [] }) : mergedCities[frequency.letter];

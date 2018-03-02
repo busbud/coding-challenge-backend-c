@@ -8,7 +8,7 @@ describe('GET /suggestions', function() {
 
     before(function (done) {
       request
-        .get('/suggestions?q=SomeRandomCityInTheMiddleOfNowhere')
+        .get('/suggestions?q=RomeRandomCityInTheMiddleOfNowhere')
         .end(function (err, res) {
           response = res;
           response.json = JSON.parse(res.text);
