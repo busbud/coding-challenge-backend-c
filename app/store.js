@@ -36,7 +36,13 @@ Store.prototype.query = function(query) {
     //with the first letter of the query
     //and filter the set by matching the full query term
     //to the city's name
-    var storedCitiesStartingWithLetter = this.store[firstLetterOfTerm] ? this.store[firstLetterOfTerm].data : (this.store[firstLetterOfTerm] = this.fetch(firstLetterOfTerm).data);
+    var storedCitiesStartingWithLetter = [];
+    
+    if(!this.store[firstLetterOfTerm]) {
+        this.store[firstLetterOfTerm] = this.fetch(firstLetterOfTerm).data;
+    }
+    
+    storedCitiesStartingWithLetter = this.store[firstLetterOfTerm];
     var citiesStartingWithQuery = storedCitiesStartingWithLetter.filter(function(city) {
         if (city.ascii.toUpperCase().match(query.term.toUpperCase())) {
             return city;
