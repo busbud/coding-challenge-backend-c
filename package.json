@@ -16,5 +16,13 @@
   },
   "engines": {
     "node": "0.10.26"
+  },
+  "devDependencies": {
+    "event-stream": "^3.3.4",
+    "express": "^4.16.2",
+    "jsonfile": "^4.0.0",
+    "path-exists": "^3.0.0",
+    "stream-json": "^0.5.2",
+    "stream-reduce": "^1.0.3"
   }
 }
