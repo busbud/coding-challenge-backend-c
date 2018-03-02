@@ -14,6 +14,7 @@ Store.prototype.init = function(source) {
     utils.mergeCitiesByLetterFrequency(source, letterFrequencies, (mergedCities) => {
         this.store = Object.assign({}, mergedCities);
     })
+    console.log(JSON.stringify(this.store, null ,2))
     return this;
 }
 
@@ -43,7 +44,7 @@ Store.prototype.query = function(query) {
     }
     
     storedCitiesStartingWithLetter = this.store[firstLetterOfTerm];
-    console.log(typeof storedCitiesStartingWithLetter);
+    console.log(storedCitiesStartingWithLetter);
     var citiesStartingWithQuery = storedCitiesStartingWithLetter.filter(function(city) {
         if (city.ascii.toUpperCase().match(query.term.toUpperCase())) {
             return city;
