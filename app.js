@@ -36,7 +36,6 @@ pathExists(outputPath).then(function(exists) {
         throw new Error("Could not read data file");
       }
       store.init(JSON.parse(cities));
-      console.log(JSON.stringify(store.query({term: "au", longitude: defaultLn, latitude: defaultLat})));
     });
   }
 });
