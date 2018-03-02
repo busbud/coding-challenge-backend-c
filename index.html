@@ -4,12 +4,16 @@
 <head>
     <meta charset="utf8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:400,700" />
 </head>
 
 <body>
     <div class="container">
         <div class="wrap">
-            <input type="text" name="city" id="city" />
+            <h3 class="title">Filter Cities</h3>
+        </div>
+        <div class="wrap">
+            <input type="text" name="city" id="city" placeholder="Enter a city"/>
         </div>
         <div class="wrap">
             <div id="suggestions">
@@ -23,19 +27,18 @@
             var suggestionsUrl = "/suggestions?q=";
             var getRequest = helpers.makeRequest("GET");
             var lastQueryTerm = "";
-
+            var suggestions = document.getElementById("suggestions");
+            
             var suggestionTpl = {
-                listeners:[],
                 wrapper: {
                     classList: ["suggestion"],
                     el: "div",
-                    tpl:
-                        (
-                            "<div class='wrap'><span class='with-attr' data-attr='name' id='name'></span></div>" +
-                            "<div class='wrap'><span class='with-attr' data-attr='longitude'></span><span class='with-attr' data-attr='latitude'></span></div>" +
-                            "<div class='wrap'><span class='with-attr' data-attr='population'</div>"
-                        )
-                }
+                },
+                tpl: (
+                    "<div><span class='with-attr' data-attr='name' id='name'></span></div>"+
+                    "<div><span class='with-attr' data-attr='longitude'></span>&nbsp;<span class='with-attr' data-attr='latitude'></span></div>"+
+                    "<div><span>Population:&nbsp;</span><span class='with-attr' data-attr='population'</div>"
+                )
             }
 
             function debounce(f, duration) {
@@ -51,19 +54,98 @@
                     return;
                 }
                 getRequest(suggestionsUrl + term).then(function(data) {
+                    suggestions.innerHTML = "";
                     TplBuilder.getBuiltTemplate(suggestionTpl, data.suggestions, "#suggestions", {}, true);
                     lastQueryTerm = term;
                 });
             }
 
             var cityInput = document.getElementById("city");
-            var debouncedGetSuggestions = debounce(getSuggestions, 2000);
-            
+            var debouncedGetSuggestions = debounce(getSuggestions, 500);
+
             cityInput.addEventListener("keyup", function(e) {
                 debouncedGetSuggestions(e.target.value);
             })
         })();
     </script>
+    
+    <style>
+        body {
+            margin: 0 !important;    
+        }
+        
+        .container {
+            height: 100vh;
+            width: 100%;
+        }
+        
+        .wrap {
+            width: 100%;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+        
+        #city {
+            background-color: transparent;
+            width: 300px;
+            border: 1px solid #cecece;
+            border-radius: 4px;
+            font-size: 24px;
+            height: 42px;
+            position: relative;
+            left: calc((100% - 300px) / 2);
+            padding: 3px;
+            box-sizing: border-box;
+        }
+            
+        .title {
+            font-family: "Roboto";
+            font-size: 24px;
+            letter-spacing: 0.05rem;
+            text-align: center;
+        }
+        
+        #suggestions {
+            font-family: "Roboto";
+            overflow-y: auto;
+            overflow-x: hidden;
+            height: 20em;
+            width: 300px;
+            margin: 40px auto;
+        }
+        
+        .suggestion {
+            width: 300px;
+            margin: auto;
+            height: 5em;
+            padding: 10px;
+            box-sizing: border-box;
+            border-bottom: 1px solid #cecece;
+            border-left: 1px solid #cecece;
+            border-right: 1px solid #cecece;
+        }
+        
+        .suggestion > div {
+            padding: 2px;
+            box-sizing: border-box;
+        }
+        
+        
+        .suggestion:first-of-type {
+            border-top: 1px solid #cecece;
+        }
+        
+        .suggestion > div > span {
+            color: grey;
+            font-size: 14px;
+        }
+        
+        #name{
+            font-weight: 700;
+            font-size: 16px;
+            color: royalblue;
+        }
+    </style>
 </body>
 
 </html>
