@@ -59,7 +59,7 @@
             var debouncedGetSuggestions = debounce(getSuggestions, 2000);
             
             cityInput.addEventListener("keyup", function(e) {
-                debouncedGetSuggestions(e.value);
+                debouncedGetSuggestions(e.target.value);
             })
         })();
     </script>
