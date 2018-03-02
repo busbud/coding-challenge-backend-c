@@ -21,7 +21,7 @@ Store.prototype.init = function(source) {
 //and cache the returned suggestions
 //using the query term as key
 Store.prototype.query = function(query) {
-    var firstLetterOfTerm = query.term[0];
+    var firstLetterOfTerm = query.term[0].toUpperCase();
     if (!firstLetterOfTerm) {
         return [];
     }
