@@ -38,7 +38,7 @@ Store.prototype.query = function(query) {
     //to the city's name
     var storedCitiesStartingWithLetter = this.store[firstLetterOfTerm] ? this.store[firstLetterOfTerm].data : (this.store[firstLetterOfTerm] = this.fetch(firstLetterOfTerm).data);
     var citiesStartingWithQuery = storedCitiesStartingWithLetter.filter(function(city) {
-        var capitalized = query.term[0].toUpperCase().concat(query.term.slice(1)));
+        var capitalized = query.term[0].toUpperCase().concat(query.term.slice(1));
         if (city.ascii.match(capitalized)) {
             return city;
         }
