@@ -1,7 +1,7 @@
 # Busbud Coding Challenge Submission
 
-## Suggestions URL
-http://filter-cities.herokuapp.com/suggestions
+## Suggestions URL example
+http://filter-cities.herokuapp.com/suggestions?q=Montreal
 
 ## Approach
 
