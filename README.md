@@ -1,7 +1,7 @@
 # Busbud Coding Challenge Submission
 
-## Suggestions link
-[http://filter-cities.herokuapp.com](http://filter-cities.herokuapp.com)
+## Suggestions URL
+http://filter-cities.herokuapp.com/suggestions
 
 ## Approach
 
