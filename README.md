@@ -1,9 +1,7 @@
 # Busbud Coding Challenge Submission
 
-## Live link
-
-[Filter-Cities site](https://filter-cities.herokuapp.com)
-
+## Suggestions link
+[http://filter-cities.herokuapp.com](http://filter-cities.herokuapp.com)
 
 ## Approach
 
