@@ -3,6 +3,9 @@
 ## Suggestions URL example
 http://filter-cities.herokuapp.com/suggestions?q=Montreal
 
+## User interface
+http://filter-cities.herokuapp.com
+
 ## Approach
 
 Given the `.tsv` data set, the first thing to do was to convert the data to JSON.
