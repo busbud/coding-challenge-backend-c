@@ -1,129 +1,57 @@
-# Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
+# Busbud Coding Challenge Submission
 
-## Requirements
+## Suggestions URL example
+http://filter-cities.herokuapp.com/suggestions?q=Montreal
 
-Design an API endpoint that provides auto-complete suggestions for large cities.
-The suggestions should be restricted to cities in the USA and Canada with a population above 5000 people.
+## User interface
+http://filter-cities.herokuapp.com
 
-- the endpoint is exposed at `/suggestions`
-- the partial (or complete) search term is passed as a querystring parameter `q`
-- the caller's location can optionally be supplied via querystring parameters `latitude` and `longitude` to help improve relative scores
-- the endpoint returns a JSON response with an array of scored suggested matches
-    - the suggestions are sorted by descending score
-    - each suggestion has a score between 0 and 1 (inclusive) indicating confidence in the suggestion (1 is most confident)
-    - each suggestion has a name which can be used to disambiguate between similarly named locations
-    - each suggestion has a latitude and longitude
-- all functional tests should pass (additional tests may be implemented as necessary).
-- the final application should be [deployed to Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs).
-- feel free to add more features if you like!
+## Approach
 
-#### Sample responses
+Given the `.tsv` data set, the first thing to do was to convert the data to JSON.
+This was done using the `event-stream` package as well as the `stream-reduce` package.
 
-These responses are meant to provide guidance. The exact values can vary based on the data source and scoring algorithm
+When the `Express` server is started, if the converted JSON file does not exist, the `.tsv`
+file is converted to a JSON file and saved in the `data` directory. The code responsible for this is in the `/app/tsv2json.js` file.
+Once the JSON file is created, a data store is initialized with the JSON data. The store is then seeded
+with data based on the frequency of the first letter of the city's ASCII name. In other words, city's starting
+with the most common first letters in the data set are added to the store.
 
-**Near match**
+The `/app/store.js` file contains the storing and caching functionality. When a search query is received, if the
+query term does not exist in the cache, then the seeded store is checked. If the data is not there, then the store
+will search in the original data set and cache the results for future use.
 
-    GET /suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
+When a request is made to the `/suggestions` route, a query object containing the search term, longitude and latitude, is passed
+to the store. The store then retrieves the data, caches the data using the query term as key and finally computes the suggestion
+score.
 
-```json
-{
-  "suggestions": [
-    {
-      "name": "London, ON, Canada",
-      "latitude": "42.98339",
-      "longitude": "-81.23304",
-      "score": 0.9
-    },
-    {
-      "name": "London, OH, USA",
-      "latitude": "39.88645",
-      "longitude": "-83.44825",
-      "score": 0.5
-    },
-    {
-      "name": "London, KY, USA",
-      "latitude": "37.12898",
-      "longitude": "-84.08326",
-      "score": 0.5
-    },
-    {
-      "name": "Londontowne, MD, USA",
-      "latitude": "38.93345",
-      "longitude": "-76.54941",
-      "score": 0.3
-    }
-  ]
-}
-```
+## Score Computation
 
-**No match**
+The score is calculated using the following simple metric:
 
-    GET /suggestions?q=SomeRandomCityInTheMiddleOfNowhere
+### GeoScore
 
-```json
-{
-  "suggestions": []
-}
-```
+calculated by taking the ratio of the city's own geo information to the default geo information (Montreal) and computing the average
 
+### TermScore
 
-### Non-functional
+calculated using the length of the search query versus the city's name length. if the search query's length is greater than the 
+name of the city, the score is dropped 0.1 to indicate a loss of relevance in the result
 
-- All code should be written in Javascript
-- Mitigations to handle high levels of traffic should be implemented
-- Challenge is submitted as pull request against this repo ([fork it](https://help.github.com/articles/fork-a-repo/) and [create a pull request](https://help.github.com/articles/creating-a-pull-request-from-a-fork/)).
-- Documentation and maintainability is a plus
+### PopulationScore    
 
-### References
+ratio of the city's population to the city in the result set with the highest population. Score is biased to city with higher population in
+case cities share the same name.
 
-- Geonames provides city lists Canada and the USA http://download.geonames.org/export/dump/readme.txt
-- http://www.nodejs.org/
-- http://ejohn.org/blog/node-js-stream-playground/
+The final score is the product of the three scores above. There is a partiality towards the geoScore. If the geoScore is greater than 0.5, then
+that value is used as the final score
 
+## Installation
 
-## Getting Started
+Once the repository is cloned, run `npm install` to install the dependencies.
 
-Begin by forking this repo and cloning your fork. GitHub has apps for [Mac](http://mac.github.com/) and
-[Windows](http://windows.github.com/) that make this easier.
+The server can be started by running the following command `npm run start`
 
-### Setting up a Nodejs environment
+Once the server is started, a new file `cities_canada-usa.json` should be created in the data directory, if it does not already exist.
 
-Get started by installing [nodejs](http://www.nodejs.org).
-
-For OS X users, use [Homebrew](http://brew.sh) and `brew install nvm`
-
-Once that's done, from the project directory, run
-
-```
-nvm use
-```
-
-### Setting up the project
-
-In the project directory run
-
-```
-npm install
-```
-
-### Running the tests
-
-The test suite can be run with
-
-```
-npm test
-```
-
-### Starting the application
-
-To start a local server run
-
-```
-PORT=3456 npm start
-```
-
-which should produce output similar to
-
-```
-Server running at http://127.0.0.1:3456/suggestions
-```
+To run tests, `npm run test`

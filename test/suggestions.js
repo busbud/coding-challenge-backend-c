@@ -8,7 +8,7 @@ describe('GET /suggestions', function() {
 
     before(function (done) {
       request
-        .get('/suggestions?q=SomeRandomCityInTheMiddleOfNowhere')
+        .get('/suggestions?q=RomeRandomCityInTheMiddleOfNowhere')
         .end(function (err, res) {
           response = res;
           response.json = JSON.parse(res.text);
@@ -51,7 +51,7 @@ describe('GET /suggestions', function() {
     it('contains a match', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.some(function (suggestion) {
-          return suggestion.name.test(/montreal/i);
+          return suggestion.name.match(/montreal/i);
         });
       })
     });
@@ -67,7 +67,7 @@ describe('GET /suggestions', function() {
     it('contains scores', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.every(function (suggestion) {
-          return suggestion.latitude && suggestion.longitude;
+          return suggestion.score;
         });
       })
     });
