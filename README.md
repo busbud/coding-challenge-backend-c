@@ -1,5 +1,18 @@
 # Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
 
+# Envrionment upgrades 
+- Node version in .nvmrc was 0.1 from 2014. Used latest stable.
+- Typescript transpiled to ES6 for awesome level upgrade and more importantly:
+    - Sanity at scale/maintainability
+    - Avoid chasing silly time consuming mistakes.
+    
+# Added Dependencies
+- Trie-search : Fast and does a good job and radix-tree string searches
+        
+# Tests Added
+- data-parsing.ts : Tests for parsing and processing city tsv data
+
+    
 ## Requirements
 
 Design an API endpoint that provides auto-complete suggestions for large cities.
