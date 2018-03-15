@@ -1,6 +1,7 @@
 import {getDataAndMakeTrie, ParsedCityData, TrieSearchResult} from './geonames-import';
 // For type
 import TrieSearch = require('trie-search');
+import {IncomingMessage} from "http";
 
 type Coordinate = {
     latitude: number;
@@ -18,6 +19,8 @@ interface CitySuggestion {
 export class util {
 
     private _trie: Promise<TrieSearch>
+    private _connections = {};
+
 
     constructor() {
         this._trie = getDataAndMakeTrie();
@@ -36,8 +39,26 @@ export class util {
         return (score + 1) ** 2 + (population / 10000000);
     }
 
-    public getSuggestionsFromRequest = async (req): Promise<CitySuggestion[]> => {
-        let {q, latitude, longitude} = req;
+    public async thottleConnection(req: IncomingMessage) {
+        // No connection for this IP , register one with 300 timeout
+        if (!this._connections[req.connection.remoteAddress]) {
+            this._connections[req.connection.remoteAddress] = new Promise((resolve, reject) => {
+                setTimeout(resolve, 300);
+            });
+            // Return a true for first connection
+            return Promise.resolve(true);
+        }
+        else {
+            console.log('Connection Throttle Activated for', req.connection.remoteAddress, 'waiting..');
+            // Ip already has connection promise, wait for it to resolve
+            await this._connections[req.connection.remoteAddress];
+            console.log('Connection released');
+            return true;
+        }
+    }
+
+    public getSuggestionsFromRequest = async (requestParams: any): Promise<CitySuggestion[]> => {
+        let {q, latitude, longitude} = requestParams;
 
         if (!q || q.length < 3)
             return [];

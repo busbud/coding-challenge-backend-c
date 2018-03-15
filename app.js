@@ -10,10 +10,14 @@ module.exports = http.createServer(function (req, res) {
     res.writeHead(404, {'Content-Type': 'text/plain'});
 
     if (req.url.indexOf('/suggestions') === 0) {
-
-        util.getSuggestionsFromRequest(url.parse(req.url,true).query)
+        // Ugly Promise sytnax but didn't want to re-wrte app tests
+        // Would be much nice to user async/await
+        util.thottleConnection(req)
+            .then(function (release) {
+                return util.getSuggestionsFromRequest(url.parse(req.url, true).query);
+            })
             .then(function (data) {
-                if(data.length)
+                if (data.length)
                     res.writeHead(200);
                 else
                     res.writeHead(404);
@@ -22,7 +26,10 @@ module.exports = http.createServer(function (req, res) {
                     suggestions: data
                 }));
             })
-
+            .catch(function (err) {
+                res.writeHead(401)
+                res.end(JSON.stringify(err));
+            })
 
     } else {
         res.end();
