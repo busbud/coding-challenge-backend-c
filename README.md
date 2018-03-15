@@ -20,7 +20,7 @@
 
 # Score Notes:
 ```math
-Score:Number(0,1) = MeanNormalized(City distance from long/lat)**2 + (population/10000000)
+Score:Number(0,1) = Normalized(City distance from long/lat)**2 + (population/10000000)
 
 ``` 
 - Distance is most important and give boost to larger cities    

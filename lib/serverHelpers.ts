@@ -33,7 +33,7 @@ export class util {
             score = Math.sqrt(Math.pow((longitude - long), 2) - Math.pow((latitude - lat), 2))
         }
         // Final score add emphasis on distance form long/lat and small boost for population
-        return (score+1)**2 + (population/10000000);
+        return (score + 1) ** 2 + (population / 10000000);
     }
 
     public getSuggestionsFromRequest = async (req): Promise<CitySuggestion[]> => {
@@ -50,18 +50,37 @@ export class util {
         let trie = await this._trie;
         let tr: TrieSearchResult[] = trie.get(q);
 
-        let unNormalized = tr.map(({value}): CitySuggestion => {
-            let {name, lat, long, country, population} = value;
+        let minScore: number, maxScore: number;
+
+        // Generate output as required
+        let output = tr.map(({value}): CitySuggestion => {
+
+            let {name, lat, long, country} = value;
+
+            // Generate non-normalized score for every city
+            let score = this.calcCityScoreFromCord(value, {latitude, longitude});
+
+            // Do min/max Score captures here for normailzation between 0,1
+            if (minScore == null || score < minScore)
+                minScore = score;
+            if (maxScore == null || score > maxScore)
+                maxScore = score;
+
             return {
                 name: `${name}, ${country}`,
                 latitude: lat.toString(),
                 longitude: long.toString(),
-                score: this.calcCityScoreFromCord(value, {latitude, longitude})
+                score,
             }
-        })
 
-        let output = unNormalized;
-
+            // Now all scores have been calculted we can normailze them to fit between 0,1 using min/max
+        }).map(suggestion => ({
+            ...suggestion,
+            score: ((suggestion.score - minScore) / (maxScore - minScore))
+        }))
+        // console.log(output);
         return output;
+
+
     }
 }

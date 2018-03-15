@@ -11,7 +11,7 @@ import {
 
 const {expect} = chai;
 
-describe('Parse TSV data into dict and tree', function () {
+describe('Parse TSV City Data', function () {
 
     let dataPath = './data/cities_canada-usa.tsv';
     let cityDict: ParsedCityDict;
@@ -28,7 +28,7 @@ describe('Parse TSV data into dict and tree', function () {
         done();
     })
 
-    it('and build out index (Trie-search)', async (done) => {
+    it('build out index (Trie-search) from dict', async (done) => {
         let trie = makeSearchTrie(cityDict);
 
         // Run a couple of sanity tests and make sure data we need is there

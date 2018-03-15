@@ -22,7 +22,7 @@ const chai = __importStar(require("chai"));
 const fs_1 = __importDefault(require("fs"));
 const geonames_import_1 = require("../lib/geonames-import");
 const { expect } = chai;
-describe('Parse TSV data into dict and tree', function () {
+describe('Parse TSV City Data', function () {
     let dataPath = './data/cities_canada-usa.tsv';
     let cityDict;
     it('pipe that stream into a dict', (done) => __awaiter(this, void 0, void 0, function* () {
@@ -34,7 +34,7 @@ describe('Parse TSV data into dict and tree', function () {
         expect(cityDict).to.be.an.instanceOf(Object);
         done();
     }));
-    it('and build out index (Trie-search)', (done) => __awaiter(this, void 0, void 0, function* () {
+    it('build out index (Trie-search) from dict', (done) => __awaiter(this, void 0, void 0, function* () {
         let trie = geonames_import_1.makeSearchTrie(cityDict);
         // Run a couple of sanity tests and make sure data we need is there
         [
