@@ -1,26 +1,35 @@
 import * as chai from 'chai';
 import fs from 'fs';
 
-import {getCityData, makeTrie, ParsedCityDict, readAndParseTsv, TrieSearchResult} from '../lib/geonames-import'
+import {
+    getCityData,
+    makeSearchTrie,
+    ParsedCityDict,
+    readAndParseCityDictFromGeoTsv,
+    TrieSearchResult
+} from '../lib/geonames-import'
 
 const {expect} = chai;
 
 describe('Parse TSV data into dict and tree', function () {
 
     let dataPath = './data/cities_canada-usa.tsv';
+    let cityDict: ParsedCityDict;
 
-    it('Should be able to pipe that stream into a dict and build out index (Trie-search)', async (done) => {
+    it('pipe that stream into a dict', async (done) => {
 
         if (!fs.existsSync(dataPath))
             await getCityData();
 
-        let ParseComplete = readAndParseTsv(dataPath);
-
+        let ParseComplete = readAndParseCityDictFromGeoTsv(dataPath);
         /// Wait for dict construction to copmlete then build radix-tree
-        let cityDict: ParsedCityDict = await ParseComplete;
+        cityDict = await ParseComplete;
         expect(cityDict).to.be.an.instanceOf(Object);
+        done();
+    })
 
-        let trie = makeTrie(cityDict);
+    it('and build out index (Trie-search)', async (done) => {
+        let trie = makeSearchTrie(cityDict);
 
         // Run a couple of sanity tests and make sure data we need is there
         [

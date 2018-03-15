@@ -5,14 +5,30 @@
 - Typescript transpiled to ES6 for awesome level upgrade and more importantly:
     - Sanity at scale/maintainability
     - Avoid chasing silly time consuming mistakes.
+- Kept app.js simple to avoid having to re-write tests
     
+
+# Test Notes:
+- Added data-parsing.ts : Tests for parsing and processing city tsv data
+- Modified suggestions line 57:
+   ```js
+      // C'est é :p
+      // return suggestion.name.test(/montreal/i);
+      return /montréal/i.test(suggestion.name)
+    ```
+
+
+# Score Notes:
+```math
+Score:Number(0,1) = MeanNormalized(City distance from long/lat)**2 + (population/10000000)
+
+``` 
+- Distance is most important and give boost to larger cities    
+- Note that distance calcuation was done using simple Eucledian math. This is not very accurate calculation, as it doesn't take into account the curvature of the earth but for this context, it will suffice
+
 # Added Dependencies
 - Trie-search : Fast and does a good job and radix-tree string searches
         
-# Tests Added
-- data-parsing.ts : Tests for parsing and processing city tsv data
-
-    
 ## Requirements
 
 Design an API endpoint that provides auto-complete suggestions for large cities.

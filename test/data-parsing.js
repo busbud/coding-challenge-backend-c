@@ -24,14 +24,18 @@ const geonames_import_1 = require("../lib/geonames-import");
 const { expect } = chai;
 describe('Parse TSV data into dict and tree', function () {
     let dataPath = './data/cities_canada-usa.tsv';
-    it('Should be able to pipe that stream into a dict and build out index (Trie-search)', (done) => __awaiter(this, void 0, void 0, function* () {
+    let cityDict;
+    it('pipe that stream into a dict', (done) => __awaiter(this, void 0, void 0, function* () {
         if (!fs_1.default.existsSync(dataPath))
             yield geonames_import_1.getCityData();
-        let ParseComplete = geonames_import_1.readAndParseTsv(dataPath);
+        let ParseComplete = geonames_import_1.readAndParseCityDictFromGeoTsv(dataPath);
         /// Wait for dict construction to copmlete then build radix-tree
-        let cityDict = yield ParseComplete;
+        cityDict = yield ParseComplete;
         expect(cityDict).to.be.an.instanceOf(Object);
-        let trie = geonames_import_1.makeTrie(cityDict);
+        done();
+    }));
+    it('and build out index (Trie-search)', (done) => __awaiter(this, void 0, void 0, function* () {
+        let trie = geonames_import_1.makeSearchTrie(cityDict);
         // Run a couple of sanity tests and make sure data we need is there
         [
             { data: trie.get('Montreal'), expectedResult: true },

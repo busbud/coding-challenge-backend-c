@@ -4,7 +4,7 @@ var request = require('supertest')(app);
 
 
 
-xdescribe('GET /suggestions', function () {
+describe('GET /suggestions', function () {
     describe('with a non-existent city', function () {
         var response;
 
@@ -53,7 +53,9 @@ xdescribe('GET /suggestions', function () {
         it('contains a match', function () {
             expect(response.json.suggestions).to.satisfy(function (suggestions) {
                 return suggestions.some(function (suggestion) {
-                    return suggestion.name.test(/montreal/i);
+                    // C'est é :p
+                    // return suggestion.name.test(/montreal/i);
+                    return /montréal/i.test(suggestion.name)
                 });
             })
         });
