@@ -1,6 +1,8 @@
 # Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
 
-# Envrionment upgrades 
+[Gabidi Heroku Deployment HERE](https://gabidi-bus-bud.herokuapp.com/suggestions?q=lon&latitude=45.5017&longitude=73.5673)
+
+# Environment upgrades 
 - Node version in .nvmrc was 0.1 from 2014. Upgraded to v8.10.0
 - Typescript transpiled to ES6 for awesome level upgrade and more importantly:
     - Sanity at scale/maintainability
@@ -31,14 +33,14 @@
 
 -Score Algo:
 ```js
- if (latitude && longitude) {
+        let score = 0;
+        if (latitude && longitude) {
             // Larger distnace = smaller score
-            score = 1e6 / (this.distance(lat, long, latitude, longitude) ** 2)
+            score = 1e6 / (this.distance(lat, long, latitude, longitude)*2)
         }
         // Final score add emphasis on distance form long/lat and small boost for population
         // i'm sure parameters can use some tuning, but the idea is there
-        return score + ((population) ? (Math.log(population + 1)/1e2) : 0)
-
+        return score + ((population) ? score*(Math.log(population + 1)) : 0)
 ```
 - Class  ./lib/server-helpers.ts has functions responsible Calculation of scores.
 - Distance is most important and give boost to larger (population) cities     
@@ -57,18 +59,23 @@
 ## Build and Deploy
 
 ### Build Docker Image
+Create a docker image tagged with latest git commit hash :
+
 ```bash
 ./docker_build.sh
 ```
-Will create a docker image tagged with latest git commit hash and tag herko
+
+Run your latest build locally :
+```bash
+docker run -p 2345:2345 bus_bud_challenge_backend:latest
+```
 
 ### Deploy Image to Heroku
+You must login to Heroku container register then run command below to Deploy to heroku
 ```bash
-./docker_push.sh
+./docker_heroku_push.sh
 ```
-Will build and push image to heroku registry.
-
- 
+- Note: Edit *"appname="* in script to change app name for deployment
 
 # **  ORIGINAL UNEDITED README BELOW THIS LINE **
         

@@ -1,9 +1,7 @@
-var http = require('http');
-var url = require('url');
-var port = process.env.PORT || 2345;
-var serverHelper = require('./lib/server-helpers');
-
-
+const http = require('http');
+const url = require('url');
+const port = process.env.PORT || 2345;
+const serverHelper = require('./lib/server-helpers');
 const util = new serverHelper.util();
 const contentType = {'Content-Type': 'application/json'}
 
