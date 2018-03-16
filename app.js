@@ -1,39 +1,42 @@
 var http = require('http');
 var url = require('url');
 var port = process.env.PORT || 2345;
-var serverHelper = require('./lib/serverHelpers');
+var serverHelper = require('./lib/server-helpers');
 
 
 const util = new serverHelper.util();
+const contentType = {'Content-Type': 'application/json'}
 
-module.exports = http.createServer(function (req, res) {
-    res.writeHead(404, {'Content-Type': 'text/plain'});
+module.exports = http.createServer(async (req, res) => {
+
+    // console.log(Date.now(),'Got Request', url.parse(req.url,true))
 
     if (req.url.indexOf('/suggestions') === 0) {
-        // Ugly Promise sytnax but didn't want to re-wrte app tests
-        // Would be much nice to user async/await
-        util.thottleConnection(req)
-            .then(function (release) {
-                return util.getSuggestionsFromRequest(url.parse(req.url, true).query);
-            })
-            .then(function (data) {
-                if (data.length)
-                    res.writeHead(200);
-                else
-                    res.writeHead(404);
 
-                res.end(JSON.stringify({
-                    suggestions: data
-                }));
-            })
-            .catch(function (err) {
-                res.writeHead(401)
-                res.end(JSON.stringify(err));
-            })
+        try {
+
+            await util.thottleConnection(req);
+            let suggestions = await util.getSuggestionsFromRequest(url.parse(req.url, true).query)
+
+            if (suggestions.length)
+                res.writeHead(200, contentType);
+            else
+                res.writeHead(404, contentType);
+
+            res.end(JSON.stringify({
+                suggestions
+            }));
+
+        } catch (err) {
+
+            res.writeHead(400)
+            res.end(JSON.stringify(err));
+        }
 
     } else {
+        res.writeHead(404, {'Content-Type': 'text/plain'});
         res.end();
     }
-}).listen(port, '127.0.0.1');
+}).listen(port);
 
 console.log('Server running at http://127.0.0.1:%d/suggestions', port);

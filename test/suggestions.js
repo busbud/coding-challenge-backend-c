@@ -76,4 +76,25 @@ describe('GET /suggestions', function () {
             })
         });
     });
+
+    describe('with a valid score sorting from Montreal ', function () {
+        before(function (done) {
+            request
+                .get('/suggestions?q=Lon&latitude=45.5017&longitude=-73.5673')
+                .end(function (err, res) {
+                    response = res;
+                    response.json = JSON.parse(res.text);
+                    done(err);
+                });
+        });
+
+        it('LONgueuil should rank higher than LONdon, ontario from montreal', function () {
+            expect(response.json.suggestions[0].name).to.satisfy(function (firstCity) {
+                return /Longueuil/.test(firstCity)
+            })
+        });
+
+
+    })
+
 });

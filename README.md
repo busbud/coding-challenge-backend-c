@@ -1,33 +1,76 @@
 # Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
 
 # Envrionment upgrades 
-- Node version in .nvmrc was 0.1 from 2014. Used latest stable.
+- Node version in .nvmrc was 0.1 from 2014. Upgraded to v8.10.0
 - Typescript transpiled to ES6 for awesome level upgrade and more importantly:
     - Sanity at scale/maintainability
     - Avoid chasing silly time consuming mistakes.
-- Kept app.js simple to avoid having to re-write tests
+- Intentionally kept app.js simple to avoid having to re-write tests
     
 
-# Test Notes:
+# Notes on Tests
 - Added data-parsing.ts : Tests for parsing and processing city tsv data
-- Modified suggestions line 57:
-   ```js
+
+    - Added tests to make sure score rankings makes sense
+    - Modified ./test/suggestions.js line 57: 
+      ```js
       // C'est é :p
       // return suggestion.name.test(/montreal/i);
       return /montréal/i.test(suggestion.name)
-    ```
+      ```
+# Notes on Functionality Created
+- Most work done is in ./lib/
+    - *server-helpers.ts* 
+        - Class with utilities to take complexity away from app.js, handles throttling and orchestrating data; 
+    - *geonames-import.ts* 
+        - Handles parsing and constructing trie for city data search; 
 
+### Score Calculation Notes:
 
-# Score Notes:
-```math
-Score:Number(0,1) = Normalized(City distance from long/lat)**2 + (population/10000000)
+-Score calculation done in ./lib/server-helpers.ts >  calcCityScoreFromCord() and getSuggestionsFromRequest() 
 
-``` 
-- Distance is most important and give boost to larger cities    
-- Note that distance calcuation was done using simple Eucledian math. This is not very accurate calculation, as it doesn't take into account the curvature of the earth but for this context, it will suffice
+-Score Algo:
+```js
+ if (latitude && longitude) {
+            // Larger distnace = smaller score
+            score = 1e6 / (this.distance(lat, long, latitude, longitude) ** 2)
+        }
+        // Final score add emphasis on distance form long/lat and small boost for population
+        // i'm sure parameters can use some tuning, but the idea is there
+        return score + ((population) ? (Math.log(population + 1)/1e2) : 0)
 
-# Added Dependencies
+```
+- Class  ./lib/server-helpers.ts has functions responsible Calculation of scores.
+- Distance is most important and give boost to larger (population) cities     
+- Notes:
+    - This query requires context. For example: If the calculation is being done for a destination selection then really close distances should be penalized as people are unlikley to be booking a bus to go to another borrow.
+    - Ideally one would factor in outbound/inbound city frequency into score data to suggest cities people frequently book for given long/lat combo. 
+
+### Throttling Notes
+- Throttling done by ./lib/server-helpers.ts >  thottleConnection()
+- Very basic throttling based on Promises and SetTimeout per IP
+- This is very basic scafolding to which one would develop into a proper queue. Of course you can always: npm i *insert favortie semaphore/bottleneck package here* :)
+
+### Added Dependencies
 - Trie-search : Fast and does a good job and radix-tree string searches
+
+## Build and Deploy
+
+### Build Docker Image
+```bash
+./docker_build.sh
+```
+Will create a docker image tagged with latest git commit hash and tag herko
+
+### Deploy Image to Heroku
+```bash
+./docker_push.sh
+```
+Will build and push image to heroku registry.
+
+ 
+
+# **  ORIGINAL UNEDITED README BELOW THIS LINE **
         
 ## Requirements
 

@@ -1,6 +1,13 @@
+/**
+ * Module
+ * Handles parsing and constructing trie for city data search;
+ */
+
 import fs from 'fs';
 import * as superagent from 'superagent';
 import TrieSearch = require('trie-search');
+
+const CITY_POPULATION_CUTOFF = 5000;
 
 type CityTsvEntry = string; // tsv entry;
 type CityName = string;
@@ -11,6 +18,7 @@ export interface ParsedCityData {
     lat: number;
     long: number;
     country: string;
+    region: string;
     population: number;
 }
 
@@ -24,14 +32,20 @@ export interface TrieSearchResult {
 }
 
 /**
- * FIXME flesh t his out later on
+ *
  * Get the tsv data if it doens't exist
+ * @todo This would get the latest data zipped and unzip in data folder
  */
 let getCityData = async () => {
-    superagent.get()
+    //superagent.get('http://download.geonames.org/export/dump/cities5000.zip')
 }
 
 
+/**
+ * Stream TSV into dict
+ * @param {string} dataPath
+ * @returns {Promise<any>}
+ */
 let readAndParseCityDictFromGeoTsv = async (dataPath: string) => {
     let stream = fs.createReadStream(dataPath);
     return new Promise((resolve, reject) => {
@@ -47,8 +61,20 @@ let readAndParseCityDictFromGeoTsv = async (dataPath: string) => {
                     // skip header;
                     if (lineNum > 0) {
                         // descruct data we need and add it to dict
-                        let [, name, ascii, altNames, lat, long,,,country,,,,,,population] = line.split('\t');
-                        dict[ascii] = {name, altNames, lat: parseFloat(lat), long: parseFloat(long), country,population}
+                        let [, name, ascii, altNames, lat, long, , , country, ,region, , , , pop] = line.split('\t');
+
+                        let population = parseInt(pop);
+                        if (population > CITY_POPULATION_CUTOFF) {
+                            dict[`${ascii}-${country}`] = {
+                                name,
+                                altNames,
+                                lat: parseFloat(lat),
+                                long: parseFloat(long),
+                                country,
+                                region,
+                                population
+                            }
+                        }
 
                     }
                     lineNum++;
@@ -63,12 +89,22 @@ let readAndParseCityDictFromGeoTsv = async (dataPath: string) => {
     });
 }
 
+/**
+ * Constuct trie from dict
+ * @param {ParsedCityDict} cityDict
+ * @returns {any}
+ */
 let makeSearchTrie = (cityDict: ParsedCityDict) => {
     let trie = new TrieSearch();
     trie.addFromObject(cityDict);
     return trie;
 }
 
+/**
+ * One shot function to read data from tsv and contstruct trie
+ * @param {string} dataPath
+ * @returns {TrieSearch}
+ */
 let getDataAndMakeTrie = async (dataPath = './data/cities_canada-usa.tsv'): TrieSearch => {
     if (!fs.existsSync(dataPath))
         await getCityData();
