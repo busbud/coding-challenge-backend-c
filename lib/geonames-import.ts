@@ -65,7 +65,7 @@ let readAndParseCityDictFromGeoTsv = async (dataPath: string) => {
 
                         let population = parseInt(pop);
                         if (population > CITY_POPULATION_CUTOFF) {
-                            dict[`${ascii}-${country}`] = {
+                            dict[`${ascii}-${region}-${country}`] = {
                                 name,
                                 altNames,
                                 lat: parseFloat(lat),
