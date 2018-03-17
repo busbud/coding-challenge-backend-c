@@ -1,5 +1,84 @@
 # Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
 
+[Gabidi Heroku Deployment HERE](https://gabidi-bus-bud.herokuapp.com/suggestions?q=lon&latitude=45.5017&longitude=73.5673)
+
+# Environment upgrades 
+- Node version in .nvmrc was 0.1 from 2014. Upgraded to v8.10.0
+- Typescript transpiled to ES6 for awesome level upgrade and more importantly:
+    - Sanity at scale/maintainability
+    - Avoid chasing silly time consuming mistakes.
+- Intentionally kept app.js simple to avoid having to re-write tests
+    
+
+# Notes on Tests
+- Added data-parsing.ts : Tests for parsing and processing city tsv data
+
+    - Added tests to make sure score rankings makes sense
+    - Modified ./test/suggestions.js line 57: 
+      ```js
+      // C'est é :p
+      // return suggestion.name.test(/montreal/i);
+      return /montréal/i.test(suggestion.name)
+      ```
+# Notes on Functionality Created
+- Most work done is in ./lib/
+    - *server-helpers.ts* 
+        - Class with utilities to take complexity away from app.js, handles throttling and orchestrating data; 
+    - *geonames-import.ts* 
+        - Handles parsing and constructing trie for city data search; 
+
+### Score Calculation Notes:
+
+-Score calculation done in ./lib/server-helpers.ts >  calcCityScoreFromCord() and getSuggestionsFromRequest() 
+
+-Score Algo:
+```js
+        let score = 0;
+        if (latitude && longitude) {
+            // Larger distnace = smaller score
+            score = 1e6 / (this.distance(lat, long, latitude, longitude)*2)
+        }
+        // Final score add emphasis on distance form long/lat and small boost for population
+        // i'm sure parameters can use some tuning, but the idea is there
+        return score + ((population) ? score*(Math.log(population + 1)) : 0)
+```
+- Class  ./lib/server-helpers.ts has functions responsible Calculation of scores.
+- Distance is most important and give boost to larger (population) cities     
+- Notes:
+    - This query requires context. For example: If the calculation is being done for a destination selection then really close distances should be penalized as people are unlikley to be booking a bus to go to another borrow.
+    - Ideally one would factor in outbound/inbound city frequency into score data to suggest cities people frequently book for given long/lat combo. 
+
+### Throttling Notes
+- Throttling done by ./lib/server-helpers.ts >  thottleConnection()
+- Very basic throttling based on Promises and SetTimeout per IP
+- This is very basic scafolding to which one would develop into a proper queue. Of course you can always: npm i *insert favortie semaphore/bottleneck package here* :)
+
+### Added Dependencies
+- Trie-search : Fast and does a good job and radix-tree string searches
+
+## Build and Deploy
+
+### Build Docker Image
+Create a docker image tagged with latest git commit hash :
+
+```bash
+./docker_build.sh
+```
+
+Run your latest build locally :
+```bash
+docker run -p 2345:2345 bus_bud_challenge_backend:latest
+```
+
+### Deploy Image to Heroku
+You must login to Heroku container register then run command below to Deploy to heroku
+```bash
+./docker_heroku_push.sh
+```
+- Note: Edit *"appname="* in script to change app name for deployment
+
+# **  ORIGINAL UNEDITED README BELOW THIS LINE **
+        
 ## Requirements
 
 Design an API endpoint that provides auto-complete suggestions for large cities.

@@ -1,75 +1,100 @@
-var expect  = require('chai').expect;
-var app     = require('../app');
+var expect = require('chai').expect;
+var app = require('../app');
 var request = require('supertest')(app);
 
-describe('GET /suggestions', function() {
-  describe('with a non-existent city', function () {
-    var response;
 
-    before(function (done) {
-      request
-        .get('/suggestions?q=SomeRandomCityInTheMiddleOfNowhere')
-        .end(function (err, res) {
-          response = res;
-          response.json = JSON.parse(res.text);
-          done(err);
+
+describe('GET /suggestions', function () {
+    describe('with a non-existent city', function () {
+        var response;
+
+        before(function (done) {
+            request
+                .get('/suggestions?q=SomeRandomCityInTheMiddleOfNowhere')
+                .end(function (err, res) {
+                    response = res;
+                    response.json = JSON.parse(res.text);
+                    done(err);
+                });
+        });
+
+        it('returns a 404', function () {
+            expect(response.statusCode).to.equal(404);
+        });
+
+        it('returns an empty array of suggestions', function () {
+            expect(response.json.suggestions).to.be.instanceof(Array);
+            expect(response.json.suggestions).to.have.length(0);
         });
     });
 
-    it('returns a 404', function () {
-      expect(response.statusCode).to.equal(404);
-    });
+    describe('with a valid city', function () {
+        var response;
 
-    it('returns an empty array of suggestions', function () {
-      expect(response.json.suggestions).to.be.instanceof(Array);
-      expect(response.json.suggestions).to.have.length(0);
-    });
-  });
+        before(function (done) {
+            request
+                .get('/suggestions?q=Montreal')
+                .end(function (err, res) {
+                    response = res;
+                    response.json = JSON.parse(res.text);
+                    done(err);
+                });
+        });
 
-  describe('with a valid city', function () {
-    var response;
+        it('returns a 200', function () {
+            expect(response.statusCode).to.equal(200);
+        });
 
-    before(function (done) {
-      request
-        .get('/suggestions?q=Montreal')
-        .end(function (err, res) {
-          response = res;
-          response.json = JSON.parse(res.text);
-          done(err);
+        it('returns an array of suggestions', function () {
+            expect(response.json.suggestions).to.be.instanceof(Array);
+            expect(response.json.suggestions).to.have.length.above(0);
+        });
+
+        it('contains a match', function () {
+            expect(response.json.suggestions).to.satisfy(function (suggestions) {
+                return suggestions.some(function (suggestion) {
+                    // C'est é :p
+                    // return suggestion.name.test(/montreal/i);
+                    return /montréal/i.test(suggestion.name)
+                });
+            })
+        });
+
+        it('contains latitudes and longitudes', function () {
+            expect(response.json.suggestions).to.satisfy(function (suggestions) {
+                return suggestions.every(function (suggestion) {
+                    return suggestion.latitude && suggestion.longitude;
+                });
+            })
+        });
+
+        it('contains scores', function () {
+            expect(response.json.suggestions).to.satisfy(function (suggestions) {
+                return suggestions.every(function (suggestion) {
+                    return suggestion.latitude && suggestion.longitude;
+                });
+            })
         });
     });
 
-    it('returns a 200', function () {
-      expect(response.statusCode).to.equal(200);
-    });
-
-    it('returns an array of suggestions', function () {
-      expect(response.json.suggestions).to.be.instanceof(Array);
-      expect(response.json.suggestions).to.have.length.above(0);
-    });
-
-    it('contains a match', function () {
-      expect(response.json.suggestions).to.satisfy(function (suggestions) {
-        return suggestions.some(function (suggestion) {
-          return suggestion.name.test(/montreal/i);
+    describe('with a valid score sorting from Montreal ', function () {
+        before(function (done) {
+            request
+                .get('/suggestions?q=Lon&latitude=45.5017&longitude=-73.5673')
+                .end(function (err, res) {
+                    response = res;
+                    response.json = JSON.parse(res.text);
+                    done(err);
+                });
         });
-      })
-    });
 
-    it('contains latitudes and longitudes', function () {
-      expect(response.json.suggestions).to.satisfy(function (suggestions) {
-        return suggestions.every(function (suggestion) {
-          return suggestion.latitude && suggestion.longitude;
+        it('LONgueuil should rank higher than LONdon, ontario from montreal', function () {
+            expect(response.json.suggestions[0].name).to.satisfy(function (firstCity) {
+                return /Longueuil/.test(firstCity)
+            })
         });
-      })
-    });
 
-    it('contains scores', function () {
-      expect(response.json.suggestions).to.satisfy(function (suggestions) {
-        return suggestions.every(function (suggestion) {
-          return suggestion.latitude && suggestion.longitude;
-        });
-      })
-    });
-  });
+
+    })
+
 });
