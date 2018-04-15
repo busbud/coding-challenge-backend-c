@@ -4,6 +4,19 @@
 
 Trie, RadixTree, PatriciaTree, LevenshteinDistance, KDTree, Fuzziness, N-Grams, Normalization, PreProcessing, Redis.
 
+## Heroku URL
+
+* [/v1/suggestions?q=montreal](https://busbud-autocomplete-cities.herokuapp.com/v1/suggestions?q=montreal)
+* [/v1/suggestions?q=monetreal](https://busbud-autocomplete-cities.herokuapp.com/v1/suggestions?q=monetreal)
+* [/v1/suggestions?q=montereal](https://busbud-autocomplete-cities.herokuapp.com/v1/suggestions?q=montereal)
+* [/v1/suggestions?q=Londo&latitude=43.70011&longitude=-79.4163](https://busbud-autocomplete-cities.herokuapp.com/v1/suggestions?q=Londo&latitude=43.70011&longitude=-79.4163)
+
+Other
+
+* [/v1](https://busbud-autocomplete-cities.herokuapp.com/v1)
+* [/v1/?name=BusBud](https://busbud-autocomplete-cities.herokuapp.com/v1/?name=BusBud)
+* [/v1/services](https://busbud-autocomplete-cities.herokuapp.com/v1/services)
+
 ## Searching Algorithm
 
 * An optimized implementation for the `Trie` DataStructure (Check `app/helpers/trie.js`).
@@ -57,6 +70,12 @@ Trie, RadixTree, PatriciaTree, LevenshteinDistance, KDTree, Fuzziness, N-Grams, 
 ## Cool Things
 
 * DI module.
+* Router module.
+* API versioning.
+* Core modules loading desing pattern `load()`.
+* The `require()` is only allowed in `app.js` check the comment in `app.js`.
+* Params Schema (Check `app/config/config.json`).
+* Trie implementation with fuzziness.
 * More types of middlewares (before, service, controller, after, fail).
 * Fully documented code, have fun reading the code :).
 * Separate the validation from the logic the validation from module.
@@ -65,16 +84,11 @@ Trie, RadixTree, PatriciaTree, LevenshteinDistance, KDTree, Fuzziness, N-Grams, 
 
 ## Bad Things
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+* I wrapped the response with `{meta: {}, data: {HERE}}`. In real world we should not break the API unless we agreed on this. I did it this time to allow you to have a look to my framework.
+* I used the minimal parts of a framework that I built from around 3 years. Some parts of the code read a revamp since they have bad implementation, consistency, naming, documentation like `router.js`, `response.js`, `tasks.js`, `helpers/validate.js`, etc.
 
 ## Notes
 
-* I used the minimal parts of a framework that I built from around 3 years. Some parts of the code read a revamp since they have bad implementation, consistency, naming, documentation like `router.js`, `response.js`, `tasks.js`, `helpers/validate.js`, etc.
 
 # Getting Started
 
