@@ -29,7 +29,7 @@ module.exports = {
       script: 'app.js',
       exec_mode: 'cluster',
       instances: config.getServer().instances,
-      watch: true,
+      watch: false,
       node_args: '--no-warnings',
       max_memory_restart: '1500M',
       ignore_watch: ['node_modules', '.git', 'tmp*'],
