@@ -16,6 +16,86 @@ Other
 * [/v1](https://busbud-autocomplete-cities.herokuapp.com/v1)
 * [/v1/?name=BusBud](https://busbud-autocomplete-cities.herokuapp.com/v1/?name=BusBud)
 * [/v1/services](https://busbud-autocomplete-cities.herokuapp.com/v1/services)
+* [/v1/dummy?name=Anas&email=email@email.com&id=10&age=10&gender=male](https://busbud-autocomplete-cities.herokuapp.com/v1/dummy?name=Anas&email=email@email.com&id=10&age=10&gender=male)
+
+## Configuration
+
+* Everything is configurable at `app/config/config.json`.
+* PM2 configuration are in `process.config.js`.
+
+### Server
+
+```
+"server": {
+  "protocol": "http",
+  "host": "localhost",
+  "port": 3000,
+  "instances": 3
+}
+```
+
+### Suggestions
+
+```
+"suggestions": {
+  "city": {
+    "filtering": {
+      "populationLowerBound": 5000
+    },
+    "matching": {
+      "fuzziness": 2,
+      "prefixLength": 1,
+      "maxResults": 5,
+      "extraResults": 3
+    },
+    "scoring": {
+      "population": 1.2,
+      "prefixUniqueness": 1,
+      "lengthMatching": 2,
+      "editDistance": 4,
+      "geoDistance": 3
+    }
+  }
+}
+```
+
+### Services
+
+```
+{
+  "name": "dummy",
+  "path": "/dummy",
+  "method": "get",
+  "version": 1,
+  "params": {
+    "name": {
+      "required": true,
+      "type": "string"
+    },
+    "id": {
+      "required": true,
+      "type": "number",
+      "is": ["integer", "positive"]
+    },
+    "email": {
+      "required": true,
+      "type": "string",
+      "is": "email"
+    },
+    "age": {
+      "required": true,
+      "type": "number"
+    },
+    "gender": {
+      "required": true,
+      "type": "string",
+      "is": {
+        "inArray": [["male", "female"]]
+      }
+    }
+  }
+}
+```
 
 ## Searching Algorithm
 
