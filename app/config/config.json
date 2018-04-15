@@ -46,6 +46,39 @@
       "version": 1
     },
     {
+      "name": "dummy",
+      "path": "/dummy",
+      "method": "get",
+      "version": 1,
+      "params": {
+        "name": {
+          "required": true,
+          "type": "string"
+        },
+        "id": {
+          "required": true,
+          "type": "number",
+          "is": ["integer", "positive"]
+        },
+        "email": {
+          "required": true,
+          "type": "string",
+          "is": "email"
+        },
+        "age": {
+          "required": true,
+          "type": "number"
+        },
+        "gender": {
+          "required": true,
+          "type": "string",
+          "is": {
+            "inArray": [["male", "female"]]
+          }
+        }
+      }
+    },
+    {
       "name": "suggestions",
       "path": "/suggestions",
       "method": "get",
