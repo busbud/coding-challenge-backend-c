@@ -67,7 +67,7 @@ var checkField = function(fieldSchema, value) {
 
     fieldSchema.is.forEach(function(condition) {
 
-      if (di.is.propertyDefined(is, condition) && di.is.not[condition](value)) {
+      if (di.is.propertyDefined(di.is, condition) && di.is.not[condition](value)) {
         valid = false;
         return false;
       }
