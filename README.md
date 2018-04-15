@@ -1,24 +1,24 @@
 # Busbud Coding Challenge
 
-## Brainstorm Keywords
+## Brainstorm Keywords 💡
 
 Trie, RadixTree, PatriciaTree, LevenshteinDistance, KDTree, Fuzziness, N-Grams, Normalization, PreProcessing, Redis.
 
-## Heroku URL
+## Heroku URL 🦄
 
 * [/v1/suggestions?q=montreal](https://busbud-autocomplete-cities.herokuapp.com/v1/suggestions?q=montreal)
 * [/v1/suggestions?q=monetreal](https://busbud-autocomplete-cities.herokuapp.com/v1/suggestions?q=monetreal)
 * [/v1/suggestions?q=montereal](https://busbud-autocomplete-cities.herokuapp.com/v1/suggestions?q=montereal)
 * [/v1/suggestions?q=Londo&latitude=43.70011&longitude=-79.4163](https://busbud-autocomplete-cities.herokuapp.com/v1/suggestions?q=Londo&latitude=43.70011&longitude=-79.4163)
 
-Other
+Other 
 
 * [/v1](https://busbud-autocomplete-cities.herokuapp.com/v1)
 * [/v1/?name=BusBud](https://busbud-autocomplete-cities.herokuapp.com/v1/?name=BusBud)
 * [/v1/services](https://busbud-autocomplete-cities.herokuapp.com/v1/services)
 * [/v1/dummy?name=Anas&email=email@email.com&id=10&age=10&gender=male](https://busbud-autocomplete-cities.herokuapp.com/v1/dummy?name=Anas&email=email@email.com&id=10&age=10&gender=male)
 
-## Configuration
+## Configuration 🎉
 
 * Everything is configurable at `app/config/config.json`.
 * PM2 configuration are in `process.config.js`.
@@ -97,7 +97,7 @@ Other
 }
 ```
 
-## Searching Algorithm
+## Searching Algorithm 
 
 * An optimized implementation for the `Trie` DataStructure (Check `app/helpers/trie.js`).
 * Support for `fuzziness` and storing objects instead of just words by specifying a specific key of the objects as lookup word.
@@ -147,7 +147,7 @@ Other
 * Give the full geoDistance score to the nearest city, otherwise give a partial score relatively to the distance.
 * It doesn't apply if the user's geo location is not passed or if we have just one suggestion.
 
-## Cool Things
+## Cool Things 😀
 
 * DI module.
 * Router module.
@@ -162,13 +162,10 @@ Other
 * Run a cluster of the app via PM2, configured in `app/config/config.json`.
 * More unit testing cases (total 71).
 
-## Bad Things
+## Bad Things 😓
 
 * I wrapped the response with `{meta: {}, data: {HERE}}`. In real world we should not break the API unless we agreed on this. I did it this time to allow you to have a look to my framework.
 * I used the minimal parts of a framework that I built from around 3 years. Some parts of the code read a revamp since they have bad implementation, consistency, naming, documentation like `router.js`, `response.js`, `tasks.js`, `helpers/validate.js`, etc.
-
-## Notes
-
 
 # Getting Started
 
