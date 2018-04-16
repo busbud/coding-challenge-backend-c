@@ -43,9 +43,9 @@ function load() {
 
       }
       
+      resolve();
+      
     });
-
-    resolve();
     
   });
 
