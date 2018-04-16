@@ -2,10 +2,12 @@
 
 ## Brainstorm Keywords 💡
 
-Trie, RadixTree, PatriciaTree, LevenshteinDistance, KDTree, Fuzziness, N-Grams, Normalization, PreProcessing, Redis.
+Trie, RadixTree, PatriciaTree, LevenshteinDistance, KDTree, Fuzziness, N-Grams, Normalization, PreProcessing, Caching.
 
 ## Heroku URL 🦄
 
+* [/v1/suggestions?q=mon](https://busbud-autocomplete-cities.herokuapp.com/v1/suggestions?q=mon)
+* [/v1/suggestions?q=mont](https://busbud-autocomplete-cities.herokuapp.com/v1/suggestions?q=mont)
 * [/v1/suggestions?q=montreal](https://busbud-autocomplete-cities.herokuapp.com/v1/suggestions?q=montreal)
 * [/v1/suggestions?q=monetreal](https://busbud-autocomplete-cities.herokuapp.com/v1/suggestions?q=monetreal)
 * [/v1/suggestions?q=montereal](https://busbud-autocomplete-cities.herokuapp.com/v1/suggestions?q=montereal)
@@ -18,10 +20,10 @@ Other
 * [/v1/services](https://busbud-autocomplete-cities.herokuapp.com/v1/services)
 * [/v1/dummy?name=Anas&email=email@email.com&id=10&age=10&gender=male](https://busbud-autocomplete-cities.herokuapp.com/v1/dummy?name=Anas&email=email@email.com&id=10&age=10&gender=male)
 
-## Configuration 🎉
+## Configurations 🎉
 
 * Everything is configurable at `app/config/config.json`.
-* PM2 configuration are in `process.config.js`.
+* PM2 configurations are in `process.config.js`.
 
 ### Server
 
@@ -104,9 +106,9 @@ Other
 * Calculate the `EditDistance`.
 * Tolerance with mssing or extra letters.
 * Interesting implementation in term of compile optimization.
-* Insert the cities sorted in descending order by population to enhance the prefix expaning.
+* Insert the cities sorted in descending order by population to enhance the prefix expansion.
 * Create the `Trie` at the first request and use it for future requests.
-* Normalize the keys and the search qurey:
+* Normalize the keys and the search quries:
   * Lowercase.
   * Remove any characters that are not either a letter or space.
   * Remove duplicate sapces.
@@ -120,7 +122,7 @@ Other
 
 ### General Notes
 
-* Configurable weigts (Check `app/config/config.json`).
+* Configurable weights (Check `app/config/config.json`).
 * Give a full score for the not applied criterias.
 * If one of the criterias is set to 0, it will not be applied.
 
@@ -135,6 +137,7 @@ Other
 * Give the full prefixUniqueness score if the key is a unique prefix among all other cities' keys prefixes.
 
 #### lengthMatching:
+
 * Give the full lengthMatching score to the exact length matching, otherwise give a partial score relatively to the length difference.
 
 #### editDistance:
@@ -157,15 +160,15 @@ Other
 * Params Schema (Check `app/config/config.json`).
 * Trie implementation with fuzziness.
 * More types of middlewares (before, service, controller, after, fail).
-* Fully documented code, have fun reading the code :).
-* Separate the validation from the logic the validation from module.
+* Fully documented code, have fun reading the code 😀.
+* A middleware to separate the validation from the services' code.
 * Run a cluster of the app via PM2, configured in `app/config/config.json`.
 * More unit testing cases (total 71).
 
 ## Bad Things 😓
 
 * I wrapped the response with `{meta: {}, data: {HERE}}`. In real world we should not break the API unless we agreed on this. I did it this time to allow you to have a look to my framework.
-* I used the minimal parts of a framework that I built from around 3 years. Some parts of the code read a revamp since they have bad implementation, consistency, naming, documentation like `router.js`, `response.js`, `tasks.js`, `helpers/validate.js`, etc.
+* I used the minimal parts of a framework that I built from around 3 years. Some parts of the code need a revamp since they have bad implementation, consistency, naming, documentation like `router.js`, `response.js`, `tasks.js`, `helpers/validate.js`, etc.
 
 # Getting Started
 
@@ -188,7 +191,7 @@ npm test
 ## Starting the application
 
 This project runs via PM2 as cluster, you can configure
-the number of cluster in the `app/config/config.json` file
+the number of instances in `app/config/config.json` file
 
 ```
 npm start
