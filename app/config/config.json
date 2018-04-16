@@ -1,0 +1,105 @@
+{
+  "server": {
+    "protocol": "http",
+    "host": "localhost",
+    "port": 3000,
+    "instances": 3
+  },
+  "suggestions": {
+    "city": {
+      "filtering": {
+        "populationLowerBound": 5000
+      },
+      "matching": {
+        "fuzziness": 2,
+        "prefixLength": 1,
+        "maxResults": 5,
+        "extraResults": 3
+      },
+      "scoring": {
+        "population": 1.2,
+        "prefixUniqueness": 1,
+        "lengthMatching": 2,
+        "editDistance": 4,
+        "geoDistance": 3
+      }
+    }
+  },
+  "services": [
+    {
+      "name": "welcome",
+      "path": "/",
+      "method": "get",
+      "version": 1,
+      "params": {
+        "name": {
+          "required": false,
+          "type": "string",
+          "default": "Anonymous"
+        }
+      }
+    },
+    {
+      "name": "api_services",
+      "path": "/services",
+      "method": "get",
+      "version": 1
+    },
+    {
+      "name": "dummy",
+      "path": "/dummy",
+      "method": "get",
+      "version": 1,
+      "params": {
+        "name": {
+          "required": true,
+          "type": "string"
+        },
+        "id": {
+          "required": true,
+          "type": "number",
+          "is": ["integer", "positive"]
+        },
+        "email": {
+          "required": true,
+          "type": "string",
+          "is": "email"
+        },
+        "age": {
+          "required": true,
+          "type": "number"
+        },
+        "gender": {
+          "required": true,
+          "type": "string",
+          "is": {
+            "inArray": [["male", "female"]]
+          }
+        }
+      }
+    },
+    {
+      "name": "suggestions",
+      "path": "/suggestions",
+      "method": "get",
+      "version": 1,
+      "params": {
+        "q": {
+          "required": true,
+          "type": "string",
+          "normalize": "name"
+        },
+        "latitude": {
+          "required": false,
+          "type": "number",
+          "default": null
+        },
+        "longitude": {
+          "required": false,
+          "type": "number",
+          "default": null
+        }
+      }
+    }
+  ]
+}

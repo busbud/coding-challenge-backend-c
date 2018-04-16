@@ -1,104 +1,178 @@
-# Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
+# Busbud Coding Challenge
 
-## Requirements
+## Brainstorm Keywords 💡
 
-Design an API endpoint that provides auto-complete suggestions for large cities.
-The suggestions should be restricted to cities in the USA and Canada with a population above 5000 people.
+Trie, RadixTree, PatriciaTree, LevenshteinDistance, KDTree, Fuzziness, N-Grams, Normalization, PreProcessing, Caching.
 
-- the endpoint is exposed at `/suggestions`
-- the partial (or complete) search term is passed as a querystring parameter `q`
-- the caller's location can optionally be supplied via querystring parameters `latitude` and `longitude` to help improve relative scores
-- the endpoint returns a JSON response with an array of scored suggested matches
-    - the suggestions are sorted by descending score
-    - each suggestion has a score between 0 and 1 (inclusive) indicating confidence in the suggestion (1 is most confident)
-    - each suggestion has a name which can be used to disambiguate between similarly named locations
-    - each suggestion has a latitude and longitude
-- all functional tests should pass (additional tests may be implemented as necessary).
-- the final application should be [deployed to Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs).
-- feel free to add more features if you like!
+## Heroku URL 🦄
 
-#### Sample responses
+* [/v1/suggestions?q=mon](https://busbud-autocomplete-cities.herokuapp.com/v1/suggestions?q=mon)
+* [/v1/suggestions?q=mont](https://busbud-autocomplete-cities.herokuapp.com/v1/suggestions?q=mont)
+* [/v1/suggestions?q=montreal](https://busbud-autocomplete-cities.herokuapp.com/v1/suggestions?q=montreal)
+* [/v1/suggestions?q=monetreal](https://busbud-autocomplete-cities.herokuapp.com/v1/suggestions?q=monetreal)
+* [/v1/suggestions?q=montereal](https://busbud-autocomplete-cities.herokuapp.com/v1/suggestions?q=montereal)
+* [/v1/suggestions?q=Londo&latitude=43.70011&longitude=-79.4163](https://busbud-autocomplete-cities.herokuapp.com/v1/suggestions?q=Londo&latitude=43.70011&longitude=-79.4163)
 
-These responses are meant to provide guidance. The exact values can vary based on the data source and scoring algorithm
+Other 
 
-**Near match**
+* [/v1](https://busbud-autocomplete-cities.herokuapp.com/v1)
+* [/v1/?name=BusBud](https://busbud-autocomplete-cities.herokuapp.com/v1/?name=BusBud)
+* [/v1/services](https://busbud-autocomplete-cities.herokuapp.com/v1/services)
+* [/v1/dummy?name=Anas&email=email@email.com&id=10&age=10&gender=male](https://busbud-autocomplete-cities.herokuapp.com/v1/dummy?name=Anas&email=email@email.com&id=10&age=10&gender=male)
 
-    GET /suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
+## Configurations 🎉
 
-```json
-{
-  "suggestions": [
-    {
-      "name": "London, ON, Canada",
-      "latitude": "42.98339",
-      "longitude": "-81.23304",
-      "score": 0.9
+* Everything is configurable at `app/config/config.json`.
+* PM2 configurations are in `process.config.js`.
+
+### Server
+
+```
+"server": {
+  "protocol": "http",
+  "host": "localhost",
+  "port": 3000,
+  "instances": 3
+}
+```
+
+### Suggestions
+
+```
+"suggestions": {
+  "city": {
+    "filtering": {
+      "populationLowerBound": 5000
     },
-    {
-      "name": "London, OH, USA",
-      "latitude": "39.88645",
-      "longitude": "-83.44825",
-      "score": 0.5
+    "matching": {
+      "fuzziness": 2,
+      "prefixLength": 1,
+      "maxResults": 5,
+      "extraResults": 3
     },
-    {
-      "name": "London, KY, USA",
-      "latitude": "37.12898",
-      "longitude": "-84.08326",
-      "score": 0.5
-    },
-    {
-      "name": "Londontowne, MD, USA",
-      "latitude": "38.93345",
-      "longitude": "-76.54941",
-      "score": 0.3
+    "scoring": {
+      "population": 1.2,
+      "prefixUniqueness": 1,
+      "lengthMatching": 2,
+      "editDistance": 4,
+      "geoDistance": 3
     }
-  ]
+  }
 }
 ```
 
-**No match**
+### Services
 
-    GET /suggestions?q=SomeRandomCityInTheMiddleOfNowhere
-
-```json
+```
 {
-  "suggestions": []
+  "name": "dummy",
+  "path": "/dummy",
+  "method": "get",
+  "version": 1,
+  "params": {
+    "name": {
+      "required": true,
+      "type": "string"
+    },
+    "id": {
+      "required": true,
+      "type": "number",
+      "is": ["integer", "positive"]
+    },
+    "email": {
+      "required": true,
+      "type": "string",
+      "is": "email"
+    },
+    "age": {
+      "required": true,
+      "type": "number"
+    },
+    "gender": {
+      "required": true,
+      "type": "string",
+      "is": {
+        "inArray": [["male", "female"]]
+      }
+    }
+  }
 }
 ```
 
+## Searching Algorithm 
 
-### Non-functional
+* An optimized implementation for the `Trie` DataStructure (Check `app/helpers/trie.js`).
+* Support for `fuzziness` and storing objects instead of just words by specifying a specific key of the objects as lookup word.
+* Calculate the `EditDistance`.
+* Tolerance with mssing or extra letters.
+* Interesting implementation in term of compile optimization.
+* Insert the cities sorted in descending order by population to enhance the prefix expansion.
+* Create the `Trie` at the first request and use it for future requests.
+* Normalize the keys and the search quries:
+  * Lowercase.
+  * Remove any characters that are not either a letter or space.
+  * Remove duplicate sapces.
+  * Remove prefix and suffix white spaces.
+* Configurable (Check `app/config/config.json`:
+  * **fuzziness**: the maximum edit distance.
+  * **prefixLength**: the number of initial letters which will not be `fuzzified` to reduce the number of examined keys.
+  * **maxResults**: the max number of returned results.
 
-- All code should be written in Javascript
-- Mitigations to handle high levels of traffic should be implemented
-- Challenge is submitted as pull request against this repo ([fork it](https://help.github.com/articles/fork-a-repo/) and [create a pull request](https://help.github.com/articles/creating-a-pull-request-from-a-fork/)).
-- Documentation and maintainability is a plus
+## Scoring
 
-### References
+### General Notes
 
-- Geonames provides city lists Canada and the USA http://download.geonames.org/export/dump/readme.txt
-- http://www.nodejs.org/
-- http://ejohn.org/blog/node-js-stream-playground/
+* Configurable weights (Check `app/config/config.json`).
+* Give a full score for the not applied criterias.
+* If one of the criterias is set to 0, it will not be applied.
 
+### Scoring criterias: 
 
-## Getting Started
+#### population
 
-Begin by forking this repo and cloning your fork. GitHub has apps for [Mac](http://mac.github.com/) and
-[Windows](http://windows.github.com/) that make this easier.
+* Give the full population score to the highest population city, otherwise give a partial score relatively to the highest population.
 
-### Setting up a Nodejs environment
+#### prefixUniqueness:
 
-Get started by installing [nodejs](http://www.nodejs.org).
+* Give the full prefixUniqueness score if the key is a unique prefix among all other cities' keys prefixes.
 
-For OS X users, use [Homebrew](http://brew.sh) and `brew install nvm`
+#### lengthMatching:
 
-Once that's done, from the project directory, run
+* Give the full lengthMatching score to the exact length matching, otherwise give a partial score relatively to the length difference.
 
-```
-nvm use
-```
+#### editDistance:
 
-### Setting up the project
+* Give the full editDistance score when editDistance = 0, otherwise give a partial score relatively to the editDistance.
+* It doesn't apply if the fuzziness matching option is set to 0.
+
+#### geoDistance
+
+* Give the full geoDistance score to the nearest city, otherwise give a partial score relatively to the distance.
+* It doesn't apply if the user's geo location is not passed or if we have just one suggestion.
+
+## Cool Things 😀
+
+* DI module.
+* Router module.
+* API versioning.
+* Core modules loading desing pattern `load()`.
+* The `require()` is only allowed in `app.js` check the comment in `app.js`.
+* Params Schema (Check `app/config/config.json`).
+* Trie implementation with fuzziness.
+* More types of middlewares (before, service, controller, after, fail).
+* Fully documented code, have fun reading it 😀.
+* A middleware to separate the validation from the services' code.
+* Run a cluster of the app via PM2, configured in `app/config/config.json`.
+* More unit testing cases (total 71).
+
+## Bad Things 😓
+
+* I wrapped the response with `{meta: {}, data: {HERE}}`. In real world we should not break the API unless we agreed on this. I did it this time to allow you to have a look to my framework.
+* I used the minimal parts of a framework that I built from around 3 years. Some parts of the code need a revamp since they have bad implementation, consistency, naming, documentation like `router.js`, `response.js`, `tasks.js`, `helpers/validate.js`, etc.
+
+# Getting Started
+
+## Setting up the project
 
 In the project directory run
 
@@ -106,7 +180,7 @@ In the project directory run
 npm install
 ```
 
-### Running the tests
+## Running the tests
 
 The test suite can be run with
 
@@ -114,16 +188,30 @@ The test suite can be run with
 npm test
 ```
 
-### Starting the application
+## Starting the application
 
-To start a local server run
-
-```
-PORT=3456 npm start
-```
-
-which should produce output similar to
+This project runs via PM2 as cluster, you can configure
+the number of instances in `app/config/config.json` file
 
 ```
-Server running at http://127.0.0.1:3456/suggestions
+npm start
 ```
+
+# About Me
+
+Mohammad Fares, Senior Software Engineer at Amazon.
+
+* CV: [https://goo.gl/fu1Zcf](https://goo.gl/fu1Zcf)
+* LinkedIn: [https://linkedin.com/in/faressoft](https://linkedin.com/in/faressoft)
+* GitHub: [https://github.com/faressoft](https://github.com/faressoft)
+* GitHubGist: [https://gist.github.com/faressoft](https://gist.github.com/faressoft)
+
+My Best Articles:
+
+* [Scalability Overview, Terms, and Methodologies](https://goo.gl/oxS3MG)
+* [Locks, Mutex, Semaphore, Deadlock, Starvation](https://goo.gl/FT8A3P)
+* [DOM Performance (Reflow & Repaint)](https://goo.gl/cfjAQr)
+
+My Best Project
+
+* [Mohmal.com](https://www.mohmal.com/en)
