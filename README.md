@@ -160,7 +160,7 @@ Other
 * Params Schema (Check `app/config/config.json`).
 * Trie implementation with fuzziness.
 * More types of middlewares (before, service, controller, after, fail).
-* Fully documented code, have fun reading the code 😀.
+* Fully documented code, have fun reading it 😀.
 * A middleware to separate the validation from the services' code.
 * Run a cluster of the app via PM2, configured in `app/config/config.json`.
 * More unit testing cases (total 71).
