@@ -1,0 +1,4 @@
+{
+    "presets": ["env", "es2015-node"],
+    "plugins": ["transform-object-rest-spread"],
+}
