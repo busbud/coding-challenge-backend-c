@@ -12,7 +12,7 @@ describe("Test calculateScore", () => {
         expect(score2).to.equal(0.12);
     });
     it("with location", async () => {
-        const params = { q: "Mo", lat: 45.02, long: 44.98 };
+        const params = { q: "Mo", latitude: 45.02, longitude: 44.98 };
         const suggestion1 = { name: "Montreal", population: 3000000, latitude: 45.02, longitude: 44.98 };
         const suggestion2 = { name: "Realmont", population: 6000000, latitude: 45.02, longitude: 46.98 };
         const score1 = await calculateScore(params, suggestion1);
