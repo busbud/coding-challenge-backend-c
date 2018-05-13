@@ -2,7 +2,7 @@ import "babel-polyfill";
 
 import calculateScore from "./calculateScore";
 import fetchData from "./dataFetcher";
-import { cityUpdater, searchDatabase } from "./psql";
+import { databaseUpdater, searchDatabase } from "./psql";
 
 const createScoreFunction = params => async suggestion => {
     const score = await calculateScore(params, suggestion);
@@ -15,9 +15,8 @@ const sortSuggestions = (a, b) => {
     return 0;
 }
 
-// The data will be stored on a postgresql database, both for performance reasons and for easier Heroku integration
 const updateDatabase = async () => {
-    const { updateLine, end } = await cityUpdater();
+    const { updateLine, end } = await databaseUpdater();
     fetchData(updateLine, end);
 }
 

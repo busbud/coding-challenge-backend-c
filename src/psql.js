@@ -7,11 +7,10 @@ const asyncQuery = (client, query, params = []) => new Promise((resolve, reject)
     resolve(result);
 }));
 
-// CityUpdater is used to update the cities stored in the database. When called, it returns two functions:
+// databaseUpdater is used to update the cities stored in the database. When called, it returns two functions:
 // -updateLine, which will update a city depending on its "modified" field
 // -end, used to close the psql client
-// CityUpdater is agnostic to the way the data is fetched
-export const cityUpdater = async () => {
+export const databaseUpdater = async () => {
 	const client = new Client(conString);
 	client.connect();
     let linesToAdd = 0;
@@ -20,6 +19,8 @@ export const cityUpdater = async () => {
     let lastDate;
 
     try {
+        // The lastDate is used to know which fields need to be updated.
+        // Given the current retriever, this is not necessary, but it will improve performance on a real-life data scenario
         const lastDateResult = await asyncQuery(client, "SELECT date FROM last_update;");
         lastDate = new Date(lastDateResult.rows[0].date);
         await asyncQuery(client, "UPDATE last_update SET date=CURRENT_DATE;");
@@ -30,25 +31,26 @@ export const cityUpdater = async () => {
     const closeIfDone = () => {
         if (linesEnded && linesToAdd === linesAdded) {
             client.end();
-            console.log("All cities have been updated");
+            console.log("All cities have been updated. Closing psql client");
         }
     }
 
     return {
         updateLine: async parameters => {
             try {
-                linesToAdd += 1;
                 if (lastDate <= new Date(parameters[18])) {
+                    linesToAdd += 1;
                     await asyncQuery(
                         client,
                         "DELETE FROM cities WHERE id=$1;",
                         [parameters[0]],
-                    ); // UPSERT could have merged those two requests, but since it is not supported on older versions of PSQL, I decided to not use it for now
+                    );
                     await asyncQuery(
                         client,
                         "INSERT INTO cities(id, name, ascii, alt_names, lat, long, feat_class, feat_code, country, cc2, admin1, admin2, admin3, admin4, population, elevation, dem, tz, modified) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19);",
                         parameters,
                     );
+                    // UPSERT could have merged the two previous requests, but since it is not supported on older versions of PSQL, I decided to not use it for this test
                     linesAdded += 1;
                     console.log("Updated line ", parameters[0]);
                     closeIfDone();
