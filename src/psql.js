@@ -71,7 +71,7 @@ export const searchDatabase = value => {
     client.connect();
     return new Promise((resolve, reject) => {
         client.query(
-            "SELECT ascii AS name, lat AS latitude, long AS longitude, population FROM cities WHERE population>5000 AND ascii LIKE $1;",
+            "SELECT ascii || ', ' || admin1 || ', ' || country AS name, lat AS latitude, long AS longitude, population FROM cities WHERE population>5000 AND ascii LIKE $1;",
             [`%${value}%`],
             (err, result) => {
                 client.end();
