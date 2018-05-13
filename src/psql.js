@@ -8,8 +8,8 @@ const asyncQuery = (client, query, params = []) => new Promise((resolve, reject)
 }));
 
 // databaseUpdater is used to update the cities stored in the database. When called, it returns two functions:
-// -updateLine, which will update a city depending on its "modified" field
-// -end, used to close the psql client
+// -updateLine, called once per city. It updates the city values in the database depending on the "modified" field
+// -end, used to tell the client that all cities have been sent
 export const databaseUpdater = async () => {
 	const client = new Client(conString);
 	client.connect();
@@ -75,7 +75,7 @@ export const searchDatabase = value => {
             [`%${value}%`],
             (err, result) => {
                 client.end();
-                if (err) return reject("Error deleting all cities in US and Canada:", err);
+                if (err) return reject("Error searching cities in the database:", err);
                 resolve(result.rows)
             }
         );

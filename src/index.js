@@ -21,11 +21,16 @@ const updateDatabase = async () => {
 }
 
 const search = async params => {
-    const resultsWithoutScore = await searchDatabase(params.q);
-    const assignScore = createScoreFunction(params);
-    const resultsUnordered = await Promise.all(resultsWithoutScore.map(assignScore));
-    const results = resultsUnordered.sort(sortSuggestions);
-    return results;
+    try {
+        const resultsWithoutScore = await searchDatabase(params.q);
+        const assignScore = createScoreFunction(params);
+        const resultsUnordered = await Promise.all(resultsWithoutScore.map(assignScore));
+        const results = resultsUnordered.sort(sortSuggestions);
+        return results;
+    } catch (err) {
+        console.log("Error in search method:", err);
+        return [];
+    }
 }
 
 module.exports = {
