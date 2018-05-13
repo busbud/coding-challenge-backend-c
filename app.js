@@ -1,7 +1,7 @@
-const { updateDatabase, search } = require("./lib");
+const lib = require("./lib");
 const url = require("url");
 
-updateDatabase();
+lib.updateDatabase();
 
 var http = require('http');
 var port = process.env.PORT || 2345;
@@ -10,7 +10,7 @@ module.exports = http.createServer(function (req, res) {
   if (req.url.indexOf('/suggestions') === 0) {
     const params = url.parse(req.url, true).query;
     res.writeHead(200, {'Content-Type': 'application/json'});
-    search(params)
+    lib.search(params)
       .then(suggestions => {
         res.end(JSON.stringify({
           suggestions
