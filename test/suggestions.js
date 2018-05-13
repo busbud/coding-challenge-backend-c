@@ -54,9 +54,8 @@ describe('GET /suggestions', function() {
     it('contains a match', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.some(function (suggestion) {
-          // I think returning a string as the name makes more sense, so I decided to change the unit test to first convert the string into a regexp
-          const name = new RegExp(suggestion.name, "i");
-          return name.test(/montreal/i);
+          // Due to the output name format, reverting suggestion.name.test(/montreal/i) to this makes more sense
+          return /montreal/i.test(suggestion.name);
         });
       })
     });
