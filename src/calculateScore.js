@@ -1,3 +1,4 @@
+// calculateScore is a pure function. The score of a suggestion does not depend on other suggestions, which allows for simpler logic
 const calculateScore = (params, suggestion) => {
     if (!params.lat || !params.long) {
         // If no position is specified, we'll first show the cities starting with the query, then those that countain the query
@@ -16,7 +17,6 @@ const calculateScore = (params, suggestion) => {
 
 // Even though calculateScore is a purely sync function, we are making it async
 // This is because upon a search, a single calculateScore function can be called a huge amount of times
-// For this reason, the whole process can be very long and might block the main thread
 // Making it async will avoid blocking the main thread for a long period of time
 // Once async, it can also bo moved to a different process or a different server
 // that will be dedicated to calculating the score
