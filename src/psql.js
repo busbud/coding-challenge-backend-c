@@ -25,7 +25,7 @@ export const databaseUpdater = async () => {
         lastDate = new Date(lastDateResult.rows[0].date);
         await asyncQuery(client, "UPDATE last_update SET date=CURRENT_DATE;");
     } catch (err) {
-        console;log("Error handling last_update date:", err);
+        console.log("Error handling last_update date:", err);
     }
 
     const closeIfDone = () => {
