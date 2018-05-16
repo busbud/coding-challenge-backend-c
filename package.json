@@ -13,7 +13,7 @@
   "dependencies": {
     "chai": "^1.9.1",
     "express": "^4.16.3",
-    "express-validator": "^4.2.0",
+    "express-validator": "^4.3.0",
     "haversine": "^1.1.0",
     "jquery": "^3.3.1",
     "mocha": "^1.18.2",
