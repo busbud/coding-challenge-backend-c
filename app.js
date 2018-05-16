@@ -8,11 +8,11 @@ const app = express();
 app.use(ev());
 app.use(express.static('public'));
 
-app.get("/", (req, res) => {
+app.get("/", function(req, res) {
   res.sendfile('./public/index.html');
 });
 
-app.get("/suggestions", (req, res) => {
+app.get("/suggestions", function(req, res) {
 
   req.check('q', "Must be alphabetic only with whitespace and dashes or dot.").notEmpty().isAscii;
   req.check('q', "Must be at least 2 chars before the autocomplete works.").isLength({min: 2});
@@ -38,7 +38,7 @@ app.get("/suggestions", (req, res) => {
   let latitude = req.query.lat ? req.query.lat : null;
   let longitude = req.query.long ? req.query.long : null;
   
-  cities.search({ q: search.toLowerCase(), lat: latitude, long: longitude }, (data) => {
+  cities.search({ q: search.toLowerCase(), lat: latitude, long: longitude }, function(data) {
     if (data.length == 0) {
       res.status(404).json({
         errors: "Nothing was found",
@@ -47,7 +47,7 @@ app.get("/suggestions", (req, res) => {
       return;
     }
 
-    data.sort((a, b) => {
+    data.sort(function(a, b) {
       return b.finalScore < a.finalScore ? -1 : b.finalScore > a.finalScore ? 1 : 0;
     });
 
@@ -58,7 +58,7 @@ app.get("/suggestions", (req, res) => {
 
 });
 
-app.listen(port, () => {
+app.listen(port, function() {
   console.log('Server running at http://127.0.0.1:%d/suggestions', port);
 });
 
