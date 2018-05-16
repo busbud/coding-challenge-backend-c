@@ -51,7 +51,7 @@
                     $.getJSON("/suggestions" + query, function (data) {
                         console.log(data);
                         response($.map(data.suggestions, function (city) {
-                            return { label: city.name + ", " + city.state + ", " + city.country + " (Pop: " + city.population + ")   (Score: " + city.finalScore + ")" };
+                            return { label: city.name + ", " + city.state + ", " + city.country + " (Distance: "+city.distanceFrom +" km) (Pop: " + city.population + ")   (Score: " + city.finalScore + ")" };
                         }));
                     });
                 },
