@@ -25,7 +25,7 @@ app.get("/suggestions", function(req, res) {
     req.check('long', "Must be a valid coordinate (longitude).").isFloat();
   }
 
-  let errors = req.validationErrors(true);
+  var errors = req.validationErrors(true);
   if(errors) {
     res.status(404).json({
       errors: errors,
@@ -34,9 +34,9 @@ app.get("/suggestions", function(req, res) {
     return;
   }
 
-  let search = req.query.q;
-  let latitude = req.query.lat ? req.query.lat : null;
-  let longitude = req.query.long ? req.query.long : null;
+  var search = req.query.q;
+  var latitude = req.query.lat ? req.query.lat : null;
+  var longitude = req.query.long ? req.query.long : null;
   
   cities.search({ q: search.toLowerCase(), lat: latitude, long: longitude }, function(data) {
     if (data.length == 0) {
