@@ -1,0 +1,90 @@
+<html>
+
+<head>
+    <title>Autocomplete City Search</title>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .ui-autocomplete-loading {
+            background: white url("/images/ui-anim_basic_16x16.gif") right center no-repeat;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(setPosition);
+            } else {
+                log.innerHTML = "Geolocation is not supported by this browser.";
+            }
+        }
+        
+        function setPosition(position) {
+            $("#lat").val(position.coords.latitude);
+            $("#long").val(position.coords.longitude);
+        }
+
+        $().ready(function() {
+            $("#locateMe").click(getLocation);
+        });
+
+        $(function () {
+            function log(message) {
+                $("<div>").text(message).prependTo("#log");
+                $("#log").scrollTop(0);
+            }
+
+            $("#city").autocomplete({
+                source: function (request, response) {
+
+                    var query = "?q=" + request.term;
+                    
+                    if($("#lat").val() != "") {
+                        query += "&lat=" + $("#lat").val();
+                    }
+
+                    if($("#long").val() != "") {
+                        query += "&long=" + $("#long").val();
+                    }
+
+                    $.getJSON("/suggestions" + query, function (data) {
+                        console.log(data);
+                        response($.map(data.suggestions, function (city) {
+                            return { label: city.name + ", " + city.state + ", " + city.country + " (Distance: "+city.distanceFrom +" km) (Pop: " + city.population + ")   (Score: " + city.finalScore + ")" };
+                        }));
+                    });
+                },
+                minLength: 2,
+                select: function (event, ui) {
+                    log("Selected: " + ui.item.value + " aka " + ui.item.id);
+                }
+            });
+        });
+    </script>
+</head>
+
+<body>
+
+    <div class="ui-widget">
+        <label for="lat">Current Latitude: </label>
+        <input id="lat">
+        <br />
+        <label for="long">Current Longitude: </label>
+        <input id="long">
+        <input type="button" id="locateMe" value="Locate Me" />
+    </div>
+
+    <div class="ui-widget">
+        <br />
+        <label for="city">City: </label>
+        <input id="city">
+    </div>
+
+    <div class="ui-widget" style="margin-top:2em; font-family:Arial">
+        Log:
+        <div id="log" style="height: 100px; width: 300px; overflow: auto;" class="ui-widget-content"></div>
+    </div>
+</body>
+
+</html>
