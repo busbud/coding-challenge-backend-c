@@ -22,10 +22,14 @@ Design an API endpoint that provides auto-complete suggestions for large cities.
 ## Advices
 
 - **Try to design and implement your solution as you would do for real production code**. Show us how you create clean, maintainable code that does awesome stuff. Build something that we'd be happy to contribute to. This is not a programming contest where dirty hacks win the game.
-- Feel free to add more features! Really, we're curious about what you can think of. We'd expect the same if you worked with us.
-- Documentation and maintainability is a plus.
-- Don't you forget those unit tests.
+- Documentation and maintainability is a plus, and don't you forget those unit tests.
 - We don’t want to know if you can do exactly as asked (or everybody would have the same result). We want to know what **you** bring to the table when working on a project, what is your secret sauce. More features? Best solution? Thinking outside the box?
+
+## Can I use a database?
+
+If you wish, it's OK to use external systems such as a database, an Elastic index, etc. in your solution. But this is certainly not required to complete the basic requirements of the challenge. Keep in mind that **our goal here is to see some code of yours**; if you only implement a thin API on top of a DB we won't have much to look at.
+
+Our advice is that if you choose to use an external search system, you are better be doing something really truly awesome with it.
 
 ## Sample responses
 
