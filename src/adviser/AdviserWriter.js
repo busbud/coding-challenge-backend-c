@@ -31,7 +31,6 @@ class AdviserWriter extends Writable {
         longitude: data.long,
         score: score,
       };
-      console.log(score)
 
       if (this.topResult.length >= this.config.maxNumber) {
         this._putResult(result);
