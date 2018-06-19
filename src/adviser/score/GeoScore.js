@@ -2,22 +2,22 @@
 class GeoScore {
   constructor() {
     this.thresholds = [{
-      distance: 10,
+      distance: 500,
       score: 1,
     }, {
-      distance: 30,
+      distance: 1000,
       score: 0.7
     }, {
-      distance: 100,
+      distance: 3000,
       score: 0.5
     }, {
-      distance: 200,
+      distance: 6000,
       score: 0.3
     }, {
-      distance: 500,
+      distance: 10000,
       score: 0.2
     }, {
-      distance: 1000,
+      distance: 20000,
       score: 0.1
     }]
   }

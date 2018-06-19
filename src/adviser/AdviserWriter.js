@@ -27,10 +27,11 @@ class AdviserWriter extends Writable {
       }
       const result = {
         name: data.name,
-        latitude: data.latitude,
-        longitude: data.longitude,
+        latitude: data.lat,
+        longitude: data.long,
         score: score,
       };
+      console.log(score)
 
       if (this.topResult.length >= this.config.maxNumber) {
         this._putResult(result);
@@ -48,18 +49,20 @@ class AdviserWriter extends Writable {
       this.topResult.push(result);
       return;
     }
-    for (let i = this.topResult.length - 1; i >= 0; i--) {
-      if (this.topResult[i].score >= result.score) {
-        this.topResult.splice(i + 1, 0, result);
+    for (let i = 0; i < this.topResult.length - 1; i++) {
+      if (this.topResult[i].score < result.score) {
+        this.topResult.splice(i - 1, 0, result);
+        return;
       }
     }
+    this.topResult.push(result);
   }
 
   _putResult(result) {
     if (this.topResult[this.topResult.length - 1].score < result.score) {
-      for (let i = this.topResult.length - 1; i >= 0; i--) {
-        if (this.topResult[i].score >= result.score) {
-          this.topResult[i + 1] = result;
+      for (let i = 0; i < this.topResult.length; i++) {
+        if (this.topResult[i].score < result.score) {
+          this.topResult[i] = result;
           break;
         }
       }
