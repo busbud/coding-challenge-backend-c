@@ -9,15 +9,15 @@ const { Main } = require('../src');
 /*
 {
   "name" : "Abbotsford",
-  "latitude" : 49.05798,
-  "longitude" : -122.25257,
+  "lat" : 49.05798,
+  "long" : -122.25257,
   "population" : 5957659.0,
   "_id" : ObjectId("5b282573040862500a011fbd")
 }
 {
   "name" : "Montreal",
-  "latitude" : 34.2,
-  "longitude" : 99.3,
+  "lat" : 34.2,
+  "long" : 99.3,
   "population" : 5957659.0,
   "_id" : ObjectId("5b285998040862500a011fbf")
 }

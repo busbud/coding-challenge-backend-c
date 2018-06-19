@@ -18,7 +18,7 @@ class Adviser {
     // read cities
     const db = await this.connection.db(this.config.databases.database);
     const collection = db.collection(this.config.databases.collection);
-    const cursor = await collection.find({ population: { $gte: this.config.suggestion.minPopulation } }, {}); // TODO filter to have one unique city name if no latitude and longitude
+    const cursor = await collection.find({ population: { $gte: this.config.suggestion.minPopulation } }, {});
     const cityReader = cursor.stream();
     // pipe to writer
     const advertiserWriter = new AdviserWriter({
