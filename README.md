@@ -114,6 +114,8 @@ The test suite can be run with
 npm test
 ```
 
+TODO put all the data in mongodb
+
 ### Starting the application
 
 To start a local server run

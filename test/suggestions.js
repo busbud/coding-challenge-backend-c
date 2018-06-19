@@ -1,75 +1,98 @@
-var expect  = require('chai').expect;
-var app     = require('../app');
-var request = require('supertest')(app);
+/* global loggerForTests wait sinon expect mocks fixtures */
+var expect = require('chai').expect;
+const supertest = require('supertest');
 
-describe('GET /suggestions', function() {
+const { Main } = require('../src');
+
+// The tests does not have to be executed with real data, data has to be mocked TODO
+// Tests made with this data in database
+/*
+{
+  "name" : "Abbotsford",
+  "latitude" : 49.05798,
+  "longitude" : -122.25257,
+  "population" : 5957659.0,
+  "_id" : ObjectId("5b282573040862500a011fbd")
+}
+{
+  "name" : "Montreal",
+  "latitude" : 34.2,
+  "longitude" : 99.3,
+  "population" : 5957659.0,
+  "_id" : ObjectId("5b285998040862500a011fbf")
+}
+*/
+// TODO unit test for each file
+describe('Test suite for functionnal test', () => {
+  let request;
+
   describe('with a non-existent city', function () {
-    var response;
 
-    before(function (done) {
-      request
-        .get('/suggestions?q=SomeRandomCityInTheMiddleOfNowhere')
-        .end(function (err, res) {
-          response = res;
-          response.json = JSON.parse(res.text);
-          done(err);
-        });
+    beforeEach(async () => {
+      const main = new Main();
+      await main.init();
+      const app = main.router.serviceDriver;
+      request = supertest(app);
+
     });
 
-    it('returns a 404', function () {
-      expect(response.statusCode).to.equal(404);
+    async function entry({ url, test }) {
+      await request
+        .get(url)
+        .end(function (err, res) {
+          test(res)
+        });
+    }
+    it('returns a 404', async function () {
+      function test(response) {
+        expect(response.statusCode).to.equal(404);
+      }
+      entry({ url: '/unkownPath', test });
     });
 
     it('returns an empty array of suggestions', function () {
-      expect(response.json.suggestions).to.be.instanceof(Array);
-      expect(response.json.suggestions).to.have.length(0);
+      function test(res) {
+        const response = JSON.parse(res.text);
+        expect(response.suggestions).to.be.instanceof(Array);
+        expect(response.suggestions).to.have.length(0);
+      }
+      entry({ url: '/suggestions?q=SomeRandomCityInTheMiddleOfNowhere', test });
     });
   });
 
   describe('with a valid city', function () {
-    var response;
+    beforeEach(async () => {
+      const main = new Main();
+      await main.init();
+      const app = main.router.serviceDriver;
+      request = supertest(app);
+    });
 
-    before(function (done) {
-      request
-        .get('/suggestions?q=Montreal')
+    async function entry({ url, test }) {
+      await request
+        .get(url)
         .end(function (err, res) {
-          response = res;
-          response.json = JSON.parse(res.text);
-          done(err);
+          test(res)
         });
+    }
+    it('returns a match with city only', async function () {
+      function test(res) {
+        const response = JSON.parse(res.text);
+        expect(res.statusCode).to.equal(200);
+        expect(response.suggestions.length).to.equal(1);
+        expect(response.suggestions[0].name).to.equal('Montreal');
+      }
+      entry({ url: '/suggestions?q=Montreal', test });
     });
 
-    it('returns a 200', function () {
-      expect(response.statusCode).to.equal(200);
-    });
-
-    it('returns an array of suggestions', function () {
-      expect(response.json.suggestions).to.be.instanceof(Array);
-      expect(response.json.suggestions).to.have.length.above(0);
-    });
-
-    it('contains a match', function () {
-      expect(response.json.suggestions).to.satisfy(function (suggestions) {
-        return suggestions.some(function (suggestion) {
-          return suggestion.name.test(/montreal/i);
-        });
-      })
-    });
-
-    it('contains latitudes and longitudes', function () {
-      expect(response.json.suggestions).to.satisfy(function (suggestions) {
-        return suggestions.every(function (suggestion) {
-          return suggestion.latitude && suggestion.longitude;
-        });
-      })
-    });
-
-    it('contains scores', function () {
-      expect(response.json.suggestions).to.satisfy(function (suggestions) {
-        return suggestions.every(function (suggestion) {
-          return suggestion.latitude && suggestion.longitude;
-        });
-      })
+    it('returns a match with latitude and longitude', async function () {
+      function test(res) {
+        const response = JSON.parse(res.text);
+        expect(res.statusCode).to.equal(200);
+        expect(response.suggestions.length).to.equal(1);
+        expect(response.suggestions[0].name).to.equal('Montreal');
+      }
+      entry({ url: '/suggestions?q=Montreal&latitude=34.2&longitude=99.3', test });
     });
   });
 });
