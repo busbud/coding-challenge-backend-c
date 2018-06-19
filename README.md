@@ -114,6 +114,12 @@ The test suite can be run with
 npm test
 ```
 
+Put all the data in mongodb
+
+```
+mongoimport --db busbud --collection cities  --type tsv --file cities_canada-usa.tsv --headerline
+```
+
 ### Starting the application
 
 To start a local server run

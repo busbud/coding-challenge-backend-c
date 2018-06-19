@@ -1,0 +1,12 @@
+{
+  "suggestion": {
+    "maxNumber": 10,
+    "thresholdMatch": 0.4,
+    "minPopulation": 5000
+  },
+  "databases": {
+    "url": "mongodb://localhost:27017",
+    "database": "busbud",
+    "collection": "cities"
+  }
+}
