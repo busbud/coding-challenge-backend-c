@@ -24,6 +24,14 @@ describe("CityRepository", () => {
       });
     });
 
+    it("returns the cities with scoringName", done => {
+      cityRepository.findByName("Montr").then(result => {
+        expect(result[0]).to.have.property("scoringName");
+
+        done();
+      });
+    });
+
     it("returns the matching cities from ascii name field", done => {
       cityRepository.findByName("Montreal").then(result => {
         expect(result).to.be.an("array");
@@ -59,6 +67,16 @@ describe("CityRepository", () => {
     it("returns cities with more than 5000 habitants", done => {
       cityRepository.findByNameAndLocation("Lorraine", { longitude: -73.78249, latitude: 45.68338 }).then(result => {
         expect(result).to.be.empty;
+        done();
+      });
+    });
+
+    it("returns the cities with both scoringName and scoringDistance", done => {
+      cityRepository.findByNameAndLocation("Montr", { longitude: -73.58, latitude: 45.5 }).then(result => {
+        expect(result).to.be.an("array");
+        expect(result[0]).to.have.property("scoringName");
+        expect(result[0]).to.have.property("scoringDistance");
+
         done();
       });
     });

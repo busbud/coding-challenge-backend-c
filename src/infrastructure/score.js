@@ -1,5 +1,15 @@
 const score = require("string-score");
 
+const METERS_IN_KM = 1000;
+
 module.exports = {
-  scoreName: (text, pattern) => score(text, pattern, 0.8)
+  scoreName: (text, pattern) => score(text, pattern, 0.8),
+  scoreDistance: (distanceInMeters, radiusInKm) => {
+    if (distanceInMeters === 0) {
+      return 1;
+    }
+
+    let distanceInKm = distanceInMeters / METERS_IN_KM;
+    return 1 - distanceInKm / radiusInKm;
+  }
 };

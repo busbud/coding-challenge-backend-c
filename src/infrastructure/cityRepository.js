@@ -3,7 +3,7 @@ const es = require("event-stream");
 const { filter } = require("fuzzaldrin");
 const score = require("string-score");
 const geolib = require("geolib");
-const { scoreName } = require("./score");
+const { scoreName, scoreDistance } = require("./score");
 
 module.exports = ({ dbFile = null } = {}) => {
   const MIN_POPULATION = 5000;
@@ -41,7 +41,7 @@ module.exports = ({ dbFile = null } = {}) => {
   const filterByDistance = (location = { longitude: null, latitude: null }, radiusInKm = 100, city) => {
     let distanceInMeters = geolib.getDistance(location, city.location, PRECISION_HUNDRED_METERS);
     if (distanceInMeters <= radiusInKm * METERS_IN_KM) {
-      return city;
+      return { ...city, scoringDistance: scoreDistance };
     }
   };
 
