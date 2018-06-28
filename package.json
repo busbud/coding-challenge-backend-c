@@ -4,17 +4,22 @@
   "description": "coding challenge in Nodejs",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
-    "test": "./node_modules/mocha/bin/mocha ./test/"
+    "start": "PORT=2525 node app.js",
+    "start:dev": "PORT=2525 nodemon src/index.js",
+    "test": "mocha --recursive --exit"
   },
   "author": "",
   "license": "WTFPL",
   "dependencies": {
-    "chai": "^1.9.1",
-    "mocha": "^1.18.2",
+    "chai": "^4.1.2",
+    "express": "^4.16.3",
+    "mocha": "^5.2.0",
     "supertest": "^0.11.0"
   },
   "engines": {
     "node": "0.10.26"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.5"
   }
 }

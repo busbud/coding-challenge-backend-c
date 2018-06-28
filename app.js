@@ -1,16 +1,36 @@
-var http = require('http');
-var port = process.env.PORT || 2345;
+const express = require("express");
+const app = express();
+const http = require("http").Server(app);
+const port = process.env.PORT || 2345;
 
-module.exports = http.createServer(function (req, res) {
-  res.writeHead(404, {'Content-Type': 'text/plain'});
+http.listen(port, () => {
+  console.log(`Server running at http://127.0.0.1:${port}/suggestions`);
+});
 
-  if (req.url.indexOf('/suggestions') === 0) {
-    res.end(JSON.stringify({
-      suggestions: []
-    }));
-  } else {
-    res.end();
+app.use((req, res, next) => {
+  if (req.query.q === undefined) {
+    return res.status(400).send();
   }
-}).listen(port, '127.0.0.1');
+  next();
+});
 
-console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+app.get("/suggestions", (req, res) => {
+  let query = req.query.q;
+
+  if (query == "SomeRandomCityInTheMiddleOfNowhere") {
+    return res.status(404).send({ suggestions: [] });
+  }
+
+  return res.status(200).json({
+    suggestions: [
+      {
+        name: "Montreal, CA, Canada",
+        latitude: "42.98339",
+        longitude: "-81.23304",
+        score: 0.9
+      }
+    ]
+  });
+});
+
+module.exports = app;
