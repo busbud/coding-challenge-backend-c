@@ -101,4 +101,23 @@ describe("GET /suggestions", function() {
       expect(response.statusCode).to.equal(400);
     });
   });
+
+  describe("with an incorrect radius", function() {
+    var response;
+
+    before(function(done) {
+      request
+        .get("/suggestions?q=Montreal&radius=-10")
+        .set("Accept", "application/json")
+        .end(function(err, res) {
+          if (err) return done(err);
+          response = res;
+          done();
+        });
+    });
+
+    it("returns a 400", function() {
+      expect(response.statusCode).to.equal(400);
+    });
+  });
 });
