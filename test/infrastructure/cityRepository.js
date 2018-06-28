@@ -24,9 +24,10 @@ describe("CityRepository", () => {
       });
     });
 
-    it("returns the cities with scoringName", done => {
+    it("returns the cities with scoringName and score", done => {
       cityRepository.findByName("Montr").then(result => {
         expect(result[0]).to.have.property("scoringName");
+        expect(result[0]).to.have.property("score");
 
         done();
       });
@@ -71,11 +72,12 @@ describe("CityRepository", () => {
       });
     });
 
-    it("returns the cities with both scoringName and scoringDistance", done => {
+    it("returns the cities with both scoringName, scoringDistance and score", done => {
       cityRepository.findByNameAndLocation("Montr", { longitude: -73.58, latitude: 45.5 }).then(result => {
         expect(result).to.be.an("array");
         expect(result[0]).to.have.property("scoringName");
         expect(result[0]).to.have.property("scoringDistance");
+        expect(result[0]).to.have.property("score");
 
         done();
       });

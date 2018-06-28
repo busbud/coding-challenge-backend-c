@@ -3,7 +3,7 @@ const es = require("event-stream");
 const { filter } = require("fuzzaldrin");
 const score = require("string-score");
 const geolib = require("geolib");
-const { scoreName, scoreDistance } = require("./score");
+const { scoreName, scoreDistance, scoring } = require("./score");
 
 module.exports = ({ dbFile = null } = {}) => {
   const MIN_POPULATION = 5000;
@@ -45,6 +45,8 @@ module.exports = ({ dbFile = null } = {}) => {
     }
   };
 
+  const computeScore = city => ({ ...city, score: scoring(({ scoringName, scoringDistance } = city)) });
+
   const fetchCities = () =>
     fs
       .createReadStream(dbFile)
@@ -60,6 +62,7 @@ module.exports = ({ dbFile = null } = {}) => {
         let writer = es.writeArray(function(err, array) {});
         fetchCities()
           .pipe(es.mapSync(boundedFilterByName))
+          .pipe(es.mapSync(computeScore))
           .pipe(
             es.writeArray((err, result) => {
               if (err) {
@@ -79,6 +82,7 @@ module.exports = ({ dbFile = null } = {}) => {
         return fetchCities()
           .pipe(es.mapSync(boundedFilterByName))
           .pipe(es.mapSync(boundedFilterByDistance))
+          .pipe(es.mapSync(computeScore))
           .pipe(
             es.writeArray((err, result) => {
               if (err) {
