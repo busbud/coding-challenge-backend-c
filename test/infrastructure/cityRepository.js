@@ -78,6 +78,7 @@ describe("CityRepository", () => {
         expect(result[0]).to.have.property("scoringName");
         expect(result[0]).to.have.property("scoringDistance");
         expect(result[0]).to.have.property("score");
+        expect(result[0].score).not.to.be.null;
 
         done();
       });

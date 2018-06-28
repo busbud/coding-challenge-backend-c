@@ -1,26 +1,23 @@
 module.exports = (app, cityRepository) => {
   app.use((req, res, next) => {
-    let query = req.query.q;
-    let { longitude, latitude } = req.query;
-
-    if (query === undefined) {
-      return res.status(400).send();
+    let { q, longitude, latitude } = req.query;
+    if (q === undefined) {
+      return res.status(400).json({ error: "Missing 'q' parameter" });
     }
 
     if ((longitude === undefined && latitude !== undefined) || (longitude !== undefined && latitude === undefined)) {
-      return res.status(400).send();
+      return res.status(400).json({ error: "Missing 'longitude' or 'latitude' parameters" });
     }
 
     next();
   });
 
   app.get("/suggestions", (req, res) => {
-    let query = req.query.q;
-    let { longitude, latitude } = req.query;
+    let { q, longitude, latitude } = req.query;
 
     if (longitude && latitude) {
       cityRepository
-        .findByNameAndLocation(query, { longitude, latitude })
+        .findByNameAndLocation(q, { longitude, latitude })
         .then(transform)
         .then(sort)
         .then(suggestions => {
@@ -31,7 +28,7 @@ module.exports = (app, cityRepository) => {
         });
     } else {
       cityRepository
-        .findByName(query)
+        .findByName(q)
         .then(transform)
         .then(sort)
         .then(suggestions => {

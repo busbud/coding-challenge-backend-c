@@ -41,7 +41,7 @@ module.exports = ({ dbFile = null } = {}) => {
   const filterByDistance = (location = { longitude: null, latitude: null }, radiusInKm = 100, city) => {
     let distanceInMeters = geolib.getDistance(location, city.location, PRECISION_HUNDRED_METERS);
     if (distanceInMeters <= radiusInKm * METERS_IN_KM) {
-      return { ...city, scoringDistance: scoreDistance };
+      return { ...city, scoringDistance: scoreDistance(distanceInMeters, radiusInKm) };
     }
   };
 
