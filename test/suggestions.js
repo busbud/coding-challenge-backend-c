@@ -53,7 +53,7 @@ describe("GET /suggestions", function() {
     it("contains a match", function() {
       expect(response.body.suggestions).to.satisfy(function(suggestions) {
         return suggestions.some(function(suggestion) {
-          let regxp = new RegExp("montreal", "i");
+          let regxp = new RegExp("montréal", "i");
           return regxp.test(suggestion.name);
         });
       });

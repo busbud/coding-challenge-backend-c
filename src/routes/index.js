@@ -1,4 +1,4 @@
-module.exports = app => {
+module.exports = (app, cityRepository) => {
   app.use((req, res, next) => {
     let query = req.query.q;
     let { longitude, latitude } = req.query;
@@ -18,19 +18,34 @@ module.exports = app => {
     let query = req.query.q;
     let { longitude, latitude } = req.query;
 
-    if (query == "SomeRandomCityInTheMiddleOfNowhere") {
-      return res.status(404).send({ suggestions: [] });
+    if (longitude && latitude) {
+      cityRepository
+        .findByNameAndLocation(query, { longitude, latitude })
+        .then(transform)
+        .then(suggestions => {
+          if (suggestions.length === 0) {
+            return res.status(404).send({ suggestions });
+          }
+          return res.status(200).json({ suggestions });
+        });
+    } else {
+      cityRepository
+        .findByName(query)
+        .then(transform)
+        .then(suggestions => {
+          if (suggestions.length === 0) {
+            return res.status(404).send({ suggestions });
+          }
+          return res.status(200).json({ suggestions });
+        });
     }
-
-    return res.status(200).json({
-      suggestions: [
-        {
-          name: "Montreal, CA, Canada",
-          latitude: "42.98339",
-          longitude: "-81.23304",
-          score: 0.9
-        }
-      ]
-    });
   });
+
+  const transform = results =>
+    results.map(result => ({
+      name: `${result.name}, ${result.state != "" ? result.state + ", " + result.country : result.country}`,
+      longitude: result.location.longitude,
+      latitude: result.location.latitude,
+      score: result.score
+    }));
 };

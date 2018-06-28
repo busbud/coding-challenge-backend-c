@@ -4,8 +4,8 @@
   "description": "coding challenge in Nodejs",
   "main": "app.js",
   "scripts": {
-    "start": "PORT=2525 node app.js",
-    "start:dev": "PORT=2525 nodemon src/index.js",
+    "start": "PORT=2525 node src/app.js",
+    "start:dev": "PORT=2525 nodemon src/app.js",
     "test": "mocha --recursive --exit"
   },
   "author": "",
