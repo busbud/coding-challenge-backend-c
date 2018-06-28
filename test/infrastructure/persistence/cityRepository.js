@@ -1,7 +1,7 @@
 const expect = require("chai").expect;
 const es = require("event-stream");
-const cityRepository = require("../../src/infrastructure/cityRepository")({
-  dbFile: `${__dirname}/../fixture.tsv`
+const cityRepository = require("../../../src/infrastructure/persistence/cityRepository")({
+  dbFile: `${__dirname}/fixture.tsv`
 });
 
 describe("CityRepository", () => {
