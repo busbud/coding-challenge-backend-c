@@ -1,3 +1,5 @@
+const { transform, sort } = require("../response/transformer");
+
 module.exports = (app, cityRepository) => {
   app.use((req, res, next) => {
     let { q, longitude, latitude } = req.query;
@@ -16,7 +18,7 @@ module.exports = (app, cityRepository) => {
     let { q, longitude, latitude } = req.query;
 
     if (longitude && latitude) {
-      cityRepository
+      return cityRepository
         .findByNameAndLocation(q, { longitude, latitude })
         .then(transform)
         .then(sort)
@@ -26,27 +28,17 @@ module.exports = (app, cityRepository) => {
           }
           return res.status(200).json({ suggestions });
         });
-    } else {
-      cityRepository
-        .findByName(q)
-        .then(transform)
-        .then(sort)
-        .then(suggestions => {
-          if (suggestions.length === 0) {
-            return res.status(404).send({ suggestions });
-          }
-          return res.status(200).json({ suggestions });
-        });
     }
+
+    return cityRepository
+      .findByName(q)
+      .then(transform)
+      .then(sort)
+      .then(suggestions => {
+        if (suggestions.length === 0) {
+          return res.status(404).send({ suggestions });
+        }
+        return res.status(200).json({ suggestions });
+      });
   });
-
-  const transform = results =>
-    results.map(result => ({
-      name: `${result.name}, ${result.state != "" ? result.state + ", " + result.country : result.country}`,
-      longitude: result.location.longitude,
-      latitude: result.location.latitude,
-      score: result.score
-    }));
-
-  const sort = results => results.sort((a, b) => (a.score > b.score ? -1 : a.score === b.score ? 0 : 1));
 };
