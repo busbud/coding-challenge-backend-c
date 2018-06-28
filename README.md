@@ -23,7 +23,7 @@ These responses are meant to provide guidance. The exact values can vary based o
 
 **Near match**
 
-    GET /suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
+    GET /suggestions?q=Londo&latitude=43.70011&longitude=-79.4163&radius=100
 
 ```json
 {
@@ -116,14 +116,30 @@ npm test
 
 ### Starting the application
 
+#### production
+
 To start a local server run
 
 ```
-PORT=3456 npm start
+npm start
 ```
 
 which should produce output similar to
 
 ```
-Server running at http://127.0.0.1:3456/suggestions
+Server running at http://127.0.0.1:2525/suggestions
+```
+
+#### development
+
+To automatically restart the server when you save changes
+
+```
+npm start:dev
+```
+
+which should produce output similar to
+
+```
+Server running at http://127.0.0.1:2525/suggestions
 ```
