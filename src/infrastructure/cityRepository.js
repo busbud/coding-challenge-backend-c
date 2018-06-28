@@ -1,6 +1,7 @@
 const fs = require("fs");
 const es = require("event-stream");
 const { filter } = require("fuzzaldrin");
+const score = require("string-score");
 
 module.exports = ({ dbFile = null } = {}) => {
   const MIN_POPULATION = 5000;
@@ -29,9 +30,11 @@ module.exports = ({ dbFile = null } = {}) => {
     let candidates = [city.name, city.nameAscii];
     let results = filter(candidates, name);
     if (results.length > 0) {
-      return city;
+      return { ...city, scoringName: computeNameScore(city.name, name) };
     }
   };
+
+  const computeNameScore = (text, pattern) => score(text, pattern, 0.8);
 
   const fetchCities = () =>
     fs

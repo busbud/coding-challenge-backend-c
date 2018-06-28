@@ -18,6 +18,7 @@ describe("CityRepository", () => {
         expect(result[0]).to.have.property("state");
         expect(result[0]).to.have.property("country");
         expect(result[0]).to.have.property("population");
+        expect(result[0]).to.have.property("scoringName");
 
         done();
       });
