@@ -6,7 +6,7 @@ const cityRepository = require("../../src/infrastructure/cityRepository")({
 
 describe("CityRepository", () => {
   describe("findByName with partial name", () => {
-    it("return the matching cities from name field", done => {
+    it("returns the matching cities from name field", done => {
       cityRepository.findByName("Montr").then(result => {
         expect(result).to.be.an("array");
 
@@ -24,7 +24,7 @@ describe("CityRepository", () => {
       });
     });
 
-    it("return the matching cities from ascii name field", done => {
+    it("returns the matching cities from ascii name field", done => {
       cityRepository.findByName("Montreal").then(result => {
         expect(result).to.be.an("array");
 
@@ -35,9 +35,38 @@ describe("CityRepository", () => {
       });
     });
 
-    it("return cities with more than 5000 habitants", done => {
+    it("returns cities with more than 5000 habitants", done => {
       cityRepository.findByName("Lorraine").then(result => {
         expect(result).to.be.empty;
+        done();
+      });
+    });
+  });
+
+  describe("findByNameAndLocation with partial name", () => {
+    it("returns the cities matching the name and located near the location", done => {
+      cityRepository.findByNameAndLocation("Montr", { longitude: -73.58, latitude: 45.5 }).then(result => {
+        expect(result).to.be.an("array");
+
+        expect(result[0]).to.have.property("name", "Montréal");
+        expect(result[0].location).to.have.property("longitude", -73.58781);
+        expect(result[0].location).to.have.property("latitude", 45.50884);
+
+        done();
+      });
+    });
+
+    it("returns cities with more than 5000 habitants", done => {
+      cityRepository.findByNameAndLocation("Lorraine", { longitude: -73.78249, latitude: 45.68338 }).then(result => {
+        expect(result).to.be.empty;
+        done();
+      });
+    });
+
+    it("returns no match if the location is too far", done => {
+      cityRepository.findByNameAndLocation("Montreal", { longitude: -122.58, latitude: 45.5 }, 10).then(result => {
+        expect(result).to.be.empty;
+
         done();
       });
     });
