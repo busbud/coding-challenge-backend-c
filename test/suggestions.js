@@ -75,4 +75,23 @@ describe("GET /suggestions", function() {
       });
     });
   });
+
+  describe("with either longitude or latitude undefined", function() {
+    var response;
+
+    before(function(done) {
+      request
+        .get("/suggestions?q=Montreal&longitude=-79.4163")
+        .set("Accept", "application/json")
+        .end(function(err, res) {
+          if (err) return done(err);
+          response = res;
+          done();
+        });
+    });
+
+    it("returns a 400", function() {
+      expect(response.statusCode).to.equal(400);
+    });
+  });
 });

@@ -8,14 +8,23 @@ http.listen(port, () => {
 });
 
 app.use((req, res, next) => {
-  if (req.query.q === undefined) {
+  let query = req.query.q;
+  let { longitude, latitude } = req.query;
+
+  if (query === undefined) {
     return res.status(400).send();
   }
+
+  if ((longitude === undefined && latitude !== undefined) || (longitude !== undefined && latitude === undefined)) {
+    return res.status(400).send();
+  }
+
   next();
 });
 
 app.get("/suggestions", (req, res) => {
   let query = req.query.q;
+  let { longitude, latitude } = req.query;
 
   if (query == "SomeRandomCityInTheMiddleOfNowhere") {
     return res.status(404).send({ suggestions: [] });
