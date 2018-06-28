@@ -24,6 +24,7 @@
     "node": "0.10.26"
   },
   "devDependencies": {
+    "chai-sorted": "^0.2.0",
     "nodemon": "^1.17.5"
   }
 }

@@ -22,6 +22,7 @@ module.exports = (app, cityRepository) => {
       cityRepository
         .findByNameAndLocation(query, { longitude, latitude })
         .then(transform)
+        .then(sort)
         .then(suggestions => {
           if (suggestions.length === 0) {
             return res.status(404).send({ suggestions });
@@ -32,6 +33,7 @@ module.exports = (app, cityRepository) => {
       cityRepository
         .findByName(query)
         .then(transform)
+        .then(sort)
         .then(suggestions => {
           if (suggestions.length === 0) {
             return res.status(404).send({ suggestions });
@@ -48,4 +50,6 @@ module.exports = (app, cityRepository) => {
       latitude: result.location.latitude,
       score: result.score
     }));
+
+  const sort = results => results.sort((a, b) => (a.score > b.score ? -1 : a.score === b.score ? 0 : 1));
 };

@@ -1,6 +1,9 @@
-var expect = require("chai").expect;
-var app = require("../src/app");
-var request = require("supertest")(app);
+const chai = require("chai");
+const expect = chai.expect;
+chai.use(require("chai-sorted"));
+
+const app = require("../src/app");
+const request = require("supertest")(app);
 
 describe("GET /suggestions", function() {
   describe("with a non-existent city", function() {
@@ -70,9 +73,13 @@ describe("GET /suggestions", function() {
     it("contains scores", function() {
       expect(response.body.suggestions).to.satisfy(function(suggestions) {
         return suggestions.every(function(suggestion) {
-          return suggestion.latitude && suggestion.longitude;
+          return suggestion.score;
         });
       });
+    });
+
+    it("returns results sorted by descending score", function() {
+      expect(response.body.suggestions).to.be.sortedBy("score", { descending: true });
     });
   });
 
