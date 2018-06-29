@@ -156,3 +156,16 @@ Create the app: `heroku create`
 Push your master branch: `git push heroku master` or a another branch: `git push heroku <branch>:master`
 
 Then you'll be able to access it (httpie): `http http://heroku-app-subdomain.herokuapp.com/suggestions q=='San F' latitude==37.77493 longitude==-122.41942 radius==100`
+
+
+### Continuous Integration
+
+We use circleci to build and test each branch before they are merged to master, and then deploy to heroku when merged to master.
+
+Make sure you have setup your app with Heroku first.
+
+Then add the following environment variables into your circleci project:
+```
+HEROKU_APP_NAME=app_name
+HEROKU_API_KEY=$(heroku auth:token)
+```
