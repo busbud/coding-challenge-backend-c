@@ -206,18 +206,9 @@ HEROKU_API_KEY=$(heroku auth:token)
 
 #### CityRepository
 
-Since the instructions pointed to the usage of streams, I used them, therefore, streaming/filtering the file is quite time consuming. Plus, we need to store it in memory in order to sort the suggestions before sending them back to the user. 
+Since the set is small, I'm loading the list of cities in memory in order to filter on it when doing the search.
 
 Performance could be improved if we were using a database: elasticsearch seems like a good candidate here (location + text search), but others could do the job as well, and for a small set of data like this, it wouldn't really matter.)
-
-Also, there is no limitation in the number of suggestions returned. If we wanted to limit the results, we would need to:
-```
-- filter
-- sort
-- limit
-- toArray
-```
-But sorting can't be done without the final array of result, and limiting after having the array would improve the memory usage only, not really the overall performance.
 
 #### General Project Structure
 

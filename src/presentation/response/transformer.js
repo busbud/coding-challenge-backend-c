@@ -5,6 +5,5 @@ module.exports = {
       longitude: result.location.longitude,
       latitude: result.location.latitude,
       score: result.score
-    })),
-  sort: results => results.sort((a, b) => (a.score > b.score ? -1 : a.score === b.score ? 0 : 1))
+    }))
 };
