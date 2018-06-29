@@ -2,6 +2,11 @@
 
 ## Demo
 
+[/suggestions?q=Montre](https://city-suggestions.herokuapp.com/suggestions?q=Montre)
+
+[/suggestions?q=Montre&longitude=-74.58438&latitude=46.21274&radius=100](https://city-suggestions.herokuapp.com/suggestions?q=Montre&longitude=-74.58438&latitude=46.21274&radius=100)
+
+
 Using httpie:
 
 ```
