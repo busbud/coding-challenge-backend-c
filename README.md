@@ -143,3 +143,16 @@ which should produce output similar to
 ```
 Server running at http://127.0.0.1:2525/suggestions
 ```
+
+
+### Deployment
+
+#### Heroku
+
+Make sure you are login with your account: `heroku login`
+
+Create the app: `heroku create`
+
+Push your master branch: `git push heroku master` or a another branch: `git push heroku <branch>:master`
+
+Then you'll be able to access it (httpie): `http http://heroku-app-subdomain.herokuapp.com/suggestions q=='San F' latitude==37.77493 longitude==-122.41942 radius==100`
