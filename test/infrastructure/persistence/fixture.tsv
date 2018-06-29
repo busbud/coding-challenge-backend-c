@@ -1,0 +1,21 @@
+id	name	ascii	alt_name	lat	long	feat_class	feat_code	country	cc2	admin1	admin2	admin3	admin4	population	elevation	dem	tz	modified_at
+6059891	Longueuil	Longueuil	Long'oj,Longej,Longejlo,Longjoj,Longueuil,lang ji er,lwnghwy,lwngwl,rongeru,Лонгеј,Лонгьой,Лонгёй,لونغوي,لونگؤل,ロンゲール,朗基爾	45.53121	-73.51806	P	PPL	CA		10	16			229330		18	America/Montreal	2010-09-22
+6060407	Lorraine	Lorraine		45.68338	-73.78249	P	PPL	CA		10	14			4999		64	America/Montreal	2010-09-23
+6060839	Louiseville	Louiseville		46.25594	-72.94145	P	PPL	CA		10	04			5819		17	America/Montreal	2008-04-11
+6064180	Magog	Magog		45.26678	-72.14909	P	PPL	CA		10	05			15550		220	America/Montreal	2008-04-11
+6065686	Maple Ridge	Maple Ridge	Mehpl-Ridzh,feng shu ling,mabl rydj, kwlwmbya albrytanyt,meipeulliji,meipururijji,Мэпл-Ридж,مابل ريدج، كولومبيا البريطانية,メイプルリッジ,楓樹嶺,메이플리지	49.21939	-122.60193	P	PPL	CA		02				70000		42	America/Vancouver	2010-02-27
+6066350	Marieville	Marieville		45.43338	-73.16585	P	PPL	CA		10	16			5600		34	America/Montreal	2008-04-11
+6066513	Markham	Markham	Markam,Markem,Markhamo,Markum,makamu,markam,wan jin shi,Маркам,Маркем,Маркъм,ماركام,مارکھم، انٹاریو,マーカム,萬錦市	43.86682	-79.2663	P	PPL	CA		08				261573		168	America/Toronto	2011-12-30
+6067494	Mascouche	Mascouche		45.74965	-73.59956	P	PPL	CA		10	14			34626		17	America/Montreal	2010-09-22
+6071618	Medicine Hat	Medicine Hat	Medicine Hat,Medikan Hat,Medisin Hetas,Medisin Khat,Medisin-Get,Medisin-Khat,YXH,mdsyn hat,mdysyn ht,mei di xin ha te,Медисин Хат,Медисин-Гет,Медисин-Хат,مدسين هات,مدیسین هت,میڈیسن ہیٹ,梅迪辛哈特	50.05006	-110.66834	P	PPL	CA		01				63138		692	America/Edmonton	2008-04-11
+6071876	Melfort	Melfort	Melfort,Мелфорт	52.86673	-104.61768	P	PPL	CA		11				5410		457	America/Regina	2008-04-11
+6072206	Mercier	Mercier		45.31678	-73.74919	P	PPL	CA		10	16			10121		47	America/Montreal	2010-09-23
+6072350	Merritt	Merritt	YMB	50.11225	-120.7942	P	PPL	CA		02				7179		593	America/Vancouver	2008-04-11
+6073363	Midland	Midland	Midland,mei de lan,mydland, awntaryw,Мидланд,Мідланд,ميدلاند، أونتاريو,美德兰	44.7501	-79.88296	P	PPL	CA		08				31502		195	America/Toronto	2006-01-22
+6074377	Milton	Milton		43.51681	-79.88294	P	PPLA2	CA		08	5969719			84362	195	194	America/Toronto	2013-07-19
+6075061	Mirabel	Mirabel		45.65008	-74.08251	P	PPL	CA		10	15			34626		70	America/Montreal	2010-09-22
+6075081	Miramichi	Miramichi	Miramichi,Miramishi,YCH,Мирамиши,Мірамічі,میرامچھی	47.02895	-65.50186	P	PPL	CA		04	1309			18129		20	America/Moncton	2013-08-10
+6075357	Mississauga	Mississauga	Misisaga,Misisoga,Misisogo,Missisoga,Mississauga,Mississoga,mi xi sha jia,mishisaga,misisaga,misisogeo,mss saga,mssaga,mysysagha,mysyswgh,mysyswja,Мисисага,Мисисога,Миссиссога,Міссісога,מיסיסוגה,مسس ساگا,مسساگا,ميسيساغا,ميسيسوجا,मिसिसागा,ਮਿੱਸਿੱਸਾਗਾ,මිසිසාගා,ミシサガ,密西沙加,미시소거	43.5789	-79.6583	P	PPL	CA		08				668549		159	America/Toronto	2012-07-01
+6076211	Moncton	Moncton	Mon'kton,Moncton,Monkton,Monktonas,Monktono,YQM,meng ke dun,monkuton,mwnktwn,mx ngk tan,Μόνκτον,Монктон,مونكتون,مونکتون,مونکٹون,มองก์ตัน,モンクトン,蒙克顿	46.11594	-64.80186	P	PPL	CA		04				87467		14	America/Moncton	2010-01-29
+6077128	Mont-Laurier	Mont-Laurier		46.55011	-75.4993	P	PPL	CA		10	15			13405		226	America/Montreal	2010-09-23
+6077243	Montréal	Montreal	Lungsod ng Montreal,Lungsod ng Montréal,Monreal,Monreal',Monreala,Monrealis,Monreyal,Monreāla,Mons Regius,Mont-real,Montreal,Montreal - Montreal,Montreal - Montréal,Montreal City,Montreali,Montrealo,Montréal,YMQ,meng te li er,monreali,monteuliol,montorioru,mwntral,mwntryal,Μοντρεαλ,Μόντρεαλ,Монреал,Монреаль,Монтреал,מונטריאול,مونترآل,مونتریال,مونترېئال,მონრეალი,ᒧᕆᐊᓪ,モントリオール,蒙特利尔,몬트리올	45.50884	-73.58781	P	PPLA2	CA		10	06			3268513		216	America/Montreal	2012-08-02
