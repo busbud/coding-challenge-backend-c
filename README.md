@@ -1,5 +1,50 @@
 # Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
 
+## Demo
+
+Using httpie:
+
+```
+http https://city-suggestions.herokuapp.com/suggestions q=='San Fr' latitude==37.77493 longitude==-122.41942 radius==100
+```
+
+should return
+```
+HTTP/1.1 200 OK
+Connection: keep-alive
+Content-Length: 326
+Content-Type: application/json; charset=utf-8
+Date: Fri, 29 Jun 2018 01:55:08 GMT
+Etag: W/"146-XcEW9GNeMiO0Cw+rL0HchXBLcaE"
+Server: Cowboy
+Via: 1.1 vegur
+X-Ratelimit-Limit: 120
+X-Ratelimit-Remaining: 119
+
+{
+    "suggestions": [
+        {
+            "latitude": 37.77493,
+            "longitude": -122.41942,
+            "name": "San Francisco, CA, US",
+            "score": 0.9203846153846154
+        },
+        {
+            "latitude": 37.65466,
+            "longitude": -122.40775,
+            "name": "South San Francisco, CA, US",
+            "score": 0.789357894736842
+        },
+        {
+            "latitude": 37.42411,
+            "longitude": -122.16608,
+            "name": "Stanford, CA, US",
+            "score": 0.5291374999999999
+        }
+    ]
+}
+```
+
 ## Requirements
 
 Design an API endpoint that provides auto-complete suggestions for large cities.
