@@ -2,9 +2,7 @@ const { transform, sort } = require("../response/transformer");
 const queryValidation = require("./queryValidation.js");
 
 module.exports = (app, cityRepository) => {
-  app.use(queryValidation);
-
-  app.get("/suggestions", (req, res) => {
+  app.get("/suggestions", queryValidation, (req, res) => {
     let { q, longitude, latitude, radius = 100 } = req.query;
 
     if (longitude && latitude) {
