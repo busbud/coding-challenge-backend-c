@@ -118,11 +118,7 @@ npm test
 
 #### production
 
-To start a local server run
-
-```
-npm start
-```
+To start a local server run: `npm start`
 
 which should produce output similar to
 
@@ -132,17 +128,7 @@ Server running at http://127.0.0.1:2525/suggestions
 
 #### development
 
-To automatically restart the server when you save changes
-
-```
-npm start:dev
-```
-
-which should produce output similar to
-
-```
-Server running at http://127.0.0.1:2525/suggestions
-```
+To automatically restart the server when you save changes run: `npm start:dev`
 
 
 ### Deployment
@@ -160,7 +146,7 @@ Then you'll be able to access it (httpie): `http http://heroku-app-subdomain.her
 
 ### Continuous Integration
 
-We use circleci to build and test each branch before they are merged to master, and then deploy to heroku when merged to master.
+We use circleci to build and test each branch before they are merged to master, and then deploy master to heroku when merged to master.
 
 Make sure you have setup your app with Heroku first.
 
@@ -169,3 +155,43 @@ Then add the following environment variables into your circleci project:
 HEROKU_APP_NAME=app_name
 HEROKU_API_KEY=$(heroku auth:token)
 ```
+
+
+### Improvements
+
+#### CityRepository
+
+Since the instructions pointed to the usage of streams, I used them, therefore, streaming/filtering the file is quite time consuming. Plus, we need to store it in memory in order to sort the suggestions before sending them back to the user. 
+
+Performance could be improved if we were using a database: elasticsearch seems like a good candidate here (location + text search), but others could do the job as well, and for a small set of data like this, it wouldn't really matter.)
+
+Also, there is no limitation in the number of suggestions returned. If we wanted to limit the results, we would need to:
+```
+- filter
+- sort
+- limit
+- toArray
+```
+But sorting can't be done without the final array of result, and limiting after having the array would improve the memory usage only, not really the overall performance.
+
+#### General Project Structure
+
+My last professional experience with Node was 3-4 years ago. I'm a bit rusted when it comes to the right project structure.
+
+I tried to follow a structure you could find in a [DDD](https://en.wikipedia.org/wiki/Domain-driven_design) project:
+
+```
+presentation
+application
+domain
+infrastructure
+```
+
+But since the `domain` would be really simple here (City), I haven't created one. Also, the `application` services are mostly orchestrators between the domain model and the infrastructure, used by the `presentation` layer. In our case, the `presentation` is directly calling the `infrastructure`, since it's a "simple" application, it doesn't really make sense to add that complexity here.
+
+
+#### Scoring
+
+I've spent some time looking for some good scoring algorithms/libraries but ended up with some basic ones. I'm pretty sure we can use better scoring algorithm for the name matching. The distance scoring is pretty dumb too.
+
+Also, I've made the arbitrary decision to weight the distance higher than the name score. The formula I came up with is `0.7 * S(distance) + 0.3 * S(name)` :shrug:
