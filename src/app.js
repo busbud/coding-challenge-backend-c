@@ -4,7 +4,7 @@ const http = require("http").Server(app);
 const port = process.env.PORT || 2345;
 
 const dbFile = __dirname + "/../data/cities_canada-usa.tsv";
-const cityRepository = require("./infrastructure/persistence/cityRepository")({ dbFile });
+const cityRepository = new (require("./infrastructure/persistence/cityRepository"))(dbFile);
 
 if (process.env.NODE_ENV === "production") {
   require("./presentation/security")(app);

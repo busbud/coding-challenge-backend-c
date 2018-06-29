@@ -18,5 +18,6 @@ module.exports = {
     return scoringDistance
       ? WEIGHT_SCORING_DISTANCE * scoringDistance + WEIGHT_SCORING_NAME * scoringName
       : scoringName;
-  }
+  },
+  sort: (a, b) => (a.score > b.score ? -1 : a.score === b.score ? 0 : 1)
 };

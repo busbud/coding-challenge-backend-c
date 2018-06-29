@@ -1,5 +1,5 @@
 const expect = require("chai").expect;
-const { scoreName, scoreDistance, scoring } = require("../../src/infrastructure/score");
+const { scoreName, scoreDistance, scoring, sort } = require("../../src/infrastructure/score");
 
 describe("Score", () => {
   describe("scoreName", () => {
@@ -50,6 +50,38 @@ describe("Score", () => {
 
     it("should give more weight to the distance than name", () => {
       expect(scoring({ scoringName: 0, scoringDistance: 1 })).to.eq(0.7);
+    });
+  });
+
+  describe("sort", () => {
+    it("returns sorted result by descending order", () => {
+      const result = [
+        {
+          name: "San Bernardino",
+          nameAscii: "San Bernardino",
+          state: "CA",
+          country: "US",
+          location: { longitude: 30, latitude: 40 },
+          score: 0,
+          scoringDistance: 0,
+          scoringName: 00
+        },
+        {
+          name: "San Francisco",
+          nameAscii: "San Francisco",
+          state: "CA",
+          country: "US",
+          location: { longitude: 10, latitude: 20 },
+          score: 1,
+          scoringDistance: 0.5,
+          scoringName: 0.6
+        }
+      ];
+
+      const sorted = result.sort(sort);
+
+      expect(sorted[0]).to.have.property("score", 1);
+      expect(sorted[1]).to.have.property("score", 0);
     });
   });
 });

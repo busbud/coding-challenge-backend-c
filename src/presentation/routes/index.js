@@ -1,4 +1,4 @@
-const { transform, sort } = require("../response/transformer");
+const { transform } = require("../response/transformer");
 const queryValidation = require("./queryValidation.js");
 
 module.exports = (app, cityRepository) => {
@@ -15,14 +15,12 @@ module.exports = (app, cityRepository) => {
       return cityRepository
         .findByNameAndLocation(q, { longitude, latitude }, radius)
         .then(transform)
-        .then(sort)
         .then(sendResponse);
     }
 
     return cityRepository
       .findByName(q)
       .then(transform)
-      .then(sort)
       .then(sendResponse);
   });
 };
