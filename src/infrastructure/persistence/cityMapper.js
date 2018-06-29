@@ -1,5 +1,5 @@
 module.exports = {
-  toJson: fields => {
+  toObj: fields => {
     return {
       name: fields[1],
       nameAscii: fields[2],

@@ -4,7 +4,7 @@ const { filter } = require("fuzzaldrin");
 const score = require("string-score");
 const geolib = require("geolib");
 const { scoreName, scoreDistance, scoring } = require("../score");
-const { toJson } = require("./cityMapper");
+const { toObj } = require("./cityMapper");
 
 module.exports = ({ dbFile = null } = {}) => {
   const MIN_POPULATION = 5000;
@@ -16,7 +16,7 @@ module.exports = ({ dbFile = null } = {}) => {
       .createReadStream(dbFile)
       .pipe(es.split("\n"))
       .pipe(es.mapSync(data => data.split("\t")))
-      .pipe(es.mapSync(toJson))
+      .pipe(es.mapSync(toObj))
       .pipe(es.mapSync(filterMinPopulation));
 
   const filterMinPopulation = city => {
