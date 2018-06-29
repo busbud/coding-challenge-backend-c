@@ -46,7 +46,6 @@ module.exports = ({ dbFile = null } = {}) => {
     findByName: name =>
       new Promise((resolve, reject) => {
         let boundedFilterByName = filterByName.bind(this, name);
-        let writer = es.writeArray(function(err, array) {});
         fetchCities()
           .pipe(es.mapSync(boundedFilterByName))
           .pipe(es.mapSync(computeScore))
@@ -65,7 +64,6 @@ module.exports = ({ dbFile = null } = {}) => {
       new Promise((resolve, reject) => {
         let boundedFilterByName = filterByName.bind(this, name);
         let boundedFilterByDistance = filterByDistance.bind(this, location, radiusInKm);
-        let writer = es.writeArray(function(err, array) {});
         return fetchCities()
           .pipe(es.mapSync(boundedFilterByName))
           .pipe(es.mapSync(boundedFilterByDistance))
