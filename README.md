@@ -236,3 +236,7 @@ But since the `domain` would be really simple here (City), I haven't created one
 I've spent some time looking for some good scoring algorithms/libraries but ended up with some basic ones. I'm pretty sure we can use better scoring algorithm for the name matching. The distance scoring is pretty dumb too.
 
 Also, I've made the arbitrary decision to weight the distance higher than the name score. The formula I came up with is `0.7 * S(distance) + 0.3 * S(name)` :shrug:
+
+#### Limit
+
+I've added an arbitrary limit of the first 20 best suggestions. We could add a parameter to handle pagination/offset of the suggestions we return.

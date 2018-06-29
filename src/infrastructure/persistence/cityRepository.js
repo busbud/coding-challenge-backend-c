@@ -69,6 +69,7 @@ module.exports = class CityRepository {
         .map(boundedScoringName)
         .map(computeScore)
         .sort(sort)
+        .slice(0, 20)
     );
   }
 
@@ -88,6 +89,7 @@ module.exports = class CityRepository {
         .map(boundedScoringDistance)
         .map(computeScore)
         .sort(sort)
+        .slice(0, 20)
     );
   }
 };
