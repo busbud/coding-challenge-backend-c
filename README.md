@@ -23,7 +23,7 @@ These responses are meant to provide guidance. The exact values can vary based o
 
 **Near match**
 
-    GET /suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
+    GET /suggestions?q=Londo&latitude=43.70011&longitude=-79.4163&radius=100
 
 ```json
 {
@@ -116,14 +116,56 @@ npm test
 
 ### Starting the application
 
+#### production
+
 To start a local server run
 
 ```
-PORT=3456 npm start
+npm start
 ```
 
 which should produce output similar to
 
 ```
-Server running at http://127.0.0.1:3456/suggestions
+Server running at http://127.0.0.1:2525/suggestions
+```
+
+#### development
+
+To automatically restart the server when you save changes
+
+```
+npm start:dev
+```
+
+which should produce output similar to
+
+```
+Server running at http://127.0.0.1:2525/suggestions
+```
+
+
+### Deployment
+
+#### Heroku
+
+Make sure you are login with your account: `heroku login`
+
+Create the app: `heroku create`
+
+Push your master branch: `git push heroku master` or a another branch: `git push heroku <branch>:master`
+
+Then you'll be able to access it (httpie): `http http://heroku-app-subdomain.herokuapp.com/suggestions q=='San F' latitude==37.77493 longitude==-122.41942 radius==100`
+
+
+### Continuous Integration
+
+We use circleci to build and test each branch before they are merged to master, and then deploy to heroku when merged to master.
+
+Make sure you have setup your app with Heroku first.
+
+Then add the following environment variables into your circleci project:
+```
+HEROKU_APP_NAME=app_name
+HEROKU_API_KEY=$(heroku auth:token)
 ```
