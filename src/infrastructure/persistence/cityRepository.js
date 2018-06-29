@@ -43,7 +43,7 @@ module.exports = ({ dbFile = null } = {}) => {
   const computeScore = city => ({ ...city, score: scoring(({ scoringName, scoringDistance } = city)) });
 
   return {
-    findByName: async name =>
+    findByName: name =>
       new Promise((resolve, reject) => {
         let boundedFilterByName = filterByName.bind(this, name);
         let writer = es.writeArray(function(err, array) {});
@@ -61,7 +61,7 @@ module.exports = ({ dbFile = null } = {}) => {
           );
       }),
 
-    findByNameAndLocation: async (name, location = { longitude: null, latitude: null }, radiusInKm = 100) =>
+    findByNameAndLocation: (name, location = { longitude: null, latitude: null }, radiusInKm = 100) =>
       new Promise((resolve, reject) => {
         let boundedFilterByName = filterByName.bind(this, name);
         let boundedFilterByDistance = filterByDistance.bind(this, location, radiusInKm);
