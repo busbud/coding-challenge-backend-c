@@ -3,7 +3,7 @@ const es = require("event-stream");
 const { filter } = require("fuzzaldrin");
 const geolib = require("geolib");
 const { scoreName, scoreDistance, scoring, sort } = require("../score");
-const { toObj } = require("./cityMapper");
+const { toCity } = require("./cityMapper");
 
 const MIN_POPULATION = 5000;
 const METERS_IN_KM = 1000;
@@ -45,7 +45,7 @@ const loadCities = dbFile =>
     .createReadStream(dbFile)
     .pipe(es.split("\n"))
     .pipe(es.mapSync(data => data.split("\t")))
-    .pipe(es.mapSync(toObj))
+    .pipe(es.mapSync(toCity))
     .pipe(es.mapSync(filterMinPopulation));
 
 module.exports = class CityRepository {

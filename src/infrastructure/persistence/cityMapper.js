@@ -4,7 +4,7 @@ const toCanadianState = stateNumber => {
 };
 
 module.exports = {
-  toObj: fields => {
+  toCity: fields => {
     return {
       name: fields[1],
       nameAscii: fields[2],
@@ -12,7 +12,7 @@ module.exports = {
         longitude: parseFloat(fields[5]),
         latitude: parseFloat(fields[4])
       },
-      state: isNaN(fields[10]) ? fields[10] : toCanadianState(fields[10]),
+      state: isNaN(fields[10]) ? fields[10] : toCanadianState(parseInt(fields[10], 10)),
       country: fields[8],
       population: parseInt(fields[14], 10)
     };
