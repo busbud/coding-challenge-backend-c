@@ -1,5 +1,4 @@
 const expect = require("chai").expect;
-const es = require("event-stream");
 const cityRepository = new (require("../../../src/infrastructure/persistence/cityRepository"))(
   `${__dirname}/fixture.tsv`
 );
