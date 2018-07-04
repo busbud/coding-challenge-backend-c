@@ -1,5 +1,55 @@
 # Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
 
+## Demo
+
+[/suggestions?q=Montre](https://city-suggestions.herokuapp.com/suggestions?q=Montre)
+
+[/suggestions?q=Montre&longitude=-74.58438&latitude=46.21274&radius=100](https://city-suggestions.herokuapp.com/suggestions?q=Montre&longitude=-74.58438&latitude=46.21274&radius=100)
+
+
+Using httpie:
+
+```
+http https://city-suggestions.herokuapp.com/suggestions q=='San Fr' latitude==37.77493 longitude==-122.41942 radius==100
+```
+
+should return
+```
+HTTP/1.1 200 OK
+Connection: keep-alive
+Content-Length: 326
+Content-Type: application/json; charset=utf-8
+Date: Fri, 29 Jun 2018 01:55:08 GMT
+Etag: W/"146-XcEW9GNeMiO0Cw+rL0HchXBLcaE"
+Server: Cowboy
+Via: 1.1 vegur
+X-Ratelimit-Limit: 120
+X-Ratelimit-Remaining: 119
+
+{
+    "suggestions": [
+        {
+            "latitude": 37.77493,
+            "longitude": -122.41942,
+            "name": "San Francisco, CA, US",
+            "score": 0.9203846153846154
+        },
+        {
+            "latitude": 37.65466,
+            "longitude": -122.40775,
+            "name": "South San Francisco, CA, US",
+            "score": 0.789357894736842
+        },
+        {
+            "latitude": 37.42411,
+            "longitude": -122.16608,
+            "name": "Stanford, CA, US",
+            "score": 0.5291374999999999
+        }
+    ]
+}
+```
+
 ## Requirements
 
 Design an API endpoint that provides auto-complete suggestions for large cities.
@@ -23,7 +73,7 @@ These responses are meant to provide guidance. The exact values can vary based o
 
 **Near match**
 
-    GET /suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
+    GET /suggestions?q=Londo&latitude=43.70011&longitude=-79.4163&radius=100
 
 ```json
 {
@@ -116,14 +166,77 @@ npm test
 
 ### Starting the application
 
-To start a local server run
+#### production
 
-```
-PORT=3456 npm start
-```
+To start a local server run: `npm start`
 
 which should produce output similar to
 
 ```
-Server running at http://127.0.0.1:3456/suggestions
+Server running at http://127.0.0.1:2525/suggestions
 ```
+
+#### development
+
+To automatically restart the server when you save changes run: `npm start:dev`
+
+
+### Deployment
+
+#### Heroku
+
+Make sure you are login with your account: `heroku login`
+
+Create the app: `heroku create`
+
+Push your master branch: `git push heroku master` or a another branch: `git push heroku <branch>:master`
+
+Then you'll be able to access it (httpie): `http http://heroku-app-subdomain.herokuapp.com/suggestions q=='San F' latitude==37.77493 longitude==-122.41942 radius==100`
+
+
+### Continuous Integration
+
+We use circleci to build and test each branch before they are merged to master, and then deploy master to heroku when merged to master.
+
+Make sure you have setup your app with Heroku first.
+
+Then add the following environment variables into your circleci project:
+```
+HEROKU_APP_NAME=app_name
+HEROKU_API_KEY=$(heroku auth:token)
+```
+
+
+## Improvements
+
+#### CityRepository
+
+Since the set is small, I'm loading the list of cities in memory in order to filter on it when doing the search.
+
+Performance could be improved if we were using a database: elasticsearch seems like a good candidate here (location + text search), but others could do the job as well, and for a small set of data like this, it wouldn't really matter.)
+
+#### General Project Structure
+
+My last professional experience with Node was 3-4 years ago. I'm a bit rusted when it comes to the right project structure.
+
+I tried to follow a structure you could find in a [DDD](https://en.wikipedia.org/wiki/Domain-driven_design) project:
+
+```
+presentation
+application
+domain
+infrastructure
+```
+
+But since the `domain` would be really simple here (City), I haven't created one. Also, the `application` services are mostly orchestrators between the domain model and the infrastructure, used by the `presentation` layer. In our case, the `presentation` is directly calling the `infrastructure`, since it's a "simple" application, it doesn't really make sense to add that complexity here.
+
+
+#### Scoring
+
+I've spent some time looking for some good scoring algorithms/libraries but ended up with some basic ones. I'm pretty sure we can use better scoring algorithm for the name matching. The distance scoring is pretty dumb too.
+
+Also, I've made the arbitrary decision to weight the distance higher than the name score. The formula I came up with is `0.7 * S(distance) + 0.3 * S(name)` :shrug:
+
+#### Limit
+
+I've added an arbitrary limit of the first 20 best suggestions. We could add a parameter to handle pagination/offset of the suggestions we return.
