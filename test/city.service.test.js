@@ -32,6 +32,36 @@ describe('CityService', () => {
   });
 
   describe('findCities function', () => {
+    it('should check latitude', () => {
+      return expect(
+        cityService.findCities({
+          q: 'Montréal',
+          latitude: 145.50884,
+          longitude: -73.58781
+        })
+      ).to.be.rejected.then(e =>
+        expect(e.message).to.equal('Invalid latitude')
+      );
+    });
+
+    it('should check longitude', () => {
+      return expect(
+        cityService.findCities({
+          q: 'Montréal',
+          latitude: 45.50884,
+          longitude: -273.58781
+        })
+      ).to.be.rejected.then(e =>
+        expect(e.message).to.equal('Invalid longitude')
+      );
+    });
+
+    it('should check lonqgitude', () => {
+      return expect(cityService.findCities({})).to.be.rejected.then(e =>
+        expect(e.message).to.equal('q is mandatory')
+      );
+    });
+
     it('invoke mongo with a geonear aggregration if coords are given', () => {
       aggregate.returns({ toArray: () => [] });
 
