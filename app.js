@@ -4,6 +4,7 @@ const port = process.env.PORT || 2345;
 const mongoURI = process.env.MONGO_URI || 'mongodb://localhost/busbud';
 const MongoClient = require('mongodb').MongoClient;
 const CityService = require('./lib/city.service');
+const ProvinceService = require('./lib/province.service');
 const ScoreService = require('./lib/score.service');
 
 // connect to mongo and start the http server
@@ -11,7 +12,8 @@ const start = async () => {
   const client = await MongoClient.connect(mongoURI);
 
   const scoreService = new ScoreService();
-  const cityService = new CityService(client, scoreService);
+  const provinceService = new ProvinceService(client);
+  const cityService = new CityService(client, scoreService, provinceService);
 
   return http
     .createServer(async (req, res) => {

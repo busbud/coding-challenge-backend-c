@@ -60,7 +60,7 @@ describe('GET /suggestions', function() {
         return suggestions.some(function(suggestion) {
           // remark for reviewer : I modified "test" to "match" because "test" is a function of Regexp and "match" is a function of String
           // otherwise it would mean that suggestion.name is a regexp instance and that would be very weird for a json response ?!
-          return suggestion.name.match(/montreal/i);
+          return suggestion.name.match(/montréal/i);
         });
       });
     });

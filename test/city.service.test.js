@@ -6,15 +6,20 @@ chai.use(require('sinon-chai'));
 const sinon = require('sinon');
 const CityService = require('../lib/city.service');
 const ScoreService = require('../lib/score.service');
+const ProvinceService = require('../lib/province.service');
 
 describe('CityService', () => {
   let cityService;
   let mongoClient;
   let scoreService;
+  let provinceService;
   let aggregate;
 
   before(() => {
     scoreService = sinon.createStubInstance(ScoreService);
+    provinceService = sinon.createStubInstance(ProvinceService);
+
+    provinceService.getProvinceByCode.resolves({ name: 'Unit' });
 
     aggregate = sinon.stub();
     find = sinon.stub();
@@ -28,7 +33,7 @@ describe('CityService', () => {
       })
     };
 
-    cityService = new CityService(mongoClient, scoreService);
+    cityService = new CityService(mongoClient, scoreService, provinceService);
   });
 
   describe('findCities function', () => {
@@ -39,9 +44,7 @@ describe('CityService', () => {
           latitude: 145.50884,
           longitude: -73.58781
         })
-      ).to.be.rejected.then(e =>
-        expect(e.message).to.equal('Invalid latitude')
-      );
+      ).to.be.rejected.then(e => expect(e.message).to.equal('Invalid latitude'));
     });
 
     it('should check longitude', () => {
@@ -51,15 +54,11 @@ describe('CityService', () => {
           latitude: 45.50884,
           longitude: -273.58781
         })
-      ).to.be.rejected.then(e =>
-        expect(e.message).to.equal('Invalid longitude')
-      );
+      ).to.be.rejected.then(e => expect(e.message).to.equal('Invalid longitude'));
     });
 
-    it('should check lonqgitude', () => {
-      return expect(cityService.findCities({})).to.be.rejected.then(e =>
-        expect(e.message).to.equal('q is mandatory')
-      );
+    it('should check q', () => {
+      return expect(cityService.findCities({})).to.be.rejected.then(e => expect(e.message).to.equal('q is mandatory'));
     });
 
     it('invoke mongo with a geonear aggregration if coords are given', () => {
@@ -119,7 +118,7 @@ describe('CityService', () => {
         return expect(r[0]).to.deep.equal({
           latitude: 43.85012,
           longitude: -79.03288,
-          name: 'Ajax, CA',
+          name: 'Ajax, Unit, CA',
           score: 1
         });
       });
