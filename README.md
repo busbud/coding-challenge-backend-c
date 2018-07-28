@@ -1,129 +1,224 @@
-# Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
+# City Microservice
 
-## Requirements
+  This implementation uses MongoDb.
 
-Design an API endpoint that provides auto-complete suggestions for large cities.
-The suggestions should be restricted to cities in the USA and Canada with a population above 5000 people.
+## Database creation
 
-- the endpoint is exposed at `/suggestions`
-- the partial (or complete) search term is passed as a querystring parameter `q`
-- the caller's location can optionally be supplied via querystring parameters `latitude` and `longitude` to help improve relative scores
-- the endpoint returns a JSON response with an array of scored suggested matches
-    - the suggestions are sorted by descending score
-    - each suggestion has a score between 0 and 1 (inclusive) indicating confidence in the suggestion (1 is most confident)
-    - each suggestion has a name which can be used to disambiguate between similarly named locations
-    - each suggestion has a latitude and longitude
-- all functional tests should pass (additional tests may be implemented as necessary).
-- the final application should be [deployed to Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs).
-- feel free to add more features if you like!
+First import the tsv file in a mongo database :
 
-#### Sample responses
+```
+sed 's/\"//g' data/cities_canada-usa.tsv > data/cities_canada-usa.clean.tsv
 
-These responses are meant to provide guidance. The exact values can vary based on the data source and scoring algorithm
+mongoimport --db busbud --collection cities --type tsv --headerline --file data/cities_canada-usa.clean.tsv
+mongoimport --db busbud --collection provinces --type tsv --fields code,name,ascii,geonameid --file data/admin1CodesASCII.txt
+```
 
-**Near match**
+Then create indexes:
 
-    GET /suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
+```
+MONGO_URL="YOUR_MONGO_URL" node initdata.js
+```
 
-```json
+## Usage
+
+A maximum of 20 results is returned in each response.
+
+### Search by name
+
+```
+GET /suggestions?q=Montréal
+
 {
-  "suggestions": [
-    {
-      "name": "London, ON, Canada",
-      "latitude": "42.98339",
-      "longitude": "-81.23304",
-      "score": 0.9
-    },
-    {
-      "name": "London, OH, USA",
-      "latitude": "39.88645",
-      "longitude": "-83.44825",
-      "score": 0.5
-    },
-    {
-      "name": "London, KY, USA",
-      "latitude": "37.12898",
-      "longitude": "-84.08326",
-      "score": 0.5
-    },
-    {
-      "name": "Londontowne, MD, USA",
-      "latitude": "38.93345",
-      "longitude": "-76.54941",
-      "score": 0.3
-    }
-  ]
+    "suggestions": [
+        {
+            "name": "Montréal, Quebec, CA",
+            "latitude": 45.50884,
+            "longitude": -73.58781,
+            "score": 1
+        },
+        {
+            "name": "Montréal-Ouest, Quebec, CA",
+            "latitude": 45.45286,
+            "longitude": -73.64918,
+            "score": 0.7954545454545454
+        }
+    ]
 }
 ```
 
-**No match**
+### Search by name part and geo coordinates
 
-    GET /suggestions?q=SomeRandomCityInTheMiddleOfNowhere
+If precise geo coordinates are given, nearest matching cities have a better score.
 
-```json
+Latitude should be between -90 and 90 and longitude between -180 and 180, otherwise an error will be returned.
+
+Example with Mont-Tremblant coordinates:
+
+```
+GET /suggestions?q=Mo&latitude=46.21274&longitude=-74.58438
+
 {
-  "suggestions": []
+    "suggestions": [
+        {
+            "name": "Mont-Tremblant, Quebec, CA",
+            "latitude": 46.21274,
+            "longitude": -74.58438,
+            "score": 0.4375
+        },
+        {
+            "name": "Monson, Massachusetts, US",
+            "latitude": 42.10426,
+            "longitude": -72.31897,
+            "score": 0.3750005083586601
+        },
+        {
+            "name": "Monroe, New York, US",
+            "latitude": 41.33065,
+            "longitude": -74.18681,
+            "score": 0.3750004592166842
+        },
+        {
+            "name": "Moosic, Pennsylvania, US",
+            "latitude": 41.35341,
+            "longitude": -75.73825,
+            "score": 0.3750004555322313
+        },
+        {
+            "name": "Monsey, New York, US",
+            "latitude": 41.11121,
+            "longitude": -74.06848,
+            "score": 0.375000439050676
+        },
+        {
+            "name": "Montréal, Quebec, CA",
+            "latitude": 45.50884,
+            "longitude": -73.58781,
+            "score": 0.30000227196475626
+        },
+        {
+            "name": "Montague, Massachusetts, US",
+            "latitude": 42.53564,
+            "longitude": -72.53509,
+            "score": 0.3000005674443664
+        },
+        {
+            "name": "Montmagny, Quebec, CA",
+            "latitude": 46.98043,
+            "longitude": -70.55493,
+            "score": 0.2727280544629094
+        },
+        {
+            "name": "Mont-Joli, Quebec, CA",
+            "latitude": 48.58388,
+            "longitude": -68.19214,
+            "score": 0.2727277281083712
+        },
+        {
+            "name": "Mount Ivy, New York, US",
+            "latitude": 41.18676,
+            "longitude": -74.03486,
+            "score": 0.27272771817957453
+        },
+        {
+            "name": "Mont-Royal, Quebec, CA",
+            "latitude": 45.51675,
+            "longitude": -73.64918,
+            "score": 0.2500023562120412
+        },
+        {
+            "name": "Morristown, Vermont, US",
+            "latitude": 44.55727,
+            "longitude": -72.62373,
+            "score": 0.25000104301507875
+        },
+        {
+            "name": "Montpelier, Vermont, US",
+            "latitude": 44.26006,
+            "longitude": -72.57539,
+            "score": 0.2500009314397036
+        },
+        {
+            "name": "Monticello, New York, US",
+            "latitude": 41.65565,
+            "longitude": -74.68933,
+            "score": 0.2500004927471387
+        },
+        {
+            "name": "Mount Kisco, New York, US",
+            "latitude": 41.20426,
+            "longitude": -73.72708,
+            "score": 0.2307696757834945
+        },
+        {
+            "name": "Mont-Laurier, Quebec, CA",
+            "latitude": 46.55011,
+            "longitude": -75.4993,
+            "score": 0.2142888523553676
+        },
+        {
+            "name": "Montréal-Ouest, Quebec, CA",
+            "latitude": 45.45286,
+            "longitude": -73.64918,
+            "score": 0.18750224358603204
+        },
+        {
+            "name": "Moultonborough, New Hampshire, US",
+            "latitude": 43.7548,
+            "longitude": -71.39674,
+            "score": 0.18750067343771773
+        },
+        {
+            "name": "Montville Center, Connecticut, US",
+            "latitude": 41.47899,
+            "longitude": -72.15119,
+            "score": 0.16666711156739203
+        },
+        {
+            "name": "Mont-Saint-Hilaire, Quebec, CA",
+            "latitude": 45.56678,
+            "longitude": -73.19915,
+            "score": 0.1500019351462081
+        }
+    ]
 }
 ```
 
+### Errors
 
-### Non-functional
-
-- All code should be written in Javascript
-- Mitigations to handle high levels of traffic should be implemented
-- Challenge is submitted as pull request against this repo ([fork it](https://help.github.com/articles/fork-a-repo/) and [create a pull request](https://help.github.com/articles/creating-a-pull-request-from-a-fork/)).
-- Documentation and maintainability is a plus
-
-### References
-
-- Geonames provides city lists Canada and the USA http://download.geonames.org/export/dump/readme.txt
-- http://www.nodejs.org/
-- http://ejohn.org/blog/node-js-stream-playground/
-
-
-## Getting Started
-
-Begin by forking this repo and cloning your fork. GitHub has apps for [Mac](http://mac.github.com/) and
-[Windows](http://windows.github.com/) that make this easier.
-
-### Setting up a Nodejs environment
-
-Get started by installing [nodejs](http://www.nodejs.org).
-
-For OS X users, use [Homebrew](http://brew.sh) and `brew install nvm`
-
-Once that's done, from the project directory, run
+Error responses are in json in this format:
 
 ```
-nvm use
+{"error":"q is mandatory"}
 ```
 
-### Setting up the project
-
-In the project directory run
-
 ```
-npm install
+{
+    "error": "Invalid latitude"
+}
 ```
 
-### Running the tests
-
-The test suite can be run with
-
 ```
-npm test
+{
+    "error": "Invalid longitude"
+}
 ```
+ 
+The status code is 400
 
-### Starting the application
+## Score
 
-To start a local server run
+The score of each result is the weighted average mean of two different scores :
 
-```
-PORT=3456 npm start
-```
+- the name score : inverse of levenshtein distance between the name of the city and the query (q)
+- the geo score : inverse of distance between the city and the query (latitude and longitude). If the query does not contain latitude and longitude, the geo score is 1.
 
-which should produce output similar to
+The name score has a weight of 3 and the geo score a weigth of 1. 
+This can be adjusted in score.service.js (could be made configurable in a next iteration ).
 
-```
-Server running at http://127.0.0.1:3456/suggestions
-```
+
+## States / Provinces
+
+The province service uses an LRU cache to avoid hitting the database for each city.
+
+The LRU cache has a default size of 100 items, which is enough to contain all USA and Canadians provinces, and at the same time small enough to avoid potential memory consumption issues (should the service be used for every countries worldwide).
+
