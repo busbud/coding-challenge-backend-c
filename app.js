@@ -101,14 +101,7 @@ input.pipe(parser)
                 name: `${cityMap[id].name}, ${cityMap[id].state}, ${cityMap[id].country}`,
                 latitude: cityMap[id].lat,
                 longitude: cityMap[id].long,
-                score: getScore(cityMap[id], query.q, query.latitude, query.longitude),
-                distance: geolib.getDistance({
-                  latitude: query.latitude, 
-                  longitude: query.longitude
-                }, {
-                  latitude: cityMap[id].lat, 
-                  longitude: cityMap[id].long
-                })
+                score: getScore(cityMap[id], query.q, query.latitude, query.longitude)
               };
             })
           }));
