@@ -5,12 +5,14 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "test": "./node_modules/mocha/bin/mocha ./test/"
+    "test": "mocha"
   },
   "author": "",
   "license": "WTFPL",
   "dependencies": {
     "chai": "^1.9.1",
+    "csv-parse": "^2.5.0",
+    "geolib": "^2.0.24",
     "mocha": "^1.18.2",
     "supertest": "^0.11.0"
   },
