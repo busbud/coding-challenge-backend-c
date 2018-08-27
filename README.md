@@ -4,6 +4,8 @@
 
 This application uses Node.js, PostgreSQL (with the PostGIS extension) and Redis to serve a text and location-based autocomplete search service.
 
+Available at: http://tranquil-ocean-36863.herokuapp.com/suggestions
+
 The application uses Express to serve a single `/autocomplete` endpoint for all results. The base environment comes with a docker-compose configuration for getting started quickly, otherwise the latest LTS version of Node.js can be installed locally. In development, I use docker-compose as well as ESLint and Flow. Tests can be executed using `docker-compose -f docker-compose.test.yml up`.
 
 City data is stored in a PostgreSQL database (automated using the script at `scripts/importer.js`). I decided to use PostgreSQL because of its familiarity and also because I've used PostGIS in the past for other projects. While I didn't end up using Postgres to filter or score results (as was my initial plan), PostGIS is still very handy for getting accurate distance results when the user's position is sent in the querystring.
