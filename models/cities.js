@@ -1,3 +1,6 @@
+const log = require('../lib/logger')('models.cities');
+const redis = require('../lib/redis').getClient();
+
 const {
   applyDistanceScores,
   applyPopulationScores,
@@ -8,23 +11,33 @@ const {
 
 const {getCities} = require('../data/citiesStore.js');
 
+const redisPrefix = `bb:cache:suggestions`;
+
 // Declare cities here so it's only loaded once
 let cities = null;
 
 module.exports = {
-  getSuggestions({q, latitude, longitude}) {
+  async getSuggestions({q, latitude, longitude}) {
     cities = getCities();
     const selectedCities = [];
     if(q) {
       // Normalize the search query
       const normalizedQuery = normalizeSearchTerm(q);
 
-      // Cities matching the normalized prefix, with name scores
-      let citiesResult = getCitiesMatchingPrefix(cities, normalizedQuery);
-      // Add city population scores
-      citiesResult = applyPopulationScores(citiesResult);
+      const cacheHit = await redis('get', `${redisPrefix}:${normalizedQuery}`);
 
-      // TODO: cache result here (in-memory? Redis?)
+      let citiesResult;
+      if(cacheHit) {
+        log.i(`Cache hit for query "${normalizedQuery}"!`);
+        citiesResult = JSON.parse(cacheHit);
+      } else {
+        // Cities matching the normalized prefix, with name scores
+        citiesResult = getCitiesMatchingPrefix(cities, normalizedQuery);
+        // Add city population scores
+        citiesResult = applyPopulationScores(citiesResult);
+
+        await redis('setex', `${redisPrefix}:${normalizedQuery}`, 1 * 24 * 60 * 60, JSON.stringify(citiesResult)); // 1 day expiration
+      }
 
       if(latitude) citiesResult = applyDistanceScores(citiesResult, {latitude, longitude});
 

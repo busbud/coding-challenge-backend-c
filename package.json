@@ -10,8 +10,8 @@
   "scripts": {
     "lint": "eslint .",
     "start": "node app.js",
-    "test": "find . -path ./node_modules -prune -o -name '*.spec.js' | NODE_ENV=test xargs mocha -R spec --exit",
-    "test:cover": "find . -path ./node_modules -prune -o -name '*.spec.js' | NODE_ENV=test xargs nyc mocha -R spec --exit",
+    "test": "find . -path ./node_modules -prune -o -name '*.spec.js' | CONFIG_LOG_LEVEL=error NODE_ENV=test xargs mocha -R spec --exit",
+    "test:cover": "find . -path ./node_modules -prune -o -name '*.spec.js' | CONFIG_LOG_LEVEL=error NODE_ENV=test xargs nyc mocha -R spec --exit",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "author": "",

@@ -1,13 +1,12 @@
 const {expect}  = require('chai');
-
 const {getSuggestions} = require('./cities');
 
 describe('models.cities', () => {
   describe('getSuggestions', () => {
     describe('without required parameters', () => {
       let result;
-      before('call function and get result', () => {
-        result = getSuggestions({foo: 'bar'});
+      before('call function and get result', async () => {
+        result = await getSuggestions({foo: 'bar'});
       });
 
       it('should return an empty array', () => {
@@ -18,8 +17,8 @@ describe('models.cities', () => {
 
     describe('with only q parameter', () => {
       let result;
-      before('call function and get result', () => {
-        result = getSuggestions({q: 'Mon'});
+      before('call function and get result', async () => {
+        result = await getSuggestions({q: 'Mon'});
       });
 
       it('should return a cities array', () => {
@@ -42,8 +41,8 @@ describe('models.cities', () => {
 
     describe('with all parameters', () => {
       let result;
-      before('call function and get result', () => {
-        result = getSuggestions({q: 'Mon', longitude: -71.8929, latitude: 45.4042});
+      before('call function and get result', async () => {
+        result = await getSuggestions({q: 'Mon', longitude: -71.8929, latitude: 45.4042});
       });
 
       it('should return a cities array', () => {

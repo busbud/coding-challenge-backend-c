@@ -4,7 +4,7 @@ module.exports = router => {
   router.get('/suggestions', getSuggestions);
 };
 
-function getSuggestions(req, res) {
+async function getSuggestions(req, res) {
   const {
     latitude,
     longitude,
@@ -17,7 +17,7 @@ function getSuggestions(req, res) {
     return res.status(400).json({error: `Either provide both latitude and longitude or none at all.`});
   }
 
-  const suggestions = models.cities.getSuggestions({q, latitude, longitude});
+  const suggestions = await models.cities.getSuggestions({q, latitude, longitude});
 
   res.status(suggestions.length ? 200 : 404).json({suggestions});
 }

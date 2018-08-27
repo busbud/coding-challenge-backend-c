@@ -1,3 +1,7 @@
+db:
+  redis:
+    url: REDIS_URL # To catch Heroku Redis URL
+    
 # The node environment
 env: NODE_ENV
 
