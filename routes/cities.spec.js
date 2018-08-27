@@ -11,7 +11,7 @@ describe('GET /suggestions', () => {
   describe('without providing a q parameter', () => {
     let response;
 
-    before(async () => {
+    before('make call', async () => {
       response = await request.get('/suggestions').query('s=Manhatt');
     });
 
@@ -27,7 +27,7 @@ describe('GET /suggestions', () => {
   describe('when providing a too short q parameter', () => {
     let response;
 
-    before(async () => {
+    before('make call', async () => {
       response = await request.get('/suggestions').query('q=');
     });
 
@@ -43,8 +43,24 @@ describe('GET /suggestions', () => {
   describe('when providing a latitude without longitude', () => {
     let response;
 
-    before(async () => {
+    before('make call', async () => {
       response = await request.get('/suggestions').query('q=Mont&latitude=46.4042');
+    });
+
+    it('returns a 400', () => {
+      expect(response.statusCode).to.equal(400);
+    });
+
+    it('returns some error text', () => {
+      expect(response.body.error).to.be.a('string');
+    });
+  });
+
+  describe('when providing a latitude with a 0 length longitude', () => {
+    let response;
+
+    before('make call', async () => {
+      response = await request.get('/suggestions').query('q=Mont&latitude=46.4042&longitude=');
     });
 
     it('returns a 400', () => {
@@ -59,8 +75,24 @@ describe('GET /suggestions', () => {
   describe('when providing a longitude without latitude', () => {
     let response;
 
-    before(async () => {
+    before('make call', async () => {
       response = await request.get('/suggestions').query('q=Mont&longitude=-72.8929');
+    });
+
+    it('returns a 400', () => {
+      expect(response.statusCode).to.equal(400);
+    });
+
+    it('returns some error text', () => {
+      expect(response.body.error).to.be.a('string');
+    });
+  });
+
+  describe('when providing a longitude with a 0 length latitude', () => {
+    let response;
+
+    before('make call', async () => {
+      response = await request.get('/suggestions').query('q=Mont&longitude=-72.8929&latitude=');
     });
 
     it('returns a 400', () => {
@@ -75,7 +107,7 @@ describe('GET /suggestions', () => {
   describe('with a non-existent city', () => {
     let response;
 
-    before(async () => {
+    before('make call', async () => {
       response = await request.get('/suggestions').query('q=SomeRandomCityInTheMiddleOfNowhere');
     });
 
@@ -92,7 +124,7 @@ describe('GET /suggestions', () => {
   describe('with a valid city', ()  => {
     let response;
 
-    before(async () => {
+    before('make call', async () => {
       response = await request.get('/suggestions').query('q=Montreal');
     });
 
@@ -122,7 +154,7 @@ describe('GET /suggestions', () => {
   describe('with a valid city in a foreign language', ()  => {
     let response;
 
-    before(async () => {
+    before('make call', async () => {
       response = await request.get('/suggestions').query(`q=${encodeURIComponent('Бостон')}`); // Boston in Russian or something like that
     });
 

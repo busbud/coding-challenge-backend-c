@@ -2,11 +2,7 @@ const config = require('config');
 const geolib = require('geolib');
 const stringScore = require('string-score');
 const {remove: removeDiacritics} = require('diacritics');
-const {getCities} = require('../data/citiesStore.js');
 const weightedMean = require('../lib/weightedMean');
-
-// Declare cities here so it's only loaded once
-let cities = null;
 
 exports.buildClientCityEntry = function buildClientCityEntry(city) {
   return {
@@ -15,10 +11,6 @@ exports.buildClientCityEntry = function buildClientCityEntry(city) {
     longitude: city.long,
     latitude: city.lat,
     score: city.score,
-    scorePrefix: city.scorePrefix,
-    scoreString: city.scoreString,
-    scoreDistance: city.scoreDistance,
-    scorePopulation: city.scorePopulation,
   };
 };
 
@@ -29,8 +21,7 @@ exports.normalizeSearchTerm = function normalizeSearchTerm(q) {
   .replace(/^st\.([A-Za-z]{1})(.*)/gi, 'st. $1$2'); // Add the space after the dot if it's missing (eg. st.john -> st. john)
 };
 
-exports.getCitiesMatchingPrefix = function getCitiesMatchingPrefix(q) {
-  cities = getCities();
+exports.getCitiesMatchingPrefix = function getCitiesMatchingPrefix(cities, q) {
   // Increase stringScore fuzziness as string length increases
   // (users are more likely to be searching for a specific city with misspellings)
   const fuzziness = q.length < 5 ? 0.01 : q.length >= 10 ? 0.85 : q.length / 10;
@@ -47,7 +38,7 @@ exports.getCitiesMatchingPrefix = function getCitiesMatchingPrefix(q) {
     } else {
       // If the city name doesn't match, we look at the alternate names
       for(let j = 0; j < cities[i].alt_name.length; j++) {
-        if(cities[i].alt_name[j].startsWith(q)) {
+        if(cities[i].alt_name[j].toLowerCase().startsWith(q)) {
           selectedCities.push({
             ...cities[i],
             scorePrefix: config.scoring.scores.alt_name,
@@ -58,6 +49,7 @@ exports.getCitiesMatchingPrefix = function getCitiesMatchingPrefix(q) {
       }
     }
   }
+
   return selectedCities;
 };
 
