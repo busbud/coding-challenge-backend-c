@@ -7,4 +7,4 @@ log:
   level: CONFIG_LOG_LEVEL
 
 # The port the server listens on
-port: CONFIG_PORT
+port: PORT
