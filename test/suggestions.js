@@ -1,10 +1,15 @@
-var expect  = require('chai').expect;
-var app     = require('../app');
-var request = require('supertest')(app);
+/* eslint-env mocha */
+/* eslint-disable prefer-arrow-callback */
+/* eslint-disable func-names */
+const { expect } = require('chai');
+const supertest = require('supertest');
+const { app } = require('../app');
 
-describe('GET /suggestions', function() {
+const request = supertest(app);
+
+describe('GET /suggestions', function () {
   describe('with a non-existent city', function () {
-    var response;
+    let response;
 
     before(function (done) {
       request
@@ -27,7 +32,7 @@ describe('GET /suggestions', function() {
   });
 
   describe('with a valid city', function () {
-    var response;
+    let response;
 
     before(function (done) {
       request
@@ -51,9 +56,9 @@ describe('GET /suggestions', function() {
     it('contains a match', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.some(function (suggestion) {
-          return suggestion.name.test(/montreal/i);
+          return /montréal/i.test(suggestion.name);
         });
-      })
+      });
     });
 
     it('contains latitudes and longitudes', function () {
@@ -61,7 +66,15 @@ describe('GET /suggestions', function() {
         return suggestions.every(function (suggestion) {
           return suggestion.latitude && suggestion.longitude;
         });
-      })
+      });
+    });
+
+    it('contains distances', function () {
+      expect(response.json.suggestions).to.satisfy(function (suggestions) {
+        return suggestions.every(function (suggestion) {
+          return suggestion.distance;
+        });
+      });
     });
 
     it('contains scores', function () {
@@ -69,7 +82,7 @@ describe('GET /suggestions', function() {
         return suggestions.every(function (suggestion) {
           return suggestion.latitude && suggestion.longitude;
         });
-      })
+      });
     });
   });
 });

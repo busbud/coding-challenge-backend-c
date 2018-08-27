@@ -1,0 +1,17 @@
+version: '3.4'
+
+services:
+  db:
+    image: mdillon/postgis:10-alpine
+  app:
+    build: ./
+    tty: true
+    command: ash -c 'npm run import && npm run test'
+    environment:
+      DB_HOST: db
+    volumes:
+      - .:/code
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db

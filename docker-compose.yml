@@ -1,0 +1,20 @@
+version: '3.4'
+
+services:
+  db:
+    image: mdillon/postgis:10-alpine
+  redis:
+    image: redis:alpine
+  app:
+    build: ./
+    tty: true
+    command: npm run start:dev
+    environment:
+      DB_HOST: db
+      REDIS_HOST: redis
+    volumes:
+      - .:/code
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
