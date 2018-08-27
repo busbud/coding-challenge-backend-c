@@ -3,18 +3,43 @@
   "version": "0.0.0",
   "description": "coding challenge in Nodejs",
   "main": "app.js",
+  "pre-commit": [
+    "lint",
+    "test"
+  ],
   "scripts": {
+    "lint": "eslint .",
     "start": "node app.js",
-    "test": "./node_modules/mocha/bin/mocha ./test/"
+    "test": "find . -path ./node_modules -prune -o -name '*.spec.js' | NODE_ENV=test xargs mocha -R spec --exit",
+    "test:cover": "find . -path ./node_modules -prune -o -name '*.spec.js' | NODE_ENV=test xargs nyc mocha -R spec --exit",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "author": "",
   "license": "WTFPL",
   "dependencies": {
-    "chai": "^1.9.1",
-    "mocha": "^1.18.2",
-    "supertest": "^0.11.0"
+    "compression": "^1.7.3",
+    "config": "^2.0.1",
+    "diacritics": "^1.3.0",
+    "express": "^4.16.3",
+    "geolib": "^2.0.24",
+    "glob": "^7.1.2",
+    "glob-all": "^3.1.0",
+    "log4js-wrapper": "^1.3.2",
+    "morgan": "^1.9.0",
+    "sol-redis-pool": "^0.3.3",
+    "string-score": "^1.0.1"
   },
   "engines": {
-    "node": "0.10.26"
+    "node": ">=8.11.0"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "coveralls": "^3.0.2",
+    "eslint": "^5.4.0",
+    "espree": "^4.0.0",
+    "mocha": "^5.2.0",
+    "nyc": "^12.0.2",
+    "pre-commit": "^1.2.2",
+    "supertest": "^3.1.0"
   }
 }

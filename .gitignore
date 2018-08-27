@@ -1,0 +1,7 @@
+node_modules
+.DS_Store
+npm-debug.log
+.nyc_output
+config/local-development.yml
+config/local-production.yml
+config/local-test.yml

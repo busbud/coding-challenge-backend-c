@@ -1,0 +1,35 @@
+# Database config
+db:
+  redis:
+    host: localhost
+    port: 6379
+
+# The node environment
+env: development
+
+# Logging settings
+log:
+  # The log level passed to bunyan
+  level: info
+  # The file to write logs to, relative to the root of the app
+  file: logs/app.log
+  # Number of log archive files to keep on the server (they should be periodically archived to an external storage anyways)
+
+maxSuggestions: 20
+  
+# The port the server listens on
+port: 2345
+
+# Scoring settings
+scoring:
+  scores: 
+    # The score to give to a direct name match
+    name: 1
+    # The score to give to an alt_name match. Significantly lower than a direct name match.
+    alt_name: 0.2
+  # The weight to give to every component of the score
+  weights:
+    prefix: 5
+    string: 4
+    distance: 5
+    population: 4

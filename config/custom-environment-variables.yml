@@ -1,0 +1,10 @@
+# The node environment
+env: NODE_ENV
+
+# Logging settings
+log:
+  # The log level passed to bunyan
+  level: CONFIG_LOG_LEVEL
+
+# The port the server listens on
+port: CONFIG_PORT
