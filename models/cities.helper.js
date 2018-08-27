@@ -79,8 +79,8 @@ exports.computeFinalScoreAndFormat = function computeFinalScoreAndFormat(cities)
   const perfectStringMatchFound = !!cities.find(city => city.scorePrefix === 1);
   return cities
   .map(city => {
-    // If some city names directly match, make alternate name matches score much lower
-    if(perfectStringMatchFound && city.scorePrefix === config.scoring.scores.alt_name) city.scorePrefix *= 0.1;
+    // If some city names directly match, make alternate name matches score much much lower
+    if(perfectStringMatchFound && city.scorePrefix === config.scoring.scores.alt_name) city.scorePrefix *= 0.05;
 
     const scoresArray = [
       [city.scorePrefix, config.scoring.weights.prefix],
