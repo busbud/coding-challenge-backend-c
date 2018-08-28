@@ -1,0 +1,16 @@
+language: node_js
+
+node_js:
+  - '8.11'
+
+services:
+  - redis-server
+
+cache:
+  yarn: true
+  directories:
+    - node_modules
+
+script: yarn run test:cover
+
+after_success: yarn run coverage

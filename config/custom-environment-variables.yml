@@ -1,0 +1,14 @@
+db:
+  redis:
+    url: REDIS_URL # To catch Heroku Redis URL
+    
+# The node environment
+env: NODE_ENV
+
+# Logging settings
+log:
+  # The log level passed to bunyan
+  level: CONFIG_LOG_LEVEL
+
+# The port the server listens on
+port: PORT

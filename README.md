@@ -1,4 +1,4 @@
-# Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
+# Busbud Coding Challenge [![Build Status](https://travis-ci.org/bolducsa/coding-challenge-backend-c.svg?branch=master)](https://travis-ci.org/bolducsa/coding-challenge-backend-c) [![Coverage Status](https://coveralls.io/repos/github/bolducsa/coding-challenge-backend-c/badge.svg?branch=master)](https://coveralls.io/github/bolducsa/coding-challenge-backend-c?branch=master)
 
 ## Requirements
 
@@ -74,56 +74,39 @@ These responses are meant to provide guidance. The exact values can vary based o
 - Challenge is submitted as pull request against this repo ([fork it](https://help.github.com/articles/fork-a-repo/) and [create a pull request](https://help.github.com/articles/creating-a-pull-request-from-a-fork/)).
 - Documentation and maintainability is a plus
 
-### References
+## My implementation
 
-- Geonames provides city lists Canada and the USA http://download.geonames.org/export/dump/readme.txt
-- http://www.nodejs.org/
-- http://ejohn.org/blog/node-js-stream-playground/
+An `express` server handles the queries. The structure is a bit overkill for a single endpoint, but it's what I usually use and it works well. All the API endpoints are handled in `routes` and they usually call `models` to interact with the database.
 
+In this case, the database is simple an in-memory representation of the parsed data. The data is parsed when the server starts, and the server only starts listening for connections when the data has been fully loaded and parsed. In a real application, I would store this data in an SQL database (PostgreSQL would be my go-to choice).
 
-## Getting Started
+For logging, I tried a lot of logging libraries over time but I always come back to `log4js`. Since I always ended up overriding some methods and settings, I wrote my own wrapper, [log4js-wrapper](https://www.npmjs.com/package/log4js-wrapper), that I use in all my projects.
 
-Begin by forking this repo and cloning your fork. GitHub has apps for [Mac](http://mac.github.com/) and
-[Windows](http://windows.github.com/) that make this easier.
+### Testing
 
-### Setting up a Nodejs environment
+I tried to get as much code covered as I could. The remaining untested code (specific branches in specific files) are very hard and time consuming to test.
 
-Get started by installing [nodejs](http://www.nodejs.org).
+I adapted the existing `supertest` tests to use async / await, and also added some to cover more cases (like foreign languages).
 
-For OS X users, use [Homebrew](http://brew.sh) and `brew install nvm`
+`nyc` is used to generate coverage statistics (uses `istantul` behind the scenes). Tests and coverage reports are automated using Travis CI and coverage data is pushed to coveralls.io.
 
-Once that's done, from the project directory, run
+`pre-commit` is used to run the tests before every commit. The `npm test` command also makes sure there's no `eslint` warning or error.
 
-```
-nvm use
-```
+### Caching
 
-### Setting up the project
+Redis is used to cache the query results. It drastically improves performance when a request is cached. I only cache the results before distance score is applied. In cases where the server handles a lot of traffic, a lot of queries are likely to be repeated, so this will vastly improve performance.
 
-In the project directory run
+### Scoring
 
-```
-npm install
-```
+I've spent a lot of time fine-tuning the scoring algorithm. It is influenced on 4 criteria:
 
-### Running the tests
+- Prefix: a matching prefix will give a score of 1 to this criteria. If it doesn't match, alt_name will be scanned and if a match is found there, a score of 0.2 will be given to that city. I set it so low because a lot of times, many alt_names are specified and do not look at all like that actual city name, so it looks a bit buggy if these for example Boston is a top result when you search for "ga";
+- String: using `string-score`, calculate the match of the string. It is especially useful for longer names where the user is more likely to have written the complete name of a city when typos. The fuzzyness (degree of tolerance) of the function is greater for longer searches and lower for shorter searches (so the first few keystrokes really show cities starting with those letters instead of cities that have a similar name);
+- Population: a city's population score is its population ratio relatively to the most populous cities in the matches array, since bus rides are more likely to be between bigger cities;
+- Distance: the distance score is calculated the same way as the population score. I tried calculating them relatively to their index in the array instead of relatively to the shortest distance, but it gave some bad results in some instance where a lot of cities are super far.
 
-The test suite can be run with
+The final score is, I think, very accurate. I tried a lot of searches and it surprised me how pertinent the results were. 
 
-```
-npm test
-```
+It's also possible to search for cities in another type of writing, for example in cyrillic. Not all cities have a lot of `alt_name` entries but the most important ones do.
 
-### Starting the application
-
-To start a local server run
-
-```
-PORT=3456 npm start
-```
-
-which should produce output similar to
-
-```
-Server running at http://127.0.0.1:3456/suggestions
-```
+Weights are applied to each score component and easily editable in the `config/default.yml` file.
