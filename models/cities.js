@@ -1,5 +1,5 @@
 const log = require('../lib/logger')('models.cities');
-const redis = require('../lib/redis').getClient();
+const redis = require('../lib/redis');
 
 const {
   applyDistanceScores,

@@ -95,13 +95,15 @@ describe('models.cities.helper', () => {
           population: 6,
         }, {
           population: 1,
+        }, {
+          population: 1,
         }];
 
         result = applyPopulationScores(cities);
       });
 
       it('should return an array of cities with scores', () => {
-        expect(result.length).to.equal(4);
+        expect(result.length).to.equal(5);
         result.forEach(entry => {
           expect(entry.scorePopulation).to.be.a('number');
         });
@@ -127,13 +129,16 @@ describe('models.cities.helper', () => {
         }, {
           long: -100.19915,
           lat: 88.56678,
+        }, {
+          long: -100.19915,
+          lat: 88.56678,
         }];
 
         result = applyDistanceScores(cities, {longitude: -71.8929, latitude: 45.4042});
       });
 
       it('should return an array of cities with scores', () => {
-        expect(result.length).to.equal(3);
+        expect(result.length).to.equal(4);
         result.forEach(entry => {
           expect(entry.scoreDistance).to.be.a('number');
         });

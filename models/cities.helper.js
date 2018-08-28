@@ -88,11 +88,11 @@ exports.computeFinalScoreAndFormat = function computeFinalScoreAndFormat(cities)
       [city.scorePopulation, config.scoring.weights.population],
     ];
 
-    if(city.distance) scoresArray.push([(city.scoreDistance || 1), config.scoring.weights.distance]);
+    if(city.distance) scoresArray.push([city.scoreDistance, config.scoring.weights.distance]);
 
     return {
       ...city,
-      score: weightedMean(scoresArray),
+      score: parseFloat(weightedMean(scoresArray).toFixed(5)),
     };
   })
   .sort((a, b) => a.score > b.score ? -1 : a.score === b.score ? 0 : 1) // Order by score

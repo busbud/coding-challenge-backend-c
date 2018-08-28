@@ -3,7 +3,7 @@ const app     = require('../app');
 const request = require('supertest')(app);
 const diacritics = require('diacritics');
 
-before(done => {
+before('wait for express to be ready', done => {
   app.on('serverReady', done);
 });
 
