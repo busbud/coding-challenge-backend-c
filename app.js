@@ -24,7 +24,7 @@ if(!['development', 'production', 'test'].includes(config.env)) {
 const app = express();
 
 if(config.env === 'production') {
-  const accessLogStream = createWriteStream(`${__dirname}/logs/${config.logFilename}`, {flags: 'a'});
+  const accessLogStream = createWriteStream(`${__dirname}/${config.log.file}`, {flags: 'a'});
   app.use(morgan('short', {stream: accessLogStream}));
 } else {
   app.use(morgan('dev', {stream: process.stdout}));
