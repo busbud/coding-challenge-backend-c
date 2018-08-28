@@ -25,11 +25,13 @@ exports.getCitiesMatchingPrefix = function getCitiesMatchingPrefix(cities, q) {
   // Increase stringScore fuzziness as string length increases
   // (users are more likely to be searching for a specific city with misspellings)
   const fuzziness = q.length < 5 ? 0.01 : q.length >= 10 ? 0.85 : q.length / 10;
+  // Require a bigger score to match similar city name for shorter queries
+  const scoreThreshold = q.length < 4 ? 0.8 : 0.5;
   // Searches city names
   const selectedCities = [];
   for(let i = 0; i < cities.length; i++) {
     const scoreString = stringScore(cities[i].ascii, q, fuzziness);
-    if(cities[i].ascii.startsWith(q) || scoreString > 0.5) {
+    if(cities[i].ascii.startsWith(q) || scoreString > scoreThreshold) {
       selectedCities.push({
         ...cities[i],
         scorePrefix: config.scoring.scores.name,

@@ -30,6 +30,6 @@ scoring:
   # The weight to give to every component of the score
   weights:
     prefix: 5
-    string: 4
+    string: 3
     distance: 5
-    population: 4
+    population: 3
