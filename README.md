@@ -1,4 +1,4 @@
-# Busbud Coding Challenge [![Build Status](https://travis-ci.org/SamuelBolduc/coding-challenge-backend-c.svg?branch=master)](https://travis-ci.org/SamuelBolduc/coding-challenge-backend-c) [![Coverage Status](https://coveralls.io/repos/github/SamuelBolduc/coding-challenge-backend-c/badge.svg?branch=master)](https://coveralls.io/github/SamuelBolduc/coding-challenge-backend-c?branch=master)
+# Busbud Coding Challenge [![Build Status](https://travis-ci.org/bolducsa/coding-challenge-backend-c.svg?branch=master)](https://travis-ci.org/bolducsa/coding-challenge-backend-c) [![Coverage Status](https://coveralls.io/repos/github/bolducsa/coding-challenge-backend-c/badge.svg?branch=master)](https://coveralls.io/github/bolducsa/coding-challenge-backend-c?branch=master)
 
 ## Requirements
 
