@@ -82,3 +82,4 @@ The app is caching request response for faster lookup.  It is using a simple in 
 
 **Avg. response time with 1000 request/second over 1 minute is 17ms. Please check load test result [here](http://bit.ly/2PJQtME)**
 
+![loader.io](test/loader.io.png)
