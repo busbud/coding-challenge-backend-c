@@ -31,5 +31,5 @@ scoring:
   weights:
     prefix: 5
     string: 3
-    distance: 5
-    population: 3
+    distance: 6
+    population: 5
