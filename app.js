@@ -1,9 +1,13 @@
+// Core server dependencies
 const express = require('express');
 const bodyParser = require('body-parser');
 const http = require('http');
 
-const jsonCities = require('./data/cities.json');
+// fetch and calculate distances and scores
+const {getUserLL, getScore} = require('./helpers');
 
+// data and data model
+const jsonCities = require('./data/cities.json');
 const {Suggestion} = require('./data/suggestion');
 
 const app = express();
@@ -18,14 +22,43 @@ app.get('/suggestions', (req, res) => {
   const longitude = req.query.longitude;
 
   if (searchString) {
-    
+    // i for ignore case. Match cities that start with the search string.
+    const searchRegex = new RegExp("^" + searchString, "i");
+
+    // Try to get the User's Lat Lng from their IP-address
+    getUserLL().then(LL => {
+      let userLat = null;
+      let userLng = null;
+      if (LL) {
+        userLat = LL.userLat;
+        userLng = LL.userLng;
+      }
+
+      // exclude the _id and _v fields added by mongodb from the return
+      Suggestion.find({ name: searchRegex }, '-_id -__v').then(cities => {
+        const suggestions = cities.map(city => {
+          const newName = city.name + ', ' + city.country
+          const score = getScore(city, userLat, userLng);
+          return {
+            name: newName,
+            latitude: city.latitude,
+            longitude: city.longitude,
+            score
+          }
+        }).sort((a, b) => {
+          return b.score - a.score;
+        });
+
+        res.send({suggestions});
+      }, (err) => {
+        res.status(400).send(err);
+      });
+    });
   } else {
     res.end(JSON.stringify({
       suggestions: []
     }));
   }
-
-  res.end();
 })
 
 // Load the JSON data into a MongoDB database
@@ -57,12 +90,6 @@ app.post('/suggestions', (req, res) => {
   }, (err) => {
     res.status(400).send(err);
   });
-
-  // Suggestion.insertMany(cities).then((error, doc) => {
-  //   res.send(doc);
-  // }, (err) => {
-  //   res.status(400).send(err);
-  // });
 })
 
 module.exports = http.createServer(app).listen(port, '127.0.0.1');
