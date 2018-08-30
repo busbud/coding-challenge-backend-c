@@ -68,9 +68,29 @@ describe('GET /suggestions', function() {
     it('contains scores', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.every(function (suggestion) {
-          return suggestion.latitude && suggestion.longitude;
+          return suggestion.score;
         });
       })
+    });
+
+    it('all scores are between 0 and 1', function () {
+      expect(response.json.suggestions).to.satisfy(function (suggestions) {
+        return suggestions.every(function (suggestion) {
+          return ((suggestion.score >= 0) && (suggestion.score <= 1));
+        });
+      });
+    });
+
+    it('all scores are sorted least to greatest', function () {
+      expect(response.json.suggestions).to.satisfy(function (suggestions) {
+        // make sure the previous score is >= the current score
+        for (i = 1; i < suggestions.length; i++) {
+          if (!(suggestions[i-1].score >= suggestions[i].score)) {
+            return false;
+          }
+        }
+        return true;
+      });
     });
   });
 });

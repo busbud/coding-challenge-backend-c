@@ -1,16 +1,16 @@
 // Core server dependencies
-const express = require('express');
+const express    = require('express');
 const bodyParser = require('body-parser');
-const http = require('http');
+const http       = require('http');
 
 // fetch and calculate distances and scores
 const {getUserLL, getScore} = require('./helpers');
 
 // data and data model
-const jsonCities = require('./data/cities.json');
+const jsonCities   = require('./data/cities.json');
 const {Suggestion} = require('./data/suggestion');
 
-const app = express();
+const app  = express();
 const port = process.env.PORT || 2345;
 
 // Tells express to expect JSON

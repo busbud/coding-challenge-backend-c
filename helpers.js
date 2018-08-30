@@ -1,8 +1,8 @@
 // Unfortunately we cannot use the browser package navigator
 // since requests aren't necessarily called from a browser.
 const publicIp = require('public-ip');
-const geolib = require('geolib');
-const geoip = require('geo-from-ip')
+const geolib   = require('geolib');
+const geoip    = require('geo-from-ip');
 
 const getUserLL = async () => {
   const ip = await publicIp.v4();
