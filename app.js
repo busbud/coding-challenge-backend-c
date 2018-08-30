@@ -109,6 +109,7 @@ app.post('/suggestions', (req, res) => {
   });
 })
 
-module.exports = http.createServer(app).listen(port, '127.0.0.1');
+module.exports = http.createServer(app).listen(port);
 
-console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+// module.exports = http.createServer(app).listen(port, '127.0.0.1');
+// console.log('Server running at http://127.0.0.1:%d/suggestions', port);
