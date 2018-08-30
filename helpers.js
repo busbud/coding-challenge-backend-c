@@ -6,7 +6,7 @@ const geoip = require('geo-from-ip')
 
 const getUserLL = async () => {
   const ip = await publicIp.v4();
-  const user = geoip.allData(ip); // '192.168.0.23'
+  const user = geoip.allData(ip);
   if (user.error) { // If the IP address cannot be located
     return;
   } else {
@@ -16,15 +16,16 @@ const getUserLL = async () => {
   }
 }
 
-const getScore = function(city, userLat, userLng) {
+const getScore = function(city, lat, lng) {
   // We will inverse the score at the end to achieve a final interval of 0 to 1
+  // If no lat and lng are supplied to the function then only population determines score
   let score = city.population;
 
   let distance = 1; // Initialize as 1 because we divide by the sqrt(distance)
-  if (userLat && userLng) {
+  if (lat && lng) {
     distance = geolib.getDistance(
       {latitude: city.latitude, longitude: city.longitude},
-      {latitude: userLat, longitude: userLng}
+      {latitude: lat, longitude: lng}
     );
     // Taking the square root means that past a certain distance population
     // is what we really care about. This is a heuristic approach

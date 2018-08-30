@@ -16,6 +16,7 @@ const port = process.env.PORT || 2345;
 // Tells express to expect JSON
 app.use(bodyParser.json());
 
+// Fetch matching cities sorted by descending score
 app.get('/suggestions', (req, res) => {
   const searchString = req.query.q;
   const latitude = req.query.latitude;
@@ -23,12 +24,15 @@ app.get('/suggestions', (req, res) => {
 
   if (searchString) {
     // i for ignore case. Match cities that start with the search string.
-    const searchRegex = new RegExp("^" + searchString, "i");
+    // We also process the search string to match characters with diacritics
+    // I don't know what all the accents used in canadian city names are, Sorry!
+    const searchRegex = new RegExp("^" + searchString.replace('e','(e|é)'), "i");
 
     // Try to get the User's Lat Lng from their IP-address
     getUserLL().then(LL => {
       let userLat = null;
       let userLng = null;
+
       if (LL) {
         userLat = LL.userLat;
         userLng = LL.userLng;
@@ -37,8 +41,16 @@ app.get('/suggestions', (req, res) => {
       // exclude the _id and _v fields added by mongodb from the return
       Suggestion.find({ name: searchRegex }, '-_id -__v').then(cities => {
         const suggestions = cities.map(city => {
-          const newName = city.name + ', ' + city.country
-          const score = getScore(city, userLat, userLng);
+          const newName = city.name + ', ' + city.country;
+
+          let score = 0;
+          if (latitude && longitude) {
+            // If the user supplied their own lat lng, use that
+            score = getScore(city, latitude, longitude);
+          } else {
+            score = getScore(city, userLat, userLng);
+          }
+
           return {
             name: newName,
             latitude: city.latitude,
@@ -49,7 +61,12 @@ app.get('/suggestions', (req, res) => {
           return b.score - a.score;
         });
 
-        res.send({suggestions});
+        // Check if there were any cities that matched the search string
+        if (suggestions.length !== 0) {
+          res.status(200).send({suggestions});
+        } else {
+          res.status(404).send({suggestions});
+        }
       }, (err) => {
         res.status(400).send(err);
       });

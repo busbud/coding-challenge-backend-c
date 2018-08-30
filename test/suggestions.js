@@ -51,7 +51,8 @@ describe('GET /suggestions', function() {
     it('contains a match', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.some(function (suggestion) {
-          return suggestion.name.test(/montreal/i);
+          const regex = new RegExp(/montr(e|é)al/i);
+          return regex.test(suggestion.name);
         });
       })
     });
