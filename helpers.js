@@ -7,6 +7,7 @@ const geoip    = require('geo-from-ip');
 const getUserLL = async () => {
   const ip = await publicIp.v4();
   const user = geoip.allData(ip);
+  console.log(ip); // Checking where the Heroku IP address is
   if (user.error) { // If the IP address cannot be located
     return;
   } else {
