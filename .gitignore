@@ -1,0 +1,6 @@
+# dirs 
+node_modules/*
+.vs/*
+
+# files
+*.log
