@@ -102,8 +102,8 @@ module.exports = http.createServer(function (req, res) {
             res.end();
             return;
         }
-        
 
+        res.writeHead(200, {'Content-Type': 'text/plain'});
         res.end(JSON.stringify({
             suggestions: top10Items
         }));
