@@ -9,6 +9,12 @@ var lvn = require('js-levenshtein');
 
 var port = process.env.PORT || 2345;
 
+// Take in two sets of co-ordinates and calculate the distance between them
+var calcDist = function (location1, location2) {
+    return Math.sqrt(Math.pow(location1[0] - location2[0], 2) +
+                     Math.pow(location1[1] - location2[1], 2));
+} 
+
 // Load the data into an array of JSON objects 
 fs.readFile('data/cities_canada-usa.tsv', function (err, data) {
     if (err) throw err;
@@ -67,9 +73,11 @@ module.exports = http.createServer(function (req, res) {
                     name: [city.name, city.country, city.admin1].join(),
                     latitude: city.latitude,
                     longitude: city.longitude,
-                    score: (10 - index)/10 
+                    score: (10 - index) / 10
                 };
             });
+        } else {
+            top10Items = calcDist(location, [ 0, 0 ]);
         }
         
 
