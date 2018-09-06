@@ -41,14 +41,29 @@ module.exports = http.createServer(function (req, res) {
         lookupCity = query.q;
         location = [query.longitude, query.latitude];
 
-        top10Items = [];
+        top10Items = objContainer;
+
+        if (!location.includes(undefined)) {
+            top10Items = top10Items.sort(function (city1, city2) {
+                dist2City1 = calcDist([city1.long, city1.lat], location);
+                dist2City2 = calcDist([city1.long, city1.lat], location);
+
+                if (dist2City1 < dist2City2) {
+                    return -1;
+                } else if (dist2City1 > dist2City2) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            });
+        }
 
         //If no location given and the city name is a valid then only use the city name to perform
         // the search, return the top 10 results
-        if (lookupCity != "" && lookupCity != undefined && location.includes(undefined)) {
+        if (lookupCity != "" && lookupCity != undefined) {
 
             // Use the levenshtein function as a comparator key
-            top10Items = objContainer.sort(function (obj1, obj2) {
+            top10Items = top10Items.sort(function (obj1, obj2) {
 
                 if (obj1.ascii === undefined) {
                     return -1;
@@ -71,13 +86,11 @@ module.exports = http.createServer(function (req, res) {
             top10Items.forEach(function (city, index) {
                 top10Items[index] = {
                     name: [city.name, city.country, city.admin1].join(),
-                    latitude: city.latitude,
-                    longitude: city.longitude,
+                    latitude: city.lat,
+                    longitude: city.long,
                     score: (10 - index) / 10
                 };
             });
-        } else {
-            top10Items = calcDist(location, [ 0, 0 ]);
         }
         
 
