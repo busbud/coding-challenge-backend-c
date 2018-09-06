@@ -1,4 +1,5 @@
 //first node.js project 
+// Mohammad Al Faiyaz
 
 var http = require('http');
 var url = require('url');
@@ -43,6 +44,10 @@ module.exports = http.createServer(function (req, res) {
 
         top10Items = objContainer;
 
+        // Sort via distance first if location is given
+        // and then using the city's name
+        // This is because the sort is stable and I'm assuming 
+        // that people are most likely are interested in cities nearer to them
         if (!location.includes(undefined)) {
             top10Items = top10Items.sort(function (city1, city2) {
                 dist2City1 = calcDist([city1.long, city1.lat], location);
@@ -83,6 +88,7 @@ module.exports = http.createServer(function (req, res) {
             }).slice(1, 11);;
 
             // Remove redundant information from the array
+            // And return the top 10 items we find
             top10Items.forEach(function (city, index) {
                 top10Items[index] = {
                     name: [city.name, city.country, city.admin1].join(),
@@ -91,6 +97,10 @@ module.exports = http.createServer(function (req, res) {
                     score: (10 - index) / 10
                 };
             });
+        } else {
+            res.writeHead(404, { 'Content-Type': 'text/plain' });
+            res.end();
+            return;
         }
         
 
