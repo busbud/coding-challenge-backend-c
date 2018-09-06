@@ -4,6 +4,9 @@ var http = require('http');
 var url = require('url');
 var fs = require('fs');
 
+//Used for 'fuzzy' search strings for city names
+var lvn = require('js-levenshtein');
+
 var port = process.env.PORT || 2345;
 
 // Load the data into an array of JSON objects 
@@ -28,8 +31,50 @@ module.exports = http.createServer(function (req, res) {
         res.writeHead(200, { 'Content-Type': 'text/plain' });
         query = url.parse(req.url, true).query;
 
+        //Parse the query
+        lookupCity = query.q;
+        location = [query.longitude, query.latitude];
+
+        top10Items = [];
+
+        //If no location given and the city name is a valid then only use the city name to perform
+        // the search, return the top 10 results
+        if (lookupCity != "" && lookupCity != undefined && location.includes(undefined)) {
+
+            // Use the levenshtein function as a comparator key
+            top10Items = objContainer.sort(function (obj1, obj2) {
+
+                if (obj1.ascii === undefined) {
+                    return -1;
+                } else if (obj2.ascii === undefined) {
+                    return 1;
+                }
+
+                comp1 = lvn(lookupCity, obj1.name);
+                comp2 = lvn(lookupCity, obj2.name);
+                if (comp1 < comp2) {
+                    return -1;
+                } else if (comp1 > comp2) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }).slice(1, 11);;
+
+            // Remove redundant information from the array
+            top10Items.forEach(function (city, index) {
+                top10Items[index] = {
+                    name: [city.name, city.country, city.admin1].join(),
+                    latitude: city.latitude,
+                    longitude: city.longitude,
+                    score: (10 - index)/10 
+                };
+            });
+        }
+        
+
         res.end(JSON.stringify({
-            suggestions: objContainer
+            suggestions: top10Items
         }));
     } else {
         res.writeHead(404, { 'Content-Type': 'text/plain' });
