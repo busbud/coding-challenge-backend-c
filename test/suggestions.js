@@ -2,6 +2,11 @@ var expect  = require('chai').expect;
 var app     = require('../app');
 var request = require('supertest')(app);
 
+//Unsure as to why objContainer is out of scope when running these tests
+
+// My approach assumes that any valid query string is a city name
+// that could be really terribly spelt, so it will return 10 suggestions
+// So I would fail this test 
 describe('GET /suggestions', function() {
   describe('with a non-existent city', function () {
     var response;
