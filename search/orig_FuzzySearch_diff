@@ -1,0 +1,90 @@
+1c1
+< import Helper from './Helper';
+---
+> const Helper = require('./Helper');
+3c3
+< export default class FuzzySearch {
+---
+> module.exports = class FuzzyCitySearch {
+13c13
+<   search(query = '') {
+---
+>   search(query = '', latitude, longitude) {
+18a19,20
+>     let minDistance;
+>     let minMatch;
+24c26
+<         const score = FuzzySearch.isMatch(item, query, this.options.caseSensitive);
+---
+>         const match = FuzzyCitySearch.isMatch(item, query, this.options.caseSensitive);
+26,27c28,30
+<         if (score) {
+<           results.push({ item, score });
+---
+>         if (match) {
+>           item.match = match;
+>           results.push(item);
+36c39
+<             const score = FuzzySearch.isMatch(propertyValues[z], query, this.options.caseSensitive);
+---
+>             const match = FuzzyCitySearch.isMatch(propertyValues[z], query, this.options.caseSensitive);
+38c41
+<             if (score) {
+---
+>             if (match) {
+41c44,45
+<               results.push({ item, score });
+---
+>               item.match = match;
+>               results.push(item);
+51a56,69
+> 
+>       // capture the lowest match score to be used for final score aggregation
+>       if (minMatch > item.match || (!minMatch && item.match)) {
+>         minMatch = item.match;
+>       }
+> 
+>       if (longitude && latitude) {
+>         item.distance = FuzzyCitySearch.distance(latitude, longitude, item.latitude, item.longitude);
+> 
+>         // capture the smallest distance to be used for final score aggregation
+>         if (minDistance > item.distance || (!minDistance && item.distance)) {
+>           minDistance = item.distance;
+>         }
+>       }
+53a72,84
+>     // aggregate score over
+>     // - query match score
+>     // - distance
+>     results.map(result => {
+>       const match = minMatch / result.match;
+>       const distance = minDistance / result.distance;
+>       result.score = (match + distance) / 2;
+> 
+>       delete result.match;
+>       delete result.distance;
+>     })
+> 
+>     // sort by highest score
+55c86
+<       results.sort((a, b) => a.score - b.score);
+---
+>       results.sort((a, b) => b.score - a.score);
+58c89
+<     return results.map(result => result.item);
+---
+>     return results;
+91a123,135
+> 
+>   // copied from the link down below
+>   // https://stackoverflow.com/questions/27928/calculate-distance-between-two-latitude-longitude-points-haversine-formula
+>   static distance(lat1, lon1, lat2, lon2) {
+>     const p = 0.017453292519943295;    // Math.PI / 180
+>     const c = Math.cos;
+>     const a = 0.5 - c((lat2 - lat1) * p)/2 +
+>             c(lat1 * p) * c(lat2 * p) *
+>             (1 - c((lon2 - lon1) * p))/2;
+> 
+>     return 12742 * Math.asin(Math.sqrt(a)); // 2 * R; R = 6371 km
+>   }
+> 
