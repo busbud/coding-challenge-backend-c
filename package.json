@@ -11,8 +11,11 @@
   "license": "WTFPL",
   "dependencies": {
     "chai": "^1.9.1",
+    "csv-parse": "^3.0.0",
     "mocha": "^1.18.2",
-    "supertest": "^0.11.0"
+    "sigmoid": "0.0.1",
+    "supertest": "^0.11.0",
+    "url-parse": "^1.4.3"
   },
   "engines": {
     "node": "0.10.26"
