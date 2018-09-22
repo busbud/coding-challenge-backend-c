@@ -59,7 +59,7 @@ const search = (req, res, next) => {
             })
             .map((city, idx, self) => {
                 const {
-                    ascii,
+                    name,
                     country,
                     admin1,
                     lat,
@@ -76,7 +76,7 @@ const search = (req, res, next) => {
                     maxConfidenceIndexes.push(idx);
                 }
                 return {
-                    name: `${ascii}, ${
+                    name: `${name}, ${
                         states[`${country}.${admin1}`].name || admin1
                     }, ${countries[country].Country}`,
                     latitude: lat,
