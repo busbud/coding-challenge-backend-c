@@ -1,16 +1,16 @@
-var http = require('http');
-var port = process.env.PORT || 2345;
+const express = require('express');
 
-module.exports = http.createServer(function (req, res) {
-  res.writeHead(404, {'Content-Type': 'text/plain'});
+const routes = require('./app/controllers');
 
-  if (req.url.indexOf('/suggestions') === 0) {
-    res.end(JSON.stringify({
-      suggestions: []
-    }));
-  } else {
-    res.end();
-  }
-}).listen(port, '127.0.0.1');
+const app = express();
+const {
+    PORT = 2345,
+} = process.env;
 
-console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+app.listen(PORT, () => {
+    console.log(`Server running at http://127.0.0.1:${PORT}/suggestions`);
+});
+app.get('/', (req, res, next) => res.json('ok'));
+app.use(routes);
+
+module.exports = app;
