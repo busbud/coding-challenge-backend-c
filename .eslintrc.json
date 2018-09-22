@@ -1,0 +1,16 @@
+{
+    "extends": "google",
+    "rules": {
+        "indent": [
+            "error",
+            4
+        ],
+        "max-len": [
+            "error",
+            { "code": 80, "ignoreComments": true }
+        ]
+    },
+    "parserOptions": {
+        "ecmaVersion": 2018
+    }
+}
