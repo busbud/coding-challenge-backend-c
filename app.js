@@ -27,7 +27,7 @@ function applySearch(q, lon, lat, data){
 	var suggestions = [];
 	var nSuggestions = 0;
 	for(var i = 0; i < data.length; i++){
-		if(data[i].name.startsWith(q)){
+		if(data[i].name.toLowerCase().startsWith(q.toLowerCase())){
 			suggestions[nSuggestions++] = new Suggestion(data[i].name,data[i].longitude,data[i].latitude,data[i].getScore(lon, lat), data[i].country)
 		}
 	}
