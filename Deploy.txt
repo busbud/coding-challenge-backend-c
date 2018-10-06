@@ -1,0 +1,4 @@
+You can test the deployed version through this link : 
+http://pure-basin-80032.herokuapp.com/suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
+
+Thank you :)
