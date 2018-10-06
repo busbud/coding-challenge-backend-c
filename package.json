@@ -11,8 +11,9 @@
   "license": "WTFPL",
   "dependencies": {
     "chai": "^1.9.1",
-    "mocha": "^1.18.2",
-    "supertest": "^0.11.0"
+    "fs": "0.0.1-security",
+    "mocha": "^5.2.0",
+    "supertest": "^3.3.0"
   },
   "engines": {
     "node": "0.10.26"
