@@ -18,6 +18,6 @@
     "update-notifier": "^2.5.0"
   },
   "engines": {
-    "node": "0.10.26"
+    "node": "8.12.0"
   }
 }
