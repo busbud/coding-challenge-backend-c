@@ -57,7 +57,7 @@ module.exports = http.createServer(function (req, res) {
 		var lat = parseFloat(splitted[3]);
 		var lon = parseFloat(splitted[5]);
 		var result = applySearch(q, lon, lat, data);
-		result.sort(compareCities);
+		
 		if(result === null){
 			//no matches found
 			res.writeHead(404, {'Content-Type': 'text/plain'});
@@ -66,6 +66,7 @@ module.exports = http.createServer(function (req, res) {
 		else{
 			//at least one match found
 			res.writeHead(200, { 'Content-Type': 'text/plain' });
+			result.sort(compareCities);
 		}
 		//send json response
 		res.end(JSON.stringify({
