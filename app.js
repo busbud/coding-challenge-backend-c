@@ -44,38 +44,38 @@ function findCity(data, search) {
             distance: distance,
             score: 1})
     }
-    list = sortByDistance(list);
+    list = sortByDistanceAndName(list);
 
-    if (cityName.length == search.name.length){
-      city.score = city.score + .1;
-    }
+    // if (cityName.length == search.name.length){
+    //   city.score = city.score + .1;
+    // }
   })
     for( let x=0; x<list.length; x++){
       list[x].score -= .1 * x ;
     }
    return list;
 }
-function sortByDistance(results) {
-
-   function compare(a,b) {
-      if (a.distance < b.distance)
-        return -1;
-      if (a.distance> b.distance)
-        return 1;
-      return 0;
+function sortByDistanceAndName(results) {
+  results.sort(function (x, y){
+    var n = x.name.length - y.name.length;
+    if( n!== 0 ){
+      return n;
     }
-  results.sort(compare);
-return results;
-}
-// results.sort(function (x, y){
-//   var n = y.name - x.name;
-//   if( n!== 0 ){
-//     return n;
-//   }
-//   return x.distance - y.distance;
-// });
+  return x.distance - y.distance;
+});
 
-// return results;}
+return results;
+//    function compare(a,b) {
+//       if (a.distance < b.distance)
+//         return -1;
+//       if (a.distance> b.distance)
+//         return 1;
+//       return 0;
+//     }
+//   results.sort(compare);
+// return results;
+}
+
 
 
 
