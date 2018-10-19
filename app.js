@@ -73,7 +73,7 @@ app.get('/suggestions', function(req, res) {
         suggestions: results
       }
       console.log(suggestions);
-
+      res.json(suggestions);
       return res.end();
     });
 
