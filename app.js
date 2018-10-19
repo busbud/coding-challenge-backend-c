@@ -46,7 +46,17 @@ function findCity(data, search) {
   })
    return list;
 }
-
+function sortByScore(results) {
+   function compare(a,b) {
+      if (a.distance < b.distance)
+        return -1;
+      if (a.distance> b.distance)
+        return 1;
+      return 0;
+    }
+  results.sort(compare);
+return results;
+}
 
 
 app.get('/suggestions', function(req, res) {
@@ -79,13 +89,12 @@ app.get('/suggestions', function(req, res) {
         latitude: req.query.latitude,
         longitude: req.query.longitude };
 
-      console.log(query);
       let results = findCity(filteredArray, query)
 
       let suggestions = {
-        suggestions: results
+        suggestions: sortByScore(results)
       }
-      console.log(suggestions);
+
       res.json(suggestions);
       return res.end();
     });
