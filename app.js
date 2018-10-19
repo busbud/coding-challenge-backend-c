@@ -17,7 +17,7 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
           c(lat1 * p) * c(lat2 * p) *
           (1 - c((lon2 - lon1) * p))/2;
 
-  return 12742 * Math.asin(Math.sqrt(a)); // 2 * R; R = 6371 km
+  return (12742 * Math.asin(Math.sqrt(a))).toFixed(2); // 2 * R; R = 6371 km
 }
 function isNorthAmerica(item) {
   if (item.country == 'US' ||  item.country == 'CA'){
@@ -48,15 +48,12 @@ function findCity(data, search) {
 }
 
 
-// app.use('/api/suggestions', suggestionsRouter);
+
 app.get('/suggestions', function(req, res) {
     if (req.url.indexOf('/suggestions') === 0) {
     res.status(404);
       }
     res.setHeader('Content-Type', 'application/json')
-    // res.json({ name: req.query.q,
-    //   latitude: req.query.latitude,
-    //   longitude: req.query.longitude })
 
      fs.readFile('./data/cities_canada-us.json', function(err, data){
       let newArr =[];
@@ -95,21 +92,7 @@ app.get('/suggestions', function(req, res) {
 
 
 });
-// if no match
-// {
-//   "suggestions": []
-// }
 
-// function parseQuery(queryString) {
-//     var query = {};
-//     var pairs = (queryString[0] === '?' ? queryString.substr(1) : queryString).split('&');
-//     for (var i = 0; i < pairs.length; i++) {
-//         var pair = pairs[i].split('=');
-//         query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '');
-//     }
-//     console.log("console in parse function", query);
-//     return query;
-// }
 
 app.listen(port, (err) => {
   if (err) {
