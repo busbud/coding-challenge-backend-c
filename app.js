@@ -20,7 +20,23 @@ function filterResults(item) {
     return true;
   }
 }
+function findCity(data, search) {
+  let list = [];
+   data.forEach(function(city) {
+    let cityName = city.name;
+    if(cityName.startsWith(search)){
+      console.log(cityName);
+        // list.push({
+        //     name :city.name,
+        //     area :city.tz,
+        //     country: city.country,
+        //     latitude: city.lat,
+        //     longitude: city.long})
+    }
 
+  return list;
+  })
+}
 // app.use('/api/suggestions', suggestionsRouter);
 app.get('/suggestions', function(req, res) {
     if (req.url.indexOf('/suggestions') === 0) {
@@ -30,6 +46,7 @@ app.get('/suggestions', function(req, res) {
     // res.json({ name: req.query.q,
     //   latitude: req.query.latitude,
     //   longitude: req.query.longitude })
+
      fs.readFile('./data/cities_canada-us.json', function(err, data){
       let newArr =[];
       let filteredArray =[];
@@ -49,8 +66,9 @@ app.get('/suggestions', function(req, res) {
         filteredArray = newArr.filter(filterResults)
 
       });
-      console.log("length of original", newArr.length);
-      console.log("length of filtered", filteredArray.length);
+
+      let results = findCity(filteredArray, req.query.q)
+
 
 
       // res.write(data.toString());
