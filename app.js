@@ -53,6 +53,9 @@ function findCity(data, search) {
     for( let x=0; x<list.length; x++){
       list[x].score -= .1 * x ;
     }
+    list.forEach(function(city){
+      delete city.distance;
+    })
    return list;
 }
 function sortByDistanceAndName(results) {
@@ -93,7 +96,6 @@ app.get('/suggestions', function(req, res) {
       arr.forEach(function(city) {
         newArr.push(
           { name :city.name,
-            area :city.tz,
             country: city.country,
             latitude: city.lat,
             longitude: city.long,
