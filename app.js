@@ -20,10 +20,19 @@ app.get('/suggestions', function(req, res) {
     //   latitude: req.query.latitude,
     //   longitude: req.query.longitude })
      fs.readFile('./data/cities_canada-us.json', function(err, data){
-
+      let newArr =[];
       let arr = JSON.parse(data);
       arr.forEach(function(city) {
-        console.log(city.name);
+        newArr.push(
+          { name :city.name,
+            area :city.tz,
+            country: city.country,
+            latitude: city.lat,
+            longitude: city.long,
+            population: city.population
+          }
+        )
+        console.log(newArr);
       });
 
 
