@@ -23,7 +23,7 @@ function filterResults(item) {
 function findCity(data, search) {
   let list = [];
    data.forEach(function(city) {
-    let cityName = city.name;
+    let cityName = (city.name).toLowerCase();
 
     if(cityName.startsWith(search)){
         list.push({
@@ -65,14 +65,15 @@ app.get('/suggestions', function(req, res) {
         filteredArray = newArr.filter(filterResults)
 
       });
-
+      let query = req.query.q.toLowerCase();
+      console.log(query);
       let results = findCity(filteredArray, req.query.q)
 
       let suggestions = {
         suggestions: results
       }
       console.log(suggestions);
-      res.json(suggestions);
+
       return res.end();
     });
 
