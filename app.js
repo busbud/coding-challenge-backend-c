@@ -67,10 +67,12 @@ app.get('/suggestions', function(req, res) {
       });
 
       let results = findCity(filteredArray, req.query.q)
-      console.log("Results", results);
 
-
-      // res.write(data.toString());
+      let suggestions = {
+        suggestions: results
+      }
+      console.log(suggestions);
+      res.json(suggestions);
       return res.end();
     });
 
