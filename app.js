@@ -24,18 +24,17 @@ function findCity(data, search) {
   let list = [];
    data.forEach(function(city) {
     let cityName = city.name;
-    if(cityName.startsWith(search)){
-      console.log(cityName);
-        // list.push({
-        //     name :city.name,
-        //     area :city.tz,
-        //     country: city.country,
-        //     latitude: city.lat,
-        //     longitude: city.long})
-    }
 
-  return list;
+    if(cityName.startsWith(search)){
+        list.push({
+            name: city.name,
+            area: city.area,
+            country: city.country,
+            latitude: city.latitude,
+            longitude: city.longitude})
+    }
   })
+   return list;
 }
 // app.use('/api/suggestions', suggestionsRouter);
 app.get('/suggestions', function(req, res) {
@@ -68,7 +67,7 @@ app.get('/suggestions', function(req, res) {
       });
 
       let results = findCity(filteredArray, req.query.q)
-
+      console.log("Results", results);
 
 
       // res.write(data.toString());
