@@ -35,26 +35,54 @@ function findCity(data, search) {
     let cityName = (city.name).toLowerCase();
     let distance = calculateDistance(city.latitude, city.longitude, search.latitude, search.longitude)
     if(cityName.startsWith(search.name)){
+      if (cityName.length == search.name.length){
         list.push({
             name: city.name,
             area: city.area,
             country: city.country,
             latitude: city.latitude,
             longitude: city.longitude,
-            distance: distance})
+            distance: distance,
+            score: 1})
+      }else {
+          list.push({
+            name: city.name,
+            area: city.area,
+            country: city.country,
+            latitude: city.latitude,
+            longitude: city.longitude,
+            distance: distance,
+            score: 0})
+      }
     }
   })
    return list;
 }
 function sortByScore(results) {
-   function compare(a,b) {
-      if (a.distance < b.distance)
-        return -1;
-      if (a.distance> b.distance)
-        return 1;
-      return 0;
-    }
-  results.sort(compare);
+results.sort(function (x, y){
+  var n = y.score - x.score;
+  if( n!== 0 ){
+    return n;
+  }
+  return x.distance - y.distance;
+});
+//    function compare1(a,b) {
+//     if (a.score < b.score)
+//         return 1;
+//       if (a.score> b.score)
+//         return -1;
+//       return 0;
+//     }
+
+//    function compare2(a,b) {
+//       if (a.distance < b.distance)
+//         return -1;
+//       if (a.distance> b.distance)
+//         return 1;
+//       return 0;
+//     }
+//   results.sort(compare1);
+//   results.sort(compare2);
 return results;
 }
 
