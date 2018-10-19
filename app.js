@@ -35,7 +35,6 @@ function findCity(data, search) {
     let cityName = (city.name).toLowerCase();
     let distance = calculateDistance(city.latitude, city.longitude, search.latitude, search.longitude)
     if(cityName.startsWith(search.name)){
-      if (cityName.length == search.name.length){
         list.push({
             name: city.name,
             area: city.area,
@@ -44,47 +43,40 @@ function findCity(data, search) {
             longitude: city.longitude,
             distance: distance,
             score: 1})
-      }else {
-          list.push({
-            name: city.name,
-            area: city.area,
-            country: city.country,
-            latitude: city.latitude,
-            longitude: city.longitude,
-            distance: distance,
-            score: 0})
-      }
+    }
+    list = sortByDistance(list);
+
+    if (cityName.length == search.name.length){
+      city.score = city.score + .1;
     }
   })
+    for( let x=0; x<list.length; x++){
+      list[x].score -= .1 * x ;
+    }
    return list;
 }
-function sortByScore(results) {
-results.sort(function (x, y){
-  var n = y.score - x.score;
-  if( n!== 0 ){
-    return n;
-  }
-  return x.distance - y.distance;
-});
-//    function compare1(a,b) {
-//     if (a.score < b.score)
-//         return 1;
-//       if (a.score> b.score)
-//         return -1;
-//       return 0;
-//     }
+function sortByDistance(results) {
 
-//    function compare2(a,b) {
-//       if (a.distance < b.distance)
-//         return -1;
-//       if (a.distance> b.distance)
-//         return 1;
-//       return 0;
-//     }
-//   results.sort(compare1);
-//   results.sort(compare2);
+   function compare(a,b) {
+      if (a.distance < b.distance)
+        return -1;
+      if (a.distance> b.distance)
+        return 1;
+      return 0;
+    }
+  results.sort(compare);
 return results;
 }
+// results.sort(function (x, y){
+//   var n = y.name - x.name;
+//   if( n!== 0 ){
+//     return n;
+//   }
+//   return x.distance - y.distance;
+// });
+
+// return results;}
+
 
 
 app.get('/suggestions', function(req, res) {
@@ -120,7 +112,7 @@ app.get('/suggestions', function(req, res) {
       let results = findCity(filteredArray, query)
 
       let suggestions = {
-        suggestions: sortByScore(results)
+        suggestions: results
       }
 
       res.json(suggestions);
