@@ -10,6 +10,17 @@ const url = require('url');
 const querystring = require('querystring');
 // var suggestionsRouter = require('./api/suggestions');
 
+function isNorthAmerica(item) {
+  if (item.country == 'US' ||  item.country == 'CA'){
+    return true;
+  }
+}
+function filterResults(item) {
+  if (item.population > 5000 && isNorthAmerica(item)) {
+    return true;
+  }
+}
+
 // app.use('/api/suggestions', suggestionsRouter);
 app.get('/suggestions', function(req, res) {
     if (req.url.indexOf('/suggestions') === 0) {
@@ -21,7 +32,9 @@ app.get('/suggestions', function(req, res) {
     //   longitude: req.query.longitude })
      fs.readFile('./data/cities_canada-us.json', function(err, data){
       let newArr =[];
+      let filteredArray =[];
       let arr = JSON.parse(data);
+
       arr.forEach(function(city) {
         newArr.push(
           { name :city.name,
@@ -32,8 +45,12 @@ app.get('/suggestions', function(req, res) {
             population: city.population
           }
         )
-        console.log(newArr);
+
+        filteredArray = newArr.filter(filterResults)
+        // console.log(filteredArray);
       });
+      console.log("length of original", newArr.length);
+      console.log("length of filtered", filteredArray.length);
 
 
       // res.write(data.toString());
