@@ -47,7 +47,7 @@ app.get('/suggestions', function(req, res) {
         )
 
         filteredArray = newArr.filter(filterResults)
-        // console.log(filteredArray);
+
       });
       console.log("length of original", newArr.length);
       console.log("length of filtered", filteredArray.length);
