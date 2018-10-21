@@ -8,7 +8,7 @@ const fs = require('fs');
 const bodyParser = require('body-parser');
 const url = require('url');
 const querystring = require('querystring');
-// var suggestionsRouter = require('./api/suggestions');
+
 
 function calculateDistance(lat1, lon1, lat2, lon2) {
   var p = 0.017453292519943295;    // Math.PI / 180
@@ -37,7 +37,6 @@ function findCity(data, search) {
     if(cityName.startsWith(search.name)){
         list.push({
             name: city.name,
-            area: city.area,
             country: city.country,
             latitude: city.latitude,
             longitude: city.longitude,
@@ -45,16 +44,19 @@ function findCity(data, search) {
             score: 1})
     }
     list = sortByDistanceAndName(list);
-
-    // if (cityName.length == search.name.length){
-    //   city.score = city.score + .1;
-    // }
   })
+   //add scoring based on sorted distance
     for( let x=0; x<list.length; x++){
       list[x].score -= .1 * x ;
     }
+    //reformatting city objects to imitate challenge example
     list.forEach(function(city){
+      let temp = city.name;
+      let temp2 = city.country;
+      let nameCountry = temp + ' , ' + temp2;
+      city.name = nameCountry;
       delete city.distance;
+      delete city.country;
     })
    return list;
 }
@@ -68,15 +70,7 @@ function sortByDistanceAndName(results) {
 });
 
 return results;
-//    function compare(a,b) {
-//       if (a.distance < b.distance)
-//         return -1;
-//       if (a.distance> b.distance)
-//         return 1;
-//       return 0;
-//     }
-//   results.sort(compare);
-// return results;
+
 }
 
 
@@ -124,6 +118,75 @@ app.get('/suggestions', function(req, res) {
 
 });
 
+// const america = {
+//   Alabama: AL,
+//   Alaska: AK,
+//   Arizona: AZ,
+//   Arkansas: AR,
+//   California: CA,
+//   Colorado: CO,
+//   Connecticut: CT,
+//   Delaware: DE,
+//   District of Columbia: DC,
+//   Florida: FL,
+//   Georgia: GA,
+//   Hawaii: HI,
+//   Idaho: ID,
+//   Illinois: IL,
+//   Indiana: IN,
+//   Iowa: IA,
+//   Kansas: KS,
+//   Kentucky: KY,
+//   Louisiana: LA,
+//   Maine: ME,
+//   Maryland: MD,
+//   Massachusetts: MA,
+//   Michigan: MI,
+//   Minnesota: MN,
+//   Mississippi: MS,
+//   Missouri: MO,
+//   Montana: MT,
+//   Nebraska:, NE
+//   Nevada: NV,
+//   New Hampshire: NH,
+//   New Jersey: NJ,
+//   New Mexico: NM,
+//   New York: NY,
+//   North Carolina: NC,
+//   North Dakota: ND,
+//   Ohio: OH,
+//   Oklahoma: OK,
+//   Oregon: OR,
+//   Pennsylvania: PA,
+//   Rhode Island: RI,
+//   South Carolina: SC,
+//   South Dakota: SD,
+//   Tennessee: TN,
+//   Texas: TX,
+//   Utah: UT,
+//   Vermont: VT,
+//   Virginia: VA,
+//   Washington: WA,
+//   West Virginia: WV,
+//   Wisconsin: WI,
+//   Wyoming: WY
+// }
+
+// const canada = {
+//   Alberta: AB,
+//   British Columbia:  BC,
+//   Manitoba:  MB,
+//   New Brunswick: NB,
+//   Newfoundland and Labrador: NL,
+//   Northwest Territories: NT,
+//   Nova Scotia: NS,
+//   Nunavut: NU,
+//   Ontario: ON,
+//   Prince Edward Island:  PE,
+//   Quebec:  QC,
+//   Saskatchewan:  SK,
+//   Yukon: YT
+// }
 
 app.listen(port, (err) => {
   if (err) {
