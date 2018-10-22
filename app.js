@@ -65,23 +65,25 @@ function findCity(data, search) {
   })
   if (list.length > 0){
     list = sortByDistanceAndName(list);
-      list = list.slice(0,10); //get only top 10 results
-      //add scoring based on sorted distance
-      for( let x=0; x<list.length; x++){
-        list[x].score -= ((1/list.length) * x).toFixed(2);
-      }
-      let firstMatch = list[0].name.toLowerCase();
+    list = list.slice(0,10); //get only top 10 results
+    list = addScore(list);
+    let firstMatch = list[0].name.toLowerCase();
 
-      if(firstMatch == search.name){
+    if (firstMatch == search.name){
       list = [list[0]];
-
       return reformat(list);
-    }else{
+    } else {
       return reformat(list);
     }
-  }else{
+  } else {
     return list;
   }
+}
+function addScore(list){
+  for( let x=0; x<list.length; x++){
+      list[x].score -= ((1/list.length) * x).toFixed(2);
+    }
+  return list;
 }
 function sortByDistanceAndName(results) {
   results.sort(function (x, y){
@@ -96,7 +98,7 @@ return results;
 
 
 app.get('/suggestions', function(req, res) {
-if (req.url.indexOf('/suggestions') === 0) {
+  if (req.url.indexOf('/suggestions') === 0) {
     fs.readFile('./data/cities_canada-us.json', function(err, data){
       let newArr =[];
       let filteredArray =[];
@@ -117,21 +119,18 @@ if (req.url.indexOf('/suggestions') === 0) {
       let query = {
         name: req.query.q.toLowerCase(),
         latitude: req.query.latitude,
-        longitude: req.query.longitude
-      };
+        longitude: req.query.longitude};
 
       let results = findCity(filteredArray, query)
+      let suggestions = {suggestions: results}
 
-      let suggestions = {
-        suggestions: results
+      if (results.length == 0) {
+        res.status(404);
       }
-    if (results.length == 0) {
-      res.status(404);
-    }
-     res.setHeader('Content-Type', 'application/json')
-     res.json(suggestions);
+        res.setHeader('Content-Type', 'application/json')
+        res.json(suggestions);
     });
-  }else {
+  } else {
     res.status(404);
     res.setHeader('Content-Type', 'application/json')
     res.end();
@@ -142,7 +141,6 @@ app.listen(port, (err) => {
   if (err) {
     return console.log('err', err)
   }
-
   console.log(`Server running at http://127.0.0.1:${port}/suggestions`);
 })
 
