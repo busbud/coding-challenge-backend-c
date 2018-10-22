@@ -32,7 +32,18 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
 
   return (12742 * Math.asin(Math.sqrt(a))).toFixed(2); // 2 * R; R = 6371 km
 }
-
+function reformat(list){
+    //reformatting city objects to imitate challenge example
+  list.forEach(function(city){
+      let temp = city.name;
+      let temp2 = city.country;
+      let nameCountry = temp + ' , ' + temp2;
+      city.name = nameCountry;
+      delete city.distance;
+      delete city.country;
+    })
+  return list;
+}
 function findCity(data, search) {
   let list = [];
 
@@ -48,26 +59,24 @@ function findCity(data, search) {
         distance: distance,
         score: 1})
     }
-    list = sortByDistanceAndName(list);
-    list = list.slice(0,10); //I only want top 10 results
   })
-  //add scoring based on sorted distance
-  for( let x=0; x<list.length; x++){
-    list[x].score -= ((1/list.length) * x).toFixed(2);
 
-  }
-  //reformatting city objects to imitate challenge example
-  list.forEach(function(city){
-      let temp = city.name;
-      let temp2 = city.country;
-      let nameCountry = temp + ' , ' + temp2;
-      city.name = nameCountry;
-      delete city.distance;
-      delete city.country;
-    })
-return list;
+      list = sortByDistanceAndName(list);
+      list = list.slice(0,10); //get only top 10 results
+      //add scoring based on sorted distance
+      for( let x=0; x<list.length; x++){
+        list[x].score -= ((1/list.length) * x).toFixed(2);
+      }
+    //   if(list[0].name.toLowerCase() == search.name){
+    //   list = reformat(list);
+    //   return list[0];
+
+    // }else{
+    //   return reformat(list);
+    // }
+
+return reformat(list);
 }
-
 function sortByDistanceAndName(results) {
   results.sort(function (x, y){
     var n = x.name.length - y.name.length;
@@ -110,10 +119,8 @@ if (req.url.indexOf('/suggestions') === 0) {
       let suggestions = {
         suggestions: results
       }
-      // console.log("results should show null", results);
     if (results.length == 0) {
       res.status(404);
-
     }
      res.setHeader('Content-Type', 'application/json')
      res.json(suggestions);
