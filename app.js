@@ -38,6 +38,7 @@ function findCity(data, search) {
 
   data.forEach(function(city) {
     let cityName = (city.name).toLowerCase();
+    console.log("cityName", cityName);
     let distance = calculateDistance(city.latitude, city.longitude, search.latitude, search.longitude)
     if(cityName.startsWith(search.name)){
       list.push({
@@ -93,7 +94,7 @@ app.get('/suggestions', function(req, res) {
 
       arr.forEach(function(city) {
         newArr.push(
-          { name :city.name,
+          { name :city.ascii,
             country: city.country,
             latitude: city.lat,
             longitude: city.long,
