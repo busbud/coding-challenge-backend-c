@@ -38,7 +38,6 @@ function findCity(data, search) {
 
   data.forEach(function(city) {
     let cityName = (city.name).toLowerCase();
-    console.log("cityName", cityName);
     let distance = calculateDistance(city.latitude, city.longitude, search.latitude, search.longitude)
     if(cityName.startsWith(search.name)){
       list.push({
@@ -66,7 +65,7 @@ function findCity(data, search) {
       delete city.distance;
       delete city.country;
     })
-  return list;
+return list;
 }
 
 function sortByDistanceAndName(results) {
@@ -82,11 +81,7 @@ return results;
 
 
 app.get('/suggestions', function(req, res) {
-    if (req.url.indexOf('/suggestions') === 0) {
-      res.status(404);
-    }
-    res.setHeader('Content-Type', 'application/json')
-
+if (req.url.indexOf('/suggestions') === 0) {
     fs.readFile('./data/cities_canada-us.json', function(err, data){
       let newArr =[];
       let filteredArray =[];
@@ -115,81 +110,20 @@ app.get('/suggestions', function(req, res) {
       let suggestions = {
         suggestions: results
       }
+      // console.log("results should show null", results);
+    if (results.length == 0) {
+      res.status(404);
 
-      res.json(suggestions);
-      return res.end();
+    }
+     res.setHeader('Content-Type', 'application/json')
+     res.json(suggestions);
     });
+  }else {
+    res.status(404);
+    res.setHeader('Content-Type', 'application/json')
+    res.end();
+  }
 });
-
-// const america = {
-//   Alabama: AL,
-//   Alaska: AK,
-//   Arizona: AZ,
-//   Arkansas: AR,
-//   California: CA,
-//   Colorado: CO,
-//   Connecticut: CT,
-//   Delaware: DE,
-//   District of Columbia: DC,
-//   Florida: FL,
-//   Georgia: GA,
-//   Hawaii: HI,
-//   Idaho: ID,
-//   Illinois: IL,
-//   Indiana: IN,
-//   Iowa: IA,
-//   Kansas: KS,
-//   Kentucky: KY,
-//   Louisiana: LA,
-//   Maine: ME,
-//   Maryland: MD,
-//   Massachusetts: MA,
-//   Michigan: MI,
-//   Minnesota: MN,
-//   Mississippi: MS,
-//   Missouri: MO,
-//   Montana: MT,
-//   Nebraska:, NE
-//   Nevada: NV,
-//   New Hampshire: NH,
-//   New Jersey: NJ,
-//   New Mexico: NM,
-//   New York: NY,
-//   North Carolina: NC,
-//   North Dakota: ND,
-//   Ohio: OH,
-//   Oklahoma: OK,
-//   Oregon: OR,
-//   Pennsylvania: PA,
-//   Rhode Island: RI,
-//   South Carolina: SC,
-//   South Dakota: SD,
-//   Tennessee: TN,
-//   Texas: TX,
-//   Utah: UT,
-//   Vermont: VT,
-//   Virginia: VA,
-//   Washington: WA,
-//   West Virginia: WV,
-//   Wisconsin: WI,
-//   Wyoming: WY
-// }
-
-// const canada = {
-//   Alberta: AB,
-//   British Columbia:  BC,
-//   Manitoba:  MB,
-//   New Brunswick: NB,
-//   Newfoundland and Labrador: NL,
-//   Northwest Territories: NT,
-//   Nova Scotia: NS,
-//   Nunavut: NU,
-//   Ontario: ON,
-//   Prince Edward Island:  PE,
-//   Quebec:  QC,
-//   Saskatchewan:  SK,
-//   Yukon: YT
-// }
 
 app.listen(port, (err) => {
   if (err) {
@@ -198,3 +132,5 @@ app.listen(port, (err) => {
 
   console.log(`Server running at http://127.0.0.1:${port}/suggestions`);
 })
+
+module.exports = app;
