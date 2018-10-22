@@ -34,6 +34,7 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
 }
 function reformat(list){
     //reformatting city objects to imitate challenge example
+  if(list.length){
   list.forEach(function(city){
       let temp = city.name;
       let temp2 = city.country;
@@ -42,6 +43,8 @@ function reformat(list){
       delete city.distance;
       delete city.country;
     })
+    return list;
+  }
   return list;
 }
 function findCity(data, search) {
@@ -60,22 +63,25 @@ function findCity(data, search) {
         score: 1})
     }
   })
-
-      list = sortByDistanceAndName(list);
+  if (list.length > 0){
+    list = sortByDistanceAndName(list);
       list = list.slice(0,10); //get only top 10 results
       //add scoring based on sorted distance
       for( let x=0; x<list.length; x++){
         list[x].score -= ((1/list.length) * x).toFixed(2);
       }
-    //   if(list[0].name.toLowerCase() == search.name){
-    //   list = reformat(list);
-    //   return list[0];
+      let firstMatch = list[0].name.toLowerCase();
 
-    // }else{
-    //   return reformat(list);
-    // }
+      if(firstMatch == search.name){
+      list = [list[0]];
 
-return reformat(list);
+      return reformat(list);
+    }else{
+      return reformat(list);
+    }
+  }else{
+    return list;
+  }
 }
 function sortByDistanceAndName(results) {
   results.sort(function (x, y){
