@@ -49,10 +49,12 @@ function findCity(data, search) {
         score: 1})
     }
     list = sortByDistanceAndName(list);
+    list = list.slice(0,10); //I only want top 10 results
   })
   //add scoring based on sorted distance
   for( let x=0; x<list.length; x++){
-    list[x].score -= .1 * x ;
+    list[x].score -= ((1/list.length) * x).toFixed(2);
+
   }
   //reformatting city objects to imitate challenge example
   list.forEach(function(city){
