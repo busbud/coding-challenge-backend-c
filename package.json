@@ -8,13 +8,19 @@
     "test": "node node_modules/mocha/bin/mocha test/"
   },
   "author": "",
-  "license": "WTFPL",
+  "license": "UNLICENSED",
   "dependencies": {
     "chai": "^1.9.1",
+    "fuzzysort": "^1.1.4",
+    "latlon-geohash": "^1.1.0",
     "mocha": "^1.18.2",
+    "overload-protection": "^1.1.0",
     "supertest": "^0.11.0"
   },
   "engines": {
     "node": "0.10.26"
+  },
+  "devDependencies": {
+    "api-benchmark": "^0.5.0"
   }
 }
