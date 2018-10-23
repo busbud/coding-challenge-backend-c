@@ -1,4 +1,8 @@
-# Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
+# Memo
+
+This code has been realized with only three production dependencies. latlon-geohash, fuzzysort and overload-protection.
+overload-protection sends an error 503 in case of overload.
+My focus was on performance. When testing on local with random queries of 3 random letters as well as random latitudes and longitudes, 75% of the requests were returned in less than 3 milliseconds. This result was obtained by using geohashes and the sublime fuzziness algorithm as implanted by fuzzysort. Caching the requests would further improve performance.  See the [benchmarks](./benchmark.html).
 
 ## Requirements
 
