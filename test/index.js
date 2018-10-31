@@ -1,6 +1,19 @@
 var expect  = require('chai').expect;
 var app     = require('../app');
-var request = require('supertest')(app);
+const config = require('../config');
+
+//replaced supertest by superagent -- and superagent-defaults allows you to set defaults parameters to superagent
+var request = require('superagent-defaults')();
+request
+    .on('request', function (request) {
+  if (request.url[0] === '/') {
+    request.url = 'http://127.0.0.1:' + config.port + request.url;
+  }
+});
+
+before((done)=>{
+  app.listen(config.port, done)
+});
 
 describe('GET /suggestions', function() {
   describe('with a non-existent city', function () {
@@ -9,6 +22,7 @@ describe('GET /suggestions', function() {
     before(function (done) {
       request
         .get('/suggestions?q=SomeRandomCityInTheMiddleOfNowhere')
+        .ok(res => res.status === 404)  //because if not we cannot test for 404s
         .end(function (err, res) {
           response = res;
           response.json = JSON.parse(res.text);
@@ -51,7 +65,7 @@ describe('GET /suggestions', function() {
     it('contains a match', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.some(function (suggestion) {
-          return suggestion.name.test(/montreal/i);
+          return  (/montreal/i).test(suggestion.name);
         });
       })
     });

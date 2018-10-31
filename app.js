@@ -5,6 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const fuzzysort = require('fuzzysort');
 const geohash = require('latlon-geohash');
+const config = require('./config');
 
 //overload-protection module
 const protectCfg = {
@@ -19,7 +20,7 @@ const protectCfg = {
 };
 const protect = require('overload-protection')('http', protectCfg);
 
-const port = process.env.PORT || 2345;
+const port = config.port;
 
 //function that tests if latitude and longitude is valid (takes input pre-converted to Number)
 const testLatLon = function(latitude/*Number!*/,longitude/*Number!*/) {
@@ -84,7 +85,8 @@ for (let i=1;i<data.length;i++){
       country = data[i][j];
     } else if (data[0][j] === "admin1"){
       admin1 = data[i][j];
-    } else if (data[0][j] === "name"){
+      // @TODO create accent folding module because fuzzysort doesn't allow accents --- then replace "ascii" by "name"
+    } else if (data[0][j] === "ascii"){
       name = data[i][j];
     } else if (data[0][j] === "lat"){
       lat = Number(data[i][j]);
@@ -177,7 +179,7 @@ module.exports = http.createServer(function (req, res) {
         };
       });
       results.sort(function(a, b){return b.score - a.score});
-      res.writeHead(200, {'Content-Type': 'application/json'});
+      res.writeHead((results.length>0?200:404), {'Content-Type': 'application/json'});
       res.end(JSON.stringify({
         suggestions: results
       }));
