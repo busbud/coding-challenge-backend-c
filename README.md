@@ -116,7 +116,13 @@ with q and LatLng (Moscow)
 with q and LatLng (Montreal)
 
 ```
-  /suggestions?q=london&latitude=45.5022&longitude=-73.6063
+  /suggestions?q=lon&latitude=45.5022&longitude=-73.6063
+```
+
+with misspelling q (you can add LatLng as well)
+
+```
+  /suggestions?q=lndon
 ```
 
 
