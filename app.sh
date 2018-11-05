@@ -4,7 +4,7 @@ GREEN='\033[0;32m' # Green
 NC='\033[0m' # No Color
 
 echo '\n'${GREEN}'-------> FOREVER STOP'${NC}'\n'
-forever stop 'busbud-challenge|coding-challenge-backend-c'
+forever stop 'busbud-challenge@api-geonames'
 
 echo '\n'${GREEN}'-------> UPDATE FROM GIT...'${NC}'\n'
 git pull
@@ -19,6 +19,6 @@ echo '\n'${GREEN}'-------> NPM INSTALL...'${NC}'\n'
 npm install
 
 echo '\n'${GREEN}'-------> FOREVER START'${NC}'\n'
-forever --uid 'busbud-challenge|coding-challenge-backend-c' --append start -c 'node' app.js
+forever --uid 'busbud-challenge@api-geonames' --append start -c 'node' app.js
 
 

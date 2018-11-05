@@ -1,5 +1,5 @@
 {
-	"name": "coding-challenge-backend-c",
+	"name": "api-geonames",
 	"options": {
 		"cpu": 4,
 		"env": "T",
