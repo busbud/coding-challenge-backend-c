@@ -4,6 +4,7 @@
   "description": "coding challenge in Node.js",
   "author": "Vitaly Anagorsky <vitaly@anagorsky.com>",
   "dependencies": {
+    "async": "^2.6.1",
     "busbud-error": "git+https://github.com/busbud-challenge/busbud-error.git",
     "busbud-log": "git+https://github.com/busbud-challenge/busbud-log.git",
     "cors": "^2.8.4",
