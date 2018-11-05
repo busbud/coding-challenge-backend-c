@@ -1,20 +1,27 @@
 {
   "name": "coding-challenge-backend-c",
-  "version": "0.0.0",
-  "description": "coding challenge in Nodejs",
+  "version": "0.0.1",
+  "description": "coding challenge in Node.js",
+  "author": "Vitaly Anagorsky <vitaly@anagorsky.com>",
+  "dependencies": {
+    "busbud-error": "git+https://github.com/busbud-challenge/busbud-error.git",
+    "busbud-log": "git+https://github.com/busbud-challenge/busbud-log.git",
+    "cors": "^2.8.4",
+    "express": "^4.16.4",
+    "pg": "^7.6.0",
+    "request": "^2.88.0"
+  },
+  "devDependencies": {
+    "ava": "1.0.0-rc.1"
+  },
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "test": "./node_modules/mocha/bin/mocha ./test/"
+    "test": "ava -v"
   },
-  "author": "",
-  "license": "WTFPL",
-  "dependencies": {
-    "chai": "^1.9.1",
-    "mocha": "^1.18.2",
-    "supertest": "^0.11.0"
-  },
-  "engines": {
-    "node": "0.10.26"
+  "ava": {
+    "files": [
+      "test/**/*.js"
+    ]
   }
 }

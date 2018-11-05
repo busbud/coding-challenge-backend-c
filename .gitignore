@@ -1,0 +1,56 @@
+
+# COMPILED SOURCE
+######################################
+*.o
+*.so
+*.com
+*.dll
+*.exe
+*.class
+
+# PACKAGES
+######################################
+*.7z
+*.gz
+*.dmg
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# LOGS & DATABASES
+######################################
+*.log
+*.sql
+
+# OS GENERATED FILES
+######################################
+._*
+.DS_Store
+.DS_Store?
+*.DS_Store
+*.DS_Store?
+.Trashes
+
+# IDE'S
+######################################
+.idea/
+
+# FOLDERS
+######################################
+raw/
+temp/
+public/
+configs/
+node_modules/
+
+# PACKAGE LOCK FILE
+######################################
+package-lock.json
+
+# CONFIG FILE
+######################################
+config.json
+
+

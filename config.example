@@ -1,0 +1,28 @@
+{
+	"name": "busbud-api-suggestions",
+	"options": {
+		"cpu": 4,
+		"env": "T",
+		"geo": "eu"
+	},
+	"pgsql": {
+		"busbud_geonames": {
+			"port": 5432,
+			"host": "xxx",
+			"database": "xxx",
+			"user": "xxx",
+			"password": "xxx"
+		}
+	},
+	"settings": {
+		"population": {
+			"min": 5000
+		},
+		"countries": {
+			"default": ["CA", "US", "GB"]
+		}
+	},
+	"server": {
+		"port": 3456
+	}
+}

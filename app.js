@@ -1,16 +1,38 @@
-var http = require('http');
-var port = process.env.PORT || 2345;
 
-module.exports = http.createServer(function (req, res) {
-  res.writeHead(404, {'Content-Type': 'text/plain'});
+/**
+ * Native modules
+ */
 
-  if (req.url.indexOf('/suggestions') === 0) {
-    res.end(JSON.stringify({
-      suggestions: []
-    }));
-  } else {
-    res.end();
-  }
-}).listen(port, '127.0.0.1');
+const cluster = require('cluster')
 
-console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+/**
+ * Worker
+ */
+
+const worker = require('./src/worker')
+
+/**
+ * Config
+ */
+
+const config = require('./config')
+
+
+
+if (cluster.isMaster) {
+
+	for (let i = 0; i < config.options.cpu; i++) {
+
+		cluster.fork()
+
+	}
+
+	cluster.on('exit', (worker, code, signal) => cluster.fork())
+
+} else {
+
+	worker()
+
+}
+
+

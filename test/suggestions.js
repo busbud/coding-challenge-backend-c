@@ -1,75 +1,68 @@
-var expect  = require('chai').expect;
-var app     = require('../app');
-var request = require('supertest')(app);
 
-describe('GET /suggestions', function() {
-  describe('with a non-existent city', function () {
-    var response;
+const _ = require('lodash')
+const ava = require('ava')
+const request = require('request')
 
-    before(function (done) {
-      request
-        .get('/suggestions?q=SomeRandomCityInTheMiddleOfNowhere')
-        .end(function (err, res) {
-          response = res;
-          response.json = JSON.parse(res.text);
-          done(err);
-        });
-    });
+ava.serial.cb('GET /suggestions - with a non-existent city', test => {
 
-    it('returns a 404', function () {
-      expect(response.statusCode).to.equal(404);
-    });
+	request.get(
+		{
+			url: 'http://127.0.0.1:3456/suggestions?q=kwfh58J7IQafNeFw',
+			json: true
+		},
+		(error, response, body) => {
 
-    it('returns an empty array of suggestions', function () {
-      expect(response.json.suggestions).to.be.instanceof(Array);
-      expect(response.json.suggestions).to.have.length(0);
-    });
-  });
+			test.is(!error, true)
+			test.is(response.statusCode, 200)
+			test.is(_.isArray(body.suggestions), true)
+			test.is(_.isEmpty(body.suggestions), true)
 
-  describe('with a valid city', function () {
-    var response;
+			test.end()
 
-    before(function (done) {
-      request
-        .get('/suggestions?q=Montreal')
-        .end(function (err, res) {
-          response = res;
-          response.json = JSON.parse(res.text);
-          done(err);
-        });
-    });
+		})
 
-    it('returns a 200', function () {
-      expect(response.statusCode).to.equal(200);
-    });
+})
 
-    it('returns an array of suggestions', function () {
-      expect(response.json.suggestions).to.be.instanceof(Array);
-      expect(response.json.suggestions).to.have.length.above(0);
-    });
+ava.serial.cb('GET /suggestions - with a valid city', test => {
 
-    it('contains a match', function () {
-      expect(response.json.suggestions).to.satisfy(function (suggestions) {
-        return suggestions.some(function (suggestion) {
-          return suggestion.name.test(/montreal/i);
-        });
-      })
-    });
+	request.get(
+		{
+			url: 'http://127.0.0.1:3456/suggestions?q=Lon',
+			json: true
+		},
+		(error, response, body) => {
 
-    it('contains latitudes and longitudes', function () {
-      expect(response.json.suggestions).to.satisfy(function (suggestions) {
-        return suggestions.every(function (suggestion) {
-          return suggestion.latitude && suggestion.longitude;
-        });
-      })
-    });
+			test.is(!error, true)
+			test.is(response.statusCode, 200)
+			test.is(_.isArray(body.suggestions), true)
+			test.is(!_.isEmpty(body.suggestions), true)
+			test.is(body.suggestions[0].name.indexOf('London, '), 0)
 
-    it('contains scores', function () {
-      expect(response.json.suggestions).to.satisfy(function (suggestions) {
-        return suggestions.every(function (suggestion) {
-          return suggestion.latitude && suggestion.longitude;
-        });
-      })
-    });
-  });
-});
+			test.end()
+
+		})
+
+})
+
+ava.serial.cb('GET /suggestions - with misspelling', test => {
+
+	request.get(
+		{
+			url: 'http://127.0.0.1:3456/suggestions?q=Lndon',
+			json: true
+		},
+		(error, response, body) => {
+
+			test.is(!error, true)
+			test.is(response.statusCode, 200)
+			test.is(_.isArray(body.suggestions), true)
+			test.is(!_.isEmpty(body.suggestions), true)
+			test.is(body.suggestions[0].name.indexOf('London, '), 0)
+
+			test.end()
+
+		})
+
+})
+
+
