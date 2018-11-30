@@ -1,16 +1,20 @@
-var http = require('http');
-var port = process.env.PORT || 2345;
+const server = require("./utils/server").server;
+// globals
+const PORT = process.env.PORT || 2345;
 
-module.exports = http.createServer(function (req, res) {
-  res.writeHead(404, {'Content-Type': 'text/plain'});
+// bootstrap the server
 
-  if (req.url.indexOf('/suggestions') === 0) {
-    res.end(JSON.stringify({
-      suggestions: []
-    }));
-  } else {
-    res.end();
-  }
-}).listen(port, '127.0.0.1');
+loadIndex();
 
-console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+// not express :-)
+const app = server();
+
+app.get("/suggestions", (req, res) => {
+  return Promise.resolve(1).then(ok => {
+    res.end("hello");
+  });
+});
+
+app.listen(PORT, "0.0.0.0", () => {
+  console.log("server listening in ", PORT);
+});
