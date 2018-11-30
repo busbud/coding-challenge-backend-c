@@ -3,16 +3,21 @@ let index = null;
 
 /** load the index in memory */
 function loadIndex(file) {
-  index = JSON.parse(fs.readFileSync(file));
+  const content = fs.readFileSync(file);
+  index = JSON.parse(fs.readFileSync(file, "utf-8"));
 }
 
 function suggest(query) {
   if (query !== "") {
+    return {
+      suggestions: [index.index[query]]
+    };
   } else {
-    return [];
+    return { suggestions: [] };
   }
 }
 
 module.exports = {
-  loadIndex
+  loadIndex,
+  suggest
 };

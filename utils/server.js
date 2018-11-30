@@ -1,4 +1,5 @@
 const http = require("http");
+const url = require("url");
 const { curry } = require("./functions");
 
 /** utilities to emulate an express like environement */
@@ -14,6 +15,16 @@ const success = endWithCode(200);
 const error = endWithCode(500);
 const notFound = endWithCode(404);
 
+/** match the basepath of a uri */
+function findHandler(uri, handlers) {
+  for (let key of Object.keys(handlers)) {
+    const handler = handlers[key];
+    const parsed = url.parse(uri);
+    if (parsed.pathname === key) return handler;
+  }
+  return null;
+}
+
 /** a very simple and thin abstraction over native nodejs api */
 // we know this is an api, so no need to implement everything here
 function server() {
@@ -27,7 +38,7 @@ function server() {
         .createServer((req, res) => {
           const base_url = req.url;
           // TODO: add support for dynamic parameters
-          const handler = handlers[base_url];
+          const handler = findHandler(base_url, handlers);
           if (handler) {
             //TODO: support promise natively
             handler(req, res);
