@@ -42,7 +42,6 @@ function indexCities(filePath) {
       // skip first line
       if (first) return true;
       const lineObject = lineMapper(line);
-      console.log("object", lineObject);
       db.objects[lineObject.id] = {
         lat: lineObject.lat,
         long: lineObject.long,
