@@ -5,22 +5,25 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "test": "./node_modules/mocha/bin/mocha ./test/",
+    "test": "jest",
     "dev": "nodemon app",
-    "postinstall": "node scripts/indexData data/cities_canada-usa.tsv data/indexed.json"
+    "postinstall": "node scripts/indexData data/cities_canada-usa.tsv data/db.json"
   },
-  "author": "",
+  "author": "Timothee Clain",
   "license": "WTFPL",
   "dependencies": {
     "@turf/distance": "^6.0.1",
-    "chai": "^1.9.1",
     "line-reader": "^0.4.0",
-    "mocha": "^1.18.2",
+    "lodash": "^4.17.11",
     "nodemon": "^1.18.7",
     "query-string": "^6.2.0",
+    "sinon": "^7.1.1",
     "supertest": "^0.11.0"
   },
   "engines": {
     "node": ">= 8"
+  },
+  "devDependencies": {
+    "jest": "^23.6.0"
   }
 }

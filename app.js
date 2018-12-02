@@ -1,19 +1,20 @@
 const { server, parseGetParams, success, notFound } = require("./utils/server");
 const Suggestions = require("./utils/suggestions");
+const { suggestFromObjectList } = require("./utils/suggestions/fromList");
 
 // globals
 const PORT = process.env.PORT || 2345;
-const INDEX_FILE = "./index.db";
+const INDEX_FILE = "./data/db.json";
 
 // bootstrap the server
-Suggestions.loadIndex(INDEX_FILE);
+const DB = Suggestions.loadIndex(INDEX_FILE);
 
 // not express :-)
 const app = server();
 
 app.get("/suggestions", (req, res) => {
   const params = parseGetParams(req.url);
-  const results = Suggestions.suggest(params.q);
+  const results = suggestFromObjectList(DB, params.q);
   // no results there
   if (results.suggestions.length === 0) return notFound(res, results);
   // we got results yeah !

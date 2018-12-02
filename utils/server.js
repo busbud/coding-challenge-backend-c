@@ -1,7 +1,7 @@
 const http = require("http");
 const url = require("url");
 const queryString = require("query-string");
-const { curry } = require("./functions");
+const curry = require("lodash/fp/curry");
 
 const id = v => v;
 

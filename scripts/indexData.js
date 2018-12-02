@@ -1,6 +1,7 @@
+const { indexCities } = require("../utils/cities");
 /** the arguments provided */
+
 const argv = process.argv;
-const indexCities = require("../utils/cities").indexCities;
 const fs = require("fs");
 
 // UTILS FUNCTION
@@ -27,7 +28,10 @@ function getArgsFromCommand() {
 
 // some good pythonic memories :=-)
 const [input, output] = getArgsFromCommand();
+
+console.log(input, output);
 indexCities(input).then(data => {
   // write the database back to file
   fs.writeFileSync(output, JSON.stringify(data, null, 4));
+  console.log("DONE");
 });

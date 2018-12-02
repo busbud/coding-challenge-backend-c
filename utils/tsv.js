@@ -1,7 +1,7 @@
 const curry = require("./functions").curry;
 
 /** a standard tsv limiter */
-const TSV_DELIMITER = /\s+/;
+const TSV_DELIMITER = /[ \s]+/;
 
 /** transform a tsv line to object with each key mapping the header name */
 const lineToMap = curry((headersArray, line) => {
