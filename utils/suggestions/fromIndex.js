@@ -7,7 +7,6 @@ function matchesFor(query) {
 
 /** the main suggest function */
 function suggest(db, query) {
-  console.log("about to suggest for this function", query);
   if (query !== "") {
     const matches = matchesFor(query);
     return {

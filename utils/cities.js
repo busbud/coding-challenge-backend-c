@@ -78,7 +78,6 @@ function indexCities(filePath) {
       db.objects[lineObject.id] = object;
       db.cities.push(object);
       if (last) {
-        console.log(last);
         resolve(db);
         return false;
       }

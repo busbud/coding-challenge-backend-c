@@ -7,12 +7,15 @@
     "start": "node app.js",
     "test": "jest",
     "dev": "nodemon app",
+    "benchmark:prod": "curl https://busbud-suggestions-tclain.herokuapp.com/suggestions?q=B && artillery quick --count 50 -n 50 https://busbud-suggestions-tclain.herokuapp.com/suggestions?q=B",
+    "benchmark:dev": "artillery quick --count 50 -n 50 http://localhost:2345/suggestions?q=B",
     "postinstall": "node scripts/indexData data/cities_canada-usa.tsv data/db.json"
   },
   "author": "Timothee Clain",
   "license": "WTFPL",
   "dependencies": {
     "@turf/distance": "^6.0.1",
+    "express": "^4.16.4",
     "line-reader": "^0.4.0",
     "lodash": "^4.17.11",
     "nodemon": "^1.18.7",
@@ -21,9 +24,10 @@
     "supertest": "^0.11.0"
   },
   "engines": {
-    "node": ">= 8"
+    "node": "10.x"
   },
   "devDependencies": {
+    "artillery": "^1.6.0-26",
     "jest": "^23.6.0"
   }
 }

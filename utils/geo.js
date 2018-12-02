@@ -1,26 +1,31 @@
-const distance = require("@turf/distance");
+const distance = require("@turf/distance").default;
+const { point } = require("@turf/helpers");
 /**
  *
- * @param {lat: number, lon: number} cityA
- * @param {lat: number, lon: number} cityB
+ * @param {latitude: number, longitude: number} cityA
+ * @param {latitude: number, longitude: number} cityB
  */
-export function distanceBetween(cityA, cityB) {
-  const cityALat = parseFloat(cityA.lat);
-  const cityALon = parseFloat(cityA.lon);
-  const cityBLat = parseFloat(cityB.lat);
-  const cityBLon = parseFloat(cityB.lon);
+function distanceBetween(cityA, cityB) {
+  const cityALat = parseFloat(cityA.latitude);
+  const cityALon = parseFloat(cityA.longitude);
+  const cityBLat = parseFloat(cityB.latitude);
+  const cityBLon = parseFloat(cityB.longitude);
 
-  if ([cityA, cityALon, cityBLat, cityBLon].some(value => value === undefined))
-    //throw new Error("LAT_LON_ARE_NOT_FLOATS");
+  // not valid data as inputs
+  if ([cityALat, cityALon, cityBLat, cityBLon].some(value => isNaN(value)))
     return -1;
 
-  return distance(
-    { lat: cityALat, lon: cityALon },
-    { lat: cityBLat, lon: cityBLon }
-  );
+  return distance(point([cityALat, cityALon]), point([cityBLat, cityBLon]));
 }
 
 /** sort cities list by ascending distance */
-export function sortByDistance(cities = []) {
-  return cities.sort(distanceBetween);
+function sortByDistance(pivot, cities = []) {
+  return cities.sort((a, b) => {
+    return distanceBetween(pivot, a) - distanceBetween(pivot, b);
+  });
 }
+
+module.exports = {
+  sortByDistance,
+  distanceBetween
+};

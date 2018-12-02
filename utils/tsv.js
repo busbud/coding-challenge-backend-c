@@ -1,4 +1,4 @@
-const curry = require("./functions").curry;
+const { curry } = require("lodash");
 
 /** a standard tsv limiter */
 const TSV_DELIMITER = /[ \s]+/;
