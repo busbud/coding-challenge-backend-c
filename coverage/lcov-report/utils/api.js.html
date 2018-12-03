@@ -32,7 +32,7 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>2/2</span>
+        <span class='fraction'>3/3</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
@@ -78,24 +78,22 @@
 33
 34
 35
-36</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+36
+37
+38
+39
+40
+41
+42
+43</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
@@ -103,13 +101,29 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -117,8 +131,28 @@
 &nbsp;
 const { validateParamsMiddleware } = require("./suggestions");
 const { suggestFromList } = require("./suggestions/fromList");
-const { withCode } = require("./server");
 const Cache = require("./cache");
+&nbsp;
+/** the main process of computing suggestions */
+function suggestionBaseEndpoint(DB) {
+  return (req, res) =&gt; {
+    const params = validateParamsMiddleware(req);
+    // params are not well formatted
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (!params) <span class="cstat-no" title="statement not covered" >return res.status(422).end('{error: "malformed request"}');</span>
+    // get the results
+&nbsp;
+    const results = Cache.fromCacheOr(
+      req.url,
+      suggestFromList.bind(null, DB, params.query, params.pivot)
+    );
+&nbsp;
+    // no results there
+    if (results.json.suggestions.length === 0)
+      return res.status(404).end(results.serialized);
+    // we got results yeah !
+    return res.end(results.serialized);
+  };
+}
 &nbsp;
 module.exports = function(DB) {
   const app = require("express")();
@@ -126,25 +160,12 @@ module.exports = function(DB) {
 &nbsp;
   // 50 req/seq from an ip address
   const limiter = rateLimit({
-    windowMs: 3 * 1000, // 2 minutes
+    windowMs: 3 * 1000, // 2 seconds@
     max: 500 // limit each IP to 100 requests per windowMs
   });
 &nbsp;
-  app.get("/suggestions", (req, res) =&gt; {
-    const params = validateParamsMiddleware(req);
-    // params are not well formatted
-    <span class="missing-if-branch" title="if path not taken" >I</span>if (!params) <span class="cstat-no" title="statement not covered" >return res.status(422).end('{error: "malformed request"}');</span>
-    // get the results
-&nbsp;
-    const results = suggestFromList(DB, params.query, params.pivot);
-    // in json
-    const resultsJSON = JSON.stringify(results);
-    // no results there
-    if (results.suggestions.length === 0)
-      return res.status(404).end(resultsJSON);
-    // we got results yeah !
-    return res.end(resultsJSON);
-  });
+  app.get("/suggestions", suggestionBaseEndpoint(DB), limiter);
+  app.get("/suggestions-nolimit", suggestionBaseEndpoint(DB));
 &nbsp;
   return app;
 };
@@ -154,7 +175,7 @@ module.exports = function(DB) {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Sun Dec 02 2018 23:39:59 GMT-0500 (GMT-05:00)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Mon Dec 03 2018 09:02:52 GMT-0500 (Eastern Standard Time)
 </div>
 </div>
 <script src="../prettify.js"></script>
