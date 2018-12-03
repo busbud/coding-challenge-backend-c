@@ -47,6 +47,8 @@ Summary report @ 01:13:40(-0500) 2018-12-02
 
 # Gotchas
 
+- Readable province and states names come from: 'http://www.geonames.org/CA/administrative-division-canada.html'
+
 To reduce time and focus on businnes logic, the usual `express` and `lodash` has been used.
 
 For tests, `jest` has been favored instead
