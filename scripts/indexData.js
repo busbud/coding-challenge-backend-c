@@ -1,3 +1,4 @@
+/* istanbul ignore */
 const { indexCities } = require("../utils/cities");
 /** the arguments provided */
 

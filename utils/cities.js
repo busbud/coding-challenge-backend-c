@@ -1,5 +1,5 @@
 const lineReader = require("line-reader");
-const { set, get, has } = require("lodash");
+const { set, get } = require("lodash");
 const { tsvLineToMap } = require("./tsv");
 const { sanitizeString } = require("./text");
 const provinceFips = require("../data/provinceFips.json");
@@ -44,7 +44,10 @@ function indexCities(filePath) {
     const db = {
       objects: {},
       cities: [],
-      index: {}
+      index: {
+        matches: {},
+        partials: {}
+      }
     };
     let first = true;
     lineReader.eachLine(filePath, (line, last) => {
@@ -59,12 +62,15 @@ function indexCities(filePath) {
         // get the province or state code
         const stateCode = provinceFips[lineObject.admin1] || lineObject.admin1;
         const object = {
+          id: lineObject.id,
           latitude: lineObject.lat,
           longitude: lineObject.long,
           name: `${lineObject.name}, ${stateCode}, ${lineObject.country}`,
           canonicalName: sanitizeString(lineObject.name),
           onlyName: lineObject.name
         };
+        // buid a text index
+        buildTextIndex(db, object);
         db.objects[lineObject.id] = object;
         db.cities.push(object);
       }
@@ -76,8 +82,32 @@ function indexCities(filePath) {
   });
 }
 
+/**
+ * build a text index with direct matches and partial matches with ids list
+ */
+function buildTextIndex(
+  db = { index: { matches: {}, partials: {} } },
+  predicate
+) {
+  const id = predicate.id;
+  const chars = predicate.canonicalName.split("");
+  let path = "";
+
+  // register the direct match
+  db.index.matches[predicate.canonicalName] = id;
+  // redirect partial matches
+  for (let char of chars) {
+    path += char;
+    const ids = get(db.index.partials, path) || [];
+    ids.push(id);
+    set(db.index.partials, path, ids);
+  }
+  return db;
+}
+
 module.exports = {
   indexCities,
   sanitizeString,
-  isCityValid
+  isCityValid,
+  buildTextIndex
 };

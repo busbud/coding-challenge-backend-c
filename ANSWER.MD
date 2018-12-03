@@ -104,6 +104,6 @@ https://www.cvedetails.com/vulnerability-list/vendor_id-12113/product_id-30764/v
 
 ## Next steps in real-life
 
-- cache !
+- cache => done
 - Add type system like typescript
-- Use a true index to descrease numbers of array trasversal
+- Use a true index to descrease numbers of array trasversal => experimental, see benchmarks

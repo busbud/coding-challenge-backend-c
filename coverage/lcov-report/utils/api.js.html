@@ -20,14 +20,14 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">94.74% </span>
+        <span class="strong">88.89% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>18/19</span>
+        <span class='fraction'>24/27</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">75% </span>
+        <span class="strong">71.43% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>3/4</span>
+        <span class='fraction'>5/7</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
@@ -35,9 +35,9 @@
         <span class='fraction'>3/3</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">100% </span>
+        <span class="strong">92.31% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>18/18</span>
+        <span class='fraction'>24/26</span>
       </div>
     </div>
   </div>
@@ -85,21 +85,54 @@
 40
 41
 42
-43</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -124,6 +157,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -131,20 +173,32 @@
 &nbsp;
 const { validateParamsMiddleware } = require("./suggestions");
 const { suggestFromList } = require("./suggestions/fromList");
+const { suggestFromIndex } = require("./suggestions/fromIndex");
 const Cache = require("./cache");
 &nbsp;
 /** the main process of computing suggestions */
-function suggestionBaseEndpoint(DB) {
+function suggestionBaseEndpoint(DB, suggest, cache = true) {
   return (req, res) =&gt; {
     const params = validateParamsMiddleware(req);
     // params are not well formatted
     <span class="missing-if-branch" title="if path not taken" >I</span>if (!params) <span class="cstat-no" title="statement not covered" >return res.status(422).end('{error: "malformed request"}');</span>
     // get the results
 &nbsp;
-    const results = Cache.fromCacheOr(
-      req.url,
-      suggestFromList.bind(null, DB, params.query, params.pivot)
-    );
+    const suggestOperation = suggest.bind(null, DB, params.query, params.pivot);
+    let results;
+&nbsp;
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (cache) {
+      results = Cache.fromCacheOr(
+        req.url,
+        suggest.bind(null, DB, params.query, params.pivot)
+      );
+    } else {
+      const json = <span class="cstat-no" title="statement not covered" >suggestOperation();</span>
+<span class="cstat-no" title="statement not covered" >      results = {</span>
+        json,
+        serialized: JSON.stringify(json)
+      };
+    }
 &nbsp;
     // no results there
     if (results.json.suggestions.length === 0)
@@ -164,8 +218,17 @@ module.exports = function(DB) {
     max: 500 // limit each IP to 100 requests per windowMs
   });
 &nbsp;
-  app.get("/suggestions", suggestionBaseEndpoint(DB), limiter);
-  app.get("/suggestions-nolimit", suggestionBaseEndpoint(DB));
+  app.get("/suggestions", suggestionBaseEndpoint(DB, suggestFromList), limiter);
+  app.get("/suggestions-nolimit", suggestionBaseEndpoint(DB, suggestFromList));
+  app.get(
+    "/suggestions-nolimit-nocache",
+    suggestionBaseEndpoint(DB, suggestFromList)
+  );
+  app.get("/suggestions-index", suggestionBaseEndpoint(DB, suggestFromIndex));
+  app.get(
+    "/suggestions-index-nocache",
+    suggestionBaseEndpoint(DB, suggestFromIndex, false)
+  );
 &nbsp;
   return app;
 };
@@ -175,7 +238,7 @@ module.exports = function(DB) {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Mon Dec 03 2018 09:02:52 GMT-0500 (Eastern Standard Time)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Mon Dec 03 2018 10:39:48 GMT-0500 (EST)
 </div>
 </div>
 <script src="../prettify.js"></script>

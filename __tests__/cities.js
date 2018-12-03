@@ -18,7 +18,12 @@ jest.mock("line-reader", () => {
     eachLine: lineWalker(exampleTsvData)
   };
 });
-const { sanitizeString, indexCities, isCityValid } = require("../utils/cities");
+const {
+  sanitizeString,
+  indexCities,
+  isCityValid,
+  buildTextIndex
+} = require("../utils/cities");
 
 describe("isCityValid", () => {
   it("should return true if the population exceed the threshold", () => {
@@ -43,6 +48,7 @@ describe("indexData", () => {
         cities: [
           {
             canonicalName: "actonvale",
+            id: "5882142",
             latitude: "45.65007",
             longitude: "-72.56582",
             name: "Acton Vale, QC, CA",
@@ -50,16 +56,41 @@ describe("indexData", () => {
           },
           {
             canonicalName: "baiecomeau",
+            id: "5889745",
             latitude: "49.21679",
             longitude: "-68.14894",
             name: "Baie-Comeau, QC, CA",
             onlyName: "Baie-Comeau"
           }
         ],
-        index: {},
+        index: {
+          matches: { actonvale: "5882142", baiecomeau: "5889745" },
+          partials: {
+            a: ["5882142"],
+            ac: ["5882142"],
+            act: ["5882142"],
+            acto: ["5882142"],
+            acton: ["5882142"],
+            actonv: ["5882142"],
+            actonva: ["5882142"],
+            actonval: ["5882142"],
+            actonvale: ["5882142"],
+            b: ["5889745"],
+            ba: ["5889745"],
+            bai: ["5889745"],
+            baie: ["5889745"],
+            baiec: ["5889745"],
+            baieco: ["5889745"],
+            baiecom: ["5889745"],
+            baiecome: ["5889745"],
+            baiecomea: ["5889745"],
+            baiecomeau: ["5889745"]
+          }
+        },
         objects: {
           "5882142": {
             canonicalName: "actonvale",
+            id: "5882142",
             latitude: "45.65007",
             longitude: "-72.56582",
             name: "Acton Vale, QC, CA",
@@ -67,6 +98,7 @@ describe("indexData", () => {
           },
           "5889745": {
             canonicalName: "baiecomeau",
+            id: "5889745",
             latitude: "49.21679",
             longitude: "-68.14894",
             name: "Baie-Comeau, QC, CA",
@@ -74,6 +106,35 @@ describe("indexData", () => {
           }
         }
       });
+    });
+  });
+});
+
+describe("build a text index", () => {
+  it("should index correctly the text index", () => {
+    const index = {
+      index: {
+        matches: {},
+        partials: {}
+      }
+    };
+    buildTextIndex(index, { canonicalName: "query", id: "1" });
+    buildTextIndex(index, { canonicalName: "quera", id: "2" });
+    buildTextIndex(index, { canonicalName: "query0", id: "3" });
+    //expect(index).toEqual(1);
+    expect(index).toEqual({
+      index: {
+        matches: { query: "1", quera: "2", query0: "3" },
+        partials: {
+          q: ["1", "2", "3"],
+          qu: ["1", "2", "3"],
+          que: ["1", "2", "3"],
+          quer: ["1", "2", "3"],
+          query: ["1", "3"],
+          quera: ["2"],
+          query0: ["3"]
+        }
+      }
     });
   });
 });

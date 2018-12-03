@@ -1,18 +1,24 @@
-/** main search function in index */
-function matchesFor(query) {
-  if (query === "") return [];
-  const directResult = index.index[query];
-  return directResult ? index.objects[directResult.id] : [];
-}
+const { suggest } = require(".");
 
-/** the main suggest function */
-function suggest(db, query) {
-  if (query !== "") {
-    const matches = matchesFor(query);
-    return {
-      suggestions: matches
-    };
-  } else {
-    return { suggestions: [] };
+/** main search function in index */
+function findMatchesInIndex(db, query) {
+  if (query === "") return [];
+
+  // try to find
+  const hasDirectMatchId = db.index.matches[query];
+  if (hasDirectMatchId) return db.objects[hasDirectMatchId];
+  else {
+    const partialMatches = db.index.partials[query];
+    return partialMatches.map(id => db.objects[id]);
   }
 }
+
+/**
+ *
+ */
+const suggestFromIndex = suggest(findMatchesInIndex);
+
+module.exports = {
+  findMatchesInIndex,
+  suggestFromIndex
+};

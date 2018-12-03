@@ -2,20 +2,32 @@ const rateLimit = require("express-rate-limit");
 
 const { validateParamsMiddleware } = require("./suggestions");
 const { suggestFromList } = require("./suggestions/fromList");
+const { suggestFromIndex } = require("./suggestions/fromIndex");
 const Cache = require("./cache");
 
 /** the main process of computing suggestions */
-function suggestionBaseEndpoint(DB) {
+function suggestionBaseEndpoint(DB, suggest, cache = true) {
   return (req, res) => {
     const params = validateParamsMiddleware(req);
     // params are not well formatted
     if (!params) return res.status(422).end('{error: "malformed request"}');
     // get the results
 
-    const results = Cache.fromCacheOr(
-      req.url,
-      suggestFromList.bind(null, DB, params.query, params.pivot)
-    );
+    const suggestOperation = suggest.bind(null, DB, params.query, params.pivot);
+    let results;
+
+    if (cache) {
+      results = Cache.fromCacheOr(
+        req.url,
+        suggest.bind(null, DB, params.query, params.pivot)
+      );
+    } else {
+      const json = suggestOperation();
+      results = {
+        json,
+        serialized: JSON.stringify(json)
+      };
+    }
 
     // no results there
     if (results.json.suggestions.length === 0)
@@ -35,8 +47,17 @@ module.exports = function(DB) {
     max: 500 // limit each IP to 100 requests per windowMs
   });
 
-  app.get("/suggestions", suggestionBaseEndpoint(DB), limiter);
-  app.get("/suggestions-nolimit", suggestionBaseEndpoint(DB));
+  app.get("/suggestions", suggestionBaseEndpoint(DB, suggestFromList), limiter);
+  app.get("/suggestions-nolimit", suggestionBaseEndpoint(DB, suggestFromList));
+  app.get(
+    "/suggestions-nolimit-nocache",
+    suggestionBaseEndpoint(DB, suggestFromList)
+  );
+  app.get("/suggestions-index", suggestionBaseEndpoint(DB, suggestFromIndex));
+  app.get(
+    "/suggestions-index-nocache",
+    suggestionBaseEndpoint(DB, suggestFromIndex, false)
+  );
 
   return app;
 };

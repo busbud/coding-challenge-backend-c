@@ -20,24 +20,24 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">96.55% </span>
+        <span class="strong">97.5% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>28/29</span>
+        <span class='fraction'>39/40</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">70% </span>
+        <span class="strong">69.23% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>7/10</span>
+        <span class='fraction'>9/13</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>5/5</span>
+        <span class='fraction'>6/6</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>27/27</span>
+        <span class='fraction'>38/38</span>
       </div>
     </div>
   </div>
@@ -126,7 +126,37 @@
 81
 82
 83
-84</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -170,6 +200,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -193,6 +226,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -204,13 +240,37 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">35x</span>
+<span class="cline-any cline-yes">35x</span>
+<span class="cline-any cline-yes">35x</span>
+<span class="cline-any cline-yes">35x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const lineReader = require("line-reader");
-const { set, get, has } = require("lodash");
+const { set, get } = require("lodash");
 const { tsvLineToMap } = require("./tsv");
 const { sanitizeString } = require("./text");
 const provinceFips = require("../data/provinceFips.json");
@@ -255,7 +315,10 @@ function indexCities(filePath) {
     const db = {
       objects: {},
       cities: [],
-      index: {}
+      index: {
+        matches: {},
+        partials: {}
+      }
     };
     let first = true;
     lineReader.eachLine(filePath, (line, last) =&gt; {
@@ -270,12 +333,15 @@ function indexCities(filePath) {
         // get the province or state code
         const stateCode = provinceFips[lineObject.admin1] || <span class="branch-1 cbranch-no" title="branch not covered" >lineObject.admin1;</span>
         const object = {
+          id: lineObject.id,
           latitude: lineObject.lat,
           longitude: lineObject.long,
           name: `${lineObject.name}, ${stateCode}, ${lineObject.country}`,
           canonicalName: sanitizeString(lineObject.name),
           onlyName: lineObject.name
         };
+        // buid a text index
+        buildTextIndex(db, object);
         db.objects[lineObject.id] = object;
         db.cities.push(object);
       }
@@ -287,10 +353,34 @@ function indexCities(filePath) {
   });
 }
 &nbsp;
+/**
+ * build a text index with direct matches and partial matches with ids list
+ */
+function buildTextIndex(
+  db = <span class="branch-0 cbranch-no" title="branch not covered" >{ index: { matches: {}, partials: {} } },</span>
+  predicate
+) {
+  const id = predicate.id;
+  const chars = predicate.canonicalName.split("");
+  let path = "";
+&nbsp;
+  // register the direct match
+  db.index.matches[predicate.canonicalName] = id;
+  // redirect partial matches
+  for (let char of chars) {
+    path += char;
+    const ids = get(db.index.partials, path) || [];
+    ids.push(id);
+    set(db.index.partials, path, ids);
+  }
+  return db;
+}
+&nbsp;
 module.exports = {
   indexCities,
   sanitizeString,
-  isCityValid
+  isCityValid,
+  buildTextIndex
 };
 &nbsp;</pre></td></tr>
 </table></pre>
@@ -298,7 +388,7 @@ module.exports = {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Mon Dec 03 2018 09:02:52 GMT-0500 (Eastern Standard Time)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Mon Dec 03 2018 10:39:48 GMT-0500 (EST)
 </div>
 </div>
 <script src="../prettify.js"></script>
