@@ -11,7 +11,7 @@ module.exports = function(DB) {
 
   // 50 req/seq from an ip address
   const limiter = rateLimit({
-    windowMs: 3 * 1000, // 2 minutes
+    windowMs: 3 * 1000, // 2 seconds@
     max: 500 // limit each IP to 100 requests per windowMs
   });
 

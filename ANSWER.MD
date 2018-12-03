@@ -53,7 +53,7 @@ The high-traffic mitigation is handled by a standard rate-limiter.
 
 the test case consists of 2500 requests, from 50 virtual users, about 100 RPS.
 
-- take 1, integral list search, without any optimizations:
+- take 1, integral list search, without rate limiting:
 
 ```
 All virtual users finished
@@ -74,6 +74,8 @@ Summary report @ 01:13:40(-0500) 2018-12-02
     200: 2500
 ```
 
+- the current benchmark will be rate limited.
+
 # Gotchas
 
 - Readable province and states names come from: 'http://www.geonames.org/CA/administrative-division-canada.html'
@@ -89,5 +91,6 @@ https://www.cvedetails.com/vulnerability-list/vendor_id-12113/product_id-30764/v
 
 ## Next steps in real-life
 
-Add type system like typescript
-Use a true index to descrease numbers of array trasversal
+- cache !
+- Add type system like typescript
+- Use a true index to descrease numbers of array trasversal
