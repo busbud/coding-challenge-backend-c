@@ -1,11 +1,3 @@
-# TODO
-
-[ ] sort index for max reuse
-[ ] sanitiez user input and indexing phase on name
-[ ] add tests
-[ ] support geodistance sorting
-[ ] support and benchmark from index
-
 # Overview
 
 The project is deployed on heroku here: https://busbud-suggestions-tclain.herokuapp.com
