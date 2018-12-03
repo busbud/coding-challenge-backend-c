@@ -18,7 +18,15 @@ jest.mock("line-reader", () => {
     eachLine: lineWalker(exampleTsvData)
   };
 });
-const { sanitizeString, indexCities } = require("../utils/cities");
+const { sanitizeString, indexCities, isCityValid } = require("../utils/cities");
+
+describe("isCityValid", () => {
+  it("should return true if the population exceed the threshold", () => {
+    expect(isCityValid({ population: "4900" }, 5000)).toBeFalsy();
+    expect(isCityValid({ population: "5100" }, 5000)).toBeTruthy();
+    expect(isCityValid({ population: "54x9" }, 5000)).toBeFalsy();
+  });
+});
 
 describe("sanitizeString", () => {
   it("should remove all whitespaces", () => {
@@ -37,13 +45,14 @@ describe("indexData", () => {
             latitude: "45.65007",
             longitude: "-72.56582",
             name: "Acton Vale, QC, CA",
-            onlyName: "Acton Vale"
+            onlyName: "Acton Vale",
+            canonicalName: "actonvale"
           },
           "5889745": {
             latitude: "49.21679",
             longitude: "-68.14894",
             name: "Baie-Comeau, QC, CA",
-            onlyName: "Baie-Comeau"
+            canonicalName: "baiecomeau"
           }
         },
         cities: [
@@ -51,13 +60,15 @@ describe("indexData", () => {
             latitude: "45.65007",
             longitude: "-72.56582",
             name: "Acton Vale, QC, CA",
-            onlyName: "Acton Vale"
+            onlyName: "Acton Vale",
+            canonicalName: "actonvale"
           },
           {
             latitude: "49.21679",
             longitude: "-68.14894",
             name: "Baie-Comeau, QC, CA",
-            onlyName: "Baie-Comeau"
+            name: "Baie-Comeau",
+            canonicalName: "baiecomeau"
           }
         ],
         index: {}

@@ -1,6 +1,7 @@
 const lineReader = require("line-reader");
 const { set, get, has } = require("lodash");
 const { tsvLineToMap } = require("./tsv");
+const { sanitizeString } = require("./text");
 const provinceFips = require("../data/provinceFips.json");
 
 // globals vars
@@ -29,18 +30,6 @@ const lineMapper = tsvLineToMap(id => id, [
   "tz",
   "modified_at"
 ]);
-
-/** predictable and testable sanitized version of a given string */
-function sanitizeString(str) {
-  return str
-    .toLowerCase()
-    .replace(/[\s-_]+/g, "")
-    .replace(/[éèêë]/g, "e")
-    .replace(/[àâä]/g, "a")
-    .replace(/[ïìî]/g, "i")
-    .replace(/[üûù]/g, "u")
-    .replace(/[ôòö]/g, "o");
-}
 
 /** is a given city valid in our search */
 function isCityValid(city, threshold) {
@@ -73,6 +62,7 @@ function indexCities(filePath) {
           latitude: lineObject.lat,
           longitude: lineObject.long,
           name: `${lineObject.name}, ${stateCode}, ${lineObject.country}`,
+          canonicalName: sanitizeString(lineObject.name),
           onlyName: lineObject.name
         };
         db.objects[lineObject.id] = object;
@@ -88,5 +78,6 @@ function indexCities(filePath) {
 
 module.exports = {
   indexCities,
-  sanitizeString
+  sanitizeString,
+  isCityValid
 };

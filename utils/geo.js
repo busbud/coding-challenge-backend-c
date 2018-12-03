@@ -5,10 +5,12 @@ const { point } = require("@turf/helpers");
  * is the coordinate object valid
  * @param {latitude:  string|number, longitude: string|number} coord
  */
-const isCoordinateObjectValid = coord => {
-  const lat = parseFloat(coord.latitude);
-  const lon = parseFloat(coord.longitude);
-  return [lat, lon].every(feat => !isNaN(feat));
+const numericalCoordinate = coord => {
+  const latitude = parseFloat(coord.latitude);
+  const longitude = parseFloat(coord.longitude);
+  return [latitude, longitude].every(feat => !isNaN(feat))
+    ? { latitude, longitude }
+    : null;
 };
 
 /**
@@ -18,9 +20,14 @@ const isCoordinateObjectValid = coord => {
  */
 function distanceBetween(cityA, cityB) {
   // if inputs are not valid; return -1
-  if ([cityA, cityB].some(coord => !isCoordinateObjectValid(coord))) return -1;
+  const cityANumerical = numericalCoordinate(cityA);
+  const cityBNumerical = numericalCoordinate(cityB);
 
-  return distance(point([cityALat, cityALon]), point([cityBLat, cityBLon]));
+  if ([cityANumerical, cityBNumerical].some(coord => !coord)) return -1;
+  return distance(
+    point([cityANumerical.latitude, cityANumerical.longitude]),
+    point([cityBNumerical.latitude, cityBNumerical.longitude])
+  );
 }
 
 /** sort cities list by ascending distance */
@@ -31,7 +38,7 @@ function sortByDistance(pivot, cities = []) {
 }
 
 module.exports = {
-  isCoordinateObjectValid,
+  numericalCoordinate,
   sortByDistance,
   distanceBetween
 };

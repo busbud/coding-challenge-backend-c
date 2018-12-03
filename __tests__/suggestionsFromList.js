@@ -1,16 +1,20 @@
 const omit = require("lodash/fp/omit");
-const { suggestFromObjectList } = require("../utils/suggestions/fromList");
+const { suggestFromList } = require("../utils/suggestions/fromList");
 
 const sampleDb = {
-  list: [
+  cities: [
     {
       id: "1",
+      canonicalName: "london",
+      onlyName: "London",
       name: "London, OH, USA",
       latitude: "39.88645",
       longitude: "-83.44825"
     },
     {
       id: "2",
+      canonicalName: "london",
+      onlyName: "London",
       name: "London, ON, Canada",
       latitude: "42.98339",
       longitude: "-81.23304"
@@ -18,12 +22,16 @@ const sampleDb = {
 
     {
       id: "3",
+      canonicalName: "london",
+      onlyName: "London",
       name: "London, KY, USA",
       latitude: "37.12898",
       longitude: "-84.08326"
     },
     {
       id: "4",
+      canonicalName: "londontowne",
+      onlyName: "Londontowne",
       name: "Londontowne, MD, USA",
       latitude: "38.93345",
       longitude: "-76.54941"
@@ -31,21 +39,88 @@ const sampleDb = {
   ]
 };
 
-describe("Utilities to query city list", () => {
-  const suggestions = suggestFromObjectList(sampleDb, "Montreal");
-  const scores = suggestions.map(suggestion => suggestion.score);
+describe("Suggestions without index", () => {
+  it("should return cities matching the begin of the query, sorted by levenstein => no geo reference involved", () => {
+    const suggestions = suggestFromList(sampleDb, "London").suggestions;
+    const scores = suggestions.map(suggestion => suggestion.score);
 
-  // scores must be sorted dsc
-  expect(scores).toMatch(scores.sort((a, b) => b - a));
+    expect(scores).toEqual([1, 1, 1, 0.17]);
+    expect(suggestions.map(omit("score"))).toEqual([
+      {
+        id: "1",
+        canonicalName: "london",
+        onlyName: "London",
+        name: "London, OH, USA",
+        latitude: "39.88645",
+        longitude: "-83.44825"
+      },
+      {
+        id: "2",
+        canonicalName: "london",
+        onlyName: "London",
+        name: "London, ON, Canada",
+        latitude: "42.98339",
+        longitude: "-81.23304"
+      },
+      {
+        id: "3",
+        canonicalName: "london",
+        onlyName: "London",
+        name: "London, KY, USA",
+        latitude: "37.12898",
+        longitude: "-84.08326"
+      },
+      {
+        id: "4",
+        canonicalName: "londontowne",
+        onlyName: "Londontowne",
+        name: "Londontowne, MD, USA",
+        latitude: "38.93345",
+        longitude: "-76.54941"
+      }
+    ]);
+  });
+  it("should weight  near cities if a refence point is provided", () => {
+    const suggestions = suggestFromList(sampleDb, "London", {
+      latitude: "42.98",
+      longitude: "-81.24"
+    }).suggestions;
+    const scores = suggestions.map(suggestion => suggestion.score);
 
-  expect(suggestions.map(omit("score"))).toMatch([
-    { id: "2", name: "Montreal", latitude: "1.0", longitude: "2.0" },
-    { id: "1", name: "Montreal", latitude: "3.0", longitude: "4.0" },
-    {
-      id: "3",
-      name: "Montreal",
-      latitude: "5.0",
-      longitude: "6.0"
-    }
-  ]);
+    expect(scores).toEqual([0.75, 0.51, 0.44, 0.04]);
+    expect(suggestions.map(omit("score"))).toEqual([
+      {
+        canonicalName: "london",
+        id: "2",
+        latitude: "42.98339",
+        longitude: "-81.23304",
+        name: "London, ON, Canada",
+        onlyName: "London"
+      },
+      {
+        canonicalName: "london",
+        id: "1",
+        latitude: "39.88645",
+        longitude: "-83.44825",
+        name: "London, OH, USA",
+        onlyName: "London"
+      },
+      {
+        canonicalName: "london",
+        id: "3",
+        latitude: "37.12898",
+        longitude: "-84.08326",
+        name: "London, KY, USA",
+        onlyName: "London"
+      },
+      {
+        canonicalName: "londontowne",
+        id: "4",
+        latitude: "38.93345",
+        longitude: "-76.54941",
+        name: "Londontowne, MD, USA",
+        onlyName: "Londontowne"
+      }
+    ]);
+  });
 });

@@ -1,4 +1,28 @@
-const { sortByDistance, distanceBetween } = require("../utils/geo");
+const {
+  sortByDistance,
+  distanceBetween,
+  numericalCoordinate
+} = require("../utils/geo");
+
+describe("numericalCoordinate", () => {
+  it("should convert coordinate to numerical values", () => {
+    expect(
+      numericalCoordinate({
+        latitude: "1.0",
+        longitude: "2.0"
+      })
+    ).toEqual({
+      latitude: 1,
+      longitude: 2
+    });
+    expect(
+      numericalCoordinate({
+        latitude: "1.x",
+        longitude: "2.0"
+      })
+    ).toEqual(null);
+  });
+});
 
 describe("distanceBetween", () => {
   it("should return -1 if one of the input is not a float to String", () => {

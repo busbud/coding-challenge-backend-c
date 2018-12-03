@@ -1,24 +1,23 @@
-const { isCoordinateObjectValid } = require("../geo");
+const { suggest } = require(".");
+const { sanitizeString } = require("../text");
 
-/** first method of suggestion, run the regexp on city list */
-function suggestFromObjectList(
-  db,
-  query,
-  pivot = { latitude: null, longitude: null }
-) {
-  if (query !== "") {
-    const matches = db.cities.filter(city => {
-      return new RegExp(query).test(city.name);
-    });
-
-    return {
-      suggestions: matches
-    };
-  } else {
-    return { suggestions: [] };
-  }
+/**
+ * search all list item without index
+ */
+function findMatchesInList(db, query) {
+  const canonicalQuery = sanitizeString(query);
+  return db.cities.filter(city => {
+    return new RegExp(canonicalQuery).test(city.canonicalName);
+  });
+  return matches;
 }
 
+/**
+ *
+ */
+const suggestFromList = suggest(findMatchesInList);
+
 module.exports = {
-  suggestFromObjectList
+  findMatchesInList,
+  suggestFromList
 };

@@ -1,24 +1,27 @@
 const levenshtein = require("fast-levenshtein");
 
-/** return the distance between two strings, useful for fuzzy matching */
-function levenshteinDistance(text1, text2) {
-  console.log("text1", text1, "text2", text2);
-  return levenshtein.get(text1, text2);
+/** predictable and testable sanitized version of a given string */
+function sanitizeString(str) {
+  return str
+    .toLowerCase()
+    .replace(/[\s-_]+/g, "")
+    .replace(/[éèêë]/g, "e")
+    .replace(/[àâä]/g, "a")
+    .replace(/[ïìî]/g, "i")
+    .replace(/[üûù]/g, "u")
+    .replace(/[ôòö]/g, "o");
 }
 
 /**
- * sort a bunch of values based on their (ascending) levenstein distance
- * extractor is function that can be used to get the actual value, if objects are used
+ * return the distance between two strings, useful for fuzzy matching
+ * @param {string} text1
+ * @param {string} text2
  */
-function sortByLevensteinDistance(pivot, predicates, extractor = id => id) {
-  return predicates.sort((predicateA, predicateB) => {
-    const valueA = extractor(predicateA);
-    const valueB = extractor(predicateB);
-    return levenshteinDistance(valueA, valueB);
-  });
+function levenshteinDistance(text1, text2) {
+  return levenshtein.get(text1, text2);
 }
 
 module.exports = {
   levenshteinDistance,
-  sortByLevensteinDistance
+  sanitizeString
 };
