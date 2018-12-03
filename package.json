@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "test": "jest",
+    "test": "jest --collectCoverage",
     "dev": "nodemon app",
     "benchmark:prod": "curl https://busbud-suggestions-tclain.herokuapp.com/suggestions?q=B && artillery quick --count 50 -n 50 https://busbud-suggestions-tclain.herokuapp.com/suggestions?q=B",
     "benchmark:dev": "artillery quick --count 50 -n 50 http://localhost:2345/suggestions?q=B",
