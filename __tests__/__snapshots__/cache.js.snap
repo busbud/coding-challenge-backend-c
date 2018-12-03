@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Cache should cache a given operation or execute it the first time 1`] = `
+Object {
+  "json": Object {
+    "a": 1,
+  },
+  "serialized": "{\\"a\\":1}",
+}
+`;
+
+exports[`Cache should set a value using a custom seriaizer 1`] = `
+Object {
+  "json": undefined,
+  "serialized": undefined,
+}
+`;
