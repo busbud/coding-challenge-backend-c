@@ -66,7 +66,28 @@ Summary report @ 01:13:40(-0500) 2018-12-02
     200: 2500
 ```
 
-- the current benchmark will be rate limited.
+- the current benchmark will be rate limited and use caching, reducing the max time by 6x.
+
+```
+Summary report @ 08:55:12(-0500) 2018-12-03
+  Scenarios launched:  50
+  Scenarios completed: 50
+  Requests completed:  2500
+  RPS sent: 55.51
+  Request latency:
+    min: 45.7
+    max: 1572.4
+    median: 111.7
+    p95: 304.2
+    p99: 666.3
+  Scenario counts:
+    0: 50 (100%)
+  Codes:
+    200: 2500
+
+Done in 46.09s.
+
+```
 
 # Gotchas
 
