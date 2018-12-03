@@ -45,7 +45,7 @@ The high-traffic mitigation is handled by a standard rate-limiter.
 
 the test case consists of 2500 requests, from 50 virtual users, about 100 RPS.
 
-- take 1, integral list search, without rate limiting:
+- take 1, integral list search, without rate limiting and cache:
 
 ```
 All virtual users finished
@@ -103,6 +103,29 @@ Done in 0.97s.
 ```
 
 You can test it using the `/suggestions-index-nocache` endpoint.
+
+Without cache, here a typical benchmark:
+
+```
+All virtual users finished
+Summary report @ 10:47:58(-0500) 2018-12-03
+  Scenarios launched:  50
+  Scenarios completed: 50
+  Requests completed:  2500
+  RPS sent: 84.77
+  Request latency:
+    min: 1.9
+    max: 1041.3
+    median: 529.1
+    p95: 917.2
+    p99: 953.6
+  Scenario counts:
+    0: 50 (100%)
+  Codes:
+    500: 2500
+```
+
+We reduced the max latency of 8x !!
 
 # Gotchas
 
