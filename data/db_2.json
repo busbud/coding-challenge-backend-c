@@ -1,0 +1,31 @@
+{
+    "objects": {
+        "5881791": {
+            "latitude": "49.05798",
+            "longitude": "-122.25257",
+            "name": "Abbotsford",
+            "fullName": "Abbotsford"
+        },
+        "5882142": {
+            "latitude": "45.65007",
+            "longitude": "-72.56582",
+            "name": "Acton Vale",
+            "fullName": "Acton Vale"
+        }
+    },
+    "cities": [
+        {
+            "latitude": "49.05798",
+            "longitude": "-122.25257",
+            "name": "Abbotsford",
+            "fullName": "Abbotsford"
+        },
+        {
+            "latitude": "45.65007",
+            "longitude": "-72.56582",
+            "name": "Acton Vale",
+            "fullName": "Acton Vale"
+        }
+    ],
+    "index": {}
+}

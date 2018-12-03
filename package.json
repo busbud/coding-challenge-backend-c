@@ -9,13 +9,15 @@
     "dev": "nodemon app",
     "benchmark:prod": "curl https://busbud-suggestions-tclain.herokuapp.com/suggestions?q=B && artillery quick --count 50 -n 50 https://busbud-suggestions-tclain.herokuapp.com/suggestions?q=B",
     "benchmark:dev": "artillery quick --count 50 -n 50 http://localhost:2345/suggestions?q=B",
-    "postinstall": "node scripts/indexData data/cities_canada-usa.tsv data/db.json"
+    "index:data": "node scripts/indexData data/cities_canada-usa.tsv data/db.json",
+    "postinstall": "npm run index:data"
   },
   "author": "Timothee Clain",
   "license": "WTFPL",
   "dependencies": {
     "@turf/distance": "^6.0.1",
     "express": "^4.16.4",
+    "fast-levenshtein": "^2.0.6",
     "line-reader": "^0.4.0",
     "lodash": "^4.17.11",
     "nodemon": "^1.18.7",

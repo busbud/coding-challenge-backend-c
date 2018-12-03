@@ -1,10 +1,30 @@
-const lineToMap = require("./tsv").lineToMap;
 const lineReader = require("line-reader");
 const { set, get, has } = require("lodash");
+const { tsvLineToMap } = require("./tsv");
+
+// globals vars
+const POPULATION_THRESHOLD = 5000;
+
+// Regexp
+const NAME_WITH_SPACE = /(\d+ )([^\t]+)(\t)/g;
+const SPACE = / /g;
+const WHITE_SPACE = /\s/g;
+
+/** custom line parser to solve inconsistencies in spacing and missing fields in tsv format */
+function reshapeLineWithHeuristics(line) {
+  return line;
+  /*return line
+    .replace(NAME_WITH_SPACE, (match, before, content, after) => {
+      console.log("MATCH", before, content, after);
+      return before + content.replace(/ /g, "_") + after;
+    })
+    .replace(WHITE_SPACE, "\t");
+    */
+}
 
 /** Business-aware utilities to construct the town index */
 /** create object with these keys from a line */
-const lineMapper = lineToMap([
+const lineMapper = tsvLineToMap(id => id, [
   "id",
   "name",
   "ascii",
@@ -38,19 +58,11 @@ function sanitizeString(str) {
     .replace(/[ôòö]/g, "u");
 }
 
-function enrichIndexTree(tree, word, id) {
-  let path = "";
-  word.split().forEach((char, index) => {
-    path += "." + char;
-    if (index === word.length - 1) {
-      set(tree, path, id);
-    } else {
-      if (!has(tree, path)) {
-        set(tree, path, {});
-      }
-    }
-  });
-  return tree;
+/** is a given city valid in our search */
+function isCityValid(city, threshold) {
+  const population = parseInt(city.population);
+  if (isNaN(population)) return false;
+  return population > threshold;
 }
 
 /** main function to index all the cities */
@@ -69,14 +81,17 @@ function indexCities(filePath) {
         return true;
       }
       const lineObject = lineMapper(line);
-
-      const object = {
-        lat: lineObject.lat,
-        long: lineObject.long,
-        name: lineObject.name
-      };
-      db.objects[lineObject.id] = object;
-      db.cities.push(object);
+      // the city is big enough
+      if (isCityValid(lineObject, POPULATION_THRESHOLD)) {
+        const object = {
+          latitude: lineObject.lat,
+          longitude: lineObject.long,
+          name: lineObject.name,
+          fullName: `${lineObject.name}`
+        };
+        db.objects[lineObject.id] = object;
+        db.cities.push(object);
+      }
       if (last) {
         resolve(db);
         return false;
