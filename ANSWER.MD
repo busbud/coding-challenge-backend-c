@@ -17,7 +17,7 @@ Basically, the process is the following:
 - receive a get requests on /suggestions
 - validate get params and return an error code if the query is not present OR the coordinates of the reference point is malformed.
 - convert the query to a canonical version
-- search inside the database of cities for every cities matching the start of the query
+- search inside the database of cities for every cities matching the start of the query ( using an index or full trasversal depending on the endpoint)
 - assign a weight to each results matching the levenstein distance of the string => 1 differenct chars on 10 total gives a 90% score (`utils/suggestions/index.js => withLevensteinDistanceScore`)
 - if a reference point is given (`utils/suggestions/index.js => weighWithGeoDistanceScore`):
   - go through each matched results,
@@ -88,6 +88,21 @@ Summary report @ 08:55:12(-0500) 2018-12-03
 Done in 46.09s.
 
 ```
+
+## Experimental index
+
+An index approach has been tested and the performance boost is encouraging:
+
+```
+$ node --expose-gc scripts/benchmark-list-index.js
+benchmark suggester-id-list
+suggester-id-list: 519.885ms
+benchmark suggester-id-index
+suggester-id-index: 55.297ms
+Done in 0.97s.
+```
+
+You can test it using the `/suggestions-index-nocache` endpoint.
 
 # Gotchas
 

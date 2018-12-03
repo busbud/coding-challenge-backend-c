@@ -18,7 +18,7 @@ function benchmark(suggester, id) {
   const benchmarkId = "suggester-id-" + id;
   console.log("benchmark", benchmarkId);
   console.time(benchmarkId, id);
-  for (const letter of letters) {
+  for (const letter of [...letters, ...letters, ...letters, ...letters]) {
     suggester(index, letter);
   }
   console.timeEnd(benchmarkId, id);
