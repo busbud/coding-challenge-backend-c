@@ -28,7 +28,7 @@
     "lodash": "^4.17.11",
     "nodemon": "^1.18.7",
     "query-string": "^6.2.0",
-    "supertest": "^0.11.0",
+    "supertest": "^3",
     "test": "^0.6.0"
   },
   "engines": {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1543851589069" clover="3.2.0">
-  <project timestamp="1543851589069" name="All files">
-    <metrics statements="164" coveredstatements="153" conditionals="53" coveredconditionals="39" methods="38" coveredmethods="35" elements="255" coveredelements="227" complexity="0" loc="164" ncloc="164" packages="2" files="11" classes="11">
+<coverage generated="1543853072007" clover="3.2.0">
+  <project timestamp="1543853072007" name="All files">
+    <metrics statements="166" coveredstatements="154" conditionals="53" coveredconditionals="39" methods="38" coveredmethods="35" elements="257" coveredelements="228" complexity="0" loc="166" ncloc="166" packages="2" files="11" classes="11">
       <package name="utils">
         <metrics statements="114" coveredstatements="112" conditionals="35" coveredconditionals="28" methods="26" coveredmethods="26"/>
         <file name="api.js" path="/home/tclain/dev/github/coding-challenge-backend-c/utils/api.js">
@@ -144,17 +144,19 @@
         </file>
       </package>
       <package name="utils.suggestions">
-        <metrics statements="50" coveredstatements="41" conditionals="18" coveredconditionals="11" methods="12" coveredmethods="9"/>
+        <metrics statements="52" coveredstatements="42" conditionals="18" coveredconditionals="11" methods="12" coveredmethods="9"/>
         <file name="fromIndex.js" path="/home/tclain/dev/github/coding-challenge-backend-c/utils/suggestions/fromIndex.js">
-          <metrics statements="8" coveredstatements="3" conditionals="4" coveredconditionals="0" methods="2" coveredmethods="0"/>
+          <metrics statements="10" coveredstatements="4" conditionals="4" coveredconditionals="0" methods="2" coveredmethods="0"/>
           <line num="1" count="1" type="stmt"/>
-          <line num="5" count="0" type="cond" truecount="0" falsecount="2"/>
+          <line num="2" count="1" type="stmt"/>
+          <line num="6" count="0" type="cond" truecount="0" falsecount="2"/>
           <line num="8" count="0" type="stmt"/>
-          <line num="9" count="0" type="cond" truecount="0" falsecount="2"/>
-          <line num="11" count="0" type="stmt"/>
-          <line num="12" count="0" type="stmt"/>
-          <line num="19" count="1" type="stmt"/>
-          <line num="21" count="1" type="stmt"/>
+          <line num="10" count="0" type="stmt"/>
+          <line num="11" count="0" type="cond" truecount="0" falsecount="2"/>
+          <line num="13" count="0" type="stmt"/>
+          <line num="15" count="0" type="stmt"/>
+          <line num="22" count="1" type="stmt"/>
+          <line num="24" count="1" type="stmt"/>
         </file>
         <file name="fromList.js" path="/home/tclain/dev/github/coding-challenge-backend-c/utils/suggestions/fromList.js">
           <metrics statements="8" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
