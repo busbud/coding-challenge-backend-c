@@ -115,6 +115,7 @@ function validateParamsMiddleware(req) {
       }
     : null;
 }
+
 module.exports = {
   loadIndex,
   suggest,

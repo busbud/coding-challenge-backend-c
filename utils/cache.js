@@ -1,13 +1,17 @@
 let cache = {};
 
 // set a value
-function set(key, value) {
-  cache[key] = JSON.stringify(value);
+function set(key, value, serializer = JSON.stringify) {
+  cache[key] = serializer(value);
 }
 
 // get a value
-function get(key) {
-  return cache[key];
+function get(key, deserializer = JSON.parse) {
+  const value = cache[key];
+  return {
+    serialized: value,
+    json: value !== undefined ? deserializer(value) : value
+  };
 }
 
 //  clear the cache
@@ -20,17 +24,21 @@ function clear(key, value) {
  * @param {*} key
  * @param {*} operation
  */
-function fromCacheOr(key, operation) {
+function fromCacheOr(key, operation, serializer = JSON.stringify) {
   const cached = get(key);
-  if (!cached) {
+  if (cached.json === undefined) {
     const result = operation();
     set(key, result);
-    return result;
+    return {
+      serialized: serializer(result),
+      json: result
+    };
   }
   return cached;
 }
 
 module.exports = {
+  cache,
   fromCacheOr,
   get,
   set,
