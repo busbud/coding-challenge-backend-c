@@ -13,6 +13,7 @@
     "benchmark:dev": "artillery quick --count 50 -n 50 http://localhost:2345/suggestions?q=B",
     "benchmark:dev:nolimit": "artillery quick --count 50 -n 50 http://localhost:2345/suggestions-nolimit?q=B",
     "benchmark:index:nolimit": "artillery quick --count 50 -n 50 http://localhost:2345/suggestions-index-nocache?q=B",
+    "benchmark:prod:index:nolimit": "artillery quick --count 50 -n 50 https://busbud-suggestions-tclain.herokuapp.com/suggestions-index-nocache?q=B",
     "index:data": "node scripts/indexData data/cities_canada-usa.tsv data/db.json",
     "postinstall": "npm run index:data"
   },

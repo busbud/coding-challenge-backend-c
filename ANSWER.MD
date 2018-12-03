@@ -107,25 +107,27 @@ You can test it using the `/suggestions-index-nocache` endpoint.
 Without cache, here a typical benchmark:
 
 ```
-All virtual users finished
-Summary report @ 10:47:58(-0500) 2018-12-03
+Summary report @ 10:59:39(-0500) 2018-12-03
   Scenarios launched:  50
   Scenarios completed: 50
   Requests completed:  2500
-  RPS sent: 84.77
+  RPS sent: 73.31
   Request latency:
-    min: 1.9
-    max: 1041.3
-    median: 529.1
-    p95: 917.2
-    p99: 953.6
+    min: 47.1
+    max: 2508
+    median: 468.1
+    p95: 1377.6
+    p99: 2231.5
   Scenario counts:
     0: 50 (100%)
   Codes:
-    500: 2500
+    200: 2500
+
+Done in 35.10s.
+
 ```
 
-We reduced the max latency of 8x !!
+We reduced the max latency by 4x !!
 
 # Gotchas
 
