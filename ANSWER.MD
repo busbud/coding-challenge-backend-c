@@ -107,6 +107,8 @@ You can test it using the `/suggestions-index-nocache` endpoint.
 Without cache, here a typical benchmark:
 
 ```
+yarn benchmark:prod:index:nolimit
+
 Summary report @ 10:59:39(-0500) 2018-12-03
   Scenarios launched:  50
   Scenarios completed: 50
