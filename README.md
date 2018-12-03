@@ -1,3 +1,5 @@
+# See my response in ANSWER.MD :-)
+
 # Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
 
 ## Requirements
@@ -9,10 +11,10 @@ The suggestions should be restricted to cities in the USA and Canada with a popu
 - the partial (or complete) search term is passed as a querystring parameter `q`
 - the caller's location can optionally be supplied via querystring parameters `latitude` and `longitude` to help improve relative scores
 - the endpoint returns a JSON response with an array of scored suggested matches
-    - the suggestions are sorted by descending score
-    - each suggestion has a score between 0 and 1 (inclusive) indicating confidence in the suggestion (1 is most confident)
-    - each suggestion has a name which can be used to disambiguate between similarly named locations
-    - each suggestion has a latitude and longitude
+  - the suggestions are sorted by descending score
+  - each suggestion has a score between 0 and 1 (inclusive) indicating confidence in the suggestion (1 is most confident)
+  - each suggestion has a name which can be used to disambiguate between similarly named locations
+  - each suggestion has a latitude and longitude
 - all functional tests should pass (additional tests may be implemented as necessary).
 - the final application should be [deployed to Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs).
 - feel free to add more features if you like!
@@ -66,7 +68,6 @@ These responses are meant to provide guidance. The exact values can vary based o
 }
 ```
 
-
 ### Non-functional
 
 - All code should be written in Javascript
@@ -79,7 +80,6 @@ These responses are meant to provide guidance. The exact values can vary based o
 - Geonames provides city lists Canada and the USA http://download.geonames.org/export/dump/readme.txt
 - http://www.nodejs.org/
 - http://ejohn.org/blog/node-js-stream-playground/
-
 
 ## Getting Started
 

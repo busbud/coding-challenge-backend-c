@@ -40,38 +40,39 @@ describe("indexData", () => {
   it("should transform a tsv file to an array of objects", () => {
     return indexCities("/path/to").then(data => {
       expect(data).toEqual({
-        objects: {
-          "5882142": {
-            latitude: "45.65007",
-            longitude: "-72.56582",
-            name: "Acton Vale, QC, CA",
-            onlyName: "Acton Vale",
-            canonicalName: "actonvale"
-          },
-          "5889745": {
-            latitude: "49.21679",
-            longitude: "-68.14894",
-            name: "Baie-Comeau, QC, CA",
-            canonicalName: "baiecomeau"
-          }
-        },
         cities: [
           {
+            canonicalName: "actonvale",
             latitude: "45.65007",
             longitude: "-72.56582",
             name: "Acton Vale, QC, CA",
-            onlyName: "Acton Vale",
-            canonicalName: "actonvale"
+            onlyName: "Acton Vale"
           },
           {
+            canonicalName: "baiecomeau",
             latitude: "49.21679",
             longitude: "-68.14894",
             name: "Baie-Comeau, QC, CA",
-            name: "Baie-Comeau",
-            canonicalName: "baiecomeau"
+            onlyName: "Baie-Comeau"
           }
         ],
-        index: {}
+        index: {},
+        objects: {
+          "5882142": {
+            canonicalName: "actonvale",
+            latitude: "45.65007",
+            longitude: "-72.56582",
+            name: "Acton Vale, QC, CA",
+            onlyName: "Acton Vale"
+          },
+          "5889745": {
+            canonicalName: "baiecomeau",
+            latitude: "49.21679",
+            longitude: "-68.14894",
+            name: "Baie-Comeau, QC, CA",
+            onlyName: "Baie-Comeau"
+          }
+        }
       });
     });
   });

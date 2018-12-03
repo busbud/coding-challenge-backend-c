@@ -89,8 +89,35 @@ const suggest = curry((matchesFinder, db, query, pivot = null) => {
   }
 });
 
+/** utility function to validate incoming get params in the suggestions endpoint */
+function validateParamsMiddleware(req) {
+  const [query, latitude, longitude] = [
+    req.query.q,
+    req.query.latitude,
+    req.query.longitude
+  ];
+  const hasQuery = query && query !== "";
+  const hasLatitude = !isNaN(parseFloat(latitude));
+  const hasLongitude = !isNaN(parseFloat(longitude));
+
+  const pivotIsDefined = hasLatitude || hasLongitude;
+  return hasQuery
+    ? {
+        query,
+        ...(pivotIsDefined
+          ? {
+              pivot: {
+                latitude,
+                longitude
+              }
+            }
+          : {})
+      }
+    : null;
+}
 module.exports = {
   loadIndex,
   suggest,
-  withLevensteinDistanceScore
+  withLevensteinDistanceScore,
+  validateParamsMiddleware
 };

@@ -1,4 +1,5 @@
-const app = require("../app").app;
+const DB = require("../data/db.json");
+const app = require("../utils/api")(DB);
 const request = require("supertest")(app);
 
 describe("GET /suggestions", function() {
@@ -16,7 +17,7 @@ describe("GET /suggestions", function() {
     });
 
     it("returns a 404", function() {
-      expect(response.statusCode).toEqual(404);
+      expect(response.status).toEqual(404);
     });
 
     it("returns an empty array of suggestions", function() {
@@ -41,7 +42,7 @@ describe("GET /suggestions", function() {
     });
 
     it("returns an array of suggestions", function() {
-      expect(response.json.suggestions).toBeInstanceof(Array);
+      expect(response.json.suggestions).toBeInstanceOf(Array);
       expect(response.json.suggestions.length).toBeGreaterThan(0);
     });
 
@@ -49,7 +50,7 @@ describe("GET /suggestions", function() {
       const suggestions = response.json.suggestions;
       expect(
         suggestions.some(function(suggestion) {
-          return suggestion.name.test(/montreal/i);
+          return /montréal/i.test(suggestion.name);
         })
       ).toBeTruthy();
     });

@@ -17,7 +17,7 @@ describe("numericalCoordinate", () => {
     });
     expect(
       numericalCoordinate({
-        latitude: "1.x",
+        latitude: "y.x",
         longitude: "2.0"
       })
     ).toEqual(null);

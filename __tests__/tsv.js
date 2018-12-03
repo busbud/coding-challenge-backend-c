@@ -5,7 +5,7 @@ describe.only("TSV utils", () => {
     const headers = ["id", "a", "b"];
     const line = "00001  valueOfA\tvalueOfb";
     const twoSpacesToTab = feat => feat.replace(/ {2}/g, "\t");
-    expect(lineToMap(twoSpacesToTab, "\t", headers, line)).toEqual({
+    expect(lineToMap("\t", twoSpacesToTab, headers, line)).toEqual({
       id: "00001",
       a: "valueOfA",
       b: "valueOfb"

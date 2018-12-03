@@ -1,29 +1,35 @@
 const rateLimit = require("express-rate-limit");
-const app = require("express")();
-const { suggestFromObjectList } = require("./suggestions/fromList");
 
-app.enable("trust proxy"); // only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
+const { validateParamsMiddleware } = require("./suggestions");
+const { suggestFromList } = require("./suggestions/fromList");
+const { withCode } = require("./server");
+const Cache = require("./cache");
 
-// 50 req/seq from an ip address
-const limiter = rateLimit({
-  windowMs: 1000, // 15 minutes
-  max: 50 // limit each IP to 100 requests per windowMs
-});
+module.exports = function(DB) {
+  const app = require("express")();
+  app.enable("trust proxy"); // only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
 
-app.get(
-  "/suggestions",
-  (req, res) => {
-    console.log("suggestions");
-    const params = parseGetParams(req.url);
-    const results = suggestFromObjectList(DB, params.q);
+  // 50 req/seq from an ip address
+  const limiter = rateLimit({
+    windowMs: 1000, // 15 minutes
+    max: 50 // limit each IP to 100 requests per windowMs
+  });
+
+  app.get("/suggestions", (req, res) => {
+    const params = validateParamsMiddleware(req);
+    // params are not well formatted
+    if (!params) return res.status(422).end('{error: "malformed request"}');
+    // get the results
+
+    const results = suggestFromList(DB, params.query, params.pivot);
+    // in json
+    const resultsJSON = JSON.stringify(results);
     // no results there
-    if (results.suggestions.length === 0) return notFound(res, results);
+    if (results.suggestions.length === 0)
+      return res.status(404).end(resultsJSON);
     // we got results yeah !
-    return success(res, results);
-  },
-  limiter
-);
+    return res.end(resultsJSON);
+  });
 
-module.exports = {
-  app
+  return app;
 };
