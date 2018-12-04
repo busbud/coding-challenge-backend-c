@@ -7,8 +7,8 @@ var port = process.env.PORT || 2345;
 app.get('/suggestions', function(req, res) {
 
   var query = req.query.q;
-  var long = req.query.long;
-  var lat = req.query.lat;
+  var long = req.query.longitude;
+  var lat = req.query.latitude;
 
   if (query === undefined || query === "") {
 
