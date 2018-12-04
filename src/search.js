@@ -3,6 +3,8 @@ const dataFile = require('./utils/dataFile');
 
 var file;
 var cities;
+var cache = {};
+var cacheIdx = 0;
 
 module.exports.getElements = 
 /**
@@ -14,19 +16,48 @@ function (term, limit, lat, long) {
 
     return new Promise(function(resolve, reject) {
 
+        var key = getCacheKey(term, limit, lat, long);
+
+        if (isSearchInCache(key)) {
+            resolve(getSearchFromCache(key));
+        }
+
         file = dataFile.import();
 
         file.then(function(result) {
 
             cities = result;
-    
-            resolve(search(term, limit, lat, long));
+
+            var searchResult = search(term, limit, lat, long);
+            addSearchToCache(key, searchResult);
+            resolve(searchResult);
     
         }, function(err) {
             reject(err);
         });
 
     });
+}
+
+function isSearchInCache(key) {
+    return key in cache;
+}
+
+function getCacheKey(term, limit, lat, long) {
+    return term+"#"+limit+"#"+lat+"#"+long;
+}
+
+function getSearchFromCache(key) {
+    return cache[key];
+}
+
+function addSearchToCache(key, value) {
+    if (cacheIdx > 10) {
+        cache = {}
+        cacheIdx = 0;
+    }
+    cacheIdx++;
+    cache[key] = value;
 }
 
 /**
