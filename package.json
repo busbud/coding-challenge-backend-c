@@ -1,11 +1,12 @@
 {
-  "name": "coding-challenge-backend-c",
-  "version": "0.0.0",
+  "name": "gauthier-seligmann-coding-challenge-backend-c",
+  "version": "0.1.0",
   "description": "coding challenge in Nodejs",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
-    "test": "./node_modules/mocha/bin/mocha ./test/"
+    "transpile": "tsc",
+    "start": "tsc && node build/app.js",
+    "test": "tsc && mocha build/test/"
   },
   "author": "",
   "license": "WTFPL",
@@ -14,7 +15,12 @@
     "mocha": "^1.18.2",
     "supertest": "^0.11.0"
   },
+  "devDependencies": {
+    "@types/mocha": "^5.2.5",
+    "@types/node": "^10.12.12",
+    "typescript": "^2.6.2"
+  },
   "engines": {
-    "node": "0.10.26"
+    "node": "10.14.1"
   }
 }
