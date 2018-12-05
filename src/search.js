@@ -5,6 +5,7 @@ var file;
 var cities;
 var cache = {};
 var cacheIdx = 0;
+var cacheMaxSize = 10;
 
 module.exports.getElements = 
 /**
@@ -52,7 +53,7 @@ function getSearchFromCache(key) {
 }
 
 function addSearchToCache(key, value) {
-    if (cacheIdx > 10) {
+    if (cacheIdx > cacheMaxSize) {
         cache = {}
         cacheIdx = 0;
     }
@@ -78,7 +79,7 @@ function search(term, limit, lat, long) {
     var filteredResults = [];
 
     cities.forEach(city => {
-        var name = city.ascii;
+        var name = city.name;
         var country;
 
         switch(city.country) {

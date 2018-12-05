@@ -15,7 +15,7 @@ function(a, b, lat, long, cityLat, cityLong) {
     }
 
     for(var i = 1; i < min; i++) {
-        if (a[i] === b[i] && a[0] === b[0]) {
+        if (a[i] === b[i] && a[i-1] === b[i-1] ) {
             x++;
         }
     }
