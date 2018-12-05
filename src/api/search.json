@@ -1,0 +1,102 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0",
+    "title": "Search Public API",
+    "description": "Search Public API"
+  },
+  "host": "search.com",
+  "basePath": "/",
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/suggestions": {
+      "get": {
+        "x-swagger-router-controller": "apiDispatcher",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "search"
+        ],
+        "summary": "Search request",
+        "description": "Search request",
+        "operationId": "search",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "description": "The search query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Response payload",
+            "schema": {
+              "$ref": "#/definitions/response"
+            }
+          },
+          "400": {
+            "description": "Bad Request, Invalid request URI or header, or unsupported nonstandard parameter",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "response": {
+      "description": "Basic response",
+      "type": "object",
+      "required": [
+        "status"
+      ],
+      "properties": {
+        "status": {
+          "type": "string"
+        },
+        "errorMessage": {
+          "type": "string"
+        }
+      }
+    },
+    "errorResponse": {
+      "description": "Error response",
+      "type": "object",
+      "required": [
+        "response",
+        "errorCode"
+      ],
+      "properties": {
+        "response": {
+          "$ref": "#/definitions/response"
+        },
+        "errorCode": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "errorMessage": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
