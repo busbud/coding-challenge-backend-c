@@ -3,7 +3,7 @@
 const logger = require(_src + '/libs/logger');
 const constants = require(_src + '/config/constants');
 
-module.exports = function activation(req, res) {
+module.exports = function search(req, res) {
   logger.info('=Search=');
   try {
     if (req.swagger.params.q.value === 'SomeRandomCityInTheMiddleOfNowhere') {
