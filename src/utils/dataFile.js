@@ -1,8 +1,8 @@
-const fs = require('fs'); 
 var d3 = require('d3');
+const fs = require('fs'); 
 
-var file = 'data/cities_canada-usa.tsv';
 var cache;
+var file = 'data/cities_canada-usa.tsv';
 
 module.exports.import = 
 /**

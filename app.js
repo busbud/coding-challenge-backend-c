@@ -3,7 +3,8 @@ const search = require('./src/search');
 
 const app = express();
 
-var port = process.env.PORT || 2345;
+const port = process.env.PORT || 2345;
+const maxSearchResults = 10;
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -27,7 +28,7 @@ app.get('/suggestions', function(req, res) {
 
   } else {
 
-    var result = search.getElements(query, 10, lat, long);
+    var result = search.getElements(query, maxSearchResults, lat, long);
 
     result.then(function (result) {
 

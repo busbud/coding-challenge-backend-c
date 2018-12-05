@@ -1,8 +1,12 @@
 module.exports.get = 
 /** 
- * Get the ratio of Levenshtein distance with a and b
+ * Get the string distance and coordinate distance
  * @param {string} a First term
  * @param {string} b Second term
+ * @param {number} lat Latiude to search
+ * @param {number} long Longitude to search
+ * @param {number} cityLat Latitude of the city
+ * @param {number} cityLong Longitude of the city
  */
 function(a, b, lat, long, cityLat, cityLong) {
 

@@ -1,17 +1,20 @@
-const distance = require('./utils/distance');
 const dataFile = require('./utils/dataFile');
+const distance = require('./utils/distance');
 
 var file;
 var cities;
 var cache = {};
 var cacheIdx = 0;
-var cacheMaxSize = 10;
+
+const cacheMaxSize = 10;
 
 module.exports.getElements = 
 /**
  * Read cities from file or cache and run search with specific term
  * @param {string} term Term to search in cities file
  * @param {number} limit Limit the number of results 
+ * @param {number} lat Latitude searched by user
+ * @param {number} long Longitude searched by user
  */
 function (term, limit, lat, long) {
 
@@ -79,7 +82,7 @@ function search(term, limit, lat, long) {
     var filteredResults = [];
 
     cities.forEach(city => {
-        var name = city.name;
+        var name = city.ascii;
         var country;
 
         switch(city.country) {
@@ -95,7 +98,13 @@ function search(term, limit, lat, long) {
 
         var admin = city.country === "CA" ? getCode(city.admin1) : city.admin1;
 
-        var score = distance.get(term.toLowerCase(), name.replace(/\./g, '').replace(/,/g, '').toLowerCase(), lat, long, city.lat, city.long);
+        var score = distance.get(
+            normalize(term), 
+            normalize(name).replace(/\./g, '').replace(/,/g, ''), 
+            lat, 
+            long, 
+            city.lat, 
+            city.long);
 
         // Do not use cities outside CA/US and null score
         if (country !== "N/A" && score >= 0.1) {
@@ -125,6 +134,10 @@ function search(term, limit, lat, long) {
     return filteredResults;
 }
 
+/**
+ * Convert Canadian state code
+ * @param {string} code Code of the state
+ */
 function getCode(code) {
     switch(code) {
         case "01":
@@ -156,4 +169,12 @@ function getCode(code) {
         default:
             return code;
     }
+}
+
+/**
+ * Normalize string to remove accent, capital letters, etc...
+ * @param {string} s String to normalize
+ */
+function normalize(s) {
+    return s.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
 }
