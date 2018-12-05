@@ -17,10 +17,13 @@ function() {
         }
 
         fs.readFile(file, "utf8", function(error, data) {
+            data = data.replace(/"/g, '');            
             data = d3.tsvParse(data);
             cache = data;
             resolve(data);
-          });
+        });
+        
+        
    
     });
 }
