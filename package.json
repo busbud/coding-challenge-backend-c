@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "transpile": "tsc",
-    "start": "tsc && node build/src/app.js",
+    "start": "npm install && npm run transpile && node build/src/app.js",
     "test": "tsc && mocha build/test/"
   },
   "author": "",
@@ -13,12 +13,12 @@
   "dependencies": {
     "chai": "^1.9.1",
     "mocha": "^1.18.2",
-    "supertest": "^0.11.0"
+    "supertest": "^0.11.0",
+    "typescript": "^2.6.2"
   },
   "devDependencies": {
     "@types/mocha": "^5.2.5",
-    "@types/node": "^10.12.12",
-    "typescript": "^2.6.2"
+    "@types/node": "^10.12.12"
   },
   "engines": {
     "node": "10.14.1"
