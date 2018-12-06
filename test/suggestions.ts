@@ -16,7 +16,7 @@ describe("GET /suggestions", function() {
         });
     });
 
-    it.only("returns a 404", function() {
+    it("returns a 404", function() {
       expect(response.statusCode).to.equal(404);
     });
 

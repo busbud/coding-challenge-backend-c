@@ -8,7 +8,7 @@ export default http
     if (req.url.indexOf("/suggestions") === 0) {
       res.end(
         JSON.stringify({
-          suggestions: [{ key: "example" }]
+          suggestions: []
         })
       );
     } else {
