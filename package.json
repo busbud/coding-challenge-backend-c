@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "transpile": "tsc",
-    "start": "tsc && node build/src/app.js",
+    "start": "node build/src/app.js",
     "test": "tsc && mocha build/test/"
   },
   "author": "",
