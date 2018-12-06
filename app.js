@@ -6,54 +6,46 @@ const app = express();
 const port = process.env.PORT || 2345;
 const maxSearchResults = 10;
 
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
   next();
 });
 
-app.get('/suggestions', function(req, res) {
+app.get('/suggestions', (req, res) => {
 
-  var query = req.query.q;
-  var long = req.query.longitude;
-  var lat = req.query.latitude;
+  const query = req.query.q;
+  const long = req.query.longitude;
+  const lat = req.query.latitude;
 
-  if (query === undefined || query === "") {
-
-    res.writeHead(404, {'Content-Type': 'application/json'});
+  if (query === undefined || query === '') {
+    res.writeHead(404, {
+      'Content-Type': 'application/json',
+    });
 
     res.end(JSON.stringify({
-      suggestions: []
+      suggestions: [],
     }));
-
   } else {
+    const results = search.getElements(query, maxSearchResults, lat, long);
 
-    var result = search.getElements(query, maxSearchResults, lat, long);
-
-    result.then(function (result) {
-
+    results.then((result) => {
       if (result.length === 0) {
         res.statusCode = 404;
         res.setHeader('Content-Type', 'application/json');
       }
 
       res.json({
-        suggestions: result
+        suggestions: result,
       });
-
-    }, function(err) {
-
+    }, (err) => {
       res.json(err);
-
     });
-
   }
-  
 });
 
-app.listen(port, function () {
+app.listen(port, () => {
   console.log('Server running at http://127.0.0.1:%d/suggestions', port);
 });
-
 
 module.exports = app;

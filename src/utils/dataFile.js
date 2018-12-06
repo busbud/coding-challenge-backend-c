@@ -1,29 +1,27 @@
-var d3 = require('d3');
-const fs = require('fs'); 
+const d3 = require('d3');
+const fs = require('fs');
 
-var cache;
-var file = 'data/cities_canada-usa.tsv';
+let cache;
+const file = 'data/cities_canada-usa.tsv';
 
-module.exports.import = 
 /**
  * Get all the cities from flat file or cache
  */
-function() {
+module.exports.import = () => new Promise(((resolve, reject) => {
+  if (cache !== undefined && cache.length > 0) {
+    resolve(cache);
+  }
 
-    return new Promise(function(resolve, reject) {
+  fs.readFile(file, 'utf8', (error, data) => {
+    if (error) {
+      reject(error);
+    }
 
-        if (cache !== undefined && cache.length > 0) {
-            resolve(cache);
-        }
+    let finalResults = data;
 
-        fs.readFile(file, "utf8", function(error, data) {
-            data = data.replace(/"/g, '');            
-            data = d3.tsvParse(data);
-            cache = data;
-            resolve(data);
-        });
-        
-        
-   
-    });
-}
+    finalResults = data.replace(/"/g, '');
+    finalResults = d3.tsvParse(finalResults);
+    cache = finalResults;
+    resolve(finalResults);
+  });
+}));
