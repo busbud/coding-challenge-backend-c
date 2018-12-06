@@ -1,12 +1,12 @@
-const dataFile = require('./utils/dataFile');
-const distance = require('./utils/distance');
+const Cache               = require('./utils/cache');
+const dataFile            = require('./utils/dataFile');
+const distance            = require('./utils/distance');
+const geoCode             = require('./utils/geoCode');
+const stringNormalization = require('./utils/stringNormalization');
 
 var file;
 var cities;
-var cache = {};
-var cacheIdx = 0;
-
-const cacheMaxSize = 10;
+var cache;
 
 module.exports.getElements = 
 /**
@@ -18,12 +18,16 @@ module.exports.getElements =
  */
 function (term, limit, lat, long) {
 
+    if (cache === undefined) {
+        cache = new Cache(10, '#');
+    }
+
     return new Promise(function(resolve, reject) {
 
-        var key = getCacheKey(term, limit, lat, long);
+        var key = cache.getCacheKey(term, limit, lat, long);
 
-        if (isSearchInCache(key)) {
-            resolve(getSearchFromCache(key));
+        if (cache.isSearchInCache(key)) {
+            resolve(cache.getSearchFromCache(key));
         }
 
         file = dataFile.import();
@@ -33,7 +37,7 @@ function (term, limit, lat, long) {
             cities = result;
 
             var searchResult = search(term, limit, lat, long);
-            addSearchToCache(key, searchResult);
+            cache.addSearchToCache(key, searchResult);
             resolve(searchResult);
     
         }, function(err) {
@@ -41,28 +45,7 @@ function (term, limit, lat, long) {
         });
 
     });
-}
-
-function isSearchInCache(key) {
-    return key in cache;
-}
-
-function getCacheKey(term, limit, lat, long) {
-    return term+"#"+limit+"#"+lat+"#"+long;
-}
-
-function getSearchFromCache(key) {
-    return cache[key];
-}
-
-function addSearchToCache(key, value) {
-    if (cacheIdx > cacheMaxSize) {
-        cache = {}
-        cacheIdx = 0;
-    }
-    cacheIdx++;
-    cache[key] = value;
-}
+};
 
 /**
  * Search term in all the cities
@@ -96,11 +79,11 @@ function search(term, limit, lat, long) {
                 country = "N/A";
         }
 
-        var admin = city.country === "CA" ? getCode(city.admin1) : city.admin1;
+        var admin = city.country === "CA" ? geoCode.getCanadianCode(city.admin1) : city.admin1;
 
         var score = distance.get(
-            normalize(term), 
-            normalize(name).replace(/\./g, '').replace(/,/g, ''), 
+            stringNormalization.normalize(term), 
+            stringNormalization.normalize(name).replace(/\./g, '').replace(/,/g, ''), 
             lat, 
             long, 
             city.lat, 
@@ -132,49 +115,4 @@ function search(term, limit, lat, long) {
     }
 
     return filteredResults;
-}
-
-/**
- * Convert Canadian state code
- * @param {string} code Code of the state
- */
-function getCode(code) {
-    switch(code) {
-        case "01":
-            return "AB";
-        case "02":
-            return "BC";
-        case "03":
-            return "MB";
-        case "04":
-            return "NB";
-        case "05":
-            return "NL";
-        case "07":
-            return "NS";
-        case "08":
-            return "ON";
-        case "09":
-            return "PE";
-        case "10":
-            return "QC";
-        case "11":
-            return "SK";
-        case "12":
-            return "YT";
-        case "13":
-            return "NT";
-        case "14":
-            return "NU";
-        default:
-            return code;
-    }
-}
-
-/**
- * Normalize string to remove accent, capital letters, etc...
- * @param {string} s String to normalize
- */
-function normalize(s) {
-    return s.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
 }
