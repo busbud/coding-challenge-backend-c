@@ -11,7 +11,15 @@ describe("Cities", () => {
   });
 
   it("should add a city with correct values", () => {
-    const city = new City("id", "name", "alternateName", 30.2, 40.1, 4200);
+    const city = new City(
+      "id",
+      "name",
+      "country code",
+      "feature code",
+      30.2,
+      40.1,
+      4200
+    );
     const cities = Cities.newWithoutCities();
 
     cities.addCity(city);
@@ -21,7 +29,15 @@ describe("Cities", () => {
 
   describe("autocomplete", () => {
     it("should return empty result if empty name", () => {
-      const city = new City("id", "name", "alternateName", 30.2, 40.1, 4200);
+      const city = new City(
+        "id",
+        "name",
+        "country code",
+        "feature code",
+        30.2,
+        40.1,
+        4200
+      );
       const cities = Cities.newWithoutCities();
       cities.addCity(city);
 
@@ -31,7 +47,15 @@ describe("Cities", () => {
     });
 
     it("should return empty result if no name matched", () => {
-      const city = new City("id", "name", "alternateName", 30.2, 40.1, 4200);
+      const city = new City(
+        "id",
+        "name",
+        "country code",
+        "feature code",
+        30.2,
+        40.1,
+        4200
+      );
       const cities = Cities.newWithoutCities();
       cities.addCity(city);
 

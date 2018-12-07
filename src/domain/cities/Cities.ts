@@ -29,7 +29,7 @@ export default class Cities {
       return [];
     }
 
-    const matchResults = matchSorter(this.cities, name);
+    const matchResults = matchSorter(this.cities, name, { keys: ["name"] });
 
     return Object.freeze(matchResults);
   }

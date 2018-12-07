@@ -26,7 +26,8 @@ export default class FileAllCities implements AllCities {
             return new City(
               lineAsArray[0],
               lineAsArray[1],
-              lineAsArray[3],
+              lineAsArray[8],
+              lineAsArray[7],
               Number(lineAsArray[4]),
               Number(lineAsArray[5]),
               Number(lineAsArray[14])

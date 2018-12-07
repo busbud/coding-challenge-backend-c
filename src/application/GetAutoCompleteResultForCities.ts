@@ -37,7 +37,12 @@ export default class GetAutoCompleteResultForCities {
             .thatAutocompleteWith(query.name, query.longitude, query.latitude)
             .map(
               (city: City): Suggestion => ({
-                name: city.getAlternateName(),
+                name:
+                  city.getName() +
+                  ", " +
+                  city.getCountryCode() +
+                  ", " +
+                  city.getFeatureCode(),
                 latitude: city.getLatitude().toString(),
                 longitude: city.getLongitude().toString(),
                 score: city.getScore()

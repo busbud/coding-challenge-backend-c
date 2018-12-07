@@ -1,7 +1,8 @@
 export default class City {
   private id: string;
   private name: string;
-  private alternateName;
+  private countryCode: string;
+  private featureCode: string;
   private latitude: number;
   private longitude: number;
   private population: number;
@@ -10,14 +11,16 @@ export default class City {
   constructor(
     id: string,
     name: string,
-    alternateName: string,
+    countryCode: string,
+    featureCode: string,
     latitude: number,
     longitude: number,
     population: number
   ) {
     this.id = id;
     this.name = name;
-    this.alternateName = alternateName;
+    this.countryCode = countryCode;
+    this.featureCode = featureCode;
     this.latitude = latitude;
     this.longitude = longitude;
     this.population = population;
@@ -40,11 +43,15 @@ export default class City {
     return this.longitude;
   }
 
-  public getAlternateName() {
-    return this.alternateName;
+  public getCountryCode() {
+    return this.countryCode;
   }
 
   public getScore() {
     return this.score;
+  }
+
+  public getFeatureCode() {
+    return this.featureCode;
   }
 }
