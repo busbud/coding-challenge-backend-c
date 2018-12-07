@@ -38,7 +38,25 @@ describe("City", () => {
     assert.equal(city.getScore(), 0);
   });
 
-  describe("scoring", () => {
+  describe("_changeScoreBy", () => {
+    it("should not have a score lower than 0", () => {
+      const city = new City(
+        "id",
+        "alongcitynametohaveanheavypenaltytomakethistestwork",
+        "country code",
+        "feature code",
+        44,
+        10,
+        4200
+      );
+
+      city._changeScoreBy("cit", 150, 150);
+
+      //only the missing letter penalty
+      assert.equal(city.getScore(), 0);
+    });
+
+    describe("by name", () => {});
     it("score should be to 1 if perfect name match either with a great distance", () => {
       const cityName = "Bordeaux";
       const city = new City(
@@ -104,6 +122,43 @@ describe("City", () => {
 
       city._changeScoreBy(cityName.slice(0, cityName.length - 4), 30.2, 40.1);
 
+      assert.equal(city.getScore(), 0.8);
+    });
+
+    describe("by distance", () => {
+      it("should no have any penalty with distance lower than 150km", () => {
+        const city = new City(
+          "id",
+          "city",
+          "country code",
+          "feature code",
+          44,
+          10,
+          4200
+        );
+
+        //distance is 149km
+        city._changeScoreBy("cit", 45.335, 10);
+
+        //only the missing letter penalty
+        assert.equal(city.getScore(), 0.95);
+      });
+    });
+
+    it("should have a 0.05 penalty every 150km", () => {
+      const city = new City(
+        "id",
+        "city",
+        "country code",
+        "feature code",
+        44,
+        10,
+        4200
+      );
+
+      city._changeScoreBy("cit", 48, 13);
+
+      //only the missing letter penalty
       assert.equal(city.getScore(), 0.8);
     });
   });

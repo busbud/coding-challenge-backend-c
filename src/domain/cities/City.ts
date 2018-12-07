@@ -1,3 +1,5 @@
+import Distance from "geo-distance";
+
 export default class City {
   private id: string;
   private name: string;
@@ -60,17 +62,48 @@ export default class City {
     if (this.name.length === name.length) {
       this.score = 1;
     } else {
-      const namePenalty = this.computeNamePenalty(name);
-      this.score = 1 - namePenalty;
+      const namePenalty = this.computeNamePenaltyWith(name);
+      const distancePenalty = this.computeDistancePenaltyWith(
+        latitude,
+        longitude
+      );
+
+      const penalty = namePenalty + distancePenalty;
+      const newScore = this.toFixed2(1 - penalty);
+
+      this.score = newScore < 0 ? 0 : newScore;
     }
   }
 
-  //a penalty of 0.05 is applied for each letter missing
-  private computeNamePenalty(autocompleteValue: string): number {
+  //a penalty of 0.05 for each letter missing
+  private computeNamePenaltyWith(autocompleteValue: string): number {
     if (autocompleteValue.length > this.name.length) {
       return 0;
     }
 
-    return ((this.name.length - autocompleteValue.length) / 2) * 0.1;
+    const result = ((this.name.length - autocompleteValue.length) / 2) * 0.1;
+
+    return this.toFixed2(result);
+  }
+
+  //a penalty of 0.05 for each 150km
+  private computeDistancePenaltyWith(
+    latitude: number,
+    longitude: number
+  ): number {
+    const distance = Number(
+      Distance.between(
+        { lat: latitude, lon: longitude },
+        { lat: this.latitude, lon: this.longitude }
+      ).human_readable().distance
+    );
+
+    const result = Math.floor(distance / 150) * 0.05;
+
+    return this.toFixed2(result);
+  }
+
+  private toFixed2(value: number) {
+    return Number(value.toFixed(2));
   }
 }
