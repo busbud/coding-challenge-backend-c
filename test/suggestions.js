@@ -1,8 +1,24 @@
+'use strict';
+
+require('dotenv').config();
 const expect = require('chai').expect;
 const app = require('../app');
 const request = require('supertest')(app);
+const Geonames = require('../src/models/geonames');
+const mongoose = require('mongoose');
+const utils = require('../src/libs/utils');
 
 describe('GET /suggestions', function() {
+  describe('Unit Test', function() {
+    it('should find some data in the DB', async function() {
+      await mongoose.connection.dropDatabase();
+      await utils.populateDB();
+      const data = await Geonames.find({country: 'CA'});
+      expect(data).to.be.instanceof(Array);
+      expect(data).to.have.length.above(0);
+    });
+  });
+
   describe('with a non-existent city', function() {
     let response;
 

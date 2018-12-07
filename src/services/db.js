@@ -2,6 +2,7 @@
 
 const logger = require('../libs/logger');
 const mongoose = require('mongoose');
+const utils = require('../libs/utils');
 
 // Override mongoose promise with bluebird
 mongoose.Promise = require('bluebird');
@@ -25,11 +26,13 @@ module.exports.initDb = function(dbUri, options, callback) {
   options.reconnectTries = Number.MAX_VALUE;
   options.reconnectInterval = 1000;
   options.useNewUrlParser = true;
+  options.useCreateIndex = true;
 
   mongoose.connect(dbUri, options);
 
   mongoose.connection.once('open', function() {
     logger.info('DB connected');
+    utils.populateDB();
     return callback();
   });
 
