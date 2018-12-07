@@ -5,6 +5,7 @@ export default class City {
   private latitude: number;
   private longitude: number;
   private population: number;
+  private score: number;
 
   constructor(
     id: string,
@@ -20,9 +21,30 @@ export default class City {
     this.latitude = latitude;
     this.longitude = longitude;
     this.population = population;
+    this.score = 0;
   }
 
   public getPopulation() {
     return this.population;
+  }
+
+  public getName() {
+    return this.name;
+  }
+
+  public getLatitude() {
+    return this.latitude;
+  }
+
+  public getLongitude() {
+    return this.longitude;
+  }
+
+  public getAlternateName() {
+    return this.alternateName;
+  }
+
+  public getScore() {
+    return this.score;
   }
 }

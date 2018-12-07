@@ -44,11 +44,7 @@ export default http
         latitude: Number(queryParameter.latitude)
       });
 
-      res.end(
-        JSON.stringify({
-          suggestions: []
-        })
-      );
+      res.end(JSON.stringify(result));
     } else {
       res.end();
     }

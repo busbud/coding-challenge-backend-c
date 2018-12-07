@@ -1,5 +1,5 @@
 import City from "./City";
-import CityAutocompleteQuery from "./CityAutocompleteQuery";
+import matchSorter from "match-sorter";
 
 export default class Cities {
   private cities: City[];
@@ -20,7 +20,17 @@ export default class Cities {
     return Object.freeze(this.cities);
   }
 
-  public getByAutocompletionWith(query: CityAutocompleteQuery): City[] {
-    return [];
+  public thatAutocompleteWith(
+    name: string,
+    longitude?: number,
+    latitude?: number
+  ): ReadonlyArray<City> {
+    if (!name) {
+      return [];
+    }
+
+    const matchResults = matchSorter(this.cities, name);
+
+    return Object.freeze(matchResults);
   }
 }

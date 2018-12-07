@@ -18,4 +18,26 @@ describe("Cities", () => {
 
     assert.deepEqual(cities.getCities(), [city]);
   });
+
+  describe("autocomplete", () => {
+    it("should return empty result if empty name", () => {
+      const city = new City("id", "name", "alternateName", 30.2, 40.1, 4200);
+      const cities = Cities.newWithoutCities();
+      cities.addCity(city);
+
+      const result = cities.thatAutocompleteWith("");
+
+      assert.lengthOf(result, 0);
+    });
+
+    it("should return empty result if no name matched", () => {
+      const city = new City("id", "name", "alternateName", 30.2, 40.1, 4200);
+      const cities = Cities.newWithoutCities();
+      cities.addCity(city);
+
+      const result = cities.thatAutocompleteWith("Alooooooooooooooogname");
+
+      assert.lengthOf(result, 0);
+    });
+  });
 });

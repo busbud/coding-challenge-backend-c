@@ -2,6 +2,7 @@ import AllCities from "../domain/cities/AllCities";
 import Cities from "../domain/cities/Cities";
 import { resolve } from "path";
 import { rejects } from "assert";
+import City from "../domain/cities/City";
 
 export interface AutoCompleteQuery {
   name: string;
@@ -32,19 +33,24 @@ export default class GetAutoCompleteResultForCities {
       this.allCities
         .inUSAAndCanadaWithMoreThan5000People()
         .then((cities: Cities) => {
+          const suggestions: Suggestion[] = cities
+            .thatAutocompleteWith(query.name, query.longitude, query.latitude)
+            .map(
+              (city: City): Suggestion => ({
+                name: city.getAlternateName(),
+                latitude: city.getLatitude().toString(),
+                longitude: city.getLongitude().toString(),
+                score: city.getScore()
+              })
+            );
+
           const view: AutoCompleteView = {
-            suggestions: [
-              {
-                name: "gogo",
-                latitude: "titi",
-                longitude: "srtuie",
-                score: 20
-              }
-            ]
+            suggestions
           };
 
           resolve(view);
-        });
+        })
+        .catch(error => console.log(error));
     });
 
     return result;
