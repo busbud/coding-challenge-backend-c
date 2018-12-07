@@ -7,7 +7,7 @@
     "transpile": "tsc",
     "dev": "tsc && npm start",
     "start": "node build/src/app.js",
-    "test": "tsc && mocha --recursive --watch -R nyan build/test build"
+    "test": "tsc && mocha --recursive --watch build/test build"
   },
   "author": "",
   "license": "WTFPL",
