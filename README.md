@@ -12,3 +12,7 @@ There is a continuous deployment on Heroku. The application is available [here](
 a rest client like [Restlet for Chrome](https://chrome.google.com/webstore/detail/restlet-client-rest-api-t/aejoelaoggembcahagimdiliamlcdmfm)
 
 I will use [match-sorter](https://www.npmjs.com/package/match-sorter) to help to autocomplete + [DDD](https://en.wikipedia.org/wiki/Domain-driven_design) concepts.
+
+## Documentation
+
+You can find a document for the rest endpoint [here](https://github.com/busbud/coding-challenge-backend-c)
