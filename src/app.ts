@@ -35,14 +35,18 @@ export default http
   .createServer(async function(req, res) {
     const queryParameter = requestParameters(req);
 
-    res.writeHead(404, { "Content-Type": "text/plain" });
-
     if (req.url.indexOf("/suggestions") === 0) {
       const result = await getAutoCompleteResultForCities.execute({
         name: queryParameter.q,
         longitude: Number(queryParameter.longitude),
         latitude: Number(queryParameter.latitude)
       });
+
+      if (result.suggestions.length == 0) {
+        res.writeHead(404, { "Content-Type": "text/plain" });
+      } else {
+        res.writeHead(200, { "Content-Type": "text/plain" });
+      }
 
       res.end(JSON.stringify(result));
     } else {

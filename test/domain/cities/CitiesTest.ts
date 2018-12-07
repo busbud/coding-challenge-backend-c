@@ -28,7 +28,7 @@ describe("Cities", () => {
   });
 
   describe("autocomplete", () => {
-    it("should return empty result if empty name", () => {
+    it("should return empty results if empty name", () => {
       const city = new City(
         "id",
         "name",
@@ -46,7 +46,7 @@ describe("Cities", () => {
       assert.lengthOf(result, 0);
     });
 
-    it("should return empty result if no name matched", () => {
+    it("should return empty results if no name matched", () => {
       const city = new City(
         "id",
         "name",
@@ -59,7 +59,7 @@ describe("Cities", () => {
       const cities = Cities.newWithoutCities();
       cities.addCity(city);
 
-      const result = cities.thatAutocompleteWith("Alooooooooooooooogname");
+      const result = cities.thatAutocompleteWith("ALooooooooooooooogName");
 
       assert.lengthOf(result, 0);
     });

@@ -31,6 +31,6 @@ export default class Cities {
 
     const matchResults = matchSorter(this.cities, name, { keys: ["name"] });
 
-    return Object.freeze(matchResults);
+    return Object.freeze(matchResults.slice(0, 5));
   }
 }

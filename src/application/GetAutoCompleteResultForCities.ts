@@ -1,7 +1,5 @@
 import AllCities from "../domain/cities/AllCities";
 import Cities from "../domain/cities/Cities";
-import { resolve } from "path";
-import { rejects } from "assert";
 import City from "../domain/cities/City";
 
 export interface AutoCompleteQuery {
@@ -35,25 +33,11 @@ export default class GetAutoCompleteResultForCities {
         .then((cities: Cities) => {
           const suggestions: Suggestion[] = cities
             .thatAutocompleteWith(query.name, query.longitude, query.latitude)
-            .map(
-              (city: City): Suggestion => ({
-                name:
-                  city.getName() +
-                  ", " +
-                  city.getCountryCode() +
-                  ", " +
-                  city.getFeatureCode(),
-                latitude: city.getLatitude().toString(),
-                longitude: city.getLongitude().toString(),
-                score: city.getScore()
-              })
-            );
+            .map((city: City): Suggestion => cityToSuggestion(city));
 
-          const view: AutoCompleteView = {
+          resolve({
             suggestions
-          };
-
-          resolve(view);
+          });
         })
         .catch(error => console.log(error));
     });
@@ -61,3 +45,15 @@ export default class GetAutoCompleteResultForCities {
     return result;
   }
 }
+
+const cityToSuggestion = (city: City): Suggestion => ({
+  name:
+    city.getName() +
+    ", " +
+    city.getCountryCode() +
+    ", " +
+    city.getFeatureCode(),
+  latitude: city.getLatitude().toString(),
+  longitude: city.getLongitude().toString(),
+  score: city.getScore()
+});
