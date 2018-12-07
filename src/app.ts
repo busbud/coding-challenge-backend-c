@@ -46,7 +46,7 @@ export default http
 
       res.end(
         JSON.stringify({
-          result
+          suggestions: []
         })
       );
     } else {

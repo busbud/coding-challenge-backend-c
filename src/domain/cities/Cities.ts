@@ -1,4 +1,5 @@
 import City from "./City";
+import CityAutocompleteQuery from "./CityAutocompleteQuery";
 
 export default class Cities {
   private cities: City[];
@@ -17,5 +18,9 @@ export default class Cities {
 
   public getCities(): ReadonlyArray<City> {
     return Object.freeze(this.cities);
+  }
+
+  public getByAutocompletionWith(query: CityAutocompleteQuery): City[] {
+    return [];
   }
 }
