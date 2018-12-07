@@ -8,15 +8,15 @@ const getAutoCompleteResultForCities = new GetAutoCompleteResultForCities(
   new FileAllCities()
 );
 
-interface QueryParameter {
+interface QueryParameters {
   q: string;
   latitude?: string;
   longitude?: string;
 }
 
-const requestParameters = (req): QueryParameter => {
+const getRequestParameters = (req): QueryParameters => {
   let q = req.url.split("?");
-  let result: QueryParameter = { q: "" };
+  let result: QueryParameters = { q: "" };
 
   if (q.length >= 2) {
     q[1].split("&").forEach(item => {
@@ -33,7 +33,7 @@ const requestParameters = (req): QueryParameter => {
 
 export default http
   .createServer(async function(req, res) {
-    const queryParameter = requestParameters(req);
+    const queryParameter = getRequestParameters(req);
 
     if (req.url.indexOf("/suggestions") === 0) {
       const result = await getAutoCompleteResultForCities.execute({

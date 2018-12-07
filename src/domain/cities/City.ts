@@ -54,4 +54,23 @@ export default class City {
   public getFeatureCode() {
     return this.featureCode;
   }
+
+  public _changeScoreBy(name: string, latitude: number, longitude: number) {
+    //latitule and longitude could be empty
+    if (this.name.length === name.length) {
+      this.score = 1;
+    } else {
+      const namePenalty = this.computeNamePenalty(name);
+      this.score = 1 - namePenalty;
+    }
+  }
+
+  //a penalty of 0.05 is applied for each letter missing
+  private computeNamePenalty(autocompleteValue: string): number {
+    if (autocompleteValue.length > this.name.length) {
+      return 0;
+    }
+
+    return ((this.name.length - autocompleteValue.length) / 2) * 0.1;
+  }
 }

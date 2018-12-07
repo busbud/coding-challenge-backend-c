@@ -29,7 +29,17 @@ export default class Cities {
       return [];
     }
 
-    const matchResults = matchSorter(this.cities, name, { keys: ["name"] });
+    //Limit is to 20 before scoring
+    //this is because matchSorter is doing a great job, and to get the best 5 results, scoring 20 results is enougth
+    const matchResults: City[] = matchSorter(this.cities, name, {
+      keys: ["name"]
+    })
+      .slice(0, 20)
+      .map((city: City) => {
+        city._changeScoreBy(name, latitude, longitude);
+        return city;
+      })
+      .sort((c1: City, c2: City) => c2.getScore() - c1.getScore());
 
     return Object.freeze(matchResults.slice(0, 5));
   }

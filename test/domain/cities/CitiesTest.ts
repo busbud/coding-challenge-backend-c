@@ -63,5 +63,28 @@ describe("Cities", () => {
 
       assert.lengthOf(result, 0);
     });
+
+    it("should return 5 results max", () => {
+      const city1 = new City(
+        "id",
+        "name",
+        "country code",
+        "feature code",
+        30.2,
+        40.1,
+        4200
+      );
+      const cities = Cities.newWithoutCities();
+      cities.addCity(city1);
+      cities.addCity(city1);
+      cities.addCity(city1);
+      cities.addCity(city1);
+      cities.addCity(city1);
+      cities.addCity(city1);
+
+      const result = cities.thatAutocompleteWith("name");
+
+      assert.lengthOf(result, 5);
+    });
   });
 });

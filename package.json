@@ -12,6 +12,7 @@
   "author": "",
   "license": "WTFPL",
   "dependencies": {
+    "geo-distance": "^0.2.0",
     "match-sorter": "^2.3.0",
     "sprintf": "^0.1.5",
     "supertest": "^0.11.0",
