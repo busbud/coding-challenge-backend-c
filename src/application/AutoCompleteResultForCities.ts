@@ -8,7 +8,7 @@ export interface AutoCompleteQuery {
   latitude?: number;
 }
 
-export interface Suggestion {
+export interface SuggestionView {
   name: string;
   latitude: string;
   longitude: string;
@@ -16,24 +16,24 @@ export interface Suggestion {
 }
 
 export interface AutoCompleteView {
-  suggestions: Suggestion[];
+  suggestions: SuggestionView[];
 }
 
-export default class GetAutoCompleteResultForCities {
+export default class AutoCompleteResultForCities {
   private allCities: AllCities;
 
   constructor(allCities: AllCities) {
     this.allCities = allCities;
   }
 
-  public async execute(query: AutoCompleteQuery): Promise<AutoCompleteView> {
+  public async proceed(query: AutoCompleteQuery): Promise<AutoCompleteView> {
     const result: Promise<AutoCompleteView> = new Promise((resolve, reject) => {
       this.allCities
         .inUSAAndCanadaWithMoreThan5000People()
         .then((cities: Cities) => {
-          const suggestions: Suggestion[] = cities
+          const suggestions: SuggestionView[] = cities
             .thatAutocompleteWith(query.name, query.longitude, query.latitude)
-            .map((city: City): Suggestion => cityToSuggestion(city));
+            .map((city: City): SuggestionView => cityToSuggestionView(city));
 
           resolve({
             suggestions
@@ -46,7 +46,7 @@ export default class GetAutoCompleteResultForCities {
   }
 }
 
-const cityToSuggestion = (city: City): Suggestion => ({
+const cityToSuggestionView = (city: City): SuggestionView => ({
   name:
     city.getName() +
     ", " +

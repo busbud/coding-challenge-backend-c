@@ -12,7 +12,6 @@ describe("Cities", () => {
 
   it("should add a city with correct values", () => {
     const city = new City(
-      "id",
       "name",
       "country code",
       "feature code",
@@ -30,7 +29,6 @@ describe("Cities", () => {
   describe("autocomplete", () => {
     it("should return empty results if empty name", () => {
       const city = new City(
-        "id",
         "name",
         "country code",
         "feature code",
@@ -48,7 +46,6 @@ describe("Cities", () => {
 
     it("should return empty results if no name matched", () => {
       const city = new City(
-        "id",
         "name",
         "country code",
         "feature code",
@@ -66,7 +63,6 @@ describe("Cities", () => {
 
     it("should return 5 results max", () => {
       const city1 = new City(
-        "id",
         "name",
         "country code",
         "feature code",

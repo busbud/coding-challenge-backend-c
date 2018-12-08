@@ -5,7 +5,6 @@ import City from "../../../src/domain/cities/City";
 describe("City", () => {
   it("should retrieve correct values", () => {
     const city = new City(
-      "id",
       "name",
       "country code",
       "feature code",
@@ -25,7 +24,6 @@ describe("City", () => {
 
   it("should have a score at 0 by default", () => {
     const city = new City(
-      "id",
       "name",
       "country code",
       "feature code",
@@ -41,7 +39,6 @@ describe("City", () => {
   describe("_changeScoreBy", () => {
     it("should not have a score lower than 0", () => {
       const city = new City(
-        "id",
         "alongcitynametohaveanheavypenaltytomakethistestwork",
         "country code",
         "feature code",
@@ -60,7 +57,6 @@ describe("City", () => {
     it("score should be to 1 if perfect name match either with a great distance", () => {
       const cityName = "Bordeaux";
       const city = new City(
-        "id",
         cityName,
         "country code",
         "feature code",
@@ -77,7 +73,6 @@ describe("City", () => {
     it("should loose 0.05 point if 1 letter is missing (it's not a match !)", () => {
       const cityName = "Bordeaux";
       const city = new City(
-        "id",
         cityName,
         "country code",
         "feature code",
@@ -94,7 +89,6 @@ describe("City", () => {
     it("should loose 0.15 point if 3 letters are missing", () => {
       const cityName = "Bordeaux";
       const city = new City(
-        "id",
         cityName,
         "country code",
         "feature code",
@@ -111,7 +105,6 @@ describe("City", () => {
     it("should loose 0.2 point if 4 letters are missing", () => {
       const cityName = "Bordeaux";
       const city = new City(
-        "id",
         cityName,
         "country code",
         "feature code",
@@ -128,7 +121,6 @@ describe("City", () => {
     describe("by distance", () => {
       it("should no have any penalty with distance lower than 150km", () => {
         const city = new City(
-          "id",
           "city",
           "country code",
           "feature code",
@@ -147,7 +139,6 @@ describe("City", () => {
 
     it("should have a 0.05 penalty every 150km", () => {
       const city = new City(
-        "id",
         "city",
         "country code",
         "feature code",

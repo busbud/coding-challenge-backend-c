@@ -30,7 +30,7 @@ export default class Cities {
     }
 
     //Limit is to 20 before scoring
-    //this is because matchSorter is doing a great job, and to get the best 5 results, scoring 20 results is enougth
+    //this is because matchSorter is doing a great job, and to get the best 5 results, scoring 20 results is enough
     const matchResults: City[] = matchSorter(this.cities, name, {
       keys: ["name"]
     })

@@ -2,9 +2,9 @@ import http from "http";
 var port = process.env.PORT || 2345;
 
 import FileAllCities from "./infrastructure/FileAllCities";
-import GetAutoCompleteResultForCities from "./application/GetAutoCompleteResultForCities";
+import AutoCompleteResultForCities from "./application/AutoCompleteResultForCities";
 
-const getAutoCompleteResultForCities = new GetAutoCompleteResultForCities(
+const autoCompleteResultForCities = new AutoCompleteResultForCities(
   new FileAllCities()
 );
 
@@ -36,13 +36,13 @@ export default http
     const queryParameter = getRequestParameters(req);
 
     if (req.url.indexOf("/suggestions") === 0) {
-      const result = await getAutoCompleteResultForCities.execute({
+      const result = await autoCompleteResultForCities.proceed({
         name: queryParameter.q,
         longitude: Number(queryParameter.longitude),
         latitude: Number(queryParameter.latitude)
       });
 
-      if (result.suggestions.length == 0) {
+      if (result.suggestions.length === 0) {
         res.writeHead(404, { "Content-Type": "text/plain" });
       } else {
         res.writeHead(200, { "Content-Type": "text/plain" });

@@ -24,7 +24,6 @@ export default class FileAllCities implements AllCities {
             const lineAsArray = line.trim().split("\t");
 
             return new City(
-              lineAsArray[0],
               lineAsArray[1],
               lineAsArray[8],
               lineAsArray[7],

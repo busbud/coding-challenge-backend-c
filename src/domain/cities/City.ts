@@ -1,7 +1,6 @@
 import Distance from "geo-distance";
 
 export default class City {
-  private id: string;
   private name: string;
   private countryCode: string;
   private featureCode: string;
@@ -11,7 +10,6 @@ export default class City {
   private score: number;
 
   constructor(
-    id: string,
     name: string,
     countryCode: string,
     featureCode: string,
@@ -19,7 +17,6 @@ export default class City {
     longitude: number,
     population: number
   ) {
-    this.id = id;
     this.name = name;
     this.countryCode = countryCode;
     this.featureCode = featureCode;
@@ -58,14 +55,12 @@ export default class City {
   }
 
   public _changeScoreBy(name: string, latitude?: number, longitude?: number) {
-    //latitule and longitude could be empty
     if (this.name.length === name.length) {
       this.score = 1;
     } else {
       const namePenalty = this.computeNamePenaltyWith(name);
 
       let distancePenalty = 0;
-
       if (latitude && longitude) {
         distancePenalty = this.computeDistancePenaltyWith(latitude, longitude);
       }
