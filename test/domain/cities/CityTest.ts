@@ -1,5 +1,4 @@
 import { assert } from "chai";
-import Cities from "../../../src/domain/cities/City";
 import City from "../../../src/domain/cities/City";
 
 describe("City", () => {
