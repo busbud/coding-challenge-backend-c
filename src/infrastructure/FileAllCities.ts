@@ -16,7 +16,7 @@ export default class FileAllCities implements AllCities {
       fs.readFile("./resources/cities_canada-usa.tsv", "utf8", (err, data) => {
         if (err) throw err;
 
-        const result = Cities.newWithoutCities();
+        const cities = Cities.newWithoutCities();
         data
           .split("\n")
           .slice(1)
@@ -33,10 +33,10 @@ export default class FileAllCities implements AllCities {
             );
           })
           .filter((city: City) => city.getPopulation() > 5000)
-          .forEach(city => result.addCity(city));
+          .forEach(city => cities.addCity(city));
 
-        cache = result;
-        resolve(result);
+        cache = cities;
+        resolve(cities);
       });
     });
   }
