@@ -5,13 +5,24 @@ const expect = require('chai').expect;
 const app = require('../app');
 const request = require('supertest')(app);
 const Geonames = require('../src/models/geonames');
-const mongoose = require('mongoose');
+const Charmap = require('charmap');
+// const mongoose = require('mongoose');
 const utils = require('../src/libs/utils');
 
 describe('GET /suggestions', function() {
+  before(function(done) {
+    setTimeout(function() {
+      request.get('/ping').expect(200, done);
+    }, 6000);
+  });
+
+  after(function(done) {
+    app.listen().close();
+    done();
+  });
   describe('Unit Test', function() {
-    it.skip('should find some data in the DB', async function() {
-      await mongoose.connection.dropDatabase();
+    it('should find some data in the DB', async function() {
+      // await mongoose.connection.dropDatabase();
       await utils.populateDB();
       const data = await Geonames.find({country: 'CA'});
       expect(data).to.be.instanceof(Array);
@@ -62,7 +73,8 @@ describe('GET /suggestions', function() {
     it('contains a match', function() {
       expect(response.json.suggestions).to.satisfy(function(suggestions) {
         return suggestions.some(function(suggestion) {
-          return suggestion.name.toLowerCase().test(/montreal/i);
+          const normalizedName = Charmap.transform(suggestion.name);
+          return expect(normalizedName).to.match(/montreal/i);
         });
       });
     });
@@ -83,10 +95,10 @@ describe('GET /suggestions', function() {
       });
     });
   });
-  describe('with a valid Country', function() {
+  describe('with a valid Longitude and Latitude', function(done) {
     let response;
     before(function(done) {
-      request.get('/suggestions?q=CA').end(function(err, res) {
+      request.get('/suggestions?q=Lond&latitude=43.70011&longitude=-79.4163').end(function(err, res) {
         response = res;
         response.json = JSON.parse(res.text);
         done(err);
@@ -105,7 +117,8 @@ describe('GET /suggestions', function() {
     it('contains a match', function() {
       expect(response.json.suggestions).to.satisfy(function(suggestions) {
         return suggestions.some(function(suggestion) {
-          return suggestion.name.test(/montreal/i);
+          const normalizedName = Charmap.transform(suggestion.name);
+          return expect(normalizedName).to.match(/london/i);
         });
       });
     });

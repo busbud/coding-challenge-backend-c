@@ -1,0 +1,17 @@
+language: node_js
+node_js:
+  - "8.10.0"
+services:
+  - mongodb
+env:
+  global:
+  - NODE_ENV=development
+  - MONGODB_URI=mongodb://127.0.0.1:27017/search-travis
+  - LOGS_LEVEL=debug
+  - LOGS_NAME=search-api-travis
+  - SESSION=12345
+install:
+  - npm install
+cache: npm
+script:
+  - npm test

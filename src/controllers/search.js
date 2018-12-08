@@ -1,6 +1,5 @@
 'use strict';
 
-const _ = require('lodash');
 const logger = require(_src + '/libs/logger');
 const constants = require(_src + '/config/constants');
 const GeoNames = require(_src + '/models/').geonames;
@@ -9,14 +8,20 @@ module.exports = async function search(req, res) {
   logger.info('=Search=');
   let suggestions = [];
   try {
-    let query = {
-      $text:
-          {
-            $caseSensitive: true,
-            $diacriticSensitive: true,
-            $search: req.swagger.params.q.value
-          }
+    // query
+    let query = [];
+    // projection
+    const project = {
+      $project: {
+        admin1: true,
+        country: true,
+        lat: true,
+        long: true,
+        name: true
+      }
     };
+
+    // Case error
     if (req.swagger.params.q.value === 'SomeRandomCityInTheMiddleOfNowhere' || req.swagger.params.q.value === '') {
       return res.status(404).json({
         status: constants.status.FAILED,
@@ -24,33 +29,92 @@ module.exports = async function search(req, res) {
       });
     }
 
-    // by country
-    if (req.swagger.params.q.value.length === 2) {
-      // query.push({country: req.swagger.params.q.value});
-      const pattern = '/\b' + req.swagger.params.q.value + '\b';
-      const regex = new RegExp(pattern, 'g');
-      query = {'$or': [query, {country: {'$regex': regex}}]};
-    }
-    // suggestions = await GeoNames.find(query, {score: {$meta: 'toextScore'}}).sort({score: {$meta: 'textScore'}}).exec();
-    suggestions = await GeoNames.aggregate([{$match: query},
-      {
-        $project: {
-          admin1: true,
-          country: true,
-          lat: true,
-          long: true,
-          name: true,
-          score: {$meta: 'textScore'}
+    // find by Geo point
+    if ((req.swagger.params.longitude.value && req.swagger.params.longitude.value !== '') &&
+        (req.swagger.params.latitude.value && req.swagger.params.latitude.value !== '')) {
+      const geo = {
+        $geoNear: {
+          distanceField: 'distance',
+          near: [
+            parseFloat(req.swagger.params.longitude.value.replace(',', '.')),
+            parseFloat(req.swagger.params.latitude.value.replace(',', '.'))
+          ],
+          num: 10000,
+          spherical: true
         }
-      }, {$sort: {score: -1}}]).exec();
+      };
+      query = [geo].concat(query);
+      query.push({
+        $match: {
+          $or: [{
+            name: {
+              $options: 'i',
+              $regex: req.swagger.params.q.value
+            }
+          }, {
+            alt_name: {
+              $options: 'i',
+              $regex: req.swagger.params.q.value
+            }
+          }, {
+            ascii: {
+              $options: 'i',
+              $regex: req.swagger.params.q.value
+            }
+          }, {
+            country: {
+              $options: 'i',
+              $regex: req.swagger.params.q.value
+            }
+          }]
+        }
+      });
 
-    const maxScore = suggestions[0].score;
+      // add projection
+      project.$project.distance = '$distance';
+      query.push(project);
+      // add distance sort
+      query.push({$sort: {distance: 1}});
+    } else {
+      // case text search only
+      const match = {
+        $match: {
+          $text:
+              {
+                $caseSensitive: true,
+                $diacriticSensitive: true,
+                $search: req.swagger.params.q.value
+              }
+        }
+      };
+      query = [match];
+      project.$project.score = {$meta: 'textScore'};
+      query.push(project);
+      query.push({$sort: {score: -1}});
+    }
+
+    // DB query
+    suggestions = await GeoNames.aggregate(query).exec();
+
+    // Score identifier
+    let maxScore = suggestions[0].score;
+    if (suggestions[0].distance) {
+      maxScore = suggestions[0].distance;
+    }
     suggestions = suggestions.map(function(data) {
+      let score = data.score / maxScore;
+      if (data.distance) {
+        if (maxScore === data.distance) {
+          score = 1;
+        } else {
+          score = maxScore / (data.distance - maxScore);
+        }
+      }
       return {
         latitude: data.lat,
         longitude: data.long,
-        name: data.name + ' ,' + data.admin1 + ', ' + data.country,
-        score: data.score / maxScore
+        name: data.name + ', ' + data.admin1 + ', ' + data.country,
+        score: parseFloat(score.toFixed(2))
       };
     });
 
@@ -62,8 +126,10 @@ module.exports = async function search(req, res) {
     logger.error('Failed search');
     logger.error('Error : ', err);
     return res.status(500).json({
-      status: constants.status.FAILED
+      status: constants.status.FAILED,
+      suggestions
     });
   }
 }
 ;
+

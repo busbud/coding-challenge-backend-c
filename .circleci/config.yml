@@ -1,0 +1,31 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/city_search
+    docker:
+    - image: circleci/node:8.10.0
+      environment:
+        NODE_ENV: development
+        MONGODB_URI: mongodb://127.0.0.1:27017/search-circle-ci
+        LOGS_LEVEL: debug
+        LOGS_NAME: search-api-circle-ci
+        SESSION: 12345
+    - image: mongo:3.6.9
+    steps:
+    - checkout
+    - restore_cache:
+        key: dependency-cache-{{ checksum "package.json" }}
+    - run:
+        name: package install
+        command: npm install
+    - save_cache:
+        key: dependency-cache-{{ checksum "package.json" }}
+        paths:
+        - ./node_modules
+    - run:
+        name: test
+        command: npm test
+    - deploy:
+        name: Deploy Master to Heroku
+        command: |
+          git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git -f

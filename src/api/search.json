@@ -5,7 +5,7 @@
     "title": "Search Public API",
     "description": "Search Public API"
   },
-  "host": "search.com",
+  "host": "city-search-prod.herokuapp.com",
   "basePath": "/",
   "schemes": [
     "http",
@@ -57,7 +57,7 @@
           "200": {
             "description": "Response payload",
             "schema": {
-              "$ref": "#/definitions/response"
+              "$ref": "#/definitions/searchResponse"
             }
           },
           "400": {
@@ -77,40 +77,58 @@
     }
   },
   "definitions": {
-    "response": {
-      "description": "Basic response",
+    "searchResponse": {
+      "description": "Search response",
       "type": "object",
       "required": [
-        "status"
+        "status",
+        "suggestions"
       ],
       "properties": {
         "status": {
+          "type": "string",
+          "enum": [
+            "FAILED",
+            "SUCCESS"
+          ]
+        },
+        "suggestions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/suggestion"
+          }
+        }
+      }
+    },
+    "suggestion": {
+      "description": "Search suggestion",
+      "type": "object",
+      "required": [
+        "latitude",
+        "longitude",
+        "name",
+        "score"
+      ],
+      "properties": {
+        "latitude": {
           "type": "string"
         },
-        "errorMessage": {
+        "longitude": {
           "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "score": {
+          "type": "number",
+          "format": "float"
         }
       }
     },
     "errorResponse": {
-      "description": "Error response",
+      "description": "Search Error response",
       "type": "object",
-      "required": [
-        "response",
-        "errorCode"
-      ],
-      "properties": {
-        "response": {
-          "$ref": "#/definitions/response"
-        },
-        "errorCode": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "errorMessage": {
-          "type": "string"
-        }
-      }
+      "$ref": "#/definitions/searchResponse"
     }
   }
 }

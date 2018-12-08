@@ -21,7 +21,7 @@ module.exports = function(app) {
     // Serve the Swagger documents and Swagger UI
     // Can be accessed through /docs and /api-docs
     // app.use(API_ROOT, middleware.swaggerUi());
-    if (process.env.NODE_ENV !== 'production') {
+    if (process.env.SHOW_DOC) {
       app.use(middleware.swaggerUi({
         apiDocs: '/api-docs',
         swaggerUi: '/docs'
@@ -45,7 +45,6 @@ module.exports = function(app) {
       const errorResponse = {
         status: constants.status.FAILED
       };
-      // logger.info('SWAGGER error:', err);
       if (!_.isObject(err)) {
         // If the object is not an Error, create a representation that appears to be
         err = {

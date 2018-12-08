@@ -10,7 +10,7 @@ global._base = __dirname;
 global._src = path.join(__dirname, '/src');
 
 // Set environment variable
-if (!process.env.AWS) {
+if (!process.env.CLOUD_DEPLOY) {
   require('dotenv').config();
 }
 
@@ -28,7 +28,6 @@ const cluster = require('cluster');
 const db = require('./src/services/db');
 const session = require('express-session');
 
-// init databases
 // init databases
 if (process.env.MONGODB_USER && process.env.MONGODB_PASS) {
   // case of mlab with credential (user + pass)
@@ -79,7 +78,7 @@ app.use(require('./src/router'));
 // Create server
 let server;
 if (app.get('env') === 'production' && cluster.isMaster) {
-  const numCPUs = require('os').cpus().length;
+  const numCPUs = process.env.MAX_CPU || require('os').cpus().length;
 
   for (let i = 0; i < numCPUs; i++) {
     cluster.fork(); // create a worker
@@ -92,8 +91,9 @@ if (app.get('env') === 'production' && cluster.isMaster) {
     logger.info('worker ' + worker.process.pid + ' died.');
   });
 } else {
-  server = http.createServer(app).listen(process.env.PORT, function() {
-    logger.info('Launching Search API on port ' + process.env.PORT + ' in ' + app.get('env') + ' mode');
+  const port = process.env.PORT || 3456;
+  server = http.createServer(app).listen(port, function() {
+    logger.info('Launching Search API on port ' + port + ' in ' + app.get('env') + ' mode');
   });
 }
 

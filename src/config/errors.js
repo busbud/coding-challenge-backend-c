@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * Error codes and messages
+ * @type {{errorCodes: {APPLICATION_WAS_NOT_VALIDATED: {code: number, errorMessage: string}, AUTHENTICATION_IMPOSSIBLE: {code: number, errorMessage: string}, BAD_AUTHENTICATION_DATA: {code: number, errorMessage: string}, BAD_PARAMETER_FORMAT: {code: number, errorMessage: string}, ENDPOINT_RETIRED: {code: number, errorMessage: string}, EXTERNAL_ERROR: {code: number, errorMessage: string}, INTERNAL_ERROR: {code: number, errorMessage: string}, INVALID_OR_EXPIRED_TOKEN: {code: number, errorMessage: string}, MISSING_CONDITIONAL_PARAMETER: {code: number, errorMessage: string}, MISSING_MANDATORY_PARAMETER: {code: number, errorMessage: string}, OPERATION_ALREADY_ONGOING: {code: number, errorMessage: string}, OVER_CAPACITY: {code: number, errorMessage: string}, RESOURCE_EXISTS: {code: number, errorMessage: string}, TIMEOUT: {code: number, errorMessage: string}, UNEXPECTED_ERROR: {code: number, errorMessage: string}, UNKNOWN_RESOURCE: {code: number, errorMessage: string}}, generics: {MODULE_NOT_FOUND: string}}}
+ */
 module.exports = {
   errorCodes: {
     APPLICATION_WAS_NOT_VALIDATED: {
