@@ -86,7 +86,7 @@ describe("City", () => {
         4200
       );
 
-      city._changeScoreBy(cityName.slice(0, cityName.length - 1), 30.2, 40.1);
+      city._changeScoreBy(cityName.slice(0, cityName.length - 1));
 
       assert.equal(city.getScore(), 0.95);
     });
@@ -103,7 +103,7 @@ describe("City", () => {
         4200
       );
 
-      city._changeScoreBy(cityName.slice(0, cityName.length - 3), 30.2, 40.1);
+      city._changeScoreBy(cityName.slice(0, cityName.length - 3));
 
       assert.equal(city.getScore(), 0.85);
     });
@@ -120,7 +120,7 @@ describe("City", () => {
         4200
       );
 
-      city._changeScoreBy(cityName.slice(0, cityName.length - 4), 30.2, 40.1);
+      city._changeScoreBy(cityName.slice(0, cityName.length - 4));
 
       assert.equal(city.getScore(), 0.8);
     });

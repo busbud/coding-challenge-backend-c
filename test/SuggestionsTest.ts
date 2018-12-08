@@ -26,7 +26,7 @@ describe("GET /suggestions", function() {
     });
   });
 
-  /*describe("with a valid city", function() {
+  describe("with a valid city", function() {
     var response;
 
     before(function(done) {
@@ -49,7 +49,7 @@ describe("GET /suggestions", function() {
     it("contains a match", function() {
       expect(response.json.suggestions).to.satisfy(function(suggestions) {
         return suggestions.some(function(suggestion) {
-          return suggestion.name.test(/montreal/i);
+          return /Montréal/i.test(suggestion.name);
         });
       });
     });
@@ -69,5 +69,5 @@ describe("GET /suggestions", function() {
         });
       });
     });
-  });*/
+  });
 });

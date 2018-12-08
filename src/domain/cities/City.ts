@@ -57,16 +57,18 @@ export default class City {
     return this.featureCode;
   }
 
-  public _changeScoreBy(name: string, latitude: number, longitude: number) {
+  public _changeScoreBy(name: string, latitude?: number, longitude?: number) {
     //latitule and longitude could be empty
     if (this.name.length === name.length) {
       this.score = 1;
     } else {
       const namePenalty = this.computeNamePenaltyWith(name);
-      const distancePenalty = this.computeDistancePenaltyWith(
-        latitude,
-        longitude
-      );
+
+      let distancePenalty = 0;
+
+      if (latitude && longitude) {
+        distancePenalty = this.computeDistancePenaltyWith(latitude, longitude);
+      }
 
       const penalty = namePenalty + distancePenalty;
       const newScore = this.toFixed2(1 - penalty);
