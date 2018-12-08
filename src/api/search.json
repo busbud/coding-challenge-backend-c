@@ -37,6 +37,20 @@
             "description": "The search query",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "latitude",
+            "in": "query",
+            "description": "Geo latitude",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "longitude",
+            "in": "query",
+            "description": "Geo longitude",
+            "required": false,
+            "type": "string"
           }
         ],
         "responses": {

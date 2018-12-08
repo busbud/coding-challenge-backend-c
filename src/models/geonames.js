@@ -62,6 +62,14 @@ const GeonameSchema = new mongoose.Schema({
     type: Number,
     unique: 1
   },
+  lat: {
+    required: false,
+    type: Number
+  },
+  long: {
+    required: false,
+    type: Number
+  },
   modified_at: {
     required: false,
     type: Date
@@ -83,8 +91,6 @@ const GeonameSchema = new mongoose.Schema({
 });
 
 // Indexes
-GeonameSchema.index({geoPosition: '2dsphere'});
-GeonameSchema.index({alt_name: 'text', ascii: 'text', name: 'text'});
-GeonameSchema.index({alt_name: 1, ascii: 1, country: 1, name: 1});
+GeonameSchema.index({ '$**': 'text' });
 
 module.exports = mongoose.model('Geoname', GeonameSchema);

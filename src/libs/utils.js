@@ -63,6 +63,9 @@ function _tsvToJson(filePath) {
  * @returns {Promise<void>}
  */
 module.exports.populateDB = async function() {
-  const data = _tsvToJson(_base + '/data/cities_canada-usa.tsv');
-  return await GeoNames.insertMany(data);
+  const data = await GeoNames.findOne({alt_name: 'LOZ'});
+  if (!data._id) {
+    const data = _tsvToJson(_base + '/data/test.tsv');
+    return await GeoNames.insertMany(data);
+  }
 };
