@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "lint": "./node_modules/.bin/eslint .",
-    "start": "./node_modules/.bin/nodemon",
+    "start": "node app.js",
     "test": "./node_modules/mocha/bin/mocha ./test/ --timeout 35000 --exit"
   },
   "author": "",
@@ -37,7 +37,6 @@
     "helmet": "^3.15.0",
     "lodash": "^4.17.11",
     "mongoose": "^5.3.14",
-    "nodemon": "^1.18.7",
     "requireindex": "^1.2.0",
     "sessions": "0.0.2-7",
     "swagger-tools": "^0.10.4"
