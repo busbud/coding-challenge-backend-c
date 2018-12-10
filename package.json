@@ -4,17 +4,24 @@
   "description": "coding challenge in Nodejs",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
-    "test": "./node_modules/mocha/bin/mocha ./test/"
+    "start": "node ./index.js",
+    "test": "./node_modules/mocha/bin/mocha ./test/",
+    "web": "node ./index.js"
   },
   "author": "",
   "license": "WTFPL",
   "dependencies": {
+    "d3": "^5.7.0",
+    "express": "^4.16.4",
+    "geolib": "^2.0.24",
+    "string-score": "^1.0.1"
+  },
+  "devDependencies" : {
     "chai": "^1.9.1",
     "mocha": "^1.18.2",
     "supertest": "^0.11.0"
   },
   "engines": {
-    "node": "0.10.26"
+    "node": "8.11.3"
   }
 }
