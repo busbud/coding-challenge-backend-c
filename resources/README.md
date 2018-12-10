@@ -24,4 +24,3 @@ dem               : digital elevation model, srtm3 or gtopo30, average elevation
                     (ca 900mx900m) area in meters, integer. srtm processed by cgiar/ciat.
 timezone          : the timezone id (see file timeZone.txt) varchar(40)
 modification date : date of last modification in yyyy-MM-dd format
-```
