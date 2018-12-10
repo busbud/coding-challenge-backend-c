@@ -13,6 +13,7 @@
   "license": "WTFPL",
   "dependencies": {
     "geo-distance": "^0.2.0",
+    "http-status-codes": "^1.3.0",
     "match-sorter": "^2.3.0",
     "sprintf": "^0.1.5",
     "typescript": "^2.6.2"

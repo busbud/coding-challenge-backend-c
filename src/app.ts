@@ -1,4 +1,5 @@
 import http from "http";
+import HttpStatus from "http-status-codes";
 var port = process.env.PORT || 2345;
 
 import FileAllCities from "./infrastructure/FileAllCities";
@@ -35,6 +36,13 @@ export default http
   .createServer(async function(req, res) {
     const queryParameter = getRequestParameters(req);
 
+    if (req.method !== "GET") {
+      res.writeHead(HttpStatus.NOT_IMPLEMENTED, {
+        "Content-Type": "text/plain"
+      });
+      res.end();
+    }
+
     if (req.url.indexOf("/suggestions") === 0) {
       const result = await autoCompleteResultForCities.proceed({
         name: queryParameter.q,
@@ -43,13 +51,16 @@ export default http
       });
 
       if (result.suggestions.length === 0) {
-        res.writeHead(404, { "Content-Type": "text/plain" });
+        res.writeHead(HttpStatus.NOT_FOUND, { "Content-Type": "text/plain" });
       } else {
-        res.writeHead(200, { "Content-Type": "text/plain" });
+        res.writeHead(HttpStatus.OK, { "Content-Type": "text/plain" });
       }
 
       res.end(JSON.stringify(result));
     } else {
+      res.writeHead(HttpStatus.NOT_IMPLEMENTED, {
+        "Content-Type": "text/plain"
+      });
       res.end();
     }
   })
