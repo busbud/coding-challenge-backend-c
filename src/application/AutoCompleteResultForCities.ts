@@ -27,22 +27,13 @@ export default class AutoCompleteResultForCities {
   }
 
   public async proceed(query: AutoCompleteQuery): Promise<AutoCompleteView> {
-    const result: Promise<AutoCompleteView> = new Promise((resolve, reject) => {
-      this.allCities
-        .inUSAAndCanadaWithMoreThan5000People()
-        .then((cities: Cities) => {
-          const suggestions: SuggestionView[] = cities
-            .thatAutocompleteWith(query.name, query.longitude, query.latitude)
-            .map((city: City): SuggestionView => cityToSuggestionView(city));
+    const cities = await this.allCities.inUSAAndCanadaWithMoreThan5000People();
 
-          resolve({
-            suggestions
-          });
-        })
-        .catch(error => console.log(error));
-    });
+    const suggestions = cities
+      .thatAutocompleteWith(query.name, query.longitude, query.latitude)
+      .map((city: City): SuggestionView => cityToSuggestionView(city));
 
-    return result;
+    return { suggestions };
   }
 }
 
