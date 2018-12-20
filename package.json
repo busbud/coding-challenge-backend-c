@@ -4,17 +4,33 @@
   "description": "coding challenge in Nodejs",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
-    "test": "./node_modules/mocha/bin/mocha ./test/"
+    "start": "nodemon app.js",
+    "import-cities": "node bin/import-cities",
+    "lint": "eslint --ignore-path .gitignore .",
+    "test": "mocha ./test/ --exit",
+    "heroku-prebuild": "npm install pm2 -g"
   },
-  "author": "",
+  "author": "Kevin Barralon",
   "license": "WTFPL",
-  "dependencies": {
-    "chai": "^1.9.1",
-    "mocha": "^1.18.2",
-    "supertest": "^0.11.0"
-  },
   "engines": {
-    "node": "0.10.26"
+    "node": "10.14.2"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "eslint": "^5.10.0",
+    "mocha": "^5.2.0",
+    "nodemon": "^1.18.9",
+    "supertest": "^3.3.0"
+  },
+  "dependencies": {
+    "apicache": "^1.2.3",
+    "csv-parser": "^2.1.0",
+    "dotenv": "^6.2.0",
+    "express": "^4.16.4",
+    "geolib": "^2.0.24",
+    "js-levenshtein": "^1.1.4",
+    "pg": "^7.7.1",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^4.42.0"
   }
 }

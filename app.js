@@ -1,16 +1,17 @@
-var http = require('http');
-var port = process.env.PORT || 2345;
+const express = require('express');
+const apicache = require('apicache');
 
-module.exports = http.createServer(function (req, res) {
-  res.writeHead(404, {'Content-Type': 'text/plain'});
+const routes = require('./routes');
 
-  if (req.url.indexOf('/suggestions') === 0) {
-    res.end(JSON.stringify({
-      suggestions: []
-    }));
-  } else {
-    res.end();
-  }
-}).listen(port, '127.0.0.1');
 
-console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+const PORT = process.env.PORT || 4000;
+
+const app = express();
+const cache = apicache.middleware;
+
+app.use(cache('5 minutes'));
+app.use(routes);
+
+app.listen(PORT, () => `Server running at http://127.0.0.1:${PORT}/suggestions'`);
+
+module.exports = app;

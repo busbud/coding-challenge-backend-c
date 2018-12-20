@@ -1,85 +1,31 @@
-# Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
+# Busbud Coding Challenge
 
-## Requirements
+## General
 
-Design an API endpoint that provides auto-complete suggestions for large cities.
-The suggestions should be restricted to cities in the USA and Canada with a population above 5000 people.
+The live version of the project is available on Heroku at: [https://thawing-bayou-30516.herokuapp.com](https://thawing-bayou-30516.herokuapp.com).
 
-- the endpoint is exposed at `/suggestions`
-- the partial (or complete) search term is passed as a querystring parameter `q`
-- the caller's location can optionally be supplied via querystring parameters `latitude` and `longitude` to help improve relative scores
-- the endpoint returns a JSON response with an array of scored suggested matches
-    - the suggestions are sorted by descending score
-    - each suggestion has a score between 0 and 1 (inclusive) indicating confidence in the suggestion (1 is most confident)
-    - each suggestion has a name which can be used to disambiguate between similarly named locations
-    - each suggestion has a latitude and longitude
-- all functional tests should pass (additional tests may be implemented as necessary).
-- the final application should be [deployed to Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs).
-- feel free to add more features if you like!
-
-#### Sample responses
-
-These responses are meant to provide guidance. The exact values can vary based on the data source and scoring algorithm
-
-**Near match**
-
-    GET /suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
-
-```json
-{
-  "suggestions": [
-    {
-      "name": "London, ON, Canada",
-      "latitude": "42.98339",
-      "longitude": "-81.23304",
-      "score": 0.9
-    },
-    {
-      "name": "London, OH, USA",
-      "latitude": "39.88645",
-      "longitude": "-83.44825",
-      "score": 0.5
-    },
-    {
-      "name": "London, KY, USA",
-      "latitude": "37.12898",
-      "longitude": "-84.08326",
-      "score": 0.5
-    },
-    {
-      "name": "Londontowne, MD, USA",
-      "latitude": "38.93345",
-      "longitude": "-76.54941",
-      "score": 0.3
-    }
-  ]
-}
-```
-
-**No match**
-
-    GET /suggestions?q=SomeRandomCityInTheMiddleOfNowhere
-
-```json
-{
-  "suggestions": []
-}
-```
+Example of search feature results: [/suggestions?q=Londo&latitude=43.70011&longitude=-79.4163](https://thawing-bayou-30516.herokuapp.com/suggestions?q=Londo&latitude=43.70011&longitude=-79.4163)
 
 
-### Non-functional
+## About
+### Cities import
+The cities data from GeoNames are imported into a PostgreSQL database which works well with Heroku. On each release deployment
+the ``` npm run import-cities ``` command is called by Heroku.
 
-- All code should be written in Javascript
-- Mitigations to handle high levels of traffic should be implemented
-- Challenge is submitted as pull request against this repo ([fork it](https://help.github.com/articles/fork-a-repo/) and [create a pull request](https://help.github.com/articles/creating-a-pull-request-from-a-fork/)).
-- Documentation and maintainability is a plus
+### Score
+The score is calculated in two steps:
+- A score relative to the query name (ex: ```?q=Londo```). The Levensthein Distance is used
+for measuring the difference between the query name and each city name. 
+- A score relative to the coordinates computed according to the distance between the requested location and each city location, 
+relatively to a geo radius. This score can boost the query name score.
 
-### References
+Each score is taken into account in the global calculation of the score. And each score has its weight in the global calculation if is filled
+(ex: the maximum score for geo distance is 0.4 of 1 and 0.6 of 1 for the query name. But if no geo coordinate is filled, 
+the query name score can reach the maximum (1), considering the relevance of the name only). 
 
-- Geonames provides city lists Canada and the USA http://download.geonames.org/export/dump/readme.txt
-- http://www.nodejs.org/
-- http://ejohn.org/blog/node-js-stream-playground/
-
+### Suggestions endpoint call
+A cache is created on each URL call, available for 5 minutes. This a memory store, but for a real app,
+it would be better to use a production-ready cache client.
 
 ## Getting Started
 
@@ -106,6 +52,30 @@ In the project directory run
 npm install
 ```
 
+### Create a database
+
+Creat a PostgreSQL database.
+
+```
+createdb challenge
+```
+
+### Create an env file
+
+Create an .env file corresponding to the values ​​of the .env.example.
+
+```
+cp .env.example .env
+```
+
+### Import the cities
+
+Import the cities into the new created database.
+
+```
+npm run import-cities
+```
+
 ### Running the tests
 
 The test suite can be run with
@@ -114,16 +84,24 @@ The test suite can be run with
 npm test
 ```
 
+### Running the linter
+
+The linter can be run with
+
+```
+npm run lint
+```
+
 ### Starting the application
 
 To start a local server run
 
 ```
-PORT=3456 npm start
+npm start
 ```
 
 which should produce output similar to
 
 ```
-Server running at http://127.0.0.1:3456/suggestions
+Server running at http://127.0.0.1:4000/suggestions
 ```

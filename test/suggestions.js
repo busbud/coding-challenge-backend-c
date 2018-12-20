@@ -1,75 +1,79 @@
-var expect  = require('chai').expect;
-var app     = require('../app');
-var request = require('supertest')(app);
+const {expect} = require('chai');
+const supertest = require('supertest');
 
-describe('GET /suggestions', function() {
-  describe('with a non-existent city', function () {
-    var response;
+const app = require('../app');
 
-    before(function (done) {
+
+const request = supertest(app);
+
+describe('GET /suggestions', () => {
+  describe('with a non-existent city', () => {
+    let response;
+
+    before(done => {
       request
-        .get('/suggestions?q=SomeRandomCityInTheMiddleOfNowhere')
-        .end(function (err, res) {
+        .get('/suggestions?q=f')
+        .end((err, res) => {
           response = res;
           response.json = JSON.parse(res.text);
           done(err);
         });
     });
 
-    it('returns a 404', function () {
+    it('returns a 404', () => {
       expect(response.statusCode).to.equal(404);
     });
 
-    it('returns an empty array of suggestions', function () {
+    it('returns an empty array of suggestions', () => {
       expect(response.json.suggestions).to.be.instanceof(Array);
       expect(response.json.suggestions).to.have.length(0);
     });
   });
 
-  describe('with a valid city', function () {
-    var response;
+  describe('with a valid city', () => {
+    let response;
 
-    before(function (done) {
+    before(done => {
       request
         .get('/suggestions?q=Montreal')
-        .end(function (err, res) {
+        .end((err, res) => {
           response = res;
           response.json = JSON.parse(res.text);
           done(err);
         });
     });
 
-    it('returns a 200', function () {
+    it('returns a 200', () => {
       expect(response.statusCode).to.equal(200);
     });
 
-    it('returns an array of suggestions', function () {
+    it('returns an array of suggestions', () => {
       expect(response.json.suggestions).to.be.instanceof(Array);
       expect(response.json.suggestions).to.have.length.above(0);
     });
 
-    it('contains a match', function () {
-      expect(response.json.suggestions).to.satisfy(function (suggestions) {
-        return suggestions.some(function (suggestion) {
-          return suggestion.name.test(/montreal/i);
+    it('contains a match', () => {
+      expect(response.json.suggestions).to.satisfy(suggestions => {
+        return suggestions.some(suggestion => {
+          return /montréal/i.test(suggestion.name);
         });
-      })
+      });
     });
 
-    it('contains latitudes and longitudes', function () {
-      expect(response.json.suggestions).to.satisfy(function (suggestions) {
-        return suggestions.every(function (suggestion) {
+    it('contains latitudes and longitudes', () => {
+      expect(response.json.suggestions).to.satisfy(suggestions => {
+        return suggestions.every(suggestion => {
           return suggestion.latitude && suggestion.longitude;
         });
-      })
+      });
     });
 
-    it('contains scores', function () {
-      expect(response.json.suggestions).to.satisfy(function (suggestions) {
-        return suggestions.every(function (suggestion) {
+    it('contains scores', () => {
+      expect(response.json.suggestions).to.satisfy(suggestions => {
+        return suggestions.every(suggestion => {
           return suggestion.latitude && suggestion.longitude;
         });
-      })
+      });
     });
   });
 });
