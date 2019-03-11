@@ -1,5 +1,20 @@
 # Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
 
+# Submission Details
+We were able to successfully implement the following:
+1. Complete the fullfilment of the expected API calls and validated with the test suite (app.js)
+2. Data stored in MongoDB (db.js, city.js, constants.js )
+3. Records read from the supplied tsv file after executing npm install. (installDefaults.js)
+4. Canada District Short codes manually supplied through a look-up table (i.e. hash table / object literal)
+5. Express used to structure the application for easier handling of request and its parameters (app.js)
+6. Caching with Redis to improve scalability of application (cache.js)
+7. Implemented score by using weighted distance-measures for both geographical distance and string-similarity distance (utils.js)
+    * Geographical: Euclidean Distance
+    * String-similarity: Levenshtein Distance
+
+Public EndPoint: https://calm-reef-34345.herokuapp.com/suggestions?q=montreal
+
+
 ## Requirements
 
 Design an API endpoint that provides auto-complete suggestions for large cities.

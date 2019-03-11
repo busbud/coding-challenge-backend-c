@@ -33,6 +33,12 @@ app.use(bodyParser.json());
 app.use(compression());
 app.use(cors());
 
+app.get("/", cacheMiddleware, (req, res) => {
+  res.json({
+    "message": "Use the suggestion Endpoint for demonstration that application works"
+  })
+})
+
 app.get('/suggestions', cacheMiddleware, (req, res) => {
   const suggestions = [];
   try {
