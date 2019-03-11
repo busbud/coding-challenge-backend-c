@@ -1,11 +1,12 @@
 {
   "name": "coding-challenge-backend-c",
-  "version": "0.0.0",
+  "version": "0.5.0",
   "description": "coding challenge in Nodejs",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "test": "./node_modules/mocha/bin/mocha ./test/"
+    "test": "./node_modules/mocha/bin/mocha ./test/",
+    "postinstall": "node ./data/installDefaults.js"
   },
   "author": "",
   "license": "WTFPL",

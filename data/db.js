@@ -1,28 +1,16 @@
 const mongoose = require('mongoose');
-const CityModel = require('./city');
-const ConstantModel = require('./constant');
-const installDefaults = require('./installDefaults');
 
-module.exports = function(config) {
-    mongoose.connect(config.db);
-    const db = mongoose.connection;
-    db.on('error', err => console.error(err));
-    db.once('open', () => console.log("database connection established"));
-
-    installDefaults
-        .checkForCities()
-            .then(() => {
-                console.log('Check for cities completed');
-                installDefaults
-                    .checkForMaxAndMinDistance()
-                        .then(() => console.log('Check for Min and Max completed'))
-                        .catch(merr=> console.error(merr));
-            })
-            .catch(err=> console.error(err));
-
-    return {
-        'db': db,
-        'CityModel': CityModel,
-        'ConstantModel': ConstantModel
-    };
+module.exports = async function (config) {
+    return new Promise((resolve, reject) => {
+        mongoose.connect(config.db);
+        const db = mongoose.connection;
+        db.on('error', err => {
+            // console.error(err);
+            reject(err);
+        });
+        db.once('open', () => {
+            // console.log("database connection established");
+            resolve(db);
+        });
+    });
 };

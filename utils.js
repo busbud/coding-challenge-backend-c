@@ -85,7 +85,7 @@ function normalizeStringDistance(diff, string1, string2){
 // Normalise distance between 1 and 0 using feature scaling
 function normalizeDistance(diff) {
     if (diff < 0 ) diff *= -1;
-    console.log(`Using the following values for normalisation => min: ${MIN_DIST} max: ${MAX_DIST}`);
+    // console.log(`Using the following values for normalisation => min: ${MIN_DIST} max: ${MAX_DIST}`);
     return Math.abs((diff - MIN_DIST) / (MAX_DIST - MIN_DIST));
 }
 
@@ -102,13 +102,13 @@ function generateScore(cityRec, cityNameQuery, latitude, longitude){
 
     let strDiff = levenshteinDistance(cityRec.asciiname, cityNameQuery);
     strDiff = normalizeStringDistance(strDiff, cityRec.asciiname, cityNameQuery);
-    console.log(`${cityRec.asciiname} : (query) = (${cityNameQuery}) : diff = ${strDiff.toFixed(2)}`);
+    // console.log(`${cityRec.asciiname} : (query) = (${cityNameQuery}) : diff = ${strDiff.toFixed(2)}`);
     cityRec.score -= (strDiff * strWeight).toFixed(2);
 
     if (latitude !== -1 && longitude !== -1){
         let locationDiff = getDistance(cityRec.latitude, cityRec.longitude, latitude, longitude);
         locationDiff = normalizeDistance(locationDiff);
-        console.log(`${cityRec.name} : (x,y) = (${cityRec.longitude}, ${cityRec.latitude}) : diff = ${locationDiff.toFixed(2)}`);
+        // console.log(`${cityRec.name} : (x,y) = (${cityRec.longitude}, ${cityRec.latitude}) : diff = ${locationDiff.toFixed(2)}`);
         cityRec.score -= (locationDiff * distWeight).toFixed(2);
     }
 
@@ -135,5 +135,3 @@ module.exports = {
     'MAX_DIST': MAX_DIST,
     'MIN_DIST': MIN_DIST
 };
-
-console.log(levenshteinDistance("landan", "london"));

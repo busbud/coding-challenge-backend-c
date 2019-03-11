@@ -9,9 +9,10 @@ const config = require('./data/config')[env];
 
 
 // Load Database Related Functionality
-const DB = require('./data/db')(config);
-const CityModel = DB['CityModel'];
-const ConstantModel = DB['ConstantModel'];
+require('./data/db')(config).then(() => console.log('Connected to DB'));
+
+const CityModel = require('./data/city');
+const ConstantModel = require('./data/constant');
 
 
 // Import Utility functions
@@ -60,9 +61,14 @@ app.get('/suggestions', cacheMiddleware, (req, res) => {
       CityModel
           .find({ name:{ $regex: new RegExp("^" + q, "ig") } }) // Filter based on the string that starts with text in q
           .exec((err, cities) => {
-            const results = cities.map(transformForClient)
-                                  .map(city => generateScore(city, q, latitude, longitude))
-                                  .sort(sortByScore);
+            let results = [];
+            if (cities.length > 0) {
+              results = cities.map(transformForClient)
+                  .map(city => generateScore(city, q, latitude, longitude))
+                  .sort(sortByScore);
+            }else{
+              res.status(404);
+            }
 
             res.json({'suggestions': results });
           });
@@ -83,7 +89,7 @@ app.get('/cities',cacheMiddleware, (req, res) => {
     let offset = parseInt(req.query.offset || 0);
     let limit = parseInt(req.query.limit || 10);
 
-    console.log(`Offset is ${offset} and Limit is ${limit}`);
+    // console.log(`Offset is ${offset} and Limit is ${limit}`);
 
     // Make the request and send the response using a callback
     CityModel
@@ -97,9 +103,8 @@ app.get('/cities',cacheMiddleware, (req, res) => {
   }
 });
 
+module.exports = app;
 app.listen(port, () => console.log('Server running at http://127.0.0.1:%d/suggestions', port));
-
-
 
 // var http = require('http');
 // const port = process.env.PORT || 2345;

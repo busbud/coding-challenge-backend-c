@@ -15,7 +15,12 @@ module.exports =  (req, res, next) => {
             else{
                 if(reply){ // We have data in the Redis Cache
                     console.log("Reading data from Redis cache");
-                    res.json(JSON.parse(reply));
+                    let records = JSON.parse(reply);
+                    if (records.length === 0)res.status(404); // Reasonable assume that if the cache is an empty array that it was due to an invalid result
+                    if ('suggestions' in records){
+                        if (records['suggestions'].length === 0)res.status(404);
+                    }
+                    res.json(records);
                 }else{ // We do not have data, we pass the request and store to our cache
                     res.sendResponse = res.json;
                     // override the json method, and then reuse previous implementation to send data to client
