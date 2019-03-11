@@ -28,6 +28,16 @@ function transformForClient(city){
     };
 }
 
+function transformCitiesForClient(city){
+    return {
+        "name": city.display_name,
+        "asciiname": city.asciiname,
+        "latitude": city.latitude,
+        "longitude": city.longitude,
+        "country_code": city.country_code
+    }
+}
+
 
 // https://en.wikipedia.org/wiki/Levenshtein_distance
 // Using the Levenshtein as a reasonable interpretation of string similarity
@@ -116,6 +126,7 @@ function sortByScore(cityA, cityB){
 
 module.exports = {
     'transformForClient': transformForClient,
+    'transformCitiesForClient': transformCitiesForClient,
     'normalizeDistance': normalizeDistance,
     'generateScore': generateScore,
     'sortByScore': sortByScore,

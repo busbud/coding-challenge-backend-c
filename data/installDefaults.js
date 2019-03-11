@@ -1,50 +1,7 @@
 const fs = require('fs');
-const csv = require('csv-streamify');
 const split = require('split');
 const CityModel = require('./city');
 const ConstantModel = require('./constant');
-
-const parser = csv({
-  delimiter: '\t',
-});
-
-
-// function installDefaults(){
-//   return new Promise((resolve, reject) => {
-//     const records = [];
-//     // emits each line as a buffer or as a string representing an array of fields
-//     parser.on('data', function (line) {
-//       // if (line.length > 0 && line[14] >= 5000){
-//         if (line.length > 0){
-//         let city = new CityModel({
-//           geonameid: line[0],
-//           name: line[1],
-//           asciiname: line[2],
-//           latitude: line[4],
-//           longitude: line[5],
-//           country_code: line[8],
-//           display_name: `${line[1]}, ${line[8]}`
-//         });
-//         // save the record to the mongo db
-//         city.save();
-//
-//         records.push(city);
-//       }
-//     });
-//
-//     parser.on('end', () => {
-//       console.log(`We found ${records.length} records`);
-//       resolve(records);
-//     });
-//
-//     parser.on('error', (err) => reject(err));
-//
-//     // now pipe some data into it
-//     fs.createReadStream('./data/cities_canada-usa.tsv')
-//       .pipe(parser);
-//   });
-// }
-
 
 function installDefaults() {
   return new Promise((resolve, reject) => {
@@ -80,8 +37,6 @@ function installDefaults() {
         .on('error', err => reject(err))
   });
 }
-
-// installDefaults();
 
 function checkForCities() {
   return new Promise((resolve, reject) => {

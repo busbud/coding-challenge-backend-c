@@ -7,16 +7,16 @@ module.exports = function(config) {
     mongoose.connect(config.db);
     const db = mongoose.connection;
     db.on('error', err => console.error(err));
-    db.once('open', ()=> console.log("database connection established"));
+    db.once('open', () => console.log("database connection established"));
 
     installDefaults
         .checkForCities()
             .then(() => {
-                console.log('Check for Cities completed');
+                console.log('Check for cities completed');
                 installDefaults
                     .checkForMaxAndMinDistance()
-                    .then(() => console.log('Check for Min and Max Completed'))
-                    .catch(merr=> console.error(merr));
+                        .then(() => console.log('Check for Min and Max completed'))
+                        .catch(merr=> console.error(merr));
             })
             .catch(err=> console.error(err));
 

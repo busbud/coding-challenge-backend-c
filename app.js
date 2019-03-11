@@ -7,6 +7,7 @@ const port = process.env.PORT || 2345;
 const env = process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 const config = require('./data/config')[env];
 
+
 // Load Database Related Functionality
 const DB = require('./data/db')(config);
 const CityModel = DB['CityModel'];
@@ -15,6 +16,7 @@ const ConstantModel = DB['ConstantModel'];
 
 // Import Utility functions
 const transformForClient = require('./utils').transformForClient;
+const transformCitiesForClient = require('./utils').transformCitiesForClient;
 const generateScore = require('./utils').generateScore;
 const sortByScore = require('./utils').sortByScore;
 const updateMinAndMaxDist = require('./utils').updateMinAndMaxDist;
@@ -29,7 +31,9 @@ app.use(bodyParser.json());
 app.use(compression());
 app.use(cors());
 
-app.get('/suggestions', (req, res) => {
+const cacheMiddleware = require('./cache');
+
+app.get('/suggestions', cacheMiddleware, (req, res) => {
   const suggestions = [];
   try{
 
@@ -73,7 +77,7 @@ app.get('/suggestions', (req, res) => {
   }
 });
 
-app.get('/cities', (req, res) => {
+app.get('/cities',cacheMiddleware, (req, res) => {
   try{
 
     let offset = parseInt(req.query.offset || 0);
@@ -86,7 +90,7 @@ app.get('/cities', (req, res) => {
         .find({})
         .skip(offset)
         .limit(limit)
-        .exec((err, cities) => res.json(cities));
+        .exec((err, cities) => res.json(cities.map(transformCitiesForClient)));
   }catch (e) {
     console.error(e);
     res.status(500).send("The server encountered an error: " + e);
