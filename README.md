@@ -127,3 +127,14 @@ which should produce output similar to
 ```
 Server running at http://127.0.0.1:3456/suggestions
 ```
+## Deploying to Heroku
+Setting the environment variables for the deployment
+
+#### Mongo Database connection string
+```bash
+heroku config:set MONGO_URI=mongodb://[username:password@]host1[:port1][/[database]
+```
+##### Redis Connection String
+```bash
+heroku config:set REDIS_URI=redis://[:PASSWORD@]HOST[:PORT][/DATABASE]
+```
