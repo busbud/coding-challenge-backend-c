@@ -86,44 +86,46 @@ These responses are meant to provide guidance. The exact values can vary based o
 Begin by forking this repo and cloning your fork. GitHub has apps for [Mac](http://mac.github.com/) and
 [Windows](http://windows.github.com/) that make this easier.
 
-### Setting up a Nodejs environment
+### Setting up a Erlang environment
 
-Get started by installing [nodejs](http://www.nodejs.org).
+This project is configured using Docker. Building the project and running tests
+and deploys should be done through Docker. In case you need to configure and
+setup your editor, the current Erlang version is `20.0.2`.
 
-For OS X users, use [Homebrew](http://brew.sh) and `brew install nvm`
+Get started by installing [Docker (Community
+Edition)](https://docs.docker.com/install/).
 
-Once that's done, from the project directory, run
+### Fetching & building dependencies
 
-```
-nvm use
-```
-
-### Setting up the project
-
-In the project directory run
+To fetch and build dependencies run
 
 ```
-npm install
+$ make deps
 ```
 
-### Running the tests
-
-The test suite can be run with
-
-```
-npm test
-```
-
-### Starting the application
+### Running the app
 
 To start a local server run
 
 ```
-PORT=3456 npm start
+$ make run
 ```
 
-which should produce output similar to
+Then visit [](http://localhost:9000/)
+
+### Tests
+
+In order to run the tests make sure you create a `config/test.config` file with
+the right configuration.
 
 ```
-Server running at http://127.0.0.1:3456/suggestions
+$ cp config/test.config{.sample,}
+
+# Edit config/test.config...
+```
+
+To run the tests locally:
+
+```
+$ make tests
 ```
