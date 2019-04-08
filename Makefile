@@ -24,8 +24,12 @@ deps:
 	$(DOCKERIZE) $(ERLANG_IMAGE) rebar3 as dev compile
 
 .PHONY: tests
+tests: CONFIG_PATH = $(TEST_CONFIG_PATH)
 tests:
-	$(DOCKERIZE) $(ERLANG_IMAGE) rebar3 ct
+	$(eval DATABASE_HOST := $(call get_config, database_host))
+	$(DOCKERIZE) --link "$(POSTGRES_CONTAINER_NAME)":"$(DATABASE_HOST)" \
+							 $(ERLANG_IMAGE) \
+							 rebar3 ct
 
 .PHONY: run
 run: CONFIG_PATH = $(TEST_CONFIG_PATH)
@@ -122,7 +126,7 @@ db-create-migration:
 .PHONY: db-import-cities
 db-import-cities: CONFIG_PATH = $(TEST_CONFIG_PATH)
 db-import-cities:
-	@awk -F'\t' '{printf "%s\t%s\t%s\t%s\n", $$2, $$5, $$6, $$9}' data/cities_canada-usa.tsv >data/cities_canada-usa.tsv.tmp
+	@awk -F'\t' '{printf "%s\t%s\t%s\t%s\t%s\n", $$2, $$3, $$5, $$6, $$9}' data/cities_canada-usa.tsv >data/cities_canada-usa.tsv.tmp
 	$(eval DATABASE_USER := $(call get_config, database_user))
 	$(eval DATABASE_PASSWORD := $(call get_config, database_password))
 	$(eval DATABASE_NAME := $(call get_config, database_name))

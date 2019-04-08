@@ -45,36 +45,11 @@ end_per_testcase(_Case, _Config) ->
 %%%===================================================================
 
 t_not_found(_Config) ->
-  Response = request(get, "/blah", #{}),
-  404 = response_status(Response),
-  #{<<"message">> := <<"Not found.">>} = jsx:decode(response_body(Response), [return_maps]).
+  Response = busbudcc_test_helper:request(get, "/blah", #{}),
+  404 = busbudcc_test_helper:response_status(Response),
+  Body = busbudcc_test_helper:response_body(Response),
+  #{<<"message">> := <<"Not found.">>} = jsx:decode(Body, [return_maps]).
 
 %%%===================================================================
 %%% Internal functions
 %%%===================================================================
-
-request(get, PathOpts, QueryParams) ->
-  Port = ct:get_config({busbudcc, webserver_port}),
-  EncodedQueryParams = binary_to_list(cow_qs:qs(maps:to_list(QueryParams))),
-  Url = format("~s:~B~s?~s", [?API_URL, Port, make_url(PathOpts), EncodedQueryParams]),
-  {ok, Response} = httpc:request(get, {Url, []}, [], []),
-  Response;
-request(Method, PathOpts, Params) ->
-  Port = ct:get_config({busbudcc, webserver_port}),
-  EncodedParams = jsx:encode(Params),
-  Url = format("~s:~B~s", [?API_URL, Port, make_url(PathOpts)]),
-  Request = {Url, [], "application/json", EncodedParams},
-  {ok, Response} = httpc:request(Method, Request, [], []),
-  Response.
-
-make_url(PathOpts) when is_list(PathOpts) ->
-  PathOpts.
-
-response_body({_, _, Body}) ->
-  list_to_binary(Body).
-
-response_status({{_, Status, _}, _, _}) ->
-  Status.
-
-format(Format, Data) ->
-  lists:flatten(io_lib:format(Format, Data)).

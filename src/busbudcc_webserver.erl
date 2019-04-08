@@ -66,5 +66,7 @@ code_change(_OldVsn, State, _Extra) ->
 %%%===================================================================
 
 dispatch_rules() ->
-  [{'_', [% Not Found
+  [{'_', [% Suggestions
+          {"/suggestions", busbudcc_suggestions_handler, []},
+          % Not Found
           {'_', busbudcc_404_handler, []}]}].

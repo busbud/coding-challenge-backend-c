@@ -7,6 +7,7 @@ BEGIN;
 CREATE TABLE cities (
   id          SERIAL PRIMARY KEY,
   name        VARCHAR(200) NOT NULL,
+  asciiname   VARCHAR(200) NOT NULL,
   country     CHAR(2),
   latitude    FLOAT NOT NULL,
   longitude   FLOAT NOT NULL,
