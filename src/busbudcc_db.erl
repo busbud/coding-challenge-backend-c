@@ -22,9 +22,9 @@ create_connection() ->
   {ok, Password} = application:get_env(busbudcc, database_password),
   {ok, DatabaseName} = application:get_env(busbudcc, database_name),
   {ok, Connection} = epgsql:connect(binary_to_list(Host),
-                                    User,
-                                    Password,
-                                    [{database, DatabaseName},
+                                    binary_to_list(User),
+                                    binary_to_list(Password),
+                                    [{database, binary_to_list(DatabaseName)},
                                      {timeout, ?TIMEOUT}]),
   Connection.
 

@@ -40,6 +40,52 @@ run:
 							 $(ERLANG_IMAGE) \
 							 rebar3 as dev shell
 
+.PHONY: build
+build:
+	$(if $(TARGET_IMAGE), \
+			 @echo "Creating image \`$(TARGET_IMAGE)\`...", \
+			 @echo "TARGET_IMAGE not provided. Aborting.." && exit 1)
+	$(DOCKERIZE) $(ERLANG_IMAGE) rebar3 release
+	$(DOCKERIZE) --env REL_NAME=$(APP_NAME) \
+							 --workdir "/app/_build/default" \
+							 $(ERLANG_IMAGE) \
+							 /bin/bash -c "/app/scripts/mkimage"
+	$(eval REL_VERSION := $(call get_rel_version))
+	$(eval ERTS_VERSION := $(call get_erts_version))
+	$(eval IMAGE_NAME := "$(TARGET_IMAGE):$(REL_VERSION)")
+	@echo "Building image \`$(IMAGE_NAME)\`..."
+	@cp config/inet.config _build/default/inet.config
+	@docker build --file Dockerfile \
+								--build-arg REL_NAME=$(APP_NAME) \
+								--build-arg ERTS_VSN=$(ERTS_VERSION) \
+								--build-arg REL_VSN=$(REL_VERSION) \
+								--pull \
+								--no-cache \
+								--force-rm \
+								--tag $(IMAGE_NAME) \
+								_build/default/
+# @docker push $(IMAGE_NAME)
+
+.PHONY: run-prod
+run-prod:
+	$(if $(IMAGE_NAME), \
+			 @echo "Running image \`$(IMAGE_NAME)\`...", \
+			 @echo "IMAGE_NAME not provided. Aborting.." && exit 1)
+	$(eval DATABASE_HOST := $(call get_config, database_host))
+	$(eval DATABASE_USER := $(call get_config, database_user))
+	$(eval DATABASE_PASSWORD := $(call get_config, database_password))
+	$(eval DATABASE_NAME := $(call get_config, database_name))
+	@docker run -it \
+							--publish 9000:9000 \
+							--link "$(POSTGRES_CONTAINER_NAME)":"$(DATABASE_HOST)" \
+							--env "ERLANG_NODE=testing@localhost" \
+							--env "ERLANG_COOKIE=c5a779108932e1a0bdacfd29ce566222" \
+							--env "DATABASE_HOST=$(DATABASE_HOST)" \
+							--env "DATABASE_USER=$(DATABASE_USER)" \
+							--env "DATABASE_PASSWORD=$(DATABASE_PASSWORD)" \
+							--env "DATABASE_NAME=$(DATABASE_NAME)" \
+							$(IMAGE_NAME)
+
 ################################################################################
 ## Internal helpers
 ################################################################################
@@ -48,6 +94,14 @@ define get_config
 	$(shell $(DOCKERIZE) --volume="$(CONFIG_PATH)":"$(DOCKER_CONFIG_PATH)" \
 											 $(ERLANG_IMAGE) \
 											 /app/scripts/get_config $(DOCKER_CONFIG_PATH) $(1))
+endef
+
+define get_erts_version
+	$(shell $(DOCKERIZE) $(ERLANG_IMAGE) /bin/bash -c "/app/scripts/get_erts_version")
+endef
+
+define get_rel_version
+	$(shell $(DOCKERIZE) $(ERLANG_IMAGE) /bin/bash -c "/app/scripts/get_rel_version")
 endef
 
 ################################################################################

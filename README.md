@@ -130,7 +130,9 @@ To run the tests locally:
 $ make tests
 ```
 
-## Starting the database
+## Database setup
+
+### Starting the database
 
 Then to start the DB locally and run all migrations, run:
 
@@ -144,7 +146,7 @@ After that, to import the cities data, run:
 $ make db-import-cities
 ```
 
-## Updating the database
+### Updating the database
 
 To incorporate new schema changes into the database we need to use
 migrations. First, set up the database access credentials in
@@ -162,77 +164,27 @@ database. But for the production database, you should configure
 $ make db-migrate-up
 ```
 
+## Deploying
 
+### Building the docker image
 
-################################################################################
-## LOCAL DB API
-################################################################################
+In order to deploy the application we first need to build a Docker image.
+To do so, run:
 
-define start_db_container
-	@echo "\`$(POSTGRES_CONTAINER_NAME)\` not running. Starting container..."
-	$(eval DATABASE_USER := $(call get_config, database_user))
-	$(eval DATABASE_PASSWORD := $(call get_config, database_password))
-	$(eval DATABASE_NAME := $(call get_config, database_name))
-	@docker run --name $(POSTGRES_CONTAINER_NAME) \
-							--detach \
-	 						--volume "$(BASE_DIR)":/app \
-	 						--workdir /app \
-							--env POSTGRES_USER=$(DATABASE_USER) \
-							--env POSTGRES_PASSWORD=$(DATABASE_PASSWORD) \
-							--env POSTGRES_DB=$(DATABASE_NAME) \
-							--rm \
-	 						postgres:9.5.8-alpine
-	@docker exec $(POSTGRES_CONTAINER_NAME) sleep 5
-endef
+```
+$ TARGET_IMAGE=<image> make build
+```
 
-define stop_db_container
-	@docker kill $(POSTGRES_CONTAINER_NAME) 1>/dev/null
-	@echo "\`$(POSTGRES_CONTAINER_NAME)\` stopped."
-endef
+`<image>` should be the docker image name, which will be appended with
+the appropriate version tag.
 
-.PHONY: db-start
-db-start:
-	$(eval CONFIG_PATH := $(TEST_CONFIG_PATH))
-	$(if $(shell docker ps --filter "name=$(POSTGRES_CONTAINER_NAME)" --quiet), \
-	     @echo "\`$(POSTGRES_CONTAINER_NAME)\` already running.", \
-			 $(call start_db_container))
-	$(eval DATABASE_USER := $(call get_config, database_user))
-	$(eval DATABASE_PASSWORD := $(call get_config, database_password))
-	$(eval DATABASE_NAME := $(call get_config, database_name))
-	@docker exec $(POSTGRES_CONTAINER_NAME) \
-						   /bin/bash -c "sleep 10 && ./shmig -t postgresql \
-																								 -l $(DATABASE_USER) \
-																								 -p $(DATABASE_PASSWORD) \
-																								 -d $(DATABASE_NAME) \
-																								 up"
+## Running the docker image (locally)
 
-.PHONY: db-stop
-db-stop:
-	$(if $(shell docker ps --filter "name=$(POSTGRES_CONTAINER_NAME)" --quiet), \
-			 $(call stop_db_container), \
-			 @echo "\`$(POSTGRES_CONTAINER_NAME)\` not running.")
+Set up sys.config with valid credentials (use testing credentials for
+testing purposes). Then run:
 
-.PHONY: db-migrate-up
-db-migrate-up:
-	$(eval DATABASE_HOST := $(call get_config, database_host))
-	$(eval DATABASE_USER := $(call get_config, database_user))
-	$(eval DATABASE_PASSWORD := $(call get_config, database_password))
-	$(eval DATABASE_NAME := $(call get_config, database_name))
-	@docker run --volume "$(BASE_DIR)":/app \
-							--workdir /app \
-							--rm \
-	 						postgres:9.5.8-alpine \
-						  /bin/bash -c "./shmig -t postgresql \
-																		-H $(DATABASE_HOST) \
-																		-l $(DATABASE_USER) \
-																		-p $(DATABASE_PASSWORD) \
-																		-d $(DATABASE_NAME) \
-																		up"
-	@echo "Migrated \`$(DATABASE_HOST)\` to last version."
+```
+$ IMAGE_MAME=<image>:<version> make run-prod
+```
 
-.PHONY: db-create-migration
-db-create-migration:
-	$(if $(MIGRATION_NAME), \
-			 @echo "Creating migration \`$(MIGRATION_NAME)\`", \
-			 @echo "MIGRATION_NAME not provided. Aborting.." && exit 1)
-	./shmig -t postgresql -d unnecessary_name create $(MIGRATION_NAME)
+You should now be able to access the production app at [](http://localhost:9000/).
