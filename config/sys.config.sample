@@ -2,4 +2,4 @@
              {database_host, <<"pg.host">>},
              {database_user, <<"busbudcc_user">>},
              {database_name, <<"busbudcc_dev">>},
-             {database_password, <<"...">>}]}].
+             {database_password, <<"6cb8afa93f54b735">>}]}].

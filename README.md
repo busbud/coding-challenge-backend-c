@@ -5,7 +5,7 @@
 Begin by forking this repo and cloning your fork. GitHub has apps for [Mac](http://mac.github.com/) and
 [Windows](http://windows.github.com/) that make this easier.
 
-### Setting up a Erlang environment
+### 1. Set up an Erlang environment
 
 This project is configured using Docker. Building the project and running tests
 and deploys should be done through Docker. In case you need to configure and
@@ -14,7 +14,7 @@ setup your editor, the current Erlang version is `20.0.2`.
 Get started by installing [Docker (Community
 Edition)](https://docs.docker.com/install/).
 
-### Fetching & building dependencies
+### 2. Fetch & build dependencies
 
 To fetch and build dependencies run
 
@@ -22,19 +22,15 @@ To fetch and build dependencies run
 $ make deps
 ```
 
-### Running the app
+### 3. Configure the app settings
 
-To start a local server run
+For simplicity just copy the sample configuration:
 
 ```
-$ make run
+$ cp config/sys.config{.sample,}
 ```
 
-Then visit [localhost:9000](http://localhost:9000/).
-
-## Database setup
-
-### Starting the database
+## 3. Start the database
 
 Then to start the DB locally and run all migrations, run:
 
@@ -46,6 +42,34 @@ After that, to import the cities data, run:
 
 ```
 $ make db-import-cities
+```
+
+### 4. Run the app
+
+To start a local server run
+
+```
+$ make run
+```
+
+Then visit [localhost:9000](http://localhost:9000/).
+
+Quit running the app by typing `q().` on the Eralng shell you just started.
+
+## Testing
+
+In order to run the tests make sure you create a `config/test.config` file with
+the right configuration. For simplicity, just copy the sample file.
+
+```
+$ cp config/test.config{.sample,}
+```
+
+To run the tests locally (with the local db started and cities
+imported):
+
+```
+$ make tests
 ```
 
 ### Updating the database
@@ -64,24 +88,6 @@ database. But for the production database, you should configure
 
 ```
 $ make db-migrate-up
-```
-
-## Testing
-
-In order to run the tests make sure you create a `config/test.config` file with
-the right configuration.
-
-```
-$ cp config/test.config{.sample,}
-
-# Edit config/test.config...
-```
-
-To run the tests locally (with the local db started and cities
-imported):
-
-```
-$ make tests
 ```
 
 ## Deploying
@@ -107,4 +113,4 @@ testing purposes). Then run:
 $ IMAGE_NAME=<image>:<version> make run-prod
 ```
 
-You should now be able to access the production app at [localhost:9000](http://localhost:9000/).
+You should now be able to access the production app at [localhost:9000](http://localhost:9000/). Run `C-c` to abort.

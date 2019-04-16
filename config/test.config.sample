@@ -1,5 +1,5 @@
 {busbudcc, [{webserver_port, 9000},
-            {database_host, <<"db.host">>},
+            {database_host, <<"pg.host">>},
             {database_user, <<"busbudcc_user">>},
-            {database_password, <<"6cb8afa93f54b735">>},
-            {database_name, <<"busbud_dev">>}]}.
+            {database_name, <<"busbudcc_dev">>},
+            {database_password, <<"6cb8afa93f54b735">>}]}.

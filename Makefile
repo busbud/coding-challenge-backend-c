@@ -24,7 +24,6 @@ deps:
 	$(DOCKERIZE) $(ERLANG_IMAGE) rebar3 as dev compile
 
 .PHONY: tests
-tests: CONFIG_PATH = $(TEST_CONFIG_PATH)
 tests:
 	$(eval DATABASE_HOST := $(call get_config, database_host))
 	$(DOCKERIZE) --link "$(POSTGRES_CONTAINER_NAME)":"$(DATABASE_HOST)" \
@@ -32,7 +31,6 @@ tests:
 							 rebar3 ct
 
 .PHONY: run
-run: CONFIG_PATH = $(TEST_CONFIG_PATH)
 run:
 	$(eval DATABASE_HOST := $(call get_config, database_host))
 	$(DOCKERIZE) --publish 9000:9000 \
@@ -54,7 +52,7 @@ build:
 	$(eval ERTS_VERSION := $(call get_erts_version))
 	$(eval IMAGE_NAME := "$(TARGET_IMAGE):$(REL_VERSION)")
 	@echo "Building image \`$(IMAGE_NAME)\`..."
-	@cp config/inet.config _build/default/inet.config
+	@sudo cp config/inet.config _build/default/inet.config # HACK: this shouldn't be necessary. Should be sent with the rest of the config instead.
 	@docker build --file Dockerfile \
 								--build-arg REL_NAME=$(APP_NAME) \
 								--build-arg ERTS_VSN=$(ERTS_VERSION) \
@@ -132,7 +130,6 @@ endef
 
 .PHONY: db-start
 db-start:
-	$(eval CONFIG_PATH := $(TEST_CONFIG_PATH))
 	$(if $(shell docker ps --filter "name=$(POSTGRES_CONTAINER_NAME)" --quiet), \
 	     @echo "\`$(POSTGRES_CONTAINER_NAME)\` already running.", \
 			 $(call start_db_container))
@@ -178,7 +175,6 @@ db-create-migration:
 	./shmig -t postgresql -d unnecessary_name create $(MIGRATION_NAME)
 
 .PHONY: db-import-cities
-db-import-cities: CONFIG_PATH = $(TEST_CONFIG_PATH)
 db-import-cities:
 	@awk -F'\t' '{printf "%s\t%s\t%s\t%s\t%s\n", $$2, $$3, $$5, $$6, $$9}' data/cities_canada-usa.tsv >data/cities_canada-usa.tsv.tmp
 	$(eval DATABASE_USER := $(call get_config, database_user))
