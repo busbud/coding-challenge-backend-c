@@ -3,6 +3,16 @@ const LineStream = require('byline').LineStream;
 const pump = require('pump');
 const d3 = require('d3-dsv');
 
+const filterData = citiesData => citiesData.filter(cityData => cityData.population >= 5000);
+const mapData = citiesData => {
+  let headerArray = citiesData.shift();
+  return citiesData.map(cityValuesArray => {
+    let cityData = {};
+    cityValuesArray.forEach((value, columnIndex) => cityData[headerArray[columnIndex]] = value);
+    return cityData;
+  });
+};
+
 module.exports = path => new Promise( (resolve, reject) => {
   let citiesData = [];
   const citiesDataStream = fs.createReadStream('./data/cities_canada-usa.tsv', 'utf8');
@@ -14,16 +24,12 @@ module.exports = path => new Promise( (resolve, reject) => {
   });
   pump(citiesDataStream, lineStream, err => {
     if(!err) {
-      let headerArray = citiesData.shift();
-      let mappedCitesData = citiesData.map(cityValuesArray => {
-        let cityData = {};
-        cityValuesArray.forEach( (value, columnIndex) => cityData[headerArray[columnIndex]] = value);
-        return cityData;
-      });
-      let filteredCitiesData = mappedCitesData.filter(cityData => cityData.population >= 5000);
-      resolve(filteredCitiesData);
+      resolve(filterData(mapData(citiesData)));
     } else {
       reject(err)
     }
   });
 });
+
+module.exports.filterData = filterData;
+module.exports.mapData = mapData;
