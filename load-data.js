@@ -5,7 +5,7 @@ const d3 = require('d3-dsv');
 
 const filterDataByPopulation = citiesData => citiesData.filter(cityData => cityData.population >= 5000);
 const filterDataByCountry = citiesData => citiesData.filter(cityData => ['CA', 'US'].includes(cityData.country));
-const filterData = citiesData => filterDataByPopulation(filterDataByCountry(citiesData));
+const filterByPopAndByCountry = citiesData => filterDataByPopulation(filterDataByCountry(citiesData));
 const unwindArrayValues = citiesData => {
   let headerArray = citiesData.shift();
   return citiesData.map(cityValuesArray => {
@@ -26,12 +26,12 @@ module.exports = path => new Promise( (resolve, reject) => {
   });
   pump(citiesDataStream, lineStream, err => {
     if(!err) {
-      resolve(filterData(unwindArrayValues(citiesData)));
+      resolve(filterByPopAndByCountry(unwindArrayValues(citiesData)));
     } else {
       reject(err)
     }
   });
 });
 
-module.exports.filterData = filterData;
+module.exports.filterData = filterByPopAndByCountry;
 module.exports.unwindArrayValues = unwindArrayValues;
