@@ -1,4 +1,5 @@
 const express = require('express');
+const geolib = require('geolib');
 const app = express();
 const dataUtils = require('./data-utils');
 const port = process.env.PORT || 2345;
@@ -15,7 +16,27 @@ app.get('/suggestions', (req, res) => {
     potentialCityMatches = citiesData.filter(cityData => cityData.name.match(queryRegex));
   }
 
-  if (potentialCityMatches.length <= 0) {
+  const latitudeFloat = Number.parseFloat(res.query.latitude);
+  const isLatitudeANumber = !Number.isNaN(latitudeFloat);
+  const longitudeFloat = Number.parseFloat(res.query.longitude);
+  const isLongitudeANumber = !Number.isNaN(longitudeFloat);
+  if (isLatitudeANumber && isLongitudeANumber) {
+    const userCoord = {
+      latitude: latitudeFloat,
+      longitude: longitudeFloat
+    };
+    potentialCityMatches.forEach(cityData => {
+      const cityCoord = {
+        latitude: cityData.latitude,
+        longitude: cityData.longitude
+      };
+      cityData.distanceInKM = geolib.getDistance(userCoord, cityCoord) / 1000; //distance in kilometers
+    })
+  }
+
+  if (potentialCityMatches.length > 0) {
+    //apply scores
+  } else {
     res.status(404);
   }
   res.send({

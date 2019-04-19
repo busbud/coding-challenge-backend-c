@@ -11,7 +11,8 @@
   "license": "WTFPL",
   "dependencies": {
     "d3-dsv": "^1.1.1",
-    "express": "^4.16.4"
+    "express": "^4.16.4",
+    "geolib": "^2.0.24"
   },
   "engines": {
     "node": "0.10.26"
