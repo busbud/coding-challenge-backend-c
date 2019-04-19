@@ -64,10 +64,11 @@ describe('GET /suggestions', function() {
       })
     });
 
-    it('contains scores', function () {
+    it('contains scores between 0 and 1', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.every(function (suggestion) {
-          return suggestion.score != null;
+          const inRange = suggestion.score >= 0 && suggestion.score <= 1;
+          return suggestion.score != null && inRange;
         });
       })
     });
