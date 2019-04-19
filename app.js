@@ -7,9 +7,18 @@ let citiesData = require('./sync-load-data');
 citiesData = dataUtils.makeRegionsReadable(citiesData);
 
 app.get('/suggestions', (req, res) => {
-  const suggestions = [];
+  let potentialCityMatches = [];
+
+  if (req.query.q != null) {
+    const queryRegex = new RegExp(`^${req.query.q}.*`, 'i');
+    potentialCityMatches = citiesData.filter(cityData => cityData.name.match(queryRegex));
+  }
+
+  if (potentialCityMatches.length <= 0) {
+    res.status(404);
+  }
   res.send({
-    suggestions: suggestions
+    suggestions: potentialCityMatches
   });
 });
 app.use((req, res) => res.sendStatus(404));
