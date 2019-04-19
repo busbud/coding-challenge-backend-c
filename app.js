@@ -16,9 +16,9 @@ loadData('./data/cities_canada-usa.tsv')
       } else {
         res.end();
       }
-    }).listen(port, '127.0.0.1');
+    }).listen(port, '127.0.0.1', () =>
 
-    console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+    console.log('Server running at http://127.0.0.1:%d/suggestions', port));
 });
 
 process.on('unhandledRejection', error => {throw error});
