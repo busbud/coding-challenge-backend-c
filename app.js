@@ -1,7 +1,9 @@
 const http = require('http');
-const citiesData = require('./sync-load-data');
+const dataUtils = require('./data-utils');
+let citiesData = require('./sync-load-data');
 const port = process.env.PORT || 2345;
 
+citiesData = dataUtils.makeRegionsReadable(citiesData);
 module.exports = http.createServer(function (req, res) {
   res.writeHead(404, {'Content-Type': 'text/plain'});
 
