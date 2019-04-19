@@ -7,6 +7,11 @@ const filterDataByPopulation = citiesData => citiesData.filter(cityData => cityD
 const filterDataByCountry = citiesData => citiesData.filter(cityData => ['CA', 'US'].includes(cityData.country));
 const filterByPopAndByCountry = citiesData => filterDataByPopulation(filterDataByCountry(citiesData));
 const sortDataByPopulation = citiesData => citiesData.sort((cityDataA, cityDataB) => cityDataB.population - cityDataA.population);
+const dropUnusedDataFields = citiesData => {
+  const keysToKeep = ['id', 'name', 'lat', 'long', 'country', 'admin1', 'population'];
+  citiesData.forEach(cityData => Object.keys(cityData).forEach((key) => keysToKeep.includes(key) || delete cityData[key]));
+  return citiesData;
+};
 const unwindArrayValues = citiesData => {
   let headerArray = citiesData.shift();
   return citiesData.map(cityValuesArray => {
@@ -27,7 +32,7 @@ module.exports = path => new Promise( (resolve, reject) => {
   });
   pump(citiesDataStream, lineStream, err => {
     if(!err) {
-      resolve(sortDataByPopulation(filterByPopAndByCountry(unwindArrayValues(citiesData))));
+      resolve(sortDataByPopulation(filterByPopAndByCountry(dropUnusedDataFields(unwindArrayValues(citiesData)))));
     } else {
       reject(err)
     }
@@ -37,3 +42,4 @@ module.exports = path => new Promise( (resolve, reject) => {
 module.exports.filterData = filterByPopAndByCountry;
 module.exports.unwindArrayValues = unwindArrayValues;
 module.exports.sortDataByPopulation = sortDataByPopulation;
+module.exports.dropUnusedDataFields = dropUnusedDataFields;
