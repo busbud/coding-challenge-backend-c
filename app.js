@@ -9,11 +9,11 @@ citiesData = dataUtils.makeRegionsReadable(citiesData);
 citiesData = dataUtils.renameLatLong(citiesData);
 
 app.get('/suggestions', (req, res) => {
-  let potentialCityMatches = [];
+  let suggestions = [];
 
   if (req.query.q != null && res.query.q.length >= 1) {
     const queryRegex = new RegExp(`^${req.query.q}.*`, 'i');
-    potentialCityMatches = citiesData.filter(cityData => cityData.name.match(queryRegex));
+    suggestions = citiesData.filter(cityData => cityData.name.match(queryRegex));
   }
 
   const latitudeFloat = Number.parseFloat(res.query.latitude);
@@ -25,7 +25,7 @@ app.get('/suggestions', (req, res) => {
       latitude: latitudeFloat,
       longitude: longitudeFloat
     };
-    potentialCityMatches.forEach(cityData => {
+    suggestions.forEach(cityData => {
       const cityCoord = {
         latitude: cityData.latitude,
         longitude: cityData.longitude
@@ -34,13 +34,13 @@ app.get('/suggestions', (req, res) => {
     })
   }
 
-  if (potentialCityMatches.length > 0) {
+  if (suggestions.length > 0) {
     //apply scores
   } else {
     res.status(404);
   }
   res.send({
-    suggestions: potentialCityMatches
+    suggestions: suggestions
   });
 });
 
