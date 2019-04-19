@@ -16,14 +16,10 @@ app.get('/suggestions', (req, res) => {
     suggestions = citiesData.filter(cityData => cityData.name.match(queryRegex));
   }
 
-  const latitudeFloat = Number.parseFloat(req.query.latitude);
-  const isLatitudeANumber = !Number.isNaN(latitudeFloat);
-  const longitudeFloat = Number.parseFloat(req.query.longitude);
-  const isLongitudeANumber = !Number.isNaN(longitudeFloat);
-  if (isLatitudeANumber && isLongitudeANumber) {
+  if (req.query.latitude != null && req.query.longitude != null) {
     const userCoord = {
-      latitude: latitudeFloat,
-      longitude: longitudeFloat
+      latitude: req.query.latitude,
+      longitude: req.query.longitude
     };
     suggestions.forEach(cityData => {
       const cityCoord = {
