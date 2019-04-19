@@ -3,7 +3,9 @@ const LineStream = require('byline').LineStream;
 const pump = require('pump');
 const d3 = require('d3-dsv');
 
-const filterData = citiesData => citiesData.filter(cityData => cityData.population >= 5000);
+const filterDataByPopulation = citiesData => citiesData.filter(cityData => cityData.population >= 5000);
+const filterDataByCountry = citiesData => citiesData.filter(cityData => ['CA', 'US'].includes(cityData.country));
+const filterData = citiesData => filterDataByPopulation(filterDataByCountry(citiesData));
 const unwindArrayValues = citiesData => {
   let headerArray = citiesData.shift();
   return citiesData.map(cityValuesArray => {
