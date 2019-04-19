@@ -10,7 +10,7 @@ citiesData = dataUtils.renameLatLong(citiesData);
 app.get('/suggestions', (req, res) => {
   let potentialCityMatches = [];
 
-  if (req.query.q != null) {
+  if (req.query.q != null && res.query.q.length >= 1) {
     const queryRegex = new RegExp(`^${req.query.q}.*`, 'i');
     potentialCityMatches = citiesData.filter(cityData => cityData.name.match(queryRegex));
   }
