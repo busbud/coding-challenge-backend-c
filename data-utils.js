@@ -17,8 +17,18 @@ const makeRegionsReadable = citiesData => {
   });
   return citiesData;
 };
+const renameLatLong = citiesData => {
+  citiesData.forEach(citiesData => {
+    citiesData.latitude = citiesData.lat;
+    delete citiesData.lat;
+    citiesData.longitude = citiesData.long;
+    delete citiesData.long;
+  });
+  return citiesData;
+};
 
 module.exports.filterByPopAndByCountry = filterByPopAndByCountry;
 module.exports.sortDataByPopulation = sortDataByPopulation;
 module.exports.dropUnusedDataFields = dropUnusedDataFields;
 module.exports.makeRegionsReadable = makeRegionsReadable;
+module.exports.renameLatLong = renameLatLong;
