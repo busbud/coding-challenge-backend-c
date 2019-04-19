@@ -11,14 +11,14 @@ citiesData = dataUtils.renameLatLong(citiesData);
 app.get('/suggestions', (req, res) => {
   let suggestions = [];
 
-  if (req.query.q != null && res.query.q.length >= 1) {
+  if (req.query.q != null && req.query.q.length >= 1) {
     const queryRegex = new RegExp(`^${req.query.q}.*`, 'i');
     suggestions = citiesData.filter(cityData => cityData.name.match(queryRegex));
   }
 
-  const latitudeFloat = Number.parseFloat(res.query.latitude);
+  const latitudeFloat = Number.parseFloat(req.query.latitude);
   const isLatitudeANumber = !Number.isNaN(latitudeFloat);
-  const longitudeFloat = Number.parseFloat(res.query.longitude);
+  const longitudeFloat = Number.parseFloat(req.query.longitude);
   const isLongitudeANumber = !Number.isNaN(longitudeFloat);
   if (isLatitudeANumber && isLongitudeANumber) {
     const userCoord = {
