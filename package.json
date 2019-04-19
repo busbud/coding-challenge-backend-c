@@ -10,7 +10,8 @@
   "author": "",
   "license": "WTFPL",
   "dependencies": {
-    "d3-dsv": "^1.1.1"
+    "d3-dsv": "^1.1.1",
+    "express": "^4.16.4"
   },
   "engines": {
     "node": "0.10.26"
