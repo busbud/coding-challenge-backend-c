@@ -22,7 +22,7 @@ app.get('/suggestions', (req, res) => {
     suggestions: potentialCityMatches
   });
 });
-app.use((req, res) => res.sendStatus(404));
+app.use((req, res) => res.sendStatus(404)); //default 404 handler if no route found
 app.listen(port, '127.0.0.1', () => console.log('Server running at http://127.0.0.1:%d/suggestions', port));
 
 process.on('unhandledRejection', error => {throw error});
