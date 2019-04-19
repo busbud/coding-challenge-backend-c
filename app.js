@@ -5,7 +5,9 @@ const port = process.env.PORT || 2345;
 loadData('./data/cities_canada-usa.tsv')
   .then(data => console.log(`${data.length} lines of data. ` + JSON.stringify(data.slice(0,5), null, '  ')))
 ;
-module.exports = http.createServer(function (req, res) {
+let server;
+module.exports = server = http.createServer();
+server.on('request', function (req, res) {
   res.writeHead(404, {'Content-Type': 'text/plain'});
 
   if (req.url.indexOf('/suggestions') === 0) {
