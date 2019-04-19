@@ -24,7 +24,15 @@ module.exports = path => new Promise( (resolve, reject) => {
   });
   pump(citiesDataStream, lineStream, err => {
     if(!err) {
-      resolve(dataUtils.sortDataByPopulation(dataUtils.filterByPopAndByCountry(dataUtils.dropUnusedDataFields(unwindArrayValues(citiesData)))));
+      resolve(
+        dataUtils.sortDataByPopulation(
+          dataUtils.filterByPopAndByCountry(
+            dataUtils.dropUnusedDataFields(
+              unwindArrayValues(citiesData)
+            )
+          )
+        )
+      );
     } else {
       reject(err)
     }
