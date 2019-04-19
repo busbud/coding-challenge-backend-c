@@ -4,7 +4,7 @@ const pump = require('pump');
 const d3 = require('d3-dsv');
 
 const filterData = citiesData => citiesData.filter(cityData => cityData.population >= 5000);
-const mapData = citiesData => {
+const unwindArrayValues = citiesData => {
   let headerArray = citiesData.shift();
   return citiesData.map(cityValuesArray => {
     let cityData = {};
@@ -24,7 +24,7 @@ module.exports = path => new Promise( (resolve, reject) => {
   });
   pump(citiesDataStream, lineStream, err => {
     if(!err) {
-      resolve(filterData(mapData(citiesData)));
+      resolve(filterData(unwindArrayValues(citiesData)));
     } else {
       reject(err)
     }
@@ -32,4 +32,4 @@ module.exports = path => new Promise( (resolve, reject) => {
 });
 
 module.exports.filterData = filterData;
-module.exports.mapData = mapData;
+module.exports.unwindArrayValues = unwindArrayValues;
