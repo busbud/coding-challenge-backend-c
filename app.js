@@ -1,5 +1,5 @@
 const http = require('http');
-const citiesData = require('./alt-load-data');
+const citiesData = require('./sync-load-data');
 const port = process.env.PORT || 2345;
 
 module.exports = http.createServer(function (req, res) {
