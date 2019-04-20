@@ -18,7 +18,13 @@ const addDistanceToSuggestions = (suggestions, lat, long) => {
 
 const scoreSuggestions = suggestions => {
   suggestions.forEach(cityData => cityData.score = score(cityData.distanceInKM, cityData.population));
-  suggestions.sort((cityDataA, cityDataB) => cityDataB.score - cityDataA.score);
+  sortByScore(suggestions);
+  normaliseSuggestionScores(suggestions);
+};
+
+const score = (distance, population) => Math.pow(distance, -10 / 3) * Math.pow(population, 6);
+const sortByScore = suggestions => suggestions.sort((cityDataA, cityDataB) => cityDataB.score - cityDataA.score);
+const normaliseSuggestionScores = suggestions => {
   const maxScore = suggestions.length >= 1 ? Math.log(suggestions[0].score) : null;
   const minScore = suggestions.length >= 1 ? Math.log(suggestions.slice(-1)[0].score) : null;
   suggestions.forEach(cityData => {
@@ -29,9 +35,9 @@ const scoreSuggestions = suggestions => {
   });
 };
 
-const score = (distance, population) => Math.pow(distance, -10 / 3) * Math.pow(population, 6);
-
 module.exports = {};
 module.exports.addDistanceToSuggestions = addDistanceToSuggestions;
 module.exports.scoreSuggestions = scoreSuggestions;
-
+module.exports.score = score;
+module.exports.sortByScore = sortByScore;
+module.exports.normaliseSuggestionScores = normaliseSuggestionScores;
