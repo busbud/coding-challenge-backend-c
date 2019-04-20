@@ -7,6 +7,7 @@ const port = process.env.PORT || 2345;
 let citiesData = require('./sync-load-data');
 citiesData = dataUtils.makeRegionsReadable(citiesData);
 citiesData = dataUtils.renameLatLong(citiesData);
+citiesData = dataUtils.addEasyDisplayName(citiesData);
 
 app.get('/suggestions', (req, res) => {
   let suggestions = [];

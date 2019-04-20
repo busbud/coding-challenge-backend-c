@@ -26,9 +26,14 @@ const renameLatLong = citiesData => {
   });
   return citiesData;
 };
+const addEasyDisplayName = citiesData => {
+  citiesData.forEach(cityData => cityData.easyDisplayName = `${cityData.name}, ${cityData.admin1}, ${cityData.country}`);
+  return citiesData;
+};
 
 module.exports.filterByPopAndByCountry = filterByPopAndByCountry;
 module.exports.sortDataByPopulation = sortDataByPopulation;
 module.exports.dropUnusedDataFields = dropUnusedDataFields;
 module.exports.makeRegionsReadable = makeRegionsReadable;
 module.exports.renameLatLong = renameLatLong;
+module.exports.addEasyDisplayName = addEasyDisplayName;
