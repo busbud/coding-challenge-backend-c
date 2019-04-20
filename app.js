@@ -32,8 +32,8 @@ app.get('/suggestions', (req, res) => {
 
   suggestions.forEach(cityData => cityData.score = Math.pow(cityData.distanceInKM, -8/7) * Math.pow(cityData.population, 2));
   suggestions.sort((cityDataA, cityDataB) => cityDataB.score - cityDataA.score);
-  if (suggestions.length > 0) {
-  } else {
+
+  if (suggestions.length <= 0) {
     res.status(404);
   }
   res.send({
