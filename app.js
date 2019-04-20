@@ -16,6 +16,9 @@ app.get('/suggestions', (req, res) => {
     suggestions = citiesData.filter(cityData => cityData.name.match(queryRegex));
   }
 
+  //clone each suggestion so that we can modify them without affecting our original/raw data
+  suggestions = suggestions.map(cityData => Object.assign({}, cityData));
+
   scoringHelper.addDistanceToSuggestions(suggestions, req.query.latitude, req.query.longitude);
   scoringHelper.scoreSuggestions(suggestions);
 
