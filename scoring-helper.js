@@ -22,7 +22,11 @@ const scoreSuggestions = suggestions => {
   normaliseSuggestionScores(suggestions);
 };
 
-const score = (distance, population) => Math.pow(distance, -10 / 3) * Math.pow(population, 6);
+const score = (distance, population) => {
+  let distanceScore = distance ? Math.pow(distance, -10 / 3) : 1;
+  let populationScore = Math.pow(population, 6);
+  return distanceScore * populationScore;
+};
 const sortByScore = suggestions => suggestions.sort((cityDataA, cityDataB) => cityDataB.score - cityDataA.score);
 const normaliseSuggestionScores = suggestions => {
   const maxScore = suggestions.length >= 1 ? Math.log(suggestions[0].score) : null;
