@@ -26,7 +26,7 @@ describe('GET /suggestions', function() {
     });
   });
 
-  describe('with a valid city', function () {
+  describe('with a valid and unique city', function () {
     var response;
 
     before(function (done) {
@@ -48,12 +48,9 @@ describe('GET /suggestions', function() {
       expect(response.json.suggestions).to.have.length.above(0);
     });
 
-    it('contains a match', function () {
-      expect(response.json.suggestions).to.satisfy(function (suggestions) {
-        return suggestions.some(function (suggestion) {
-          return suggestion.name.match(/Laval/i);
-        });
-      })
+    it('contains exactly one match', function () {
+      expect(response.json.suggestions.length).to.equal(1);
+      expect(response.json.suggestions[0].name.match(/Laval/i));
     });
 
     it('contains latitudes and longitudes', function () {
