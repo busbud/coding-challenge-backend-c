@@ -27,7 +27,21 @@ const renameLatLong = citiesData => {
   return citiesData;
 };
 const addEasyDisplayName = citiesData => {
-  citiesData.forEach(cityData => cityData.easyDisplayName = `${cityData.name}, ${cityData.admin1}, ${cityData.country}`);
+  citiesData.forEach(cityData => {
+    const displayNameComponents = [];
+
+    displayNameComponents.push(cityData.name);
+
+    if(cityData.admin1 != null) {
+      displayNameComponents.push(cityData.admin1);
+    }
+
+    if(cityData.country != null) {
+      displayNameComponents.push(cityData.country);
+    }
+
+    cityData.easyDisplayName = displayNameComponents.join(', ');
+  });
   return citiesData;
 };
 
