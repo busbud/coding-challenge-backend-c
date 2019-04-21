@@ -13,8 +13,8 @@ app.get('/suggestions', (req, res) => {
   let suggestions = [];
 
   if (req.query.q != null && req.query.q.length >= 1) {
-    const compareOptions = {usage: 'search', sensitivity: 'base'};
-    suggestions = citiesData.filter(cityData => 0 === cityData.name.localeCompare(req.query.q, [], compareOptions));
+    const queryRegex = new RegExp(`^${req.query.q}.*`, 'i');
+    suggestions = citiesData.filter(cityData => cityData.name.match(queryRegex));
   }
 
   //clone each suggestion so that we can modify them without affecting our original/raw data
