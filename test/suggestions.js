@@ -26,12 +26,12 @@ describe('GET /suggestions', function() {
     });
   });
 
-  describe('with a valid and unique city', function () {
+  describe('with a partial string', function () {
     var response;
 
     before(function (done) {
       request
-        .get('/suggestions?q=Laval')
+        .get('/suggestions?q=Ot')
         .end(function (err, res) {
           response = res;
           response.json = JSON.parse(res.text);
@@ -46,11 +46,6 @@ describe('GET /suggestions', function() {
     it('returns an array of suggestions', function () {
       expect(response.json.suggestions).to.be.instanceof(Array);
       expect(response.json.suggestions).to.have.length.above(0);
-    });
-
-    it('contains exactly one match', function () {
-      expect(response.json.suggestions.length).to.equal(1);
-      expect(response.json.suggestions[0].name.match(/Laval/i));
     });
 
     it('contains latitudes and longitudes', function () {
