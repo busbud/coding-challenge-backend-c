@@ -18,10 +18,10 @@
     "node": "0.10.26"
   },
   "devDependencies": {
-    "chai": "^1.10.0",
-    "mocha": "^1.21.5",
+    "chai": "^4.2.0",
+    "mocha": "^3.5.3",
     "stacktrace-js": "^2.0.0",
-    "supertest": "^0.11.0",
+    "supertest": "^4.0.2",
     "testdouble": "^3.11.0"
   }
 }
