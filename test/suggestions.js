@@ -45,7 +45,7 @@ describe('GET /suggestions', function() {
 
     it('returns an array of suggestions', function () {
       expect(response.json.suggestions).to.be.instanceof(Array);
-      expect(response.json.suggestions).to.have.length.above(0);
+      expect(response.json.suggestions).to.have.length.above(1);
     });
 
     it('contains latitudes and longitudes', function () {
