@@ -13,8 +13,12 @@ app.get('/suggestions', (req, res) => {
   let suggestions = [];
 
   if (req.query.q != null && req.query.q.length >= 1) {
-    const queryRegex = new RegExp(`^${req.query.q}.*`, 'i');
-    suggestions = citiesData.filter(cityData => cityData.name.match(queryRegex));
+    const nameQueryRegex = new RegExp(`^${req.query.q}.*`, 'i');
+    suggestions = citiesData.filter(cityData =>
+      cityData.name.match(nameQueryRegex)
+        || cityData.ascii.match(nameQueryRegex)
+        || cityData.alt_name.some(altName => altName.match(nameQueryRegex))
+    );
   }
 
   //clone each suggestion so that we can modify them without affecting our original/raw data
