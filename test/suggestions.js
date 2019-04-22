@@ -141,4 +141,23 @@ describe('GET /suggestions', () => {
       expect(response.json.suggestions.some(suggestion => suggestion.name.match(/montréal/i)));
     });
   });
+
+  describe('with city name in another language', () => {
+    var response;
+
+    before(done => {
+      request
+        .get(`/suggestions?q=${encodeURIComponent('Нью')}`)
+        .end((err, res) => {
+          response = res;
+          response.json = JSON.parse(res.text);
+          done(err);
+        });
+    });
+
+    it('returns a match', () => {
+      expect(response.json.suggestions.length).to.be.at.least(1);
+      expect(response.json.suggestions[0].name.match(/new york/i));
+    });
+  });
 });
