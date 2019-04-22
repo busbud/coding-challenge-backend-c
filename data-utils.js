@@ -6,7 +6,7 @@ const filterDataByCountry = citiesData => citiesData.filter(cityData => ['CA', '
 const filterByPopAndByCountry = citiesData => filterDataByPopulation(filterDataByCountry(citiesData));
 const sortDataByPopulation = citiesData => citiesData.sort((cityDataA, cityDataB) => cityDataB.population - cityDataA.population);
 const dropUnusedDataFields = citiesData => {
-  const keysToKeep = ['id', 'name', 'lat', 'long', 'country', 'admin1', 'population'];
+  const keysToKeep = ['id', 'name', 'ascii', 'alt_name', 'lat', 'long', 'country', 'admin1', 'population'];
   citiesData.forEach(cityData => Object.keys(cityData).forEach((key) => keysToKeep.includes(key) || delete cityData[key]));
   return citiesData;
 };
