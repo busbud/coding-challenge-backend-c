@@ -122,4 +122,23 @@ describe('GET /suggestions', () => {
       expect(response.json.suggestions[0].name.match(/Chambly/i));
     });
   });
+
+  describe('with query with no accents', () => {
+    var response;
+
+    before(done => {
+      request
+        .get('/suggestions?q=montreal')
+        .end((err, res) => {
+          response = res;
+          response.json = JSON.parse(res.text);
+          done(err);
+        });
+    });
+
+    it('matches cities that do have accents', () => {
+      expect(response.json.suggestions.length).to.be.at.least(1);
+      expect(response.json.suggestions.some(suggestion => suggestion.name.match(/montréal/i)));
+    });
+  });
 });
