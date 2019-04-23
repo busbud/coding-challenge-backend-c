@@ -1,20 +1,20 @@
 const fs = require('fs');
 const d3 = require('d3-dsv');
 
-let stringData = fs.readFileSync('./data/cities_canada-usa.tsv', 'utf8');
-stringData = stringData.replace(/["]/g, ''); // Force data to conform to RFC 4180 before parsing it
+let string_data = fs.readFileSync('./data/cities_canada-usa.tsv', 'utf8');
+string_data = string_data.replace(/["]/g, ''); // Force data to conform to RFC 4180 before parsing it
 
-const citiesData = d3.tsvParse(stringData, d3.autoType);
+const cities_data = d3.tsvParse(string_data, d3.autoType);
 
 // post processing, change comman-separated alt_name field into array of alt names
-citiesData.forEach(cityData => {
-  if (cityData.alt_name != null) {
-    cityData.alt_name = d3.csvParseRows(cityData.alt_name); // unwrap comma-separated alternative names
-    if (cityData.alt_name.length === 1) {
-      cityData.alt_name = cityData.alt_name[0]; // unwrap nested array
+cities_data.forEach(city_data => {
+  if (city_data.alt_name != null) {
+    city_data.alt_name = d3.csvParseRows(city_data.alt_name); // unwrap comma-separated alternative names
+    if (city_data.alt_name.length === 1) {
+      city_data.alt_name = city_data.alt_name[0]; // unwrap nested array
     }
   } else {
-    cityData.alt_name = []; // always provide a default so that we can alt_name.forEach
+    city_data.alt_name = []; // always provide a default so that we can alt_name.forEach
   }
 });
-module.exports = citiesData;
+module.exports = cities_data;
