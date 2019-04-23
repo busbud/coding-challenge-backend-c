@@ -19,7 +19,7 @@ const dropUnusedDataFields = citiesData => {
   return Promise.resolve(citiesData);
 };
 
-const makeRegionsReadable = citiesData => {
+const replaceRegionCodesWithNames = citiesData => {
   citiesData.forEach(citiesData => {
     citiesData.admin1 = admin1Codes[citiesData.admin1];
     citiesData.country = countryCodes[citiesData.country];
@@ -60,6 +60,6 @@ module.exports.filterDataByPopulation = filterDataByPopulation;
 module.exports.filterDataByCountry = filterDataByCountry;
 module.exports.sortDataByPopulationDesc = sortDataByPopulationDesc;
 module.exports.dropUnusedDataFields = dropUnusedDataFields;
-module.exports.makeRegionsReadable = makeRegionsReadable;
+module.exports.replaceRegionCodesWithNames = replaceRegionCodesWithNames;
 module.exports.renameLatLong = renameLatLong;
 module.exports.addEasyDisplayName = addEasyDisplayName;

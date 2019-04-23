@@ -20,7 +20,7 @@ dataUtils.dropUnusedDataFields(citiesData) // drop unused fields to reduce its s
   .then(dataUtils.filterByCountry)         // keep only cities from USA & Canada
   .then(dataUtils.filterByPopulation)      // keep only cities with population >= 5000
   .then(dataUtils.sortDataByPopulationDesc)// sort by population, descending
-  .then(dataUtils.makeRegionsReadable)
+  .then(dataUtils.replaceRegionCodesWithNames)
   .then(dataUtils.renameLatLong)
   .then(dataUtils.addEasyDisplayName)
   .then(processedCitiesData => { citiesData = processedCitiesData; })
