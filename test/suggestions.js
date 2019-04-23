@@ -1,6 +1,6 @@
 const chai = require('chai');
-const expect  = chai.expect;
-const app     = require('../app');
+const expect = chai.expect;
+const app = require('../app');
 const request = require('supertest')(app);
 chai.use(require('chai-things'));
 
@@ -56,15 +56,15 @@ describe('GET /suggestions', () => {
     it('contains latitudes and longitudes', () => {
       expect(response.json.suggestions).to.satisfy(suggestions =>
         suggestions.every(suggestion => suggestion.latitude && suggestion.longitude)
-      )
+      );
     });
 
     it('contains scores between 0 and 1', () => {
       expect(response.json.suggestions).to.satisfy(suggestions =>
-        suggestions.every(suggestion => 
+        suggestions.every(suggestion =>
           suggestion.score != null && suggestion.score >= 0 && suggestion.score <= 1
         )
-      )
+      );
     });
 
     it('should NOT include a distance for any suggestions', () => {
@@ -93,14 +93,14 @@ describe('GET /suggestions', () => {
 
     it('should return local results reasonably high in the rankings', () => {
       expect(response.json.suggestions.slice(0, 5)).to.satisfy(suggestions =>
-        suggestions.some(suggestion => suggestion.name == 'Laval')
-      )
+        suggestions.some(suggestion => suggestion.name === 'Laval')
+      );
     });
 
     it('should return balance top population suggestions with local results', () => {
       expect(response.json.suggestions.slice(0, 5)).to.satisfy(suggestions =>
-        suggestions.some(suggestion => suggestion.name == 'Las Vegas')
-      )
+        suggestions.some(suggestion => suggestion.name === 'Las Vegas')
+      );
     });
   });
 
