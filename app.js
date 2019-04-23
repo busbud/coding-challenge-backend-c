@@ -17,13 +17,13 @@ const speedLimiter = slowDown({
 
 let citiesData = require('./sync-load-data'); // load the data set
 dataUtils.dropUnusedDataFields(citiesData) // drop unused fields to reduce its size
-  .then(dataUtils.filterByCountry)         // keep only cities from USA & Canada
-  .then(dataUtils.filterByPopulation)      // keep only cities with population >= 5000
+  .then(dataUtils.filterByCountry) // keep only cities from USA & Canada
+  .then(dataUtils.filterByPopulation) // keep only cities with population >= 5000
   .then(dataUtils.sortDataByPopulationDesc)// sort by population, descending
   .then(dataUtils.replaceRegionCodesWithNames) // replace province/state and country codes with actual names
   .then(dataUtils.renameLatLong) // rename lat, long -> latitude, longitude
   .then(dataUtils.addEasyDisplayName) // add a geographically-qualified name like 'Montreal, Quebec, Canada'
-  .then(processedCitiesData => { citiesData = processedCitiesData; }) //save the final processed data set
+  .then(processedCitiesData => { citiesData = processedCitiesData; }) // save the final processed data set
 ;
 
 app.use(speedLimiter); // rate-limit requests, per challenge requirements
