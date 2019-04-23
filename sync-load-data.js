@@ -7,7 +7,7 @@ stringData = stringData.replace(/["]/g, ''); // Force data to conform to RFC 418
 const citiesData = d3.tsvParse(stringData, d3.autoType);
 citiesData.forEach(cityData => {
   if (cityData.alt_name != null) {
-    cityData.alt_name = d3.csvParseRows(cityData.alt_name);
+    cityData.alt_name = d3.csvParseRows(cityData.alt_name); // unwrap comma-separated alternative names
     if (cityData.alt_name.length === 1) {
       cityData.alt_name = cityData.alt_name[0];
     }
