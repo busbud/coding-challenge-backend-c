@@ -17,7 +17,7 @@ const addDistanceToSuggestions = (suggestions, lat, long) => {
 };
 
 const scoreSuggestions = suggestions => {
-  suggestions.forEach(cityData => cityData.score = score(cityData.distanceInKM, cityData.population));
+  suggestions.forEach(cityData => { cityData.score = score(cityData.distanceInKM, cityData.population); });
   sortByScore(suggestions);
   normaliseSuggestionScores(suggestions);
 };

@@ -93,13 +93,13 @@ describe('GET /suggestions', () => {
 
     it('should return local results reasonably high in the rankings', () => {
       expect(response.json.suggestions.slice(0, 5)).to.satisfy(suggestions =>
-        suggestions.some(suggestion => suggestion.name == 'Laval')
+        suggestions.some(suggestion => suggestion.name === 'Laval')
       );
     });
 
     it('should return balance top population suggestions with local results', () => {
       expect(response.json.suggestions.slice(0, 5)).to.satisfy(suggestions =>
-        suggestions.some(suggestion => suggestion.name == 'Las Vegas')
+        suggestions.some(suggestion => suggestion.name === 'Las Vegas')
       );
     });
   });

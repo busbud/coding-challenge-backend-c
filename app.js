@@ -20,7 +20,7 @@ dataUtils.dropUnusedDataFields(citiesData)
   .then(dataUtils.makeRegionsReadable)
   .then(dataUtils.renameLatLong)
   .then(dataUtils.addEasyDisplayName)
-  .then(processedCitiesData => citiesData = processedCitiesData)
+  .then(processedCitiesData => { citiesData = processedCitiesData; })
 ;
 
 app.use(speedLimiter); // rate-limit requests, per challenge requirements
