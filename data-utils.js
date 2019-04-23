@@ -1,59 +1,59 @@
-const countryCodes = require('./data/countrycodes');
-const admin1Codes = require('./data/admin1codes');
+const COUNTRY_CODES = require('./data/countrycodes');
+const ADMIN1_CODES = require('./data/admin1codes');
 
-const filterDataByMinPopulation = (citiesData, minPopulation = 5000) =>
-  Promise.resolve(citiesData.filter(cityData => cityData.population >= minPopulation))
+const filterDataByMinPopulation = (cities_data, min_population = 5000) =>
+  Promise.resolve(cities_data.filter(c => c.population >= min_population))
 ;
 
-const filterDataByCountry = (citiesData, arrayOfAcceptedCountries = ['CA', 'US']) =>
-  Promise.resolve(citiesData.filter(cityData => arrayOfAcceptedCountries.includes(cityData.country)))
+const filterDataByCountry = (cities_data, array_of_accepted_countries = ['CA', 'US']) =>
+  Promise.resolve(cities_data.filter(c => array_of_accepted_countries.includes(c.country)))
 ;
 
-const sortDataByPopulationDesc = citiesData =>
-  Promise.resolve(citiesData.sort((cityDataA, cityDataB) => cityDataB.population - cityDataA.population))
+const sortDataByPopulationDesc = cities_data =>
+  Promise.resolve(cities_data.sort((a, b) => b.population - a.population))
 ;
 
-const dropUnusedDataFields = citiesData => {
-  const keysToKeep = ['id', 'name', 'ascii', 'alt_name', 'lat', 'long', 'country', 'admin1', 'population'];
-  citiesData.forEach(cityData => Object.keys(cityData).forEach((key) => keysToKeep.includes(key) || delete cityData[key]));
-  return Promise.resolve(citiesData);
+const dropUnusedDataFields = cities_data => {
+  const keys_to_keep = ['id', 'name', 'ascii', 'alt_name', 'lat', 'long', 'country', 'admin1', 'population'];
+  cities_data.forEach(c => Object.keys(c).forEach((k) => keys_to_keep.includes(k) || delete c[k]));
+  return Promise.resolve(cities_data);
 };
 
-const replaceRegionCodesWithNames = citiesData => {
-  citiesData.forEach(citiesData => {
-    citiesData.admin1 = admin1Codes[citiesData.admin1];
-    citiesData.country = countryCodes[citiesData.country];
+const replaceRegionCodesWithNames = cities_data => {
+  cities_data.forEach(cities_data => {
+    cities_data.admin1 = ADMIN1_CODES[cities_data.admin1];
+    cities_data.country = COUNTRY_CODES[cities_data.country];
   });
-  return Promise.resolve(citiesData);
+  return Promise.resolve(cities_data);
 };
 
-const renameLatLong = citiesData => {
-  citiesData.forEach(citiesData => {
-    citiesData.latitude = citiesData.lat;
-    delete citiesData.lat;
-    citiesData.longitude = citiesData.long;
-    delete citiesData.long;
+const renameLatLong = cities_data => {
+  cities_data.forEach(cities_data => {
+    cities_data.latitude = cities_data.lat;
+    delete cities_data.lat;
+    cities_data.longitude = cities_data.long;
+    delete cities_data.long;
   });
-  return Promise.resolve(citiesData);
+  return Promise.resolve(cities_data);
 };
 
-const addEasyDisplayName = citiesData => {
-  citiesData.forEach(cityData => {
-    const displayNameComponents = [];
+const addEasyDisplayName = cities_data => {
+  cities_data.forEach(city_data => {
+    const display_name_components = [];
 
-    displayNameComponents.push(cityData.name);
+    display_name_components.push(city_data.name);
 
-    if (cityData.admin1 != null) {
-      displayNameComponents.push(cityData.admin1);
+    if (city_data.admin1 != null) {
+      display_name_components.push(city_data.admin1);
     }
 
-    if (cityData.country != null) {
-      displayNameComponents.push(cityData.country);
+    if (city_data.country != null) {
+      display_name_components.push(city_data.country);
     }
 
-    cityData.easyDisplayName = displayNameComponents.join(', ');
+    city_data.easyDisplayName = display_name_components.join(', ');
   });
-  return Promise.resolve(citiesData);
+  return Promise.resolve(cities_data);
 };
 
 module.exports.filterDataByMinPopulation = filterDataByMinPopulation;
