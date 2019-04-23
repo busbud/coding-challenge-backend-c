@@ -12,7 +12,7 @@ citiesData.forEach(cityData => {
       cityData.alt_name = cityData.alt_name[0]; // unwrap nested array
     }
   } else {
-    cityData.alt_name = [];
+    cityData.alt_name = []; // always provide a default so that we can alt_name.forEach
   }
 });
 module.exports = citiesData;
