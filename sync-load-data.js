@@ -9,7 +9,7 @@ citiesData.forEach(cityData => {
   if (cityData.alt_name != null) {
     cityData.alt_name = d3.csvParseRows(cityData.alt_name); // unwrap comma-separated alternative names
     if (cityData.alt_name.length === 1) {
-      cityData.alt_name = cityData.alt_name[0];
+      cityData.alt_name = cityData.alt_name[0]; // unwrap nested array
     }
   } else {
     cityData.alt_name = [];
