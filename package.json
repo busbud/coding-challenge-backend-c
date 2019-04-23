@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "test": "semistandard && mocha"
+    "test": "mocha",
+    "lint": "semistandard"
   },
   "author": "",
   "license": "WTFPL",
