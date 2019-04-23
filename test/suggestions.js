@@ -1,12 +1,12 @@
 const chai = require('chai');
-var expect  = chai.expect;
-var app     = require('../app');
-var request = require('supertest')(app);
+const expect  = chai.expect;
+const app     = require('../app');
+const request = require('supertest')(app);
 chai.use(require('chai-things'));
 
 describe('GET /suggestions', () => {
   describe('with a non-existent city', () => {
-    var response;
+    let response;
 
     before(done => {
       request
@@ -29,7 +29,7 @@ describe('GET /suggestions', () => {
   });
 
   describe('with a partial string (no lat/long)', () => {
-    var response;
+    let response;
 
     before(done => {
       request
@@ -74,7 +74,7 @@ describe('GET /suggestions', () => {
   });
 
   describe('with a partial string and a latitude and longitude', () => {
-    var response;
+    let response;
 
     before(done => {
       request
@@ -105,7 +105,7 @@ describe('GET /suggestions', () => {
   });
 
   describe('with a valid and unique city', () => {
-    var response;
+    let response;
 
     before(done => {
       request
@@ -124,7 +124,7 @@ describe('GET /suggestions', () => {
   });
 
   describe('with query with no accents', () => {
-    var response;
+    let response;
 
     before(done => {
       request
@@ -143,7 +143,7 @@ describe('GET /suggestions', () => {
   });
 
   describe('with city name in another language', () => {
-    var response;
+    let response;
 
     before(done => {
       request
