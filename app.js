@@ -1,8 +1,16 @@
 const express = require('express');
+const slowDown = require("express-slow-down");
 const app = express();
 const dataUtils = require('./data-utils');
 const scoringHelper = require('./scoring-helper');
 const port = process.env.PORT || 2345;
+app.enable("trust proxy");
+
+const speedLimiter = slowDown({
+  windowMs: 60 * 1000, // 1 minute
+  delayAfter: 100, // allow 100 requests per minute, then...
+  delayMs: 100 // begin adding 100ms of delay per request above 100:
+});
 
 let citiesData = require('./sync-load-data');
 dataUtils.dropUnusedDataFields(citiesData)
@@ -15,6 +23,7 @@ dataUtils.dropUnusedDataFields(citiesData)
   .then(processedCitiesData => citiesData = processedCitiesData)
 ;
 
+app.use(speedLimiter); //rate-limit requests, per challenge requirements
 app.get('/suggestions', (req, res) => {
   let suggestions = [];
 
