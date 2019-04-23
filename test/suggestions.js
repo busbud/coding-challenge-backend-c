@@ -61,9 +61,7 @@ describe('GET /suggestions', () => {
 
     it('contains scores between 0 and 1', () => {
       expect(response.json.suggestions).to.satisfy(suggestions =>
-        suggestions.every(suggestion =>
-          suggestion.score != null && suggestion.score >= 0 && suggestion.score <= 1
-        )
+        suggestions.every(s => s.score != null && s.score >= 0 && s.score <= 1)
       );
     });
 
@@ -92,15 +90,11 @@ describe('GET /suggestions', () => {
     });
 
     it('should return local results reasonably high in the rankings', () => {
-      expect(response.json.suggestions.slice(0, 5)).to.satisfy(suggestions =>
-        suggestions.some(suggestion => suggestion.name === 'Laval')
-      );
+      expect(response.json.suggestions.slice(0, 5)).to.satisfy(s => s.some(c => c.name === 'Laval'));
     });
 
     it('should return balance top population suggestions with local results', () => {
-      expect(response.json.suggestions.slice(0, 5)).to.satisfy(suggestions =>
-        suggestions.some(suggestion => suggestion.name === 'Las Vegas')
-      );
+      expect(response.json.suggestions.slice(0, 5)).to.satisfy(s => s.some(c => c.name === 'Las Vegas'));
     });
   });
 
