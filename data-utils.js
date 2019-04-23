@@ -1,7 +1,7 @@
 const countryCodes = require('./data/countrycodes');
 const admin1Codes = require('./data/admin1codes');
 
-const filterDataByPopulation = (citiesData, minPopulation = 5000) =>
+const filterDataByMinPopulation = (citiesData, minPopulation = 5000) =>
   Promise.resolve(citiesData.filter(cityData => cityData.population >= minPopulation))
 ;
 
@@ -56,7 +56,7 @@ const addEasyDisplayName = citiesData => {
   return Promise.resolve(citiesData);
 };
 
-module.exports.filterDataByPopulation = filterDataByPopulation;
+module.exports.filterDataByMinPopulation = filterDataByMinPopulation;
 module.exports.filterDataByCountry = filterDataByCountry;
 module.exports.sortDataByPopulationDesc = sortDataByPopulationDesc;
 module.exports.dropUnusedDataFields = dropUnusedDataFields;
