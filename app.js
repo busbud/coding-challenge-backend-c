@@ -57,6 +57,6 @@ app.get('/suggestions', (req, res) => {
 });
 
 app.use((req, res) => res.sendStatus(404)); // default 404 handler if no route found
-app.listen(port, '127.0.0.1', () => console.log('Server running at http://127.0.0.1:%d/suggestions', port));
+app.listen(port, '0.0.0.0', () => console.log('Server running at http://127.0.0.1:%d/suggestions', port));
 
 module.exports = app;
