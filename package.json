@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node app.js",
     "test": "mocha",
-    "lint": "semistandard"
+    "lint": "standard && eslint ."
   },
   "author": "",
   "license": "WTFPL",
@@ -25,10 +25,18 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "chai-things": "^0.2.0",
+    "eslint": "^5.16.0",
+    "eslint-config-busbud": "^0.8.0",
     "mocha": "^3.5.3",
     "semistandard": "^13.0.1",
     "stacktrace-js": "^2.0.0",
     "supertest": "^4.0.2",
     "testdouble": "^3.11.0"
+  },
+  "eslintConfig": {
+    "extends": "busbud",
+    "env": {
+      "mocha": true
+    }
   }
 }
