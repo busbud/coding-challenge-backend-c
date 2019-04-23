@@ -20,7 +20,9 @@
     "node": "^10.12.0"
   },
   "semistandard": {
-    "env": [ "mocha" ]
+    "env": [
+      "mocha"
+    ]
   },
   "devDependencies": {
     "chai": "^4.2.0",
