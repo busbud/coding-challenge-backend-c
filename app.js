@@ -5,9 +5,15 @@ const scoringHelper = require('./scoring-helper');
 const port = process.env.PORT || 2345;
 
 let citiesData = require('./sync-load-data');
-citiesData = dataUtils.makeRegionsReadable(citiesData);
-citiesData = dataUtils.renameLatLong(citiesData);
-citiesData = dataUtils.addEasyDisplayName(citiesData);
+dataUtils.dropUnusedDataFields(citiesData)
+  .then(dataUtils.filterByCountry)
+  .then(dataUtils.filterByPopulation)
+  .then(dataUtils.sortDataByPopulation)
+  .then(dataUtils.makeRegionsReadable)
+  .then(dataUtils.renameLatLong)
+  .then(dataUtils.addEasyDisplayName)
+  .then(processedCitiesData => citiesData = processedCitiesData)
+;
 
 app.get('/suggestions', (req, res) => {
   let suggestions = [];

@@ -1,21 +1,20 @@
 const countryCodes = require('./data/countrycodes');
 const admin1Codes = require('./data/admin1codes');
 
-const filterDataByPopulation = citiesData => citiesData.filter(cityData => cityData.population >= 5000);
-const filterDataByCountry = citiesData => citiesData.filter(cityData => ['CA', 'US'].includes(cityData.country));
-const filterByPopAndByCountry = citiesData => filterDataByPopulation(filterDataByCountry(citiesData));
-const sortDataByPopulation = citiesData => citiesData.sort((cityDataA, cityDataB) => cityDataB.population - cityDataA.population);
+const filterDataByPopulation = (citiesData, minPopulation = 5000) => Promise.resolve(citiesData.filter(cityData => cityData.population >= minPopulation));
+const filterDataByCountry = (citiesData, arrayOfAcceptedCountries = ['CA', 'US']) => Promise.resolve(citiesData.filter(cityData => arrayOfAcceptedCountries.includes(cityData.country)));
+const sortDataByPopulation = citiesData => Promise.resolve(citiesData.sort((cityDataA, cityDataB) => cityDataB.population - cityDataA.population));
 const dropUnusedDataFields = citiesData => {
   const keysToKeep = ['id', 'name', 'ascii', 'alt_name', 'lat', 'long', 'country', 'admin1', 'population'];
   citiesData.forEach(cityData => Object.keys(cityData).forEach((key) => keysToKeep.includes(key) || delete cityData[key]));
-  return citiesData;
+  return Promise.resolve(citiesData);
 };
 const makeRegionsReadable = citiesData => {
   citiesData.forEach(citiesData => {
     citiesData.admin1 = admin1Codes[citiesData.admin1];
     citiesData.country = countryCodes[citiesData.country];
   });
-  return citiesData;
+  return Promise.resolve(citiesData);
 };
 const renameLatLong = citiesData => {
   citiesData.forEach(citiesData => {
@@ -24,7 +23,7 @@ const renameLatLong = citiesData => {
     citiesData.longitude = citiesData.long;
     delete citiesData.long;
   });
-  return citiesData;
+  return Promise.resolve(citiesData);
 };
 const addEasyDisplayName = citiesData => {
   citiesData.forEach(cityData => {
@@ -42,10 +41,11 @@ const addEasyDisplayName = citiesData => {
 
     cityData.easyDisplayName = displayNameComponents.join(', ');
   });
-  return citiesData;
+  return Promise.resolve(citiesData);
 };
 
-module.exports.filterByPopAndByCountry = filterByPopAndByCountry;
+module.exports.filterDataByPopulation = filterDataByPopulation;
+module.exports.filterDataByCountry = filterDataByCountry;
 module.exports.sortDataByPopulation = sortDataByPopulation;
 module.exports.dropUnusedDataFields = dropUnusedDataFields;
 module.exports.makeRegionsReadable = makeRegionsReadable;
