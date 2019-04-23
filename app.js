@@ -45,7 +45,7 @@ app.get('/suggestions', (req, res) => {
   suggestions = suggestions.map(cityData => Object.assign({}, cityData));
 
   scoringHelper.addDistanceToSuggestions(suggestions, req.query.latitude, req.query.longitude);
-  scoringHelper.scoreSuggestions(suggestions);
+  scoringHelper.scoreSuggestions(suggestions); // apply scores, normalise and sort
 
   if (suggestions.length <= 0) {
     res.status(404);
