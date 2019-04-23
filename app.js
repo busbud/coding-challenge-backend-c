@@ -41,7 +41,7 @@ app.get('/suggestions', (req, res) => {
     );
   }
 
-  // clone each suggestion so that we can modify them without affecting our original/raw data
+  // clone each suggestion so that we can modify (add properties) them without affecting our original/raw data
   suggestions = suggestions.map(cityData => Object.assign({}, cityData));
 
   scoringHelper.addDistanceToSuggestions(suggestions, req.query.latitude, req.query.longitude);
