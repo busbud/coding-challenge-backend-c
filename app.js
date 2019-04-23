@@ -19,7 +19,7 @@ let citiesData = require('./sync-load-data'); // load the data set
 dataUtils.dropUnusedDataFields(citiesData) // drop unused fields to reduce its size
   .then(dataUtils.filterByCountry)         // keep only cities from USA & Canada
   .then(dataUtils.filterByPopulation)      // keep only cities with population >= 5000
-  .then(dataUtils.sortDataByPopulation)
+  .then(dataUtils.sortDataByPopulationDesc)
   .then(dataUtils.makeRegionsReadable)
   .then(dataUtils.renameLatLong)
   .then(dataUtils.addEasyDisplayName)

@@ -9,7 +9,7 @@ const filterDataByCountry = (citiesData, arrayOfAcceptedCountries = ['CA', 'US']
   Promise.resolve(citiesData.filter(cityData => arrayOfAcceptedCountries.includes(cityData.country)))
 ;
 
-const sortDataByPopulation = citiesData =>
+const sortDataByPopulationDesc = citiesData =>
   Promise.resolve(citiesData.sort((cityDataA, cityDataB) => cityDataB.population - cityDataA.population))
 ;
 
@@ -58,7 +58,7 @@ const addEasyDisplayName = citiesData => {
 
 module.exports.filterDataByPopulation = filterDataByPopulation;
 module.exports.filterDataByCountry = filterDataByCountry;
-module.exports.sortDataByPopulation = sortDataByPopulation;
+module.exports.sortDataByPopulationDesc = sortDataByPopulationDesc;
 module.exports.dropUnusedDataFields = dropUnusedDataFields;
 module.exports.makeRegionsReadable = makeRegionsReadable;
 module.exports.renameLatLong = renameLatLong;

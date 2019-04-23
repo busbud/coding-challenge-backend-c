@@ -63,9 +63,9 @@ describe('data-utils', () => {
     });
   });
 
-  describe('sortDataByPopulation', () => {
+  describe('sortDataByPopulationDesc', () => {
     it('should sort in descending order', done => {
-      dataUtils.sortDataByPopulation(testCitiesData)
+      dataUtils.sortDataByPopulationDesc(testCitiesData)
         .then(filteredCityData => {
           expect(filteredCityData).to.have.length.at.least(1);
           filteredCityData.forEach((cityData, i) => {
