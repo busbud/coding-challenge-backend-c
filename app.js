@@ -1,9 +1,11 @@
 const express = require('express');
 const slowDown = require('express-slow-down');
-const app = express();
 const dataUtils = require('./data-utils');
 const scoringHelper = require('./scoring-helper');
+
+const app = express();
 const port = process.env.PORT || 2345;
+
 app.enable('trust proxy');
 
 const speedLimiter = slowDown({
