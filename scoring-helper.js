@@ -27,7 +27,9 @@ const score = (distance, population) => {
   let populationScore = Math.pow(population, 6);
   return distanceScore * populationScore;
 };
+
 const sortByScore = suggestions => suggestions.sort((cityDataA, cityDataB) => cityDataB.score - cityDataA.score);
+
 const normaliseSuggestionScores = suggestions => {
   const maxScore = suggestions.length >= 1 ? Math.log(suggestions[0].score) : null;
   const minScore = suggestions.length >= 1 ? Math.log(suggestions.slice(-1)[0].score) : null;
