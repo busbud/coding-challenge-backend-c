@@ -31,11 +31,13 @@ app.get('/suggestions', (req, res) => {
   let suggestions = [];
 
   if (req.query.q != null && req.query.q.length >= 1) {
+    // create a case-insensitive regex of our query, as this is probably the easiest way to check strings
     const nameQueryRegex = new RegExp(`^${req.query.q}.*`, 'i');
-    suggestions = citiesData.filter(cityData =>
-      cityData.name.match(nameQueryRegex) ||
-        cityData.ascii.match(nameQueryRegex) ||
-        cityData.alt_name.some(altName => altName.match(nameQueryRegex))
+
+    suggestions = citiesData.filter(cityData => // filter the data set to find matching entries
+      cityData.name.match(nameQueryRegex) || // with the query in the name,
+        cityData.ascii.match(nameQueryRegex) || // with the query in the ascii name (ignores accents),
+        cityData.alt_name.some(altName => altName.match(nameQueryRegex)) // or with the query as one of the alternative names
     );
   }
 
