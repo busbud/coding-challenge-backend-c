@@ -16,7 +16,7 @@
     "geolib": "^2.0.24"
   },
   "engines": {
-    "node": "0.10.26"
+    "node": "^10.12.0"
   },
   "semistandard": {
     "env": [ "mocha" ]
