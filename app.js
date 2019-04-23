@@ -17,8 +17,8 @@ const speedLimiter = slowDown({
 
 let citiesData = require('./sync-load-data');
 dataUtils.dropUnusedDataFields(citiesData)
-  .then(dataUtils.filterByCountry)
-  .then(dataUtils.filterByPopulation)
+  .then(dataUtils.filterDataByCountry)
+  .then(dataUtils.filterDataByMinPopulation)
   .then(dataUtils.sortDataByPopulationDesc)
   .then(dataUtils.replaceRegionCodesWithNames)
   .then(dataUtils.renameLatLong)
