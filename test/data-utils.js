@@ -1,18 +1,18 @@
 const chai = require('chai');
-const expect  = chai.expect;
+const expect = chai.expect;
 chai.should();
 chai.use(require('chai-things'));
 const dataUtils = require('../data-utils');
 
 describe('data-utils', () => {
   const testCitiesData = [
-    {population: 10000, country: "US"},
-    {population:  7500, country: "US"},
-    {population:  4000, country: "US"},
-    {population:   100, country: "CA"},
-    {population: 20000, country: "CA"},
-    {population:  5500, country: "CA"},
-    {population:  5500, country: "XX"},
+    { population: 10000, country: 'US' },
+    { population: 7500, country: 'US' },
+    { population: 4000, country: 'US' },
+    { population: 100, country: 'CA' },
+    { population: 20000, country: 'CA' },
+    { population: 5500, country: 'CA' },
+    { population: 5500, country: 'XX' }
   ];
 
   describe('filterDataByPopulation', () => {
@@ -24,6 +24,7 @@ describe('data-utils', () => {
         })
         .then(() => done())
         .catch(err => done(err))
+      ;
     });
 
     it('should filter to argument when provided', done => {
@@ -34,6 +35,7 @@ describe('data-utils', () => {
         })
         .then(() => done())
         .catch(err => done(err))
+      ;
     });
   });
 
@@ -46,6 +48,7 @@ describe('data-utils', () => {
         })
         .then(() => done())
         .catch(err => done(err))
+      ;
     });
 
     it('should filter to argument when provided', done => {
@@ -56,6 +59,7 @@ describe('data-utils', () => {
         })
         .then(() => done())
         .catch(err => done(err))
+      ;
     });
   });
 
@@ -66,11 +70,12 @@ describe('data-utils', () => {
           expect(filteredCityData).to.have.length.at.least(1);
           filteredCityData.forEach((cityData, i) => {
             const lastElementPopulation = i > 0 ? filteredCityData[i - 1].population : Number.MAX_VALUE;
-            expect(cityData.population).to.be.at.most(lastElementPopulation, `Filtered city data ${i}'s population was not at most ${i - 1}'s`)
+            expect(cityData.population).to.be.at.most(lastElementPopulation, `Filtered city data ${i}'s population was not at most ${i - 1}'s`);
           });
         })
         .then(() => done())
         .catch(err => done(err))
+      ;
     });
   });
 });

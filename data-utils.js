@@ -31,11 +31,11 @@ const addEasyDisplayName = citiesData => {
 
     displayNameComponents.push(cityData.name);
 
-    if(cityData.admin1 != null) {
+    if (cityData.admin1 != null) {
       displayNameComponents.push(cityData.admin1);
     }
 
-    if(cityData.country != null) {
+    if (cityData.country != null) {
       displayNameComponents.push(cityData.country);
     }
 

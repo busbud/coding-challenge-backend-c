@@ -11,8 +11,8 @@ const addDistanceToSuggestions = (suggestions, lat, long) => {
         latitude: cityData.latitude,
         longitude: cityData.longitude
       };
-      cityData.distanceInKM = geolib.getDistance(userCoord, cityCoord) / 1000; //distance in kilometers
-    })
+      cityData.distanceInKM = geolib.getDistance(userCoord, cityCoord) / 1000; // distance in kilometers
+    });
   }
 };
 
@@ -32,10 +32,10 @@ const normaliseSuggestionScores = suggestions => {
   const maxScore = suggestions.length >= 1 ? Math.log(suggestions[0].score) : null;
   const minScore = suggestions.length >= 1 ? Math.log(suggestions.slice(-1)[0].score) : null;
 
-  //if min and max are even (happens when only 1 result, or possibly edge cases),
+  // if min and max are even (happens when only 1 result, or possibly edge cases),
   // use max to get a score of 1 instead of dividing by 0
   const scoreDiff = (maxScore - minScore) || maxScore;
-  
+
   suggestions.forEach(cityData => {
     cityData.score = Math.log(cityData.score);
     cityData.score -= minScore;
