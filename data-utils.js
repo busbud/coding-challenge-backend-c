@@ -1,8 +1,8 @@
 const countryCodes = require('./data/countrycodes');
 const admin1Codes = require('./data/admin1codes');
 
-const filterDataByPopulation = citiesData => Promise.resolve(citiesData.filter(cityData => cityData.population >= 5000));
-const filterDataByCountry = citiesData => Promise.resolve(citiesData.filter(cityData => ['CA', 'US'].includes(cityData.country)));
+const filterDataByPopulation = (citiesData, minPopulation = 5000) => Promise.resolve(citiesData.filter(cityData => cityData.population >= minPopulation));
+const filterDataByCountry = (citiesData, arrayOfAcceptedCountries = ['CA', 'US']) => Promise.resolve(citiesData.filter(cityData => arrayOfAcceptedCountries.includes(cityData.country)));
 const sortDataByPopulation = citiesData => Promise.resolve(citiesData.sort((cityDataA, cityDataB) => cityDataB.population - cityDataA.population));
 const dropUnusedDataFields = citiesData => {
   const keysToKeep = ['id', 'name', 'ascii', 'alt_name', 'lat', 'long', 'country', 'admin1', 'population'];
