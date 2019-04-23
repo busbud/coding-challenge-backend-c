@@ -1,11 +1,11 @@
 {
   "name": "coding-challenge-backend-c",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "coding challenge in Nodejs",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "test": "semistandard && ./node_modules/mocha/bin/mocha ./test/"
+    "test": "semistandard && mocha"
   },
   "author": "",
   "license": "WTFPL",
@@ -16,7 +16,7 @@
     "geolib": "^2.0.24"
   },
   "engines": {
-    "node": "0.10.26"
+    "node": "^10.12.0"
   },
   "semistandard": {
     "env": [ "mocha" ]

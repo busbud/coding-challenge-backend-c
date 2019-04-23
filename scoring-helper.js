@@ -27,7 +27,9 @@ const score = (distance, population) => {
   let populationScore = Math.pow(population, 6);
   return distanceScore * populationScore;
 };
+
 const sortByScore = suggestions => suggestions.sort((cityDataA, cityDataB) => cityDataB.score - cityDataA.score);
+
 const normaliseSuggestionScores = suggestions => {
   const maxScore = suggestions.length >= 1 ? Math.log(suggestions[0].score) : null;
   const minScore = suggestions.length >= 1 ? Math.log(suggestions.slice(-1)[0].score) : null;
@@ -37,10 +39,13 @@ const normaliseSuggestionScores = suggestions => {
   const scoreDiff = (maxScore - minScore) || maxScore;
 
   suggestions.forEach(cityData => {
-    cityData.score = Math.log(cityData.score);
-    cityData.score -= minScore;
-    cityData.score /= scoreDiff;
-    cityData.score = Math.round(cityData.score * 100) / 100;
+    cityData.score = Math.log(cityData.score); // take the log, to avoid too much variance in the scores
+
+    // normalise the score
+    cityData.score -= minScore; // subtract by minimum score to get same baseline
+    cityData.score /= scoreDiff; // divide by difference between min and max
+
+    cityData.score = Math.round(cityData.score * 100) / 100; // round and truncate to 2 decimals
   });
 };
 

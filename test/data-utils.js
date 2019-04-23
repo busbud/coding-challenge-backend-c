@@ -15,9 +15,9 @@ describe('data-utils', () => {
     { population: 5500, country: 'XX' }
   ];
 
-  describe('filterDataByPopulation', () => {
+  describe('filterDataByMinPopulation', () => {
     it('should filter to 5000 with no argument', done => {
-      dataUtils.filterDataByPopulation(testCitiesData)
+      dataUtils.filterDataByMinPopulation(testCitiesData)
         .then(filteredCityData => {
           expect(filteredCityData).to.have.length.at.least(1);
           filteredCityData.forEach((cityData, i) => expect(cityData.population).to.be.at.least(5000, `Filtered city data ${i} was not at least 5000`));
@@ -28,7 +28,7 @@ describe('data-utils', () => {
     });
 
     it('should filter to argument when provided', done => {
-      dataUtils.filterDataByPopulation(testCitiesData, 9000)
+      dataUtils.filterDataByMinPopulation(testCitiesData, 9000)
         .then(filteredCityData => {
           expect(filteredCityData).to.have.length.at.least(1);
           filteredCityData.forEach((cityData, i) => expect(cityData.population).to.be.at.least(9000, `Filtered city data ${i} was not at least 9000`));
@@ -63,9 +63,9 @@ describe('data-utils', () => {
     });
   });
 
-  describe('sortDataByPopulation', () => {
+  describe('sortDataByPopulationDesc', () => {
     it('should sort in descending order', done => {
-      dataUtils.sortDataByPopulation(testCitiesData)
+      dataUtils.sortDataByPopulationDesc(testCitiesData)
         .then(filteredCityData => {
           expect(filteredCityData).to.have.length.at.least(1);
           filteredCityData.forEach((cityData, i) => {
