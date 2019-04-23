@@ -149,6 +149,8 @@ In the event of invalid lat/long, an exception is generated, which is automatica
 Since a 500 is the correct response to invalid input, no effort was expended in changing this, nor was any bloat added to apply additional validation. A nice to have feature would be to remove the stack returned by the 500 error and to add an informative (and human-readable) message for the client, depending on how 500 was not handled by a reverse-proxy in a production environment.  
 
 ### Code Style
-Although I did see the [Busbud style guide](https://github.com/busbud/js-style-guide), it was enough of a departure from js norms (specifically, the choice of snake_case for variables), that if Busbud didn't actually use this style, my code would look very particular. 
-The choice was therefore made to use the very standard [semistandard](https://github.com/Flet/semistandard) code style. 
-The plan is still to implement Busbud style in another branch.         
+This branch uses [semistandard](https://github.com/Flet/semistandard) code style.
+ 
+Check `busbud-code-style` branch for the [Busbud style guide](https://github.com/busbud/js-style-guide) code style. 
+
+We opted for Semistandard on this branch, because it wasn't clear whether Busbud actually used the code style from the repo, and things like snake_case might look weird to anyone who wasn't used to it. It was implemented as best as possible according to the documentation on the [repo](https://github.com/busbud/js-style-guide), but some rules are ambiguous in some contexts, and the linting does not consider all of the listed rules. For example, UPPER_SNAKE_CASE for constants is usually used for string or numerical constants, but it's not clear whether it should be used for arrays whose contents are subject to modification, nor for Objects. In the latter cases, snake_case was used instead.    
