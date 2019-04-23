@@ -6,18 +6,19 @@ const scoringHelper = require('./scoring-helper');
 const app = express();
 const port = process.env.PORT || 2345;
 
-app.enable('trust proxy');
+app.enable('trust proxy'); // trust `X-Forwarded-` HTTP headers, since we're behind a reverse proxy on Heroku
 
+// create rate-limiting middleware, which will delay requests that are coming in too fast
 const speedLimiter = slowDown({
   windowMs: 60 * 1000, // 1 minute
   delayAfter: 100, // allow 100 requests per minute, then...
   delayMs: 100 // begin adding 100ms of delay per request above 100:
 });
 
-let citiesData = require('./sync-load-data');
-dataUtils.dropUnusedDataFields(citiesData)
-  .then(dataUtils.filterByCountry)
-  .then(dataUtils.filterByPopulation)
+let citiesData = require('./sync-load-data'); // load the data set
+dataUtils.dropUnusedDataFields(citiesData) // drop unused fields to reduce its size
+  .then(dataUtils.filterByCountry)         // keep only cities from USA & Canada
+  .then(dataUtils.filterByPopulation)      // keep only cities with population >= 5000
   .then(dataUtils.sortDataByPopulation)
   .then(dataUtils.makeRegionsReadable)
   .then(dataUtils.renameLatLong)
