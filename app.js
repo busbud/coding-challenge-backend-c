@@ -47,8 +47,8 @@ app.get('/suggestions', (req, res) => {
   scoringHelper.addDistanceToSuggestions(suggestions, req.query.latitude, req.query.longitude);
   scoringHelper.scoreSuggestions(suggestions); // apply scores, normalise and sort
 
-  if (suggestions.length <= 0) {
-    res.status(404);
+  if (suggestions.length <= 0) { // if we can't find any suggestions
+    res.status(404); // respond 404, per API requirements
   }
   res.send({
     suggestions: suggestions
