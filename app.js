@@ -15,6 +15,7 @@ const speedLimiter = slowDown({
   delayMs: 100 // begin adding 100ms of delay per request above 100:
 });
 
+// load and process data
 let citiesData = require('./sync-load-data');
 dataUtils.dropUnusedDataFields(citiesData)
   .then(dataUtils.filterDataByCountry)
