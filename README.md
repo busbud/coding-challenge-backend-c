@@ -149,6 +149,4 @@ In the event of invalid lat/long, an exception is generated, which is automatica
 Since a 500 is the correct response to invalid input, no effort was expended in changing this, nor was any bloat added to apply additional validation. A nice to have feature would be to remove the stack returned by the 500 error and to add an informative (and human-readable) message for the client, depending on how 500 was not handled by a reverse-proxy in a production environment.  
 
 ### Code Style
-Although I did see the [Busbud style guide](https://github.com/busbud/js-style-guide), it was enough of a departure from js norms (specifically, the choice of snake_case for variables), that if Busbud didn't actually use this style, my code would look very particular. 
-The choice was therefore made to use the very standard [semistandard](https://github.com/Flet/semistandard) code style. 
-The plan is still to implement Busbud style in another branch.         
+This branch uses the [Busbud style guide](https://github.com/busbud/js-style-guide). Check master for [semistandard](https://github.com/Flet/semistandard) code style. 
