@@ -1,0 +1,29 @@
+# Any build artifacts for any and every VCSes have to be excluded 
+# from storing in repository.
+.env
+lib-cov
+docs
+*.seed
+*.log
+*.csv
+*.dat
+*.out
+*.pid
+*.gz
+build
+
+pids
+logs
+results
+
+npm-debug.log
+.nyc_output
+coverage
+node_modules
+
+build
+
+.idea
+*.iml
+yarn.lock
+.DS_store

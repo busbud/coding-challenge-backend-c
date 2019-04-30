@@ -1,0 +1,29 @@
+sudo: false
+
+language: node_js
+
+node_js:
+  - 10
+
+notifications:
+  email: false
+
+script: npm run coveralls
+
+deploy:
+  - provider: releases
+    api_key: $GITHUB_TOKEN
+    file_glob: true
+    file: "{busbud}-*.tgz"
+    skip_cleanup: true
+    on:
+      tags: true
+
+
+branches:
+  only:
+    - master
+
+cache:
+  directories:
+    - "$HOME/.npm"

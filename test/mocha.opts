@@ -1,0 +1,5 @@
+# mocha.opts
+  --require ts-node/register
+  --reporter spec
+  --watch-extensions tsx,ts
+  ./**/test__*.ts

@@ -1,20 +1,105 @@
 {
   "name": "coding-challenge-backend-c",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "coding challenge in Nodejs",
-  "main": "app.js",
   "scripts": {
-    "start": "node app.js",
-    "test": "./node_modules/mocha/bin/mocha ./test/"
+    "lint": "eslint src/**/*.ts",
+    "doc": "rimraf docs && typedoc --out docs src/",
+    "opendoc": "open ./docs/index.html",
+    "test": "nyc mocha --exit -r ts-node/register test/**/test__*.ts",
+    "watch": "mocha -r ts-node/register test/**/test__*.ts --watch",
+    "build": "rimraf build && npm run doc && npm run lint && npm run test && tsc -p .",
+    "coverage": "nyc --reporter=lcov --reporter=text-lcov mocha --exit -r ts-node/register test/**/test__*.ts && open ./coverage/lcov-report/index.html",
+    "coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
+    "debug": "nodemon --legacy-watch --watch ./build --inspect=0.0.0.0:5858 --nolazy ./build/server.js",
+    "docker-build": "docker build -t dev .",
+    "docker-run": "docker run --name dev -p 3000:3000 -d dev && open localhost:",
+    "docker-stop": "docker stop dev",
+    "docker-debug": "docker-compose up",
+    "local": "npm run build && npm start",
+    "start": "node ./build/server.js",
+    "fastLocal": "rimraf build && tsc -p . && npm start",
+    "prod": "NODE_ENV=production && npm run fastLocal",
+    "seed": "tsc -p . && node build/migrations/seed.js"
   },
-  "author": "",
-  "license": "WTFPL",
-  "dependencies": {
-    "chai": "^1.9.1",
-    "mocha": "^1.18.2",
-    "supertest": "^0.11.0"
+  "main": "./build/server.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elyx0/"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm test",
+      "pre-push": "npm test"
+    }
+  },
+  "nyc": {
+    "include": [
+      "src/**/*.ts"
+    ],
+    "extension": [
+      ".ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ],
+    "sourceMap": true,
+    "instrument": true,
+    "check-coverage": true,
+    "per-file": false,
+    "lines": 70,
+    "statements": 70,
+    "functions": 70,
+    "branches": 70
+  },
+  "preferGlobal": true,
   "engines": {
-    "node": "0.10.26"
+    "node": "11.14.0",
+    "npm": "6.9.0"
+  },
+  "author": "Elyx0 - Eric Destaing",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/apicache": "1.2.0",
+    "@types/byline": "4.2.31",
+    "@types/chai": "4.1.7",
+    "@types/express": "4.16.1",
+    "@types/express-rate-limit": "3.3.0",
+    "@types/fuzzaldrin": "2.1.2",
+    "@types/geolib": "2.0.23",
+    "@types/mocha": "5.2.6",
+    "@types/node": "11.11.6",
+    "@types/sinon": "7.0.11",
+    "@types/supertest": "2.0.7",
+    "@typescript-eslint/eslint-plugin": "1.6.0",
+    "@typescript-eslint/parser": "1.6.0",
+    "assert-diff": "2.0.3",
+    "chai": "4.2.0",
+    "chai-diff": "1.0.1",
+    "coveralls": "3.0.3",
+    "eslint": "5.15.1",
+    "husky": "1.3.1",
+    "mocha": "6.1.4",
+    "nodemon": "1.18.10",
+    "nyc": "13.3.0",
+    "rimraf": "2.6.3",
+    "should": "13.2.3",
+    "sinon": "7.2.7",
+    "sinon-chai": "3.3.0",
+    "supertest": "0.11.0",
+    "synk": "0.0.2",
+    "ts-node": "8.0.3",
+    "typedoc": "0.14.2",
+    "typescript": "3.3.4000"
+  },
+  "dependencies": {
+    "apicache": "1.4.0",
+    "body-parser": "1.18.3",
+    "byline": "5.0.0",
+    "dotenv": "7.0.0",
+    "express-rate-limit": "3.3.2",
+    "express": "4.16.4",
+    "fuzzaldrin": "2.1.0",
+    "geolib": "2.0.24"
   }
 }

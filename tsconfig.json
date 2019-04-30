@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": { "*": ["types/*"] },
+      "target": "es6",
+      "module": "commonjs",
+      "lib": ["es2015"],
+      "sourceMap": true,
+      "declaration": true,
+      "outDir": "build",
+      "rootDir": "src",
+      "strict": true,
+      "types": ["node","mocha"],
+      "noFallthroughCasesInSwitch": true,
+      "esModuleInterop": true,
+      "resolveJsonModule": true
+    },
+    "include": [
+      "src",
+      //"test"
+    ],
+  }
