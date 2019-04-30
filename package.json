@@ -12,15 +12,10 @@
     "coverage": "nyc --reporter=lcov --reporter=text-lcov mocha --exit -r ts-node/register test/**/test__*.ts && open ./coverage/lcov-report/index.html",
     "coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
     "debug": "nodemon --legacy-watch --watch ./build --inspect=0.0.0.0:5858 --nolazy ./build/server.js",
-    "docker-build": "docker build -t dev .",
-    "docker-run": "docker run --name dev -p 3000:3000 -d dev && open localhost:",
-    "docker-stop": "docker stop dev",
-    "docker-debug": "docker-compose up",
     "local": "npm run build && npm start",
     "start": "node ./build/server.js",
     "fastLocal": "rimraf build && tsc -p . && npm start",
-    "prod": "NODE_ENV=production && npm run fastLocal",
-    "seed": "tsc -p . && node build/migrations/seed.js"
+    "prod": "NODE_ENV=production && npm run fastLocal"
   },
   "main": "./build/server.js",
   "repository": {

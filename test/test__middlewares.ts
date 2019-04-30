@@ -34,7 +34,6 @@ describe('middlewares', function (): void {
             headers: {},
             connection: {}
         },{},nextLogger);
-        // debugger;
         // @ts-ignore
         expect(spyLogger.getCall(0).args[1].logLevel).to.equal(4);
         // @ts-ignore
