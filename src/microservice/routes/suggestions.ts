@@ -132,8 +132,8 @@ const suggestionsEndpoint = async (req: any, res: any): Promise<any> => {
     let location: any = null;
     if (latitude && longitude) {
         location = {
-            latitude: parseInt(latitude),
-            longitude: parseInt(longitude)
+            latitude: parseFloat(latitude),
+            longitude: parseFloat(longitude)
         };
     }
 
