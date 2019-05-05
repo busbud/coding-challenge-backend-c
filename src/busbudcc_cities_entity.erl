@@ -1,7 +1,7 @@
 -module(busbudcc_cities_entity).
 
 %% API
--export([suggest/2]).
+-export([suggest/1]).
 
 %% Macros
 -define(MAX_CITIES, 25).
@@ -14,18 +14,18 @@
 %%% API functions
 %%%===================================================================
 
--spec suggest(epgsql:connection(), map()) -> {ok, [map()]} |
-                                             {error, binary()}.
+-spec suggest(map()) -> {ok, [map()]} | {error, binary()}.
 %% SCORE = WORD_WEIGHT     - MAX(WORD_WEIGHT     * WORD_DISTANCE, 0)     / MAX_WORD_DISTANCE +
 %%         LOCATION_WEIGHT - MAX(LOCATION_WEIGHT * LOCATION_DISTANCE, 0) / MAX_LOCATION_DISTANCE
-suggest(Conn, #{<<"q">> := SearchText,
-                <<"latitude">> := Lat,
-                <<"longitude">> := Lon}) when is_binary(SearchText) andalso
+suggest(#{<<"q">> := SearchText,
+          <<"latitude">> := Lat,
+          <<"longitude">> := Lon}) when is_binary(SearchText) andalso
                                               is_binary(Lat) andalso
                                               is_binary(Lon) ->
   SearchTextStr = binary_to_list(SearchText),
   case parse_location(Lon, Lat) of
     {ok, LonFloat, LatFloat} ->
+      Conn = busbudcc_db:create_connection(),
       Cities = busbudcc_db:select_query(
                  Conn,
                  "SELECT * "
@@ -45,11 +45,13 @@ suggest(Conn, #{<<"q">> := SearchText,
                   ?LOCATION_WEIGHT, ?LOCATION_WEIGHT, LonFloat, LatFloat, ?MAX_LOCATION_DISTANCE,
                   sanitize_search_text(SearchText),
                   ?MAX_CITIES]),
+      ok = busbudcc_db:close_connection(Conn),
       {ok, serialize_cities(Cities)};
     error -> {error, <<"Invalid location format.">>}
   end;
-suggest(Conn, #{<<"q">> := SearchText}) when is_binary(SearchText) ->
+suggest(#{<<"q">> := SearchText}) when is_binary(SearchText) ->
   SearchTextStr = binary_to_list(SearchText),
+  Conn = busbudcc_db:create_connection(),
   Cities = busbudcc_db:select_query(
              Conn,
              "SELECT * "
@@ -65,8 +67,9 @@ suggest(Conn, #{<<"q">> := SearchText}) when is_binary(SearchText) ->
              "WHERE score > 0",
              [string:to_lower(SearchTextStr), ?MAX_WORD_DISTANCE,
               sanitize_search_text(SearchTextStr), ?MAX_CITIES]),
+  ok = busbudcc_db:close_connection(Conn),
   {ok, serialize_cities(Cities)};
-suggest(_Conn, _SearchParams) ->
+suggest(_SearchParams) ->
   {error, <<"Invalid params format.">>}.
 
 %%%===================================================================

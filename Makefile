@@ -123,7 +123,8 @@ define start_db_container
 							--env POSTGRES_PASSWORD=$(DATABASE_PASSWORD) \
 							--env POSTGRES_DB=$(DATABASE_NAME) \
 							--rm \
-	 						mdillon/postgis:11
+	 						mdillon/postgis:11 \
+							postgres -c max_connections=500
 	@docker exec $(POSTGRES_CONTAINER_NAME) sleep 40
 endef
 
@@ -196,8 +197,8 @@ db-import-cities:
 ## BENCHMARKING
 ################################################################################
 
-.PHONY: benchmark-random
-benchmark-random:
+.PHONY: benchmark-suggestions
+benchmark-suggestions:
 	@docker run -it \
 							--rm \
 							--volume "$(BASE_DIR)":/app \
