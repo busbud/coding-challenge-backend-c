@@ -1,7 +1,8 @@
 -module(busbudcc_cities_entity).
 
 %% API
--export([suggest/1]).
+-export([suggest/1,
+         suggest_cached/1]).
 
 %% Macros
 -define(MAX_CITIES, 25).
@@ -14,40 +15,49 @@
 %%% API functions
 %%%===================================================================
 
--spec suggest(map()) -> {ok, [map()]} | {error, binary()}.
-%% SCORE = WORD_WEIGHT     - MAX(WORD_WEIGHT     * WORD_DISTANCE, 0)     / MAX_WORD_DISTANCE +
-%%         LOCATION_WEIGHT - MAX(LOCATION_WEIGHT * LOCATION_DISTANCE, 0) / MAX_LOCATION_DISTANCE
-suggest(#{<<"q">> := SearchText,
-          <<"latitude">> := Lat,
-          <<"longitude">> := Lon}) when is_binary(SearchText) andalso
-                                              is_binary(Lat) andalso
-                                              is_binary(Lon) ->
+-spec suggest_cached(map()) -> {ok, [map()]} | {error, binary()}.
+suggest_cached(#{<<"q">> := SearchText,
+                 <<"latitude">> := Lat,
+                 <<"longitude">> := Lon}) when is_binary(SearchText) andalso
+                                               is_binary(Lat) andalso
+                                               is_binary(Lon) ->
   SearchTextStr = binary_to_list(SearchText),
   case parse_location(Lon, Lat) of
     {ok, LonFloat, LatFloat} ->
-      Cities = busbudcc_db:select_query(
-                 "SELECT * "
-                 "FROM ("
-                 "  SELECT cities.name, cities.state, cities.country, "
-                 "    cities.latitude, cities.longitude, "
-                 "    $1 - $2 * LEVENSHTEIN($3, LOWER(cities.name), 1, 10, 10) / $4 + "
-                 "    GREATEST($5 - $6 * ST_DISTANCE(cities.location, ST_POINT($7, $8)) / $9, 0)"
-                 "    AS score "
-                 "  FROM cities "
-                 "  WHERE LOWER(cities.name) LIKE $10 "
-                 "  ORDER BY score DESC "
-                 "  LIMIT $11"
-                 ") AS inner_cities "
-                 "WHERE score > 0",
-                 [?WORD_WEIGHT, ?WORD_WEIGHT, string:to_lower(SearchTextStr), ?MAX_WORD_DISTANCE,
-                  ?LOCATION_WEIGHT, ?LOCATION_WEIGHT, LonFloat, LatFloat, ?MAX_LOCATION_DISTANCE,
-                  sanitize_search_text(SearchText),
-                  ?MAX_CITIES]),
-      {ok, serialize_cities(Cities)};
+      {ok, busbudcc_suggestions_cache:suggest({located, SearchTextStr, LonFloat, LatFloat})};
     error -> {error, <<"Invalid location format.">>}
   end;
-suggest(#{<<"q">> := SearchText}) when is_binary(SearchText) ->
+suggest_cached(#{<<"q">> := SearchText}) when is_binary(SearchText) ->
   SearchTextStr = binary_to_list(SearchText),
+  {ok, busbudcc_suggestions_cache:suggest({unlocated, SearchTextStr})};
+suggest_cached(_SearchParams) ->
+  {error, <<"Invalid params format.">>}.
+
+-spec suggest({located, string(), float(), float()} |
+              {unlocated, string()}) -> [map()].
+%% SCORE = WORD_WEIGHT     - MAX(WORD_WEIGHT     * WORD_DISTANCE, 0)     / MAX_WORD_DISTANCE +
+%%         LOCATION_WEIGHT - MAX(LOCATION_WEIGHT * LOCATION_DISTANCE, 0) / MAX_LOCATION_DISTANCE
+suggest({located, SearchTextStr, LonFloat, LatFloat}) ->
+  Cities = busbudcc_db:select_query(
+             "SELECT * "
+             "FROM ("
+             "  SELECT cities.name, cities.state, cities.country, "
+             "    cities.latitude, cities.longitude, "
+             "    $1 - $2 * LEVENSHTEIN($3, LOWER(cities.name), 1, 10, 10) / $4 + "
+             "    GREATEST($5 - $6 * ST_DISTANCE(cities.location, ST_POINT($7, $8)) / $9, 0)"
+             "    AS score "
+             "  FROM cities "
+             "  WHERE LOWER(cities.name) LIKE $10 "
+             "  ORDER BY score DESC "
+             "  LIMIT $11"
+             ") AS inner_cities "
+             "WHERE score > 0",
+             [?WORD_WEIGHT, ?WORD_WEIGHT, string:to_lower(SearchTextStr), ?MAX_WORD_DISTANCE,
+              ?LOCATION_WEIGHT, ?LOCATION_WEIGHT, LonFloat, LatFloat, ?MAX_LOCATION_DISTANCE,
+              sanitize_search_text(SearchTextStr),
+              ?MAX_CITIES]),
+  serialize_cities(Cities);
+suggest({unlocated, SearchTextStr}) ->
   Cities = busbudcc_db:select_query(
              "SELECT * "
              "FROM ("
@@ -62,9 +72,7 @@ suggest(#{<<"q">> := SearchText}) when is_binary(SearchText) ->
              "WHERE score > 0",
              [string:to_lower(SearchTextStr), ?MAX_WORD_DISTANCE,
               sanitize_search_text(SearchTextStr), ?MAX_CITIES]),
-  {ok, serialize_cities(Cities)};
-suggest(_SearchParams) ->
-  {error, <<"Invalid params format.">>}.
+  serialize_cities(Cities).
 
 %%%===================================================================
 %%% Internal functions

@@ -28,7 +28,7 @@ handle_req(_Method, Req, State) ->
 
 get_suggestions(Req, State) ->
   Params = busbudcc_webutils:query_params(Req),
-  case busbudcc_cities_entity:suggest(Params) of
+  case busbudcc_cities_entity:suggest_cached(Params) of
     {ok, Suggestions} ->
       busbudcc_webutils:success(Req, State, 200, #{suggestions => Suggestions});
     {error, Reason} ->

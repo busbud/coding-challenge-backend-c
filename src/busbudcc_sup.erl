@@ -40,7 +40,13 @@ init([]) ->
                                {size, DbPoolSize},
                                {max_overflow, ceil(DbPoolSize / 2)}],
                               []),
-  {ok, {SupFlags, [Webserver, DbPool]}}.
+  SuggestionsCache = #{id => suggestions_cache,
+                       start => {busbudcc_suggestions_cache, start_link, []},
+                       restart => permanent,
+                       shutdown => 5000,
+                       type => worker,
+                       modules => [busbudcc_suggestions_cache]},
+  {ok, {SupFlags, [Webserver, DbPool, SuggestionsCache]}}.
 
 %%====================================================================
 %% Internal functions

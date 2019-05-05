@@ -10,6 +10,7 @@
                   ,jsx
                   ,epgsql
                   ,poolboy
+                  ,ecache
                  ]},
   {env,[]},
   {modules, []},
