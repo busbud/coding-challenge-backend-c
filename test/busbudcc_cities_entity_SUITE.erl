@@ -31,47 +31,40 @@ all() ->
 
 init_per_suite(Config) ->
   busbudcc_test_helper:set_env_vars(),
+  {ok, _} = application:ensure_all_started(busbudcc),
   Config.
 
 end_per_suite(_Config) ->
   ok.
 
 init_per_testcase(_Case, Config) ->
-  Connection = busbudcc_db:create_connection(),
-  busbudcc_db:begin_transaction(Connection),
-  [{connection, Connection} | Config].
+  Config.
 
-end_per_testcase(_Case, Config) ->
-  Connection = ?config(connection, Config),
-  busbudcc_db:abort_transaction(Connection).
+end_per_testcase(_Case, _Config) ->
+  ok.
 
 %%%===================================================================
 %% suggest
 %%%===================================================================
 
-t_suggest(Config) ->
-  Connection = ?config(connection, Config),
-  {ok, [#{name := <<"London, ", _RestName/binary>>, score := 0.9} | _Rest]} =
-    busbudcc_cities_entity:suggest(Connection, #{<<"q">> => <<"Londo">>}).
+t_suggest(_Config) ->
+  {ok, [#{name := <<"London, ", _RestName/binary>>} | _Rest]} =
+    busbudcc_cities_entity:suggest(#{<<"q">> => <<"Londo">>}).
 
-t_suggest_with_location(Config) ->
-  Connection = ?config(connection, Config),
-  {ok, [#{name := <<"London, Canada">>} | _Rest]} =
-    busbudcc_cities_entity:suggest(Connection, #{<<"q">> => <<"Londo">>,
-                                                 <<"latitude">> => <<"43.70011">>,
-                                                 <<"longitude">> => <<"-79.4163">>}).
+t_suggest_with_location(_Config) ->
+  {ok, [#{name := <<"London, ", _RestName/binary>>} | _Rest]} =
+    busbudcc_cities_entity:suggest(#{<<"q">> => <<"Londo">>,
+                                     <<"latitude">> => <<"43.70011">>,
+                                     <<"longitude">> => <<"-79.4163">>}).
 
-t_suggest_with_no_query(Config) ->
-  Connection = ?config(connection, Config),
+t_suggest_with_no_query(_Config) ->
+  {error, _ErrMsg} = busbudcc_cities_entity:suggest(#{}).
+
+t_suggest_with_invalid_location(_Config) ->
   {error, _ErrMsg} =
-    busbudcc_cities_entity:suggest(Connection, #{}).
-
-t_suggest_with_invalid_location(Config) ->
-  Connection = ?config(connection, Config),
-  {error, _ErrMsg} =
-    busbudcc_cities_entity:suggest(Connection, #{<<"q">> => <<"Londo">>,
-                                                 <<"latitude">> => <<"invalid!">>,
-                                                 <<"longitude">> => <<"-79.4163">>}).
+    busbudcc_cities_entity:suggest(#{<<"q">> => <<"Londo">>,
+                                     <<"latitude">> => <<"invalid!">>,
+                                     <<"longitude">> => <<"-79.4163">>}).
 
 %%%===================================================================
 %%% Internal functions

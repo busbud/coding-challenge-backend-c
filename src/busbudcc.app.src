@@ -9,6 +9,7 @@
                   ,cowboy
                   ,jsx
                   ,epgsql
+                  ,poolboy
                  ]},
   {env,[]},
   {modules, []},

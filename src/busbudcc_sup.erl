@@ -32,7 +32,15 @@ init([]) ->
                 shutdown => 5000,
                 type => worker,
                 modules => [busbudcc_webserver]},
-  {ok, {SupFlags, [Webserver]}}.
+  DbPoolName = busbudcc_db:pool_name(),
+  {ok, DbPoolSize} = application:get_env(busbudcc, database_pool_size),
+  DbPool = poolboy:child_spec(DbPoolName,
+                              [{name, {local, DbPoolName}},
+                               {worker_module, busbudcc_db_pool_worker},
+                               {size, DbPoolSize},
+                               {max_overflow, ceil(DbPoolSize / 2)}],
+                              []),
+  {ok, {SupFlags, [Webserver, DbPool]}}.
 
 %%====================================================================
 %% Internal functions

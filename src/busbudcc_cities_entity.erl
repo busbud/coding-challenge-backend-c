@@ -25,9 +25,7 @@ suggest(#{<<"q">> := SearchText,
   SearchTextStr = binary_to_list(SearchText),
   case parse_location(Lon, Lat) of
     {ok, LonFloat, LatFloat} ->
-      Conn = busbudcc_db:create_connection(),
       Cities = busbudcc_db:select_query(
-                 Conn,
                  "SELECT * "
                  "FROM ("
                  "  SELECT cities.name, cities.state, cities.country, "
@@ -45,15 +43,12 @@ suggest(#{<<"q">> := SearchText,
                   ?LOCATION_WEIGHT, ?LOCATION_WEIGHT, LonFloat, LatFloat, ?MAX_LOCATION_DISTANCE,
                   sanitize_search_text(SearchText),
                   ?MAX_CITIES]),
-      ok = busbudcc_db:close_connection(Conn),
       {ok, serialize_cities(Cities)};
     error -> {error, <<"Invalid location format.">>}
   end;
 suggest(#{<<"q">> := SearchText}) when is_binary(SearchText) ->
   SearchTextStr = binary_to_list(SearchText),
-  Conn = busbudcc_db:create_connection(),
   Cities = busbudcc_db:select_query(
-             Conn,
              "SELECT * "
              "FROM ("
              "  SELECT cities.name, cities.state, cities.country, "
@@ -67,7 +62,6 @@ suggest(#{<<"q">> := SearchText}) when is_binary(SearchText) ->
              "WHERE score > 0",
              [string:to_lower(SearchTextStr), ?MAX_WORD_DISTANCE,
               sanitize_search_text(SearchTextStr), ?MAX_CITIES]),
-  ok = busbudcc_db:close_connection(Conn),
   {ok, serialize_cities(Cities)};
 suggest(_SearchParams) ->
   {error, <<"Invalid params format.">>}.
