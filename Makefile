@@ -6,6 +6,7 @@ TEST_CONFIG_PATH ?= "$(BASE_DIR)/config/test.config"
 DOCKER_CONFIG_PATH = "/sys.config"
 
 ERLANG_IMAGE = erlang:20.0.2
+BENCHMARK_IMAGE_NAME = wrk2_centos_benchmark
 
 DOCKER_OPTS ?=
 DOCKERIZE = docker run --rm \
@@ -14,6 +15,8 @@ DOCKERIZE = docker run --rm \
 							 				 -it
 
 POSTGRES_CONTAINER_NAME = busbudcc_postgresql_container
+WEBAPP_CONTAINER_NAME = busbudcc_webapp
+
 
 ################################################################################
 # Makefile API
@@ -33,7 +36,8 @@ tests:
 .PHONY: run
 run:
 	$(eval DATABASE_HOST := $(call get_config, database_host))
-	$(DOCKERIZE) --publish 9000:9000 \
+	$(DOCKERIZE) --name="$(WEBAPP_CONTAINER_NAME)" \
+							 --publish 9000:9000 \
 							 --link "$(POSTGRES_CONTAINER_NAME)":"$(DATABASE_HOST)" \
 							 $(ERLANG_IMAGE) \
 							 rebar3 as dev shell
@@ -187,3 +191,21 @@ db-import-cities:
 										-d $(DATABASE_NAME) \
 										-f data/import.sql
 	@rm data/cities_canada-usa.tsv.tmp
+
+################################################################################
+## BENCHMARKING
+################################################################################
+
+.PHONY: benchmark-random
+benchmark-random:
+	@docker run -it \
+							--rm \
+							--volume "$(BASE_DIR)":/app \
+							--workdir /app \
+							--link "$(WEBAPP_CONTAINER_NAME)":"webapp.host" \
+							$(BENCHMARK_IMAGE_NAME) \
+							wrk -s scripts/pipeline.lua -t2 -c100 -d30s -R1000 http://webapp.host:9000
+
+.PHONY: benchmark-image
+benchmark-image:
+	@docker build -f Dockerfile.wrk2 -t $(BENCHMARK_IMAGE_NAME) .

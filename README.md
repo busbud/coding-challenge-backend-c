@@ -114,3 +114,13 @@ $ IMAGE_NAME=<image>:<version> make run-prod
 ```
 
 You should now be able to access the production app at [localhost:9000](http://localhost:9000/). Run `C-c` to abort.
+
+## Benchmarking
+
+First, create the benchmarking image which contains the ApacheBench tool. Then run
+the suggestions endpoint benchmark:
+
+```
+$ make benchmark-image
+$ make benchmark-suggestions
+```
