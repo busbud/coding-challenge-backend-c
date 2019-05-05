@@ -176,13 +176,13 @@ db-create-migration:
 
 .PHONY: db-import-cities
 db-import-cities:
-	@awk -F'\t' '{printf "%s\t%s\t%s\t%s\t%s\n", $$2, $$3, $$5, $$6, $$9}' data/cities_canada-usa.tsv >data/cities_canada-usa.tsv.tmp
+	@awk -F'\t' '{printf "%s\t%s\t%s\t%s\t%s\t%s\n", $$2, $$3, $$5, $$6, $$9, $$11}' data/cities_canada-usa.tsv >data/cities_canada-usa.tsv.tmp
 	$(eval DATABASE_USER := $(call get_config, database_user))
 	$(eval DATABASE_PASSWORD := $(call get_config, database_password))
 	$(eval DATABASE_NAME := $(call get_config, database_name))
 	@docker exec -it \
 							 -e PGPASSWORD="$(DATABASE_PASSWORD)" \
-									$(POSTGRES_CONTAINER_NAME) \
+							 $(POSTGRES_CONTAINER_NAME) \
 						   psql -U $(DATABASE_USER) \
 										-d $(DATABASE_NAME) \
 										-f data/import.sql

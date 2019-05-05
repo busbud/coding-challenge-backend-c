@@ -30,7 +30,7 @@ suggest(Conn, #{<<"q">> := SearchText,
                  Conn,
                  "SELECT * "
                  "FROM ("
-                 "  SELECT cities.name, cities.country, "
+                 "  SELECT cities.name, cities.state, cities.country, "
                  "    cities.latitude, cities.longitude, "
                  "    $1 - $2 * LEVENSHTEIN($3, LOWER(cities.name), 1, 10, 10) / $4 + "
                  "    GREATEST($5 - $6 * ST_DISTANCE(cities.location, ST_POINT($7, $8)) / $9, 0)"
@@ -54,7 +54,7 @@ suggest(Conn, #{<<"q">> := SearchText}) when is_binary(SearchText) ->
              Conn,
              "SELECT * "
              "FROM ("
-             "  SELECT cities.name, cities.country, "
+             "  SELECT cities.name, cities.state, cities.country, "
              "    cities.latitude, cities.longitude, "
              "    100 - 100 * LEVENSHTEIN($1, LOWER(cities.name), 1, 10, 10) / $2 AS score "
              "  FROM cities "
@@ -84,21 +84,22 @@ serialize_cities(Cities) ->
   [serialize_city(C) || C <- Cities].
 
 serialize_city(#{name := Name,
+                 state := State,
                  country := Country,
                  score := Score,
                  latitude := Lat,
                  longitude := Lon}) ->
-  #{name => serialize_name(Name, Country),
+  #{name => serialize_name(Name, State, Country),
     score => round(Score) / 100,
     latitude => Lat,
     longitude => Lon}.
 
-serialize_name(Name, <<"US">>) ->
-  list_to_binary(lists:flatten(io_lib:format("~s, USA", [Name])));
-serialize_name(Name, <<"CA">>) ->
-  list_to_binary(lists:flatten(io_lib:format("~s, Canada", [Name])));
-serialize_name(Name, Country) ->
-  list_to_binary(lists:flatten(io_lib:format("~s, ~s", [Name, Country]))).
+serialize_name(Name, State, <<"US">>) ->
+  list_to_binary(lists:flatten(io_lib:format("~s, ~s, USA", [Name, State])));
+serialize_name(Name, State, <<"CA">>) ->
+  list_to_binary(lists:flatten(io_lib:format("~s, ~s, Canada", [Name, State])));
+serialize_name(Name, State, Country) ->
+  list_to_binary(lists:flatten(io_lib:format("~s, ~s, ~s", [Name, State, Country]))).
 
 sanitize_search_text(SearchText) ->
   string:replace(SearchText, "%", "\\%") ++ "%".
