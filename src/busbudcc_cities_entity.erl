@@ -34,7 +34,7 @@ suggest(#{<<"q">> := SearchText,
                  "    GREATEST($5 - $6 * ST_DISTANCE(cities.location, ST_POINT($7, $8)) / $9, 0)"
                  "    AS score "
                  "  FROM cities "
-                 "  WHERE cities.name ILIKE $10 "
+                 "  WHERE LOWER(cities.name) LIKE $10 "
                  "  ORDER BY score DESC "
                  "  LIMIT $11"
                  ") AS inner_cities "
@@ -55,7 +55,7 @@ suggest(#{<<"q">> := SearchText}) when is_binary(SearchText) ->
              "    cities.latitude, cities.longitude, "
              "    100 - 100 * LEVENSHTEIN($1, LOWER(cities.name), 1, 10, 10) / $2 AS score "
              "  FROM cities "
-             "  WHERE cities.name ILIKE $3 "
+             "  WHERE LOWER(cities.name) LIKE $3 "
              "  ORDER BY score DESC "
              "  LIMIT $4"
              ") AS inner_cities "
@@ -99,4 +99,4 @@ serialize_name(Name, State, Country) ->
   list_to_binary(lists:flatten(io_lib:format("~s, ~s, ~s", [Name, State, Country]))).
 
 sanitize_search_text(SearchText) ->
-  string:replace(SearchText, "%", "\\%") ++ "%".
+  string:to_lower(lists:flatten(string:replace(SearchText, "%", "\\%"))) ++ "%".
