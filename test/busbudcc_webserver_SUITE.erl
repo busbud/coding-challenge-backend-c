@@ -47,6 +47,7 @@ end_per_testcase(_Case, _Config) ->
 t_not_found(_Config) ->
   Response = busbudcc_test_helper:request(get, "/blah", #{}),
   404 = busbudcc_test_helper:response_status(Response),
+  "application/json" = busbudcc_test_helper:response_content_type(Response),
   Body = busbudcc_test_helper:response_body(Response),
   #{<<"message">> := <<"Not found.">>} = jsx:decode(Body, [return_maps]).
 

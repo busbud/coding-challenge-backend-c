@@ -7,7 +7,8 @@
 -export([set_env_vars/0,
          request/3,
          response_body/1,
-         response_status/1]).
+         response_status/1,
+         response_content_type/1]).
 
 %%%===================================================================
 %%% API
@@ -35,6 +36,9 @@ response_body({_, _, Body}) ->
 
 response_status({{_, Status, _}, _, _}) ->
   Status.
+
+response_content_type({_, Headers, _}) ->
+  proplists:get_value("content-type", Headers).
 
 %%%===================================================================
 %%% Internal functions
