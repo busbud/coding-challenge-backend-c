@@ -51,7 +51,7 @@ end_per_testcase(_Case, Config) ->
 
 t_suggest(Config) ->
   Connection = ?config(connection, Config),
-  {ok, [#{name := <<"London, Canada">>, score := 0.9} | _Rest]} =
+  {ok, [#{name := <<"London, ", _RestName/binary>>, score := 0.9} | _Rest]} =
     busbudcc_cities_entity:suggest(Connection, #{<<"q">> => <<"Londo">>}).
 
 t_suggest_with_location(Config) ->

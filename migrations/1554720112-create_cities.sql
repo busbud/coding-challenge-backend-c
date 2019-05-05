@@ -14,8 +14,6 @@ CREATE TABLE cities (
   location    GEOGRAPHY(POINT) NOT NULL
 );
 
-CREATE INDEX cities_location ON cities USING GIST(location);
-
 COMMIT;
 
 -- ==== DOWN ====

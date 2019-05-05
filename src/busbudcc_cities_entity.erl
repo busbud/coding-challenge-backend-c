@@ -5,10 +5,10 @@
 
 %% Macros
 -define(MAX_CITIES, 25).
--define(WORD_WEIGHT, 60).
+-define(WORD_WEIGHT, 50).
 -define(MAX_WORD_DISTANCE, 10).
--define(LOCATION_WEIGHT, 40).
--define(MAX_LOCATION_DISTANCE, 10000).
+-define(LOCATION_WEIGHT, 50).
+-define(MAX_LOCATION_DISTANCE, 1000000).
 
 %%%===================================================================
 %%% API functions
@@ -32,16 +32,18 @@ suggest(Conn, #{<<"q">> := SearchText,
                  "FROM ("
                  "  SELECT cities.name, cities.country, "
                  "    cities.latitude, cities.longitude, "
-                 "    $1 - $2 * LEVENSHTEIN($3, cities.name, 1, 3, 3) / $4 + "
+                 "    $1 - $2 * LEVENSHTEIN($3, LOWER(cities.name), 1, 10, 10) / $4 + "
                  "    GREATEST($5 - $6 * ST_DISTANCE(cities.location, ST_POINT($7, $8)) / $9, 0)"
                  "    AS score "
                  "  FROM cities "
+                 "  WHERE cities.name ILIKE $10 "
                  "  ORDER BY score DESC "
-                 "  LIMIT $10"
+                 "  LIMIT $11"
                  ") AS inner_cities "
                  "WHERE score > 0",
-                 [?WORD_WEIGHT, ?WORD_WEIGHT, SearchTextStr, ?MAX_WORD_DISTANCE,
+                 [?WORD_WEIGHT, ?WORD_WEIGHT, string:to_lower(SearchTextStr), ?MAX_WORD_DISTANCE,
                   ?LOCATION_WEIGHT, ?LOCATION_WEIGHT, LonFloat, LatFloat, ?MAX_LOCATION_DISTANCE,
+                  sanitize_search_text(SearchText),
                   ?MAX_CITIES]),
       {ok, serialize_cities(Cities)};
     error -> {error, <<"Invalid location format.">>}
@@ -54,13 +56,15 @@ suggest(Conn, #{<<"q">> := SearchText}) when is_binary(SearchText) ->
              "FROM ("
              "  SELECT cities.name, cities.country, "
              "    cities.latitude, cities.longitude, "
-             "    100 - 100 * LEVENSHTEIN($1, cities.name, 1, 3, 3) / $2 AS score "
+             "    100 - 100 * LEVENSHTEIN($1, LOWER(cities.name), 1, 10, 10) / $2 AS score "
              "  FROM cities "
+             "  WHERE cities.name ILIKE $3 "
              "  ORDER BY score DESC "
-             "  LIMIT $3"
+             "  LIMIT $4"
              ") AS inner_cities "
              "WHERE score > 0",
-             [SearchTextStr, ?MAX_WORD_DISTANCE, ?MAX_CITIES]),
+             [string:to_lower(SearchTextStr), ?MAX_WORD_DISTANCE,
+              sanitize_search_text(SearchTextStr), ?MAX_CITIES]),
   {ok, serialize_cities(Cities)};
 suggest(_Conn, _SearchParams) ->
   {error, <<"Invalid params format.">>}.
@@ -71,7 +75,7 @@ suggest(_Conn, _SearchParams) ->
 
 parse_location(Lon, Lat) ->
   try
-    {ok, binary_to_float(Lat), binary_to_float(Lon)}
+    {ok, binary_to_float(Lon), binary_to_float(Lat)}
   catch
     _C:_E -> error
   end.
@@ -95,3 +99,6 @@ serialize_name(Name, <<"CA">>) ->
   list_to_binary(lists:flatten(io_lib:format("~s, Canada", [Name])));
 serialize_name(Name, Country) ->
   list_to_binary(lists:flatten(io_lib:format("~s, ~s", [Name, Country]))).
+
+sanitize_search_text(SearchText) ->
+  string:replace(SearchText, "%", "\\%") ++ "%".
