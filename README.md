@@ -1,3 +1,21 @@
+# Implementation 
+
+I decided to have a little fun with this exercise since this is my first time working with Nodejs. I also thought since the data is mostly static it might be fun to also try to solve this exercise with Elasticsearch, which was also my first time using it.
+
+I also wanted to avoid using too many packages from npm solely for the purpose to spend a little bit more time with nodejs
+
+How the suggestion algorithm is evaluated: 
+- Search terms are evaluated by Elasticsearch using a Wildcard query. 
+- Distances are evaluated by Elasticsearch by doing a location query.
+- The score is automatically evaluated by ElasticSearch but I normalized it to be between 0-1
+
+The integration tests on git are currently failing but they do work locally as long as the Elasticsearch docker container is running.
+
+## Launching Elasticsearch with Docker
+
+docker pull docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+docker run -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+
 # Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
 
 ## Requirements
