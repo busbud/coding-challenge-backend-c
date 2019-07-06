@@ -10,8 +10,11 @@ I also wanted to avoid using too many packages from npm solely for the purpose t
 
 How the suggestion algorithm is evaluated: 
 - Search terms are evaluated by Elasticsearch using a Wildcard query. 
-- Distances are evaluated by Elasticsearch by doing a Location query.
-- The score is automatically evaluated by ElasticSearch normalized between 0-1
+- Distances are evaluated by Elasticsearch using a Location query.
+- The score is evaluated by ElasticSearch normalized between 0-1
+
+How throttling is implemented:
+- Throttling is done using Bottleneck at 10 requests per second
 
 # Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
 

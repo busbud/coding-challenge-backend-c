@@ -21,6 +21,8 @@ const parse = async (tsvFile) => {
             lng = null;
             elasticData.push({ index: { _index: 'population', _id: data[0] } });
             
+            //Extract lat and long and create get_point in elasticsearch
+            //The rest are extracted from the headers in the tsv file
             const body = headers.reduce((obj, nextKey, index) => {
                 if (nextKey === 'lat') {
                     lat = data[index];
