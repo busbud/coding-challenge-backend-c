@@ -1,11 +1,17 @@
 const elastic = require('../../modules/elasticsearch');
+var Bottleneck = require("bottleneck");
 
 const get_suggestions = async (req, res) => {
     try {
+        //Limit to 10 request a second
+        const limiter = new Bottleneck({
+            minTime: 100
+        });
+
         const query = build_query(req);
 
         if (query != null) {
-            const result = await elastic.get_suggestions(query);
+            const result = await limiter.schedule(() => { return elastic.get_suggestions(query) });
             if (result.length == 0) {
                 res.status(404);
             }
@@ -19,6 +25,7 @@ const get_suggestions = async (req, res) => {
     catch (e) {
         console.log(e);
         res.status(500);
+        res.send(e);
     }
 };
 
@@ -27,7 +34,7 @@ function build_query(req) {
     const latitude = req.query['latitude'];
     const longitude = req.query['longitude'];
 
-    if(query == null) return null;
+    if (query == null) return null;
 
     if (latitude != null && longitude != null && query != null) {
         //Send a geo query to elasticsearch with a wildcard string search
