@@ -11,9 +11,12 @@ How the suggestion algorithm is evaluated:
 
 The integration tests on git are currently failing but they do work locally as long as the Elasticsearch docker container is running.
 
-## Launching Elasticsearch with Docker
+## Installing Elasticsearch
 
 > docker pull docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+
+## Launching Elasticsearch
+
 > docker run -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.2.0
 
 # Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
