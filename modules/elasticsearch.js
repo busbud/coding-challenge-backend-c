@@ -48,9 +48,9 @@ const get_suggestions = async (query) => {
     const result = await client.search(query);
     return result.body.hits.hits.map(s =>
         ({
-            "name": `${s._source.name}, ${s._source.admin1}, ${s._source.country}`,
-            "latitude": s._source.lat,
-            "longitude": s._source.long,
+            "name": `${s._source.ascii}, ${s._source.admin1}, ${s._source.country}`,
+            "latitude": s._source.location.lat,
+            "longitude": s._source.location.lon,
 
             //The highest element score is the best match at 1
             "score": s._score / result.body.hits.max_score
