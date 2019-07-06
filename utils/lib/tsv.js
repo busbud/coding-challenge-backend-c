@@ -25,9 +25,9 @@ const parse = async (tsvFile) => {
             //The rest are extracted from the headers in the tsv file
             const body = headers.reduce((obj, nextKey, index) => {
                 if (nextKey === 'lat') {
-                    lat = data[index];
+                    lat = Number(data[index]);
                 } else if (nextKey === 'long') {
-                    lng = data[index];
+                    lng = Number(data[index]);
                 }
                 else {
                     obj[nextKey] = data[index];

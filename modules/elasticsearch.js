@@ -14,11 +14,11 @@ async function init_module() {
         if (!result.body) {
             console.log("Index does not exist");
             await client.indices.create({
-                "index": "population",
+                index: 'population',
                 body: {
-                    "mappings": {
-                        "properties": {
-                            "location": { "type": "geo_point" }
+                    mappings: {
+                        properties: {
+                            location: { type: 'geo_point' }
                         }
                     }
                 }
@@ -49,12 +49,12 @@ const get_suggestions = async (query) => {
     const result = await client.search(query);
     return result.body.hits.hits.map(s =>
         ({
-            "name": `${s._source.ascii}, ${s._source.admin1}, ${s._source.country}`,
-            "latitude": s._source.location.lat,
-            "longitude": s._source.location.lon,
+            name: `${s._source.ascii}, ${s._source.admin1}, ${s._source.country}`,
+            latitude: s._source.location.lat,
+            longitude: s._source.location.lon,
 
             //The highest element score is the best match at 1
-            "score": s._score / result.body.hits.max_score
+            score: s._score / (result.body.hits.max_score == 0 ? 1 : result.body.hits.max_score)
         }));
 };
 

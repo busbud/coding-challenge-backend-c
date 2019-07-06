@@ -39,24 +39,24 @@ function build_query(req) {
     if (latitude != null && longitude != null && query != null) {
         //Send a geo query to elasticsearch with a wildcard string search
         return {
-            index: 'population',
+            index: "population",
             body: {
                 query: {
-                    "function_score": {
-                        "query": {
-                            "wildcard": {
-                                "ascii": {
-                                    "value": "*" + query.toLowerCase() + "*",
-                                    "rewrite": "scoring_boolean"
+                    function_score: {
+                        query: {
+                            wildcard: {
+                                ascii: {
+                                    value: "*" + query.toLowerCase() + "*",
+                                    rewrite: "scoring_boolean"
                                 }
                             }
                         },
-                        "functions": [
+                        functions: [
                             {
-                                "gauss": {
-                                    "location": {
-                                        "origin": { "lat": latitude, "lon": longitude },
-                                        "scale": "100km"
+                                gauss: {
+                                    location: {
+                                        origin: { lat: latitude, lon: longitude },
+                                        scale: "100km"
                                     }
                                 }
                             }
@@ -68,13 +68,13 @@ function build_query(req) {
     } else {
         //Send a regular wildcard query to elasticsearch
         return {
-            index: 'population',
+            index: "population",
             body: {
                 query: {
-                    "wildcard": {
-                        "ascii": {
-                            "value": "*" + query.toLowerCase() + "*",
-                            "rewrite": "scoring_boolean"
+                    wildcard: {
+                        ascii: {
+                            value: "*" + query.toLowerCase() + "*",
+                            rewrite: "scoring_boolean"
                         }
                     }
                 }
