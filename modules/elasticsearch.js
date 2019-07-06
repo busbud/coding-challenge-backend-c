@@ -2,7 +2,8 @@ const { Client: Client7 } = require('es7');
 const parser = require('../utils').TsvUtils;
 
 function create_client() {
-    return new Client7({ node: 'http://localhost:9200' });
+    //This is 100% not secure baking credentials in but its just for the demonstration purpose of this challenge
+    return new Client7({ node: 'http://elastic:SuperSecretPassword123!@lb-paufavsh5nxbc.eastus.cloudapp.azure.com:9200' });
 }
 
 async function init_module() {
