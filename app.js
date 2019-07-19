@@ -1,16 +1,26 @@
-var http = require('http');
-var port = process.env.PORT || 2345;
+// Basic Requirements
+const express = require('express');
+const log4js = require('log4js');
+const morgan = require('morgan');
 
-module.exports = http.createServer(function (req, res) {
-  res.writeHead(404, {'Content-Type': 'text/plain'});
+// App specifc Requirements
+const routes = require('./routes');
+const config = require('./config');
 
-  if (req.url.indexOf('/suggestions') === 0) {
-    res.end(JSON.stringify({
-      suggestions: []
-    }));
-  } else {
-    res.end();
-  }
-}).listen(port, '127.0.0.1');
 
-console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+const app = express(); // setting up express app
+const serverConfig = config.server;
+
+
+// configure application logging
+app.use(morgan(((config.env === 'production') ? 'short': 'dev')));
+const logger = log4js.getLogger();
+logger.level = 'debug';
+
+// setup routes
+app.use(routes);
+
+app.listen(serverConfig.port, serverConfig.host, () => {
+  logger.info(`app running on http://${serverConfig.host}:${serverConfig.port} in ${config.env}`);
+});
+
