@@ -20,6 +20,10 @@ logger.level = 'debug';
 // setup routes
 app.use(routes);
 
+
+const { importData } = require('./lib/loadData');
+importData(`${__dirname}/data/cities_canada-usa.tsv`,'\t');
+
 app.listen(serverConfig.port, serverConfig.host, () => {
   logger.info(`app running on http://${serverConfig.host}:${serverConfig.port} in ${config.env}`);
 });
