@@ -4,6 +4,7 @@
   "description": "coding challenge in Nodejs",
   "main": "app.js",
   "scripts": {
+    "lint": "busbud-lint",
     "start": "node app.js",
     "start:dev": "nodemon ./app.js",
     "test": "./node_modules/mocha/bin/mocha ./test/"
@@ -11,11 +12,14 @@
   "author": "",
   "license": "WTFPL",
   "dependencies": {
-    "chai": "^1.9.1",
     "express": "^4.17.1",
     "log4js": "^4.5.1",
-    "mocha": "^1.18.2",
-    "morgan": "^1.9.1",
+    "morgan": "^1.9.1"
+  },
+  "devDependencies": {
+    "chai": "^1.9.1",
+    "mocha": "^1.21.5",
+    "nodemon": "^1.19.1",
     "supertest": "^0.11.0"
   },
   "engines": {

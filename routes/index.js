@@ -1,7 +1,10 @@
-const app = require('express')();
+// General Requirements
+const app               = require('express')();
+// Application Code
 const suggestionsRoutes = require('./suggestions');
 
-app.use('/suggestions', suggestionsRoutes); // load suggestion routes
+// load suggestion routes
+app.use('/suggestions', suggestionsRoutes);
 
 // catch all routes
 app.all("*", function(req,res) {
