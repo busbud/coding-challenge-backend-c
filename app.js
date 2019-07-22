@@ -16,6 +16,8 @@ logger.level        = 'debug';
 const DATA_PATH     = `${__dirname}/data/cities_canada-usa.tsv`;
 const DATA_DELIM    = '\t';
 
+logger.info(config);
+
 // configure application logging
 app.use(morgan(((config.env === 'production') ? 'short' : 'dev')));
 
