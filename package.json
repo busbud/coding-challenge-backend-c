@@ -3,12 +3,15 @@
   "version": "0.0.0",
   "description": "coding challenge in Nodejs",
   "main": "app.js",
+  "engine": {
+    "node":  "12.1.0",
+    "npm":  "6.9.0"
+  },
   "scripts": {
     "lint": "busbud-lint",
     "start": "node app.js",
     "start:dev": "nodemon ./app.js",
-    "test": "./node_modules/mocha/bin/mocha ./test/",
-    "deploy": "git push heroku master"
+    "test": "./node_modules/mocha/bin/mocha ./test/"
   },
   "author": "",
   "license": "WTFPL",
