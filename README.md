@@ -1,5 +1,38 @@
 # Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
 
+## Submission
+
+- Uses [expressjs](https://github.com/expressjs/express) as a server
+- City Data is stored in memory.
+- 
+
+#### Scoring Algorithm
+
+#### File structure
+```
+├── Makefile                            Usefull commands 
+├── README.md
+├── app.js                              Express App Setup
+├── config.js                           Environment Configuration Style
+├── data
+│   ├── README.md
+│   ├── admin_1_code.js                 Province and State Data
+│   └── cities_canada-usa.tsv           City Data
+├── domain
+│   ├── suggestor.helper.js             Scoring and matching helper functions
+│   └── suggestor.js                    Iterates through suggestion matching and scoring them
+├── lib
+│   ├── dataImporter.js                 Generic file importer
+│   └── loadData.js                     Load domain specific data
+├── package.json                        NPM configuration
+├── routes  
+│   ├── index.js                        Includes all API endpoints
+│   └── suggestions.js                  Define suggestion API endpoint
+└── test
+    ├── domain
+    │   └── suggestor.helper.js         Test helper function locates in domain > suggestor.helper.js
+    └── suggestions.js                  Route Testing
+```
 ## Requirements
 
 Design an API endpoint that provides auto-complete suggestions for large cities.

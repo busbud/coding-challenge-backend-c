@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "coding challenge in Nodejs",
   "main": "app.js",
+  "pre-commit": [
+    "test"
+  ],
   "engines": {
     "node": "12.1.0",
     "npm": "6.9.0"

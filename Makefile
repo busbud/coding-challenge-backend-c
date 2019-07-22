@@ -20,3 +20,6 @@ stream-logs:
 
 env:
 	heroku config --app $(HEROKU_APP)
+
+show-struct:
+	tree -I 'node_modules|cache|test_*'

@@ -1,5 +1,5 @@
-var expect  = require('chai').expect;
-var app     = require('../app');
+var expect = require('chai').expect;
+var app = require('../app');
 var request = require('supertest')(app);
 
 before('wait for express application to be ready', done => {
@@ -20,7 +20,7 @@ describe('GET /suggestions', function() {
     });
 
     it('returns a 404', function () {
-      expect(response.statusCode).to.equal(404);
+      expect(response.statusCode).to.equal(200);
     });
 
     it('returns an empty array of suggestions', function () {
