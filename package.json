@@ -1,11 +1,11 @@
 {
   "name": "coding-challenge-backend-c",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "coding challenge in Nodejs",
   "main": "app.js",
-  "engine": {
-    "node":  "12.1.0",
-    "npm":  "6.9.0"
+  "engines": {
+    "node": "12.1.0",
+    "npm": "6.9.0"
   },
   "scripts": {
     "lint": "busbud-lint",
@@ -13,7 +13,7 @@
     "start:dev": "nodemon ./app.js",
     "test": "./node_modules/mocha/bin/mocha ./test/"
   },
-  "author": "",
+  "author": "Julien Cassis",
   "license": "WTFPL",
   "dependencies": {
     "express": "^4.17.1",
@@ -21,12 +21,10 @@
     "morgan": "^1.9.1"
   },
   "devDependencies": {
+    "busbud-lint": "^1.6.1",
     "chai": "^1.9.1",
     "mocha": "^1.21.5",
     "nodemon": "^1.19.1",
     "supertest": "^0.11.0"
-  },
-  "engines": {
-    "node": "0.10.26"
   }
 }
