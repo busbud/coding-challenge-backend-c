@@ -28,6 +28,8 @@ router.get('/beta', async function(req, res) {
   }
 
   const cities = getData();
+  var suggestions = [];
+
   // creates a readable string from the cities store in-memory
   const cityDataStream = new Readable({
     read(size) {
@@ -71,7 +73,7 @@ router.get('/beta', async function(req, res) {
     transform(city, encoding, callback) {
 
       const seriazliedCity = serializeCity(city);
-      this.push(JSON.stringify(seriazliedCity));
+      suggestions.push(seriazliedCity);
       callback();
     }
   });
@@ -80,12 +82,12 @@ router.get('/beta', async function(req, res) {
     .pipe(cityFilter)
     .pipe(cityScorer)
     .pipe(cityFormatter)
-    .pipe(res);
-
-  res.writeHead(HTTP_OK, HTTP_HEADERS);
+    .on('finish', function() {
+      res
+        .status(((suggestions.length > 0) ? HTTP_OK : HTTP_NOT_FOUND))
+        .json({suggestions: suggestions});
+    });
 });
-
-
 
 /**
  * Implements a streaming version [GET] '/steam/alpha'
@@ -133,10 +135,11 @@ router.get('/alpha', async function(req, res) {
   const writableSuggestionToHTTP = new Writable({
     objectMode: true,
     write(suggestions, encoding, callback) {
-      res.writeHead(((suggestions.length > 0) ? HTTP_OK : HTTP_NOT_FOUND), HTTP_HEADERS);
-      res.end(JSON.stringify({
-        suggestions: suggestions.map((city) => serializeCity(city))
-      }));
+      res
+        .status(((suggestions.length > 0) ? HTTP_OK : HTTP_NOT_FOUND))
+        .json({
+          suggestions: suggestions.map((city) => serializeCity(city))
+        });
       callback();
     }
   });

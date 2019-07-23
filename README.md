@@ -9,7 +9,7 @@
 #### Routes
 
 ###### Suggestions
-- `[GET] /suggestions`: Implements the standard suggestions endpoint without any streaming
+- `[GET] /suggestions`: Implements the standard suggestions endpoint without any streaming as per the minimum requirements
     
 ###### Stream
 - `[GET] /stream/alpha`: Implements the suggestions endpoint with streaming. We start by creating a readable stream from the query URL and pipe in parameters validation and suggestions fetching:
@@ -76,12 +76,12 @@ final_score = (search_term_score * searc_term_score_weight) + (distance_score * 
     └── suggestions.js                  Route Testing
 ```
 
-#### Deployment
-- Deployed on heroku at https://geosuggest.herokuapp.com
+#### CI/CD
+The application is deployed on Heroku at https://geosuggest.herokuapp.com and it tested via CircleCI. I setup heroku to auto deploy when the master branch on github pass circle ci's continuous integration.  
 
 #### Todo
-- Implement Caching on endpoint `/stream/beta`
 - Wrap json response on endpoint `/stream/beta` with a root
+- Implement Caching on endpoint `/stream/beta`
 
 #### Resources
 -   https://www.freecodecamp.org/news/node-js-streams-everything-you-need-to-know-c9141306be93/

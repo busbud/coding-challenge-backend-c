@@ -143,7 +143,6 @@ describe('GET /suggestions', function() {
         .end(function(err, res) {
           response = res;
           response.json = JSON.parse(res.text);
-          console.log(JSON.parse(res.text));
           done(err);
         });
     });
@@ -191,7 +190,6 @@ describe('GET /suggestions', function() {
         .end(function(err, res) {
           response = res;
           response.json = JSON.parse(res.text);
-          console.log(JSON.parse(res.text));
           done(err);
         });
     });
