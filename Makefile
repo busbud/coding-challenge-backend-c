@@ -23,3 +23,6 @@ env:
 
 show-struct:
 	tree -I 'node_modules|cache|test_*'
+
+restart:
+	heroku restart --app $(HEROKU_APP)
