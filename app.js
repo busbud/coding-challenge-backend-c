@@ -6,6 +6,7 @@ const morgan = require('morgan');
 const routes = require('./routes');
 const config = require('./config');
 const { importData } = require('./lib/loadData');
+const client = require('./lib/configureRedis');
 const app = express(); // setting up express app
 const serverConfig = config.server;
 const logger = log4js.getLogger();
@@ -13,8 +14,6 @@ logger.level = 'debug';
 
 const DATA_PATH = `${__dirname}/data/cities_canada-usa.tsv`;
 const DATA_DELIM = '\t';
-
-logger.info(config);
 
 // configure application logging
 app.use(morgan(((config.env === 'production') ? 'short' : 'dev')));

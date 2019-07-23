@@ -7,7 +7,7 @@ var router = express.Router();
 const HTTP_OK = 200;
 const HTTP_NOT_FOUND = 404;
 
-router.get('/', function(req, res) {
+router.get('/', async  function(req, res) {
   // fetch and validate parameters
   const {
     q,
@@ -20,7 +20,7 @@ router.get('/', function(req, res) {
     return res.status(400).json({ error: error_msg });
   }
   // retrieve suggestions
-  const suggestions = getSuggestions(q, coordinate);
+  const suggestions = await getSuggestions(q, coordinate);
   // format suggestions
   res.status((suggestions.length > 0) ? HTTP_OK : HTTP_NOT_FOUND).json({
     suggestions: suggestions.map((city) => formatCity(city))

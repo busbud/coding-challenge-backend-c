@@ -18,7 +18,8 @@
   "dependencies": {
     "express": "^4.17.1",
     "log4js": "^4.5.1",
-    "morgan": "^1.9.1"
+    "morgan": "^1.9.1",
+    "redis": "^2.8.0"
   },
   "devDependencies": {
     "busbud-lint": "^1.6.1",
