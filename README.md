@@ -3,10 +3,30 @@
 ## Submission
 
 - Uses [expressjs](https://github.com/expressjs/express) as a server
-- City Data is stored in memory.
-- 
+- City Data is imported and stored stored in memory
+- We use redis to implement caching
 
 #### Scoring Algorithm
+
+The scoring algorithm is comprised of two parts:
+- The `search_term` score
+        The `search_term` score is a float between 0 and 1 which represents the confidence level of the match. It is calculated by dividing the length of the `search_term` by the length of the city's name.  
+        ```search_term.length / city.name.length```  
+        If the lengths match it would be an full match and yield a value of 1. If it is a partial match then the length of `search_term` will be inferior to the length of city's name and will yield a fractional value less then 1.
+                
+- The `distance` score
+        The `distance` score is a float between 0 and 1 which represents the closeness of two coordinates, where 1 implies both coordinate are at the same exact point and 0 mean they are the farthest apart. It is calculated by taking the difference between the biggest possible distance and the distance between both point and dividing that by the biggest possible distance between 2 coordinates on earth.  
+        
+        EARTH_CIRCUMFERENCE = 40075.0 // in kilometers
+        HALF_EARTH_CIRCUMFERENCE = EARTH_CIRCUMFERENCE / 2.0 // biggest ditance between 2 coordinates on earth
+        distanceInKm = distanceBetweenCoordinates(coordinate_a, coordinate_b)
+        ((HALF_EARTH_CIRCUMFERENCE - distanceInKm) / HALF_EARTH_CIRCUMFERENCE)
+                 
+Once we retrieve both scores we weight them based on the configuration value `config.suggestionConfig.coordinateScoreWeight`. If we are not taking into account `distance` score (since query does not contain latitude and longitude) we would simply use 1 as the weight score for `searc_term` score
+
+```
+final_score = (search_term_score * searc_term_score_weight) + (distance_score * distance_score_weight)   
+```
 
 #### File structure
 ```
@@ -22,6 +42,7 @@
 │   ├── suggestor.helper.js             Scoring and matching helper functions
 │   └── suggestor.js                    Iterates through suggestion matching and scoring them
 ├── lib
+│   ├── configureRedis.js               Redis Configuration File
 │   ├── dataImporter.js                 Generic file importer
 │   └── loadData.js                     Load domain specific data
 ├── package.json                        NPM configuration

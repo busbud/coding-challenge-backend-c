@@ -13,6 +13,7 @@ module.exports = {
     maxPopulation: null,
     countryWhitelist: ['CA', 'US'],
     scorePrecision: 4,
-    coordinateScoreWeight: 0.5
+    coordinateScoreWeight: 0.5,
+    cachingExpiry: (60 * 60 * 24)
   }
 };
