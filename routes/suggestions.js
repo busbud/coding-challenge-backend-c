@@ -2,7 +2,7 @@
 const express = require('express');
 // Application Code
 const { getSuggestions } = require('../domain/suggestor');
-const { getSuggestionParameters, serializeCity  } = require('./routes.helper');
+const { getSuggestionParameters, serializeCity } = require('./routes.helper');
 var router = express.Router();
 const HTTP_OK = 200;
 const HTTP_BAD_REQUEST = 400;

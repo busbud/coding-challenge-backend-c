@@ -5,19 +5,19 @@ const express = require('express');
 const { getData } = require('../lib/loadData');
 // Application Code
 const { getSuggestions } = require('../domain/suggestor');
-const { searchString, scoreCity, cleanAndNormalizeString } = require('../domain/suggestor.helper');
-const { getSuggestionParameters, serializeCity  } = require('./routes.helper');
+const { searchString, scoreCity } = require('../domain/suggestor.helper');
+const { getSuggestionParameters, serializeCity } = require('./routes.helper');
 var router = express.Router();
 const HTTP_OK = 200;
 const HTTP_BAD_REQUEST = 400;
 const HTTP_NOT_FOUND = 404;
+const HTTP_HEADERS = { 'Content-Type': 'application/json' };
 
 /**
  * Implements a streaming version [GET] '/steam/beta
  *
  */
 router.get('/beta', async function(req, res) {
-
   // fetch suggestion parameters and processing them
   const { q, coordinate, is_valid, error_msg } = getSuggestionParameters(req.query);
 
@@ -27,7 +27,7 @@ router.get('/beta', async function(req, res) {
     return res.status(HTTP_BAD_REQUEST).json({ error: error_msg });
   }
 
-  let cities = getData();
+  const cities = getData();
   // creates a readable string from the cities store in-memory
   const cityDataStream = new Readable({
     read(size) {
@@ -46,7 +46,7 @@ router.get('/beta', async function(req, res) {
     transform(cityChunk, encoding, callback) {
       const city = JSON.parse(cityChunk.toString());
       const searchState = searchString(city.ascii, q);
-      if(searchState.found) {
+      if (searchState.found) {
         this.push(city);
       }
       callback();
@@ -69,7 +69,9 @@ router.get('/beta', async function(req, res) {
     writableObjectMode: true,
     readableObjectMode: true,
     transform(city, encoding, callback) {
-      this.push(JSON.stringify(serializeCity(city)));
+
+      const seriazliedCity = serializeCity(city);
+      this.push(JSON.stringify(seriazliedCity));
       callback();
     }
   });
@@ -79,6 +81,8 @@ router.get('/beta', async function(req, res) {
     .pipe(cityScorer)
     .pipe(cityFormatter)
     .pipe(res);
+
+  res.writeHead(HTTP_OK, HTTP_HEADERS);
 });
 
 
@@ -91,24 +95,24 @@ router.get('/alpha', async function(req, res) {
   const transformGetParameters = new Transform({
     readableObjectMode: true,
     transform(chunk, encoding, callback) {
-      // get  buffered chunk and convert to string
-      const queryUrl = chunk.toString();
-      // parse url string
-      const parsedUrl = JSON.parse(queryUrl);
+      // get  buffered chunk (json request query) and convert to string
+      const requestQueryString = chunk.toString();
+      // parse request query string to json object
+      const requestQuery = JSON.parse(requestQueryString);
       // retrieve parameters
       const {
         q,
         coordinate,
         is_valid,
         error_msg
-      } = getSuggestionParameters(req.query);
+      } = getSuggestionParameters(requestQuery);
       // validate parameters
       if (!is_valid) {
         // Call callbox once we are done processing with error
         callback(new Error(error_msg)); //
-        return
+        return;
       }
-      this.push({q, coordinate});
+      this.push({ q, coordinate });
       // Call callback once we are done processing without error
       callback();
     }
@@ -118,7 +122,7 @@ router.get('/alpha', async function(req, res) {
     writableObjectMode: true,
     readableObjectMode: true,
     transform(params, encoding, callback) {
-      getSuggestions(params.q, params.coordinate).then(function(suggestions){
+      getSuggestions(params.q, params.coordinate).then(function(suggestions) {
         // Call callback once we are done processing without error
         this.push(suggestions);
         callback();
@@ -129,7 +133,7 @@ router.get('/alpha', async function(req, res) {
   const writableSuggestionToHTTP = new Writable({
     objectMode: true,
     write(suggestions, encoding, callback) {
-      res.writeHead(((suggestions.length > 0) ? HTTP_OK : HTTP_NOT_FOUND));
+      res.writeHead(((suggestions.length > 0) ? HTTP_OK : HTTP_NOT_FOUND), HTTP_HEADERS);
       res.end(JSON.stringify({
         suggestions: suggestions.map((city) => serializeCity(city))
       }));
@@ -145,15 +149,24 @@ router.get('/alpha', async function(req, res) {
     }
   });
 
-  httpRequestInStream.push(JSON.stringify(req.query));            // need to push a readeable string, Buffer, or Uint8Array
-  httpRequestInStream                                             //  create a readeable stream that will take the URL as a chunk
-    .pipe(transformGetParameters)                                 //  take the url and extra and validate parameters
-    .on('error', (err) => {                                       //  getStreamedParameters may throw an error so catch it here
-      res.writeHead(HTTP_BAD_REQUEST);                            //  set HTTP header
-      res.end(JSON.stringify( { error: err.message }));    //  set error payload
+  //  need to push a readeable string, Buffer, or Uint8Array
+  httpRequestInStream.push(JSON.stringify(req.query));
+  //  create a readeable stream that will take the URL as a chunk
+  httpRequestInStream
+    //  take the url and extra and validate parameters
+    .pipe(transformGetParameters)
+    // getStreamedParameters may throw an error so catch it here
+    .on('error', (err) => {
+      //  set HTTP header
+      res.writeHead(HTTP_BAD_REQUEST);
+      //  set error payload
+      res.end(JSON.stringify({ error: err.message }));
     })
-    .pipe(transformGetSuggestions)                                //  parameters are valid and processed, get suggestions
-    .pipe(writableSuggestionToHTTP);                              //  display suggestions
+
+    //  parameters are valid and processed, get suggestions
+    .pipe(transformGetSuggestions)
+    //  display suggestions
+    .pipe(writableSuggestionToHTTP);
 });
 
 module.exports = router;

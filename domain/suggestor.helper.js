@@ -44,21 +44,27 @@ function searchString(str, pattern) {
  */
 function scoreCity(city, search_term, search_coordinate) {
   //  set the name and distance score weights to their default value
-  let nameScoreWeight = 1.0;
-  let distanceScoreWeight = 0.0;
+  let name_score_weight = 1.0;
+  let distance_score_weight = 0.0;
   if (search_coordinate) {
     // is a search coordinate is specified modify the score weights appropriately
-    distanceScoreWeight = suggestionConfig.coordinateScoreWeight;
-    nameScoreWeight = (1.0 - distanceScoreWeight);
+    distance_score_weight = suggestionConfig.coordinateScoreWeight;
+    name_score_weight = (1.0 - distance_score_weight);
   }
   //  get the name search score
-  const scoreByName = searchString(city.ascii, search_term).confidence;
+  const score_by_name = (searchString(city.ascii, search_term).confidence || 0);
+  // if search term score is 0 simplye return, coordinate will have no impac
+  if (score_by_name === 0) {
+    return 0.0;
+  }
   //  get the distance score
-  const scoreByDistance = (search_coordinate ? normalizedDistanceBetweenCoordinates(city.coordinate, search_coordinate) : 1);
+  const score_by_distance = (search_coordinate ? normalizedDistanceBetweenCoordinates(city.coordinate, search_coordinate) : 1);
   //  normalize the score based on the specified weights
-  let score = ((scoreByName * nameScoreWeight) + (scoreByDistance * distanceScoreWeight));
+  let score = ((score_by_name * name_score_weight) + (score_by_distance * distance_score_weight));
+
   //  round score number to desired precision
-  score = Number(score).toFixed(suggestionConfig.scorePrecision || 1);
+  const score_precision = (suggestionConfig.scorePrecision || 1);
+  score = Math.round(score * Math.pow(10, score_precision)) / Math.pow(10, score_precision);
   return score;
 }
 
@@ -107,8 +113,8 @@ function distanceBetweenCoordinates(coordinate_a, coordinate_b) {
 function normalizedDistanceBetweenCoordinates(coordinate_a, coordinate_b) {
   const EARTH_CIRCUMFERENCE = 40075.0; // earth circumference in kilometers
   const HALF_EARTH_CIRCUMFERENCE = EARTH_CIRCUMFERENCE / 2.0; // half earth circumference in kilometers
-  var distanceInKm = distanceBetweenCoordinates(coordinate_a, coordinate_b);
-  return ((HALF_EARTH_CIRCUMFERENCE - distanceInKm) / HALF_EARTH_CIRCUMFERENCE);
+  var distance_in_km = distanceBetweenCoordinates(coordinate_a, coordinate_b);
+  return ((HALF_EARTH_CIRCUMFERENCE - distance_in_km) / HALF_EARTH_CIRCUMFERENCE);
 }
 
 /**
