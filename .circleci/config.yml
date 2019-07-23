@@ -4,6 +4,11 @@ jobs:
     docker:
       # specify the version you desire here
       - image: circleci/node:12.1
+          environment:
+            NODE_ENV: test
+            PORT: 2345
+            REDIS_URL: redis://127.0.0.1:6379
+      - image: circleci/redis:5.0-alpine
     working_directory: ~/repo
     steps:
       - checkout

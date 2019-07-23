@@ -16,6 +16,7 @@ const DATA_DELIM = '\t';
 
 // configure application logging
 app.use(morgan(((config.env === 'production') ? 'short' : 'dev')));
+logger.info(config);
 
 // setup routes
 app.use(routes);
