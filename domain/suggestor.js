@@ -44,10 +44,8 @@ async function suggestor(search_term, search_coordinate) {
   var suggestions = [];
   if(cached_suggestions){
     // cache hit found a suggested list
-    console.log('hit');
     suggestions = JSON.parse(cached_suggestions);
   } else {
-    console.log('miss');
     // cache hit found a suggested list
     suggestions = getData();
     suggestions = suggestions.filter(function(city) {
