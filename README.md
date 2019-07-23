@@ -6,6 +6,25 @@
 - City Data is imported and stored stored in memory
 - We use redis to implement caching. caching configuration can be found in `config.caching`
 - Added busbud-lint
+#### Routes
+
+###### Suggestions
+- `[GET] /suggestions`: Implements the standard suggestions endpoint without any streaming
+    
+###### Stream
+- `[GET] /stream/alpha`: Implements the suggestions endpoint with streaming. We start by creating a readable stream from the query URL and pipe in parameters validation and suggestions fetching:
+    1. Create readable stream from query parameter
+    2. Pipe into parameter fetch and validation
+    3. Pipe into fetch all suggestions. The filtering and scoring is done here
+    4. Pipe into a writable stream to process the array of suggestions 
+    
+ 
+- `[GET] /stream/beta`: Implements the suggestions endpoint with streaming. We are attempting here to start a stream diretcly from the data itself and not the query url. In this sceneraio as we progress through the in-memory city data we will be filtering, scoring and adding to the writable stream which in this case would be HTTPS response
+    1. Create a readable stream from the in-memory city data
+    2. Pipe into a city filter which only push cities which match the city criteria
+    3. Pipe into a city scorer which add the score to the city
+    4. Pipe into a city formatter which formats the city to be display in the json response 
+
 #### Scoring Algorithm
 
 The scoring algorithm is comprised of two parts:
@@ -48,12 +67,19 @@ final_score = (search_term_score * searc_term_score_weight) + (distance_score * 
 ├── package.json                        NPM configuration
 ├── routes  
 │   ├── index.js                        Includes all API endpoints
+│   ├── routes.helper.js                Define helper methods used in routes
+│   ├── stream.js                       Define stream API endpoint    
 │   └── suggestions.js                  Define suggestion API endpoint
 └── test
     ├── domain
     │   └── suggestor.helper.js         Test helper function locates in domain > suggestor.helper.js
     └── suggestions.js                  Route Testing
 ```
+
+#### Todo
+- Implement Caching on endpoint `/stream/beta`
+- Wrap json response on endpoint `/stream/beta` with a root
+- Pass `busbud-lint`
 
 #### Resources
 -   https://www.freecodecamp.org/news/node-js-streams-everything-you-need-to-know-c9141306be93/

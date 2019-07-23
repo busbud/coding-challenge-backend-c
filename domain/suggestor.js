@@ -56,14 +56,17 @@ async function suggestor(search_term, search_coordinate) {
   if(cachingConfig.enable){
     // create cache key based on normalize search term
     cache_key = cleanAndNormalizeString(search_term);
+    logger.info('checking cache at key ',cache_key);
     // retrieve cached suggestions when redis is ready
     cached_suggestions = await getAsync(cache_key);
   }
   var suggestions = [];
   if (cached_suggestions) {
     // cache hit found a suggested list
+    logger.info('cache hit at key ',cache_key);
     suggestions = JSON.parse(cached_suggestions);
   } else {
+    logger.info('cache miss at key ',cache_key);
     // cache hit found a suggested list
     suggestions = getData();
     suggestions = suggestions.filter(function(city) {
