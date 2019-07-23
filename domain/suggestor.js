@@ -2,9 +2,10 @@
 const { promisify } = require('util');
 // Application Sepcific
 const log4js = require('log4js');
+const suggestionConfig = require('../config').suggestionConfig;
 const { getData } = require('../lib/loadData');
 const { searchString, scoreCity, cleanAndNormalizeString } = require('./suggestor.helper.js');
-const { client, connectionReady } = require('../lib/configureRedis');
+const client = require('../lib/configureRedis');
 const getAsync = promisify(client.get).bind(client);
 const logger = log4js.getLogger();
 logger.level = 'debug';
@@ -39,12 +40,14 @@ async function suggestor(search_term, search_coordinate) {
   // create cache key based on normatlize search term
   const cache_key = cleanAndNormalizeString(search_term);
   // retrieve cached suggestions when redis is ready
-  const cached_suggestions = (connectionReady ? await getAsync(cache_key) : undefined);
+  const cached_suggestions = await getAsync(cache_key);
   var suggestions = [];
   if(cached_suggestions){
     // cache hit found a suggested list
+    console.log('hit');
     suggestions = JSON.parse(cached_suggestions);
   } else {
+    console.log('miss');
     // cache hit found a suggested list
     suggestions = getData();
     suggestions = suggestions.filter(function(city) {
@@ -60,8 +63,9 @@ async function suggestor(search_term, search_coordinate) {
     // sort cities
     return (city_b.score - city_a.score);
   });
-  if(connectionReady && !cached_suggestions){
-    client.set(cache_key,JSON.stringify(suggestions));
+  if(!cached_suggestions){
+    // set cache to expire based on config file or default to 24 hours
+    client.set(cache_key,JSON.stringify(suggestions),'EX', (suggestionConfig.cachingExpiry || (60*60*24)));
   }
   return suggestions;
 }
