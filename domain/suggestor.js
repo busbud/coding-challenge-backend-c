@@ -21,8 +21,8 @@ logger.level = 'debug';
  * @return  {number}  city.score                  City score
  */
 function getScoredCity(city, search_term, search_coordinate) {
-  const cityScore =  scoreCity(city, search_term, search_coordinate);
-  return Object.assign(city, { score:  cityScore });
+  const cityScore = scoreCity(city, search_term, search_coordinate);
+  return Object.assign(city, { score: cityScore });
 }
 
 /**
@@ -36,20 +36,20 @@ function getScoredCity(city, search_term, search_coordinate) {
 async function suggestor(search_term, search_coordinate) {
   var cache_key = null;
   var cached_suggestions = null;
-  if(cachingConfig.enable){
+  if (cachingConfig.enable) {
     // create cache key based on normalize search term
     cache_key = cleanAndNormalizeString(search_term);
-    logger.info('checking cache at key ',cache_key);
+    logger.info(`checking cache at key: ${cache_key}`);
     // retrieve cached suggestions when redis is ready
     cached_suggestions = await getAsync(cache_key);
   }
   var suggestions = [];
   if (cached_suggestions) {
     // cache hit found a suggested list
-    logger.info('cache hit at key ',cache_key);
+    logger.info(`cache hit at key: ${cache_key}`);
     suggestions = JSON.parse(cached_suggestions);
   } else {
-    logger.info('cache miss at key ',cache_key);
+    logger.info(`cache miss at key: ${cache_key}`);
     // cache hit found a suggested list
     suggestions = getData();
     suggestions = suggestions.filter(function(city) {
