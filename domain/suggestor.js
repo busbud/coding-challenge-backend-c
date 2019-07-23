@@ -4,7 +4,7 @@ const { promisify } = require('util');
 const log4js = require('log4js');
 const { getData } = require('../lib/loadData');
 const { searchString, scoreCity, cleanAndNormalizeString } = require('./suggestor.helper.js');
-const client = require('../lib/configureRedis');
+const { client, connectionReady } = require('../lib/configureRedis');
 const getAsync = promisify(client.get).bind(client);
 const logger = log4js.getLogger();
 logger.level = 'debug';
@@ -28,7 +28,7 @@ function getScoredCity(city, search_term, search_coordinate) {
 
 
 /**
- * Adds city score attribute
+ * Returns a formatted & filtered list of suggested cities based on search terms
  * @param   {string}  search_term                  Search term
  * @param   {Object}  search_coordinate            Search Coordinate
  * @param   {number}  search_coordinate.latitude   Search Coordinate's Latitude
@@ -38,12 +38,12 @@ function getScoredCity(city, search_term, search_coordinate) {
 async function suggestor(search_term, search_coordinate) {
   // create cache key based on normatlize search term
   const cache_key = cleanAndNormalizeString(search_term);
-  // retrieve cached suggestions
-  const cached_suggestions = await getAsync(cache_key);
+  // retrieve cached suggestions when redis is ready
+  const cached_suggestions = (connectionReady ? await getAsync(cache_key) : undefined);
   var suggestions = [];
-  if(cached_list){
+  if(cached_suggestions){
     // cache hit found a suggested list
-    suggestions = JSON.parse(cached_list);
+    suggestions = JSON.parse(cached_suggestions);
   } else {
     // cache hit found a suggested list
     suggestions = getData();
@@ -60,11 +60,10 @@ async function suggestor(search_term, search_coordinate) {
     // sort cities
     return (city_b.score - city_a.score);
   });
-  if(!cached_list){
+  if(connectionReady && !cached_suggestions){
     client.set(cache_key,JSON.stringify(suggestions));
   }
-  return cities
-
+  return suggestions;
 }
 
 module.exports = {
