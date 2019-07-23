@@ -21,25 +21,8 @@ logger.level = 'debug';
  * @return  {number}  city.score                  City score
  */
 function getScoredCity(city, search_term, search_coordinate) {
-  return {
-    ...city,
-    score: scoreCity(city, search_term, search_coordinate)
-  };
-}
-
-/**
- * Returns cached suggestion set or null if caching is disabled or cache misses
- * @param   {string}  search_term   Query string
- * @return  {Array}   results       Cache results
- */
-
-async function getCacheRequest(search_term){
-
-  if(cached_suggestions){
-
-  }else {}
-    suggestions = JSON.parse(cached_suggestions);
-  return cached_suggestions
+  const cityScore =  scoreCity(city, search_term, search_coordinate);
+  return Object.assign(city, { score:  cityScore });
 }
 
 /**

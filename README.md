@@ -1,11 +1,11 @@
-# Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
-
+# Busbud Coding Challenge [![Build Status](https://circleci.com/gh/jubeless/coding-challenge-backend-c/tree/master.png?circle-token=c3a1acdb7897118e0c8445b53cc4c35a0fa26e07)](https://circleci.com/gh/jubeless/coding-challenge-backend-c/tree/master)
 ## Submission
 
 - Uses [expressjs](https://github.com/expressjs/express) as a server
 - City Data is imported and stored stored in memory
 - We use redis to implement caching. caching configuration can be found in `config.caching`
 - Added busbud-lint
+
 #### Routes
 
 ###### Suggestions
@@ -76,11 +76,13 @@ final_score = (search_term_score * searc_term_score_weight) + (distance_score * 
     └── suggestions.js                  Route Testing
 ```
 
+#### Deployment
+- Deployed on heroku at https://geosuggest.herokuapp.com
+
 #### Todo
 - Implement Caching on endpoint `/stream/beta`
 - Wrap json response on endpoint `/stream/beta` with a root
 - Pass `busbud-lint`
-- Add CircleCi Integration
 
 #### Resources
 -   https://www.freecodecamp.org/news/node-js-streams-everything-you-need-to-know-c9141306be93/
