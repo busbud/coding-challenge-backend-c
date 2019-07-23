@@ -42,7 +42,7 @@ async function suggestor(search_term, search_coordinate) {
   // retrieve cached suggestions when redis is ready
   const cached_suggestions = await getAsync(cache_key);
   var suggestions = [];
-  if(cached_suggestions){
+  if (cached_suggestions) {
     // cache hit found a suggested list
     suggestions = JSON.parse(cached_suggestions);
   } else {
@@ -61,9 +61,9 @@ async function suggestor(search_term, search_coordinate) {
     // sort cities
     return (city_b.score - city_a.score);
   });
-  if(!cached_suggestions){
+  if (!cached_suggestions) {
     // set cache to expire based on config file or default to 24 hours
-    client.set(cache_key,JSON.stringify(suggestions),'EX', (suggestionConfig.cachingExpiry || (60*60*24)));
+    client.set(cache_key, JSON.stringify(suggestions), 'EX', (suggestionConfig.cachingExpiry || (60 * 60 * 24)));
   }
   return suggestions;
 }

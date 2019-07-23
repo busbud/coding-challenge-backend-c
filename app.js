@@ -6,7 +6,6 @@ const morgan = require('morgan');
 const routes = require('./routes');
 const config = require('./config');
 const { importData } = require('./lib/loadData');
-const client = require('./lib/configureRedis');
 const app = express(); // setting up express app
 const serverConfig = config.server;
 const logger = log4js.getLogger();

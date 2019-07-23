@@ -5,7 +5,7 @@ module.exports = {
     port: (process.env.PORT || 2345)
   },
   redis: {
-    url: (process.env.REDIS_URL  || 'redis://localhost:6379'),
+    url: (process.env.REDIS_URL || 'redis://localhost:6379'),
     namespace: 'gs'
   },
   suggestionConfig: {

@@ -5,7 +5,7 @@
 - Uses [expressjs](https://github.com/expressjs/express) as a server
 - City Data is imported and stored stored in memory
 - We use redis to implement caching
-
+- Added busbud-lint
 #### Scoring Algorithm
 
 The scoring algorithm is comprised of two parts:

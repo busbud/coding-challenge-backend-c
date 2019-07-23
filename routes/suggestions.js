@@ -7,7 +7,7 @@ var router = express.Router();
 const HTTP_OK = 200;
 const HTTP_NOT_FOUND = 404;
 
-router.get('/', async  function(req, res) {
+router.get('/', async function(req, res) {
   // fetch and validate parameters
   const {
     q,
