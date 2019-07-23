@@ -4,7 +4,7 @@
 
 - Uses [expressjs](https://github.com/expressjs/express) as a server
 - City Data is imported and stored stored in memory
-- We use redis to implement caching
+- We use redis to implement caching. caching configuration can be found in `config.caching`
 - Added busbud-lint
 #### Scoring Algorithm
 
@@ -22,7 +22,7 @@ The scoring algorithm is comprised of two parts:
         distanceInKm = distanceBetweenCoordinates(coordinate_a, coordinate_b)
         ((HALF_EARTH_CIRCUMFERENCE - distanceInKm) / HALF_EARTH_CIRCUMFERENCE)
                  
-Once we retrieve both scores we weight them based on the configuration value `config.suggestionConfig.coordinateScoreWeight`. If we are not taking into account `distance` score (since query does not contain latitude and longitude) we would simply use 1 as the weight score for `searc_term` score
+Once we retrieve both scores we weight them based on the configuration value `config.suggestionConfig.coordinateScoreWeight`. If we are not taking into account `distance` score (since query does not contain latitude and longitude) we would simply use 1 as the weight score for `search_term` score
 
 ```
 final_score = (search_term_score * searc_term_score_weight) + (distance_score * distance_score_weight)   
@@ -54,6 +54,11 @@ final_score = (search_term_score * searc_term_score_weight) + (distance_score * 
     │   └── suggestor.helper.js         Test helper function locates in domain > suggestor.helper.js
     └── suggestions.js                  Route Testing
 ```
+
+#### Resources
+-   https://www.freecodecamp.org/news/node-js-streams-everything-you-need-to-know-c9141306be93/
+-   https://stackoverflow.com/questions/990904/remove-accents-diacritics-in-a-string-in-javascript
+-   
 ## Requirements
 
 Design an API endpoint that provides auto-complete suggestions for large cities.

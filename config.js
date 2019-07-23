@@ -8,12 +8,15 @@ module.exports = {
     url: (process.env.REDIS_URL || 'redis://localhost:6379'),
     namespace: 'gs'
   },
+  caching: {
+    enable: true,
+    expiry: (60 * 60 * 24)
+  },
   suggestionConfig: {
     minPopulation: 5000,
     maxPopulation: null,
     countryWhitelist: ['CA', 'US'],
     scorePrecision: 4,
     coordinateScoreWeight: 0.5,
-    cachingExpiry: (60 * 60 * 24)
   }
 };

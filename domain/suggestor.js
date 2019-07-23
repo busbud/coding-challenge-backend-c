@@ -2,7 +2,7 @@
 const { promisify } = require('util');
 // Application Sepcific
 const log4js = require('log4js');
-const suggestionConfig = require('../config').suggestionConfig;
+const cachingConfig = require('../config').caching;
 const { getData } = require('../lib/loadData');
 const { searchString, scoreCity, cleanAndNormalizeString } = require('./suggestor.helper.js');
 const client = require('../lib/configureRedis');
@@ -27,6 +27,20 @@ function getScoredCity(city, search_term, search_coordinate) {
   };
 }
 
+/**
+ * Returns cached suggestion set or null if caching is disabled or cache misses
+ * @param   {string}  search_term   Query string
+ * @return  {Array}   results       Cache results
+ */
+
+async function getCacheRequest(search_term){
+
+  if(cached_suggestions){
+
+  }else {}
+    suggestions = JSON.parse(cached_suggestions);
+  return cached_suggestions
+}
 
 /**
  * Returns a formatted & filtered list of suggested cities based on search terms
@@ -37,10 +51,14 @@ function getScoredCity(city, search_term, search_coordinate) {
  * @return  {Array}   cities                       Array of cities sorted by score and filtered by search query
  */
 async function suggestor(search_term, search_coordinate) {
-  // create cache key based on normatlize search term
-  const cache_key = cleanAndNormalizeString(search_term);
-  // retrieve cached suggestions when redis is ready
-  const cached_suggestions = await getAsync(cache_key);
+  var cache_key = null;
+  var cached_suggestions = null;
+  if(cachingConfig.enable){
+    // create cache key based on normalize search term
+    cache_key = cleanAndNormalizeString(search_term);
+    // retrieve cached suggestions when redis is ready
+    cached_suggestions = await getAsync(cache_key);
+  }
   var suggestions = [];
   if (cached_suggestions) {
     // cache hit found a suggested list
@@ -61,9 +79,9 @@ async function suggestor(search_term, search_coordinate) {
     // sort cities
     return (city_b.score - city_a.score);
   });
-  if (!cached_suggestions) {
+  if (cache_key && !cached_suggestions) {
     // set cache to expire based on config file or default to 24 hours
-    client.set(cache_key, JSON.stringify(suggestions), 'EX', (suggestionConfig.cachingExpiry || (60 * 60 * 24)));
+    client.set(cache_key, JSON.stringify(suggestions), 'EX', (cachingConfig.expiry || (60 * 60 * 24)));
   }
   return suggestions;
 }

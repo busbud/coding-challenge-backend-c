@@ -1,12 +1,94 @@
+// Node Core
+const { Readable, Writable, Transform } = require('stream');
 // General Libraries
 const express = require('express');
-// Application
-// Code
+const path = require('path');
+const url = require('url');
+const querystring = require('querystring');
+// Application Code
 const { getSuggestions } = require('../domain/suggestor');
 var router = express.Router();
 const HTTP_OK = 200;
+const HTTP_BAD_REQUEST = 400;
 const HTTP_NOT_FOUND = 404;
 
+/**
+ * Implements a streaming version [GET] '/suggetions/stream'
+ */
+router.get('/stream', async function(req, res) {
+  // get parameters transform
+  const transformGetParameters = new Transform({
+    readableObjectMode: true,
+    transform(chunk, encoding, callback) {
+      // get  buffered chunk and convert to string
+      const queryUrl = chunk.toString();
+      // parse url string
+      const parsedUrl = JSON.parse(queryUrl);
+      // retrieve parameters
+      const {
+        q,
+        coordinate,
+        is_valid,
+        error_msg
+      } = getParameters(req.query);
+      // validate parameters
+      if (!is_valid) {
+        // Call callbox once we are done processing with error
+        callback(new Error(error_msg)); //
+        return
+      }
+      this.push({q, coordinate});
+      // Call callback once we are done processing without error
+      callback();
+    }
+  });
+  // get suggestions transform
+  const transformGetSuggestions = new Transform({
+    writableObjectMode: true,
+    readableObjectMode: true,
+    transform(params, encoding, callback) {
+      getSuggestions(params.q, params.coordinate).then(function(suggestions){
+        // Call callback once we are done processing without error
+        this.push(suggestions);
+        callback();
+      }.bind(this)); // binding this is require to gain access to push
+    }
+  });
+  // writes suggestions to http
+  const writableSuggestionToHTTP = new Writable({
+    objectMode: true,
+    write(suggestions, encoding, callback) {
+      res.writeHead(((suggestions.length > 0) ? HTTP_OK : HTTP_NOT_FOUND));
+      res.end(JSON.stringify({
+        suggestions: suggestions.map((city) => formatCity(city))
+      }));
+      callback();
+    }
+  });
+  // implements http stream
+  const httpRequestInStream = new Readable({
+    // implement read function to push data on demand
+    read(size) {
+      // there is a demand on the data... Someone wants to read it.
+      this.push(null);
+    }
+  });
+
+  httpRequestInStream.push(JSON.stringify(req.query));        // need to push a readeable string, Buffer, or Uint8Array
+  httpRequestInStream                                         //  create a readeable stream that will take the URL as a chunk
+    .pipe(transformGetParameters)                             //  take the url and extra and validate parameters
+    .on('error', (err) => {                                   //  getStreamedParameters may throw an error so catch it here
+      res.writeHead(HTTP_BAD_REQUEST);                        //  set HTTP header
+      res.end(JSON.stringify( { error: err.message }));    //  set error payload
+    })
+    .pipe(transformGetSuggestions)                                   //  parameters are valid and processed, get suggestions
+    .pipe(writableSuggestionToHTTP);                                         //  display suggestions
+});
+
+
+/**
+ * Implements the basig [GET] /suggestions request
+ */
 router.get('/', async function(req, res) {
   // fetch and validate parameters
   const {
@@ -17,7 +99,7 @@ router.get('/', async function(req, res) {
   } = getParameters(req.query);
   if (!is_valid) {
     // return 400 if parameters aren't valid
-    return res.status(400).json({ error: error_msg });
+    return res.status(HTTP_BAD_REQUEST).json({ error: error_msg });
   }
   // retrieve suggestions
   const suggestions = await getSuggestions(q, coordinate);
