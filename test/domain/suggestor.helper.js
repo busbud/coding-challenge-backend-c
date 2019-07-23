@@ -1,4 +1,5 @@
 const expect = require('chai').expect;
+const suggestionConfig = require('../../config').suggestionConfig;
 
 const {
   searchString,
@@ -164,5 +165,92 @@ describe('suggestor.helper', function() {
     });
   });
   describe('scoreCity', function() {
+    const city = {
+      ascii: 'Montréal',
+      coordinate: {
+        latitude: 45.50884,
+        longitude: -73.58781
+      }
+    };
+
+    describe('without search coordinate', function() {
+      describe('with a full match', function() {
+        it('should return a number', function() {
+          expect(scoreCity(city, 'montreal', null)).be.a('number');
+        });
+
+        it('should return the correct score', function() {
+          expect(scoreCity(city, 'montreal', null)).be.eql(1.0);
+        });
+      });
+
+      describe('with a partial match', function() {
+        it('should return a number', function() {
+          expect(scoreCity(city, 'mon', null)).be.a('number');
+        });
+
+        it('should return the correct score', function() {
+          expect(scoreCity(city, 'mon', null)).be.eql(3.0 / 8.0);
+        });
+      });
+
+      describe('with no match', function() {
+        it('should return a number', function() {
+          expect(scoreCity(city, 'foo', null)).be.a('number');
+        });
+
+        it('should return the correct score', function() {
+          expect(scoreCity(city, 'foo', null)).be.eql(0.0);
+        });
+      });
+    });
+
+    describe('with search coordinate', function() {
+      const search_coordinate = { latitude: 45.50884, longitude: -68.7263 };
+      const max_distance = 20037.5;
+      const distance_apart = 378.8;
+      const distance_score_weight = suggestionConfig.coordinateScoreWeight;
+      const name_score_weight = (1.0 - suggestionConfig.coordinateScoreWeight);
+      const error_tolerance = 1.0 / Math.pow(10, suggestionConfig.scorePrecision);
+
+      describe('with a full match', function() {
+        it('should return a number', function() {
+          expect(scoreCity(city, 'montreal', search_coordinate)).be.a('number');
+        });
+
+        it('should return the correct score', function() {
+          const distance_score = (max_distance - distance_apart) / max_distance;
+          const expected_score = (1 * name_score_weight) + (distance_score * distance_score_weight);
+          const calculate_score = scoreCity(city, 'montreal', search_coordinate);
+          expect(calculate_score).be.closeTo(expected_score, error_tolerance);
+        });
+      });
+
+
+      describe('with a partial match', function() {
+        it('should return a number', function() {
+          expect(scoreCity(city, 'mon', search_coordinate)).be.a('number');
+        });
+
+        it('should return the correct score', function() {
+          const distance_score = (max_distance - distance_apart) / max_distance;
+          const expected_score = ((3.0 / 8.0) * name_score_weight) + (distance_score * distance_score_weight);
+          const calculate_score = scoreCity(city, 'mon', search_coordinate);
+          expect(calculate_score).be.closeTo(expected_score, error_tolerance);
+        });
+      });
+
+      describe('with no match', function() {
+        it('should return a number', function() {
+          expect(scoreCity(city, 'foo', search_coordinate)).be.a('number');
+        });
+
+        it('should return the correct score', function() {
+          const expected_score = 0;
+          const calculate_score = scoreCity(city, 'foo', search_coordinate);
+          expect(calculate_score).be.eql(expected_score);
+        });
+      });
+    });
   });
 });

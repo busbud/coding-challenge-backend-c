@@ -11,6 +11,7 @@ var router = express.Router();
 const HTTP_OK = 200;
 const HTTP_BAD_REQUEST = 400;
 const HTTP_NOT_FOUND = 404;
+const HTTP_HEADERS = { 'Content-Type': 'application/json' };
 
 /**
  * Implements a streaming version [GET] '/steam/beta
@@ -68,7 +69,9 @@ router.get('/beta', async function(req, res) {
     writableObjectMode: true,
     readableObjectMode: true,
     transform(city, encoding, callback) {
-      this.push(JSON.stringify(serializeCity(city)));
+
+      const seriazliedCity = serializeCity(city);
+      this.push(JSON.stringify(seriazliedCity));
       callback();
     }
   });
@@ -78,6 +81,8 @@ router.get('/beta', async function(req, res) {
     .pipe(cityScorer)
     .pipe(cityFormatter)
     .pipe(res);
+
+  res.writeHead(HTTP_OK, HTTP_HEADERS);
 });
 
 
@@ -128,7 +133,7 @@ router.get('/alpha', async function(req, res) {
   const writableSuggestionToHTTP = new Writable({
     objectMode: true,
     write(suggestions, encoding, callback) {
-      res.writeHead(((suggestions.length > 0) ? HTTP_OK : HTTP_NOT_FOUND));
+      res.writeHead(((suggestions.length > 0) ? HTTP_OK : HTTP_NOT_FOUND), HTTP_HEADERS);
       res.end(JSON.stringify({
         suggestions: suggestions.map((city) => serializeCity(city))
       }));

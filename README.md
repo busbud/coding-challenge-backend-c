@@ -82,7 +82,6 @@ final_score = (search_term_score * searc_term_score_weight) + (distance_score * 
 #### Todo
 - Implement Caching on endpoint `/stream/beta`
 - Wrap json response on endpoint `/stream/beta` with a root
-- Pass `busbud-lint`
 
 #### Resources
 -   https://www.freecodecamp.org/news/node-js-streams-everything-you-need-to-know-c9141306be93/
