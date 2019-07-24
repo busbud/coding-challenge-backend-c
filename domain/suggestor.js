@@ -72,6 +72,7 @@ async function suggestor(search_term, search_coordinate) {
   return suggestions;
 }
 
+
 module.exports = {
   getSuggestions: suggestor
 };

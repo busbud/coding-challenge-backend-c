@@ -33,7 +33,7 @@ router.get('/', async function(req, res) {
   // column header storage
   let columns = [];
   // store suggestions
-  const suggestions = [];
+  let suggestions = [];
 
   // validating parameters
   if (!is_valid) {
@@ -188,9 +188,14 @@ router.get('/', async function(req, res) {
     .pipe(cityToJson)
     .pipe(pushCityToSuggestions)
     .on('finish', function() {
+      // sort suggestions
+      suggestions = suggestions.sort(function(city_a, city_b) {
+        // sort cities
+        return (city_b.score - city_a.score);
+      });
       res
         .status((suggestions.length > 0) ? HTTP_OK : HTTP_NOT_FOUND)
-        .json({ suggestions: suggestions });
+        .json({ suggestions: suggestions});
     });
 });
 
