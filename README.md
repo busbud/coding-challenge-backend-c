@@ -11,6 +11,7 @@
 #### Stuff To Improve
 - Add [fuzzy search](https://en.wikipedia.org/wiki/Approximate_string_matching) to match ascii name of the city
 - Search also through city's altername names (i.e. `alt_name` field in data sheet)
+- Build a frequency map of search term to determine search patterns
 
 #### Importing Data
 City data is imported in the `importData.js` file. We utilize Node Stream to pipe individual lines of the file and process each one individual. Currently we are simply storing the cities in-memory. We can easily add a pipe to store the cities in a Database.   

@@ -21,8 +21,8 @@ logger.level = 'debug';
  * @return  {number}  city.score                  City score
  */
 function getScoredCity(city, search_term, search_coordinate) {
-  const cityScore = scoreCity(city, search_term, search_coordinate);
-  return Object.assign(city, { score: cityScore });
+  const city_score = scoreCity(city, search_term, search_coordinate);
+  return Object.assign(city, { score: city_score });
 }
 
 /**
@@ -54,8 +54,8 @@ async function suggestor(search_term, search_coordinate) {
     suggestions = getData();
     suggestions = suggestions.filter(function(city) {
       // search by string
-      const searchState = searchString(city.ascii, search_term);
-      return searchState.found;
+      const search_state = searchString(city.ascii, search_term);
+      return search_state.found;
     });
   }
   suggestions = suggestions.map(function(city) {
