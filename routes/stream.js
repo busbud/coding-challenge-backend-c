@@ -195,7 +195,7 @@ router.get('/', async function(req, res) {
       });
       res
         .status((suggestions.length > 0) ? HTTP_OK : HTTP_NOT_FOUND)
-        .json({ suggestions: suggestions});
+        .json({ suggestions: suggestions });
     });
 });
 
