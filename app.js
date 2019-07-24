@@ -5,14 +5,17 @@ const morgan = require('morgan');
 // Application Code
 const routes = require('./routes');
 const config = require('./config');
-const { importData } = require('./lib/loadData');
-const app = express(); // setting up express app
+const { importData, getData } = require('./lib/importData');
+// setting up express app
+const app = express();
 const serverConfig = config.server;
+// setting up logger
 const logger = log4js.getLogger();
 logger.level = 'debug';
-
+// data file configuration
 const DATA_PATH = `${__dirname}/data/cities_canada-usa.tsv`;
-const DATA_DELIM = '\t';
+const DATA_DELIMITER = '\t';
+const DATA_ENCODING = 'utf8';
 
 // configure application logging
 app.use(morgan(((config.env === 'production') ? 'short' : 'dev')));
@@ -20,10 +23,10 @@ logger.info(config);
 
 // setup routes
 app.use(routes);
+
 // importing data
-importData(DATA_PATH, DATA_DELIM, function() {
-  // prevent conflicting port while developing and testing
-  // App can only start listening once data has been loaded
+importData(DATA_PATH, DATA_DELIMITER, DATA_ENCODING, function() {
+  logger.info(`Imported ${getData().length} cities`);
   app.listen(serverConfig.port, serverConfig.host, () => {
     logger.info(`app running on http://${serverConfig.host}:${serverConfig.port} in ${config.env}`);
     app.emit('appReady');

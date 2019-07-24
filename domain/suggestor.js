@@ -3,7 +3,7 @@ const { promisify } = require('util');
 // Application Sepcific
 const log4js = require('log4js');
 const cachingConfig = require('../config').caching;
-const { getData } = require('../lib/loadData');
+const { getData } = require('../lib/importData');
 const { searchString, scoreCity, cleanAndNormalizeString } = require('./suggestor.helper.js');
 const client = require('../lib/configureRedis');
 const getAsync = promisify(client.get).bind(client);

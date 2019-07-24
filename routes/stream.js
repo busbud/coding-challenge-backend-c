@@ -1,25 +1,41 @@
 // Node Core
-const { Readable, Writable, Transform } = require('stream');
+const fs = require('fs');
+var path = require('path');
+const readline = require('readline');
+const { Transform } = require('stream');
 // General Libraries
 const express = require('express');
-const { getData } = require('../lib/loadData');
 // Application Code
-const { getSuggestions } = require('../domain/suggestor');
 const { searchString, scoreCity } = require('../domain/suggestor.helper');
 const { getSuggestionParameters, serializeCity } = require('./routes.helper');
+const admin1Code = require('../data/admin_1_code');
+const suggestionConfig = require('../config').suggestionConfig;
 var router = express.Router();
 const HTTP_OK = 200;
 const HTTP_BAD_REQUEST = 400;
 const HTTP_NOT_FOUND = 404;
-const HTTP_HEADERS = { 'Content-Type': 'application/json' };
 
 /**
- * Implements a streaming version [GET] '/steam/beta
- *
+ * Implements a streaming version [GET] '/'
+ *  1. Create a readable stream from tsv file
+ *  2. Pipe into city population formatter
+ *  3. Pipe into city coordinate formatter
+ *  4. Pipe into city state formatter
+ *  5. Pipe into filter by city based on config
+ *  6. Pipe into search by search term
+ *  7. Pipe into add score to city
+ *  8. Pipe into city to json formatter
+ *  9. Pipe into suggetions array
  */
-router.get('/beta', async function(req, res) {
+router.get('/', async function(req, res) {
   // fetch suggestion parameters and processing them
   const { q, coordinate, is_valid, error_msg } = getSuggestionParameters(req.query);
+  // count lines
+  let line_index = 0;
+  // column header storage
+  let columns = [];
+  // store suggestions
+  const suggestions = [];
 
   // validating parameters
   if (!is_valid) {
@@ -27,26 +43,73 @@ router.get('/beta', async function(req, res) {
     return res.status(HTTP_BAD_REQUEST).json({ error: error_msg });
   }
 
-  const cities = getData();
-  var suggestions = [];
+  // create a readble stream from TSV file
+  const data_file_path = `${path.dirname(require.main.filename)}/data/cities_canada-usa-2.tsv`;
+  const file_stream = fs.createReadStream(data_file_path);
 
-  // creates a readable string from the cities store in-memory
-  const cityDataStream = new Readable({
-    read(size) {
-      this.push(JSON.stringify(cities[this.cityIndex]));
-      this.cityIndex += 1;
-      if (this.cityIndex > cities.length) {
-        this.push(null);
-      }
+  // format city's population
+  const cityPopulationFormatter = new Transform({
+    writableObjectMode: true,
+    readableObjectMode: true,
+    transform(city, encoding, callback) {
+      // update city populations
+      city.population = parseInt(city.population);
+      this.push(city);
+      callback();
     }
   });
-  cityDataStream.cityIndex = 0;
 
-  // filters city by search term
-  const cityFilter = new Transform({
+  // format city's coordinate
+  const cityCoordinateFormatter = new Transform({
+    writableObjectMode: true,
     readableObjectMode: true,
-    transform(cityChunk, encoding, callback) {
-      const city = JSON.parse(cityChunk.toString());
+    transform(city, encoding, callback) {
+      city.coordinate = {
+        latitude: parseFloat(city.lat),
+        longitude: parseFloat(city.long)
+      };
+      this.push(city);
+      callback();
+    }
+  });
+
+  // format city's state
+  const cityStateFormatter = new Transform({
+    writableObjectMode: true,
+    readableObjectMode: true,
+    transform(city, encoding, callback) {
+      // get state key mapping
+      const stateKey = [city.country, city.admin1].join('.');
+      // get state information
+      const state = admin1Code[stateKey];
+      // update city state infomation
+      city.state = (state ? state.isocode2 : city.admin1);
+      // pas city downstream
+      this.push(city);
+      callback();
+    }
+  });
+
+  // filter city by config
+  const filterCityByConfig = new Transform({
+    writableObjectMode: true,
+    readableObjectMode: true,
+    transform(city, encoding, callback) {
+      var has_valid_min_population = (suggestionConfig.minPopulation ? city.population >= suggestionConfig.minPopulation : true);
+      var has_valid_max_population = (suggestionConfig.maxPopulation ? city.population <= suggestionConfig.maxPopulation : true);
+      var has_valid_country = (suggestionConfig.countryWhitelist ? suggestionConfig.countryWhitelist.includes(city.country) : true);
+      if (has_valid_min_population && has_valid_max_population && has_valid_country) {
+        this.push(city);
+      }
+      callback();
+    }
+  });
+
+  // search city by query search term
+  const searchCityBySearchTerm = new Transform({
+    writableObjectMode: true,
+    readableObjectMode: true,
+    transform(city, encoding, callback) {
       const searchState = searchString(city.ascii, q);
       if (searchState.found) {
         this.push(city);
@@ -55,8 +118,8 @@ router.get('/beta', async function(req, res) {
     }
   });
 
-  // adds score to city
-  const cityScorer = new Transform({
+  // add score to city
+  const addScoreToCity = new Transform({
     writableObjectMode: true,
     readableObjectMode: true,
     transform(city, encoding, callback) {
@@ -67,109 +130,70 @@ router.get('/beta', async function(req, res) {
   });
 
   // formats city to json
-  const cityFormatter = new Transform({
+  const cityToJson = new Transform({
     writableObjectMode: true,
     readableObjectMode: true,
     transform(city, encoding, callback) {
-
-      const seriazliedCity = serializeCity(city);
-      suggestions.push(seriazliedCity);
+      const serializedCity = serializeCity(city);
+      this.push(serializedCity);
       callback();
     }
   });
 
-  cityDataStream
-    .pipe(cityFilter)
-    .pipe(cityScorer)
-    .pipe(cityFormatter)
-    .on('finish', function() {
-      res
-        .status(((suggestions.length > 0) ? HTTP_OK : HTTP_NOT_FOUND))
-        .json({suggestions: suggestions});
-    });
-});
-
-/**
- * Implements a streaming version [GET] '/steam/alpha'
- */
-router.get('/alpha', async function(req, res) {
-  // get parameters transform
-  const transformGetParameters = new Transform({
-    readableObjectMode: true,
-    transform(chunk, encoding, callback) {
-      // get  buffered chunk (json request query) and convert to string
-      const requestQueryString = chunk.toString();
-      // parse request query string to json object
-      const requestQuery = JSON.parse(requestQueryString);
-      // retrieve parameters
-      const {
-        q,
-        coordinate,
-        is_valid,
-        error_msg
-      } = getSuggestionParameters(requestQuery);
-      // validate parameters
-      if (!is_valid) {
-        // Call callbox once we are done processing with error
-        callback(new Error(error_msg)); //
-        return;
-      }
-      this.push({ q, coordinate });
-      // Call callback once we are done processing without error
-      callback();
-    }
-  });
-  // get suggestions transform
-  const transformGetSuggestions = new Transform({
+  // push city to suggestions array
+  const pushCityToSuggestions = new Transform({
     writableObjectMode: true,
     readableObjectMode: true,
-    transform(params, encoding, callback) {
-      getSuggestions(params.q, params.coordinate).then(function(suggestions) {
-        // Call callback once we are done processing without error
-        this.push(suggestions);
-        callback();
-      }.bind(this)); // binding this is require to gain access to push
-    }
-  });
-  // writes suggestions to http
-  const writableSuggestionToHTTP = new Writable({
-    objectMode: true,
-    write(suggestions, encoding, callback) {
-      res
-        .status(((suggestions.length > 0) ? HTTP_OK : HTTP_NOT_FOUND))
-        .json({
-          suggestions: suggestions.map((city) => serializeCity(city))
-        });
+    transform(city, encoding, callback) {
+      suggestions.push(city);
       callback();
     }
   });
-  // implements http stream
-  const httpRequestInStream = new Readable({
-    // implement read function to push data on demand
-    read(size) {
-      // there is a demand on the data... Someone wants to read it.
-      this.push(null);
-    }
+
+  // create a read line interface to process file stream line by line
+  const rl = readline.createInterface({
+    input: file_stream,
+    crlfDelay: Infinity
   });
 
-  //  need to push a readeable string, Buffer, or Uint8Array
-  httpRequestInStream.push(JSON.stringify(req.query));
-  //  create a readeable stream that will take the URL as a chunk
-  httpRequestInStream
-    //  take the url and extra and validate parameters
-    .pipe(transformGetParameters)
-    // getStreamedParameters may throw an error so catch it here
-    .on('error', (err) => {
-      //  set HTTP header
-      res.writeHead(HTTP_BAD_REQUEST);
-      //  set error payload
-      res.end(JSON.stringify({ error: err.message }));
-    })
+  // on new line event
+  rl.on('line', (line) => {
+    // split line by delimiter
+    line = line.split('\t');
+    if (line_index !== 0) {
+      // process data line
+      var data_line = {};
+      // map header names to line value and create map
+      columns.forEach((column, columnIndex) => {
+        data_line[column] = line[columnIndex];
+      });
+      // write data_line map into a stream
+      cityPopulationFormatter.write(data_line);
+    } else {
+      // process header line
+      columns = line;
+    }
+    line_index++;
+  });
 
-    //  parameters are valid and processed, get suggestions
-    .pipe(transformGetSuggestions)
-    //  display suggestions
-    .pipe(writableSuggestionToHTTP);
+  // on file close event
+  rl.on('close', () => {
+    cityPopulationFormatter.end();
+  });
+
+  cityPopulationFormatter
+    .pipe(cityCoordinateFormatter)
+    .pipe(cityStateFormatter)
+    .pipe(filterCityByConfig)
+    .pipe(searchCityBySearchTerm)
+    .pipe(addScoreToCity)
+    .pipe(cityToJson)
+    .pipe(pushCityToSuggestions)
+    .on('finish', function() {
+      res
+        .status((suggestions.length > 0) ? HTTP_OK : HTTP_NOT_FOUND)
+        .json({ suggestions: suggestions });
+    });
 });
 
 module.exports = router;

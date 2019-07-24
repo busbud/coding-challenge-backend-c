@@ -6,24 +6,25 @@
 - We use redis to implement caching. caching configuration can be found in `config.caching`
 - Added busbud-lint
 
+#### Importing Data
+
+
 #### Routes
 
 ###### Suggestions
 - `[GET] /suggestions`: Implements the standard suggestions endpoint without any streaming as per the minimum requirements
     
 ###### Stream
-- `[GET] /stream/alpha`: Implements the suggestions endpoint with streaming. We start by creating a readable stream from the query URL and pipe in parameters validation and suggestions fetching:
-    1. Create readable stream from query parameter
-    2. Pipe into parameter fetch and validation
-    3. Pipe into fetch all suggestions. The filtering and scoring is done here
-    4. Pipe into a writable stream to process the array of suggestions 
-    
- 
-- `[GET] /stream/beta`: Implements the suggestions endpoint with streaming. We are attempting here to start a stream diretcly from the data itself and not the query url. In this sceneraio as we progress through the in-memory city data we will be filtering, scoring and adding to the writable stream which in this case would be HTTPS response
-    1. Create a readable stream from the in-memory city data
-    2. Pipe into a city filter which only push cities which match the city criteria
-    3. Pipe into a city scorer which add the score to the city
-    4. Pipe into a city formatter which formats the city to be display in the json response 
+- `[GET] /stream`: Implements the suggestions endpoint with streaming. Streaming directly from the tsv file. As we process the lines we are formatting, searching and outputting the suggestions:
+    1. Create a readable stream from tsv file
+    2. Pipe into city population formatter
+    3. Pipe into city coordinate formatter
+    4. Pipe into city state formatter
+    5. Pipe into filter by city based on config
+    6. Pipe into search by search term
+    7. Pipe into add score to city
+    8. Pipe into city to json formatter
+    9. Pipe into suggetions array
 
 #### Scoring Algorithm
 
@@ -49,6 +50,34 @@ final_score = (search_term_score * searc_term_score_weight) + (distance_score * 
 
 #### File structure
 ```
+├── Makefile
+├── README.md
+├── app.js
+├── config.js
+├── data
+│   ├── README.md
+│   ├── admin_1_code.js
+│   ├── cities_canada-usa-2.tsv
+│   └── cities_canada-usa.tsv
+├── domain
+│   ├── suggestor.helper.js
+│   └── suggestor.js
+├── dump.rdb
+├── lib
+│   ├── configureRedis.js
+│   └── importData.js
+├── package-lock.json
+├── package.json
+├── routes
+│   ├── index.js
+│   ├── routes.helper.js
+│   ├── stream.js
+│   └── suggestions.js
+└── test
+    ├── domain
+    │   └── suggestor.helper.js
+    └── suggestions.js
+
 ├── Makefile                            Usefull commands 
 ├── README.md
 ├── app.js                              Express App Setup
@@ -62,8 +91,7 @@ final_score = (search_term_score * searc_term_score_weight) + (distance_score * 
 │   └── suggestor.js                    Iterates through suggestion matching and scoring them
 ├── lib
 │   ├── configureRedis.js               Redis Configuration File
-│   ├── dataImporter.js                 Generic file importer
-│   └── loadData.js                     Load domain specific data
+│   └── importData.js                   Import data from TSV
 ├── package.json                        NPM configuration
 ├── routes  
 │   ├── index.js                        Includes all API endpoints

@@ -1,0 +1,7 @@
+id	name	ascii	alt_name	lat	long	feat_class	feat_code	country	cc2	admin1	admin2	admin3	admin4	population	elevation	dem	tz	modified_at
+6077128	Mont-Laurier	Mont-Laurier		46.55011	-75.4993	P	PPL	CA		10	15			13405		226	America/Montreal	2010-09-23
+6077243	Montréal	Montreal	Lungsod ng Montreal,Lungsod ng Montréal,Monreal,Monreal',Monreala,Monrealis,Monreyal,Monreāla,Mons Regius,Mont-real,Montreal,Montreal - Montreal,Montreal - Montréal,Montreal City,Montreali,Montrealo,Montréal,YMQ,meng te li er,monreali,monteuliol,montorioru,mwntral,mwntryal,Μοντρεαλ,Μόντρεαλ,Монреал,Монреаль,Монтреал,מונטריאול,مونترآل,مونتریال,مونترېئال,მონრეალი,ᒧᕆᐊᓪ,モントリオール,蒙特利尔,몬트리올	45.50884	-73.58781	P	PPLA2	CA		10	06			3268513		216	America/Montreal	2012-08-02
+6077265	Montréal-Ouest	Montreal-Ouest	Montreal West	45.45286	-73.64918	P	PPL	CA		10				5184		48	America/Montreal	2010-09-23
+6077315	Mont-Royal	Mont-Royal		45.51675	-73.64918	P	PPL	CA		10				18933		47	America/Montreal	2010-09-23
+6077340	Mont-Saint-Hilaire	Mont-Saint-Hilaire		45.56678	-73.19915	P	PPL	CA		10	16			15720		4	America/Montreal	2010-09-23
+6077445	Mont-Tremblant	Mont-Tremblant	Mont-Tremblant,YTM	46.21274	-74.58438	P	PPL	CA		10	15			8892		244	America/Montreal	2013-08-17
