@@ -8,14 +8,15 @@
 - Implemented a stream API endpoint which  utilizes node streams to read file and return desired suggestions. This was more of a intellectual curiosity.
 - Setup CI/CD pipeline via CircleCI and Heroku
 
-#### Improvement
-- Add [fuzzy search](https://en.wikipedia.org/wiki/Approximate_string_matching) to match ascii name of the city
-- Search also through city's altername names (i.e. `alt_name` field in data sheet)
-- Build a frequency map of search term to determine search patterns
-- Test the sorting
+#### Traffic Mitigations
+We implemented caching to allow faster response time and would speed up request. Other strategies we can use here are:
+
+- Implement rate limiting using load balancers, nginx or use  [bottleneck](https://www.npmjs.com/package/bottleneck) or [express-rate-limit](https://github.com/nfriedly/express-rate-limit) to rate limit the api
+- Enforce a minimum length for the query string, i.e. 3 chars
 
 #### Importing Data
-City data is imported in the `importData.js` file. We utilize Node Stream to pipe individual lines of the file and process each one individual. Currently we are simply storing the cities in-memory. We can easily add a pipe to store the cities in a Database.   
+City data is imported in the `importData.js` file. We utilize Node Stream to pipe individual lines of the file and process each one individual. 
+Currently we are simply storing the cities in-memory. We can easily add a pipe to store the cities in a Database since since [PSQL copy](https://github.com/brianc/node-pg-copy-streams?source=post_page---------------------------) command supports streaming binary data directly into the table.   
 
 #### Routes
 ###### Suggestions
@@ -88,10 +89,17 @@ final_score = (search_term_score * searc_term_score_weight) + (distance_score * 
 #### CI/CD
 The application is deployed on Heroku at https://geosuggest.herokuapp.com and it tested via CircleCI. I setup heroku to auto deploy when the master branch on github pass circle ci's continuous integration.  
 
+#### Improvement
+- Add [fuzzy search](https://en.wikipedia.org/wiki/Approximate_string_matching) to match ascii name of the city
+- Search also through city's altername names (i.e. `alt_name` field in data sheet)
+- Build a frequency map of search term to determine search patterns
+- Test the sorting
+
 #### Resources
 -   https://www.freecodecamp.org/news/node-js-streams-everything-you-need-to-know-c9141306be93/
 -   https://stackoverflow.com/questions/990904/remove-accents-diacritics-in-a-string-in-javascript
-   
+
+___  
 ## Requirements
 
 Design an API endpoint that provides auto-complete suggestions for large cities.
