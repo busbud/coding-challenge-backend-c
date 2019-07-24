@@ -2,15 +2,13 @@
 ## Submission
 
 - Uses [expressjs](https://github.com/expressjs/express) as a server
-- City Data is imported and stored stored in memory
 - We use redis to implement caching. caching configuration can be found in `config.caching`
 - Added busbud-lint
 
 #### Importing Data
-
+City data is imported in the `importData.js` file. We utilize Node Stream to pipe individual lines of the file and process each one individual. Currently we are simply storing the cities in-memory. We can easily add a pipe to store the cities in a Database.   
 
 #### Routes
-
 ###### Suggestions
 - `[GET] /suggestions`: Implements the standard suggestions endpoint without any streaming as per the minimum requirements
     
@@ -77,31 +75,6 @@ final_score = (search_term_score * searc_term_score_weight) + (distance_score * 
     ├── domain
     │   └── suggestor.helper.js
     └── suggestions.js
-
-├── Makefile                            Usefull commands 
-├── README.md
-├── app.js                              Express App Setup
-├── config.js                           Environment Configuration Style
-├── data
-│   ├── README.md
-│   ├── admin_1_code.js                 Province and State Data
-│   └── cities_canada-usa.tsv           City Data
-├── domain
-│   ├── suggestor.helper.js             Scoring and matching helper functions
-│   └── suggestor.js                    Iterates through suggestion matching and scoring them
-├── lib
-│   ├── configureRedis.js               Redis Configuration File
-│   └── importData.js                   Import data from TSV
-├── package.json                        NPM configuration
-├── routes  
-│   ├── index.js                        Includes all API endpoints
-│   ├── routes.helper.js                Define helper methods used in routes
-│   ├── stream.js                       Define stream API endpoint    
-│   └── suggestions.js                  Define suggestion API endpoint
-└── test
-    ├── domain
-    │   └── suggestor.helper.js         Test helper function locates in domain > suggestor.helper.js
-    └── suggestions.js                  Route Testing
 ```
 
 #### CI/CD
