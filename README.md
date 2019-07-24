@@ -8,7 +8,7 @@
 - Implemented a stream API endpoint which  utilizes node streams to read file and return desired suggestions. This was more of a intellectual curiosity.
 - Setup CI/CD pipeline via CircleCI and Heroku
 
-#### Traffic Mitigations
+#### High Traffic Mitigation
 We implemented caching to allow faster response time and would speed up request. Other strategies we can use here are:
 
 - Implement rate limiting using load balancers, nginx or use  [bottleneck](https://www.npmjs.com/package/bottleneck) or [express-rate-limit](https://github.com/nfriedly/express-rate-limit) to rate limit the api
