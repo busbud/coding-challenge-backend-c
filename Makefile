@@ -22,7 +22,7 @@ env:
 	heroku config --app $(HEROKU_APP)
 
 tree:
-	tree -I 'node_modules|cache|test_*'
+	tree -I 'node_modules|cache|test_*|dump.rdb'
 
 restart:
 	heroku restart --app $(HEROKU_APP)

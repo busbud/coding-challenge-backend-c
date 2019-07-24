@@ -2,8 +2,15 @@
 ## Submission
 
 - Uses [expressjs](https://github.com/expressjs/express) as a server
-- We use redis to implement caching. caching configuration can be found in `config.caching`
-- Added busbud-lint
+- Utilized node streams to import data into in-memory
+- Implemented a suggestion API endpoint as per the requirements 
+- Implement caching on the suggestion API endpoint via redis on suggestions API endpoint
+- Implemented a stream API endpoint which  utilizes node streams to read file and return desired suggestions. This was more of a intellectual curiosity.
+- Setup CI/CD pipeline via CircleCI and Heroku
+
+#### Stuff To Improve
+- Add [fuzzy search](https://en.wikipedia.org/wiki/Approximate_string_matching) to match ascii name of the city
+- Search also through city's altername names (i.e. `alt_name` field in data sheet)
 
 #### Importing Data
 City data is imported in the `importData.js` file. We utilize Node Stream to pipe individual lines of the file and process each one individual. Currently we are simply storing the cities in-memory. We can easily add a pipe to store the cities in a Database.   
@@ -22,7 +29,7 @@ City data is imported in the `importData.js` file. We utilize Node Stream to pip
     6. Pipe into search by search term
     7. Pipe into add score to city
     8. Pipe into city to json formatter
-    9. Pipe into suggetions array
+    9. Pipe into suggestions array
 
 #### Scoring Algorithm
 
@@ -48,46 +55,41 @@ final_score = (search_term_score * searc_term_score_weight) + (distance_score * 
 
 #### File structure
 ```
-├── Makefile
-├── README.md
-├── app.js
-├── config.js
+├── Makefile                        Usefull commands
+├── README.md                       This file
+├── app.js                          Express app initialization and setup
+├── config.js                       Environment configuration
+├── constants.js                    Envinroment constant use throughout
 ├── data
 │   ├── README.md
-│   ├── admin_1_code.js
-│   ├── cities_canada-usa-2.tsv
-│   └── cities_canada-usa.tsv
+│   ├── admin_1_code.js             Province and state data
+│   └── cities_canada-usa.tsv       City Data    
 ├── domain
-│   ├── suggestor.helper.js
-│   └── suggestor.js
-├── dump.rdb
+│   ├── suggestor.helper.js         Scoring and match helper functions
+│   └── suggestor.js                Iterates through suggestions, filter, searching and scoring them
 ├── lib
-│   ├── configureRedis.js
-│   └── importData.js
+│   ├── configureRedis.js           Redis configuration file
+│   └── importData.js               Imports data in-memory utilising node streams
 ├── package-lock.json
-├── package.json
+├── package.json                    NPM configuration
 ├── routes
-│   ├── index.js
-│   ├── routes.helper.js
-│   ├── stream.js
-│   └── suggestions.js
+│   ├── index.js                    Loads all API endpoints
+│   ├── routes.helper.js            Helper method used in mutiple API endpoints
+│   ├── stream.js                   Implements stream API endpoint    
+│   └── suggestions.js              Implements suggestions API endpoint
 └── test
     ├── domain
-    │   └── suggestor.helper.js
-    └── suggestions.js
+    │   └── suggestor.helper.js     Test helper function located in domain > suggestor.helper.js
+    └── suggestions.js              Test suggestions API endpoint
 ```
 
 #### CI/CD
 The application is deployed on Heroku at https://geosuggest.herokuapp.com and it tested via CircleCI. I setup heroku to auto deploy when the master branch on github pass circle ci's continuous integration.  
 
-#### Todo
-- Wrap json response on endpoint `/stream/beta` with a root
-- Implement Caching on endpoint `/stream/beta`
-
 #### Resources
 -   https://www.freecodecamp.org/news/node-js-streams-everything-you-need-to-know-c9141306be93/
 -   https://stackoverflow.com/questions/990904/remove-accents-diacritics-in-a-string-in-javascript
--   
+   
 ## Requirements
 
 Design an API endpoint that provides auto-complete suggestions for large cities.

@@ -13,9 +13,7 @@ const serverConfig = config.server;
 const logger = log4js.getLogger();
 logger.level = 'debug';
 // data file configuration
-const DATA_PATH = `${__dirname}/data/cities_canada-usa.tsv`;
-const DATA_DELIMITER = '\t';
-const DATA_ENCODING = 'utf8';
+const { DATA_PATH, DATA_DELIMITER, DATA_ENCODING } = require('./constants');
 
 // configure application logging
 app.use(morgan(((config.env === 'production') ? 'short' : 'dev')));

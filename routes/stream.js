@@ -1,6 +1,5 @@
 // Node Core
 const fs = require('fs');
-var path = require('path');
 const readline = require('readline');
 const { Transform } = require('stream');
 // General Libraries
@@ -10,10 +9,9 @@ const { searchString, scoreCity } = require('../domain/suggestor.helper');
 const { getSuggestionParameters, serializeCity } = require('./routes.helper');
 const admin1Code = require('../data/admin_1_code');
 const suggestionConfig = require('../config').suggestionConfig;
+const { DATA_PATH, DATA_DELIMITER, HTTP_OK, HTTP_BAD_REQUEST, HTTP_NOT_FOUND } = require('../constants');
 var router = express.Router();
-const HTTP_OK = 200;
-const HTTP_BAD_REQUEST = 400;
-const HTTP_NOT_FOUND = 404;
+
 
 /**
  * Implements a streaming version [GET] '/'
@@ -44,7 +42,7 @@ router.get('/', async function(req, res) {
   }
 
   // create a readble stream from TSV file
-  const data_file_path = `${path.dirname(require.main.filename)}/data/cities_canada-usa-2.tsv`;
+  const data_file_path = DATA_PATH;
   const file_stream = fs.createReadStream(data_file_path);
 
   // format city's population
@@ -159,7 +157,7 @@ router.get('/', async function(req, res) {
   // on new line event
   rl.on('line', (line) => {
     // split line by delimiter
-    line = line.split('\t');
+    line = line.split(DATA_DELIMITER);
     if (line_index !== 0) {
       // process data line
       var data_line = {};

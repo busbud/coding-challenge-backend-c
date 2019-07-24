@@ -3,11 +3,8 @@ const express = require('express');
 // Application Code
 const { getSuggestions } = require('../domain/suggestor');
 const { getSuggestionParameters, serializeCity } = require('./routes.helper');
+const { HTTP_OK, HTTP_BAD_REQUEST, HTTP_NOT_FOUND } = require('../constants');
 var router = express.Router();
-const HTTP_OK = 200;
-const HTTP_BAD_REQUEST = 400;
-const HTTP_NOT_FOUND = 404;
-
 
 /**
  * Implements the basig [GET] /suggestions request
