@@ -2,10 +2,10 @@
 
 
 ## Comments
+First of all prepare data at first start of the service and store it in memory (~ 1.5 mb)
 
 ### Stage 1: simple indexOf with coordinate distance.
 
-First of all prepare data at first start of the service and store it in memory (~ 1.5 mb)
 Base on query we filter cities, than caclucate distance between cities and sort.
 
 ##### Tests:
@@ -24,7 +24,20 @@ Time per request:       12.198 [ms] (mean)
 Time per request:       0.610 [ms] (mean, across all concurrent requests)
 ```
 
-### Stage 1: levinstein distance with coordinate distance.
+### Stage 2: levenshtein distance with coordinate distance.
+
+Trying calculate levenshtein distance to every record in memory, than caclulate coords distance, than sort.
+
+```
+ab -n1000 -c5 http://127.0.0.1:2345/suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
+
+Requests per second:    17.45 [#/sec] (mean)
+Time per request:       286.577 [ms] (mean)
+Time per request:       57.315 [ms] (mean, across all concurrent requests)
+
+```
+**Unacceptable performance!**
+
 
 
 ## Requirements

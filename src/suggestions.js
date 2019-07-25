@@ -1,6 +1,7 @@
 const fs = require('fs')
 
 const sortBy = require('lodash.sortby');
+const levenshtein = require('js-levenshtein');
 
 const REGION_CODES = {
     "CA.01": "Alberta",
@@ -91,6 +92,16 @@ class Search {
     findIndex(value) {
         return this.allCities.filter(city => city['name'] && city['name'].indexOf(value) != -1)
     }
+    findLevenshteinIndex(value) {
+        return this.allCities.map(
+            city => {
+                return {
+                    ...city,
+                    leven: city['name'] ? levenshtein(value, city['name']) : 99999
+                }
+            }
+        )
+    }
     calculateDistance({ latitude, longitude }, results) {
         return results.map(city => {
             var dLat = this.deg2rad(city.latitude - latitude);
@@ -121,10 +132,10 @@ class Search {
         return deg * (Math.PI / 180)
     }
     findSuggest(value) {
-        let results = this.findIndex(value.q);
+        let results = this.findLevenshteinIndex(value.q);
         let latitude = parseFloat(value.latitude), longitude = parseFloat(value.longitude);
         if (!isNaN(latitude) && !isNaN(longitude)) {
-            results = sortBy(this.calculateDistance({ latitude, longitude }, results), ['distance'])
+            results = sortBy(this.calculateDistance({ latitude, longitude }, results), ['leven', 'distance'])
         }
         return results
     }
