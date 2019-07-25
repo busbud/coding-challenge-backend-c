@@ -71,33 +71,73 @@ const REGION_CODES = {
 }
 class Search {
     constructor() {
-        this.allCities = this.prepareData()
+        this.hashTables = {}
+        this.hashes = [];
+        this.allCities = [];
+        this.prepareData();
+        this.minLeven = 999;
+
     }
 
     prepareData() {
         var content = fs.readFileSync("./data/cities_canada-usa.tsv", "utf8");
-        const json = content.split("\n").map(city => {
+        content.split("\n").map(function (city) {
             const p = city.split('\t');
-            return {
-                "name": p[1],
-                "latitude": parseFloat(p[4]),
-                "longitude": parseFloat(p[5]),
-                "country": p[8],
-                "region": REGION_CODES[`${p[8]}.${p[10]}`],
+            if (p[2] !== undefined && p[2] !== 'ascii') {
+                let record = {
+                    "name": p[2],
+                    "latitude": parseFloat(p[4]),
+                    "longitude": parseFloat(p[5]),
+                    "country": p[8],
+                    "region": REGION_CODES[`${p[8]}.${p[10]}`],
+                }
+                let hash = record.name.substring(0, 3).toLowerCase();
+                if (this.hashTables[hash] == undefined) {
+                    this.hashTables[hash] = []
+                    this.hashes.push(hash);
+                }
+                this.hashTables[hash].push(record);
+                this.allCities.push(record)
+            }
+        }.bind(this));
 
-            };
-        });
-        return json;
     }
     findIndex(value) {
         return this.allCities.filter(city => city['name'] && city['name'].indexOf(value) != -1)
     }
     findLevenshteinIndex(value) {
-        return this.allCities.filter(city => city['name'] && city['name'].indexOf(value) != -1).map(
+        let queryHash = '';
+        if (value.length < 10) {
+            queryHash = value.substring(0, 3).toLowerCase();
+        } else {
+            queryHash = value
+        }
+        let cities = []
+        if (this.hashTables[queryHash] !== undefined) {
+            // If we have the prepared set of cities, we use them
+            cities = this.hashTables[queryHash];
+        } else {
+            // Else we try to find similar hash
+            let levenHashes = this.hashes.filter(hash => levenshtein(queryHash, hash) < 2)
+            if (levenHashes.length > 0) {
+                cities = levenHashes.reduce((acc = [], hash) => {
+                    this.hashTables[hash].map((city => acc.push(city)))
+                    return acc
+                }, []);
+            } else {
+                // failback to indexOf
+                cities = this.findIndex()
+            }
+        }
+        return cities.map(
             city => {
+                let leven = levenshtein(value, city['name'])
+                if (leven < this.minLeven) {
+                    this.minLeven = leven
+                }
                 return {
                     ...city,
-                    leven: city['name'] ? levenshtein(value, city['name']) : 99999
+                    leven,
                 }
             }
         )
@@ -119,23 +159,18 @@ class Search {
             }
         })
     }
-    calculateDistance2({ latitude, longitude }, results) {
-        return results.map(city => {
-            let d = Math.sqrt(Math.pow(city.latitude - latitude, 2) + Math.pow(city.longitude - longitude, 2));
-            return {
-                ...city,
-                distance: d
-            }
-        })
-    }
     deg2rad(deg) {
         return deg * (Math.PI / 180)
     }
     findSuggest(value) {
+        this.minLeven = 999; // trick with levenshtain distance
+
         let results = this.findLevenshteinIndex(value.q);
         let latitude = parseFloat(value.latitude), longitude = parseFloat(value.longitude);
         if (!isNaN(latitude) && !isNaN(longitude)) {
-            results = sortBy(this.calculateDistance({ latitude, longitude }, results), ['leven', 'distance'])
+            results = sortBy(this.calculateDistance({ latitude, longitude }, results.filter(r => r.leven < this.minLeven + 2)), ['leven', 'distance'])
+        } else {
+            results = sortBy(results.filter(r => r.leven < this.minLeven + 2), ['leven'])
         }
         return results
     }

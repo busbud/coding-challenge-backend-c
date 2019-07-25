@@ -1,8 +1,8 @@
-var expect  = require('chai').expect;
-var app     = require('../app');
+var expect = require('chai').expect;
+var app = require('../app');
 var request = require('supertest')(app);
 
-describe('GET /suggestions', function() {
+describe('GET /suggestions', function () {
   describe('with a non-existent city', function () {
     var response;
 
@@ -50,8 +50,9 @@ describe('GET /suggestions', function() {
 
     it('contains a match', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
+
         return suggestions.some(function (suggestion) {
-          return suggestion.name.test(/montreal/i);
+          return suggestion.name.match(/montreal/i);
         });
       })
     });
