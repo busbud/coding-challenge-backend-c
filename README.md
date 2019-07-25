@@ -1,4 +1,4 @@
-# Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
+# Busbud Coding Challenge [![Build Status](https://travis-ci.org/nvnoskov/coding-challenge-backend-c.svg?branch=master)](https://travis-ci.org/nvnoskov/coding-challenge-backend-c)
 
 
 ## Comments
@@ -65,7 +65,7 @@ Time per request:       0.647 [ms] (mean, across all concurrent requests)
 ### Stage 4: trying improve performance.
 ![We have to go deeper](https://miro.medium.com/max/1024/1*cwR_ezx0jliDvVUV6yno5g.jpeg)
 
-One of the tricks will be dividing our data to chunks based on name and search in small piece of data, instead of full list
+One of the tricks will be dividing our data to chunks based on name and search in a small piece of data, instead of a full list
 I choose hash with 3 symbols length, but it can be changed just need more tests and experiments.
 
 
