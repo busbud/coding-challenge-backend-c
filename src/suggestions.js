@@ -80,6 +80,7 @@ class Search {
     }
 
     prepareData() {
+        console.log('Prepare data...')
         var content = fs.readFileSync("./data/cities_canada-usa.tsv", "utf8");
         content.split("\n").map(function (city) {
             const p = city.split('\t');
@@ -100,6 +101,7 @@ class Search {
                 this.allCities.push(record)
             }
         }.bind(this));
+        console.log('Finish data...')
 
     }
     findIndex(value) {
