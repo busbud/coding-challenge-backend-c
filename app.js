@@ -10,7 +10,6 @@ const cities = search.prepareData();
 module.exports = http.createServer(function (req, res) {
   res.writeHead(404, { 'Content-Type': 'text/plain' });
   let query = querystring.parse(url.parse(req.url).query)
-  console.log(query);
   if (req.url.indexOf('/suggestions') === 0) {
     suggestions =
       res.end(JSON.stringify({

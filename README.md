@@ -1,6 +1,34 @@
 # Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
 
+
+## Comments
+
+### Stage 1: simple indexOf with coordinate distance.
+
+First of all prepare data at first start of the service and store it in memory (~ 1.5 mb)
+Base on query we filter cities, than caclucate distance between cities and sort.
+
+##### Tests:
+```
+ab -n1000 -c5 http://127.0.0.1:2345/suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
+
+Requests per second:    1220.62 [#/sec] (mean)
+Time per request:       4.096 [ms] (mean)
+Time per request:       0.819 [ms] (mean, across all concurrent requests)
+
+
+ab -n10000 -c20 'http://127.0.0.1:2345/suggestions?q=Londo&latitude=43.70011&longitude=-79.4163'
+
+Requests per second:    1639.61 [#/sec] (mean)
+Time per request:       12.198 [ms] (mean)
+Time per request:       0.610 [ms] (mean, across all concurrent requests)
+```
+
+### Stage 1: levinstein distance with coordinate distance.
+
+
 ## Requirements
+
 
 Design an API endpoint that provides auto-complete suggestions for large cities.
 The suggestions should be restricted to cities in the USA and Canada with a population above 5000 people.

@@ -93,17 +93,24 @@ class Search {
     }
     calculateDistance({ latitude, longitude }, results) {
         return results.map(city => {
-            var R = 6371; // Radius of the earth in km
-            var dLat = this.deg2rad(city.latitude - latitude);  // this.deg2rad below
+            var dLat = this.deg2rad(city.latitude - latitude);
             var dLon = this.deg2rad(city.longitude - longitude);
             var a =
                 Math.sin(dLat / 2) * Math.sin(dLat / 2) +
                 Math.cos(this.deg2rad(latitude)) * Math.cos(this.deg2rad(city.latitude)) *
                 Math.sin(dLon / 2) * Math.sin(dLon / 2)
                 ;
-            var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-            var d = R * c;
-            console.log(d)
+            var d = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+            return {
+                ...city,
+                distance: d
+            }
+        })
+    }
+    calculateDistance2({ latitude, longitude }, results) {
+        return results.map(city => {
+            let d = Math.sqrt(Math.pow(city.latitude - latitude, 2) + Math.pow(city.longitude - longitude, 2));
             return {
                 ...city,
                 distance: d
