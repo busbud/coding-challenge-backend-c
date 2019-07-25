@@ -90,5 +90,5 @@ Time per request:       0.189 [ms] (mean, across all concurrent requests)
 ```
 **Performance increased 3 times**
 
-
-
+`this.minLeven + 2` - this can trick show suggestions with 2 mistakes. but because of it we can't show additional suggestions like `New London` for `London`.
+Of course, we can increase the count of appropriate mistakes, but again we need more tests
