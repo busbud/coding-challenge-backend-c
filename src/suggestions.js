@@ -93,7 +93,7 @@ class Search {
         return this.allCities.filter(city => city['name'] && city['name'].indexOf(value) != -1)
     }
     findLevenshteinIndex(value) {
-        return this.allCities.map(
+        return this.allCities.filter(city => city['name'] && city['name'].indexOf(value) != -1).map(
             city => {
                 return {
                     ...city,

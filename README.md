@@ -25,6 +25,7 @@ Time per request:       0.610 [ms] (mean, across all concurrent requests)
 ```
 
 ### Stage 2: levenshtein distance with coordinate distance.
+Levenshtein distance can forgive user for mistakes in queries
 
 Trying calculate levenshtein distance to every record in memory, than caclulate coords distance, than sort.
 
@@ -38,6 +39,28 @@ Time per request:       57.315 [ms] (mean, across all concurrent requests)
 ```
 **Unacceptable performance!**
 
+
+### Stage 3: indexOf + levenshtein distance with coordinate distance.
+
+Previously we filter records by indexOf, than calculate levenshtain distance, than coords distance.
+
+```
+ab -n1000 -c5 http://127.0.0.1:2345/suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
+
+Requests per second:    1148.55 [#/sec] (mean)
+Time per request:       4.353 [ms] (mean)
+Time per request:       0.871 [ms] (mean, across all concurrent requests)
+
+
+ab -n10000 -c20 'http://127.0.0.1:2345/suggestions?q=Londo&latitude=43.70011&longitude=-79.4163'
+
+Requests per second:    1545.56 [#/sec] (mean)
+Time per request:       12.940 [ms] (mean)
+Time per request:       0.647 [ms] (mean, across all concurrent requests)
+
+```
+
+**This stage give us good performance with relevant results**
 
 
 ## Requirements
