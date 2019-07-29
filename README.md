@@ -1,5 +1,50 @@
 # Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
 
+## Notes:
+
+### API url:
+- https://ian-test-test.herokuapp.com/suggestions?q=londo&latitude=43.70011&longitude=-79.4163
+
+### DB
+I used elasticsearch (bonsai.io) as the db for this server which ends up being faster
+and better than loading the whole data into memory.
+
+### Testing
+I used jest for testing components that contain some kind of logic.
+Also used supertest to test the server endpoints.
+You can see the tests in the folders named "__test__" that can be found inside
+some folders.
+
+### Score
+Decided to generate a string similarity score and a distance score and apply
+weight to each of those.
+- To generate the city name score I used the Sorensen-Dice coefficient algorithm
+- To generate the distance score I calculated the distance between each city and
+  the client's geo coordinates and then normalized the values from 0 to 1.
+
+### config
+Created a configuration file that contains all the config values that can be
+overriden by using environment variables.
+
+### Mitigations to handle high level of traffic
+I decided to use:
+- cluster module: createsan instance of the server for each of the available cpu
+  cores. If any of the instances crash it will get respawn.
+- Elasticsearch: Is much better than loading the data on memory and it's a very
+  fast document store. It also supports replication which I am not using because
+  I am using a free basic version of bonsai.io
+
+Suggestions:
+- Using a load balancer would allow us to have n number of instances and it would
+  distribute the traffic among them
+- Using sharding and replica sets in Elasticsearch.
+
+### additional features
+You can additionally pass the "autodetect=1" parameter to the request. If it's
+set to 1 then the server will use the geo-ip lite package to get the client's
+approximate geo coordinates and use them to score the suggestions.
+
+
 ## Requirements
 
 Design an API endpoint that provides auto-complete suggestions for large cities.
@@ -119,11 +164,11 @@ npm test
 To start a local server run
 
 ```
-PORT=3456 npm start
+npm start
 ```
 
 which should produce output similar to
 
 ```
-Server running at http://127.0.0.1:3456/suggestions
+server started on port 8080
 ```

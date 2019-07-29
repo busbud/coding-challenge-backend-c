@@ -1,0 +1,18 @@
+{
+  "data": {
+    "path": "data/cities_canada-usa.tsv",
+    "index": "cities",
+    "type": "northamerica"
+  },
+  "db": {
+    "url": "",
+    "access_key": "",
+    "secret": ""
+  },
+  "log": {
+    "level": "debug"
+  },
+  "server": {
+    "port": 8080
+  }
+}
