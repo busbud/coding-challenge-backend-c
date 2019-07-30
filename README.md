@@ -85,6 +85,7 @@ The usage of functional programing desing pattern have been widely used for "ped
  
  Make sure Docker is installed on your machine.
 
+Make a copy of `.env.example` and rename it to `.env`
 
 Run the following comands to build and run the containers.
 
