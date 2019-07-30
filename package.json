@@ -6,9 +6,7 @@
   "scripts": {
     "pre-commit": "lint-staged",
     "dev": "nodemon app.js",
-    "migrate": "./node_modules/migrate/bin/migrate",
-    "migrate-up": "./node_modules/migrate/bin/migrate-up",
-    "migrate-down": "./node_modules/migrate/bin/migrate-down",
+    "migrate": "./node_modules/migrate/bin/migrate",    
     "start": "node app.js",
     "test": "PORT=3000 nyc --reporter=text ./node_modules/mocha/bin/mocha --exit ./test"
   },  
