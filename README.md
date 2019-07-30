@@ -22,6 +22,12 @@ weight to each of those.
 - To generate the distance score I calculated the distance between each city and
   the client's geo coordinates and then normalized the values from 0 to 1.
 
+### Searching
+The suggestions are queried through elasticsearch.
+
+- I noticed that all of the cities on the doc have population above 5000 so I
+  didn't have to add any additional logic to filter the results
+
 ### config
 Created a configuration file that contains all the config values that can be
 overriden by using environment variables.
@@ -34,7 +40,7 @@ I decided to use:
   fast document store. It also supports replication which I am not using because
   I am using a free basic version of bonsai.io
 
-Suggestions:
+####Suggestions:
 - Using a load balancer would allow us to have n number of instances and it would
   distribute the traffic among them
 - Using sharding and replica sets in Elasticsearch.
@@ -44,6 +50,16 @@ You can additionally pass the "autodetect=1" parameter to the request. If it's
 set to 1 then the server will use the geo-ip lite package to get the client's
 approximate geo coordinates and use them to score the suggestions.
 
+### Data migration
+The data migration script can be found the db migration folder. It utilizes
+other modules/packages like config, db, tsv and elasticsearch.
+An array is put together with all the parsed values from the tsv file
+and injected to elasticsearch by using the bulk method.
+
+To run it just type
+```
+node db-migration/init-db.js
+```
 
 ## Requirements
 
