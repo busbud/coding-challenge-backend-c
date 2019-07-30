@@ -1,0 +1,16 @@
+language: node_js
+node_js:
+- 10.16.0
+env:
+  global:  
+  - DATABASE_URL="mongodb://user:pass@127.0.0.1:27017/busbud"  
+  - REDIS_URL=redis://localhost:6379
+services:
+- mongodb
+before_script:
+- sleep 15
+- mongo busbud --eval 'db.createUser({user:"user",pwd:"pass",roles:["readWrite"]});'
+- sudo redis-server /etc/redis/redis.conf --port 6379
+script:
+- npm run migrate -- up
+- npm run test

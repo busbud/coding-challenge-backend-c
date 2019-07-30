@@ -4,17 +4,55 @@
   "description": "coding challenge in Nodejs",
   "main": "app.js",
   "scripts": {
+    "pre-commit": "lint-staged",
+    "dev": "nodemon app.js",
+    "migrate": "node node_modules/db-migrate/bin/db-migrate",
     "start": "node app.js",
-    "test": "./node_modules/mocha/bin/mocha ./test/"
+    "test": "PORT=3000 nyc --reporter=text ./node_modules/mocha/bin/mocha --exit ./test"
+  },
+  "pre-commit": [
+    "pre-commit"
+  ],
+  "lint-staged": {
+    "src/**/*.js": [
+      "prettier --write",
+      "git add"
+    ],
+    "test/**/*.js": [
+      "prettier --write",
+      "git add"
+    ],
+    "migrations/**/*.js": [
+      "prettier --write",
+      "git add"
+    ],
+    "app.js": [
+      "prettier --write",
+      "git add"
+    ]
   },
   "author": "",
   "license": "WTFPL",
   "dependencies": {
-    "chai": "^1.9.1",
-    "mocha": "^1.18.2",
-    "supertest": "^0.11.0"
+    "csv-parser": "^2.3.0",
+    "db-migrate": "^0.11.6",
+    "db-migrate-mongodb": "^1.5.0",
+    "lodash": "^4.17.15",
+    "mongodb": "^3.3.0-beta2",
+    "redis": "^2.8.0",
+    "remove-accents": "^0.4.2"
   },
   "engines": {
-    "node": "0.10.26"
+    "node": "10.16.0"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "lint-staged": "^9.2.1",
+    "mocha": "^6.2.0",
+    "nyc": "^14.1.1",
+    "pre-commit": "^1.2.2",
+    "prettier": "^1.18.2",
+    "sinon": "^7.3.2",
+    "supertest": "^4.0.2"
   }
 }
