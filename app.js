@@ -11,19 +11,19 @@ const cpuCount = os.cpus().length;
 // cluster module will allow us to have an instance of the server running for
 // each cpu core in the current machine. Which will result in better performace
 if (cluster.isMaster) {
-  console.log(`creating ${cpuCount} workers.`);
+  logger.debug(`creating ${cpuCount} workers.`);
 
   for(let i = 0; i < cpuCount; i++) {
     cluster.fork();
   }
 
   cluster.on('online', function(worker) {
-    console.log(`Worker ${worker.process.pid} is online`);
+    logger.debug(`Worker ${worker.process.pid} is online`);
   });
 
   cluster.on('exit', function(worker, code, signal) {
-    console.log(`Worker ${worker.process.pid}  died with code: ${code} , and signal:  ${signal}`);
-    console.log(`creating new worker`);
+    logger.debug(`Worker ${worker.process.pid}  died with code: ${code} , and signal:  ${signal}`);
+    logger.debug(`creating new worker`);
     cluster.fork();
   });
 
