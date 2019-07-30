@@ -5,7 +5,10 @@ const waitForApp = require("../src/dbUtils").waitForApp;
 const redisClient = require("../src/cache").redisClient;
 const getRedisKey = require("../src/suggestions/dataUtils").getRedisKey;
 
-const callApi = q => {
+const callApi = (q, long, lat) => {
+  url = "/suggestions?q=" + q;
+  url += (long) ? "&long=" + long : "";
+  url += (lat) ? "&lat=" + lat : "";
   return new Promise((resolve, reject) => {
     request.get("/suggestions?q=" + q).end(function(err, res) {
       if (err) {
@@ -91,7 +94,7 @@ describe("GET /suggestions", function() {
     });
 
     it("has been store in redis", () => {
-      redisClient().get(getRedisKey("Montreal"), (err, reply) => {
+      redisClient().get(getRedisKey({q: "Montreal"}), (err, reply) => {
         expect(reply).to.not.equal(null);
       });
     });
@@ -108,4 +111,17 @@ describe("GET /suggestions", function() {
       expect(response.json.suggestions).to.have.length.above(0);
     });
   });
+
+  describe("works with geo input", () => {
+    let response;
+    before(async () => {
+      return (response = await callApi("newY", 1, 2));
+    });
+
+    it("returns an array of suggestions", function() {
+      expect(response.json.suggestions).to.be.instanceof(Array);
+      expect(response.json.suggestions).to.have.length.above(0);
+    });
+  });
+
 });

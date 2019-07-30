@@ -57,7 +57,7 @@ Every column get saved so they could potentially be used by other endpoints and 
 A geo index is created on the location collection to allow the score to be entirely calculated from
 the query. The motivation to calculate the score on mongo comes from the need to perform a sort and to apply a limit. Not applying a limit on the query would potentially affect the server for no good reasons while applying a limit before calcuting the score ( if we suppose that the score is calculated in javascript) would mean that a document with a perfect score could potentially be ignored.
 
-Redis takes care of caching the results in order to improve performance. The keys are built using the search term only. Gathring metrics on the application usage could give informations
+Redis takes care of caching the results in order to improve performance. The keys are built using the search term and rounded geo inputs. Gathring metrics on the application usage could give informations
 that could guide us on how to create more optimal keys.
 
 ## Search Strategy

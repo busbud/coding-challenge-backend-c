@@ -12,10 +12,14 @@ const REDIS_EXPIRE = 60 * 60 * 24;
  * @param { string } q
  * @returns { string }
  */
-const getRedisKey = q => {
-  return getRegEx(q)
-    .toString()
-    .concat("-", "suggestions");
+const getRedisKey = reqParams => {  
+  let key = 'suggestions';
+  const search =  getRegEx(reqParams.q).toString();
+  key = key.concat("-", search);
+  if (reqParams.long !== undefined && reqParams.lat !== undefined) {    
+    key = key.concat('-', reqParams.long, '-', reqParams.lat);
+  }  
+  return key;
 };
 
 /**
@@ -39,19 +43,19 @@ const getRegEx = q => {
  *
  * @param {string} q
  */
-const fetchSuggestions = requestParams => {
+const fetchSuggestions = reqParams => {
   
   const query = [];
 
-  if( requestParams.long && requestParams.lat) {
+  if( reqParams.long && reqParams.lat) {
     query.push({      
       $geoNear: {
         query: {
-          searchField: { $regex: getRegEx(requestParams.q) }          
+          searchField: { $regex: getRegEx(reqParams.q) }          
         },        
         near: { 
            type: "Point",
-           coordinates: [ Number(requestParams.long) , Number(requestParams.lat)]
+           coordinates: [ Number(reqParams.long) , Number(reqParams.lat)]
          },         
          distanceField: "distance",         
          spherical: true,         
@@ -59,13 +63,13 @@ const fetchSuggestions = requestParams => {
       }
     },)
   } else {    
-    query.push({ $match: { searchField: { $regex: getRegEx(requestParams.q) } } },)
+    query.push({ $match: { searchField: { $regex: getRegEx(reqParams.q) } } },)
   }  
-
+  
   query.push({
     $project: {        
       _id: 0,                        
-      score: getScoreQuery(requestParams),        
+      score: getScoreQuery(reqParams),        
       name: "$disambiguateName",
       longitude: "$long",
       latitude: "$lat"
@@ -73,8 +77,8 @@ const fetchSuggestions = requestParams => {
   })
     
   query.push({$sort: {score: -1}})
-  query.push({$limit: 5})
-  
+  query.push({$limit: 5})  
+  console.log(query);
   return mongo()
     .collection("locations")
     .aggregate(query)
@@ -86,18 +90,18 @@ const fetchSuggestions = requestParams => {
  *
  * @param {string} q
  */
-const fetchSuggestionsCached = requestParams => {
-  const redisKey = getRedisKey(requestParams.q);  
+const fetchSuggestionsCached = reqParams => {
+  const redisKey = getRedisKey(reqParams);  
   return new Promise((resolve, reject) => {
-    
-      redisClient().get(redisKey, (err, reply) => {        
+    redisClient().get(redisKey, (err, reply) => {        
         if(err) {
           return reject(err);
         }
-        if (reply) {
+        if (reply) {         
+          console.log('CACHED', redisKey) ;
           return resolve(JSON.parse(reply));
         } else {
-          fetchSuggestions(requestParams).then(documents => {
+          fetchSuggestions(reqParams).then(documents => {
             redisClient().set(
               redisKey,
               JSON.stringify(documents),
@@ -128,17 +132,40 @@ const roundScore = (row) => {
  * @param {object} reqParams
  */
 const getSuggestions = async reqParams => {  
+  const documents = await fetchSuggestionsCached(sanitizeRequestParams(reqParams));
+  return documents.map(roundScore)
+};
+
+/**
+ * Round long and la for cache and make sure mongo db doesn't use geoNear for 
+ * invalid geo input.
+ * 
+ * @param {object} reqParams 
+ */
+const sanitizeRequestParams = function(reqParams) {  
   if (typeof reqParams.q !== "string") {
     throw new Error("Param q is required");
   }
-  const documents = await fetchSuggestionsCached(reqParams);
-  return documents.map(roundScore)
-};
+  
+  const output = {}
+  output.q = reqParams.q;
+  
+  const long = isNaN(reqParams.long) ?  false : Math.round(parseFloat(reqParams.long));
+  const lat = isNaN(reqParams.lat) ?  false : Math.round(parseFloat(reqParams.lat));
+  
+  if (long !== false && lat !== false) {
+    output.long = long;
+    output.lat = lat;
+  }
+  
+  return output;
+}
 
 module.exports = {  
   getRegEx,
   getRedisKey,
   fetchSuggestions,
   fetchSuggestionsCached,  
-  getSuggestions
+  getSuggestions,
+  sanitizeRequestParams,
 };

@@ -45,23 +45,23 @@ const getPopulationScoreExpr = (weight) => {
       $switch: {
         branches: [        
           {
-            case: { $lte : [ "$distance", 10 * 1000] },
+            case: { $lte : [ "$distance", 100 * 1000] },
             then: 1 * weight
           },
           {
-            case: { $lte : [ "$distance", 50 * 1000 ] },
+            case: { $lte : [ "$distance", 200 * 1000 ] },
             then: 0.8 * weight
           },
           {
-            case: { $lte : [ "$distance", 100 * 1000 ] },
+            case: { $lte : [ "$distance", 300 * 1000 ] },
             then: 0.6 * weight
           },
           {
-            case: { $lte : [ "$distance", 200 * 1000 ] },
+            case: { $lte : [ "$distance", 400 * 1000 ] },
             then: 0.4 * weight
           },
           {
-            case: { $lte : [ "$distance", 400 * 1000 ] },
+            case: { $lte : [ "$distance", 500 * 1000 ] },
             then: 0.2 * weight
           }        
         ],

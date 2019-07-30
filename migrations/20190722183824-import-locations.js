@@ -26,8 +26,7 @@ exports.up = async db => {
   const mongo = await db.connection.connect(db.connectionString);
   await runUp(mongo);
   await mongo.collection('locations').createIndex( { "testGeo" : "2dsphere" } )
-  mongo.close()
-  //return db.connection.connect(db.connectionString).then(runUp);
+  mongo.close()  
 };
 
 /**
