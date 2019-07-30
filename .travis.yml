@@ -2,8 +2,8 @@ language: node_js
 node_js:
 - 10.16.0
 env:
-  global:  
-  - DATABASE_URL="mongodb://user:pass@127.0.0.1:27017/busbud"  
+  global:
+  - DATABASE_URL="mongodb://user:pass@127.0.0.1:27017/busbud"
   - REDIS_URL=redis://localhost:6379
 services:
 - mongodb
@@ -14,3 +14,9 @@ before_script:
 script:
 - npm run migrate -- up
 - npm run test
+deploy:
+  provider: heroku
+  app: morning-bastion-69807
+  api_key:
+    secure: Jr6lglFOrwwfO7C9eR08axbhmGWAkiBW7vtuugjrc63k+mRPaGiW1f1jnjAALqmX0WVfAQqQIW/f3Mmp1x+NEEAGdq0kCvvoM0Q3nDRrg/sU22fuka4Ky1ABhiteoyRmdHACwbEoEnpEzFLyFawpd6BdLZHHVZJD4kUco/TFlR7IwpJ8oH4rMJLdjUilgjp512iDB9aLJOcq65/HWgOBUj7A3s6KUsc0Av889Olp3CmL7mkyxIUg0zPBT2NbhOLwcOdhaFYfMrLF4INKYqXzGyO7nqIAIly3Nt5raA2jA213BjPtil0Ec4N2G3pU3lDH4FqoeZ32kWGjatQiaYVF+uGwtx5Bp+iMgC4Fe5aJLDe6J3gzrLe+dSqNUgRVVgzRhx4UI/P39CA9nYun3LcEt1c9GEktFeQ8zGaFYdSRPEqInQRF6/mpy7Xia7IfIjj0BFZy50EGYJAD8vHpSeBhMdMWidUNkWV6gXhaW64PiRpvHn66RAqHUdJCTDHisGwPBR5VoQo4VngJ0XSu46FDkDBJ0k8lSIf8H8Ul7wLbwxjzJMCRVR8jKvr9nZ6YpLT07IvKVO7UUTEuPxYVQbCPPd4Nv9wlFCJ2LBrxYVmcHrpJeJzuaHNVhy35EDOw6at7GCYsWsNcSBDaElduuvxi1gvkqraXymMTshJ7iHYRb2k=
+  on: master

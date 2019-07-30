@@ -2,6 +2,7 @@ const createRedisClient = require("./src/cache").createClient;
 const http = require("http");
 const port = process.env.PORT || 2345;
 const url = require("url");
+
 const dataUtils = require("./src/suggestions/dataUtils");
 const connectMongo = require("./src/mongo").connect;
 const { getErrorMsg } = require("./src/apiUtils");
