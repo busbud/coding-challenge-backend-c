@@ -6,10 +6,12 @@
   "scripts": {
     "pre-commit": "lint-staged",
     "dev": "nodemon app.js",
-    "migrate": "node node_modules/db-migrate/bin/db-migrate",
+    "migrate": "./node_modules/migrate/bin/migrate",
+    "migrate-up": "./node_modules/migrate/bin/migrate-up",
+    "migrate-down": "./node_modules/migrate/bin/migrate-down",
     "start": "node app.js",
     "test": "PORT=3000 nyc --reporter=text ./node_modules/mocha/bin/mocha --exit ./test"
-  },
+  },  
   "pre-commit": [
     "pre-commit"
   ],
@@ -35,9 +37,8 @@
   "license": "WTFPL",
   "dependencies": {
     "csv-parser": "^2.3.0",
-    "db-migrate": "^0.11.6",
-    "db-migrate-mongodb": "^1.5.0",
     "lodash": "^4.17.15",
+    "migrate": "^1.6.2",
     "mongodb": "^3.3.0-beta2",
     "redis": "^2.8.0",
     "remove-accents": "^0.4.2"

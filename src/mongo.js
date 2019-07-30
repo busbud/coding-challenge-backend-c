@@ -31,8 +31,13 @@ const isConnectedToMongo = () => {
   return !!db && !!db.topology && db.topology.isConnected();
 };
 
+const getClient = () => {
+  return client;
+};
+
 module.exports = {
   connect,
   mongo,
-  isConnectedToMongo
+  isConnectedToMongo,
+  getClient
 };

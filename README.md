@@ -95,7 +95,7 @@ Run the following comands to build and run the containers.
 
 Run the migration
 
-```docker-compose exec api npm run migrate -- up```
+```docker-compose exec api npm run migrate-up```
 
 Run the tests
 
