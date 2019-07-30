@@ -78,7 +78,7 @@ const fetchSuggestions = reqParams => {
     
   query.push({$sort: {score: -1}})
   query.push({$limit: 5})  
-  console.log(query);
+  
   return mongo()
     .collection("locations")
     .aggregate(query)
@@ -97,8 +97,7 @@ const fetchSuggestionsCached = reqParams => {
         if(err) {
           return reject(err);
         }
-        if (reply) {         
-          console.log('CACHED', redisKey) ;
+        if (reply) {          
           return resolve(JSON.parse(reply));
         } else {
           fetchSuggestions(reqParams).then(documents => {
