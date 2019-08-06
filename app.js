@@ -14,11 +14,6 @@ fs.readFile('./data/cities_canada-usa.tsv', function (err, data) {
     processFile(content);         
 });
 
-function filter(cities, query) {
-  const filteredCities = cities.filter((city) => (city.population > 5000) && (city.countryCode == "US" || "CA") && (city.name.toLowerCase().includes(query.q.toLowerCase())))
-  console.log(filteredCities);
-}
-
 let cities;
 function processFile(content) {
   cities = content.split('\n').map(city => {
@@ -26,43 +21,50 @@ function processFile(content) {
     return {
       id: info[0],
       name: info[1],
-      asciiname: info[2],
-      alternatenames: info[3],
+      // asciiname: info[2],
+      // alternatenames: info[3],
       latitude: info[4],
       longitude: info[5],
-      featureClass: info[6],
-      featureCode: info[7],
+      // featureClass: info[6],
+      // featureCode: info[7],
       countryCode: info[8],
-      cc2: info[9],
+      // cc2: info[9],
       admin1: info[10],
-      admin2: info[11],
-      admin3: info[12],
-      admin4: info[13],
+      // admin2: info[11],
+      // admin3: info[12],
+      // admin4: info[13],
       population: info[14],
-      elevation: info[15],
-      dem: info[16],
-      timezone: info[17],
-      modDate: info[18],
+      // elevation: info[15],
+      // dem: info[16],
+      // timezone: info[17],
+      // modDate: info[18],
     };
   });
   return cities;
 }
 
-function evaluateQuery(query) {
- console.log("done");
+function filter(cities, query) {
+  const filteredCities = cities.filter((city) => (city.population > 5000) && (city.countryCode == "US" || "CA") && (city.name.toLowerCase().includes(query.q.toLowerCase())))
+  for (i = 0; i < filteredCities.length; i++) {
+    filteredCities[i].score = 0.1;
+    if (query.latitude) {
+      if (parseFloat(query.latitude) - parseFloat(filteredCities[i].latitude) < 1) {
+        filteredCities[i].score += 0.1;
+      }
+    }
+  }
+  const sortedSuggestions = filteredCities.sort((a,b) => (b.score - a.score))
+  return sortedSuggestions;
 }
 
-
-
 module.exports = http.createServer(function (req, res) {
-  res.writeHead(404, {'Content-Type': 'text/plain'});
+  res.writeHead(200, {'Content-Type': 'text/plain'});
 
   if (req.url.indexOf('/suggestions') === 0) {
     const parsedUrl = url.parse(req.url, true);
     const query = parsedUrl.query;
-    filter(cities, query);
     res.end(JSON.stringify({
-      suggestions: []
+      suggestions: filter(cities, query),
     }));
   } else {
     res.end();
