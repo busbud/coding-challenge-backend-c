@@ -5,22 +5,23 @@ const url = require('url');
 const fs = require('fs');
 
 
-let content;
+
 fs.readFile('./data/cities_canada-usa.tsv', function (err, data) {
     if (err) {
         throw err;
     }
-    content = data.toString();
+    const content = data.toString();
     processFile(content);         
 });
 
-function filter(cities) {
-  const filteredCities = cities.filter((city) => city.population > 5000 && city.countryCode == "US" || "CA" )
+function filter(cities, query) {
+  const filteredCities = cities.filter((city) => (city.population > 5000) && (city.countryCode == "US" || "CA") && (city.name.toLowerCase().includes(query.q.toLowerCase())))
   console.log(filteredCities);
 }
 
+let cities;
 function processFile(content) {
-  const cities = content.split('\n').map(city => {
+  cities = content.split('\n').map(city => {
     const info = city.split('\t');
     return {
       id: info[0],
@@ -44,7 +45,11 @@ function processFile(content) {
       modDate: info[18],
     };
   });
-  filter(cities);
+  return cities;
+}
+
+function evaluateQuery(query) {
+ console.log("done");
 }
 
 
@@ -55,7 +60,7 @@ module.exports = http.createServer(function (req, res) {
   if (req.url.indexOf('/suggestions') === 0) {
     const parsedUrl = url.parse(req.url, true);
     const query = parsedUrl.query;
-    console.log(query.q);
+    filter(cities, query);
     res.end(JSON.stringify({
       suggestions: []
     }));
