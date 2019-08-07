@@ -44,6 +44,7 @@ describe('GET /suggestions', function() {
     });
 
     it('returns an array of suggestions', function () {
+      console.log(response.json);
       expect(response.json.suggestions).to.be.instanceof(Array);
       expect(response.json.suggestions).to.have.length.above(0);
     });
