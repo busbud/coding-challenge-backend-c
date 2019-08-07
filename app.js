@@ -11,6 +11,7 @@ app.use(
     outputStyle: "expanded"
   })
 );
+app.use(express.static(__dirname + "/public"));
 PORT = 3000;
 
 
