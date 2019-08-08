@@ -51,7 +51,7 @@ describe('GET /suggestions', function() {
     it('contains a match', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.some(function (suggestion) {
-          //I was getting an error when running the test as is: TypeError: suggestion.name.test is not a function
+          //I'm getting an error when running the test as is: TypeError: suggestion.name.test is not a function
           return suggestion.name.test(/montreal/i);
         });
       })
