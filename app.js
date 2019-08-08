@@ -121,6 +121,7 @@ const url = require('url');
 const fs = require('fs');
 
 const response = {};
+
 fs.readFile('./data/cities_canada-usa.tsv', 'utf-8', function(err, data) {
   if (err) {
     throw err;
@@ -130,10 +131,11 @@ fs.readFile('./data/cities_canada-usa.tsv', 'utf-8', function(err, data) {
   processFile(content);
 });
 
+
 function processFile(content) {
   response.suggestions = content.split('\n').map(city => ({
     id: city.split('\t')[0],
-    name: city.split('\t')[1],
+    name: city.split('\t')[2],
     latitude: city.split('\t')[4],
     longitude: city.split('\t')[5],
     countryCode: city.split('\t')[8],
@@ -141,8 +143,7 @@ function processFile(content) {
     population: city.split('\t')[14]
   }));
 
-  for (i = 0; i < (response.suggestions.length - 1); i++) {
-    response.suggestions[i].name = removeAccents(response.suggestions[i].name);
+  // for (i = 0; i < (response.suggestions.length - 1); i++) {
     // switch (response.suggestions[i].admin1) {
     //   case '01':
     //     response.suggestions[i].name = `${
@@ -210,43 +211,28 @@ function processFile(content) {
     //       }, Nunavut`;
     //     break;
     // }
-  }
+  // }
   return response;
 }
 
-removeAccents = function(string){
-  var r=string.toLowerCase();
-  r = r.replace(new RegExp(/[àáâãäå]/g),"a");
-  r = r.replace(new RegExp(/æ/g),"ae");
-  r = r.replace(new RegExp(/ç/g),"c");
-  r = r.replace(new RegExp(/[èéêë]/g),"e");
-  r = r.replace(new RegExp(/[ìíîï]/g),"i");
-  r = r.replace(new RegExp(/ñ/g),"n");                
-  r = r.replace(new RegExp(/[òóôõö]/g),"o");
-  r = r.replace(new RegExp(/œ/g),"oe");
-  r = r.replace(new RegExp(/[ùúûü]/g),"u");
-  r = r.replace(new RegExp(/[ýÿ]/g),"y");
-  return r;
-};
 
 function filter(cities, query) {
   query.q = query.q.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-  if (cities) {
   const filteredCities = cities.filter(
     city =>
-      city.population > 5000 &&
-      (city.countryCode == 'US' || 'CA') &&
-      city.name.includes(query.q)
+    city.population > 5000 &&
+    (city.countryCode == 'US' || 'CA') &&
+      city.name.toLowerCase().includes(query.q)
   );
   for (i = 0; i < filteredCities.length; i++) {
     filteredCities[i].score = 0.1;
-    if (query.q == filteredCities[i].name) {
+    if (query.q == filteredCities[i].name.toLowerCase()) {
       filteredCities[i].score += 0.5;
     }
     if (filteredCities[i].population > 100000) {
       filteredCities[i].score += 0.1;
     }
-    if (query.q[0] == filteredCities[i].name[0]) {
+    if (query.q[0] == filteredCities[i].name[0].toLowerCase()) {
       filteredCities[i].score += 0.1;
     }
     if (query.latitude) {
@@ -269,17 +255,16 @@ function filter(cities, query) {
   const sortedSuggestions = filteredCities.sort((a, b) => b.score - a.score);
   return sortedSuggestions;
 }
-}
 
 
-const server = http.createServer(async function(req, res) {
+module.exports = http.createServer(async function(req, res) {
     if (req.url.indexOf('/suggestions') === 0) {
       const parsedUrl = url.parse(req.url, true);
       const query = parsedUrl.query;
       const suggestions = await filter(response.suggestions, query);
       console.log(suggestions);
       if (!suggestions) {
-        res.statuscode = 404;
+        res.statusCode = 404;
         res.end(
           JSON.stringify({
             suggestions
@@ -295,11 +280,10 @@ const server = http.createServer(async function(req, res) {
       }
       console.log(res.json);
     } else {
+      // res.statusCode = 500;
       res.end();
     }
   })
   .listen(port, '127.0.0.1');
-
-  module.exports = server;
 
 console.log('Server running at http://127.0.0.1:%d/suggestions', port);
