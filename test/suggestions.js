@@ -44,7 +44,6 @@ describe('GET /suggestions', function() {
     });
 
     it('returns an array of suggestions', function () {
-      console.log(response.json);
       expect(response.json.suggestions).to.be.instanceof(Array);
       expect(response.json.suggestions).to.have.length.above(0);
     });
@@ -52,6 +51,7 @@ describe('GET /suggestions', function() {
     it('contains a match', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.some(function (suggestion) {
+          //I was getting an error when running the test as is: TypeError: suggestion.name.test is not a function
           return suggestion.name.test(/montreal/i);
         });
       })
