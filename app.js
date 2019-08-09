@@ -31,8 +31,9 @@
 
 ////////////////////////////////////////////////////////////////////////////
 const http = require('http');
-const port = process.env.PORT || 2345;
+const port = 8080;
 const fs = require('fs');
+const url = require('url');
 
 fs.readFile('./data/cities_canada-usa.tsv', 'utf-8', function (err, data) {
     if (err) {
@@ -64,7 +65,7 @@ function filterData(input) {
     // CA.11	Saskatchewan	Saskatchewan	6141242
     // CA.12	Yukon	Yukon	6185811
     // CA.05	Newfoundland and Labrador	Newfoundland and Labrador	6354959
-    
+
     // Change each province's administration code to abbreviations
     let province = "";
     if (cityDetails[8] === "CA") {
@@ -132,12 +133,17 @@ module.exports = http.createServer(function (req, res) {
   res.writeHead(404, {'Content-Type': 'text/plain'});
 
   if (req.url.indexOf('/suggestions') === 0) {
-    res.end(JSON.stringify({
-      suggestions: []
-    }));
+    const parsedUrl = url.parse(req.url, true);
+    const query = parsedUrl.query;
+    console.log(parsedUrl)
+    console.log(query)
+    console.log(query.q)
+    // res.end(JSON.stringify({
+    //   suggestions: []
+    // }));
   } else {
     res.end();
   }
-}).listen(port, '127.0.0.1');
+}).listen(port);
 
-console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+console.log(`Server running at http://localhost:${port}/suggestions`);
