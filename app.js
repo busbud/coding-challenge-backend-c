@@ -15,8 +15,6 @@
 // PORT = 3000;
 
 
-
-
 // app.get("/", (req, res) => {
 //   res.send("hello! Please go to /suggestions");
 // });
@@ -29,7 +27,6 @@
 
 // module.exports = app;
 
-////////////////////////////////////////////////////////////////////////////
 const http = require('http');
 const port = 8080;
 const fs = require('fs');
@@ -40,9 +37,10 @@ fs.readFile('./data/cities_canada-usa.tsv', 'utf-8', function (err, data) {
         throw err;
     }
     const dataSet = data.toString();
-    console.log(filterData(dataSet))
+    filterData(dataSet)
 });
 
+let output = {}
 // create a function that further cleans data
 function filterData(input) {
   //convert string to array
@@ -107,6 +105,8 @@ function filterData(input) {
           province = "NT"
           break;
       }
+    } else {
+      province = cityDetails[10];
     }
     //store each array's elements as a property of an object
     return {
@@ -122,11 +122,38 @@ function filterData(input) {
     }
   })
   //create output object
-  const output = {}
   output.suggestions = filteredList
   return output
 }
 
+// function that filters the filteredList from raw data based on query object
+
+function suggestion (dataArray, queryObjInput) {
+// functionalities:
+// 1. find matched city name based on q attribute in query object
+  if (queryObjInput.q) {
+    const cityQuery = queryObjInput.q
+    const filteredResults = dataArray.filter((city) => 
+    (city.population > 5000) && (city.countryCode == "CA" || "US") && 
+    (city.name.normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .includes(cityQuery
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase())))
+    return filteredResults
+  }
+// 2. calculate score based on longitude and latitude attribute in query object
+  
+// 3. store the score in the returned array of results
+// 4. return other relevant information
+}
+
+// function that calculates score based on query's longitude and latitude
+function score (longitude, latitude) {
+
+}
 
 
 module.exports = http.createServer(function (req, res) {
@@ -134,13 +161,12 @@ module.exports = http.createServer(function (req, res) {
 
   if (req.url.indexOf('/suggestions') === 0) {
     const parsedUrl = url.parse(req.url, true);
-    const query = parsedUrl.query;
-    console.log(parsedUrl)
-    console.log(query)
-    console.log(query.q)
-    // res.end(JSON.stringify({
-    //   suggestions: []
-    // }));
+    const queryObj = parsedUrl.query;
+    console.log(queryObj)
+    const suggestions = suggestion(output.suggestions, queryObj)
+    res.end(JSON.stringify({
+      suggestions
+    }));
   } else {
     res.end();
   }
