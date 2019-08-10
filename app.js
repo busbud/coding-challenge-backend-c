@@ -1,6 +1,6 @@
 const http = require('http');
-// const port = 8080;
-const port = process.env.PORT || 2345;
+const port = 8080;
+// const port = process.env.PORT || 2345;
 const fs = require('fs');
 const url = require('url');
 
@@ -231,10 +231,10 @@ module.exports = http.createServer(function (req, res) {
     }
   }
 
-}).listen(port, '127.0.0.1');
+}).listen(port)
 
-console.log('Server running at http://127.0.0.1:%d/suggestions', port);
-// console.log(`Server running at http://localhost:${port}/suggestions`);
+// console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+console.log(`Server running at http://localhost:${port}/suggestions`);
 
 
 

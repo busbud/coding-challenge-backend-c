@@ -15,6 +15,9 @@ The suggestions should be restricted to cities in the USA and Canada with a popu
     - each suggestion has a latitude and longitude
 - all functional tests should pass (additional tests may be implemented as necessary).
 - the final application should be [deployed to Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs).
+(I wasn't able to deploy on Heroku, here's the error message from Heroku:
+Error R10 (Boot timeout) -> Web process failed to bind to $PORT within 60 seconds of launch.
+Thus, I'm changing listening port back to 8080 which is what I used during working on this project)
 - feel free to add more features if you like!
 
 #### Sample responses
