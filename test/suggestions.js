@@ -51,7 +51,12 @@ describe('GET /suggestions', function() {
     it('contains a match', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.some(function (suggestion) {
-          return suggestion.name.test(/montreal/i);
+          // return suggestion.name.test(/montreal/i);
+          // because suggestion.name.test is not a function
+          // this is testing whether in an array of suggestions, there is
+          // a match in name property that is equal to query string
+          var regex = /montreal/i;
+          return regex.test(suggestion.name)
         });
       })
     });
