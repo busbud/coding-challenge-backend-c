@@ -230,9 +230,10 @@ module.exports = http.createServer(function (req, res) {
     }
   }
 
-}).listen(port);
+}).listen(port, '127.0.0.1');
 
-console.log(`Server running at http://localhost:${port}/suggestions`);
+console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+// console.log(`Server running at http://localhost:${port}/suggestions`);
 
 
 
