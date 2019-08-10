@@ -66,7 +66,10 @@ function filterData(input) {
 
     // Change each province's administration code to abbreviations
     let province = "";
+    let canada = "Canada";
+    let usa = "USA";
     if (cityDetails[8] === "CA") {
+      cityDetails[8] = canada;
       switch (cityDetails[10]) {
         case "01":
           province = "AB"
@@ -106,19 +109,20 @@ function filterData(input) {
           break;
       }
     } else {
+      cityDetails[8] = usa;
       province = cityDetails[10];
     }
     //store each array's elements as a property of an object
     return {
-      id: cityDetails[0],
-      name: cityDetails[1],
-      ascii: cityDetails[2],
+      // id: cityDetails[0],
+      name: cityDetails[1] + ", " + province + ", " + cityDetails[8],
+      // ascii: cityDetails[2],
       latitude: cityDetails[4],
       longitude: cityDetails[5],
-      countryCode: cityDetails[8],
-      admin1: province,
+      // countryCode: cityDetails[8],
+      // admin1: province,
       population: cityDetails[14],
-      timezone: cityDetails[17],
+      // timezone: cityDetails[17],
     }
   })
   //create output object
@@ -133,7 +137,7 @@ function suggestion (dataArray, queryObjInput) {
 // 1. find matched city name based on q attribute in query object
   if (queryObjInput.q) {
     const cityQuery = queryObjInput.q
-    const filteredResults = dataArray.filter((city) => 
+    let filteredResults = dataArray.filter((city) => 
     (city.population > 5000) && (city.countryCode == "CA" || "US") && 
     (city.name.normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
@@ -142,16 +146,32 @@ function suggestion (dataArray, queryObjInput) {
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "")
       .toLowerCase())))
+      filteredResults.forEach(function(cityObj){
+        let score = 0.5
+        // cityObj.score = score;
+
+        if (cityQuery === cityObj.name.substring(0, cityQuery.length)) {
+          score += 0.1
+        }
+
+        if ((cityQuery.length === cityObj.name.indexOf(",")) && 
+        (cityQuery === cityObj.name.substring(0, cityQuery.length))) {
+          score += 0.2
+        }
+
+        
+
+        cityObj.score = score
+      })
+      
     return filteredResults
   }
-// 2. calculate score based on longitude and latitude attribute in query object
-  
-// 3. store the score in the returned array of results
-// 4. return other relevant information
-}
 
-// function that calculates score based on query's longitude and latitude
-function score (longitude, latitude) {
+// 2. calculate score based on longitude and latitude attribute in query object
+
+// 3. store the score in the returned array of results
+
+// 4. return other relevant information
 
 }
 
