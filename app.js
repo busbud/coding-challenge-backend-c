@@ -45,43 +45,43 @@ function filterData(input) {
       cityDetails[8] = canada;
       switch (cityDetails[10]) {
         case "01":
-          province = "AB"
+          province = "AB";
           break;
         case "02":
-          province = "BC"
+          province = "BC";
           break;
         case "03":
-          province = "MB"
+          province = "MB";
           break;
         case "04":
-          province = "NB"
+          province = "NB";
           break;
         case "05":
-          province = "NL"
+          province = "NL";
           break;
         case "07":
-          province = "NS"
+          province = "NS";
           break;
         case "08":
-          province = "ON"
+          province = "ON";
           break;
         case "09":
-          province = "PE"
+          province = "PE";
           break;
         case "10":
-          province = "QC"
+          province = "QC";
           break;
         case "11":
-          province = "SK"
+          province = "SK";
           break;
         case "12":
-          province = "YT"
+          province = "YT";
           break;
         case "13":
-          province = "NT"
+          province = "NT";
           break;
       }
-    } else {
+    } else if (cityDetails[8] === "US") {
       cityDetails[8] = usa;
       // for US countries, each state is exactly admin1 code
       province = cityDetails[10];
@@ -169,9 +169,9 @@ function suggestion (dataArray, queryObjInput) {
           }
 
         }
-        // 3. store the score in the returned array of results
-        cityObj.score = score;
 
+        // 3. store the score in the returned array of results.
+        cityObj.score = score;
       })
     // 4. return all relevant information sorted by score (descending order)
     const sortedFilteredResults = filteredResults.sort(function(a, b){return b.score - a.score})

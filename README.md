@@ -119,11 +119,11 @@ npm test
 To start a local server run
 
 ```
-PORT=3456 npm start
+npm start
 ```
 
 which should produce output similar to
 
 ```
-Server running at http://127.0.0.1:3456/suggestions
+Server running at http://localhost:8080/suggestions
 ```
