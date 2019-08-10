@@ -1,34 +1,3 @@
-// Original Direction
-
-// const express = require("express");
-// const app = express();
-// const sass = require("node-sass-middleware");
-// app.set("view engine", "ejs");
-// app.use(
-//   "/styles",
-//   sass({
-//     src: __dirname + "/styles",
-//     dest: __dirname + "/public/styles",
-//     debug: true,
-//     outputStyle: "expanded"
-//   })
-// );
-// app.use(express.static(__dirname + "/public"));
-// PORT = 3000;
-
-
-// app.get("/", (req, res) => {
-//   res.send("hello! Please go to /suggestions");
-// });
-
-
-// app.listen(PORT, () => {
-//   console.log('Server running at localhost:%d/suggestions', PORT);
-// });
-// module.exports = app;
-
-
-// New Direction
 const http = require('http');
 const port = 8080;
 const fs = require('fs');
@@ -235,29 +204,63 @@ module.exports = http.createServer(function (req, res) {
   if (req.url.indexOf('/suggestions') === 0) {
     const parsedUrl = url.parse(req.url, true);
     const queryObj = parsedUrl.query;
-
-    const suggestions = suggestion(output.suggestions, queryObj);
-    console.log(suggestions)
-    //check whether array is empty
-    if (suggestions.length < 1){
-      res.writeHead(404, {'Content-Type': 'text/plain'});
-        res.end(
-          JSON.stringify({
-            suggestions
-          })
-        );
-
-    } else if (suggestions.length >= 1 ){
-      res.statuscode = 200;
-      res.end(JSON.stringify({
-        suggestions
-      }));
-
+    // if queryObj is empty
+    if (Object.getOwnPropertyNames(queryObj).length === 0) {
+      res.end("You don't have any search input")
     } else {
-      res.end();
+      const suggestions = suggestion(output.suggestions, queryObj);
+      //check whether array is empty
+      if (suggestions.length < 1){
+        res.writeHead(404, {'Content-Type': 'text/plain'});
+          res.end(
+            JSON.stringify({
+              suggestions
+            })
+          );
+
+      } else if (suggestions.length >= 1 ){
+        res.statuscode = 200;
+        res.end(JSON.stringify({
+          suggestions
+        }));
+
+      } else {
+        res.end();
+      }
     }
   }
 
 }).listen(port);
 
 console.log(`Server running at http://localhost:${port}/suggestions`);
+
+
+
+// Original code of planning on using express server and deliver ejs templates in frontend
+
+// const express = require("express");
+// const app = express();
+// const sass = require("node-sass-middleware");
+// app.set("view engine", "ejs");
+// app.use(
+//   "/styles",
+//   sass({
+//     src: __dirname + "/styles",
+//     dest: __dirname + "/public/styles",
+//     debug: true,
+//     outputStyle: "expanded"
+//   })
+// );
+// app.use(express.static(__dirname + "/public"));
+// PORT = 3000;
+
+
+// app.get("/", (req, res) => {
+//   res.send("hello! Please go to /suggestions");
+// });
+
+
+// app.listen(PORT, () => {
+//   console.log('Server running at localhost:%d/suggestions', PORT);
+// });
+// module.exports = app;
