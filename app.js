@@ -37,17 +37,18 @@ fs.readFile('./data/cities_canada-usa.tsv', 'utf-8', function (err, data) {
         throw err;
     }
     const dataSet = data.toString();
-    filterData(dataSet)
+    filterData(dataSet);
 });
 
-let output = {}
+let output = {};
 // create a function that further cleans data
 function filterData(input) {
   //convert string to array
-  cities = input.split('\n')
+  let cities = input.split('\n');
+
   let filteredList = cities.map(function(city){
     //each city's information is stored in an array
-    const cityDetails = city.split('\t')
+    let cityDetails = city.split('\t');
     // According to http://download.geonames.org/export/dump/admin1CodesASCII.txt
     // and http://www.comeexplorecanada.com/abbreviations.php
     // CA.01	Alberta	Alberta	5883102
@@ -65,6 +66,7 @@ function filterData(input) {
     // CA.05	Newfoundland and Labrador	Newfoundland and Labrador	6354959
 
     // Change each province's administration code to abbreviations
+    
     let province = "";
     let canada = "Canada";
     let usa = "USA";
@@ -125,9 +127,17 @@ function filterData(input) {
       // timezone: cityDetails[17],
     }
   })
+  
+  //Remove accents
+  filteredList.forEach(function(eachObj){
+    const index = eachObj.name.indexOf(",")
+    const restInfo = eachObj.name.substring(index)
+    eachObj.name = accentsTidy(eachObj.name.substring(0, index)) + restInfo
+  })
+
   //create output object
-  output.suggestions = filteredList
-  return output
+  output.suggestions = filteredList;
+  return output;
 }
 
 // function that filters the filteredList from raw data based on query object
@@ -136,7 +146,11 @@ function suggestion (dataArray, queryObjInput) {
 // functionalities:
 // 1. find matched city name based on q attribute in query object
   if (queryObjInput.q) {
-    const cityQuery = queryObjInput.q
+
+    const cityQuery = queryObjInput.q;
+    const cityQueryLong = queryObjInput.longitude;
+    const cityQueryLat = queryObjInput.latitude;
+
     let filteredResults = dataArray.filter((city) => 
     (city.population > 5000) && (city.countryCode == "CA" || "US") && 
     (city.name.normalize("NFD")
@@ -146,35 +160,73 @@ function suggestion (dataArray, queryObjInput) {
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "")
       .toLowerCase())))
-      filteredResults.forEach(function(cityObj){
-        let score = 0.5
-        // cityObj.score = score;
 
+      // 2. calculate score based on name, longitude and latitude attribute in query object
+      filteredResults.forEach(function(cityObj){
+        // if query string is included in name string, city population is larger
+        // than 5000, and in Canada or US, then get base score 0.5
+       
+
+        let score = 0.5;
+        
+        // if query string is at the beginning of name string, add 0.1 to the score
         if (cityQuery === cityObj.name.substring(0, cityQuery.length)) {
-          score += 0.1
+          score += 0.1;
         }
 
+        // if query string is at the beginning of name string, and is at the same length
+        // as city name, add 0.1 to the score
         if ((cityQuery.length === cityObj.name.indexOf(",")) && 
         (cityQuery === cityObj.name.substring(0, cityQuery.length))) {
-          score += 0.2
+          score += 0.1;
         }
 
-        
+        // if longitude difference is smaller than 1, then add 0.15 to the score
+        if (cityQueryLong) {
 
-        cityObj.score = score
+          if (Math.abs(cityQueryLong - cityObj.longitude) < 1) {
+            score += 0.15;
+          }
+
+        }
+
+        // if latitdue difference is smaller than 1, then add 0.15 to the score
+        if (cityQueryLat) {
+
+          if (Math.abs(cityQueryLat - cityObj.latitude) < 1) {
+            score += 0.15;
+          }
+
+        }
+        // 3. store the score in the returned array of results
+        cityObj.score = score;
+
       })
-      
-    return filteredResults
+    // 4. return all relevant information sorted by score (descending order)
+    const sortedFilteredResults = filteredResults.sort(function(a, b){return b.score - a.score})
+
+    return sortedFilteredResults;
   }
-
-// 2. calculate score based on longitude and latitude attribute in query object
-
-// 3. store the score in the returned array of results
-
-// 4. return other relevant information
 
 }
 
+// from https://stackoverflow.com/questions/990904/remove-accents-diacritics-in-a-string-in-javascript
+accentsTidy = function(r){
+  // let r=s.toLowerCase();
+  r = r.replace(new RegExp(/\s/g),"");
+  r = r.replace(new RegExp(/[àáâãäå]/g),"a");
+  r = r.replace(new RegExp(/æ/g),"ae");
+  r = r.replace(new RegExp(/ç/g),"c");
+  r = r.replace(new RegExp(/[èéêë]/g),"e");
+  r = r.replace(new RegExp(/[ìíîï]/g),"i");
+  r = r.replace(new RegExp(/ñ/g),"n");                
+  r = r.replace(new RegExp(/[òóôõö]/g),"o");
+  r = r.replace(new RegExp(/œ/g),"oe");
+  r = r.replace(new RegExp(/[ùúûü]/g),"u");
+  r = r.replace(new RegExp(/[ýÿ]/g),"y");
+  r = r.replace(new RegExp(/\W/g),"");
+  return r;
+};
 
 module.exports = http.createServer(function (req, res) {
   res.writeHead(404, {'Content-Type': 'text/plain'});
@@ -182,14 +234,26 @@ module.exports = http.createServer(function (req, res) {
   if (req.url.indexOf('/suggestions') === 0) {
     const parsedUrl = url.parse(req.url, true);
     const queryObj = parsedUrl.query;
-    console.log(queryObj)
     const suggestions = suggestion(output.suggestions, queryObj)
-    res.end(JSON.stringify({
-      suggestions
-    }));
-  } else {
-    res.end();
+    
+    if (!suggestions){
+      res.statuscode = 404;
+        res.end(
+          JSON.stringify({
+            suggestions
+          })
+        );
+
+    } else if (suggestions) {
+      res.end(JSON.stringify({
+        suggestions
+      }));
+
+    } else {
+      res.end();
+    }
   }
+
 }).listen(port);
 
 console.log(`Server running at http://localhost:${port}/suggestions`);
