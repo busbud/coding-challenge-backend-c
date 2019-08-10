@@ -1,3 +1,5 @@
+// Original Direction
+
 // const express = require("express");
 // const app = express();
 // const sass = require("node-sass-middleware");
@@ -23,10 +25,10 @@
 // app.listen(PORT, () => {
 //   console.log('Server running at localhost:%d/suggestions', PORT);
 // });
-
-
 // module.exports = app;
 
+
+// New Direction
 const http = require('http');
 const port = 8080;
 const fs = require('fs');
@@ -49,6 +51,7 @@ function filterData(input) {
   let filteredList = cities.map(function(city){
     //each city's information is stored in an array
     let cityDetails = city.split('\t');
+
     // According to http://download.geonames.org/export/dump/admin1CodesASCII.txt
     // and http://www.comeexplorecanada.com/abbreviations.php
     // CA.01	Alberta	Alberta	5883102
@@ -66,7 +69,6 @@ function filterData(input) {
     // CA.05	Newfoundland and Labrador	Newfoundland and Labrador	6354959
 
     // Change each province's administration code to abbreviations
-    
     let province = "";
     let canada = "Canada";
     let usa = "USA";
@@ -112,6 +114,7 @@ function filterData(input) {
       }
     } else {
       cityDetails[8] = usa;
+      // for US countries, each state is exactly admin1 code
       province = cityDetails[10];
     }
     //store each array's elements as a property of an object
@@ -163,10 +166,9 @@ function suggestion (dataArray, queryObjInput) {
 
       // 2. calculate score based on name, longitude and latitude attribute in query object
       filteredResults.forEach(function(cityObj){
+
         // if query string is included in name string, city population is larger
         // than 5000, and in Canada or US, then get base score 0.5
-       
-
         let score = 0.5;
         
         // if query string is at the beginning of name string, add 0.1 to the score
@@ -229,22 +231,24 @@ accentsTidy = function(r){
 };
 
 module.exports = http.createServer(function (req, res) {
-  res.writeHead(404, {'Content-Type': 'text/plain'});
 
   if (req.url.indexOf('/suggestions') === 0) {
     const parsedUrl = url.parse(req.url, true);
     const queryObj = parsedUrl.query;
-    const suggestions = suggestion(output.suggestions, queryObj)
-    
-    if (!suggestions){
-      res.statuscode = 404;
+
+    const suggestions = suggestion(output.suggestions, queryObj);
+    console.log(suggestions)
+    //check whether array is empty
+    if (suggestions.length < 1){
+      res.writeHead(404, {'Content-Type': 'text/plain'});
         res.end(
           JSON.stringify({
             suggestions
           })
         );
 
-    } else if (suggestions) {
+    } else if (suggestions.length >= 1 ){
+      res.statuscode = 200;
       res.end(JSON.stringify({
         suggestions
       }));
