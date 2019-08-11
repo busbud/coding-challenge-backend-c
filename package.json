@@ -14,6 +14,7 @@
     "geopoint": "^1.0.1",
     "mocha": "^1.18.2",
     "n-readlines": "^1.0.0",
+    "rate-limiter-flexible": "^1.1.1",
     "remove-accents": "^0.4.2",
     "string-similarity": "^3.0.0",
     "supertest": "^0.11.0"

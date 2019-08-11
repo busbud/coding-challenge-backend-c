@@ -15,8 +15,8 @@ const generate = (params) => {
         const useDistance = validateLatLong(params)
         filterCities(params, factors, results, useDistance)
         calculateScores(factors, results, useDistance)
+        formatResults(results, output)
     }
-    formatResults(results, output)
     return output
 }
 
