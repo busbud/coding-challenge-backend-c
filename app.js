@@ -1,16 +1,59 @@
-var http = require('http');
-var port = process.env.PORT || 2345;
+require('dotenv').config();
+const cluster = require('cluster');
+const http = require('http');
+http.globalAgent.maxSockets = Infinity;
 
-module.exports = http.createServer(function (req, res) {
-  res.writeHead(404, {'Content-Type': 'text/plain'});
+if ((cluster.isMaster) && (process.env.NODE_ENV !== 'development')) {
+  // Count the machine's CPUs
+  const cpuCount = require('os').cpus().length;
 
-  if (req.url.indexOf('/suggestions') === 0) {
-    res.end(JSON.stringify({
-      suggestions: []
-    }));
-  } else {
-    res.end();
+  // Create a worker for each CPU
+  for (var i = 0; i < cpuCount; i += 1) {
+    cluster.fork();
   }
-}).listen(port, '127.0.0.1');
+  // Listen for dying workers
+  cluster.on('exit', function(worker) {
+    // Replace the dead worker, we're not sentimental
+    console.log('Worker %d died :(', worker.id);
+    cluster.fork();
+  });
 
-console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+// Code to run if we're in a worker process
+} else {
+  const express = require('express');
+  const app = express();
+  const cors = require('cors');
+
+
+  // Allow cors from everywhere
+  app.use(cors());
+
+  const suggestionsRoutes = require('./api/routes/suggestions');
+
+  app.use('/suggestions', suggestionsRoutes);
+
+  const port = process.env.PORT || 2345;
+  const host = process.env.HOST || 'localhost';
+
+  app.use((req, res, next) => {
+    const error = new Error('These aren\'t the droids you\'re looking for.');
+    error.status = 404;
+    next(error);
+  });
+
+  app.use((error, req, res, next) => {
+    res.status(error.status || 500);
+    res.json({
+      error: {
+        message: error.message,
+        status: (error.status || 500)
+      }
+    });
+  });
+
+  const workerMessage = (process.env.NODE_ENV !== 'development') ? `worker id =${cluster.worker.id}` : '';
+
+  module.exports = app.listen(port, host, () => {
+    console.log(`Server is running at PORT http://${host}:${port} ${workerMessage}`);
+  });
+}
