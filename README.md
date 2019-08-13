@@ -1,5 +1,15 @@
 # Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
 
+Stream/pipe based solution. I could have stored the data in database (i.e. redis), but the reference to a John Resig article suggests that a streaming is the way go for this.
+
+Note: NODE_ENV must be set  development to make unit test work due to the way I implemented cluster.
+
+Deployed to https://cool-kids-take-the-bus.herokuapp.com/ 
+
+/api/lib/clean-data.js produces a copy of the cities_canada-usa.tsv file with unnecessary columns dropped to reduce  exection time and required recources when piping the data
+
+Linted with busbud-lint
+
 ## Requirements
 
 Design an API endpoint that provides auto-complete suggestions for large cities.

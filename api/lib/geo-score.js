@@ -1,3 +1,9 @@
+/*  There is approximately(roughly) 7000 KM betwen the two furthest cities/towns in north america.
+   So to calculate the confidence score we map distance from 0 to 7000 on to 0 to 1 and then take a eigthed average
+   with how closely the search string matches the name. This is rounded to one decimal point to give the score
+
+ */
+
 function geoDistance(lat1, lon1, lat2, lon2, unit) {
   if ((lat1 === lat2) && (lon1 === lon2)) {
     return 0;
