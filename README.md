@@ -2,7 +2,9 @@
 
 Stream/pipe based solution. I could have stored the data in database (i.e. redis), but the reference to a John Resig article suggests that a streaming is the way go for this.
 
-Note: NODE_ENV must be set  development to make unit test work due to the way I implemented cluster.
+Note: NODE_ENV must be set  development to make unit test work due to the way I implemented cluster. 
+
+Rename .env-sample to .env (of course)
 
 Deployed to https://cool-kids-take-the-bus.herokuapp.com/ 
 
