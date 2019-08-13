@@ -33,7 +33,7 @@ if ((cluster.isMaster) && (process.env.NODE_ENV !== 'development')) {
   app.use('/suggestions', suggestionsRoutes);
 
   const port = process.env.PORT || 2345;
-  const host = process.env.HOST || 'localhost';
+  // const host = process.env.HOST || 'localhost';
 
   app.use((req, res, next) => {
     const error = new Error('These aren\'t the droids you\'re looking for.');
@@ -53,7 +53,7 @@ if ((cluster.isMaster) && (process.env.NODE_ENV !== 'development')) {
 
   const workerMessage = (process.env.NODE_ENV !== 'development') ? `worker id =${cluster.worker.id}` : '';
 
-  module.exports = app.listen(port, host, () => {
-    console.log(`Server is running at PORT http://${host}:${port} ${workerMessage}`);
+  module.exports = app.listen(port, () => {
+    console.log(`Server is running at ${port} ${workerMessage}`);
   });
 }
