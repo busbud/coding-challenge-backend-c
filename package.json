@@ -12,6 +12,7 @@
   "author": "",
   "license": "WTFPL",
   "dependencies": {
+    "JSONStream": "^1.3.5",
     "cluster": "^0.7.7",
     "cors": "^2.8.5",
     "csv-streamify": "^4.0.0",
@@ -19,16 +20,14 @@
     "express": "^4.17.1",
     "express-validator": "^6.1.1",
     "remove-accents": "^0.4.2",
-    "sort-stream": "^1.0.1",
-    "supertest": "^4.0.2"
+    "sort-stream": "^1.0.1"
   },
   "engines": {
     "node": "10.16.2"
   },
   "devDependencies": {
-    "chai": "^4.2.0",
-    "mocha": "^6.2.0",
     "busbud-lint": "^1.7.0",
+    "chai": "^4.2.0",
     "eslint": "^6.1.0",
     "eslint-config-busbud": "^1.5.0",
     "eslint-config-standard": "^13.0.1",
@@ -36,6 +35,8 @@
     "eslint-plugin-node": "^9.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.0",
-    "nodemon": "^1.19.1"
+    "mocha": "^6.2.0",
+    "nodemon": "^1.19.1",
+    "supertest": "^4.0.2"
   }
 }
