@@ -1,3 +1,8 @@
+// TODO: case insensitive !!!
+//
+// TODO: score should include population?
+// TODO: why return a 404 if no matches found?
+//
 // TODO: calculate distance from user lat, long
 // estimate is good enough
 // http://jonisalonen.com/2014/computing-distance-between-coordinates-can-be-simple-and-fast/
@@ -31,6 +36,22 @@ var csvData = fs.readFileSync('data/cities_canada-usa.tsv', 'utf-8');
 var csvLines = csvData.split('\n');
 var headers = csvLines.shift().split('\t');
 
+function degToRadian(angle) {
+    return Math.PI * angle / 180;
+}
+
+function estimateDistance(lat1, long1, lat2, long2) {
+    const deglen = 111.138;
+    lat1 = degToRadian(lat1);
+    long1 = degToRadian(long1);
+    lat2 = degToRadian(lat2);
+    long2 = degToRadian(long2);
+    var x = lat2 - lat1;
+    var y = (long2 - long1) * Math.cos((lat1 + lat2) * 0.0087266);
+
+    return deglen * Math.sqrt(x*x + y*y) // in kilometers
+}
+
 function addOrAppend(dict, key, val) {
     if (dict[key]) {
         dict[key].push(val);
@@ -57,21 +78,35 @@ module.exports = http.createServer(function (req, res) {
     var matches = [];
     if (queryParams.q) {
         cityQ = S(queryParams.q).latinise().toString();
-        if (cities[queryParams.q]) {
-            cities[queryParams.q].forEach(function(city) {matches.push(city)});
+        if (cities[cityQ]) {
+            cities[cityQ].forEach(function(city) {
+                city['score'] = 1.0
+                matches.push(city)
+            });
         }
-        if (partialCities[queryParams.q]) {
-            partialCities[queryParams.q].forEach(function(city) {matches.push(city)});
+        if (partialCities[cityQ]) {
+            partialCities[cityQ].forEach(function(city) {
+                // too rough an estimate?
+                delta = Math.abs(city['ascii'].length - cityQ.length);
+                city['score'] = Math.max(1.0 - delta * 0.1, 0);
+                matches.push(city)
+            });
         }
     }
     if (matches.length === 0) {
-      res.writeHead(404, {'Content-Type': 'text/plain'});
+        res.writeHead(404, {'Content-Type': 'text/plain'});
     } else {
-      res.writeHead(200, {'Content-Type': 'text/plain'});
-
+        if (queryParams.latitude && queryParams.longitude) {
+            matches.forEach(function(match) {
+                delta = estimateDistance(match.lat, match.long, queryParams.lattitude, queryParams.longitude)
+                match['score'] += Math.min(50 - delta, 0) / 100 ;
+                match['score'] /= 1.5;
+            })
+        }
+        res.writeHead(200, {'Content-Type': 'text/plain'});
     }
     res.end(JSON.stringify({
-      suggestions: matches
+        suggestions: matches
     }));
   } else {
     res.writeHead(404, {'Content-Type': 'text/plain'});
