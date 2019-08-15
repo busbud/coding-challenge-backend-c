@@ -22,6 +22,7 @@ var http = require('http');
 var url = require('url');
 var port = process.env.PORT || 2345;
 var fs = require('fs');
+var S = require('string');
 
 var cities = {};
 var partialCities = {};
@@ -40,31 +41,40 @@ function addOrAppend(dict, key, val) {
 
 csvLines.forEach(function(line){
     row = line.split('\t');
-    cityName = String(row[1])
-    addOrAppend(cities, cityName, row);
+    jsonObj = {};
+    headers.forEach(function(key, i) {jsonObj[key] = row[i]});
+    cityName = S(row[1]).latinise().toString();
+    addOrAppend(cities, cityName, jsonObj);
     for (var i=1; i<cityName.length; i++) {
-        addOrAppend(partialCities, cityName.substring(0,i), row);
+        addOrAppend(partialCities, cityName.substring(0,i), jsonObj);
     }
 })
 
 module.exports = http.createServer(function (req, res) {
-  res.writeHead(404, {'Content-Type': 'text/plain'});
 
   if (req.url.indexOf('/suggestions') === 0) {
     queryParams = url.parse(req.url, true).query;
+    var matches = [];
     if (queryParams.q) {
+        cityQ = S(queryParams.q).latinise().toString();
         if (cities[queryParams.q]) {
-            console.log(cities[queryParams.q]);
+            cities[queryParams.q].forEach(function(city) {matches.push(city)});
         }
         if (partialCities[queryParams.q]) {
-            console.log("-----------")
-            console.log(partialCities[queryParams.q])
+            partialCities[queryParams.q].forEach(function(city) {matches.push(city)});
         }
     }
+    if (matches.length === 0) {
+      res.writeHead(404, {'Content-Type': 'text/plain'});
+    } else {
+      res.writeHead(200, {'Content-Type': 'text/plain'});
+
+    }
     res.end(JSON.stringify({
-      suggestions: []
+      suggestions: matches
     }));
   } else {
+    res.writeHead(404, {'Content-Type': 'text/plain'});
     res.end();
   }
 }).listen(port, '127.0.0.1');
