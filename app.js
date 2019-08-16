@@ -67,6 +67,35 @@ csvLines.forEach(function(line){
     }
 })
 
+function exactMatches(query, results) {
+   if (cities[query]) {
+       cities[query].forEach(function(city) {
+           city['score'] = 1.0
+           results.push(city)
+       });
+   }
+}
+
+function partialMatches(query, results) {
+   if (partialCities[query]) {
+       partialCities[query].forEach(function(city) {
+           // too rough an estimate?
+           delta = Math.abs(city['ascii'].length - cityQ.length);
+           city['score'] = Math.max(1.0 - delta * 0.1, 0);
+           results.push(city)
+       });
+   }
+}
+
+function updateScoreForDistance(lat, long, matches) {
+    matches.forEach(function(match) {
+        delta = estimateDistance(match.lat, match.long, lat, long)
+        match['score'] += Math.min(50 - delta, 0) / 100 ;
+        // normalize back to 0-1
+        match['score'] /= 1.5;
+    })
+}
+
 module.exports = http.createServer(function (req, res) {
 
   if (req.url.indexOf('/suggestions') === 0) {
@@ -74,28 +103,11 @@ module.exports = http.createServer(function (req, res) {
     var matches = [];
     if (queryParams.q) {
         cityQ = S(queryParams.q).latinise().toString().toLowerCase();
-        if (cities[cityQ]) {
-            cities[cityQ].forEach(function(city) {
-                city['score'] = 1.0
-                matches.push(city)
-            });
-        }
-        if (partialCities[cityQ]) {
-            partialCities[cityQ].forEach(function(city) {
-                // too rough an estimate?
-                delta = Math.abs(city['ascii'].length - cityQ.length);
-                city['score'] = Math.max(1.0 - delta * 0.1, 0);
-                matches.push(city)
-            });
-        }
+        exactMatches(cityQ, matches);
+        partialMatches(cityQ, matches)
     }
     if (queryParams.latitude && queryParams.longitude) {
-        matches.forEach(function(match) {
-            delta = estimateDistance(match.lat, match.long, queryParams.lattitude, queryParams.longitude)
-            match['score'] += Math.min(50 - delta, 0) / 100 ;
-            // normalize back to 0-1
-            match['score'] /= 1.5;
-        })
+        updateScoreForDistance(queryParams.latitude, queryParams.longitude, matches);
     }
     res.writeHead(200, {'Content-Type': 'text/plain'});
     res.end(JSON.stringify({
