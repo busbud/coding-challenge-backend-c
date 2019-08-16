@@ -31,7 +31,7 @@ describe('GET /suggestions', function() {
 
     before(function (done) {
       request
-        .get('/suggestions?q=Montreal')
+        .get('/suggestions?q=montreal')
         .end(function (err, res) {
           response = res;
           response.json = JSON.parse(res.text);

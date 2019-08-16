@@ -1,5 +1,3 @@
-// TODO: case insensitive !!!
-//
 // TODO: score should include population?
 // TODO: why return a 404 if no matches found?
 //
@@ -64,7 +62,7 @@ csvLines.forEach(function(line){
     row = line.split('\t');
     jsonObj = {};
     headers.forEach(function(key, i) {jsonObj[key] = row[i]});
-    cityName = S(row[1]).latinise().toString();
+    cityName = S(row[1]).latinise().toString().toLowerCase();
     addOrAppend(cities, cityName, jsonObj);
     for (var i=1; i<cityName.length; i++) {
         addOrAppend(partialCities, cityName.substring(0,i), jsonObj);
@@ -77,7 +75,7 @@ module.exports = http.createServer(function (req, res) {
     queryParams = url.parse(req.url, true).query;
     var matches = [];
     if (queryParams.q) {
-        cityQ = S(queryParams.q).latinise().toString();
+        cityQ = S(queryParams.q).latinise().toString().toLowerCase();
         if (cities[cityQ]) {
             cities[cityQ].forEach(function(city) {
                 city['score'] = 1.0
@@ -100,6 +98,7 @@ module.exports = http.createServer(function (req, res) {
             matches.forEach(function(match) {
                 delta = estimateDistance(match.lat, match.long, queryParams.lattitude, queryParams.longitude)
                 match['score'] += Math.min(50 - delta, 0) / 100 ;
+                // normalize back to 0-1
                 match['score'] /= 1.5;
             })
         }
