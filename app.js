@@ -109,6 +109,7 @@ module.exports = http.createServer(function (req, res) {
     if (queryParams.latitude && queryParams.longitude) {
         updateScoreForDistance(queryParams.latitude, queryParams.longitude, matches);
     }
+    matches.sort(function(a, b) {return a.score > b.score ? -1 : 1})
     res.writeHead(200, {'Content-Type': 'text/plain'});
     res.end(JSON.stringify({
         suggestions: matches
