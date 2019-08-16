@@ -1,6 +1,4 @@
 // TODO: score should include population?
-// TODO: why return a 404 if no matches found?
-//
 // TODO: calculate distance from user lat, long
 // estimate is good enough
 // http://jonisalonen.com/2014/computing-distance-between-coordinates-can-be-simple-and-fast/
@@ -91,19 +89,15 @@ module.exports = http.createServer(function (req, res) {
             });
         }
     }
-    if (matches.length === 0) {
-        res.writeHead(404, {'Content-Type': 'text/plain'});
-    } else {
-        if (queryParams.latitude && queryParams.longitude) {
-            matches.forEach(function(match) {
-                delta = estimateDistance(match.lat, match.long, queryParams.lattitude, queryParams.longitude)
-                match['score'] += Math.min(50 - delta, 0) / 100 ;
-                // normalize back to 0-1
-                match['score'] /= 1.5;
-            })
-        }
-        res.writeHead(200, {'Content-Type': 'text/plain'});
+    if (queryParams.latitude && queryParams.longitude) {
+        matches.forEach(function(match) {
+            delta = estimateDistance(match.lat, match.long, queryParams.lattitude, queryParams.longitude)
+            match['score'] += Math.min(50 - delta, 0) / 100 ;
+            // normalize back to 0-1
+            match['score'] /= 1.5;
+        })
     }
+    res.writeHead(200, {'Content-Type': 'text/plain'});
     res.end(JSON.stringify({
         suggestions: matches
     }));

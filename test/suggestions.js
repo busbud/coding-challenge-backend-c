@@ -16,8 +16,8 @@ describe('GET /suggestions', function() {
         });
     });
 
-    it('returns a 404', function () {
-      expect(response.statusCode).to.equal(404);
+    it('returns a 200', function () {
+      expect(response.statusCode).to.equal(200);
     });
 
     it('returns an empty array of suggestions', function () {
