@@ -82,23 +82,38 @@ function updateScoreForDistance(lat, long, matches) {
 
 // init data structures
 
+var keepers = ["id", "name", "ascii", "lat", "long", "country", "admin1", "population", "tz"];
 var cities = {};
 var partialCities = {};
+var stateName = {};
 
-var csvData = fs.readFileSync('data/cities_canada-usa.tsv', 'utf-8');
-var csvLines = csvData.split('\n');
-var headers = csvLines.shift().split('\t');
+var stateData = fs.readFileSync('data/admin1CodesASCII.txt', 'utf-8');
+var statePerLine = stateData.split('\n');
+statePerLine.forEach(function(line) {
+    row = line.split('\t');
+    stateName[row[0]] = row[1];
+});
 
-csvLines.forEach(function(line){
+var cityData = fs.readFileSync('data/cities_canada-usa.tsv', 'utf-8');
+var cityPerLine = cityData.split('\n');
+var headers = cityPerLine.shift().split('\t');
+
+cityPerLine.forEach(function(line){
     row = line.split('\t');
     jsonObj = {};
-    headers.forEach(function(key, i) {jsonObj[key] = row[i]});
+    headers.forEach(function(key, i) {
+        if (keepers.indexOf(key) !== -1) {
+            jsonObj[key] = row[i];
+        }
+    });
+    compositeKey = jsonObj['country'] + "." + jsonObj['admin1']
+    jsonObj['fullname'] = jsonObj['name'] + "," + stateName[compositeKey] + "," + jsonObj['country'];
     cityName = S(row[1]).latinise().toString().toLowerCase();
     addOrAppend(cities, cityName, jsonObj);
     for (var i=1; i<cityName.length; i++) {
         addOrAppend(partialCities, cityName.substring(0,i), jsonObj);
     }
-})
+});
 
 module.exports = http.createServer(function (req, res) {
 
