@@ -25,12 +25,7 @@ var port = process.env.PORT || 2345;
 var fs = require('fs');
 var S = require('string');
 
-var cities = {};
-var partialCities = {};
-
-var csvData = fs.readFileSync('data/cities_canada-usa.tsv', 'utf-8');
-var csvLines = csvData.split('\n');
-var headers = csvLines.shift().split('\t');
+// helper functions
 
 function degToRadian(angle) {
     return Math.PI * angle / 180;
@@ -55,17 +50,6 @@ function addOrAppend(dict, key, val) {
         dict[key] = [val];
     }
 }
-
-csvLines.forEach(function(line){
-    row = line.split('\t');
-    jsonObj = {};
-    headers.forEach(function(key, i) {jsonObj[key] = row[i]});
-    cityName = S(row[1]).latinise().toString().toLowerCase();
-    addOrAppend(cities, cityName, jsonObj);
-    for (var i=1; i<cityName.length; i++) {
-        addOrAppend(partialCities, cityName.substring(0,i), jsonObj);
-    }
-})
 
 function exactMatches(query, results) {
    if (cities[query]) {
@@ -95,6 +79,26 @@ function updateScoreForDistance(lat, long, matches) {
         match['score'] /= 1.5;
     })
 }
+
+// init data structures
+
+var cities = {};
+var partialCities = {};
+
+var csvData = fs.readFileSync('data/cities_canada-usa.tsv', 'utf-8');
+var csvLines = csvData.split('\n');
+var headers = csvLines.shift().split('\t');
+
+csvLines.forEach(function(line){
+    row = line.split('\t');
+    jsonObj = {};
+    headers.forEach(function(key, i) {jsonObj[key] = row[i]});
+    cityName = S(row[1]).latinise().toString().toLowerCase();
+    addOrAppend(cities, cityName, jsonObj);
+    for (var i=1; i<cityName.length; i++) {
+        addOrAppend(partialCities, cityName.substring(0,i), jsonObj);
+    }
+})
 
 module.exports = http.createServer(function (req, res) {
 
