@@ -1,11 +1,7 @@
 // TODO: score should include population?
-// TODO: calculate distance from user lat, long
-// estimate is good enough
-// http://jonisalonen.com/2014/computing-distance-between-coordinates-can-be-simple-and-fast/
-// https://stackoverflow.com/a/15737369
 // TODO: user metro area lookup? bounding box? voronoi map?
-// for each city, find nearest city. bounding box vertex goes midway (prorate
-// by population?) on line connecting two cities. if user lat,long are in city
+// for each city, find nearest city. bounding box vertex goes midway
+// on line connecting two cities. if user lat,long are in city
 // bounding box, city gets a score bump (how much?)
 // TODO: partialCities has many keys -> same val; custom dict to reduce size
 // https://codereview.stackexchange.com/questions/85842/a-dictionary-that-allows-multiple-keys-for-one-value
@@ -13,10 +9,6 @@
 // this is hard: https://medium.com/snipette/types-of-typos-aeee34ab0424
 // most queries from phone? no keyboard clustering assumptions
 // supported languages? each language has its own list of common typos
-// TODO: scoring function?!? score = max(1, f(nameScore, distanceScore))
-// TODO: nameScore = 1 for perfect match, 1 - n * delta
-//                      where n distance from perfect match
-// TODO: distance score = exp(-1 * distance from city center)
 // TODO:
 //
 var http = require('http');
@@ -82,9 +74,15 @@ function updateScoreForDistance(lat, long, matches) {
 
 // init data structures
 
+// the headers from the data we want to include in response
 var keepers = ["id", "name", "ascii", "lat", "long", "country", "admin1", "population", "tz"];
+// cityname -> [jsonData...]
+// eg: london -> [dataForLondonOH, dataforLondonKY, ...]
 var cities = {};
+// cityname.substring -> [jsonData...]
+// eg: londo -> [dataforLondonOH, dataforLondonderryON, ...]
 var partialCities = {};
+// two letter country code + "." + two letter admin1 code -> state/province name
 var stateName = {};
 
 var stateData = fs.readFileSync('data/admin1CodesASCII.txt', 'utf-8');
@@ -115,6 +113,8 @@ cityPerLine.forEach(function(line){
     }
 });
 
+//req handling
+//
 module.exports = http.createServer(function (req, res) {
 
   if (req.url.indexOf('/suggestions') === 0) {
