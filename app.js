@@ -74,7 +74,7 @@ function partialMatches(query, results) {
 function updateScoreForDistance(lat, long, matches) {
     matches.forEach(function(match) {
         delta = estimateDistance(match.lat, match.long, lat, long)
-        match['score'] += Math.min(50 - delta, 0) / 100 ;
+        match['score'] += Math.max(50 - delta, 0) / 100 ;
         // normalize back to 0-1
         match['score'] /= 1.5;
     })
