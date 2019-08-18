@@ -3,8 +3,6 @@
 // for each city, find nearest city. bounding box vertex goes midway
 // on line connecting two cities. if user lat,long are in city
 // bounding box, city gets a score bump (how much?)
-// TODO: partialCities has many keys -> same val; custom dict to reduce size
-// https://codereview.stackexchange.com/questions/85842/a-dictionary-that-allows-multiple-keys-for-one-value
 // TODO: handle typos in city query
 // this is hard: https://medium.com/snipette/types-of-typos-aeee34ab0424
 // most queries from phone? no keyboard clustering assumptions
@@ -16,6 +14,43 @@ var url = require('url');
 var port = process.env.PORT || 2345;
 var fs = require('fs');
 var S = require('string');
+
+// multi key dictionary
+function MKDict(hashFunc) {
+    this.objStore = {};
+    //key -> list of ids (use set instead)
+    this.keyStore = {}
+    this.hashFunc = hashFunc;
+}
+MKDict.prototype = {
+    constructor: MKDict,
+    addOrAppend: function(key, obj) {
+        id = this.hashFunc(obj);
+        if (!this.objStore[id]) {
+            this.objStore[id] = obj;
+        }
+        if (this.keyStore[key]) {
+            this.keyStore[key].push(id);
+        } else {
+            this.keyStore[key] = [id];
+        }
+    },
+    contains: function(key){
+        if (this.keyStore[key]) {
+            return true;
+        }
+        return false;
+    },
+    get: function(key) {
+        results = [];
+        var ids = this.keyStore[key];
+        for (var i=0; i<ids.length; i++) {
+            id = ids[i];
+            results.push(this.objStore[id]);
+        }
+        return results;
+    }
+}
 
 // helper functions
 
@@ -53,8 +88,8 @@ function exactMatches(query, results) {
 }
 
 function partialMatches(query, results) {
-   if (partialCities[query]) {
-       partialCities[query].forEach(function(city) {
+   if (partialCities.contains(query)) {
+       partialCities.get(query).forEach(function(city) {
            // too rough an estimate?
            delta = Math.abs(city['ascii'].length - cityQ.length);
            city['score'] = Math.max(1.0 - delta * 0.1, 0);
@@ -81,7 +116,7 @@ var keepers = ["id", "name", "ascii", "lat", "long", "country", "admin1", "popul
 var cities = {};
 // cityname.substring -> [jsonData...]
 // eg: londo -> [dataforLondonOH, dataforLondonderryON, ...]
-var partialCities = {};
+var partialCities = new MKDict(function(obj) {return obj.id});
 // two letter country code + "." + two letter admin1 code -> state/province name
 var stateName = {};
 
@@ -97,6 +132,7 @@ var cityPerLine = cityData.split('\n');
 var headers = cityPerLine.shift().split('\t');
 
 cityPerLine.forEach(function(line){
+    if (line === '') {return;}
     row = line.split('\t');
     jsonObj = {};
     headers.forEach(function(key, i) {
@@ -109,7 +145,7 @@ cityPerLine.forEach(function(line){
     cityName = S(row[1]).latinise().toString().toLowerCase();
     addOrAppend(cities, cityName, jsonObj);
     for (var i=1; i<cityName.length; i++) {
-        addOrAppend(partialCities, cityName.substring(0,i), jsonObj);
+        partialCities.addOrAppend(cityName.substring(0,i), jsonObj);
     }
 });
 
