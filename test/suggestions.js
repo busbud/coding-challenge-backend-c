@@ -1,13 +1,22 @@
 // Following is for busbud-lint who want me to remove space between async ()
 /* eslint-disable space-before-function-paren */
 
+// Time freezing, used in rate limit test but need to be installed before requires
+const dateNow = Date.now;
+let frozenTime = Date.now();
+let fakeTimers = false;
+Date.now = () => (fakeTimers ? frozenTime : dateNow());
+
 const expect = require('chai').expect;
 const app = require('../app');
 const request = require('supertest')(app);
 const session = require('supertest-session');
 
 describe('GET /suggestions', () => {
-  after(async () => new Promise(resolve => app.close(resolve)));
+  after(async () => {
+    Date.now = dateNow;
+    return new Promise(resolve => app.close(resolve));
+  });
 
   describe('with a non-existent city', () => {
     let response;
@@ -183,9 +192,8 @@ describe('GET /suggestions', () => {
 
     it('should hit rate limiting after 5 requests in 1 sec', async () => {
       // CI is too slow to make actual requests, so let's freeze the time
-      const dateNow = Date.now;
-      const frozenTime = Date.now();
-      Date.now = () => frozenTime;
+      frozenTime = Date.now();
+      fakeTimers = true;
       await request
         .get('/suggestions?q=mont')
         .expect('X-RateLimit-Remaining', '4')
@@ -206,14 +214,13 @@ describe('GET /suggestions', () => {
         .get('/suggestions?q=montreal')
         .expect('X-RateLimit-Remaining', '0')
         .expect(200);
-
       await request
         .get('/suggestions?q=montreals')
         .expect('Retry-After', '1')
         .expect(429); // too many requests
 
       // restore
-      Date.now = dateNow;
+      fakeTimers = false;
     });
   });
 });
