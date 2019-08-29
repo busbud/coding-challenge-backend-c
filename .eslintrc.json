@@ -7,13 +7,13 @@
   "extends": ["busbud", "plugin:prettier/recommended"],
   "globals": {
     "Atomics": "readonly",
-    "SharedArrayBuffer": "readonly"
+    "SharedArrayBuffer": "readonly",
+    "BigInt": "readonly"
   },
   "parserOptions": {
-    "ecmaVersion": 2019,
+    "ecmaVersion": 2020,
     "sourceType": "script"
   },
-  "rules": {},
   "overrides": [
     {
       "files": ["./test/*.js"],
