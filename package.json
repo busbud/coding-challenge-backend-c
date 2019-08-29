@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "test": "nyc mocha --timeout=3000 && npx codecov",
+    "test": "nyc --reporter=lcov --reporter=text --reporter=text-summary mocha --timeout=3000 && npx codecov --disable=gcov -f coverage/lcov.info",
     "lint": "npx busbud-lint"
   },
   "author": "",
