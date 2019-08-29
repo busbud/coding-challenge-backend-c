@@ -10,7 +10,7 @@ const { LONGEST_CITY_NAME } = require('./lib/data-loader');
 
 // we will allow up to 4 request per second
 const rateLimiter = new RateLimiterMemory({
-  points: 4,
+  points: 5,
   duration: 1,
   blockDuration: 2
 });
@@ -78,7 +78,7 @@ app.use(session()).use(
 
     // all good, let's do data
     ctx.body = {
-      suggestions: buildSuggestions(ctx.query.q, latitude, longitude)
+      suggestions: buildSuggestions(ctx, latitude, longitude)
     };
 
     await cacheResults(ctx);

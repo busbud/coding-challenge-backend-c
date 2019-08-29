@@ -34,6 +34,7 @@
     "mocha": "^6.2.0",
     "nyc": "14.1.1",
     "prettier": "1.18.2",
-    "supertest": "^4.0.2"
+    "supertest": "^4.0.2",
+    "supertest-session": "4.0.0"
   }
 }

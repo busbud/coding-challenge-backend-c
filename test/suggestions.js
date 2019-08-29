@@ -4,6 +4,7 @@
 const expect = require('chai').expect;
 const app = require('../app');
 const request = require('supertest')(app);
+const session = require('supertest-session');
 
 describe('GET /suggestions', () => {
   after(async () => new Promise(resolve => app.close(resolve)));
@@ -128,6 +129,40 @@ describe('GET /suggestions', () => {
       // San Francisco coordinates
       const { body } = await request.get('/suggestions').query(`q=MONtREaL`);
       expect(body.suggestions[0].name).to.contains('Montréal');
+    });
+  });
+
+  describe('uses session information', () => {
+    let testSession;
+    beforeEach(() => {
+      testSession = session(app);
+    });
+
+    // prevent rate limiting
+    afterEach(done => setTimeout(done, 500));
+
+    it('should return 304 and the same result for the same query in session', async () => {
+      await testSession.get('/suggestions').query(`q=montr`);
+      await testSession
+        .get('/suggestions')
+        .query(`q=montr`)
+        .expect(304);
+    });
+
+    it('should use session results for incremental typing and score should grow', async () => {
+      await testSession
+        .get('/suggestions?q=mont&latitude=40.6976633&longitude=-74.1201063')
+        .expect(200);
+      const req2 = await testSession
+        .get('/suggestions?q=montr&latitude=40.6976633&longitude=-74.1201063')
+        .expect(200);
+      const req3 = await testSession
+        .get('/suggestions?q=montre&latitude=40.6976633&longitude=-74.1201063')
+        .expect(200);
+      // ensure score is incrementing at evert type
+      expect(req2.body.suggestions[0].score).to.be.below(
+        req3.body.suggestions[0].score
+      );
     });
   });
 });
