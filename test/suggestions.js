@@ -182,36 +182,38 @@ describe('GET /suggestions', () => {
     before(done => setTimeout(done, 1100));
 
     it('should hit rate limiting after 5 requests in 1 sec', async () => {
-      // It'd love to do sequential requests and check for X-RateLimit-Remaining
-      // but Heroku CI seems to be too slow to make 5 requests in 1 sec
-      // So, trying another approach
-      // sending 6 different requests, so, 1 must hit rate limiting and others must return X-RateLimit-Remaining from 0 to 5
-      const results = await Promise.all(
-        [
-          '/suggestions?q=mont&latitude=40.6976633&longitude=-74.1201063',
-          '/suggestions?q=montr&latitude=40.6976633&longitude=-74.1201063',
-          '/suggestions?q=montre&latitude=40.6976633&longitude=-74.1201063',
-          '/suggestions?q=montrea&latitude=40.6976633&longitude=-74.1201063',
-          '/suggestions?q=montreal&latitude=40.6976633&longitude=-74.1201063',
-          '/suggestions?q=montreals&latitude=40.6976633&longitude=-74.1201063'
-        ].map(u => request.get(u))
-      );
+      // CI is too slow to make actual requests, so let's freeze the time
+      const dateNow = Date.now;
+      const frozenTime = Date.now();
+      Date.now = () => frozenTime;
+      await request
+        .get('/suggestions?q=mont')
+        .expect('X-RateLimit-Remaining', '4')
+        .expect(200);
+      await request
+        .get('/suggestions?q=montr')
+        .expect('X-RateLimit-Remaining', '3')
+        .expect(200);
+      await request
+        .get('/suggestions?q=montre')
+        .expect('X-RateLimit-Remaining', '2')
+        .expect(200);
+      await request
+        .get('/suggestions?q=montrea')
+        .expect('X-RateLimit-Remaining', '1')
+        .expect(200);
+      await request
+        .get('/suggestions?q=montreal')
+        .expect('X-RateLimit-Remaining', '0')
+        .expect(200);
 
-      // set of 0..4
-      const rateCounter = new Set(Array.from({ length: 5 }, (k, i) => '' + i));
-      for (const { headers, statusCode } of results) {
-        // passed request
-        if (statusCode === 200) {
-          expect(rateCounter.has(headers['x-ratelimit-remaining'])).to.be.true;
-          rateCounter.delete(headers['x-ratelimit-remaining']);
-        } else {
-          // rate limited request
-          expect(statusCode).to.equal(429); // too many requests
-          expect(headers['retry-after']).to.equal('1');
-        }
-      }
-      // make sure all rate limiters were exhausted
-      expect(rateCounter.size).to.equal(0);
+      await request
+        .get('/suggestions?q=montreals')
+        .expect('Retry-After', '1')
+        .expect(429); // too many requests
+
+      // restore
+      Date.now = dateNow;
     });
   });
 });
