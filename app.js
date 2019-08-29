@@ -9,11 +9,12 @@ const buildSuggestions = require('./lib/suggestions-builder');
 const { LONGEST_CITY_NAME } = require('./lib/data-loader');
 
 // we will allow up to 4 request per second
-const rateLimiter = new RateLimiterMemory({
+const RATE_LIMITER_OPTIONS = {
   points: 5,
   duration: 1,
-  blockDuration: 2
-});
+  blockDuration: 1
+};
+const rateLimiter = new RateLimiterMemory(RATE_LIMITER_OPTIONS);
 
 const { PORT = '1234' } = process.env;
 
@@ -65,12 +66,14 @@ app.use(session()).use(
     } catch (rateLimiterRes) {
       ctx.set('X-RateLimit-Remaining', rateLimiterRes.remainingPoints);
       ctx.set('Retry-After', rateLimiterRes.msBeforeNext / 1000);
-      ctx.set('X-RateLimit-Limit', 3);
+      ctx.set('X-RateLimit-Limit', RATE_LIMITER_OPTIONS.points);
       ctx.set(
         'X-RateLimit-Reset',
         new Date(Date.now() + rateLimiterRes.msBeforeNext)
       );
-      ctx.throw(429, 'Too many requests');
+      ctx.status = 429; // too many requests
+      ctx.body = 'Too many requests';
+      return;
     }
 
     // Request cache test

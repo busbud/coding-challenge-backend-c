@@ -176,4 +176,40 @@ describe('GET /suggestions', () => {
       );
     });
   });
+
+  describe('requests rate limiting', () => {
+    // exhaust rate limiting first
+    before(done => setTimeout(done, 1100));
+
+    it('should hit retry limiting', async () => {
+      await request
+        .get('/suggestions?q=mont&latitude=40.6976633&longitude=-74.1201063')
+        .expect('X-RateLimit-Remaining', '4')
+        .expect(200);
+      await request
+        .get('/suggestions?q=montr&latitude=40.6976633&longitude=-74.1201063')
+        .expect('X-RateLimit-Remaining', '3')
+        .expect(200);
+      await request
+        .get('/suggestions?q=montre&latitude=40.6976633&longitude=-74.1201063')
+        .expect('X-RateLimit-Remaining', '2')
+        .expect(200);
+      await request
+        .get('/suggestions?q=montrea&latitude=40.6976633&longitude=-74.1201063')
+        .expect('X-RateLimit-Remaining', '1')
+        .expect(200);
+      await request
+        .get(
+          '/suggestions?q=montreal&latitude=40.6976633&longitude=-74.1201063'
+        )
+        .expect('X-RateLimit-Remaining', '0')
+        .expect(200);
+      await request
+        .get(
+          '/suggestions?q=montreals&latitude=40.6976633&longitude=-74.1201063'
+        )
+        .expect('Retry-After', '1')
+        .expect(429); // too many requests
+    });
+  });
 });
