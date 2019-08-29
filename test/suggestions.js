@@ -150,15 +150,26 @@ describe('GET /suggestions', () => {
     });
 
     it('should use session results for incremental typing and score should grow', async () => {
+      const t1 = process.hrtime.bigint();
       await testSession
         .get('/suggestions?q=mont&latitude=40.6976633&longitude=-74.1201063')
         .expect(200);
+      const d1 = Number(process.hrtime.bigint() - t1);
+
+      const t2 = process.hrtime.bigint();
       const req2 = await testSession
         .get('/suggestions?q=montr&latitude=40.6976633&longitude=-74.1201063')
         .expect(200);
+      const d2 = Number(process.hrtime.bigint() - t2);
+      expect(d2).to.be.below(d1);
+
+      const t3 = process.hrtime.bigint();
       const req3 = await testSession
         .get('/suggestions?q=montre&latitude=40.6976633&longitude=-74.1201063')
         .expect(200);
+      const d3 = Number(process.hrtime.bigint() - t3);
+      expect(d3).to.be.below(d1);
+
       // ensure score is incrementing at evert type
       expect(req2.body.suggestions[0].score).to.be.below(
         req3.body.suggestions[0].score
