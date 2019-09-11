@@ -1,16 +1,90 @@
-var http = require('http');
-var port = process.env.PORT || 2345;
+const http = require('http');
+const url = require('url');
+const port = process.env.PORT || 2345;
+const getCityDataAndScoreFromGeoDataModule = require('./getCityDataAndScoreFromGeoData.js');
 
-module.exports = http.createServer(function (req, res) {
-  res.writeHead(404, {'Content-Type': 'text/plain'});
-
-  if (req.url.indexOf('/suggestions') === 0) {
-    res.end(JSON.stringify({
-      suggestions: []
-    }));
-  } else {
-    res.end();
+/**
+ * Validates client request parameters.
+ * @param {string} Request path of the client request.
+ * @param {Object} URLSearch object to validate the URL.
+ * @return {string} Returns the error message if client request doesn't validate
+ * Else returns an empty string indicting success.
+ */
+function validateClientRequestAndGetErrors(requestPath, urlSearch) {
+  var lat;
+  var longitude;
+  if (requestPath != '/suggestions') {
+    return 'Request path: ' + requestPath + ' invalid.';
   }
-}).listen(port, '127.0.0.1');
 
-console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+  if (!urlSearch.has('q')) {
+    return 'Request missing parameter q.';
+  }
+
+  if (!urlSearch.get('q') && urlSearch.get('q').length == 0) {
+    return 'Request contains invalid value for q.';
+  }
+
+  if (!urlSearch.has('latitude') && urlSearch.has('longitude')) {
+    return 'Request contains parameter longitude but is missing latitude.';
+  }
+
+  if (!urlSearch.has('longitude') && urlSearch.has('latitude')) {
+    return 'Request contains parameter latitude but is missing longitude.';
+  }
+
+  if (urlSearch.has('latitude') && urlSearch.has('longitude')) {
+    lat = parseFloat(urlSearch.get('latitude'));
+    longitude = parseFloat(urlSearch.get('longitude'));
+    if (Number.isNaN(lat) || Number.isNaN(longitude)) {
+      return 'Request contains invalid values for latitude/longitude.';
+    }
+  }
+
+  return '';
+}
+
+/**
+ * Request handler for client connections.
+ * @param {object} Client Request.
+ * @param {object} Response to be returned to the client.
+ */
+const requestHandler = (request, response) => {
+  var req = url.parse(request.url, true);
+
+  const urlSearch = new URLSearchParams(req.search);
+  var errorsDuringValidation = validateClientRequestAndGetErrors(req.pathname, urlSearch);
+  var region;
+  var latitude;
+  var longitude;
+  if (errorsDuringValidation.length == 0) {
+    region = urlSearch.get('q');
+
+    // During validation we check either both latitude and longitude are present or neither.
+    longitude = null;
+    latitude = null;
+    if (urlSearch.has('latitude') && urlSearch.has('longitude')) {
+      latitude = parseFloat(urlSearch.get('latitude'));
+      longitude = parseFloat(urlSearch.get('longitude'));
+    }
+
+    getCityDataAndScoreFromGeoDataModule.getCityDataWithScore(region, latitude, longitude,
+      function callbackHandlerAfterRetrievingGeoNameData(err, responseJson, responseStatusCode) {
+        if (!err) {
+          response.statusCode = responseStatusCode;
+          response.write(responseJson);
+          response.end();
+        } else {
+          response.statusCode = responseStatusCode;
+          response.end(err.message);
+        }
+      });
+  } else {
+    response.statusCode = 400;
+    // console.log('Bad request: ' + req.toString() + ' error: ' + errorsDuringValidation);
+    response.write(errorsDuringValidation);
+    response.end();
+  }
+};
+
+module.exports = http.createServer(requestHandler).listen(port, '127.0.0.1');

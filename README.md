@@ -127,3 +127,20 @@ which should produce output similar to
 ```
 Server running at http://127.0.0.1:3456/suggestions
 ```
+
+## Implementation
+Using Geoname's search API to retrieve results for a given region name or region name prefix
+[Geoname search API](http://www.geonames.org/export/geonames-search.html)
+The Geoname API allows to specify the prefix via names_startWith query parameter.
+The suggestions API implemented will use 'name' field of Geoname API response in its response.
+
+In absence of user specified latitude and longitude coordinates, scores are assigned depending on the population,
+otherwise the Euclidean distance of the coordinates from the region is used to determine the score.
+
+Geoname API is known to take too long, even while making a GET request from the browser, causes tests to occasionally timeout.
+
+Also I have made a small change to a test case which essentially checks if the name matches the REGEX user provided prefix.
+The test is using a regex.test to check if that is the case, however the API returns a string not a regex.
+I've changed it to string.match instead, which pretty much checks for the same thing.
+
+I've adhered to AirBnB Javascript style guide wherever it made sense to me.
