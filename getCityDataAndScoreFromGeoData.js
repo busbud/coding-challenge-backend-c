@@ -1,4 +1,5 @@
 const request = require('request');
+const removeAccents = require('remove-accents');
 
 /**
  * Validates data for a given region returned by Geodata service.
@@ -10,21 +11,22 @@ const request = require('request');
  */
 function validateAndGetCityDataFromJsonFields(jsonFields, checkPopulation, regionPrefix) {
   var obj;
+  const regionPrefixWithoutAccent = removeAccents(regionPrefix);
   // Validating all required fields are present in the json before returning data object
   if (
-    ('name' in jsonFields) && (jsonFields.name) && (jsonFields.name.length > 0)
-    && jsonFields.name.includes(regionPrefix)
-    && ('adminCodes1' in jsonFields) && ('ISO3166_2' in jsonFields.adminCodes1)
-    && (jsonFields.adminCodes1.ISO3166_2) && (jsonFields.adminCodes1.ISO3166_2.length > 0)
-    && ('countryCode' in jsonFields) && (jsonFields.countryCode) && (jsonFields.countryCode.length > 0)
-    && ('lat' in jsonFields) && !Number.isNaN(jsonFields.lat)
-    && ('lng' in jsonFields) && !Number.isNaN(jsonFields.lng)
-    && ((!checkPopulation) || (checkPopulation
-      && ('population' in jsonFields) && !Number.isNaN(jsonFields.population)
-      && jsonFields.population > 0))
+    ('toponymName' in jsonFields) && (jsonFields.toponymName) && (jsonFields.toponymName.length > 0) &&
+    removeAccents(jsonFields.toponymName).includes(regionPrefixWithoutAccent) &&
+    ('adminCodes1' in jsonFields) && ('ISO3166_2' in jsonFields.adminCodes1) &&
+    (jsonFields.adminCodes1.ISO3166_2) && (jsonFields.adminCodes1.ISO3166_2.length > 0) &&
+    ('countryCode' in jsonFields) && (jsonFields.countryCode) && (jsonFields.countryCode.length > 0) &&
+    ('lat' in jsonFields) && !Number.isNaN(jsonFields.lat) &&
+    ('lng' in jsonFields) && !Number.isNaN(jsonFields.lng) &&
+    ((!checkPopulation) || (checkPopulation &&
+      ('population' in jsonFields) && !Number.isNaN(jsonFields.population) &&
+      jsonFields.population > 0))
   ) {
     obj = {};
-    obj.name = jsonFields.name + ', ' + jsonFields.adminCodes1.ISO3166_2 + ', ' + jsonFields.countryCode;
+    obj.name = removeAccents(jsonFields.toponymName) + ', ' + jsonFields.adminCodes1.ISO3166_2 + ', ' + jsonFields.countryCode;
     obj.latitude = jsonFields.lat;
     obj.longitude = jsonFields.lng;
 
@@ -60,8 +62,7 @@ function getScoresForCityData(jsonObject, latitude, longitude, regionPrefix) {
 
   for (i = 0; i < jsonObject.geonames.length; i += 1) {
     // Validate and return object if all the concerned fields in the json seem valid
-    obj = validateAndGetCityDataFromJsonFields(jsonObject.geonames[i],
-      !areUserCoordinatesSpecified, regionPrefix);
+    obj = validateAndGetCityDataFromJsonFields(jsonObject.geonames[i], !areUserCoordinatesSpecified, regionPrefix);
 
     if (obj != null) {
       if (areUserCoordinatesSpecified) {
@@ -92,12 +93,12 @@ function getScoresForCityData(jsonObject, latitude, longitude, regionPrefix) {
       Normalize score between 0 & 1
       Substract the score from 1 to give lower Euclidean distances a higher score
       */
-      returnJsonObj.suggestions[i].score = (1.0
-        - (returnJsonObj.suggestions[i].score - minScore) / (maxScore - minScore)).toFixed(2);
+      returnJsonObj.suggestions[i].score = (1.0 -
+        (returnJsonObj.suggestions[i].score - minScore) / (maxScore - minScore)).toFixed(2);
     } else {
       // Normalize population score between 0 and 1
-      returnJsonObj.suggestions[i].score = ((returnJsonObj.suggestions[i].score - minScore)
-        / (maxScore - minScore)).toFixed(2);
+      returnJsonObj.suggestions[i].score = ((returnJsonObj.suggestions[i].score - minScore) /
+        (maxScore - minScore)).toFixed(2);
     }
   }
 
@@ -124,7 +125,7 @@ function getCityDataFromGeoNames(regionPrefix, callback) {
   reqUri += '&country=US';
   reqUri += '&country=CA';
   reqUri += '&cities=cities5000';
-  reqUri += '&fields=name,countryCode,adminCodes1,lng,lat,population';
+  reqUri += '&fields=toponymName,countryCode,adminCodes1,lng,lat,population';
   reqUri += '&name_startsWith=' + regionPrefix;
   reqUri += '&maxRows=1000';
 
@@ -146,7 +147,7 @@ function getCityDataFromGeoNames(regionPrefix, callback) {
     if (!error) {
       return callback(
         new Error('Unexpected error while fetching data, response status code ' + response.statusCode), null
-        );
+      );
     }
     return callback(error, null);
   });
