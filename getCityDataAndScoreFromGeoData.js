@@ -14,16 +14,16 @@ function validateAndGetCityDataFromJsonFields(jsonFields, checkPopulation, regio
   const regionPrefixWithoutAccent = removeAccents(regionPrefix);
   // Validating all required fields are present in the json before returning data object
   if (
-    ('toponymName' in jsonFields) && (jsonFields.toponymName) && (jsonFields.toponymName.length > 0) &&
-    removeAccents(jsonFields.toponymName).includes(regionPrefixWithoutAccent) &&
-    ('adminCodes1' in jsonFields) && ('ISO3166_2' in jsonFields.adminCodes1) &&
-    (jsonFields.adminCodes1.ISO3166_2) && (jsonFields.adminCodes1.ISO3166_2.length > 0) &&
-    ('countryCode' in jsonFields) && (jsonFields.countryCode) && (jsonFields.countryCode.length > 0) &&
-    ('lat' in jsonFields) && !Number.isNaN(jsonFields.lat) &&
-    ('lng' in jsonFields) && !Number.isNaN(jsonFields.lng) &&
-    ((!checkPopulation) || (checkPopulation &&
-      ('population' in jsonFields) && !Number.isNaN(jsonFields.population) &&
-      jsonFields.population > 0))
+    ('toponymName' in jsonFields) && (jsonFields.toponymName) && (jsonFields.toponymName.length > 0)
+    && removeAccents(jsonFields.toponymName).includes(regionPrefixWithoutAccent)
+    && ('adminCodes1' in jsonFields) && ('ISO3166_2' in jsonFields.adminCodes1)
+    && (jsonFields.adminCodes1.ISO3166_2) && (jsonFields.adminCodes1.ISO3166_2.length > 0)
+    && ('countryCode' in jsonFields) && (jsonFields.countryCode) && (jsonFields.countryCode.length > 0)
+    && ('lat' in jsonFields) && !Number.isNaN(jsonFields.lat)
+    && ('lng' in jsonFields) && !Number.isNaN(jsonFields.lng)
+    && ((!checkPopulation) || (checkPopulation
+      && ('population' in jsonFields) && !Number.isNaN(jsonFields.population)
+      && jsonFields.population > 0))
   ) {
     obj = {};
     obj.name = removeAccents(jsonFields.toponymName) + ', ' + jsonFields.adminCodes1.ISO3166_2 + ', ' + jsonFields.countryCode;
@@ -62,7 +62,8 @@ function getScoresForCityData(jsonObject, latitude, longitude, regionPrefix) {
 
   for (i = 0; i < jsonObject.geonames.length; i += 1) {
     // Validate and return object if all the concerned fields in the json seem valid
-    obj = validateAndGetCityDataFromJsonFields(jsonObject.geonames[i], !areUserCoordinatesSpecified, regionPrefix);
+    obj = validateAndGetCityDataFromJsonFields(jsonObject.geonames[i],
+      !areUserCoordinatesSpecified, regionPrefix);
 
     if (obj != null) {
       if (areUserCoordinatesSpecified) {
@@ -93,12 +94,12 @@ function getScoresForCityData(jsonObject, latitude, longitude, regionPrefix) {
       Normalize score between 0 & 1
       Substract the score from 1 to give lower Euclidean distances a higher score
       */
-      returnJsonObj.suggestions[i].score = (1.0 -
-        (returnJsonObj.suggestions[i].score - minScore) / (maxScore - minScore)).toFixed(2);
+      returnJsonObj.suggestions[i].score = (1.0
+        - (returnJsonObj.suggestions[i].score - minScore) / (maxScore - minScore)).toFixed(2);
     } else {
       // Normalize population score between 0 and 1
-      returnJsonObj.suggestions[i].score = ((returnJsonObj.suggestions[i].score - minScore) /
-        (maxScore - minScore)).toFixed(2);
+      returnJsonObj.suggestions[i].score = ((returnJsonObj.suggestions[i].score - minScore)
+        / (maxScore - minScore)).toFixed(2);
     }
   }
 
@@ -120,7 +121,15 @@ function getCityDataFromGeoNames(regionPrefix, callback) {
   var reqUri = 'http://api.geonames.org/searchJSON?';
   var resultJsonObj;
   const userName = 'soyboyxvx702';
-  // var options;
+  /*
+  const options = {
+    url: reqUri,
+    headers: {
+      'X-Busbud-Token': 'PARTNER_AHm3M6clSAOoyJg4KyCg7w',
+    },
+  };
+  */
+
   reqUri += 'username=' + userName;
   reqUri += '&country=US';
   reqUri += '&country=CA';
@@ -129,15 +138,7 @@ function getCityDataFromGeoNames(regionPrefix, callback) {
   reqUri += '&name_startsWith=' + regionPrefix;
   reqUri += '&maxRows=1000';
 
-  /* options = {
-    url: reqUri,
-    headers: {
-      'X-Busbud-Token': 'PARTNER_AHm3M6clSAOoyJg4KyCg7w',
-    },
-  }; */
-
   // console.log('Making the following HTTP GET request to geoname: ' + reqUri);
-
   request(reqUri, function callbackHandlerGeoNameResponse(error, response, body) {
     if (!error && response.statusCode == 200) {
       // console.log('Geoname response for region: ' + regionPrefix + ' is: ' + body);
@@ -146,7 +147,7 @@ function getCityDataFromGeoNames(regionPrefix, callback) {
     }
     if (!error) {
       return callback(
-        new Error('Unexpected error while fetching data, response status code ' + response.statusCode), null
+        new Error('Unexpected error while fetching data, response status code ' + response.statusCode), null,
       );
     }
     return callback(error, null);

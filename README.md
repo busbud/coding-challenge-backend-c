@@ -132,7 +132,8 @@ Server running at http://127.0.0.1:3456/suggestions
 Using Geoname's search API to retrieve results for a given region name or region name prefix
 [Geoname search API](http://www.geonames.org/export/geonames-search.html).
 The Geoname API allows to specify the prefix via names_startWith query parameter.
-The suggestions API implemented will use 'name' field of Geoname API response in its result.
+The suggestions API implemented will use 'toponymName' field of Geoname API response in its result.
+The city will only be included only if toponymName contains region prefix specified by the user.
 
 In absence of user specified latitude and longitude coordinates, scores are determined based on the population,
 otherwise the Euclidean distance of the coordinates from the region is used to determine the score.
