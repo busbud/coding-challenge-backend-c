@@ -11,17 +11,15 @@ const getCityDataAndScoreFromGeoDataModule = require('./getCityDataAndScoreFromG
  * Else returns an empty string indicting success.
  */
 function validateClientRequestAndGetErrors(requestPath, urlSearch) {
-  var lat;
-  var longitude;
-  if (requestPath != '/suggestions') {
-    return 'Request path: ' + requestPath + ' invalid.';
+  if (requestPath !== '/suggestions') {
+    return `Request path: ${requestPath} invalid.`;
   }
 
   if (!urlSearch.has('q')) {
     return 'Request missing parameter q.';
   }
 
-  if (!urlSearch.get('q') && urlSearch.get('q').length == 0) {
+  if (!urlSearch.get('q') && urlSearch.get('q').length === 0) {
     return 'Request contains invalid value for q.';
   }
 
@@ -34,8 +32,8 @@ function validateClientRequestAndGetErrors(requestPath, urlSearch) {
   }
 
   if (urlSearch.has('latitude') && urlSearch.has('longitude')) {
-    lat = parseFloat(urlSearch.get('latitude'));
-    longitude = parseFloat(urlSearch.get('longitude'));
+    const lat = parseFloat(urlSearch.get('latitude'));
+    const longitude = parseFloat(urlSearch.get('longitude'));
     if (Number.isNaN(lat) || Number.isNaN(longitude)) {
       return 'Request contains invalid values for latitude/longitude.';
     }
@@ -50,26 +48,23 @@ function validateClientRequestAndGetErrors(requestPath, urlSearch) {
  * @param {object} Response to be returned to the client.
  */
 const requestHandler = (request, response) => {
-  var req = url.parse(request.url, true);
+  const req = url.parse(request.url, true);
 
   const urlSearch = new URLSearchParams(req.search);
-  var errorsDuringValidation = validateClientRequestAndGetErrors(req.pathname, urlSearch);
-  var region;
-  var latitude;
-  var longitude;
-  if (errorsDuringValidation.length == 0) {
-    region = urlSearch.get('q');
+  const errorsDuringValidation = validateClientRequestAndGetErrors(req.pathname, urlSearch);
+  if (errorsDuringValidation.length === 0) {
+    const region = urlSearch.get('q');
 
     // During validation we check either both latitude and longitude are present or neither.
-    longitude = null;
-    latitude = null;
+    let longitude = null;
+    let latitude = null;
     if (urlSearch.has('latitude') && urlSearch.has('longitude')) {
       latitude = parseFloat(urlSearch.get('latitude'));
       longitude = parseFloat(urlSearch.get('longitude'));
     }
 
     getCityDataAndScoreFromGeoDataModule.getCityDataWithScore(region, latitude, longitude,
-      function callbackHandlerAfterRetrievingGeoNameData(err, responseJson, responseStatusCode) {
+      (err, responseJson, responseStatusCode) => {
         if (!err) {
           response.statusCode = responseStatusCode;
           response.write(responseJson);

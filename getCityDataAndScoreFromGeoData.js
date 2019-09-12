@@ -11,7 +11,7 @@ const removeAccents = require('remove-accents');
  */
 function validateAndGetCityDataFromJsonFields(jsonFields, checkPopulation,
   regionPrefixWithoutAccent) {
-  var obj;
+  let obj;
   // Validating all required fields are present in the json before returning data object
   if (
     ('toponymName' in jsonFields) && (jsonFields.toponymName) && (jsonFields.toponymName.length > 0)
@@ -27,8 +27,8 @@ function validateAndGetCityDataFromJsonFields(jsonFields, checkPopulation,
         && jsonFields.population > 0))
   ) {
     obj = {};
-    obj.name = removeAccents(jsonFields.toponymName) + ', ' + jsonFields.adminCodes1.ISO3166_2 + ', '
-    + jsonFields.countryCode;
+    obj.name = `${removeAccents(jsonFields.toponymName)}, ${jsonFields.adminCodes1.ISO3166_2}, ${
+      jsonFields.countryCode}`;
     obj.latitude = jsonFields.lat;
     obj.longitude = jsonFields.lng;
 
@@ -47,27 +47,26 @@ function validateAndGetCityDataFromJsonFields(jsonFields, checkPopulation,
  * @return {Object} JSON object contaning regions starting with region prefix & their scores.
  */
 function getScoresForCityData(jsonObject, latitude, longitude, regionPrefixWithoutAccent) {
-  var maxScore = Number.MIN_VALUE;
-  var minScore = 0;
-  var obj;
-  var i;
+  let maxScore = Number.MIN_VALUE;
+  const minScore = 0;
+  let obj;
 
-  var returnJsonObj = {
+  const returnJsonObj = {
     suggestions: [],
   };
 
   // Flag to indicate if we are using proximity to user's location to determine the score
-  var areUserCoordinatesSpecified = true;
-  if (latitude == null && longitude == null) {
+  let areUserCoordinatesSpecified = true;
+  if (latitude === null && longitude === null) {
     areUserCoordinatesSpecified = false;
   }
 
-  for (i = 0; i < jsonObject.geonames.length; i += 1) {
+  for (let i = 0; i < jsonObject.geonames.length; i += 1) {
     // Validate and return object if all the concerned fields in the json seem valid
     obj = validateAndGetCityDataFromJsonFields(jsonObject.geonames[i],
       !areUserCoordinatesSpecified, regionPrefixWithoutAccent);
 
-    if (obj != null) {
+    if (obj !== null) {
       if (areUserCoordinatesSpecified) {
         // Score is tentatively assigned to Euclidean distance from user's current location
         // obj.score = Math.pow(Math.pow(obj.longitude - longitude, 2)
@@ -93,7 +92,7 @@ function getScoresForCityData(jsonObject, latitude, longitude, regionPrefixWitho
   */
   maxScore += 1;
 
-  for (i = 0; i < returnJsonObj.suggestions.length; i += 1) {
+  for (let i = 0; i < returnJsonObj.suggestions.length; i += 1) {
     if (areUserCoordinatesSpecified) {
       /*
       Normalize score between 0 & 1
@@ -110,9 +109,7 @@ function getScoresForCityData(jsonObject, latitude, longitude, regionPrefixWitho
   }
 
   // Sort the cities in descending order of scores
-  returnJsonObj.suggestions.sort(function sortByDescendingScores(a, b) {
-    return b.score - a.score;
-  });
+  returnJsonObj.suggestions.sort((a, b) => b.score - a.score);
 
   return returnJsonObj;
 }
@@ -124,8 +121,7 @@ function getScoresForCityData(jsonObject, latitude, longitude, regionPrefixWitho
  * @param {Function} callback with the results when finished.
  */
 function getCityDataFromGeoNames(regionPrefixWithoutAccent, callback) {
-  var reqUri = 'http://api.geonames.org/searchJSON?';
-  var resultJsonObj;
+  let reqUri = 'http://api.geonames.org/searchJSON?';
   const userName = 'soyboyxvx702';
 
   /*
@@ -137,24 +133,24 @@ function getCityDataFromGeoNames(regionPrefixWithoutAccent, callback) {
   };
   */
 
-  reqUri += 'username=' + userName;
+  reqUri += `username=${userName}`;
   reqUri += '&country=US';
   reqUri += '&country=CA';
   reqUri += '&cities=cities5000';
   reqUri += '&fields=toponymName,countryCode,adminCodes1,lng,lat,population';
-  reqUri += '&name_startsWith=' + regionPrefixWithoutAccent;
+  reqUri += `&name_startsWith=${regionPrefixWithoutAccent}`;
   reqUri += '&maxRows=1000';
 
   // console.log('Making the following HTTP GET request to geoname: ' + reqUri);
-  request(reqUri, function callbackHandlerGeoNameResponse(error, response, body) {
-    if (!error && response.statusCode == 200) {
+  request(reqUri, (error, response, body) => {
+    if (!error && response.statusCode === 200) {
       // console.log('Geoname response for region: ' + regionPrefixWithoutAccent + ' is: ' + body);
-      resultJsonObj = JSON.parse(body);
+      const resultJsonObj = JSON.parse(body);
       return callback(null, resultJsonObj);
     }
     if (!error) {
       return callback(
-        new Error('Unexpected error while fetching data, response status code ' + response.statusCode), null,
+        new Error(`Unexpected error while fetching data, response status code: ${response.statusCode}`), null,
       );
     }
     return callback(error, null);
@@ -172,13 +168,11 @@ function getRegionalDataAndCalculateScores(regionPrefix, latitude,
   longitude, callbackToReturnResult) {
   const regionPrefixWithoutAccent = removeAccents(regionPrefix);
   getCityDataFromGeoNames(regionPrefixWithoutAccent,
-    function callbackToProcessGeoNameData(err, data) {
-      var resultJsonObject;
-      var responseStatusCode;
-
+    (err, data) => {
       if (!err) {
         if (data && ('geonames' in data)) {
-          resultJsonObject = getScoresForCityData(data, latitude, longitude,
+          let responseStatusCode;
+          const resultJsonObject = getScoresForCityData(data, latitude, longitude,
             regionPrefixWithoutAccent);
           if (resultJsonObject.suggestions.length > 0) {
             responseStatusCode = 200;
