@@ -87,4 +87,4 @@ const requestHandler = (request, response) => {
   }
 };
 
-module.exports = http.createServer(requestHandler).listen(port, '127.0.0.1');
+module.exports = http.createServer(requestHandler).listen(port, '0.0.0.0');
