@@ -1,5 +1,7 @@
 const request = require('request');
 const removeAccents = require('remove-accents');
+const NodeCache = require('node-cache');
+const geoNameCache = new NodeCache({ stdTTL: 1000, checkperiod: 2200 });
 
 /**
  * Validates data for a given region returned by Geodata service.
@@ -124,15 +126,6 @@ function getCityDataFromGeoNames(regionPrefixWithoutAccent, callback) {
   let reqUri = 'http://api.geonames.org/searchJSON?';
   const userName = 'soyboyxvx702';
 
-  /*
-  const options = {
-    url: reqUri,
-    headers: {
-      'X-Busbud-Token': 'PARTNER_AHm3M6clSAOoyJg4KyCg7w',
-    },
-  };
-  */
-
   reqUri += `username=${userName}`;
   reqUri += '&country=US';
   reqUri += '&country=CA';
@@ -141,20 +134,71 @@ function getCityDataFromGeoNames(regionPrefixWithoutAccent, callback) {
   reqUri += `&name_startsWith=${regionPrefixWithoutAccent}`;
   reqUri += '&maxRows=1000';
 
+  const options = {
+    url: reqUri,
+    headers: {
+      'X-Busbud-Token': 'PARTNER_AHm3M6clSAOoyJg4KyCg7w',
+    },
+  };
+
   // console.log('Making the following HTTP GET request to geoname: ' + reqUri);
-  request(reqUri, (error, response, body) => {
-    if (!error && response.statusCode === 200) {
+  request(options, (geoNameRequestErr, response, regionData) => {
+    if (!geoNameRequestErr && response.statusCode === 200) {
       // console.log('Geoname response for region: ' + regionPrefixWithoutAccent + ' is: ' + body);
-      const resultJsonObj = JSON.parse(body);
-      return callback(null, resultJsonObj);
+      return callback(null, regionData);
     }
-    if (!error) {
+    if (!geoNameRequestErr) {
       return callback(
-        new Error(`Unexpected error while fetching data, response status code: ${response.statusCode}`), null,
+        new Error(`Unexpected error while fetching data, response status code: ${response.statusCode}`),
+        null,
       );
     }
-    return callback(error, null);
+    return callback(geoNameRequestErr, null);
   });
+}
+
+/**
+ * Updates GeoName cache for given region prefix regions.
+ * @param {string} region prefix supplied by the user.
+ * @param {string} Geo Name Data that is cached.
+ */
+function updateGeoNameCache(regionPrefixWithoutAccent, regionData) {
+  geoNameCache.set(regionPrefixWithoutAccent, regionData);
+}
+
+/**
+ * Retrieves Geoname data through API and updates cache.
+ * @param {string} region prefix supplied by the user.
+ * @param {Function} callback with the results when finished.
+ */
+function getGeoNameCityDataAndUpdateCache(regionPrefixWithoutAccent, callback) {
+  getCityDataFromGeoNames(regionPrefixWithoutAccent, (geoNameReqErr, regionData) => {
+    if (!geoNameReqErr && regionData !== null) {
+      updateGeoNameCache(regionPrefixWithoutAccent, regionData);
+      return callback(null, JSON.parse(regionData));
+    }
+    if (!geoNameReqErr) {
+      return callback(new Error('Unexpected error while retrieving Geoname data.'),
+        null);
+    }
+    return callback(geoNameReqErr, null);
+  });
+}
+
+/**
+ * Retrieves Geo name data for a given region prefix.
+ * @param {string} region prefix supplied by the user.
+ * @param {Function} callback with the results when finished.
+ */
+function getGeoNamesCityData(regionPrefixWithoutAccent, callback) {
+  const cachedData = geoNameCache.get(regionPrefixWithoutAccent);
+  if (cachedData) {
+    // cache hit
+    callback(null, JSON.parse(cachedData));
+  } else {
+    // cache miss
+    getGeoNameCityDataAndUpdateCache(regionPrefixWithoutAccent, callback);
+  }
 }
 
 /**
@@ -167,7 +211,7 @@ function getCityDataFromGeoNames(regionPrefixWithoutAccent, callback) {
 function getRegionalDataAndCalculateScores(regionPrefix, latitude,
   longitude, callbackToReturnResult) {
   const regionPrefixWithoutAccent = removeAccents(regionPrefix);
-  getCityDataFromGeoNames(regionPrefixWithoutAccent,
+  getGeoNamesCityData(regionPrefixWithoutAccent,
     (err, data) => {
       if (!err) {
         if (data && ('geonames' in data)) {

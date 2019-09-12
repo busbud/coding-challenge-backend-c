@@ -140,6 +140,8 @@ otherwise the Euclidean distance of the coordinates from the region is used to d
 
 Geoname API is known to take too long, even while making a GET request from the browser, causing the tests to occasionally timeout.
 
+I am not quite sure what the purpose of the BusBud Token provided is.
+
 Also I have made a small change to a test case which essentially checks if the name matches the REGEX user provided prefix.
 The test is using a regex.test to check if that is the case, however the API returns a string not a regex.
 I've changed it to string.match instead, which pretty much checks for the same thing.
@@ -148,3 +150,17 @@ I've adhered to AirBnB Javascript style guide wherever it made sense to me.
 
 ## Deployment
 App has been deployed to Heroku http://fathomless-falls-03862.herokuapp.com/suggestions?q=New&latitude=43.70011&longitude=-79.4163
+
+## Mitigation for high traffic
+The implementation chose to make use of an existing Geo name search API instead of reinventing the wheel. However the search API has a slow response time.
+To alleviate, a cache for a region prefix has been used to reduce the number of calls made to Geo name.
+
+### Alternate implementation by using cities5000 dump and a trie for prefix based lookup
+An alternate implementation can instead periodically download Geo name's cities5000.zip dump, load it into a database.
+The Web Service can then -
+1. Read from a cache maintained for a given prefix
+2. Maintain a trie for all prefixes, city names contaning records for the same.
+3. In case of a cache miss, retrieve all records for a given prefix from the trie. Update the cache.
+4. If the trie does not have the record, read the data from the database, update the trie and cache.
+5. Periodically update cities5000 dump by downloading it from Geonames and periodically update the trie and cache.
+

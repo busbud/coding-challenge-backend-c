@@ -51,6 +51,8 @@ describe('GET /suggestions', function() {
     it('contains a match', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.some(function (suggestion) {
+          // Replacing test with match over here,
+          // as we return a string not a regex
           return suggestion.name.match(/montreal/i);
         });
       })
