@@ -145,3 +145,6 @@ The test is using a regex.test to check if that is the case, however the API ret
 I've changed it to string.match instead, which pretty much checks for the same thing.
 
 I've adhered to AirBnB Javascript style guide wherever it made sense to me.
+
+## Deployment
+App has been deployed to Heroku http://fathomless-falls-03862.herokuapp.com/suggestions?q=New&latitude=43.70011&longitude=-79.4163

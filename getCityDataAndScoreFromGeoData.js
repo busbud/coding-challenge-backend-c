@@ -9,9 +9,9 @@ const removeAccents = require('remove-accents');
  * @param {string} region prefix supplied by the user.
  * @return {Object} Returns region object post validation or a null object if validation fails.
  */
-function validateAndGetCityDataFromJsonFields(jsonFields, checkPopulation, regionPrefix) {
+function validateAndGetCityDataFromJsonFields(jsonFields, checkPopulation,
+  regionPrefixWithoutAccent) {
   var obj;
-  const regionPrefixWithoutAccent = removeAccents(regionPrefix);
   // Validating all required fields are present in the json before returning data object
   if (
     ('toponymName' in jsonFields) && (jsonFields.toponymName) && (jsonFields.toponymName.length > 0)
@@ -21,12 +21,14 @@ function validateAndGetCityDataFromJsonFields(jsonFields, checkPopulation, regio
     && ('countryCode' in jsonFields) && (jsonFields.countryCode) && (jsonFields.countryCode.length > 0)
     && ('lat' in jsonFields) && !Number.isNaN(jsonFields.lat)
     && ('lng' in jsonFields) && !Number.isNaN(jsonFields.lng)
-    && ((!checkPopulation) || (checkPopulation
-      && ('population' in jsonFields) && !Number.isNaN(jsonFields.population)
-      && jsonFields.population > 0))
+    && ((!checkPopulation)
+      || (checkPopulation
+        && ('population' in jsonFields) && !Number.isNaN(jsonFields.population)
+        && jsonFields.population > 0))
   ) {
     obj = {};
-    obj.name = removeAccents(jsonFields.toponymName) + ', ' + jsonFields.adminCodes1.ISO3166_2 + ', ' + jsonFields.countryCode;
+    obj.name = removeAccents(jsonFields.toponymName) + ', ' + jsonFields.adminCodes1.ISO3166_2 + ', '
+    + jsonFields.countryCode;
     obj.latitude = jsonFields.lat;
     obj.longitude = jsonFields.lng;
 
@@ -42,9 +44,9 @@ function validateAndGetCityDataFromJsonFields(jsonFields, checkPopulation, regio
  * @param {number} user specified lattitude.
  * @param {number} user specified longitude.
  * @param {string} region prefix supplied by the user.
- * @return {Object} JSON object contaning regions starting with regionPrefix & their scores.
+ * @return {Object} JSON object contaning regions starting with region prefix & their scores.
  */
-function getScoresForCityData(jsonObject, latitude, longitude, regionPrefix) {
+function getScoresForCityData(jsonObject, latitude, longitude, regionPrefixWithoutAccent) {
   var maxScore = Number.MIN_VALUE;
   var minScore = 0;
   var obj;
@@ -63,7 +65,7 @@ function getScoresForCityData(jsonObject, latitude, longitude, regionPrefix) {
   for (i = 0; i < jsonObject.geonames.length; i += 1) {
     // Validate and return object if all the concerned fields in the json seem valid
     obj = validateAndGetCityDataFromJsonFields(jsonObject.geonames[i],
-      !areUserCoordinatesSpecified, regionPrefix);
+      !areUserCoordinatesSpecified, regionPrefixWithoutAccent);
 
     if (obj != null) {
       if (areUserCoordinatesSpecified) {
@@ -72,13 +74,16 @@ function getScoresForCityData(jsonObject, latitude, longitude, regionPrefix) {
         // + Math.pow(obj.latitude - latitude, 2), 0.5);
         obj.score = (((obj.longitude - longitude) ** 2) + ((obj.latitude - latitude) ** 2)) ** 0.5;
       } else {
-        // Score is tentatively assigned to the regionPrefix's log(population)
+        // Score is tentatively assigned to the region's log(population)
         obj.score = Math.log10(jsonObject.geonames[i].population);
       }
       maxScore = Math.max(maxScore, obj.score);
       returnJsonObj.suggestions.push(obj);
     } else {
-      // console.log('Encountered invalid geoname entry for region prefix ' + regionPrefix + '.');
+      /*
+      console.log('Encountered invalid geoname entry for region prefix '
+      + regionPrefixWithoutAccent + '.');
+      */
     }
   }
 
@@ -95,7 +100,8 @@ function getScoresForCityData(jsonObject, latitude, longitude, regionPrefix) {
       Substract the score from 1 to give lower Euclidean distances a higher score
       */
       returnJsonObj.suggestions[i].score = (1.0
-        - (returnJsonObj.suggestions[i].score - minScore) / (maxScore - minScore)).toFixed(2);
+        - (returnJsonObj.suggestions[i].score - minScore)
+        / (maxScore - minScore)).toFixed(2);
     } else {
       // Normalize population score between 0 and 1
       returnJsonObj.suggestions[i].score = ((returnJsonObj.suggestions[i].score - minScore)
@@ -117,10 +123,11 @@ function getScoresForCityData(jsonObject, latitude, longitude, regionPrefix) {
  * @param {string} region prefix supplied by the user.
  * @param {Function} callback with the results when finished.
  */
-function getCityDataFromGeoNames(regionPrefix, callback) {
+function getCityDataFromGeoNames(regionPrefixWithoutAccent, callback) {
   var reqUri = 'http://api.geonames.org/searchJSON?';
   var resultJsonObj;
   const userName = 'soyboyxvx702';
+
   /*
   const options = {
     url: reqUri,
@@ -135,13 +142,13 @@ function getCityDataFromGeoNames(regionPrefix, callback) {
   reqUri += '&country=CA';
   reqUri += '&cities=cities5000';
   reqUri += '&fields=toponymName,countryCode,adminCodes1,lng,lat,population';
-  reqUri += '&name_startsWith=' + regionPrefix;
+  reqUri += '&name_startsWith=' + regionPrefixWithoutAccent;
   reqUri += '&maxRows=1000';
 
   // console.log('Making the following HTTP GET request to geoname: ' + reqUri);
   request(reqUri, function callbackHandlerGeoNameResponse(error, response, body) {
     if (!error && response.statusCode == 200) {
-      // console.log('Geoname response for region: ' + regionPrefix + ' is: ' + body);
+      // console.log('Geoname response for region: ' + regionPrefixWithoutAccent + ' is: ' + body);
       resultJsonObj = JSON.parse(body);
       return callback(null, resultJsonObj);
     }
@@ -163,25 +170,29 @@ function getCityDataFromGeoNames(regionPrefix, callback) {
  */
 function getRegionalDataAndCalculateScores(regionPrefix, latitude,
   longitude, callbackToReturnResult) {
-  getCityDataFromGeoNames(regionPrefix, function processGeoNameData(err, data) {
-    var resultJsonObject;
-    var responseStatusCode;
-    if (!err) {
-      if (data && ('geonames' in data)) {
-        resultJsonObject = getScoresForCityData(data, latitude, longitude, regionPrefix);
-        if (resultJsonObject.suggestions.length > 0) {
-          responseStatusCode = 200;
+  const regionPrefixWithoutAccent = removeAccents(regionPrefix);
+  getCityDataFromGeoNames(regionPrefixWithoutAccent,
+    function callbackToProcessGeoNameData(err, data) {
+      var resultJsonObject;
+      var responseStatusCode;
+
+      if (!err) {
+        if (data && ('geonames' in data)) {
+          resultJsonObject = getScoresForCityData(data, latitude, longitude,
+            regionPrefixWithoutAccent);
+          if (resultJsonObject.suggestions.length > 0) {
+            responseStatusCode = 200;
+          } else {
+            responseStatusCode = 404;
+          }
+          callbackToReturnResult(null, JSON.stringify(resultJsonObject), responseStatusCode);
         } else {
-          responseStatusCode = 404;
+          callbackToReturnResult(new Error('Unexpected error while fetching data'), null, 500);
         }
-        callbackToReturnResult(null, JSON.stringify(resultJsonObject), responseStatusCode);
       } else {
-        callbackToReturnResult(new Error('Unexpected error while fetching data'), null, 500);
+        callbackToReturnResult(err, null, 500);
       }
-    } else {
-      callbackToReturnResult(err, null, 500);
-    }
-  });
+    });
 }
 
 exports.getCityDataWithScore = getRegionalDataAndCalculateScores;
