@@ -9,11 +9,10 @@ const geoNameCache = new NodeCache({ stdTTL: 1000, checkperiod: 2200 });
  * @param {Object} JSON object contaning data for a given region.
  * @param {Boolean} indicates whether we need to validate population data for the region.
  * @param {string} region prefix supplied by the user.
- * @return {Object} Returns region object post validation or a null object if validation fails.
+ * @return {Boolean} Returns boolean to indicate whether the validation was successful.
  */
-function validateAndGetCityDataFromJsonFields(jsonFields, checkPopulation,
+function validateCityDataFromJsonFields(jsonFields, checkPopulation,
   regionPrefixWithoutAccent) {
-  let obj;
   // Validating all required fields are present in the json before returning data object
   if (
     ('toponymName' in jsonFields) && (jsonFields.toponymName) && (jsonFields.toponymName.length > 0)
@@ -28,15 +27,9 @@ function validateAndGetCityDataFromJsonFields(jsonFields, checkPopulation,
         && ('population' in jsonFields) && !Number.isNaN(jsonFields.population)
         && jsonFields.population > 0))
   ) {
-    obj = {};
-    obj.name = `${removeAccents(jsonFields.toponymName)}, ${jsonFields.adminCodes1.ISO3166_2}, ${
-      jsonFields.countryCode}`;
-    obj.latitude = jsonFields.lat;
-    obj.longitude = jsonFields.lng;
-
-    return obj;
+    return true;
   }
-  return null;
+  return false;
 }
 
 /**
@@ -51,7 +44,6 @@ function validateAndGetCityDataFromJsonFields(jsonFields, checkPopulation,
 function getScoresForCityData(jsonObject, latitude, longitude, regionPrefixWithoutAccent) {
   let maxScore = Number.MIN_VALUE;
   const minScore = 0;
-  let obj;
 
   const returnJsonObj = {
     suggestions: [],
@@ -63,30 +55,29 @@ function getScoresForCityData(jsonObject, latitude, longitude, regionPrefixWitho
     areUserCoordinatesSpecified = false;
   }
 
-  for (let i = 0; i < jsonObject.geonames.length; i += 1) {
-    // Validate and return object if all the concerned fields in the json seem valid
-    obj = validateAndGetCityDataFromJsonFields(jsonObject.geonames[i],
-      !areUserCoordinatesSpecified, regionPrefixWithoutAccent);
+  const geoNamesExtracted = jsonObject.geonames.filter(
+    geoname => validateCityDataFromJsonFields(geoname,
+      !areUserCoordinatesSpecified, regionPrefixWithoutAccent) === true,
+  ).map((geoname) => {
+    const obj = {};
+    obj.name = `${removeAccents(geoname.toponymName)}, ${geoname.adminCodes1.ISO3166_2}, ${
+      geoname.countryCode}`;
+    obj.latitude = geoname.lat;
+    obj.longitude = geoname.lng;
 
-    if (obj !== null) {
-      if (areUserCoordinatesSpecified) {
-        // Score is tentatively assigned to Euclidean distance from user's current location
-        // obj.score = Math.pow(Math.pow(obj.longitude - longitude, 2)
-        // + Math.pow(obj.latitude - latitude, 2), 0.5);
-        obj.score = (((obj.longitude - longitude) ** 2) + ((obj.latitude - latitude) ** 2)) ** 0.5;
-      } else {
-        // Score is tentatively assigned to the region's log(population)
-        obj.score = Math.log10(jsonObject.geonames[i].population);
-      }
-      maxScore = Math.max(maxScore, obj.score);
-      returnJsonObj.suggestions.push(obj);
+    // Determine score for each geoname entry
+    if (areUserCoordinatesSpecified) {
+      // Score is tentatively assigned to Euclidean distance from user's current location
+      // obj.score = Math.pow(Math.pow(obj.longitude - longitude, 2)
+      // + Math.pow(obj.latitude - latitude, 2), 0.5);
+      obj.score = (((obj.longitude - longitude) ** 2) + ((obj.latitude - latitude) ** 2)) ** 0.5;
     } else {
-      /*
-      console.log('Encountered invalid geoname entry for region prefix '
-      + regionPrefixWithoutAccent + '.');
-      */
+      // Score is tentatively assigned to the region's log(population)
+      obj.score = Math.log10(geoname.population);
     }
-  }
+    maxScore = Math.max(maxScore, obj.score);
+    return obj;
+  });
 
   /*
   To avoid cases where maxScore = minScore.
@@ -94,21 +85,23 @@ function getScoresForCityData(jsonObject, latitude, longitude, regionPrefixWitho
   */
   maxScore += 1;
 
-  for (let i = 0; i < returnJsonObj.suggestions.length; i += 1) {
+  // Normalize score between 0 & 1
+  returnJsonObj.suggestions = geoNamesExtracted.map((geoname) => {
+    const obj = geoname;
     if (areUserCoordinatesSpecified) {
       /*
-      Normalize score between 0 & 1
       Substract the score from 1 to give lower Euclidean distances a higher score
       */
-      returnJsonObj.suggestions[i].score = (1.0
-        - (returnJsonObj.suggestions[i].score - minScore)
+      obj.score = (1.0
+        - (geoname.score - minScore)
         / (maxScore - minScore)).toFixed(2);
     } else {
-      // Normalize population score between 0 and 1
-      returnJsonObj.suggestions[i].score = ((returnJsonObj.suggestions[i].score - minScore)
+      // Normalize population score
+      obj.score = ((geoname.score - minScore)
         / (maxScore - minScore)).toFixed(2);
     }
-  }
+    return obj;
+  });
 
   // Sort the cities in descending order of scores
   returnJsonObj.suggestions.sort((a, b) => b.score - a.score);
