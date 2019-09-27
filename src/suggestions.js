@@ -45,21 +45,20 @@ Basic Weight:
 
 function getCityScores(cities, query, qLongitude, qLatitude) {
   const largestPopulation = Math.max.apply(Math, cities.map((city) => {return city.population}));
-  console.log(largestPopulation);
   const qLength = query.length;
-  const hasLocation = qLongitude && qLatitude
-
+  const hasLocation = qLongitude && qLatitude;
+  const qLocation = {longitude: qLongitude, latitude: qLatitude};
   let citiesWithScores = cities.map((city) => {
     city.score = (query.length/city.name.length) * 0.8 + (city.population/largestPopulation)* 0.2;
     return city;
   })
 
-  if (hasLocation) {
-    console.log("calculating location");
+  /* Recalculate score when given valid coordinates */
+  if (hasLocation && geolib.isValidCoordinate(qLocation)) {
     const citiesWithLocDifference = citiesWithScores.map((city) => {
       city.locDifference = geolib.getDistance(
         {latitude: city.lat, longitude: city.long},
-        {latitude: qLatitude, longitude: qLongitude}
+        qLocation
       );
       return city;
     });

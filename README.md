@@ -8,6 +8,7 @@ The suggestions should be restricted to cities in the USA and Canada with a popu
 - the endpoint is exposed at `/suggestions`
 - the partial (or complete) search term is passed as a querystring parameter `q`
 - the caller's location can optionally be supplied via querystring parameters `latitude` and `longitude` to help improve relative scores
+  - invalid values of `latitude` and/or `longitude` will be ignored, as will only receiving one of the two parameters.
 - the endpoint returns a JSON response with an array of scored suggested matches
     - the suggestions are sorted by descending score
     - each suggestion has a score between 0 and 1 (inclusive) indicating confidence in the suggestion (1 is most confident)
