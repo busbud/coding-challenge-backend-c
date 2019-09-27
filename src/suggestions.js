@@ -16,7 +16,8 @@ function getSuggestions(query, cities) {
 
 function findValidCities(cities, q) {
   const validCities = cities.filter((city) => {
-    if (city.name.startsWith(q)) return true;
+    cityLowercase = city.name.toLowerCase();
+    if (cityLowercase.startsWith(q.toLowerCase())) return true;
 
     validAltNames = city.alt_name.filter((altName) => {
       return altName.startsWith(q)
