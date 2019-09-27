@@ -27,7 +27,11 @@ cities.forEach((city) => {
 
 app.get('/suggestions', (req, res) => {
   const suggestionList = suggestions.getSuggestions(req.query, cities);
-  res.status(200).send(JSON.stringify({suggestions: suggestionList}));
+  const suggestionsString = JSON.stringify({suggestions: suggestionList});
+
+  suggestionList.length
+    ? res.status(200).send(suggestionsString)
+    : res.status(404).send(suggestionsString);
 });
 
 app.listen(port, function() {
