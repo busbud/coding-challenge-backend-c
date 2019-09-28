@@ -19,6 +19,8 @@ function findValidCities(cities, q) {
     cityLowercase = city.name.toLowerCase();
     if (cityLowercase.startsWith(q.toLowerCase())) return true;
 
+    /* If the search query is valid for an alternate name, make the alternate name
+    the new name to fulfill the suggestion */
     validAltNames = city.alt_name.filter((altName) => {
       return altName.startsWith(q)
     })
