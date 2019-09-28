@@ -26,7 +26,7 @@ cities.forEach((city) => {
 })
 
 app.get('/suggestions', (req, res) => {
-  if (!req.query.q) res.status(404).send();
+  if (req.query.q == null) res.status(404).send();
   else {
     const suggestionList = suggestions.getSuggestions(req.query, cities);
     const suggestionsString = JSON.stringify({suggestions: suggestionList});
