@@ -26,12 +26,15 @@ cities.forEach((city) => {
 })
 
 app.get('/suggestions', (req, res) => {
-  const suggestionList = suggestions.getSuggestions(req.query, cities);
-  const suggestionsString = JSON.stringify({suggestions: suggestionList});
+  if (!req.query.q) res.status(404).send();
+  else {
+    const suggestionList = suggestions.getSuggestions(req.query, cities);
+    const suggestionsString = JSON.stringify({suggestions: suggestionList});
 
-  suggestionList.length
-    ? res.status(200).send(suggestionsString)
-    : res.status(404).send(suggestionsString);
+    suggestionList.length
+      ? res.status(200).send(suggestionsString)
+      : res.status(404).send(suggestionsString);
+  }
 });
 
 app.listen(port, function() {
