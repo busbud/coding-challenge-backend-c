@@ -11,10 +11,15 @@
   "license": "WTFPL",
   "dependencies": {
     "chai": "^1.9.1",
+    "csv-parse": "^4.4.7",
+    "haversine": "^1.1.1",
+    "heap": "^0.2.6",
     "mocha": "^1.18.2",
-    "supertest": "^0.11.0"
+    "natural": "^0.6.3",
+    "supertest": "^0.11.0",
+    "tsv": "^0.2.0"
   },
   "engines": {
-    "node": "0.10.26"
+    "node": "10.16.3"
   }
 }
