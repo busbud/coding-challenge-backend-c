@@ -1,44 +1,63 @@
 const citiesService = require('./cities');
 const geoLib = require('geolib');
 
+/*
+    since we don't have any scores, so lets give the scores to the cities based on following weight allocation assumptions
+    - 0.3 for population (assuming max population cities should come on top)
+    - 0.7 for location (distance from given latitude and longitude, assuming we want nearby places to come on top)
+*/
+const distributedWeight = {
+    population: 0.3,
+    location: 0.7
+}
+
 module.exports.getSuggestions = async function (req, res) {
-    let query = {
-        searchString: req.query && req.query.q ? req.query.q.toLowerCase() : null,
-        latitude: req.query && req.query.latitude ? req.query.latitude : null,
-        longitude: req.query && req.query.longitude ? req.query.longitude : null
-    };
+    let query = req.query || {};
     let cities = await citiesService.getCities();
     let hasLocation = false;
     console.log("query is : ", query);
 
-    let results = searchBySearchString(cities, query.searchString);
-    if (results && results.length) {
-        results = distanceFromGivenCoords(results, query, hasLocation);
+    if (query.latitude && query.longitude) { 
+        hasLocation = true; 
     }
 
-    if (query.latitude && query.longitude) { hasLocation = true; }
-    results = getCityScores(results, hasLocation);
-    results = sortByScores(results);
+    let results = searchCitiesAndGetSuggestions(cities, query, hasLocation);
 
-    console.log(results);
+    if (results && results.length) {
+        
+        res.status(200).send({ suggestions: results });
+    } else {
+        res.status(404).send({ suggestions: [] });
+    }
+}
 
+function searchCitiesAndGetSuggestions(cities, query, hasLocation) {
+    let results = searchBySearchString(cities, query.q.toLowerCase()) || [];
 
+    if(results && results.length) {
+        results = distanceFromGivenCoords(results, query, hasLocation);
+        results = getCityScores(results, hasLocation);
+        results = prepareAndSortSuggestedCities(results);
+    }
 
-    // res.status(200).send('Hello World!!!');
-    let parsedResponse = JSON.stringify(results,null,'\t');
-    res.status(200).send(parsedResponse);
+    return results;
 }
 
 function searchBySearchString(cities, searchString) {
-
+    console.log(searchString);
     let results = cities.filter((city) => {
-        if (city.name.startsWith(searchString)) {
-            // city = {
-            //     name: city.name
-            // }
+        const cityName = city.name.toLowerCase();
+        const alt_name = city.alt_name.toLowerCase();
+        if (cityName.startsWith(searchString)) {
             return city;
         }
+        if (alt_name.startsWith(searchString)) {
+            city.name = city.alt_name;
+            return city; 
+        }
     });
+
+    // console.log(results)
     return results;
 }
 
@@ -55,18 +74,13 @@ function distanceFromGivenCoords(results, query, hasLocation) {
 }
 
 
-/*
-    since we don't have any scores, so lets give the scores to the cities based on following weight allocation assumptions
-    - 0.7 for population (assuming max population cities should come on top)
-    - 0.3 for location (distance from given latitude and longitude, assuming we want nearby places to come on top)
-*/
 function getCityScores(filteredCities, hasLocation) {
     const maxPopulation = Math.max.apply(Math, filteredCities.map((city) => city.population));
-    const nearestDistance = hasLocation ? Math.max.apply(Math, filteredCities.map((city) => city.geoDistance)) : 0;
+    const farthestDistance = hasLocation ? Math.max.apply(Math, filteredCities.map((city) => city.geoDistance)) : 0;
     filteredCities = filteredCities.map((city) => {
-        city.score = (city.population / maxPopulation) * 0.7;
+        city.score = (city.population / maxPopulation) * distributedWeight.population;
         if (hasLocation) {
-            city.score = city.score + (1-(city.geoDistance / nearestDistance) * 0.3);
+            city.score = city.score + (1 - ((city.geoDistance / farthestDistance) * distributedWeight.location));
             delete city.geoDistance;
         }
         return city;
@@ -75,7 +89,16 @@ function getCityScores(filteredCities, hasLocation) {
     return filteredCities;
 }
 
-function sortByScores(filteredCities) {
-    filteredCities.sort((city1, city2) => { return city2.score - city1.score });
-    return filteredCities;
+function prepareAndSortSuggestedCities(suggestions) {
+    let suggestedCities = suggestions.map((suggestion) => {
+        return ({
+            name: suggestion.name,
+            alt_name: suggestion.alt_name,
+            latitude: suggestion.lat,
+            longitude: suggestion.long,
+            score: suggestion.score
+        });
+    });
+    suggestedCities.sort((city1, city2) => { return city2.score - city1.score });
+    return suggestedCities;
 }
