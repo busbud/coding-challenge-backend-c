@@ -1,13 +1,24 @@
 var http = require('http');
 var port = process.env.PORT || 2345;
+const { readCityData } = require('./readCityData');
+const { getCitiesSearcher } = require('./searchCities');
+const { handleSuggestions } = require('./suggestionsHandler');
 
-module.exports = http.createServer(function (req, res) {
-  res.writeHead(404, {'Content-Type': 'text/plain'});
+const searchCitiesPromise = getFilteredCityData().then(citiesData => getCitiesSearcher(citiesData));
 
-  if (req.url.indexOf('/suggestions') === 0) {
-    res.end(JSON.stringify({
-      suggestions: []
-    }));
+async function getFilteredCityData() {
+  const citiesData = await readCityData('./data/cities_canada-usa.tsv');
+  return citiesData.filter((cityData) =>
+    (cityData.country === 'CA' || cityData.country === 'US') &&
+    Number(cityData.population) > 5000);
+}
+
+module.exports = http.createServer(async function (req, res) {
+  res.writeHead(404, { 'Content-Type': 'text/plain' });
+
+  if (req.url.includes('/suggestions')) {
+    const searchCities = await searchCitiesPromise;
+    handleSuggestions(searchCities, req, res);
   } else {
     res.end();
   }
