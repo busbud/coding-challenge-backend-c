@@ -6,7 +6,7 @@ module.exports = { getCitiesSearcher };
 // to calculate the Levenshtein distance ourselves. In addition, it also handles typos. 
 function getCitiesSearcher(citiesData) {
   const fuse = new Fuse(citiesData, {
-    keys: ['name'],
+    keys: ['name', 'alt_name'],
     includeScore: true,
     threshold: 0.3
   });

@@ -9,9 +9,15 @@ const searchCitiesPromise = getFilteredCityData().then(citiesData => getCitiesSe
 
 async function getFilteredCityData() {
   const citiesData = await readTsvAsJson('./data/cities_canada-usa.tsv');
-  return citiesData.filter((cityData) =>
+  const filteredCities = citiesData.filter((cityData) =>
     (cityData.country === 'CA' || cityData.country === 'US') &&
-    Number(cityData.population) > 5000);
+    Number(cityData.population) > 5000
+  );
+  filteredCities.forEach((cityData) => {
+    // This is needed in order to facilitate multi field queries.
+    cityData.alt_name = cityData.alt_name.split(',');
+  });
+  return filteredCities;
 }
 
 module.exports = http.createServer(async function (req, res) {
