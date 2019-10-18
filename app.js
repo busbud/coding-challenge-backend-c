@@ -15,14 +15,14 @@ async function getFilteredCityData() {
 }
 
 module.exports = http.createServer(async function (req, res) {
-  res.writeHead(404, { 'Content-Type': 'text/plain' });
-
   if (req.url.includes('/suggestions')) {
+    console.debug(`Received request from ${req.url}`);
     const searchCities = await searchCitiesPromise;
     handleSuggestions(searchCities, req, res);
   } else {
+    res.writeHead(404, { 'Content-Type': 'text/plain' });
     res.end();
   }
-}).listen(port, '127.0.0.1');
+}).listen(port);
 
 console.log('Server running at http://127.0.0.1:%d/suggestions', port);
