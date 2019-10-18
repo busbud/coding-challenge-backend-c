@@ -3,6 +3,23 @@ var app     = require('../app');
 var request = require('supertest')(app);
 
 describe('GET /suggestions', function() {
+  describe('with no city', function () {
+    let response;
+
+    before((done) => {
+      request
+        .get('/suggestions?q=')
+        .end((err, res) => {
+          response = res;
+          done(err);
+        });
+    });
+
+    it('returns a 422', () => {
+      expect(response.statusCode).to.equal(422);
+    });
+  });
+
   describe('with a non-existent city', function () {
     var response;
 

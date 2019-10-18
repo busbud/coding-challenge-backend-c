@@ -36,6 +36,7 @@ function calculateDistancesScore(cityLatitude, cityLongitude, userLatitude, user
   // Considering no point can be further away than the circumference of the earth/2 (that means, the points are
   // exactly across the world), we can use CIRCUMFERENCE_OF_EARTH / 2 as the max possible value in the scale of distances,
   // making it possible to easily normalize distances without having to find out the min/max distances 
+  // among the provided data, doing it in a single pass.
   const distanceScore = 1 - normalizeValues(distance, 0, CIRCUMFERENCE_OF_EARTH / 2);
   return distanceScore;
 }
