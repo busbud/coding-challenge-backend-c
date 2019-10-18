@@ -127,3 +127,24 @@ which should produce output similar to
 ```
 Server running at http://127.0.0.1:3456/suggestions
 ```
+
+# Development notes
+
+The application works by preloading and filtering the cities data file in memory, which is not wrong given its low size of 1 MB. If the file was bigger, we could use a database or text search tool instead, but for simplicity reasons I chose not to.
+
+In order to handle the text search, I'm using the library FuseJS, which provides fuzzy searching features. It'll search the objects, handle typos and similar names, and multi field searches easily. 
+Another big feature that led me to choosing it is that it'll add a score based on how close the name is to the search term, making it easy to compute a query score afterwards.
+
+In order to handle the geolocation assisted search I chose to first narrow down the search for performance reasons using the name. Afterwards I'll compute the distance to each result, and then normalize the distances to a value between 0 and 1.
+Afterwards, computing the overall score is a matter of doing a weighted average calculation between the name score and the distance score. 
+After some experimentation, I decided to give a 0.6 value of weight to the distance, and 0.4 value of weight to the name.
+
+I also decided to reject queries without any text, returning an HTTP error code of 422 (Unprocessable Entity).
+The code is deployed in Heroku:
+http://busbud-berman-coding-challenge.herokuapp.com/suggestions
+
+Example query using alternate names:
+http://busbud-berman-coding-challenge.herokuapp.com/suggestions?q=teareantea&latitude=43.70011&longitude=-79.4163
+
+Best,
+Uri Berman.
