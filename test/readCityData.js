@@ -2,9 +2,9 @@ const expect = require('chai').expect;
 const sinon = require('sinon');
 const fs = require('fs');
 const { Readable } = require('stream');
-const { readCityData } = require('../readCityData');
+const { readTsvAsJson } = require('../readTsvAsJson');
 
-describe('readCityData', () => {
+describe('readTsvAsJson', () => {
   function mockFileStream(linesToRead) {
     const fakeStream = new Readable();
     for (const lineToRead of linesToRead) {
@@ -20,12 +20,12 @@ describe('readCityData', () => {
     });
 
     it('returns two objects representing the cities', async () => {
-      const cityData = await readCityData('');
+      const cityData = await readTsvAsJson('');
       expect(cityData).length(2);
     });
 
     it('should parse cities according to the headers of the file', async () => {
-      const cityData = await readCityData('');
+      const cityData = await readTsvAsJson('');
       expect(cityData[0].name).equals('winnipeg');
       expect(cityData[0].id).equals('1');
       expect(cityData[1].name).equals('montreal');
@@ -39,7 +39,7 @@ describe('readCityData', () => {
     });
 
     it('ignores the invalid city', async () => {
-      const cityData = await readCityData('');
+      const cityData = await readTsvAsJson('');
       expect(cityData).length(1);
       expect(cityData[0].name).equal('montreal');
     });

@@ -1,13 +1,14 @@
 var http = require('http');
 var port = process.env.PORT || 2345;
-const { readCityData } = require('./readCityData');
+const { readTsvAsJson } = require('./readTsvAsJson');
 const { getCitiesSearcher } = require('./searchCities');
 const { handleSuggestions } = require('./suggestionsHandler');
 
+// Used in order to only process the cities data once, during startup.
 const searchCitiesPromise = getFilteredCityData().then(citiesData => getCitiesSearcher(citiesData));
 
 async function getFilteredCityData() {
-  const citiesData = await readCityData('./data/cities_canada-usa.tsv');
+  const citiesData = await readTsvAsJson('./data/cities_canada-usa.tsv');
   return citiesData.filter((cityData) =>
     (cityData.country === 'CA' || cityData.country === 'US') &&
     Number(cityData.population) > 5000);

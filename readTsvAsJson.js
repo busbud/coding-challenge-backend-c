@@ -1,12 +1,13 @@
 const fs = require('fs');
 const readLine = require('readline');
 
-module.exports = { readCityData };
+module.exports = { readTsvAsJson };
 
-async function readCityData(filePath) {
+async function readTsvAsJson(filePath) {
   const cityDataStream = fs.createReadStream(filePath, { encoding: 'utf-8' });
   const lineReader = readLine.createInterface({
     input: cityDataStream,
+    // Used in order to recognize CR LF as a single line break
     crlfDelay: Infinity
   });
   let isFirstLine = true;
@@ -20,14 +21,14 @@ async function readCityData(filePath) {
     } else if (cityHeaders.length !== lineParts.length) {
       console.warn(`Invalid data package ${JSON.stringify(lineParts)}`);
     } else {
-      citiesData.push(parseCityData(cityHeaders, lineParts));
+      citiesData.push(parseRow(cityHeaders, lineParts));
     }
   }
 
   return citiesData;
 }
 
-function parseCityData(dataHeaders, data) {
+function parseRow(dataHeaders, data) {
   const cityData = {};
   if (data.length !== dataHeaders.length) {
     throw new Error('Data headers and data package are not');
