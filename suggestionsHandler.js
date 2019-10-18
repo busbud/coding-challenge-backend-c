@@ -5,9 +5,9 @@ const scoreCalculators = require('./scoreCalculators');
 
 module.exports = { handleSuggestions };
 
-async function handleSuggestions(searchCities, req, res) {
+function handleSuggestions(searchCities, req, res) {
   const queryStrings = querystring.parse(url.parse(req.url).query);
-  const suggestions = (await getSuggestions(searchCities, queryStrings))
+  const suggestions = getSuggestions(searchCities, queryStrings)
     .sort((cityA, cityB) => cityB.score - cityA.score)
 
   const responseCode = suggestions.length > 0 ? 200 : 404;
@@ -17,7 +17,7 @@ async function handleSuggestions(searchCities, req, res) {
   }));
 }
 
-async function getSuggestions(searchCities, queryStrings) {
+function getSuggestions(searchCities, queryStrings) {
   const cities = searchCities(queryStrings.q).slice(0, 50);
 
   const scoreCalculator = queryStrings.latitude && queryStrings.longitude ?
