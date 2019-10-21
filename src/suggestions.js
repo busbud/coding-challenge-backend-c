@@ -11,11 +11,11 @@ const distributedWeight = {
     location: 0.7
 }
 
+// gets suggestions
 module.exports.getSuggestions = async function (req, res) {
     let query = req.query || {};
     let cities = await citiesService.getCities();
     let hasLocation = false;
-    console.log("query is : ", query);
 
     if (query.latitude && query.longitude) { 
         hasLocation = true; 
@@ -31,6 +31,7 @@ module.exports.getSuggestions = async function (req, res) {
     }
 }
 
+// search for given query params and prepare a suggested list of suggestions 
 function searchCitiesAndGetSuggestions(cities, query, hasLocation) {
     let results = searchBySearchString(cities, query.q.toLowerCase()) || [];
 
@@ -43,6 +44,8 @@ function searchCitiesAndGetSuggestions(cities, query, hasLocation) {
     return results;
 }
 
+
+// getting search results based on given search string as query param
 function searchBySearchString(cities, searchString) {
     console.log(searchString);
     let results = cities.filter((city) => {
@@ -61,6 +64,7 @@ function searchBySearchString(cities, searchString) {
     return results;
 }
 
+// calculating the distance from given coordinates(helper function)
 function distanceFromGivenCoords(results, query, hasLocation) {
     if (hasLocation) {
         results.forEach(result => {
@@ -74,6 +78,7 @@ function distanceFromGivenCoords(results, query, hasLocation) {
 }
 
 
+// calculating city scores
 function getCityScores(filteredCities, hasLocation) {
     const maxPopulation = Math.max.apply(Math, filteredCities.map((city) => city.population));
     const farthestDistance = hasLocation ? Math.max.apply(Math, filteredCities.map((city) => city.geoDistance)) : 0;
@@ -89,6 +94,7 @@ function getCityScores(filteredCities, hasLocation) {
     return filteredCities;
 }
 
+// preparing and sorting suggestions array by score
 function prepareAndSortSuggestedCities(suggestions) {
     let suggestedCities = suggestions.map((suggestion) => {
         return ({
