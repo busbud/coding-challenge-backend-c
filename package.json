@@ -4,7 +4,7 @@
   "description": "coding challenge in Nodejs",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js",
+    "start": "node app.js",
     "test": "./node_modules/mocha/bin/mocha ./test/"
   },
   "author": "",
@@ -17,6 +17,6 @@
     "supertest": "^0.11.0"
   },
   "engines": {
-    "node": "0.10.26"
+    "node": ">=10.9.0"
   }
 }
