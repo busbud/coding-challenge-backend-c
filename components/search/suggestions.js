@@ -49,6 +49,7 @@ function suggestions(ctxObject, cb) {
         results = results
         .map((city) => {
             city['score'] = calculateScore(city);
+            delete city['distance'];
             return city;
         })
         .sort((cityA, cityB) => {
