@@ -72,4 +72,26 @@ describe('GET /suggestions', function() {
       })
     });
   });
+
+  describe('with latitude and longitude', function () {
+    var response;
+
+    before(function (done) {
+      request
+        .get('/suggestions?q=Montreal&latitude=45.50884&longitude=-73.58781')
+        .end(function (err, res) {
+          response = res;
+          response.json = JSON.parse(res.text);
+          done(err);
+        });
+    });
+
+    it('contains a match', function () {
+      expect(response.json.suggestions).to.satisfy(function (suggestions) {
+        return suggestions.some(function (suggestion) {
+          return expect(suggestion.score).to.equal(1);
+        });
+      })
+    });
+  });
 });
