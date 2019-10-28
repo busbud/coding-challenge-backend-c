@@ -4,13 +4,15 @@
   "description": "coding challenge in Nodejs",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "nodemon app.js",
     "test": "./node_modules/mocha/bin/mocha ./test/"
   },
   "author": "",
   "license": "WTFPL",
   "dependencies": {
     "chai": "^1.9.1",
+    "event-stream": "^4.0.1",
+    "fuzzy-search": "^3.0.2",
     "mocha": "^1.18.2",
     "supertest": "^0.11.0"
   },
