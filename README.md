@@ -1,13 +1,13 @@
-# Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
+# Busbud Coding Challenge
 
 ## Requirements
 
-Design an API endpoint that provides auto-complete suggestions for large cities.
+Design an API endpoint that provides autocomplete suggestions for large cities.
 The suggestions should be restricted to cities in the USA and Canada with a population above 5000 people.
 
 - the endpoint is exposed at `/suggestions`
-- the partial (or complete) search term is passed as a querystring parameter `q`
-- the caller's location can optionally be supplied via querystring parameters `latitude` and `longitude` to help improve relative scores
+- the partial (or complete) search term is passed as a query string parameter `q`
+- the caller's location can optionally be supplied via query string parameters `latitude` and `longitude` to help improve relative scores
 - the endpoint returns a JSON response with an array of scored suggested matches
     - the suggestions are sorted by descending score
     - each suggestion has a score between 0 and 1 (inclusive) indicating confidence in the suggestion (1 is most confident)
@@ -19,7 +19,7 @@ The suggestions should be restricted to cities in the USA and Canada with a popu
 
 #### Sample responses
 
-These responses are meant to provide guidance. The exact values can vary based on the data source and scoring algorithm
+These responses are meant to provide guidance. The exact values can vary based on the data source and scoring algorithm.
 
 **Near match**
 
@@ -69,61 +69,92 @@ These responses are meant to provide guidance. The exact values can vary based o
 
 ### Non-functional
 
-- All code should be written in Javascript
-- Mitigations to handle high levels of traffic should be implemented
+- All code should be written in Javascript.
+- Mitigations to handle high levels of traffic should be implemented.
 - Challenge is submitted as pull request against this repo ([fork it](https://help.github.com/articles/fork-a-repo/) and [create a pull request](https://help.github.com/articles/creating-a-pull-request-from-a-fork/)).
-- Documentation and maintainability is a plus
+- Documentation and maintainability is a plus.
 
-### References
+## Dataset
 
-- Geonames provides city lists Canada and the USA http://download.geonames.org/export/dump/readme.txt
-- http://www.nodejs.org/
-- http://ejohn.org/blog/node-js-stream-playground/
+You can find the necessary dataset along with its description and documentation in the [`data`](data/) directory.
 
+## Evaluation
+
+We will use the following criteria to evaluate your solution:
+
+- Capacity to follow instructions
+- Developer Experience (how easy it is to run your solution locally, how clear your documentation is, etc)
+- Solution correctness
+- Performance
+- Tests (quality and coverage)
+- Code style and cleanliness
+- Attention to detail
+- Ability to make sensible assumptions
+
+It is ok to ask us questions!
+
+We know that the time for this project is limited and it is hard to create a "perfect" solution, so we will consider that along with your experience when evaluating the submission.
+
+If you choose to add other services to your challenge, we ask that you use the existing Docker Compose setup, which can be found in the `docker-compose.yml` file.
 
 ## Getting Started
 
-Begin by forking this repo and cloning your fork. GitHub has apps for [Mac](http://mac.github.com/) and
+### Prerequisites
+
+You are going to need:
+
+- `Git`
+- `nvm` (or your preferred node version manager)
+- `Node.js`
+- `Docker` (optional)
+- `Docker Compose` (optional)
+
+### Setting up your environment
+
+1. Begin by forking this repo and cloning your fork. GitHub has apps for [Mac](http://mac.github.com/) and
 [Windows](http://windows.github.com/) that make this easier.
 
-### Setting up a Nodejs environment
+2. Install [nvm](https://github.com/nvm-sh/nvm#install--update-script) or your preferred node version manager.
 
-Get started by installing [nodejs](http://www.nodejs.org).
+3. Install [Node.js](http://www.nodejs.org).
 
-For OS X users, use [Homebrew](http://brew.sh) and `brew install nvm`
+4. Install [Docker](https://docs.docker.com/install/).
 
-Once that's done, from the project directory, run
-
-```
-nvm use
-```
+5. Install [Docker Compose](https://docs.docker.com/compose/install/).
 
 ### Setting up the project
 
-In the project directory run
+In the project directory run:
 
 ```
+nvm use
 npm install
 ```
 
 ### Running the tests
 
-The test suite can be run with
+The test suite can be run with:
 
 ```
-npm test
+npm run test
 ```
 
 ### Starting the application
 
-To start a local server run
+To start a local server run:
 
 ```
-PORT=3456 npm start
+npm run start
 ```
 
-which should produce output similar to
+#### or using Docker Compose:
 
 ```
-Server running at http://127.0.0.1:3456/suggestions
+npm run start:docker
+```
+
+either should produce an output similar to:
+
+```
+Server running at http://127.0.0.1:2345/suggestions
 ```
