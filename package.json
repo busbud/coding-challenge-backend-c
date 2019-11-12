@@ -12,6 +12,7 @@
   "dependencies": {
     "@google/maps": "^1.0.2",
     "chai": "^1.9.1",
+    "dotenv": "^8.2.0",
     "mocha": "^1.18.2",
     "supertest": "^0.11.0"
   },

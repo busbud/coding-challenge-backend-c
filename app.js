@@ -1,6 +1,8 @@
 var http = require('http');
 var port = process.env.PORT || 2345;
+
 var url = require('url');
+require('dotenv').config();
 
 module.exports = http.createServer(function (req, res) {
   res.writeHead(404, {'Content-Type': 'text/plain'});
@@ -15,8 +17,9 @@ module.exports = http.createServer(function (req, res) {
     let latitude = urlQuery.latitude?urlQuery.latitude:null;
     let longitude = urlQuery.longitude?urlQuery.longitude:null;  
     
+    console.log(process.env.GOOGLE_MAPS_KEY);
     const googleMapsClient = require('@google/maps').createClient({
-      key: 'AIzaSyCY5X5Qx9aDthAW8VnoctvXCNCUvzHDYYA',
+      key: process.env.GOOGLE_MAPS_KEY,
       Promise: Promise // 'Promise' is the native constructor.
     });
 
