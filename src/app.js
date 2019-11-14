@@ -6,7 +6,7 @@ const { makeScorer } = require("./score.js");
 const { parsecsv } = require("./parsecsv.js");
 
 // constants
-const PORT            = process.env.PORT || 8080;
+const PORT            = process.env.PORT || 80;
 const SCORE_THRESHOLD = process.env.SCORE_THRESHOLD || 0.20;
 const RESULTS_QTY     = process.env.RESULTS_QTY || 6;
 const distWeight      = process.env.distWeight || 0.42;
