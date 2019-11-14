@@ -15,7 +15,7 @@ const popWeight       = process.env.popWeight || 0.06;
 
 // objects
 const app = express();
-const records = parsecsv(path.join(__dirname, "data", "cities_canada-usa.tsv"));
+const records = parsecsv(path.join(__dirname, "..", "data", "cities_canada-usa.tsv"));
 const scorerConfig = {
   distWeight, nameWeight, popWeight,
   maxPop: _.maxBy(records, "population")["population"]
@@ -28,7 +28,7 @@ app.get("/suggestions", (req, res) => {
     latitude:  req.query.latitude,
   };
 
-  if (!query.q) {
+  if (!query.q || query.q.length > 40) {
     res.json({ suggestions: [] });
     return;
   }
