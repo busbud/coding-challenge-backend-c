@@ -12,7 +12,7 @@ const parsecsv = (filepath) => {
 
   return _.chain(records)
     .map(r => _.pick(_.zipObject(colnames, r), [
-      "name", "admin1", "country", "lat", "long", "population"
+      "ascii", "admin1", "country", "lat", "long", "population"
     ]))
     .filter(({ country }) => country === "US" || country === "CA")
     .map(r => {
@@ -21,7 +21,7 @@ const parsecsv = (filepath) => {
         latitude: Number(r["lat"]),
         longitude: Number(r["long"]),
         population: Number(r["population"]),
-        name: `${r["name"]}, ${admin1}, ${r["country"]}`
+        name: `${r["ascii"]}, ${admin1}, ${r["country"]}`
       };
     })
     .filter(({ population }) => population >= 5000)

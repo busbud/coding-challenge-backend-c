@@ -5,18 +5,18 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "test": "_mocha ./test/"
+    "test": "mocha ./test/ --exit"
   },
   "author": "",
   "license": "WTFPL",
   "dependencies": {
-    "chai": "^1.9.1",
+    "chai": "^4.2.0",
     "express": "^4.17.1",
     "fast-levenshtein": "^2.0.6",
     "haversine-distance": "^1.1.6",
     "lodash": "^4.17.15",
-    "mocha": "^1.18.2",
-    "supertest": "^0.11.0"
+    "mocha": "^6.2.2",
+    "supertest": "^4.0.2"
   },
   "engines": {
     "node": "12.13.0"

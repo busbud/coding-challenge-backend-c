@@ -21,11 +21,6 @@ const makeScorer = ({ distWeight, nameWeight, popWeight, maxPop }, { q, latitude
     const populationScore = population / maxPop;
     const popScoreFixed = -1/(7*populationScore + 1) + 1;
 
-    console.log("-----------");
-    console.log(`dist: ${distanceScore * distWeight}`);
-    console.log(`name: ${nameScore * nameWeight}`);
-    console.log(`popl: ${popWeight * popScoreFixed}`);
-    console.log(`total: ${distanceScore * distWeight + nameScore * nameWeight + popWeight * popScoreFixed}`);
     const score = (
       distWeight * distanceScore +
       nameWeight * nameScore +
