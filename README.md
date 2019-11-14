@@ -8,6 +8,8 @@ First, `npm install`. Then, `npm run test`. Finally, `npm run start`.
 
 Note that the default server port is 80. You may need to use `PORT=8080 npm run start`.
 
+The app is currently deployed to Heroku. Test it out at [`https://still-wave-05226.herokuapp.com/suggestions?q=montreal`](https://still-wave-05226.herokuapp.com/suggestions?q=montreal)
+
 ## Requirements
 
 Design an API endpoint that provides autocomplete suggestions for large cities.
