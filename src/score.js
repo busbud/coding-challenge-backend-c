@@ -19,7 +19,7 @@ const makeScorer = ({ distWeight, nameWeight, popWeight, maxPop }, { q, latitude
 
     // population
     const populationScore = population / maxPop;
-    const popScoreFixed = -1/(7*populationScore + 1) + 1;
+    const popScoreFixed = -1/(7*populationScore + 1) + 1; // adjust for few very large cities
 
     const score = (
       distWeight * distanceScore +
