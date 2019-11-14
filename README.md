@@ -1,5 +1,11 @@
 # Busbud Coding Challenge
 
+## Solution
+
+Use node 12.13.0 (`nvm use 12.13.0`).
+
+First, `npm install`. Then, `npm run test`. Finally, `npm run start`.
+
 ## Requirements
 
 Design an API endpoint that provides autocomplete suggestions for large cities.
