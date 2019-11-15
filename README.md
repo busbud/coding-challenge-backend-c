@@ -95,8 +95,6 @@ It is ok to ask us questions!
 
 We know that the time for this project is limited and it is hard to create a "perfect" solution, so we will consider that along with your experience when evaluating the submission.
 
-If you choose to add other services to your challenge, we ask that you use the existing Docker Compose setup, which can be found in the `docker-compose.yml` file.
-
 ## Getting Started
 
 ### Prerequisites
@@ -106,8 +104,6 @@ You are going to need:
 - `Git`
 - `nvm` (or your preferred node version manager)
 - `Node.js`
-- `Docker` (optional)
-- `Docker Compose` (optional)
 
 ### Setting up your environment
 
@@ -117,10 +113,6 @@ You are going to need:
 2. Install [nvm](https://github.com/nvm-sh/nvm#install--update-script) or your preferred node version manager.
 
 3. Install [Node.js](http://www.nodejs.org).
-
-4. Install [Docker](https://docs.docker.com/install/).
-
-5. Install [Docker Compose](https://docs.docker.com/compose/install/).
 
 ### Setting up the project
 
@@ -147,13 +139,7 @@ To start a local server run:
 npm run start
 ```
 
-#### or using Docker Compose:
-
-```
-npm run start:docker
-```
-
-either should produce an output similar to:
+it should produce an output similar to:
 
 ```
 Server running at http://127.0.0.1:2345/suggestions
