@@ -64,6 +64,8 @@ module.exports.getMatchingCities = (
   locationName,
   population = config.MAX_POPULATION
 ) => {
+  if (!locationName || locationName.length < config.MIN_LENGHT_SEARCH)
+    return [];
   const normalizeLocationName = normalizeString(locationName);
   return cities.filter(
     (city) =>

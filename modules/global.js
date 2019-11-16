@@ -13,3 +13,5 @@ module.exports.NUM_DECIMALS = 2; //number of decimals shown in the score
 module.exports.GOOGLE_MAPS_KEY = 'AIzaSyAsap645uYiwbZh_cfm-LEp1rdRGB4nKXU'; //key to access to Google maps API
 module.exports.TSV_PATH = './data/cities_canada-usa.tsv'; //name of the file containing the data of the locations
 module.exports.MAX_POPULATION = 5000; //give preferences to locations where population is equals and greater than this number
+
+module.exports.MIN_LENGHT_SEARCH = 3; //minimum longitud of search string

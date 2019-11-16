@@ -87,6 +87,7 @@ console.log('Server running at http://127.0.0.1:%d/suggestions', port);
  */
 const getParametersFromQueryString = (req) => {
   const parsedUrl = url.parse(req.url, true);
+
   const queryAsObject = parsedUrl.query;
   let qLatitude = parseFloat(queryAsObject.latitude);
   let qLongitude = parseFloat(queryAsObject.longitude);
