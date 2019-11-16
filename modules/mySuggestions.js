@@ -1,7 +1,9 @@
 const config = require('./global.js');
 /**
+ * Given a location name and an array of suggested destinations, it ranks the destinations by name
+ * the less number of charcters the name and the name of the suggestion will be top ranked scored
+ * also, given a weight (by default 1 representing 100%), this score is weighted
  * @param [String] string
- *
  * @returns []
  */
 let getRankingByName = (originCityName, arrayDestination, weight = 1) => {
@@ -55,6 +57,8 @@ function invertedScoreArray(arrayTmp) {
 }
 
 /**
+ * This method calculates the total score (ranking) of the destinations, according to distance and name, both totalized scores
+ * if there is no distance then only the name score is returned
  * @param [String] string
  *
  * @returns []
@@ -87,6 +91,5 @@ module.exports.getRanking = (
   }
   arrayDestination.sort((a, b) => b.score - a.score); //descendent order
 
-  //arrayDestination.forEach((e) => console.log(e.score));
   return arrayDestination;
 };

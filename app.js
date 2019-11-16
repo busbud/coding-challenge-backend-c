@@ -79,7 +79,8 @@ module.exports = http
 console.log('Server running at http://127.0.0.1:%d/suggestions', port);
 
 /**
- *
+ * From the URL, each parameter is obtained
+ * latitud and longitud are parsed to float type in case of existence
  *
  * @param {request}
  * @returns {{name: String, latitude?: Number, longitude?: Number}} parameters

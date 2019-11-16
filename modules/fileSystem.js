@@ -55,9 +55,9 @@ let getCities = () => {
 const cities = getCities();
 /**
  *Given a location name, it returns the matching locations From the array of cities
- * the number of inhabitants musy be >=5k
- *
+ *where population must be >=  MAX_POPULATION
  * @param String
+ * @param Number
  * @returns []
  */
 module.exports.getMatchingCities = (
@@ -75,7 +75,6 @@ module.exports.getMatchingCities = (
 /**
  * Removes accents and diatrics of a string
  * https://stackoverflow.com/questions/990904/remove-accents-diacritics-in-a-string-in-javascript
- *
  * @param {String} string
  * @returns {String}
  */
