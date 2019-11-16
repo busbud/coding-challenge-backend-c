@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "test": "./node_modules/mocha/bin/mocha ./test/"
+    "test": "./node_modules/mocha/bin/mocha /test/",
+    "testW": "node_modules/mocha/bin/mocha /test/"
   },
   "author": "",
   "license": "WTFPL",
