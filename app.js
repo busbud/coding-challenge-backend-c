@@ -9,6 +9,19 @@ const googleMaps = require('./modules/googleMaps');
 
 const mySuggestions = require('./modules/mySuggestions');
 
+/**
+ * Responds a Json.
+ * Option statusCode is 200 by default
+ *
+ * @param {Object} json
+ * @param {ServerResponse} res
+ * @param {Object} [{statusCode = 200}={}]
+ */
+const respondJSon = (json, res, { statusCode = 200 } = {}) => {
+  res.writeHead(statusCode, { 'Content-Type': 'application/json' });
+  res.end(JSON.stringify(json));
+};
+
 module.exports = http
   .createServer(function(req, res) {
     res.writeHead(404, { 'Content-Type': 'text/plain' });
@@ -17,13 +30,8 @@ module.exports = http
       let parametersObj = getParametersFromQueryString(req);
 
       let arrayDestinations = fileSystem.getMatchingCities(parametersObj.name);
-      if (arrayDestinations.length <= 0) {
-        res.end(
-          JSON.stringify({
-            suggestions: [],
-          })
-        );
-      }
+      if (arrayDestinations.length <= 0)
+        respondJSon({ suggestions: [] }, res, { statusCode: 404 });
 
       googleMaps
         .getDistances(parametersObj, arrayDestinations)
@@ -37,18 +45,16 @@ module.exports = http
           );
 
           const suggestions = arraySuggestions.map((city) => ({
-            name: [city.name, city.adminCode1, city.countryCode].join(', '),
+            name: [city.asciiname, city.adminCode1, city.countryCode].join(
+              ', '
+            ),
             latitude: city.latitude,
             longitude: city.longitude,
             //distance: city.distance,
             score: parseFloat(city.score).toFixed(config.NUM_DECIMALS),
           }));
 
-          res.end(
-            JSON.stringify({
-              suggestions: suggestions,
-            })
-          );
+          respondJSon({ suggestions: suggestions }, res, { statusCode: 200 });
         })
         .catch((err) => {
           const arraySuggestions = mySuggestions.getRanking(
@@ -58,17 +64,16 @@ module.exports = http
             0
           );
           const suggestions = arraySuggestions.map((city) => ({
-            name: [city.name, city.adminCode1, city.countryCode].join(', '),
+            name: [city.asciiname, city.adminCode1, city.countryCode].join(
+              ', '
+            ),
             latitude: city.latitude,
             longitude: city.longitude,
             //distance: city.distance,
             score: parseFloat(city.score).toFixed(config.NUM_DECIMALS),
           }));
-          res.end(
-            JSON.stringify({
-              suggestions: suggestions,
-            })
-          );
+
+          respondJSon({ suggestions: suggestions }, res, { statusCode: 200 });
         });
     } else {
       res.end();
