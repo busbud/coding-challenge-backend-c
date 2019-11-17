@@ -13,14 +13,14 @@ https://challenge-recomendations-laura.herokuapp.com/suggestions?q=Londo&latitud
 
 Configuration can be done in constants located in folder '/modules/global.js'
 
--Constant 'WEIGHT_NAME= 0.15' means you give the algorithm a 15% of weight of importance to the matching of names. The weight of the distance is the remaining to 100%, in this case is 85%.
--Constant 'MAX_POPULATION= 5000' is the requirement to show recomendations with population over 5000 inhabitants. Change it to your needs.
--Constant 'NUM_DECIMALS', you can set it to show more presition in the scale.
--Constant 'MIN_LENGHT_SEARCH', to make search when the query parameter 'q' is at least of this lenght.
+- Constant 'WEIGHT_NAME= 0.15' means you give the algorithm a 15% of weight of importance to the matching of names. The weight of the distance is the remaining to 100%, in this case is 85%.
+- Constant 'MAX_POPULATION= 5000' is the requirement to show recomendations with population over 5000 inhabitants. Change it to your needs.
+- Constant 'NUM_DECIMALS', you can set it to show more presition in the scale.
+- Constant 'MIN_LENGHT_SEARCH', to make search when the query parameter 'q' is at least of this lenght.
 
--Constant 'GOOGLE_MAPS_KEY' is set in here just to demonstrations purposes, has to be hidden.
+- Constant 'GOOGLE_MAPS_KEY' is set in here just to demonstrations purposes, has to be hidden.
 
--Constant 'TSV_PATH' is the name of the file source of data for the locations search.
+- Constant 'TSV_PATH' is the name of the file source of data for the locations search.
 
 ## Requirements
 
