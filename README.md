@@ -9,13 +9,18 @@ https://challenge-recomendations-laura.herokuapp.com/suggestions?q=Londo
 Or with query parameters: latitude and longitude
 https://challenge-recomendations-laura.herokuapp.com/suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
 
-## What I did
+## Configuration
 
-- two endpoints `/suggestions` and `/streamsuggestions`
-- add some tests
-- add CI and CD with CircleCI and Heroku
-- make a simple demo page of the API (RxJS : streams for client too ;))
-- respect all the requirements
+Configuration can be done in constants located in folder '/modules/global.js'
+
+-Constant 'WEIGHT_NAME= 0.15' means you give the algorithm a 15% of weight of importance to the matching of names. The weight of the distance is the remaining to 100%, in this case is 85%.
+-Constant 'MAX_POPULATION= 5000' is the requirement to show recomendations with population over 5000 inhabitants. Change it to your needs.
+-Constant 'NUM_DECIMALS', you can set it to show more presition in the scale.
+-Constant 'MIN_LENGHT_SEARCH', to make search when the query parameter 'q' is at least of this lenght.
+
+-Constant 'GOOGLE_MAPS_KEY' is set in here just to demonstrations purposes, has to be hidden.
+
+-Constant 'TSV_PATH' is the name of the file source of data for the locations search.
 
 ## Requirements
 
