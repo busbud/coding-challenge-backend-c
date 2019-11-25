@@ -66,6 +66,14 @@ These responses are meant to provide guidance. The exact values can vary based o
 }
 ```
 
+**Service Health Check**
+
+    GET /
+```json
+{
+  "data": "Health check ok!"
+}
+```
 
 ### Non-functional
 
@@ -103,7 +111,8 @@ You are going to need:
 
 - `Git`
 - `nvm` (or your preferred node version manager)
-- `Node.js`
+- `Node.js` (v9 or above)
+- `Postgres` (12.1)
 
 ### Setting up your environment
 
@@ -113,14 +122,37 @@ You are going to need:
 2. Install [nvm](https://github.com/nvm-sh/nvm#install--update-script) or your preferred node version manager.
 
 3. Install [Node.js](http://www.nodejs.org).
+4. Install [Docker or Docker Desktop](https://hub.docker.com/editions/community/docker-ce-desktop-windows)
+
 
 ### Setting up the project
 
-In the project directory run:
+In the project directory:
 
+    Create `.env` file
+
+In the project directory, there is another directory called `env`
+
+
+    Inside env directory, there are 2 files
+
+    - env
+      - .heroku 
+      - .local
+
+#### Horuku Env Setup
+If you want to run the app in the `Heroku` environment. Please copy `.heroku` file contents then paste into `.env` file
+
+#### Local Env Setup
+If you want to run the app in the `Local` environment. Please copy `.local` file contents then paste into `.env` file
+
+In the project directory run:
 ```
 nvm use
 npm install
+
+docker-compose up (will install Postgres as well PgAdmin)
+npm run seeder
 ```
 
 ### Running the tests

@@ -5,16 +5,38 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "test": "./node_modules/mocha/bin/mocha ./test/"
+    "test": "./node_modules/mocha/bin/mocha ./test/**/*.js",
+    "lint": "eslint",
+    "seeder": "node seeder.js"
   },
   "author": "",
   "license": "WTFPL",
   "dependencies": {
     "chai": "^1.9.1",
+    "chai-as-promised": "^7.1.1",
+    "chai-http": "^4.3.0",
+    "dotenv": "^8.2.0",
+    "etag": "^1.8.1",
+    "http-status-codes": "^1.4.0",
+    "koa": "^2.11.0",
+    "koa-body": "^4.1.1",
+    "koa-bodyparser": "^4.2.1",
+    "koa-router": "^7.4.0",
     "mocha": "^1.18.2",
-    "supertest": "^0.11.0"
+    "pg": "^7.14.0",
+    "sinon": "^7.5.0",
+    "string-score": "^1.0.1",
+    "supertest": "^0.11.0",
+    "supertest-as-promised": "^4.0.2",
+    "tsv": "^0.2.0",
+    "uuid": "^3.3.3"
   },
   "engines": {
-    "node": "0.10.26"
+    "node": "v9.11.2"
+  },
+  "devDependencies": {
+    "eslint": "^6.6.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2"
   }
 }

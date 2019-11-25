@@ -1,0 +1,24 @@
+version: "3"
+services:
+  postgres-compose:
+    image: "postgres"  
+    environment:
+      - POSTGRES_USER=burd
+      - POSTGRES_PASSWORD=burd123!
+      - POSTGRES_DB=db_burd
+
+    ports:
+      - "5432:5432"
+
+  pgadmin-compose:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "manishkpr@gmail.com"
+      PGADMIN_DEFAULT_PASSWORD: "PgAdmin2019!"
+    ports:
+      - "16543:80"
+    depends_on:
+      - postgres-compose
+
+
+# psql -h 0.0.0.0 -p 5432 -U burd -d db_burd
