@@ -25,6 +25,11 @@ These responses are meant to provide guidance. The exact values can vary based o
 
     GET /suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
 
+**Heroku Link**
+
+    https://gentle-inlet-21376.herokuapp.com/suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
+
+
 ```json
 {
   "suggestions": [
