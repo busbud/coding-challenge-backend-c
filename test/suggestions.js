@@ -25,6 +25,26 @@ describe('GET /suggestions', function() {
       expect(response.json.suggestions).to.have.length(0);
     });
   });
+  describe('with a two letters search', function() {
+    var response;
+
+    before(function(done) {
+      request.get('/suggestions?q=mo').end(function(err, res) {
+        response = res;
+        response.json = JSON.parse(res.text);
+        done(err);
+      });
+    });
+
+    it('returns a 404', function() {
+      expect(response.statusCode).to.equal(404);
+    });
+
+    it('returns an empty array of suggestions', function() {
+      expect(response.json.suggestions).to.be.instanceof(Array);
+      expect(response.json.suggestions).to.have.length(0);
+    });
+  });
 
   describe('with a valid city', function () {
     var response;
@@ -57,12 +77,12 @@ describe('GET /suggestions', function() {
         })	
       });	
 
-      it('contains scores', function () {	
-        expect(response.json.suggestions).to.satisfy(function (suggestions) {	
-          return suggestions.every(function (suggestion) {	
-            return suggestion.latitude && suggestion.longitude;	
-          });	
-        })	
+      it('contains numeric scores', function() {
+        expect(response.json.suggestions).to.satisfy(function(suggestions) {
+          return suggestions.every(function(suggestion) {
+            return suggestion.score && typeof suggestion.score == 'number';
+          });
+        });
       });
     });
     
