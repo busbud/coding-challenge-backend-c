@@ -1,12 +1,14 @@
 var http = require('http');
 var url = require('url');
+var suggestions = require('./suggestions.js');
+
 var port = process.env.PORT || 2345;
 
 
 function serveSuggestions(req, res) {
   var reqUrl = url.parse(req.url, true);
   var body = {
-    suggestions: []
+    suggestions: suggestions.getSuggestions(reqUrl.query)
   };
   // Set headers, send response
   res.statusCode = body.suggestions.length > 0 ? 200 : 404;
@@ -16,7 +18,6 @@ function serveSuggestions(req, res) {
 }
 
 module.exports = http.createServer(function (req, res) {
-  res.writeHead(404, {'Content-Type': 'text/plain'});
 
   if (req.url.indexOf('/suggestions') === 0) {
     serveSuggestions(req, res);
