@@ -110,7 +110,7 @@ function calculateScores(data, q) {
           name: city.name,
           lat: city.lat,
           long: city.long,
-          score: name_score
+          score: name_score.roundScores()
         };
       })
       // distance Score
@@ -132,7 +132,7 @@ function calculateScores(data, q) {
           score:
             city.score - distance_score < 0.2
               ? 0.2
-              : (city.score - distance_score)
+              : (city.score - distance_score).roundScores()
         };
       })
   );
@@ -188,4 +188,9 @@ function normalizeCityNames(name, admin1, country) {
   }
   return [item.name, item.area, item.country].join(', ');
 }
+
+Number.prototype.roundScores = function () {
+  return (Math.round(this.valueOf() * 10) / 10)
+}
+
 exports.getSuggestions = getSuggestions;
