@@ -133,7 +133,7 @@ function calculateScores(data, q) {
           score:
             city.score - distance_score < 0.2
               ? 0.2
-              : (city.score - distance_score).toFixed(1)
+              : (city.score - distance_score)
         };
       })
   );
