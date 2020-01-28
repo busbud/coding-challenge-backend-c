@@ -22,6 +22,7 @@ module.exports = http.createServer(function (req, res) {
   if (req.url.indexOf('/suggestions') === 0) {
     serveSuggestions(req, res);
   } else {
+    res.statusCode = 404;
     res.end();
   }
 }).listen(port, '127.0.0.1');

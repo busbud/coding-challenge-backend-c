@@ -1,13 +1,12 @@
 var citiesDataSet = require('./data/cities_canada-usa.json');
-
 function getSuggestions(params) {
-  const regexp = new RegExp(params.q, 'gi');
   const minimumSearchLenght = 2;
-  return params.q.length > minimumSearchLenght
-    ? calculateScores(
-        citiesDataSet
-          .filter(function(city) {
-            return (
+  return (params.q && params.q.length) > minimumSearchLenght
+  ? calculateScores(
+    citiesDataSet
+    .filter(function(city) {
+      const regexp = new RegExp(params.q, 'gi');
+      return (
               //First screening for name or alt_name match
               ((city.name && city.name.match(regexp)) ||
                 (city.alt_name && city.alt_name.match(regexp))) &&

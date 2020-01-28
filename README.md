@@ -210,7 +210,13 @@ npm run-script test
 
 
 ```
-GET /suggestions
+  GET /notFound
+    ✓ returns a 404 
+
+  GET /suggestions
+    with empty query
+      ✓ returns a 404 
+      ✓ returns an empty array of suggestions 
     with a non-existent city
       ✓ returns a 404 
       ✓ returns an empty array of suggestions 
@@ -223,6 +229,6 @@ GET /suggestions
       ✓ contains a match 
       Validate the shape of the data being returned
         ✓ contains latitudes and longitudes 
-        ✓ contains numeric scores
+        ✓ contains numeric scores 
 
 ```
