@@ -1,13 +1,25 @@
 var http = require('http');
+var url = require('url');
 var port = process.env.PORT || 2345;
+
+
+function serveSuggestions(req, res) {
+  var reqUrl = url.parse(req.url, true);
+  var body = {
+    suggestions: []
+  };
+  // Set headers, send response
+  res.statusCode = body.suggestions.length > 0 ? 200 : 404;
+  res.statusMessage = body.suggestions.length > 0 ? 'OK' : 'No results found';
+  res.setHeader('Content-Type', 'application/json');
+  res.end(JSON.stringify(body));
+}
 
 module.exports = http.createServer(function (req, res) {
   res.writeHead(404, {'Content-Type': 'text/plain'});
 
   if (req.url.indexOf('/suggestions') === 0) {
-    res.end(JSON.stringify({
-      suggestions: []
-    }));
+    serveSuggestions(req, res);
   } else {
     res.end();
   }
