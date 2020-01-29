@@ -1,6 +1,6 @@
 # Busbud Coding Challenge
 
-An API endpoint that provides autocomplete suggestions for large cities.
+An API endpoint that provide autocomplete suggestions for large cities.
 
 ## Getting Started
 
@@ -9,7 +9,7 @@ These instructions will help you to run this project on your local machine for d
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
+Things you need to install the software and how to install them
 - node.js
 - nvm
 
@@ -38,7 +38,7 @@ Server running at http://127.0.0.1:2345/suggestions
 
 ```
 
-You can check the [live demo here :https://andre682-backend-challenge.herokuapp.com/suggestions](https://andre682-backend-challenge.herokuapp.com/suggestions?q=maple&latitude=45.5265657&longitude=-73.59595) 
+You can check the [live demo here.](https://andre682-backend-challenge.herokuapp.com/suggestions?q=maple&latitude=45.5265657&longitude=-73.59595) 
 
 ## API Documentation
 
