@@ -38,7 +38,7 @@ Server running at http://127.0.0.1:2345/suggestions
 
 ```
 
-You can check the [live demo here]() 
+You can check the [live demo here :https://andre682-backend-challenge.herokuapp.com/suggestions](https://andre682-backend-challenge.herokuapp.com/suggestions?q=maple&latitude=45.5265657&longitude=-73.59595) 
 
 ## API Documentation
 
