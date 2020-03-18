@@ -4,10 +4,10 @@
   "description": "coding challenge in Nodejs",
   "main": "app.js",
   "scripts": {
-    "dev": "nodemon app.js --exec babel-node --presets babel-preset-env",
-    "build": "babel app.js src -d build --presets babel-preset-env",
+    "dev": "nodemon app.js --exec babel-node --presets @babel/preset-env",
+    "build": "babel app.js src -d build --presets @babel/preset-env",
     "start": "node build/app.js",
-    "test": "./node_modules/mocha/bin/mocha ./test/"
+    "test": "./node_modules/mocha/bin/mocha --compilers js:@babel/register ./test/"
   },
   "author": "",
   "license": "WTFPL",
@@ -21,11 +21,11 @@
     "node": "0.10.26"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.3",
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.8.7",
+    "@babel/node": "^7.8.7",
+    "@babel/preset-env": "^7.8.7",
     "babel-loader": "^8.0.6",
-    "babel-node": "0.0.1-security",
-    "babel-preset-env": "^1.7.0",
     "nodemon": "^2.0.2"
   }
 }
