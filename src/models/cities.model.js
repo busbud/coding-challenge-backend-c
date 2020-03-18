@@ -1,5 +1,6 @@
 import fs from 'fs';
-import { tsvJSON, getCitiesThatMatchName, calcNameMatchingScore, calcDistanceScore } from './../utils/functions'
+import { tsvJSON, getCitiesThatMatchName, calcNameMatchingScore, calcDistanceScore,
+    sortByAscendingScore } from './../utils/functions'
 
 const tsvFILENAME = './data/cities_canada-usa.tsv';
 const jsonFILENAME = './data/cities_canada-usa.json';
@@ -60,7 +61,7 @@ citiesModel.getSuggestions = (urlString) => {
         });
     });
 
-    return { "suggestions": suggestions };
+    return { "suggestions": suggestions.sort(sortByAscendingScore) };
 };
 
 citiesModel.getAllCities = () => {
