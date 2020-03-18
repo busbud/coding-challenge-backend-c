@@ -144,3 +144,12 @@ it should produce an output similar to:
 ```
 Server running at http://127.0.0.1:2345/suggestions
 ```
+
+### Deploying the app to Heroku
+
+- Follow these steps to [setup Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs).
+- Set `heroku config:set NPM_CONFIG_PRODUCTION=false` to trigger babel dependencies install
+- Set binding port `heroku config:set PORT=80` 
+- Make sure your all changes have been commited to your local repo
+- Deploy the app with `git push heroku master`
+- It will take some time and you can watch the logs with `heroku logs --tail`
