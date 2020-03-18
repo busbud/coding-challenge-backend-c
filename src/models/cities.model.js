@@ -64,8 +64,4 @@ citiesModel.getSuggestions = (urlString) => {
     return { "suggestions": suggestions.sort(sortByDescendingScore) };
 };
 
-citiesModel.getAllCities = () => {
-    return jsonData;
-};
-
 export default citiesModel;
