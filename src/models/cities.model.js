@@ -12,7 +12,7 @@ citiesModel.getSuggestions = (urlString) => {
     // check if tsv needs to be converted to JSON
     try {
         if (!fs.existsSync(jsonFILENAME)) {
-            const tsvData = fs.readFileSync(tsvFILENAME, 'utf8');
+            const tsvData = fs.readFileSync(tsvFILENAME, 'utf-8');
             jsonData = JSON.stringify(tsvJSON(tsvData));
             fs.writeFileSync(jsonFILENAME, jsonData);
             jsonData = JSON.parse(fs.readFileSync(jsonFILENAME));
@@ -26,6 +26,7 @@ citiesModel.getSuggestions = (urlString) => {
     const fields = urlString.split('?')[1].split('&');
     let queryParams = {}
 
+    // Possible queryParams q/latitude/longitude. q is used for the city name
     fields.map((item) => {
         const [fieldName, givenValue] = item.split('=');
         queryParams[fieldName] = givenValue;
@@ -53,7 +54,7 @@ citiesModel.getSuggestions = (urlString) => {
         });
     });
 
-    return JSON.stringify({ "suggestions": suggestions });
+    return { "suggestions": suggestions };
 };
 
 citiesModel.getAllCities = () => {

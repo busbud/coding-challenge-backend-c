@@ -31,7 +31,7 @@ describe('GET /suggestions', function() {
 
     before(function (done) {
       request
-        .get('/suggestions?q=Montreal')
+        .get('/suggestions?q=Montrose')
         .end(function (err, res) {
           response = res;
           response.json = JSON.parse(res.text);
@@ -48,7 +48,7 @@ describe('GET /suggestions', function() {
       expect(response.json.suggestions).to.have.length.above(0);
     });
 
-    describe.skip('Validate the shape of the data being returned', function() {
+    describe('Validate the shape of the data being returned', function() {
       it('contains latitudes and longitudes', function () {	
         expect(response.json.suggestions).to.satisfy(function (suggestions) {	
           return suggestions.every(function (suggestion) {	
@@ -65,15 +65,11 @@ describe('GET /suggestions', function() {
         })	
       });
     });
-    
-    it('is a gratuitously failing test you should remove to prove you ran the tests', function () {	
-      expect(true).to.equal(false);	
-    });	    
-
+     
     it('contains a match', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.some(function (suggestion) {
-          return suggestion.name.test(/montreal/i);
+          return suggestion.name.match(/Montrose/i);
         });
       })
     });
