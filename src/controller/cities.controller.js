@@ -1,4 +1,5 @@
 import citiesModel from './../models/cities.model';
+import beautify from 'json-beautify';
 
 const citiesController = {
     suggestions: (request, response) => {
@@ -7,7 +8,7 @@ const citiesController = {
             response.writeHead(200, { 'Content-Type': 'text/plain' });
         }
         return response.end(
-            JSON.stringify(result)
+            beautify(result, null, 2)
         );
     }
 };
