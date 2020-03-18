@@ -13,15 +13,18 @@ citiesModel.getSuggestions = (urlString) => {
     try {
         if (!fs.existsSync(jsonFILENAME)) {
             const tsvData = fs.readFileSync(tsvFILENAME, 'utf8');
-            fs.writeFileSync(jsonFILENAME, JSON.stringify(tsvJSON(tsvData)));
-        } 
-        
-        // read json data and filter for Canadian and American cities with >5000 population
-        jsonData = JSON.parse(fs.readFileSync(jsonFILENAME))
-        .filter((city)=>{
-            return ['CA','US'].includes(city.country) && city.population > 5000;
-        });
-        
+            fs.writeFileSync(jsonFILENAME,
+                JSON.stringify(
+                    tsvJSON(tsvData)
+                        .filter((city) => {
+                            // read json data and filter for Canadian and American cities with >5000 population
+                            return ['CA', 'US'].includes(city.country) && city.population > 5000;
+                        })
+                )
+            );
+        }
+
+        jsonData = JSON.parse(fs.readFileSync(jsonFILENAME));
     } catch (error) {
         console.error(error);
     }
@@ -41,19 +44,20 @@ citiesModel.getSuggestions = (urlString) => {
 
     filterCitiesByName.map(city => {
         // if long and lat are given calculate distance score otherwise distance score is 1 to not skew name matching score
-        const distanceScore = 
-            queryParams.latitude&&queryParams.longitude
-            ?calcDistanceScore([queryParams.latitude, queryParams.longitude], [city.lat, city.long])
-            :1
+        const distanceScore =
+            queryParams.latitude && queryParams.longitude
+                ? calcDistanceScore([queryParams.latitude, queryParams.longitude], [city.lat, city.long])
+                : 1
 
         const nameMatchingScore = calcNameMatchingScore(city.name, queryParams.q);
-        const score = Math.round(((distanceScore+nameMatchingScore)/2) * 10) /10;
+        const score = Math.round(((distanceScore + nameMatchingScore) / 2) * 10) / 10;
 
         suggestions.push({
             "name": `${city.name}, ${city.admin1}, ${city.country}`,
             "latitude": city.lat,
             "longitude": city.long,
-            score
+            score,
+            "p": city.population
         });
     });
 
