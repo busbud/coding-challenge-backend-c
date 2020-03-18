@@ -12,13 +12,16 @@ citiesModel.getSuggestions = (urlString) => {
     // check if tsv needs to be converted to JSON
     try {
         if (!fs.existsSync(jsonFILENAME)) {
-            const tsvData = fs.readFileSync(tsvFILENAME, 'utf-8');
-            jsonData = JSON.stringify(tsvJSON(tsvData));
-            fs.writeFileSync(jsonFILENAME, jsonData);
-            jsonData = JSON.parse(fs.readFileSync(jsonFILENAME));
-        } else {
-            jsonData = JSON.parse(fs.readFileSync(jsonFILENAME));
-        }
+            const tsvData = fs.readFileSync(tsvFILENAME, 'utf8');
+            fs.writeFileSync(jsonFILENAME, JSON.stringify(tsvJSON(tsvData)));
+        } 
+        
+        // read json data and filter for Canadian and American cities with >5000 population
+        jsonData = JSON.parse(fs.readFileSync(jsonFILENAME))
+        .filter((city)=>{
+            return ['CA','US'].includes(city.country) && city.population > 5000;
+        });
+        
     } catch (error) {
         console.error(error);
     }
