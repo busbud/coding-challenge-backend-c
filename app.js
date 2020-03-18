@@ -8,7 +8,11 @@ module.exports = http.createServer(function (req, res) {
 
   if (req.url.indexOf('/suggestions') === 0) {
       return citiesController.suggestions(req.url, res)
-  } else {
+  } else if(req.url === '/') {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end("welcome to my app. Please go to /suggestions to see suggested cities");
+  }
+  else {
     res.end();
   }
 }).listen(port, '0.0.0.0');
