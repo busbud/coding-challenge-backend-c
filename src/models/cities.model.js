@@ -56,8 +56,7 @@ citiesModel.getSuggestions = (urlString) => {
             "name": `${city.name}, ${city.admin1}, ${city.country}`,
             "latitude": city.lat,
             "longitude": city.long,
-            score,
-            "p": city.population
+            score
         });
     });
 
