@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { tsvJSON, getCitiesThatMatchName } from './../utils/functions'
+import { tsvJSON, getCitiesThatMatchName, calcNameMatchingScore } from './../utils/functions'
 
 const tsvFILENAME = './data/cities_canada-usa.tsv';
 const jsonFILENAME = './data/cities_canada-usa.json';
@@ -39,7 +39,7 @@ citiesModel.getSuggestions = (urlString) => {
             "name": `${city.name}, ${city.admin1}, ${city.country}`,
             "latitude": city.lat,
             "longitude": city.long,
-            "score": 0
+            "score": calcNameMatchingScore(city.name, queryParams.q)
         });
     });
 

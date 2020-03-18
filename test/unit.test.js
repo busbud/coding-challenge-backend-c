@@ -2,7 +2,7 @@ var expect  = require('chai').expect;
 var app     = require('../app');
 var request = require('supertest')(app);
 
-import { getCitiesThatMatchName } from '../src/utils/functions';
+import { getCitiesThatMatchName, calcNameMatchingScore } from '../src/utils/functions';
 
 const testData = [
     { "name": "Abbotsford", "lat": "49.05798", "long": "-122.25257" },
@@ -40,5 +40,16 @@ describe('getCitiesThatMatchName', () => {
         expect(filteredCities).to.be.instanceof(Array);
         expect(filteredCities).to.have.length(3);
     });
+});
+
+describe('calcNameMatchingScore', () => {
+    it('returns 0 for not matching strings', () => {
+        const score = calcNameMatchingScore("abcd", "wxyz");
+        expect(score).to.equal(0);
+    }),
+    it('returns 1 for not matching strings', () => {
+        const score = calcNameMatchingScore("EXACT SAME STRING", "EXACT SAME STRING");
+        expect(score).to.equal(1);
+    })
 });
 

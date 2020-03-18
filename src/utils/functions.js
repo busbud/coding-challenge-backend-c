@@ -1,3 +1,4 @@
+import string_similarity from 'string-similarity';
 
 // takes in tsv formatted data and returns JSON array
 export const tsvJSON = tsv => {
@@ -11,9 +12,13 @@ export const tsvJSON = tsv => {
         }, {});
     });
 }
-
+//filters for items whose name key containds lookUpCityName and returns an array
 export const getCitiesThatMatchName = (lookUpCityName, data) => {
     return data.filter(city =>
         city.name && city.name.match(lookUpCityName)
     );
+}
+// calculates matching score between 2 strings
+export const calcNameMatchingScore = (stringA, stringB) => {
+    return Math.round(string_similarity.compareTwoStrings(stringA, stringB) * 10) / 10;
 }
