@@ -1,7 +1,7 @@
+import citiesController from './src/controller/cities.controller';
+
 var http = require('http');
 var port = process.env.PORT || 2345;
-
-import citiesController from './src/controller/cities.controller'
 
 module.exports = http.createServer(function (req, res) {
   res.writeHead(404, { 'Content-Type': 'text/plain' });

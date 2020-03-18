@@ -63,7 +63,7 @@ const distance = (lat1, lon1, lat2, lon2) => {
 		return Math.round(dist);
 	}
 }
-
+// callback functions for sorting an array of objects
 export const sortByDescendingScore = (a, b) => {
     return a.score < b.score?1:(a.score > b.score?-1:0);
 };

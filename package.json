@@ -5,8 +5,8 @@
   "main": "app.js",
   "scripts": {
     "dev": "nodemon app.js --exec babel-node --presets @babel/preset-env",
-    "build": "babel app.js src -d build --presets @babel/preset-env",
-    "start": "node build/app.js",
+    "build": "babel app.js -d build && babel src -d build/src --presets @babel/preset-env",
+    "start": "npm run build && node build/app.js",
     "test": "./node_modules/mocha/bin/mocha --compilers js:@babel/register ./test/"
   },
   "author": "",

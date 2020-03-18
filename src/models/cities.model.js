@@ -5,11 +5,11 @@ import { tsvJSON, getCitiesThatMatchName, calcNameMatchingScore, calcDistanceSco
 const tsvFILENAME = './data/cities_canada-usa.tsv';
 const jsonFILENAME = './data/cities_canada-usa.json';
 
-let jsonData;
-
 const citiesModel = {};
 
 citiesModel.getSuggestions = (urlString) => {
+    let jsonData;
+    
     // check if tsv needs to be converted to JSON
     try {
         if (!fs.existsSync(jsonFILENAME)) {
