@@ -2,9 +2,9 @@ import citiesModel from './../models/cities.model';
 
 const citiesController = {
     suggestions: (request, response) => {
-        return response.end(JSON.stringify(
+        return response.end(
             citiesModel.getSuggestions(request)
-        ));
+        );
     }
 };
 

@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { tsvJSON } from './../utils/functions'
+import { tsvJSON, getCitiesThatMatchName } from './../utils/functions'
 
 const tsvFILENAME = './data/cities_canada-usa.tsv';
 const jsonFILENAME = './data/cities_canada-usa.json';
@@ -21,8 +21,29 @@ try {
 
 const citiesModel = {};
 
-citiesModel.getSuggestions = (queryParams) => {
-    return queryParams;
+citiesModel.getSuggestions = (urlString) => {
+    const fields = urlString.split('?')[1].split('&');
+    let queryParams = {}
+
+    fields.map((item) => {
+        const [fieldName, givenValue] = item.split('=');
+        queryParams[fieldName] = givenValue;
+    });
+
+    const filterCitiesByName = getCitiesThatMatchName(queryParams.q, jsonData);
+
+    const suggestions = [];
+
+    filterCitiesByName.map(city => {
+        suggestions.push({
+            "name": `${city.name}, ${city.admin1}, ${city.country}`,
+            "latitude": city.lat,
+            "longitude": city.long,
+            "score": 0
+        });
+    });
+
+    return JSON.stringify({ "suggestions": suggestions });
 };
 
 citiesModel.getAllCities = () => {

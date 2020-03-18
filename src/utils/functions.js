@@ -11,3 +11,9 @@ export const tsvJSON = tsv => {
         }, {});
     });
 }
+
+export const getCitiesThatMatchName = (lookUpCityName, data) => {
+    return data.filter(city =>
+        city.name && city.name.match(lookUpCityName)
+    );
+}
