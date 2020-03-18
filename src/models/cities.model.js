@@ -1,6 +1,6 @@
 import fs from 'fs';
 import { tsvJSON, getCitiesThatMatchName, calcNameMatchingScore, calcDistanceScore,
-    sortByAscendingScore } from './../utils/functions'
+    sortByDescendingScore } from './../utils/functions'
 
 const tsvFILENAME = './data/cities_canada-usa.tsv';
 const jsonFILENAME = './data/cities_canada-usa.json';
@@ -61,7 +61,7 @@ citiesModel.getSuggestions = (urlString) => {
         });
     });
 
-    return { "suggestions": suggestions.sort(sortByAscendingScore) };
+    return { "suggestions": suggestions.sort(sortByDescendingScore) };
 };
 
 citiesModel.getAllCities = () => {

@@ -64,6 +64,6 @@ const distance = (lat1, lon1, lat2, lon2) => {
 	}
 }
 
-export const sortByAscendingScore = (a, b) => {
+export const sortByDescendingScore = (a, b) => {
     return a.score < b.score?1:(a.score > b.score?-1:0);
 };
