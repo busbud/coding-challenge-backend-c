@@ -21,6 +21,10 @@ try {
 
 const citiesModel = {};
 
+citiesModel.getSuggestions = (queryParams) => {
+    return queryParams;
+};
+
 citiesModel.getAllCities = () => {
     return jsonData;
 };

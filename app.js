@@ -7,9 +7,7 @@ module.exports = http.createServer(function (req, res) {
   res.writeHead(404, { 'Content-Type': 'text/plain' });
 
   if (req.url.indexOf('/suggestions') === 0) {
-    res.end(JSON.stringify(
-      citiesController.cities()
-    ));
+      citiesController.suggestions(req.url, res)
   } else {
     res.end();
   }

@@ -1,8 +1,10 @@
 import citiesModel from './../models/cities.model';
 
 const citiesController = {
-    cities: () =>{
-        return citiesModel.getAllCities();
+    suggestions: (request, response) => {
+        return response.end(JSON.stringify(
+            citiesModel.getSuggestions(request)
+        ));
     }
 };
 
