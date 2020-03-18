@@ -2,7 +2,7 @@ var expect  = require('chai').expect;
 var app     = require('../app');
 var request = require('supertest')(app);
 
-import { getCitiesThatMatchName, calcNameMatchingScore } from '../src/utils/functions';
+import { getCitiesThatMatchName, calcNameMatchingScore, calcDistanceScore } from '../src/utils/functions';
 
 const testData = [
     { "name": "Abbotsford", "lat": "49.05798", "long": "-122.25257" },
@@ -50,6 +50,17 @@ describe('calcNameMatchingScore', () => {
     it('returns 1 for not matching strings', () => {
         const score = calcNameMatchingScore("EXACT SAME STRING", "EXACT SAME STRING");
         expect(score).to.equal(1);
+    })
+});
+
+describe('calcDistanceScore', () => {
+    it('returns 1 for same points', () => {
+        const score = calcDistanceScore([1,99],[1,99]);
+        expect(score).to.equal(1);
+    }),
+    it('returns 0 for distance greater than the 2000km threshold', () => {
+        const score = calcDistanceScore([0,0],[100,100]);
+        expect(score).to.equal(0);
     })
 });
 
