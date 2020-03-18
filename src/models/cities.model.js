@@ -21,7 +21,6 @@ citiesModel.getSuggestions = (urlString) => {
         }
     } catch (error) {
         console.error(error);
-        
     }
 
     const fields = urlString.split('?')[1].split('&');
@@ -42,7 +41,7 @@ citiesModel.getSuggestions = (urlString) => {
             queryParams.latitude&&queryParams.longitude
             ?calcDistanceScore([queryParams.latitude, queryParams.longitude], [city.lat, city.long])
             :1
-            
+
         const nameMatchingScore = calcNameMatchingScore(city.name, queryParams.q);
         const score = Math.round(((distanceScore+nameMatchingScore)/2) * 10) /10;
 

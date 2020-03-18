@@ -30,7 +30,6 @@ describe('getCitiesThatMatchName', () => {
         const filteredCities = getCitiesThatMatchName(lookUpCity, testData);
         expect(filteredCities).to.be.instanceof(Array);
         expect(filteredCities).to.have.length(1);
-        // expect(filteredCities).to.include([{name:'Ajax'}]);
         
     });
 
@@ -63,4 +62,3 @@ describe('calcDistanceScore', () => {
         expect(score).to.equal(0);
     })
 });
-
