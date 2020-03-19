@@ -1,0 +1,29 @@
+version: '3.7'
+
+services:
+  app:
+    build: .
+    ports:
+      - 8080:8080
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_DATABASE=busbud
+    depends_on:
+      - db
+  db:
+    image: postgres:12-alpine
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: busbud
+    volumes:
+      - type: bind
+        source: ./data/cities_canada-usa.tsv
+        target: /data/cities_canada-usa.tsv
+      - type: bind
+        source: ./data/init_db.sql
+        target: /docker-entrypoint-initdb.d/init_db.sql
