@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node app/app.js",
     "dev": "nodemon app/app.js",
-    "test": "./node_modules/mocha/bin/mocha ./test/"
+    "test": "./node_modules/mocha/bin/mocha ./app/test/**/*.js"
   },
   "author": "",
   "license": "WTFPL",

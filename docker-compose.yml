@@ -9,7 +9,7 @@ services:
       - DB_HOST=db
       - DB_PORT=5432
       - DB_USER=postgres
-      - DB_DATABASE=busbud
+      - DB_DATABASE=postgres
     depends_on:
       - db
   db:
@@ -19,7 +19,7 @@ services:
       - 5432:5432
     environment:
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: busbud
+      POSTGRES_DB: postgres
     volumes:
       - type: bind
         source: ./data/cities_canada-usa.tsv

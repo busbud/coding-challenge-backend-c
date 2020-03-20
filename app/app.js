@@ -1,14 +1,14 @@
 var express = require('express');
-var suggestionRoute = require('./routes/suggestion_route')
 
-var host = process.env.HOST || '0.0.0.0';
-var port = process.env.PORT || 8080;
+var suggestionRoute = require('./routes/suggestion_route');
+var serverConfig = require('./properties').server;
+
 var app = express();
 
 app.use('/suggestions', suggestionRoute);
 
-app.listen(port, host);
+app.listen(serverConfig.port, serverConfig.host);
 
-console.log('Server running at http://%s:%d/suggestions', host, port);
+console.log('Server running at http://%s:%d/suggestions', serverConfig.host, serverConfig.port);
 
 module.exports = app;

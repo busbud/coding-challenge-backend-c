@@ -1,7 +1,7 @@
 var pg = require('../utils/pgclient');
 
 const QUERY_SELECT_SUGGESTION_BY_TERM = `
-    SELECT name, country, admin1, population
+    SELECT ascii AS name, lat AS latitude, long AS longitude, population
     FROM cities
     WHERE name ILIKE '%' || $1 || '%'
     OR alt_name ILIKE '%' || $1 || '%'

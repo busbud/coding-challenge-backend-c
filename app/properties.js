@@ -1,4 +1,8 @@
 module.exports = {
+    server: {
+        host: '0.0.0.0',
+        port: process.env.PORT || 8080
+    },
     db: {
         host: process.env.DB_HOST || '0.0.0.0',
         port: process.env.DB_PORT || '5432',
