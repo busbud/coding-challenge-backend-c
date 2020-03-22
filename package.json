@@ -13,14 +13,19 @@
   "dependencies": {
     "chai": "^1.9.1",
     "express": "^4.17.1",
+    "haversine-distance": "^1.2.1",
+    "knex": "^0.20.12",
     "mocha": "^7.1.1",
     "pg": "^7.18.2",
+    "string-similarity": "^4.0.1",
     "supertest": "^4.0.2"
   },
   "engines": {
-    "node": "0.10.26"
+    "node": "12.x"
   },
   "devDependencies": {
-    "nodemon": "^2.0.2"
+    "chai-increasing": "^2.0.0",
+    "nodemon": "^2.0.2",
+    "testcontainers": "^2.6.0"
   }
 }

@@ -9,7 +9,7 @@ module.exports = {
       return results.rows;
     }
     catch (err) {
-      err.status = 500;
+      err.statusCode = 500;
       err.message = 'Database operation failed with message: ' + err.message;
       return setImmediate(() => { throw err; });
     }

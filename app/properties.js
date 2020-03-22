@@ -9,5 +9,10 @@ module.exports = {
         user: process.env.DB_USER || 'postgres',
         password: process.env.DB_PASSWORD || 'postgres',
         database: process.env.DB_DATABASE || 'postgres'
+    },
+    app: {
+        weight: {
+            similarity: process.env.APP_WEIGHT_SIMILARITY || 0.8
+        }
     }
 }

@@ -144,3 +144,19 @@ it should produce an output similar to:
 ```
 Server running at http://127.0.0.1:2345/suggestions
 ```
+
+## Candidate Notes
+
+### Project Structure
+
+The project is structured as
+
+### Running the application
+
+It's possible to run the app using `docker` and `docker-commpose`.
+
+```sh
+docker-compose up
+```
+
+The default configuration sets the server running at `port=8080`.

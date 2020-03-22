@@ -9,15 +9,15 @@ CREATE TABLE IF NOT EXISTS public.cities(
   feat_code VARCHAR(10),
   country VARCHAR(2) NOT NULL,
   cc2 VARCHAR(60),
-  admin1 VARCHAR(20) NOT NULL,
+  admin1 VARCHAR(20),
   admin2 VARCHAR(20),
   admin3 VARCHAR(20),
   admin4 VARCHAR(20),
   population INTEGER NOT NULL,
   elevation INTEGER,
   dem INTEGER,
-  tz VARCHAR(40) NOT NULL,
-  modified_at DATE NOT NULL
+  tz VARCHAR(40),
+  modified_at DATE
 );
 
 COPY public.cities FROM '/data/cities_canada-usa.tsv' CSV HEADER DELIMITER E'\t' QUOTE '&';
