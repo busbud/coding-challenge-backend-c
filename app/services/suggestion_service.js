@@ -6,12 +6,12 @@ var setup = require("../properties");
 var farthest = 1.0;
 
 function cleanUp(suggestion) {
-	delete suggestion.similarity;
-	delete suggestion.distance;
-	delete suggestion.country;
-	delete suggestion.admin1;
-	delete suggestion.ascii;
-	return suggestion
+  delete suggestion.similarity;
+  delete suggestion.distance;
+  delete suggestion.country;
+  delete suggestion.admin1;
+  delete suggestion.ascii;
+  return suggestion;
 }
 
 module.exports = {
@@ -41,8 +41,8 @@ module.exports = {
         var dw = 1 - sw;
         s.score = s.similarity * sw + dw - (s.distance / farthest) * dw;
         return s;
-			})
-			.map(s => cleanUp(s))
+      })
+      .map(s => cleanUp(s))
       .sort((a, b) => b.score - a.score);
 
     return scoredSuggestions;

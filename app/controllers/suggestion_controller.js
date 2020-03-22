@@ -1,7 +1,7 @@
 var utils = require('../utils/utils');
 var suggestionService = require('../services/suggestion_service');
 
-exports.root = async function (req, res, index) {
+exports.root = async function (req, res) {
     var { q: term, latitude: lat, longitude: lon } = req.query;
     var suggestions = await suggestionService.search(term, lat, lon);
     if (utils.isNotEmpty(suggestions)) {
