@@ -154,7 +154,8 @@ The result of the search is a suggestion of cities ordered by name similarity an
 
 Example: 
 
-- [/suggestions?q=montreal&latitude=40.4314779&longitude=-80.0507118]([/suggestions?q=Montreal](https://anishitani-busbud.herokuapp.com/suggestions?q=montreal&latitude=40.4314779&longitude=-80.0507118))
+- [/suggestions?q=montreal&latitude=40.4314779&longitude=-80.0507118](https://anishitani-busbud.herokuapp.com/suggestions?q=montreal&latitude=40.4314779&longitude=-80.0507118)
+  
 ``` json
 {
   "suggestions": [
