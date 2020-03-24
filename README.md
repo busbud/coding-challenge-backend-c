@@ -147,9 +147,44 @@ Server running at http://127.0.0.1:2345/suggestions
 
 ## Candidate Notes
 
-### Project Structure
+### Description
 
-The project is structured as
+Implementation of a term search with optional location parameterization.
+The result of the search is a suggestion of cities ordered by name similarity and proximity.
+
+Example: 
+
+- [/suggestions?q=montreal&latitude=40.4314779&longitude=-80.0507118]([/suggestions?q=Montreal](https://anishitani-busbud.herokuapp.com/suggestions?q=montreal&latitude=40.4314779&longitude=-80.0507118))
+``` json
+{
+  "suggestions": [
+    {
+      "name": "Montreal, 10, CA",
+      "latitude": "45.50884",
+      "longitude": "-73.58781",
+      "score": 0.6857142857142857
+    },
+    {
+      "name": "Montreal-Ouest, 10, CA",
+      "latitude": "45.45286",
+      "longitude": "-73.64918",
+      "score": 0.4820182953011256
+    }
+  ]
+}
+```
+
+#### Parameters
+
+- `q` => The lookup term (required)
+- `latitude`, `longitude` (optional)
+
+#### Features
+
+- Searches are matched fully or partially, meaning that results for `Mont` will be a  subset of results of `Montreal` lookup.
+- Cached queries by term, latitude and longitude parameters.
+- Configurable rate limit on the resource.
+- Requests queue after reaching rate limit.
 
 ### Running the application
 
@@ -159,4 +194,42 @@ It's possible to run the app using `docker` and `docker-commpose`.
 docker-compose up
 ```
 
-The default configuration sets the server running at `port=8080`.
+### Parameters
+
+Some properties can be set to for a finer tune of the application.
+
+#### Server
+
+- `HOST`: The address the application will accept requests. (default `0.0.0.0`)
+- `PORT`: The port the application will accept requests. (default `8080`)
+
+#### Database
+
+The application makes use of a Postgres Database. 
+It must be set beforehand and it may be configured through the following properties.
+
+- `DB_HOST`: DB server hostname (default `0.0.0.0`)
+- `DB_PORT`: DB server listening port (default `5432`)
+- `DB_USER`: User to connect with the database. (default `postgres`)
+- `DB_PASSWORD`: Password to connect with the Database. (default `postgres`)
+- `DB_DATABASE`: The name of the database. (default `postgres`)
+
+#### Application  
+
+##### Cache
+
+- `APP_CACHE_SUGGESTION_TTL`: The `time to live` of each key in seconds. (default 300)
+
+##### Weight
+
+- `APP_WEIGHT_SIMILARITY`: How much relevance is given to term similarity. Value is given between 0 and 1. The left over is the location relevance. (default 0.8)
+
+##### Rate Limiter
+
+- `APP_RATE_LIMITER_POINTS`: Number of requests alowed per `duration`. (default 100)
+- `APP_RATE_LIMITER_DURATION`: Window for counting points in seconds. (default 1)
+- `APP_RATE_LIMITER_BLOCK_DURATION`: Blocking period in seconds after reaching points limit. (default 5)
+
+##### Rate Limiter Queue
+
+- `APP_RATE_LIMITER_QUEUE_MAX_QUEUE_SIZE`: Queue length to store requests after reaching points threshold. (default 100)

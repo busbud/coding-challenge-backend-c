@@ -1,6 +1,6 @@
 module.exports = {
   server: {
-    host: "0.0.0.0",
+    host: process.env.HOST ||"0.0.0.0",
     port: process.env.PORT || 8080
   },
   db: {
@@ -13,19 +13,19 @@ module.exports = {
   app: {
     cache: {
       suggestions: {
-        ttl: 300
+        ttl: process.env.APP_CACHE_SUGGESTION_TTL || 300
       }
     },
     weight: {
       similarity: process.env.APP_WEIGHT_SIMILARITY || 0.8
     },
-    brute: {
-      freeRetries: 1000,
-      attachResetToRequest: false,
-      refreshTimeoutOnRequest: false,
-      minWait: 60 * 1000,
-      maxWait: 15 * 60 * 1000,
-      lifetime: 24 * 60 * 60
+    rateLimiter: {
+      points: process.env.APP_RATE_LIMITER_POINTS || 100, // Limits 30 req/s. Still needs tunning.
+      duration: process.env.APP_RATE_LIMITER_DURATION || 1, // Window of 1 second.
+      blockDuration: process.env.APP_RATE_LIMITER_BLOCK_DURATION || 5 // Block of 5 seconds after limit reached.
+    },
+    rateLimiterQueue: {
+      maxQueueSize: process.env.APP_RATE_LIMITER_QUEUE_MAX_QUEUE_SIZE || 100 // Queues 100 requests before throwing 429 error.
     }
   }
 };
