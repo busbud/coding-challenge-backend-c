@@ -15,14 +15,11 @@ const rateLimiter = new RateLimiterQueue(
 const rateLimiterMiddleware = async (req, res, next) => {
   try {
     const remainingTokens = await rateLimiter.removeTokens(1);
-    console.log(remainingTokens);
     next();
   } catch (err) {
     if (err instanceof RateLimiterQueueError) {
-      console.log("Out of tokens");
       res.status(429).send("Too Many Requests");
     } else {
-      console.log("Plain error");
       res.status(400).end();
     }
   }
