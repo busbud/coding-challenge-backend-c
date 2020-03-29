@@ -4,9 +4,10 @@
   "description": "coding challenge in Nodejs",
   "main": "app.js",
   "scripts": {
+    "mocha": "mocha -r @babel/register -w",
     "start": "node app.js",
     "start:dev": "nodemon --exec babel-node app.js",
-    "test": "./node_modules/mocha/bin/mocha -r @babel/register ./test/",
+    "test": "mocha ./test/",
     "lintjs": "eslint --ignore-path .gitignore --ignore-pattern \"!**/.*\" ./",
     "lintjs:fix": "eslint --ignore-path .gitignore --ignore-pattern \"!**/.*\" ./ --fix",
     "prettier": "prettier --write \"**/*.{js,jsx,json,ts,tsx,md,mdx,css,html,yml,yaml,scss,sass}\" && yarn lintjs-fix"
@@ -25,6 +26,7 @@
     "@babel/register": "^7.9.0",
     "babel-eslint": "^10.1.0",
     "chai": "^1.9.1",
+    "chai-almost": "^1.0.1",
     "eslint": "^6.8.0",
     "eslint-config-standard": "^14.1.1",
     "eslint-plugin-import": "^2.20.1",

@@ -54,7 +54,7 @@ describe('GET /suggestions', function () {
           return suggestions.every(function (suggestion) {
             return suggestion.latitude && suggestion.longitude;
           });
-        })
+        });
       });
 
       it('contains scores', function () {
@@ -62,7 +62,7 @@ describe('GET /suggestions', function () {
           return suggestions.every(function (suggestion) {
             return suggestion.latitude && suggestion.longitude;
           });
-        })
+        });
       });
     });
 
@@ -75,7 +75,7 @@ describe('GET /suggestions', function () {
         return suggestions.some(function (suggestion) {
           return suggestion.name.test(/montreal/i);
         });
-      })
+      });
     });
   });
 });
