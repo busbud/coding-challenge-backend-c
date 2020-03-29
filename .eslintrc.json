@@ -17,6 +17,7 @@
     "mocha": true
   },
   "rules": {
+    "semi": ["error", "always"],
     "no-console": "off",
     "prefer-template": ["error"]
   }
