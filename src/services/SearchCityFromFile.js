@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import path from 'path';
 import { map, filter } from 'rxjs/operators';
 
 import { TsvParser } from '../utils';
@@ -13,6 +14,13 @@ const pivot = 100;
 export default class SearchCityFromFile {
   constructor ({ dataFile }) {
     this.dataFile = dataFile;
+  }
+
+  static buildFromEnv () {
+    const { DATA_FILE } = process.env;
+    const defaultDataFile = path.resolve('./data/cities_canada-usa.tsv');
+    const cityDataFile = DATA_FILE || defaultDataFile;
+    return new SearchCityFromFile({ dataFile: cityDataFile });
   }
 
   async search ({ q: query, latitude, longitude }) {

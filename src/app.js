@@ -1,12 +1,21 @@
-import path from 'path';
 import http from 'http';
 import url from 'url';
-import { SearchCityFromFile } from './services';
+import dotenv from 'dotenv';
+import { SearchCityFromFile, SearchCityFromEs } from './services';
 
-const port = process.env.PORT || 2345;
+dotenv.config();
 
-const cityDataFile = path.resolve('./data/cities_canada-usa.tsv');
-const searchService = new SearchCityFromFile({ dataFile: cityDataFile });
+const { SELECT_SERVICE = 'fileSearch', PORT } = process.env;
+const port = PORT || 2345;
+
+console.info('SELECT_SERVICE', SELECT_SERVICE);
+
+const SEARCH_SERVICES = {
+  elasticsearch: SearchCityFromEs,
+  fileSearch: SearchCityFromFile
+};
+
+const searchService = SEARCH_SERVICES[SELECT_SERVICE].buildFromEnv();
 
 function searchSuccess (cities, res) {
   if (cities.length <= 0) {
@@ -14,7 +23,7 @@ function searchSuccess (cities, res) {
   } else {
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({
-      suggestions: cities,
+      suggestions: cities
     }));
   }
 }
@@ -22,7 +31,7 @@ function searchSuccess (cities, res) {
 function searchFailure (res) {
   res.writeHead(404, { 'Content-Type': 'application/json' });
   res.end(JSON.stringify({
-    suggestions: [],
+    suggestions: []
   }));
 }
 

@@ -17,6 +17,11 @@ export default class SearchCityFromEs {
     this.indexName = indexName;
   }
 
+  static buildFromEnv () {
+    const { INDEX_NAME } = process.env || 'canada_us_cities';
+    return new SearchCityFromEs({ indexName: INDEX_NAME });
+  }
+
   _processEsResult = (esRes) => {
     const { hits } = esRes.body.hits;
     const scores = _.map(hits, (h) => h._score);
@@ -29,7 +34,7 @@ export default class SearchCityFromEs {
         name: fullName,
         score: scaledScore,
         longitude: _source.lat,
-        latitude: _source.long,
+        latitude: _source.long
       };
     });
   };
@@ -38,13 +43,13 @@ export default class SearchCityFromEs {
     const cityIndexBody = await this._loadCityIndexer();
     return elasticSearchClient.indices.create({
       index: this.indexName,
-      body: cityIndexBody,
+      body: cityIndexBody
     });
   }
 
   async deleteIndex () {
     return await elasticSearchClient.indices.delete({
-      index: this.indexName,
+      index: this.indexName
     });
   }
 
@@ -68,11 +73,11 @@ export default class SearchCityFromEs {
       .withQuery(q)
       .withLocation({
         longitude,
-        latitude,
+        latitude
       });
     const results = await elasticSearchClient.search({
       index: this.indexName,
-      body: queryProxy.buildEsQuery(),
+      body: queryProxy.buildEsQuery()
     })
       .then(this._processEsResult);
     return results;

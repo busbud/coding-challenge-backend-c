@@ -24,15 +24,15 @@ export default class BuildQueryProxy {
         bool: {
           must: {
             match: {
-              ...this._searchName(),
+              ...this._searchName()
             }
           },
-          ...this._distanceFeature(),
+          ...this._distanceFeature()
         }
       },
       sort: [
-        { _score: { order: 'desc' } },
-      ],
+        { _score: { order: 'desc' } }
+      ]
     });
   }
 
@@ -44,9 +44,9 @@ export default class BuildQueryProxy {
         distance_feature: {
           field: 'location',
           pivot: this.pivot,
-          origin: `${latitude},${longitude}`,
-        },
-      },
+          origin: `${latitude},${longitude}`
+        }
+      }
     });
   }
 
@@ -54,8 +54,8 @@ export default class BuildQueryProxy {
     return ({
       name: {
         query: this.query,
-        analyzer: 'pattern',
-      },
+        analyzer: 'pattern'
+      }
     });
   }
 }

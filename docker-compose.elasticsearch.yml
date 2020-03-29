@@ -4,4 +4,4 @@ services:
     volumes:
       - .:/home/node/app
     environment:
-      - SELECT_SERVICE=fileSearch
+      - SELECT_SERVICE=elasticsearch

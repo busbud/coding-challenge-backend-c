@@ -15,17 +15,17 @@ const examples = [
   {
     desc: 'should return score in ordered',
     searchQuery: { q: 'London' },
-    expectedFn: (actual) => expect(actual).to.be.sortedBy('score', { descending: true }),
+    expectedFn: (actual) => expect(actual).to.be.sortedBy('score', { descending: true })
   },
   {
     desc: 'should return nearest location first',
     searchQuery: {
       q: 'London',
       latitude: 40.16721,
-      longitude: -105.10193,
+      longitude: -105.10193
     },
-    expectedFn: (actual) => expect(actual).to.be.sortedBy('score', { descending: true }),
-  },
+    expectedFn: (actual) => expect(actual).to.be.sortedBy('score', { descending: true })
+  }
 ];
 
 describe('SearchCityFromEs', () => {
@@ -36,7 +36,6 @@ describe('SearchCityFromEs', () => {
     if (process.env.NOCK_DISABLE) {
       nock.enableNetConnect();
     } else {
-      nock.disableNetConnect();
       nockScope = nock(`${ElasticsearchUrl}`);
       nockScope
         .persist()
@@ -53,6 +52,6 @@ describe('SearchCityFromEs', () => {
 
   describe('#act_as_search_service', ActsAsSearchable.actAsSearchService({
     searchService,
-    examples,
+    examples
   }));
 });
