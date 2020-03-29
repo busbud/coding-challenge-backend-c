@@ -8,6 +8,7 @@
     "start": "node app.js",
     "start:dev": "nodemon --exec babel-node app.js",
     "test": "mocha ./test/",
+    "build": "babel src -d lib/",
     "lintjs": "eslint --ignore-path .gitignore --ignore-pattern \"!**/.*\" ./",
     "lintjs:fix": "eslint --ignore-path .gitignore --ignore-pattern \"!**/.*\" ./ --fix",
     "prettier": "prettier --write \"**/*.{js,jsx,json,ts,tsx,md,mdx,css,html,yml,yaml,scss,sass}\" && yarn lintjs-fix"
@@ -37,7 +38,10 @@
     "nodemon": "^2.0.2",
     "supertest": "^4.0.2"
   },
-  "dependencies": {},
+  "dependencies": {
+    "lodash": "^4.17.15",
+    "rxjs": "^6.5.4"
+  },
   "engines": {
     "node": "12.16.1"
   }
