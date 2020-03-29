@@ -1,0 +1,22 @@
+{
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaVersion": 7,
+    "ecmaFeatures": {
+      "legacyDecorators": true,
+      "experimentalObjectRestSpread": true
+    }
+  },
+  "extends": "standard",
+  "plugins": ["import", "standard", "promise"],
+  "env": {
+    "browser": false,
+    "commonjs": true,
+    "node": true,
+    "es6": true
+  },
+  "rules": {
+    "no-console": "off",
+    "prefer-template": ["error"]
+  }
+}
