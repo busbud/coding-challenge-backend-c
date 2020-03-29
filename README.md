@@ -11,19 +11,18 @@
 - `npm run lintjs` - check code convention 
 - `npm run lintjs:fix` - check code convention, and auto fix.
 
-#### Things can be improved if I have more time
+### Things can be improved if I have more time
 
-- [] Use **lerna** to implement monorepo, so that I can move search services to separated packages. 
-Packages that I would like to move to packages:
+- [ ] Use **lerna** to implement monorepo, so that I can move search services to separated packages. 
 
     - es_search
     - search_test_helper
     - file_search
     ... 
 
-- [] User Joi to validate configuration from environments variables
-- [] Add caching for each search keywords   
-- [] Write script to wait for elasticsearch service up before run any application command. 
+- [ ] User Joi to validate configuration from environments variables
+- [ ] Add caching for each search keywords   
+- [ ] Write script to wait for elasticsearch service up before run any application command. 
 Currently temporary run test by sequence docker, it makes running the test slow       
-- [] Configure git hooks by using `husky` to run fixing code convention before each commit.
+- [ ] Configure git hooks by using `husky` to run fixing code convention before each commit.
  
