@@ -11,6 +11,7 @@
     "start:dev": "nodemon --exec babel-node src/app.js",
     "test": "mocha -r @babel/register ./test/suggestions.js",
     "test:unit": "mocha -r @babel/register --ignore ./test/suggestions.js ./test/**/*.js ",
+    "import:data": "node -r @babel/register src/services/es_search/bin/load_and_create_index.js",
     "test:es": "cross-env NOCK_DISABLE=true mocha -r @babel/register ./test/services/SearchCityFromEs.js",
     "clean": "rimraf build",
     "build": "concurrently \"npm run clean\" \"babel src -d build\"",
@@ -51,6 +52,7 @@
     "@elastic/elasticsearch": "^7.6.1",
     "cross-env": "^7.0.2",
     "d3-scale": "^3.2.1",
+    "dotenv": "^8.2.0",
     "lodash": "^4.17.15",
     "rxjs": "^6.5.4",
     "yargs": "^15.3.1"

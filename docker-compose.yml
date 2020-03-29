@@ -18,7 +18,22 @@ services:
       - "5601:5601"
     depends_on:
       - elasticsearch
-
+  app:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+      cache_from:
+        - node:12
+      args:
+        - CODE_VERSION=0.1
+    env_file:
+      - .env
+    ports:
+      - 2345:2345
+    networks:
+      - overlay
+    depends_on:
+      - elasticsearch
 networks:
   overlay:
 

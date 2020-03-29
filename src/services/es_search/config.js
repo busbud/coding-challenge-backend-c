@@ -1,5 +1,9 @@
+import dotenv from 'dotenv';
+
+dotenv.config();
+
 export default {
   esClientConfig: {
-    node: 'http://localhost:9200'
+    node: process.env.ES_NODE
   }
 };
