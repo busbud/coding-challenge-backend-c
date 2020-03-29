@@ -1,5 +1,5 @@
 !.*.js
-test/fixtures
+test/*
 node_modules
 yarn.lock
 package-lock.json
