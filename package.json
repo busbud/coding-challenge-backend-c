@@ -5,8 +5,8 @@
   "main": "app.js",
   "scripts": {
     "mocha": "mocha -r @babel/register -w",
-    "start": "node app.js",
-    "start:dev": "nodemon --exec babel-node app.js",
+    "start": "node lib/app.js",
+    "start:dev": "nodemon --exec babel-node src/app.js",
     "test": "mocha ./test/",
     "build": "babel src -d lib/",
     "lintjs": "eslint --ignore-path .gitignore --ignore-pattern \"!**/.*\" ./",
