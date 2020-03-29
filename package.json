@@ -11,6 +11,7 @@
     "start:dev": "nodemon --exec babel-node src/app.js",
     "test": "mocha -r @babel/register ./test/suggestions.js",
     "test:unit": "mocha -r @babel/register --ignore ./test/suggestions.js ./test/**/*.js ",
+    "test:es": "cross-env NOCK_DISABLE=true mocha -r @babel/register ./test/services/SearchCityFromEs.js",
     "build": "babel src -d lib/",
     "lintjs": "eslint --ignore-path .gitignore --ignore-pattern \"!**/.*\" ./",
     "lintjs:fix": "eslint --ignore-path .gitignore --ignore-pattern \"!**/.*\" ./ --fix",
@@ -45,6 +46,7 @@
   },
   "dependencies": {
     "@elastic/elasticsearch": "^7.6.1",
+    "cross-env": "^7.0.2",
     "d3-scale": "^3.2.1",
     "lodash": "^4.17.15",
     "rxjs": "^6.5.4",
