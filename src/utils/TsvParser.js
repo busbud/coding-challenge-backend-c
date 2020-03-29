@@ -20,7 +20,7 @@ export default class TsvParser {
       let row = 0;
       rl.on('line', (line) => {
         const datum = line.trim().split('\t');
-        if (row == 0) {
+        if (row === 0) {
           this.header = datum;
         } else {
           const cityObj = this._convertToObject(datum);

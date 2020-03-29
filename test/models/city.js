@@ -9,24 +9,24 @@ const distanceTestCases = [
   {
     originalPoint: {
       lat: 42.98339,
-      long: -81.23304,
+      long: -81.23304
     },
-    result: 0,
+    result: 0
   },
   {
     originalPoint: {
       lat: 42.18339,
-      long: -81.23304,
+      long: -81.23304
     },
-    result: 89,
+    result: 89
   },
   {
     originalPoint: {
       lat: 42.98339,
-      long: -81.33304,
+      long: -81.33304
     },
-    result: 8,
-  },
+    result: 8
+  }
 ];
 
 describe('City', () => {
@@ -36,7 +36,7 @@ describe('City', () => {
     city = new City({
       name: 'London',
       lat: 42.98339,
-      long: -81.23304,
+      long: -81.23304
     });
   });
 
