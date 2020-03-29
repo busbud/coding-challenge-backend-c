@@ -6,7 +6,10 @@
   "scripts": {
     "start": "node app.js",
     "start:dev": "nodemon --exec babel-node app.js",
-    "test": "./node_modules/mocha/bin/mocha -r @babel/register ./test/"
+    "test": "./node_modules/mocha/bin/mocha -r @babel/register ./test/",
+    "lintjs": "eslint --ignore-path .gitignore --ignore-pattern \"!**/.*\" ./",
+    "lintjs:fix": "eslint --ignore-path .gitignore --ignore-pattern \"!**/.*\" ./ --fix",
+    "prettier": "prettier --write \"**/*.{js,jsx,json,ts,tsx,md,mdx,css,html,yml,yaml,scss,sass}\" && yarn lintjs-fix"
   },
   "author": "",
   "license": "WTFPL",
