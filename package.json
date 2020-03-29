@@ -7,7 +7,7 @@
     "mocha": "mocha -r @babel/register -w",
     "start": "node lib/app.js",
     "start:dev": "nodemon --exec babel-node src/app.js",
-    "test": "mocha ./test/",
+    "test": "mocha -r @babel/register ./test/",
     "build": "babel src -d lib/",
     "lintjs": "eslint --ignore-path .gitignore --ignore-pattern \"!**/.*\" ./",
     "lintjs:fix": "eslint --ignore-path .gitignore --ignore-pattern \"!**/.*\" ./ --fix",
@@ -28,6 +28,7 @@
     "babel-eslint": "^10.1.0",
     "chai": "^1.9.1",
     "chai-almost": "^1.0.1",
+    "chai-sorted": "^0.2.0",
     "eslint": "^6.8.0",
     "eslint-config-standard": "^14.1.1",
     "eslint-plugin-import": "^2.20.1",
@@ -39,7 +40,6 @@
     "supertest": "^4.0.2"
   },
   "dependencies": {
-    "chai-sorted": "^0.2.0",
     "lodash": "^4.17.15",
     "rxjs": "^6.5.4"
   },
