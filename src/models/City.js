@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { DistanceHelper } from '../utils';
 
 export default class City {
@@ -11,6 +12,11 @@ export default class City {
     this.tz = tz;
     this.long = Number(long);
     this.population = population;
+  }
+
+  get fullName () {
+    return _.filter([this.name, this.admin1, this.country],
+      (e) => !_.isEmpty(e.trim())).join(', ');
   }
 
   /*

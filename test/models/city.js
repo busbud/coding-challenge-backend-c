@@ -9,24 +9,24 @@ const distanceTestCases = [
   {
     originalPoint: {
       lat: 42.98339,
-      long: -81.23304
+      long: -81.23304,
     },
-    result: 0
+    result: 0,
   },
   {
     originalPoint: {
       lat: 42.18339,
-      long: -81.23304
+      long: -81.23304,
     },
-    result: 89
+    result: 89,
   },
   {
     originalPoint: {
       lat: 42.98339,
-      long: -81.33304
+      long: -81.33304,
     },
-    result: 8
-  }
+    result: 8,
+  },
 ];
 
 describe('City', () => {
@@ -36,8 +36,28 @@ describe('City', () => {
     city = new City({
       name: 'London',
       lat: 42.98339,
-      long: -81.23304
+      long: -81.23304,
     });
+  });
+
+  it('#fullName', () => {
+    const city1 = new City({
+      name: 'London',
+      admin1: 'ON',
+      country: 'CA',
+      lat: 42.98339,
+      long: -81.23304,
+    });
+    expect(city1.fullName).to.equal('London, ON, CA');
+
+    const city2 = new City({
+      name: 'London',
+      admin1: '',
+      country: 'CA',
+      lat: 42.98339,
+      long: -81.23304,
+    });
+    expect(city2.fullName).to.equal('London, CA');
   });
 
   it('#name', () => {
