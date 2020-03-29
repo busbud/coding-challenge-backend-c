@@ -2,17 +2,18 @@
   "name": "coding-challenge-backend-c",
   "version": "0.0.0",
   "description": "coding challenge in Nodejs",
-  "main": "app.js",
+  "main": "build/app.js",
   "bin": {
     "es-load-index": "src/services/es_search/bin/load_and_create_index.js"
   },
   "scripts": {
-    "start": "node lib/app.js",
+    "start": "node build/app.js",
     "start:dev": "nodemon --exec babel-node src/app.js",
     "test": "mocha -r @babel/register ./test/suggestions.js",
     "test:unit": "mocha -r @babel/register --ignore ./test/suggestions.js ./test/**/*.js ",
     "test:es": "cross-env NOCK_DISABLE=true mocha -r @babel/register ./test/services/SearchCityFromEs.js",
-    "build": "babel src -d lib/",
+    "clean": "rimraf build",
+    "build": "concurrently \"npm run clean\" \"babel src -d build\"",
     "lintjs": "eslint --ignore-path .gitignore --ignore-pattern \"!**/.*\" ./",
     "lintjs:fix": "eslint --ignore-path .gitignore --ignore-pattern \"!**/.*\" ./ --fix",
     "prettier": "prettier --write \"**/*.{js,jsx,json,ts,tsx,md,mdx,css,html,yml,yaml,scss,sass}\" && yarn lintjs-fix"
@@ -33,6 +34,7 @@
     "chai": "^1.9.1",
     "chai-almost": "^1.0.1",
     "chai-sorted": "^0.2.0",
+    "concurrently": "^5.1.0",
     "eslint": "^6.8.0",
     "eslint-config-standard": "^14.1.1",
     "eslint-plugin-import": "^2.20.1",
@@ -42,6 +44,7 @@
     "mocha": "^7.1.1",
     "nock": "^12.0.3",
     "nodemon": "^2.0.2",
+    "rimraf": "^3.0.2",
     "supertest": "^4.0.2"
   },
   "dependencies": {
