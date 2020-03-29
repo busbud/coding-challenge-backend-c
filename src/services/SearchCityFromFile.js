@@ -15,7 +15,10 @@ export default class SearchCityFromFile {
     this.dataFile = dataFile;
   }
 
-  async search ({ q, latitude, longitude }) {
+  async search ({ q: query, latitude, longitude }) {
+    const q = query.trim();
+    if (_.isEmpty(q)) return Promise.reject(new Error('q params is required'));
+
     const tsvParser = new TsvParser({ filePath: this.dataFile });
     const regEx = new RegExp(q, 'i');
     const observableObj = tsvParser.parse()
@@ -24,14 +27,14 @@ export default class SearchCityFromFile {
           const city = new City(data);
           return {
             city,
-            score: city.match(regEx),
+            score: city.match(regEx)
           };
         }),
         filter(datum => datum.score),
         map(this._updateScoreWithDistance({
           latitude,
-          longitude,
-        })),
+          longitude
+        }))
       );
 
     return new Promise((resolve, reject) => {
@@ -39,7 +42,7 @@ export default class SearchCityFromFile {
       observableObj.subscribe({
         next: (cityWithScore) => results.push(cityWithScore),
         error: (err) => reject(err),
-        complete: () => resolve(results),
+        complete: () => resolve(results)
       });
     })
       .then(results => _.sortBy(results, (d) => -1 * d.score));
@@ -55,7 +58,7 @@ export default class SearchCityFromFile {
       if (latitude && longitude) {
         const distance = city.distanceFrom({
           lat: latitude,
-          long: longitude,
+          long: longitude
         });
         newScore = currentScore * (pivot / (distance + pivot));
       }
@@ -65,7 +68,7 @@ export default class SearchCityFromFile {
         name,
         latitude: lat,
         longitude: long,
-        score: newScore,
+        score: newScore
       };
     };
   }

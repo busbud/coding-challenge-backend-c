@@ -1,4 +1,3 @@
-import fs from 'fs';
 import _ from 'lodash';
 import chai, { expect } from 'chai';
 import chaiSorted from 'chai-sorted';
