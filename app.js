@@ -6,7 +6,7 @@ module.exports = http.createServer(function (req, res) {
 
   if (req.url.indexOf('/suggestions') === 0) {
     res.end(JSON.stringify({
-      suggestions: []
+      suggestions: [],
     }));
   } else {
     res.end();
