@@ -39,6 +39,7 @@
     "supertest": "^4.0.2"
   },
   "dependencies": {
+    "chai-sorted": "^0.2.0",
     "lodash": "^4.17.15",
     "rxjs": "^6.5.4"
   },
