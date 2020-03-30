@@ -3,29 +3,30 @@ import fs from 'fs';
 import { expect } from 'chai';
 import nock from 'nock';
 
-import { SearchCityFromEs, testHelpers } from '../../src/services';
+import { SearchCityFromEs } from '../../src/services';
 
 import { fixturePath } from '../test_setup';
+import { ActsAsSearchable } from '../test_helpers';
 
 const esDataRes = fs.readFileSync(path.join(fixturePath, 'es_data_mock.json'));
-const { ActsAsSearchable } = testHelpers;
+
 const ElasticsearchUrl = 'http://localhost:9200';
 
 const examples = [
   {
     desc: 'should return score in ordered',
     searchQuery: { q: 'London' },
-    expectedFn: (actual) => expect(actual).to.be.sortedBy('score', { descending: true })
+    expectedFn: (actual) => expect(actual).to.be.sortedBy('score', { descending: true }),
   },
   {
     desc: 'should return nearest location first',
     searchQuery: {
       q: 'London',
       latitude: 40.16721,
-      longitude: -105.10193
+      longitude: -105.10193,
     },
-    expectedFn: (actual) => expect(actual).to.be.sortedBy('score', { descending: true })
-  }
+    expectedFn: (actual) => expect(actual).to.be.sortedBy('score', { descending: true }),
+  },
 ];
 
 describe('SearchCityFromEs', () => {
@@ -52,6 +53,6 @@ describe('SearchCityFromEs', () => {
 
   describe('#act_as_search_service', ActsAsSearchable.actAsSearchService({
     searchService,
-    examples
+    examples,
   }));
 });
