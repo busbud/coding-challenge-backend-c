@@ -70,10 +70,10 @@ export default class SearchCityFromFile {
         });
         newScore = currentScore * (pivot / (distance + pivot));
       }
-      const { id, name, lat, long } = city;
+      const { id, fullName, lat, long } = city;
       return {
         id,
-        name,
+        name: fullName,
         latitude: lat,
         longitude: long,
         score: newScore
