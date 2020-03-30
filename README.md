@@ -1,3 +1,8 @@
+### Environment Variable
+
+- `SELECT_SERVICE` - allow values `elasticsearch` or `fileSearch`. It's used to switch search engine
+- `ES_NODE` - Elasticsearch Node Url 
+
 ### Commands
 
 - `make importDataToEs` - Import city data to elasticsearch
@@ -22,7 +27,7 @@
 
 - [ ] User Joi to validate configuration from environments variables
 - [ ] Add caching for each search keywords   
-- [ ] Write script to wait for elasticsearch service up before run any application command. 
+- [x] Write script to wait for elasticsearch service up before run any application command. 
 Currently temporary run test by sequence docker, it makes running the test slow       
 - [ ] Configure git hooks by using `husky` to run fixing code convention before each commit.
  
