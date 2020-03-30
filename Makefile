@@ -4,10 +4,10 @@ importDataToEs:
 
 testWithEs:
 	echo "Run test unit with elasticsearch"
-	echo "Import data"
 	docker-compose up -d elasticsearch
-	docker-compose run --rm app npm run import:data createIndex ./data/cities_canada-usa.tsv
-	docker-compose run --rm app npm run test:es
+	echo "waiting for elasticsearch"
+	./wait_for_elasticsearch.sh
+	docker-compose run --rm app /bin/bash -c "npm run import:data createIndex ./data/cities_canada-usa.tsv;npm run test:es"
 
 testUnit:
 	docker-compose run --rm app npm run test:unit
