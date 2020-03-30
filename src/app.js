@@ -1,14 +1,13 @@
 import http from 'http';
 import url from 'url';
 import dotenv from 'dotenv';
+
 import { SearchCityFromFile, SearchCityFromEs } from './services';
 
-dotenv.config();
+if (!process.env.HEROKU) dotenv.config();
 
 const { SELECT_SERVICE = 'fileSearch', PORT } = process.env;
 const port = PORT || 2345;
-
-console.info('SELECT_SERVICE', SELECT_SERVICE);
 
 const SEARCH_SERVICES = {
   elasticsearch: SearchCityFromEs,
