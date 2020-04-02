@@ -2,10 +2,12 @@ import { IRepository } from "./IRepository";
 import { City } from "../models/city.model";
 import * as fs from "fs";
 
+const DATA_FILE_NAME = "cities_canada-usa.tsv";
+
 export class CityRepository implements IRepository<City> {
   getAll() {
     return fs
-      .readFileSync("./data/cities_canada-usa.tsv", "utf8")
+      .readFileSync(`./data/${DATA_FILE_NAME}`, "utf8")
       .split("\n")
       .map(this.parseCity);
   }
@@ -13,7 +15,9 @@ export class CityRepository implements IRepository<City> {
   private parseCity(cityJson: string): City {
     const columnValus = cityJson.split("\t");
     if (columnValus.length !== 19)
-      throw new Error("The formatting of the row in the data was wrong.");
+      throw new Error(
+        `The city row ${cityJson} in the file ${DATA_FILE_NAME} cannot be parsed.`
+      );
 
     return {
       id: +columnValus[0],

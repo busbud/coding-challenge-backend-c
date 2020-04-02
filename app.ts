@@ -1,4 +1,4 @@
-import { CityService } from "./services/cityService";
+import { CitySuggestionService } from "./services/citySuggestionService";
 
 const http = require("http");
 const url = require("url");
@@ -7,14 +7,14 @@ const port = process.env.PORT || 2345;
 
 module.exports = http
   .createServer(function(req, res) {
-    const cityService = new CityService();
+    const cityService = new CitySuggestionService();
     res.writeHead(404, { "Content-Type": "text/plain" });
     const requestUrl = url.parse(req.url, true);
 
     if (req.url.indexOf("/suggestions") === 0) {
       res.end(
         JSON.stringify({
-          suggestions: cityService.getByName(requestUrl.query.q)
+          suggestions: cityService.getSuggestions(requestUrl.query.q)
         })
       );
     } else {

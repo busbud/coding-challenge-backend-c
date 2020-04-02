@@ -21,6 +21,7 @@
   "devDependencies": {
     "@types/mocha": "^7.0.2",
     "@types/node": "^13.9.8",
+    "fast-fuzzy": "^1.9.2",
     "typescript": "^3.8.3"
   }
 }
