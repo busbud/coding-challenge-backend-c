@@ -19,7 +19,7 @@ const EARTH_RADIUS = 6371e3;
 
 const EARTH_MAXIMUM_DISTANCE = Math.PI * EARTH_RADIUS;
 
-export class CitySuggestionService {
+class SuggestionService {
   private cachedRepository: IRepository<City>;
   private fastSearcher: any;
 
@@ -73,14 +73,14 @@ export class CitySuggestionService {
     const Δφ = this.getRadians(cityLocation.latitude - userLocation.latitude);
     const Δλ = this.getRadians(cityLocation.longitude - userLocation.longitude);
 
-    const aversine =
+    const haversine =
       Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
       Math.cos(this.getRadians(userLocation.latitude)) *
         Math.cos(this.getRadians(cityLocation.latitude)) *
         Math.sin(Δλ / 2) *
         Math.sin(Δλ / 2);
 
-    const angularDistance = Math.asin(Math.sqrt(aversine));
+    const angularDistance = Math.asin(Math.sqrt(haversine));
 
     return 2 * EARTH_RADIUS * angularDistance;
   };
@@ -99,3 +99,5 @@ export class CitySuggestionService {
     };
   }
 }
+
+export const CitySuggestionService = new SuggestionService();

@@ -7,32 +7,50 @@ const port = process.env.PORT || 2345;
 
 module.exports = http
   .createServer(function(req, res) {
-    const cityService = new CitySuggestionService();
-    res.writeHead(404, { "Content-Type": "text/plain" });
-
-    const requestUrl = url.parse(req.url, true);
-    const { latitude, longitude } = requestUrl.query;
-    const userLocation =
-      latitude && longitude
-        ? {
-            latitude,
-            longitude
-          }
-        : undefined;
-
     if (req.url.indexOf("/suggestions") === 0) {
-      res.end(
-        JSON.stringify({
-          suggestions: cityService.getSuggestions(
-            requestUrl.query.q,
-            userLocation
-          )
-        })
-      );
+      handleSuggestionsRequest(req, res);
     } else {
-      res.end();
+      handleNonExistentEndpoint(res);
     }
   })
   .listen(port, "127.0.0.1");
+
+function handleSuggestionsRequest(req, res) {
+  const { q, userLocation } = parseSuggestionsParams(req);
+
+  try {
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(
+      JSON.stringify({
+        suggestions: CitySuggestionService.getSuggestions(q, userLocation)
+      })
+    );
+  } catch (e) {
+    returnApiError(res, 500, { message: e.message, stack: e.stack });
+  }
+}
+
+function parseSuggestionsParams(req) {
+  const requestUrl = url.parse(req.url, true);
+  const { latitude, longitude, q } = requestUrl.query;
+  const userLocation =
+    latitude && longitude
+      ? {
+          latitude,
+          longitude
+        }
+      : undefined;
+
+  return { q, userLocation };
+}
+
+function handleNonExistentEndpoint(res) {
+  returnApiError(res, 404, { message: "The endpoint was not found." });
+}
+
+function returnApiError(res, statusCode: number, error: any) {
+  res.writeHead(statusCode, { "Content-Type": "application/json" });
+  res.end(JSON.stringify(error));
+}
 
 console.log("Server running at http://127.0.0.1:%d/suggestions", port);
