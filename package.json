@@ -16,11 +16,11 @@
     "supertest": "^0.11.0"
   },
   "engines": {
-    "node": "0.10.26"
+    "node": "12.16.1"
   },
   "devDependencies": {
     "@types/mocha": "^7.0.2",
-    "@types/node": "^13.9.8",
+    "@types/node": "^13.11.0",
     "fast-fuzzy": "^1.9.2",
     "typescript": "^3.8.3"
   }
