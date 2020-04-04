@@ -28,8 +28,8 @@ function suggestions(params) {
         sugg = latlongScore(sugg, 
             Math.abs(parseFloat(params[1]) + parseFloat(params[2])));
     }
-
-    return sugg;
+    
+    return sugg.sort(function(cityA, cityB){return cityB.score - cityA.score });
 }
 /**
  * Function will compare the lat and long of each suggestion 
