@@ -1,0 +1,8 @@
+id	name	ascii	alt_name	lat	long	feat_class	feat_code	country	cc2	admin1	admin2	admin3	admin4	population	elevation	dem	tz	modified_at
+1	Montrzal	Abbotsford	Montreal	49.05798	-122.25257	P	PPL	CA		2	5957659			151683		114	America/Vancouver	4/22/2013
+5	Montrou	Acton Vale		45.65007	-72.56582	P	PPL	CA		10	16			5135		90	America/Montreal	4/11/2008
+4	Montrzal	Ajax	"Adzhaks,Ehjdzhaks,Ejdzaks,ajaks, awntaryw,eijegseu,Аджакс,Ејџакс,Эйджакс,أجاكس، أونتاريو,에이젝스"	43333.85012	-79.03288	P	PPL	CA		8				90167		97	America/Toronto	12/30/2011
+2	Alma	Alma	"Al'ma,Alma,YTF,alma,alma, kbk,alma, kybk,Алма,Альма,آلما,آلما، کبک,ألما، كيبك"	48.55009	-71.6491	P	PPL	CA		10	2			29526		90	America/Montreal	1/29/2010
+3	Amherst	Amherst		45.83345	-64.19874	P	PPL	CA		7				9336		20	America/Halifax	4/11/2008
+7	Amherstburg	Amherstburg		42.11679	-83.04985	P	PPL	CA		8				11459		183	America/Toronto	1/22/2006
+6	Amos	Amos	"Amos,YEY,amws,amws, kbk,amws, kybk,Амос,آموس، کبک,أموس، كيبك,اموس"	48.56688	-78.11624	P	PPL	CA		10	8			17918		298	America/Montreal	9/22/2010
