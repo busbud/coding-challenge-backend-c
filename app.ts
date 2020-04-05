@@ -18,6 +18,10 @@ module.exports = http
 function handleSuggestionsRequest(req, res) {
   const { q, userLocation } = parseSuggestionsParams(req);
 
+  if (!q) {
+    returnApiError(res, 400, { message: "No query was specified" });
+  }
+
   try {
     const suggestions = CitySuggestionService.getSuggestions(q, userLocation);
     res.writeHead(suggestions.length > 0 ? 200 : 404, {

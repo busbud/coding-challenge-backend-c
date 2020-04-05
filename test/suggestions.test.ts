@@ -42,6 +42,27 @@ describe("GET /suggestions", function() {
     });
   });
 
+  describe("with no query city", function() {
+    let response;
+
+    before(function(done) {
+      request.get("/suggestions").end(function(err, res) {
+        response = res;
+        response.json = JSON.parse(res.text);
+        done(err);
+      });
+    });
+
+    it("returns a 400", function() {
+      expect(response.statusCode).to.equal(400);
+    });
+
+    it("returns an error object instead of suggestions", function() {
+      expect(!response.json.suggestions && response.json.message);
+      expect(response.json.message).to.equal("No query was specified");
+    });
+  });
+
   describe("with a non-existent city", function() {
     let response;
 
