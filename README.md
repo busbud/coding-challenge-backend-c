@@ -1,5 +1,5 @@
 # Busbud Coding Challenge
-This is one implementation to fulfill the requirement for the challenge. It uses the npm library fast-fuzzy to find matches. The tests are written using Mocha, Chai and Sinon.
+This is one implementation to fulfill the requirement for the challenge. It uses the npm library fast-fuzzy to find matches. The tests are written using Mocha, Chai and Sinon. A separate production build is deployed to heroku here: https://peaceful-basin-34962.herokuapp.com/suggestions?q=montreal
 
 
 ### Prerequisites
