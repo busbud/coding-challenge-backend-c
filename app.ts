@@ -19,10 +19,13 @@ function handleSuggestionsRequest(req, res) {
   const { q, userLocation } = parseSuggestionsParams(req);
 
   try {
-    res.writeHead(200, { "Content-Type": "application/json" });
+    const suggestions = CitySuggestionService.getSuggestions(q, userLocation);
+    res.writeHead(suggestions.length > 0 ? 200 : 404, {
+      "Content-Type": "application/json"
+    });
     res.end(
       JSON.stringify({
-        suggestions: CitySuggestionService.getSuggestions(q, userLocation)
+        suggestions
       })
     );
   } catch (e) {

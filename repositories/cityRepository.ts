@@ -16,7 +16,7 @@ export class CityRepository implements IRepository<City> {
     const columnValus = cityJson.split("\t");
     if (columnValus.length !== 19)
       throw new Error(
-        `The city row ${cityJson} in the file ${DATA_FILE_NAME} cannot be parsed.`
+        `A city row in the file ${DATA_FILE_NAME} has an invalid number of columns.`
       );
 
     return {

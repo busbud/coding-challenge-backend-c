@@ -19,14 +19,14 @@ const EARTH_RADIUS = 6371e3;
 
 const EARTH_MAXIMUM_DISTANCE = Math.PI * EARTH_RADIUS;
 
-class SuggestionService {
-  private cachedRepository: IRepository<City>;
+export class CitySuggestionProvider {
   private fastSearcher: any;
 
   constructor() {
-    let repository = new CityRepository();
-    this.cachedRepository = new CityRepositoryCachingDecorator(repository);
-    this.fastSearcher = new Searcher(this.cachedRepository.getAll(), {
+    let cachedRepository = new CityRepositoryCachingDecorator(
+      new CityRepository()
+    );
+    this.fastSearcher = new Searcher(cachedRepository.getAll(), {
       keySelector: (city: City) => city.name,
       returnMatchData: true,
       threshold: 0.75
@@ -100,4 +100,4 @@ class SuggestionService {
   }
 }
 
-export const CitySuggestionService = new SuggestionService();
+export const CitySuggestionService = new CitySuggestionProvider();

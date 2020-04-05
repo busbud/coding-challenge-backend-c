@@ -1,8 +1,47 @@
+import { stub } from "sinon";
 let expect = require("chai").expect;
 let app = require("../app");
+let suggestionServiceModule = require("../services/citySuggestionService");
 let request = require("supertest")(app);
 
 describe("GET /suggestions", function() {
+  describe("when CitySuggestionService throws", function() {
+    let response;
+    let stubSuggestionService;
+
+    before(function(done) {
+      stubSuggestionService = stub(
+        suggestionServiceModule.CitySuggestionService,
+        "getSuggestions"
+      ).throws(new Error("suggestionServiceError"));
+
+      request
+        .get("/suggestions?q=SomeRandomCityInTheMiddleOfNowhere")
+        .end(function(err, res) {
+          response = res;
+          response.json = JSON.parse(res.text);
+          done(err);
+        });
+    });
+
+    after(function() {
+      stubSuggestionService.restore();
+    });
+
+    it("returns a 500", function() {
+      expect(response.statusCode).to.equal(500);
+    });
+
+    it("returns an error object instead of suggestions", function() {
+      expect(
+        !response.json.suggestions &&
+          response.json.message &&
+          response.json.stack
+      );
+      expect(response.json.message).to.equal("suggestionServiceError");
+    });
+  });
+
   describe("with a non-existent city", function() {
     let response;
 
@@ -46,7 +85,7 @@ describe("GET /suggestions", function() {
       expect(response.json.suggestions).to.have.length.above(0);
     });
 
-    describe.skip("Validate the shape of the data being returned", function() {
+    describe("Validate the shape of the data being returned", function() {
       it("contains latitudes and longitudes", function() {
         expect(response.json.suggestions).to.satisfy(function(suggestions) {
           return suggestions.every(function(suggestion) {
@@ -67,7 +106,7 @@ describe("GET /suggestions", function() {
     it("contains a match", function() {
       expect(response.json.suggestions).to.satisfy(function(suggestions) {
         return suggestions.some(function(suggestion) {
-          return suggestion.name.test(/montreal/i);
+          return /Montréal/.test(suggestion.name);
         });
       });
     });
