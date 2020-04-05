@@ -4,11 +4,14 @@ var http = require('http');
 var port = process.env.PORT || 2345;
 
 module.exports = http.createServer(function (req, res) {
-  //res.writeHead(404, {'Content-Type': 'text/plain'});
   if (req.url.indexOf('/suggestions') === 0) {
+    var temp = autocompleteSuggestions(req.url);
+    if(temp.length == 0) {
+      res.writeHead(404, {'Content-Type': 'text/plain'});
+    } 
     res.end(JSON.stringify({
-      suggestions: autocompleteSuggestions(req.url)
-    }));
+      suggestions: temp
+    }));      
   } else {
     res.end();
   }

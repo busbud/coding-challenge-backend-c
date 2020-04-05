@@ -17,7 +17,6 @@ describe('GET /suggestions', function() {
     });
 
     it('returns a 404', function () {
-      // Question on how to handle status codes from node side.
       expect(response.statusCode).to.equal(404);
     });
 
