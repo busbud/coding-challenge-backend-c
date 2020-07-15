@@ -4,17 +4,23 @@
   "description": "coding challenge in Nodejs",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
-    "test": "./node_modules/mocha/bin/mocha ./test/"
+    "lint": "./node_modules/.bin/eslint app.js",
+    "test": "./node_modules/mocha/bin/mocha ./test/",
+    "start": "node app.js"
   },
   "author": "",
   "license": "WTFPL",
   "dependencies": {
+    "@elastic/elasticsearch": "^7.8.0",
     "chai": "^1.9.1",
     "mocha": "^1.18.2",
     "supertest": "^0.11.0"
   },
   "engines": {
     "node": "0.10.26"
+  },
+  "devDependencies": {
+    "eslint": "^7.4.0",
+    "eslint-config-google": "^0.14.0"
   }
 }
