@@ -1,0 +1,83 @@
+PUT /_index_template/cities-template
+{
+  "index_patterns": [
+    "cities*"
+  ],
+  "template": {
+    "settings": {
+      "number_of_shards": "1",
+      "number_of_replicas": "0"
+    },
+    "mappings": {
+      "properties": {
+        "ASCIIName": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          },
+          "index_prefixes": {
+              "min_chars": 4,
+              "max_chars": 19
+         }
+        },
+        "CountryName": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "GeonamesId": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "ModificationDate": {
+          "type": "date"
+        },
+        "Name": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "Population": {
+          "type": "long"
+        },
+        "StateName": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "Timezone": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "location": {
+          "type": "geo_point"
+        }
+      }
+    }
+  }
+}

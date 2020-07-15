@@ -1,0 +1,36 @@
+# search with latitude, longitude and city prefix
+GET /cities/_search
+{
+  "query": {"prefix": {
+    "Name": {
+      "value": "mont"
+    }
+  }}
+}
+
+# search with latitude, longitude and city prefix
+GET /cities/_search
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "geo_distance": {
+            "distance": "100000km",
+            "location": {
+              "lat": 43.70011,
+              "lon": 79.4163
+            }
+          }
+        },
+        {
+          "prefix": {
+            "Name": {
+              "value": "londo"
+            }
+          }
+        }
+      ]
+    }
+  }
+}
