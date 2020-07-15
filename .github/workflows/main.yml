@@ -1,0 +1,29 @@
+# This is a basic workflow to help you get started with Actions
+
+name: coding challenge build khaled souf branch
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the challenge-khaled-souf branch
+on:
+  push:
+    branches: [ challenge-khaled-souf ]
+  pull_request:
+    branches: [ challenge-khaled-souf ]
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      # install node version based on .nvmrc
+      - uses: dcodeIO/setup-node-nvm@master
+      - name: install depedencies
+      - run: npm install
+      - name: run linter
+      - run: npm run lint
+      - name: build
+        run: npm ci
