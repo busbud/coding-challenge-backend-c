@@ -21,13 +21,33 @@ app.get("/suggestions", (req, res) => {
   let lat = null;
   let long = null;
 
+  // validate q parameter
   if (/^[a-zA-Z]+$/igm.test(params.q)){
     query = params.q;
   } else {
     res.status(400).send("Bad request.");
   }
 
-  res.send(JSON.stringify(req.query));
+  // validate latitude parameter
+  if (params.hasOwnProperty('latitude') && parseFloat(params.latitude) <= 90.0 && parseFloat(params.latitude) >= -90.0){
+    lat = parseFloat(params.latitude);
+  } else {
+    lat = null;
+  }
+
+  // validate longitude parameter
+  if (params.hasOwnProperty('longitude') && parseFloat(params.longitude) <= 90.0 && parseFloat(params.longitude) >= -90.0){
+    long = parseFloat(params.longitude);
+  } else {
+    long = null;
+  }
+
+  // search nearby cities
+  let nearbyCities = location.search(query, lat, long);
+
+  res.status(200).json({
+    "suggestions": nearbyCities
+  });
 });
 
 // express app listens on specified port
