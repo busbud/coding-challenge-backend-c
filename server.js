@@ -7,12 +7,12 @@ const express = require('express');
 const app = express();
 const port = process.env.port || 3000;
 
+// this function serves static files from the ./client directory
 app.use(express.static(path.join(__dirname, 'client')));
 
-// app.get('/', (req, res) => {
-//   res.send('Hello World!')
-// })
 
+
+// express app listens on specified port
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
