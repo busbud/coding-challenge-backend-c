@@ -1,0 +1,14 @@
+### valid request
+GET http://localhost:3000/suggestions?q=New York&latitude=10.92&longitude=65.01
+
+### invalid request
+GET http://localhost:3000/suggestions?q=<script href='javascript:alert('xss')'>
+
+### invalid request2
+GET http://localhost:3000/suggestions?q=09434
+
+### incomplete but valid request
+GET http://localhost:3000/suggestions?q=someTown&latitude=10.0
+
+### invalid optional parameter
+GET http://localhost:3000/suggestions?q=someTown&latitude=high&longitude=1000
