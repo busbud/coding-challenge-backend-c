@@ -4,8 +4,8 @@ const levenshtein = require('js-levenshtein')
 
 // constant names for canadian provinces as of https://en.wikipedia.org/wiki/List_of_FIPS_region_codes_(A%E2%80%93C)#CA:_Canada
 const PROVINCES_CA = [
-  'Alberta','British Columbia', 'Manitoba', 'New Brunswick', 'Newfoundland and Labrador',
-  'Nova Scotia', 'Ontario', 'Prince Edward Island', 'Quebec', 'Saskatchewan', 'Yukon',
+  '', 'Alberta','British Columbia', 'Manitoba', 'New Brunswick', 'Newfoundland and Labrador',
+  '', 'Nova Scotia', 'Ontario', 'Prince Edward Island', 'Quebec', 'Saskatchewan', 'Yukon',
   'Northwest Territories', 'Nunavut'
 ];
 const MAX_LEVEN = 2; // maximum allowed levenshtein distance
@@ -87,14 +87,12 @@ const search = (query, lat, long) => {
         'score': score
       };
     });
-    console.log(candidates);
   }
   // 4. optionally enhance confidence score with location information
   if (lat !== null || long !== null){
     candidates.forEach((el) => {
       el.score = el.score * score_location(lat, long, parseFloat(el.latitude), parseFloat(el.longitude), MAX_DIST);
     });
-    console.log(candidates);
   }
 
   // return list of candidates sorted by confidence score
