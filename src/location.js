@@ -3,11 +3,13 @@ const parse = require('csv-parse/lib/sync');
 const levenshtein = require('js-levenshtein')
 
 // constant names for canadian provinces as of https://en.wikipedia.org/wiki/List_of_FIPS_region_codes_(A%E2%80%93C)#CA:_Canada
-const PROVINCESCA = [
+const PROVINCES_CA = [
   'Alberta','British Columbia', 'Manitoba', 'New Brunswick', 'Newfoundland and Labrador',
   'Nova Scotia', 'Ontario', 'Prince Edward Island', 'Quebec', 'Saskatchewan', 'Yukon',
   'Northwest Territories', 'Nunavut'
 ];
+const MAX_LEVEN = 5; // maximum allowed levenshtein distance
+const MAX_DIST = 1500; // maximum allowed spatial distance in km
 
 const extractDataFromCSV = () => {
   // read data from csv file
@@ -39,6 +41,15 @@ const spatialDistance = (lat1, lon1, lat2, lon2) => {
   return R2 * Math.asin(Math.sqrt(a))
 };
 
+// calculate confidence score based on levenshtein distance
+const score_leven = (leven, maxDeviation) => 1.0 - 1.0*leven/maxDeviation;
+
+// calculate confidence score based on location distance
+const score_location = (lat_query, long_query, lat_candidate, long_candidate, maxDeviation) => {
+  const dist = spatialDistance(lat_query, long_query, lat_candidate, long_candidate);
+  return 1.0 - 1.0*dist/maxDeviation;
+};
+
 const search = (query, lat, long) => {
   // extract data
   const data = extractDataFromCSV();
@@ -49,23 +60,46 @@ const search = (query, lat, long) => {
     item.leven = levenshtein(query, item.ascii);
   });
   // candidates have a levenshtein distance of <= 10 to query
-  let candidates = data.filter((city) => city.levenshein < 5);
-
-
-  if (candidates.length === 0){
-    console.log("bad")
-    
-  }
+  let candidates = data.filter((city) => city.levenshein < MAX_LEVEN);
 
   // 2. if no matches: search cities by alternative names
-  // 3. optionally enhance confidence score with location information
-  
+  if (candidates.length === 0){
+    const smallestLevenshtein = (arr) => {
+      let dist = arr.map((el) => levenshtein(query, el));
+      return Math.min(...dist);
+    };
+    data.forEach((item) => {
+      item.leven = smallestLevenshtein(item.alt.split(','))
+    });
+    candidates = data.filter((city) => city.levenshein < MAX_LEVEN);
+  }
+  // 3. if still empty return, else calculate confidence based on levenshtein distance
+  if (candidates.length === 0){
+    return [];
+  } else {
+    candidates = candidates.map((item) => {
+      let name = `${item.ascii}, ${item.country == 'US' ? item.state : PROVINCES_CA[parseInt(item.state,base=10)]}, ${item.country}`;
+      let score = score_leven(item.leven, MAX_LEVEN);
+      return {
+        'name': name,
+        'latitude': `${item.lat}`,
+        'longitude': `${item.long}`,
+        'score': score
+      };
+    });
+  }
+  // 4. optionally enhance confidence score with location information
+  if (lat !== null || long !== null){
+    candidates.forEach((el) => {
+      el.score *= score_location(lat, long, parseFloat(el.latitude), parseFloat(el.longitude), MAX_DIST);
+    });
+  }
 
-
-
-
+  // return list of candidates
+  return candidates;
 };
 
-search('a','b','c');
+c  = search('a','b','c');
+console.log(c);
 
 module.exports.search = search;
