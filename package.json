@@ -11,7 +11,9 @@
   "license": "WTFPL",
   "dependencies": {
     "chai": "^1.9.1",
+    "csv-parse": "^4.12.0",
     "express": "^4.17.1",
+    "js-levenshtein": "^1.1.6",
     "mocha": "^1.18.2",
     "supertest": "^4.0.2"
   },
