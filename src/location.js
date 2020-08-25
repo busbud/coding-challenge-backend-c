@@ -36,18 +36,18 @@ const extractDataFromCSV = () => {
 const spatialDistance = (lat1, lon1, lat2, lon2) => {
   const p = 0.017453292519943295; // Math.PI / 180
   const R2 = 12742; // 2 * R; R = 6371 km
-  const a = 0.5 - Math.cos((lat2 - lat1) * p)/2 + Math.cos(lat1 * p) * Math.cos(lat2 * p) * 
-            (1 - Math.cos((lon2 - lon1) * p))/2;
+  const a = 0.5 - Math.cos((lat2 - lat1) * p)/2 + Math.cos(lat1 * p) * Math.cos(lat2 * p) * (1 - Math.cos((lon2 - lon1) * p))/2;
   return R2 * Math.asin(Math.sqrt(a))
 };
 
 // calculate confidence score based on levenshtein distance
-const score_leven = (leven, maxDeviation) => 1.0 - 1.0*leven/maxDeviation;
+const score_leven = (leven, maxDeviation) => 1.0 - Math.min(1.0, 1.0*leven/maxDeviation);
 
 // calculate confidence score based on location distance
 const score_location = (lat_query, long_query, lat_candidate, long_candidate, maxDeviation) => {
   const dist = spatialDistance(lat_query, long_query, lat_candidate, long_candidate);
-  return 1.0 - 1.0*dist/maxDeviation;
+  console.log(dist);
+  return 1.0 - Math.min(1.0, 1.0*dist/maxDeviation);
 };
 
 const search = (query, lat, long) => {
@@ -98,8 +98,5 @@ const search = (query, lat, long) => {
   // return list of candidates sorted by confidence score
   return candidates.sort((a, b) => b.score - a.score);
 };
-
-c  = search('London',43.70011,-79.4163);
-console.log(c);
 
 module.exports.search = search;

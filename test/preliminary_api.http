@@ -1,5 +1,11 @@
 ### valid request
-GET http://localhost:3000/suggestions?q=New York&latitude=10.92&longitude=65.01
+GET http://localhost:3000/suggestions?q=Springfield&latitude=10.92&longitude=65.01
+
+### without location
+GET http://localhost:3000/suggestions?q=Springfield
+
+### also valid
+GET http://localhost:3000/suggestions?q=New%20York&latitude=10.92&longitude=65.01
 
 ### invalid request
 GET http://localhost:3000/suggestions?q=<script href='javascript:alert('xss')'>
