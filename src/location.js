@@ -8,7 +8,7 @@ const PROVINCES_CA = [
   'Nova Scotia', 'Ontario', 'Prince Edward Island', 'Quebec', 'Saskatchewan', 'Yukon',
   'Northwest Territories', 'Nunavut'
 ];
-const MAX_LEVEN = 5; // maximum allowed levenshtein distance
+const MAX_LEVEN = 2; // maximum allowed levenshtein distance
 const MAX_DIST = 1500; // maximum allowed spatial distance in km
 
 const extractDataFromCSV = () => {
@@ -87,19 +87,21 @@ const search = (query, lat, long) => {
         'score': score
       };
     });
+    console.log(candidates);
   }
   // 4. optionally enhance confidence score with location information
   if (lat !== null || long !== null){
     candidates.forEach((el) => {
-      el.score *= score_location(lat, long, parseFloat(el.latitude), parseFloat(el.longitude), MAX_DIST);
+      el.score = el.score * score_location(lat, long, parseFloat(el.latitude), parseFloat(el.longitude), MAX_DIST);
     });
+    console.log(candidates);
   }
 
-  // return list of candidates
-  return candidates;
+  // return list of candidates sorted by confidence score
+  return candidates.sort((a, b) => b.score - a.score);
 };
 
-c  = search('London',null,null);
+c  = search('London',43.70011,-79.4163);
 console.log(c);
 
 module.exports.search = search;
