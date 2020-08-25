@@ -1,5 +1,6 @@
 const fs = require('fs');
 const parse = require('csv-parse/lib/sync');
+const levenshtein = require('js-levenshtein')
 
 // constant names for canadian provinces as of https://en.wikipedia.org/wiki/List_of_FIPS_region_codes_(A%E2%80%93C)#CA:_Canada
 const PROVINCESCA = [
@@ -7,8 +8,6 @@ const PROVINCESCA = [
   'Nova Scotia', 'Ontario', 'Prince Edward Island', 'Quebec', 'Saskatchewan', 'Yukon',
   'Northwest Territories', 'Nunavut'
 ];
-// one degree of latitude in kilometres
-const LAT2KM = 111.0
 
 const extractDataFromCSV = () => {
   // read data from csv file
@@ -35,28 +34,36 @@ const extractDataFromCSV = () => {
 const spatialDistance = (lat1, lon1, lat2, lon2) => {
   const p = 0.017453292519943295; // Math.PI / 180
   const R2 = 12742; // 2 * R; R = 6371 km
-  const a = 0.5 - Math.cos((lat2 - lat1) * p)/2 + 
-    Math.cos(lat1 * p) * Math.cos(lat2 * p) * 
-    (1 - Math.cos((lon2 - lon1) * p))/2;
-
+  const a = 0.5 - Math.cos((lat2 - lat1) * p)/2 + Math.cos(lat1 * p) * Math.cos(lat2 * p) * 
+            (1 - Math.cos((lon2 - lon1) * p))/2;
   return R2 * Math.asin(Math.sqrt(a))
-}; 
+};
 
 const search = (query, lat, long) => {
-  
+  // extract data
   const data = extractDataFromCSV();
-  console.log(data)
+
+  // 1. search cities by ascii name
+  // calculate levenshtein distance and store it
+  data.forEach((item) => {
+    item.leven = levenshtein(query, item.ascii);
+  });
+  // candidates have a levenshtein distance of <= 10 to query
+  let candidates = data.filter((city) => city.levenshein < 5);
 
 
-
-
-  return [
-    {
-      "query": query,
-      "latitude": lat,
-      "longitude": long
+  if (candidates.length === 0){
+    console.log("bad")
+    
   }
-  ];
+
+  // 2. if no matches: search cities by alternative names
+  // 3. optionally enhance confidence score with location information
+  
+
+
+
+
 };
 
 search('a','b','c');
