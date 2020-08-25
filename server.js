@@ -41,8 +41,6 @@ app.get("/suggestions", (req, res) => {
   } else {
     long = null;
   }
-  console.log(lat);
-  console.log(long);
 
   // search nearby cities
   let nearbyCities = location.search(query, lat, long);
