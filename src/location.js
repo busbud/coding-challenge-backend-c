@@ -60,7 +60,7 @@ const search = (query, lat, long) => {
     item.leven = levenshtein(query, item.ascii);
   });
   // candidates have a levenshtein distance of <= 10 to query
-  let candidates = data.filter((city) => city.levenshein < MAX_LEVEN);
+  let candidates = data.filter((city) => city.leven < MAX_LEVEN);
 
   // 2. if no matches: search cities by alternative names
   if (candidates.length === 0){
@@ -71,7 +71,7 @@ const search = (query, lat, long) => {
     data.forEach((item) => {
       item.leven = smallestLevenshtein(item.alt.split(','))
     });
-    candidates = data.filter((city) => city.levenshein < MAX_LEVEN);
+    candidates = data.filter((city) => city.leven < MAX_LEVEN);
   }
   // 3. if still empty return, else calculate confidence based on levenshtein distance
   if (candidates.length === 0){
@@ -99,7 +99,7 @@ const search = (query, lat, long) => {
   return candidates;
 };
 
-c  = search('a','b','c');
+c  = search('London',null,null);
 console.log(c);
 
 module.exports.search = search;
