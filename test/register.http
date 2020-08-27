@@ -1,9 +1,9 @@
 ### create a valid user
-POST https://city-search-node-api.herokuapp.com//register
+POST https://city-search-node-api.herokuapp.com/register
 Content-Type: application/json
 
 {
-  "username": "test6",
+  "username": "test13",
   "password": "test"
 }
 

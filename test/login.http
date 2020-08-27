@@ -1,9 +1,9 @@
 ### attempt login for valid user
-POST http://localhost:3000/login
+POST https://city-search-node-api.herokuapp.com/login
 Content-Type: application/json
 
 {
-  "username": "test4",
+  "username": "test7",
   "password": "test"
 }
 

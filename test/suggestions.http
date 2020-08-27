@@ -1,5 +1,5 @@
 ### valid request
-GET http://localhost:3000/suggestions?q=Springfield&latitude=10.92&longitude=65.01
+GET https://city-search-node-api.herokuapp.com/suggestions?q=Springfield&latitude=30.92&longitude=-83.01
 
 ### without location
 GET http://localhost:3000/suggestions?q=Springfield
