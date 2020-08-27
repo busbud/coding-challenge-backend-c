@@ -23,7 +23,7 @@ app.set('trust proxy', true);
 
 // register a new user
 app.post("/register", (req, res) => {
-
+  
 });
 
 // login for registered users
