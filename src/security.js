@@ -1,5 +1,5 @@
 const fs = require('fs');
-const { request } = require('http');
+const bcrypt = require('bcrypt');
 
 // module variables
 const ipLimit = 20; // one ip address cannot create more than 50 users
@@ -53,6 +53,19 @@ module.exports.checkIp = (requestIp, ips) => {
     return [true, ips];
   }
 };
+
+// add new user to 
+module.exports.encryptUserPw = (userObj) => {
+  // create a different salt for each user
+  const salt = await bcrypt.genSalt(10);
+  // hash the password
+  const hashedPassword = await bcrypt.hash(userObj.password, salt);
+  const user = {
+    username: userObj.username,
+    password: hashedPassword
+  };
+  return user;
+}
 
 
 // check if user has an jwt access cookie set

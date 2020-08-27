@@ -1,7 +1,6 @@
 // node imports
 const path = require('path');
 const express = require('express');
-const bcrypt = require('bcrypt');
 
 // own imports
 const security = require('./src/security');
@@ -26,29 +25,36 @@ app.use(express.json());
 app.set('trust proxy', true);
 
 // register a new user
-app.post("/register", (req, res) => {
-  // check if requeste ip has created too many users already
+app.post("/register", async (req, res) => {
+  // check if requested ip has created too many users already
   let [creationAllowed, updatedIps] = security.checkIp(req.ip, ips);
   // save updated ip list
   ips = updatedIps;
   security.writeArray(ips, ipPath);
 
   // proceed according to the creationAllowed value
-  
-  // create a different salt for each user
-  // const salt = await bcrypt.genSalt(10);
-  // // hash the password
-  // const hashedPassword = await bcrypt.hash(req.body.password, salt);
-  // const user = {
-  //   username: req.body.username,
-  //   password: hashedPassword
-  // };
-  // users.push(user);
-  // security.appendObject(user, userPath);
-  // res.status(200).json({
-  //   message: "New user created."
-  // });
-  res.status(200).send("msg");
+  if (!creationAllowed) { // ip forbidden
+    res.status(403).json({
+      message: "You are temporarily blocked, because you created too many users."
+    });
+  } else { // ip allowed, proceed
+    // check if username already exists
+    if ( users.findIndex((el) => el.username === req.body.username) > -1) { // username already taken
+      // Note: in this case users counter in ips is increased regardless, this is not quite logical and could be changed
+      res.status(409).json({
+        message: "This username is already taken, try a different one."
+      });
+    } else {
+      // create new user object and update users list
+      let newUser = security.encryptUserPw(req.body);
+      users.push(newUser);
+      security.appendObject(newUser, userPath);
+
+      res.status(201).json({
+        message: "New user created."
+      });
+    }
+  }
 });
 
 // login for registered users
