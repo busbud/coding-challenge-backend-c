@@ -2,6 +2,14 @@ const fs = require('fs');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
+// This will read the .env (if it exists) into process.env
+require('dotenv').config();
+
+// aws variables
+const BUCKET = process.env.BUCKET;
+const ACCESS_KEY = process.env.ACCESS_KEY;
+const SECRET_ACCESS_KEY = process.env.SECRET_ACCESS_KEY;
+
 // module variables
 const ipLimit = 20; // one ip address cannot create more than 50 users
 const jwtKey = "tHiSiSaVeRySeCrEtKeY";

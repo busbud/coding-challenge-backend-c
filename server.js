@@ -8,7 +8,8 @@ const bcrypt = require('bcrypt');
 const security = require('./src/security');
 const location = require('./src/location');
 
-// global users array
+
+// global variables
 const userPath = "./data/users.txt";
 const ipPath = "./data/ips.txt";
 let users = security.readArray(userPath) || [];
