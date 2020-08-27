@@ -3,8 +3,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const AWS = require('aws-sdk');
 
-// This will read the .env (if it exists) into process.env
-require('dotenv').config();
+// This will read the .env (if it exists) into process.env, for local testing
+//require('dotenv').config();
 
 // aws variables
 const BUCKET = process.env.BUCKET;
