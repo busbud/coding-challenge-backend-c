@@ -19,7 +19,7 @@ const jwtExpirySeconds = 300;
 
 // instantiate express app
 const app = express();
-const port = process.env.port || 3000;
+const port = process.env.PORT || 8080;
 
 // this function serves static files from the ./client directory
 app.use(express.static(path.join(__dirname, 'client')));
@@ -149,5 +149,5 @@ app.get("/suggestions", security.authenticateUser, (req, res) => {
 
 // express app listens on specified port
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
+  console.log(`Example app listening at ${port}`)
 });
