@@ -101,7 +101,11 @@ app.post("/login", async (req, res) => {
 // delte user account
 // but first trigger middleware function to ensure that user is already authenticated
 app.delete("/deregister", security.authenticateUser, (req,res) => {
-  res.status(200).send(req.user);
+  let userIndex = users.findIndex((el) => el.username === req.user.username);
+  let deletedUser = users.splice(userIndex,1);
+  // write to persistent file
+  security.writeArray(users, userPath);
+  return res.status(200).send("Deleted user " + deletedUser[0].username);
 });
 
 

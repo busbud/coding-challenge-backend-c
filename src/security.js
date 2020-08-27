@@ -83,7 +83,7 @@ module.exports.authenticateUser = (req, res, next) => {
       return res.status(401).send("Authentication failed.");
     }
     // else middleware executes next function
-    req.user = username;
+    req.user = user;
     next();
   });
 };
