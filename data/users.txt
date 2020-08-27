@@ -1,4 +1,0 @@
-{"username":"test","password":"$2b$10$/MWWqQqc0vlJABOoL352vehjsdbM.KKViPbUDnlyDrFdwVDhAK7.a"}
-{"username":"test2","password":"$2b$10$D1WHjWnqPdi38bMcP158h.cRbDMLfy770pfEg7B20TKdfbnZiLqMi"}
-{"username":"tes!t","password":"$2b$10$sWwDcMwjkPYok/2JtYrlgeQgwUlYRr0mXvMVEmkenvm/iH4U6awj6"}
-{"username":"test4","password":"$2b$10$clRn1U6B/tPsNSalA6xZceGmoR35tqA5oo/TwExcwMetw8f4NGfj2"}
