@@ -1,6 +1,8 @@
 // node imports
 const path = require('path');
 const express = require('express');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 // own imports
 const security = require('./src/security');
@@ -11,6 +13,8 @@ const userPath = "./data/users.txt";
 const ipPath = "./data/ips.txt";
 let users = security.readArray(userPath) || [];
 let ips = security.readArray(ipPath) || [];
+const jwtKey = "tHiSiSaVeRySeCrEtKeY";
+const jwtExpirySeconds = 300;
 
 
 // instantiate express app
@@ -82,8 +86,42 @@ app.post("/register", async (req, res) => {
 });
 
 // login for registered users
-app.post("/login", (req, res) => {
+app.post("/login", async (req, res) => {
+  // input validation username: allowed alphanumeric and _
+  if (!/^[a-zA-Z0-9_]+$/.test(req.body.username)){
+    res.status(400).json({
+      message: "Usernames can only contain alphanumeric characters and underscores."
+    });
+    return 0; // this is nessecary, so that only one result at a time is returned
+  }
+  // input validation username: allowed alphanumeric and _$*+
+  if (!/^[a-zA-Z0-9_$*+!]+$/.test(req.body.password)){
+    res.status(400).send("Passwords can only contain alphanumeric characters and _$*+!");
+    return 0;
+  }
+  // check if user exists and password is correct
+  const userIndex = users.findIndex((el) => el.username == req.body.username);
 
+  // user does not exist
+  if (userIndex === -1){
+    res.status(403).send("User does not exist or wrong password.");
+    return 0;
+  }
+  // user exists but wrong password 
+  if (!await bcrypt.compare(req.body.password, users[userIndex].password)) {
+    res.status(403).send("User does not exist or wrong password.");
+    return 0;
+  }
+
+  // else user successfully authenticated
+  const token = jwt.sign({ username: req.body.username }, jwtKey, {
+		algorithm: "HS256",
+		expiresIn: jwtExpirySeconds,
+	});
+	// set the cookie as the token string, with a similar max age as the token
+	// here, the max age is in milliseconds, so we multiply by 1000
+  res.cookie("token", token, { maxAge: jwtExpirySeconds * 1000 });
+  res.status(202).send("Access token created.");
 });
 
 // delte user account
