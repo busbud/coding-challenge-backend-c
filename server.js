@@ -100,15 +100,15 @@ app.post("/login", async (req, res) => {
 
 // delte user account
 // but first trigger middleware function to ensure that user is already authenticated
-app.post("/deregister", security.validateUser, (req,res) => {
-
+app.post("/deregister", security.authenticateUser, (req,res) => {
+  res.status(200).send("Success.");
 });
 
 
 
 // handle GET requests to /suggestions
 // querystrings of the form ?q=a&lat=91.0&long=18.2 are available in req.query as key:value object
-app.get("/suggestions", security.validateUser, (req, res) => {
+app.get("/suggestions", security.authenticateUser, (req, res) => {
   const params = req.query;
   let query = "";
   let lat = null;

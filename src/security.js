@@ -69,6 +69,17 @@ module.exports.encryptUserPw = async (userObj) => {
 
 
 // check if user has an jwt access cookie set
-module.exports.validateUser = () => {
-
+module.exports.authenticateUser = (req, res, next) => {
+  const token = req.cookies.token;
+  if (!token) { // check if cookie was set
+		return res.status(401).end();
+  }
+  // if set verify it with jwt, handle result with callback
+  jwt.verify(token, jwtKey, (err, username) => {
+    if (err) { // authentication failed
+      return res.status(401).end();
+    }
+    // else middleware executes next function
+    next();
+  });
 };
