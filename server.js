@@ -1,6 +1,7 @@
 // node imports
 const path = require('path');
 const express = require('express');
+const security = require('./src/security');
 
 // own imports
 const location = require('./src/location');
@@ -12,10 +13,30 @@ const port = process.env.port || 3000;
 
 // this function serves static files from the ./client directory
 app.use(express.static(path.join(__dirname, 'client')));
+// to parse ip address via proxy
+app.set('trust proxy', true);
+
+// register a new user
+app.post("/register", (req, res) => {
+
+});
+
+// login for registered users
+app.post("/login", (req, res) => {
+
+});
+
+// delte user account
+// but first trigger middleware function to ensure that user is already authenticated
+app.post("/deregister", security.validateUser, (req,res) => {
+
+});
+
+
 
 // handle GET requests to /suggestions
 // querystrings of the form ?q=a&lat=91.0&long=18.2 are available in req.query as key:value object
-app.get("/suggestions", (req, res) => {
+app.get("/suggestions", security.validateUser, (req, res) => {
   const params = req.query;
   let query = "";
   let lat = null;
