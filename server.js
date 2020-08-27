@@ -7,7 +7,9 @@ const security = require('./src/security');
 const location = require('./src/location');
 
 // global users array
+const userPath = "./data/users.txt";
 let users = security.readArray('./data/users.txt');
+const ipPath = "./data/ips.txt";
 let ips = security.readArray('./data/ips.txt');
 
 // instantiate express app
@@ -23,7 +25,15 @@ app.set('trust proxy', true);
 
 // register a new user
 app.post("/register", (req, res) => {
-  
+  const user = {
+    username: req.body.username,
+    password: req.body.password
+  };
+  users.push(user);
+  security.appendObject(user, userPath);
+  res.status(200).json({
+    message: "New user created."
+  });
 });
 
 // login for registered users

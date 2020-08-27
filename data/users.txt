@@ -1,2 +1,1 @@
-{"user":"usr1","password":"pw1"}
-{"user":"usr2","password":"pw2"}
+{"username":"test","password":"test"}
