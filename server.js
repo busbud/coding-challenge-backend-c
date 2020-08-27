@@ -26,47 +26,58 @@ app.set('trust proxy', true);
 
 // register a new user
 app.post("/register", async (req, res) => {
-  // input validation username: allowed alphanumeric and _
-  if (!/^[a-zA-Z0-9_]+$/.match(req.body.username)){
-    res.status(400).json({
-      message: "Usernames can only contain alphanumeric characters and underscores."
-    });
-  }
-  // input validation username: allowed alphanumeric and _$*+
-  if (!/^[a-zA-Z0-9_$*+]+$/.match(req.body.password)){
-    res.status(400).json({
-      message: "Passwords can only contain alphanumeric characters and _$*+"
-    });
-  }
-
-  // check if requested ip has created too many users already
-  let [creationAllowed, updatedIps] = security.checkIp(req.ip, ips);
-  // save updated ip list
-  ips = updatedIps;
-  security.writeArray(ips, ipPath);
-
-  // proceed according to the creationAllowed value
-  if (!creationAllowed) { // ip forbidden
-    res.status(403).json({
-      message: "You are temporarily blocked, because you created too many users."
-    });
-  } else { // ip allowed, proceed
-    // check if username already exists
-    if ( users.findIndex((el) => el.username === req.body.username) > -1) { // username already taken
-      // Note: in this case users counter in ips is increased regardless, this is not quite logical and could be changed
-      res.status(409).json({
-        message: "This username is already taken, try a different one."
+  try {
+    // input validation username: allowed alphanumeric and _
+    if (!/^[a-zA-Z0-9_]+$/.test(req.body.username)){
+      res.status(400).json({
+        message: "Usernames can only contain alphanumeric characters and underscores."
       });
-    } else {
-      // create new user object and update users list
-      let newUser = security.encryptUserPw(req.body);
-      users.push(newUser);
-      security.appendObject(newUser, userPath);
-
-      res.status(201).json({
-        message: "New user created."
-      });
+      return 0; // this is nessecary, so that only one result at a time is returned
     }
+    // input validation username: allowed alphanumeric and _$*+
+    if (!/^[a-zA-Z0-9_$*+!]+$/.test(req.body.password)){
+      res.status(400).json({
+        message: "Passwords can only contain alphanumeric characters and _$*+!"
+      });
+      return 0;
+    }
+
+    // check if requested ip has created too many users already
+    let [creationAllowed, updatedIps] = security.checkIp(req.ip, ips);
+    // save updated ip list
+    ips = updatedIps;
+    security.writeArray(ips, ipPath);
+
+    // proceed according to the creationAllowed value
+    if (!creationAllowed) { // ip forbidden
+      res.status(403).json({
+        message: "You are temporarily blocked, because you created too many users."
+      });
+      return 0;
+    } else { // ip allowed, proceed
+      // check if username already exists
+      if ( users.findIndex((el) => el.username === req.body.username) > -1) { // username already taken
+        // Note: in this case users counter in ips is increased regardless, this is not quite logical and could be changed
+        res.status(409).json({
+          message: "This username is already taken, try a different one."
+        });
+        return 0;
+      } else {
+        // create new user object and update users list
+        let newUser = await security.encryptUserPw(req.body);
+        users.push(newUser);
+        security.appendObject(newUser, userPath);
+
+        res.status(201).json({
+          message: "New user created."
+        });
+        return 0;
+      }
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Error.");
+    return 0;
   }
 });
 

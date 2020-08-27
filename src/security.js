@@ -55,7 +55,7 @@ module.exports.checkIp = (requestIp, ips) => {
 };
 
 // add new user to 
-module.exports.encryptUserPw = (userObj) => {
+module.exports.encryptUserPw = async (userObj) => {
   // create a different salt for each user
   const salt = await bcrypt.genSalt(10);
   // hash the password
