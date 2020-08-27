@@ -1,10 +1,14 @@
 // node imports
 const path = require('path');
 const express = require('express');
-const security = require('./src/security');
 
 // own imports
+const security = require('./src/security');
 const location = require('./src/location');
+
+// global users array
+let users = security.readArray('./data/users.txt');
+let ips = security.readArray('./data/ips.txt');
 
 
 // instantiate express app
