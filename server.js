@@ -45,6 +45,7 @@ app.post("/register", async (req, res) => {
   // save updated ip list
   ips = updatedIps;
   security.writeArray(ips, ipPath);
+  security.uploadFile(ipPath, "ips.txt");
 
   // proceed according to the creationAllowed value
   if (!creationAllowed) { // ip forbidden
@@ -59,6 +60,7 @@ app.post("/register", async (req, res) => {
       let newUser = await security.encryptUserPw(req.body);
       users.push(newUser);
       security.appendObject(newUser, userPath);
+      security.uploadFile(userPath, "users.txt");
 
       return res.status(201).send("New user created.");
     }
@@ -106,6 +108,7 @@ app.delete("/deregister", security.authenticateUser, (req,res) => {
   let deletedUser = users.splice(userIndex,1);
   // write to persistent file
   security.writeArray(users, userPath);
+  security.uploadFile(userPath, "users.txt");
   return res.status(200).send("Deleted user " + deletedUser[0].username);
 });
 

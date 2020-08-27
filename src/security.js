@@ -1,6 +1,7 @@
 const fs = require('fs');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const AWS = require('aws-sdk');
 
 // This will read the .env (if it exists) into process.env
 require('dotenv').config();
@@ -9,6 +10,10 @@ require('dotenv').config();
 const BUCKET = process.env.BUCKET;
 const ACCESS_KEY = process.env.ACCESS_KEY;
 const SECRET_ACCESS_KEY = process.env.SECRET_ACCESS_KEY;
+const s3 = new AWS.S3({
+  accessKeyId: AWS_ACCESS_KEY,
+  secretAccessKey: AWS_SECRET_ACCESS_KEY
+});
 
 // module variables
 const ipLimit = 20; // one ip address cannot create more than 50 users
@@ -21,6 +26,24 @@ module.exports.writeArray = (arr, filePath) => {
   }, "");
 
   fs.writeFileSync(filePath, serialized);
+};
+
+module.exports.uploadFile = (filePath, uploadPath) => {
+  // create a file stream from file
+  const fileStream = fs.createReadStream(filePath);
+  const params = {
+    Bucket: BUCKET,
+    Key: uploadPath,
+    Body: fileStream
+  };
+  s3.upload(params, function (err, data) {
+    if (err) {
+      console.log("Error", err);
+    }
+    if (data) {
+      console.log("Uploaded in:", data.Location);
+    }
+  });
 };
 
 module.exports.appendObject = (obj, filePath) => {
@@ -77,13 +100,12 @@ module.exports.encryptUserPw = async (userObj) => {
   return user;
 }
 
-
 // check if user has an jwt access cookie set
 module.exports.authenticateUser = (req, res, next) => {
   // retrieve the access token which is sored under that path in the reqest header
   const token = req.headers.cookie && req.headers.cookie.split("=")[1];
   if (!token) { // check if cookie was set
-		return res.status(401).send("Login first before starting a request.");
+    return res.status(401).send("Login first before starting a request.");
   }
   // if set verify it with jwt, handle result with callback
   jwt.verify(token, jwtKey, (err, user) => {

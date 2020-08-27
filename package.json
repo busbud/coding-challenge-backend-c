@@ -10,6 +10,7 @@
   "author": "Patrick Frank",
   "license": "WTFPL",
   "dependencies": {
+    "aws-sdk": "^2.741.0",
     "bcrypt": "^5.0.0",
     "chai": "^1.9.1",
     "csv-parse": "^4.12.0",
