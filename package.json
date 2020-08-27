@@ -1,7 +1,7 @@
 {
-  "name": "coding-challenge-backend-c",
+  "name": "patrick-coding-challenge-backend-c",
   "version": "0.0.0",
-  "description": "coding challenge in Nodejs",
+  "description": "rest api written in express.js that retrieves north american cities",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -20,7 +20,7 @@
     "supertest": "^4.0.2"
   },
   "engines": {
-    "node": ">=12.0.0",
+    "node": "12.x.x",
     "npm": ">=6.0.0"
   }
 }
