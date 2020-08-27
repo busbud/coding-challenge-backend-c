@@ -1,1 +1,4 @@
 {"username":"test","password":"test"}
+{"username":"test","password":"$2b$10$pqB98HdaF3q6hwuGeN6p.OX9hpWjCVXJvMcDjkZddpGNOP4bJ3nnS"}
+{"username":"test","password":"$2b$10$ZzlQmahch7UPgHOUZE6R5OLr8El21qop4FE/TgFUNK1z7dKR3vgZy"}
+{"username":"test","password":"$2b$10$yAEo0fQBWNJjw.5dq473l./yN9UF1OF5zWaDPx.kOGrS3s7oPcPyO"}

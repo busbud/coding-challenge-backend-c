@@ -1,6 +1,7 @@
 // node imports
 const path = require('path');
 const express = require('express');
+const bcrypt = require('bcrypt');
 
 // own imports
 const security = require('./src/security');
@@ -24,10 +25,14 @@ app.use(express.json());
 app.set('trust proxy', true);
 
 // register a new user
-app.post("/register", (req, res) => {
+app.post("/register", async (req, res) => {
+  // create a different salt for each user
+  const salt = await bcrypt.genSalt(10);
+  // hash the password
+  const hashedPassword = await bcrypt.hash(req.body.password, salt);
   const user = {
     username: req.body.username,
-    password: req.body.password
+    password: hashedPassword
   };
   users.push(user);
   security.appendObject(user, userPath);
