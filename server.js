@@ -9,9 +9,10 @@ const location = require('./src/location');
 
 // global users array
 const userPath = "./data/users.txt";
-let users = security.readArray('./data/users.txt');
 const ipPath = "./data/ips.txt";
-let ips = security.readArray('./data/ips.txt');
+let users = security.readArray(userPath) || [];
+let ips = security.readArray(ipPath) || [];
+
 
 // instantiate express app
 const app = express();
@@ -25,20 +26,29 @@ app.use(express.json());
 app.set('trust proxy', true);
 
 // register a new user
-app.post("/register", async (req, res) => {
+app.post("/register", (req, res) => {
+  // check if requeste ip has created too many users already
+  let [creationAllowed, updatedIps] = security.checkIp(req.ip, ips);
+  // save updated ip list
+  ips = updatedIps;
+  security.writeArray(ips, ipPath);
+
+  // proceed according to the creationAllowed value
+  
   // create a different salt for each user
-  const salt = await bcrypt.genSalt(10);
-  // hash the password
-  const hashedPassword = await bcrypt.hash(req.body.password, salt);
-  const user = {
-    username: req.body.username,
-    password: hashedPassword
-  };
-  users.push(user);
-  security.appendObject(user, userPath);
-  res.status(200).json({
-    message: "New user created."
-  });
+  // const salt = await bcrypt.genSalt(10);
+  // // hash the password
+  // const hashedPassword = await bcrypt.hash(req.body.password, salt);
+  // const user = {
+  //   username: req.body.username,
+  //   password: hashedPassword
+  // };
+  // users.push(user);
+  // security.appendObject(user, userPath);
+  // res.status(200).json({
+  //   message: "New user created."
+  // });
+  res.status(200).send("msg");
 });
 
 // login for registered users

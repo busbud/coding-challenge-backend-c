@@ -2,3 +2,5 @@
 {"username":"test","password":"$2b$10$pqB98HdaF3q6hwuGeN6p.OX9hpWjCVXJvMcDjkZddpGNOP4bJ3nnS"}
 {"username":"test","password":"$2b$10$ZzlQmahch7UPgHOUZE6R5OLr8El21qop4FE/TgFUNK1z7dKR3vgZy"}
 {"username":"test","password":"$2b$10$yAEo0fQBWNJjw.5dq473l./yN9UF1OF5zWaDPx.kOGrS3s7oPcPyO"}
+{"username":"test","password":"$2b$10$NAT32phL9IrfUy.oPWFG3.cKtONWJjNYmYb3M2Mo80eU6h632whYK"}
+{"username":"test","password":"$2b$10$URWqxhZywVN9o7UJsi2h6.yJb8YGZv4Z3u.0cm7SS.XCpy1e/3rce"}

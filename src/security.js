@@ -1,4 +1,8 @@
-const fs = require('fs')
+const fs = require('fs');
+const { request } = require('http');
+
+// module variables
+const ipLimit = 20; // one ip address cannot create more than 50 users
 
 // write an array with object elements to file, use with readArray
 module.exports.writeArray = (arr, filePath) => {
@@ -24,6 +28,29 @@ module.exports.readArray = (filePath) => {
     return arr;
   } catch (err) {
     return [];
+  }
+};
+
+// return true if ip is allowed to create a new user, false otherwise
+// ip should be passed as string, returns if user creation allowed and list of updated ips
+module.exports.checkIp = (requestIp, ips) => {
+  const ipIndex = ips.findIndex(el => el.ip === requestIp);
+
+  if (ipIndex > -1) { // ip exists in list
+    ips[ipIndex].users += 1;
+
+    if (ips[ipIndex].users > ipLimit) { // user creating limit reached
+      return [false, ips];
+    } else { // user creation allowed
+      return [true, ips];
+    }
+  }
+  else { // first user to be created
+    ips.push({
+      ip: requestIp,
+      users: 1
+    });
+    return [true, ips];
   }
 };
 
