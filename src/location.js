@@ -46,7 +46,6 @@ const score_leven = (leven, maxDeviation) => 1.0 - Math.min(1.0, 1.0*leven/maxDe
 // calculate confidence score based on location distance
 const score_location = (lat_query, long_query, lat_candidate, long_candidate, maxDeviation) => {
   const dist = spatialDistance(lat_query, long_query, lat_candidate, long_candidate);
-  console.log(dist);
   return 1.0 - Math.min(1.0, 1.0*dist/maxDeviation);
 };
 
