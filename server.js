@@ -100,8 +100,8 @@ app.post("/login", async (req, res) => {
 
 // delte user account
 // but first trigger middleware function to ensure that user is already authenticated
-app.post("/deregister", security.authenticateUser, (req,res) => {
-  res.status(200).send("Success.");
+app.delete("/deregister", security.authenticateUser, (req,res) => {
+  res.status(200).send(req.user);
 });
 
 

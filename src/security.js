@@ -1,8 +1,10 @@
 const fs = require('fs');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 // module variables
 const ipLimit = 20; // one ip address cannot create more than 50 users
+const jwtKey = "tHiSiSaVeRySeCrEtKeY";
 
 // write an array with object elements to file, use with readArray
 module.exports.writeArray = (arr, filePath) => {
@@ -70,16 +72,18 @@ module.exports.encryptUserPw = async (userObj) => {
 
 // check if user has an jwt access cookie set
 module.exports.authenticateUser = (req, res, next) => {
-  const token = req.cookies.token;
+  // retrieve the access token which is sored under that path in the reqest header
+  const token = req.headers.cookie && req.headers.cookie.split("=")[1];
   if (!token) { // check if cookie was set
-		return res.status(401).end();
+		return res.status(401).send("Cookie was not set.");
   }
   // if set verify it with jwt, handle result with callback
-  jwt.verify(token, jwtKey, (err, username) => {
+  jwt.verify(token, jwtKey, (err, user) => {
     if (err) { // authentication failed
-      return res.status(401).end();
+      return res.status(401).send("Authentication failed.");
     }
     // else middleware executes next function
+    req.user = username;
     next();
   });
 };

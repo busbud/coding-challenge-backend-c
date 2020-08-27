@@ -1,0 +1,2 @@
+### attempt login for valid user
+DELETE http://localhost:3000/deregister
