@@ -11,8 +11,8 @@ const BUCKET = process.env.BUCKET;
 const ACCESS_KEY = process.env.ACCESS_KEY;
 const SECRET_ACCESS_KEY = process.env.SECRET_ACCESS_KEY;
 const s3 = new AWS.S3({
-  accessKeyId: AWS_ACCESS_KEY,
-  secretAccessKey: AWS_SECRET_ACCESS_KEY
+  accessKeyId: ACCESS_KEY,
+  secretAccessKey: SECRET_ACCESS_KEY
 });
 
 // module variables
@@ -28,6 +28,7 @@ module.exports.writeArray = (arr, filePath) => {
   fs.writeFileSync(filePath, serialized);
 };
 
+// upload file to s3
 module.exports.uploadFile = (filePath, uploadPath) => {
   // create a file stream from file
   const fileStream = fs.createReadStream(filePath);
@@ -62,6 +63,23 @@ module.exports.readArray = (filePath) => {
   } catch (err) {
     return [];
   }
+};
+
+// download file from s3
+module.exports.downloadFile = (filePath, downloadPath) => {
+  console.log("entered download function");
+  const s3 = new AWS.S3({
+    accessKeyId: ACCESS_KEY,
+    secretAccessKey: SECRET_ACCESS_KEY
+  });
+  const params = {
+        Bucket : BUCKET,
+        Key: downloadPath
+    };
+  const writeStream = fs.createWriteStream(filePath);
+  // download and write to file
+  s3.getObject(params).createReadStream().pipe(writeStream);
+  return 0;
 };
 
 // return true if ip is allowed to create a new user, false otherwise

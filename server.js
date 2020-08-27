@@ -10,17 +10,21 @@ const location = require('./src/location');
 
 
 // global variables
-const userPath = "./data/users.txt";
-const ipPath = "./data/ips.txt";
-let users = security.readArray(userPath) || [];
-let ips = security.readArray(ipPath) || [];
 const jwtKey = "tHiSiSaVeRySeCrEtKeY";
 const jwtExpirySeconds = 300;
-
+// temporary file paths
+const userPath = "./data/users.txt";
+const ipPath = "./data/ips.txt";
+// download from s3
+security.downloadFile(userPath, 'users.txt');
+security.downloadFile(ipPath, 'ips.txt');
+// files into memory
+let users = security.readArray(userPath) || [];
+let ips = security.readArray(ipPath) || [];
 
 // instantiate express app
 const app = express();
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 3000;
 
 // this function serves static files from the ./client directory
 app.use(express.static(path.join(__dirname, 'client')));

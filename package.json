@@ -23,5 +23,8 @@
   "engines": {
     "node": "12.x.x",
     "npm": ">=6.0.0"
+  },
+  "devDependencies": {
+    "dotenv": "^8.2.0"
   }
 }
