@@ -30,58 +30,37 @@ app.set('trust proxy', true);
 
 // register a new user
 app.post("/register", async (req, res) => {
-  try {
-    // input validation username: allowed alphanumeric and _
-    if (!/^[a-zA-Z0-9_]+$/.test(req.body.username)){
-      res.status(400).json({
-        message: "Usernames can only contain alphanumeric characters and underscores."
-      });
-      return 0; // this is nessecary, so that only one result at a time is returned
-    }
-    // input validation username: allowed alphanumeric and _$*+
-    if (!/^[a-zA-Z0-9_$*+!]+$/.test(req.body.password)){
-      res.status(400).json({
-        message: "Passwords can only contain alphanumeric characters and _$*+!"
-      });
-      return 0;
-    }
+  // input validation username: allowed alphanumeric and _
+  if (!/^[a-zA-Z0-9_]+$/.test(req.body.username)){
+    return res.status(400).send("Usernames can only contain alphanumeric characters and underscores.");
+  }
+  // input validation username: allowed alphanumeric and _$*+
+  if (!/^[a-zA-Z0-9_$*+!]+$/.test(req.body.password)){
+    return res.status(400).send("Passwords can only contain alphanumeric characters and _$*+!");
+  }
 
-    // check if requested ip has created too many users already
-    let [creationAllowed, updatedIps] = security.checkIp(req.ip, ips);
-    // save updated ip list
-    ips = updatedIps;
-    security.writeArray(ips, ipPath);
+  // check if requested ip has created too many users already
+  let [creationAllowed, updatedIps] = security.checkIp(req.ip, ips);
+  // save updated ip list
+  ips = updatedIps;
+  security.writeArray(ips, ipPath);
 
-    // proceed according to the creationAllowed value
-    if (!creationAllowed) { // ip forbidden
-      res.status(403).json({
-        message: "You are temporarily blocked, because you created too many users."
-      });
-      return 0;
-    } else { // ip allowed, proceed
-      // check if username already exists
-      if ( users.findIndex((el) => el.username === req.body.username) > -1) { // username already taken
-        // Note: in this case users counter in ips is increased regardless, this is not quite logical and could be changed
-        res.status(409).json({
-          message: "This username is already taken, try a different one."
-        });
-        return 0;
-      } else {
-        // create new user object and update users list
-        let newUser = await security.encryptUserPw(req.body);
-        users.push(newUser);
-        security.appendObject(newUser, userPath);
+  // proceed according to the creationAllowed value
+  if (!creationAllowed) { // ip forbidden
+    return res.status(403).send("You are temporarily blocked, because you created too many users.");
+  } else { // ip allowed, proceed
+    // check if username already exists
+    if ( users.findIndex((el) => el.username === req.body.username) > -1) { // username already taken
+      // Note: in this case users counter in ips is increased regardless, this is not quite logical and could be changed
+      return res.status(409).send("This username is already taken, try a different one.");
+    } else {
+      // create new user object and update users list
+      let newUser = await security.encryptUserPw(req.body);
+      users.push(newUser);
+      security.appendObject(newUser, userPath);
 
-        res.status(201).json({
-          message: "New user created."
-        });
-        return 0;
-      }
+      return res.status(201).send("New user created.");
     }
-  } catch (err) {
-    console.log(err);
-    res.status(500).send("Error.");
-    return 0;
   }
 });
 
@@ -89,31 +68,26 @@ app.post("/register", async (req, res) => {
 app.post("/login", async (req, res) => {
   // input validation username: allowed alphanumeric and _
   if (!/^[a-zA-Z0-9_]+$/.test(req.body.username)){
-    res.status(400).json({
-      message: "Usernames can only contain alphanumeric characters and underscores."
-    });
-    return 0; // this is nessecary, so that only one result at a time is returned
+    return res.status(400).send("Usernames can only contain alphanumeric characters and underscores.");
   }
   // input validation username: allowed alphanumeric and _$*+
   if (!/^[a-zA-Z0-9_$*+!]+$/.test(req.body.password)){
-    res.status(400).send("Passwords can only contain alphanumeric characters and _$*+!");
-    return 0;
+    return res.status(400).send("Passwords can only contain alphanumeric characters and _$*+!");
   }
   // check if user exists and password is correct
   const userIndex = users.findIndex((el) => el.username == req.body.username);
 
   // user does not exist
   if (userIndex === -1){
-    res.status(403).send("User does not exist or wrong password.");
-    return 0;
+    return res.status(403).send("User does not exist or wrong password.");
   }
   // user exists but wrong password 
   if (!await bcrypt.compare(req.body.password, users[userIndex].password)) {
-    res.status(403).send("User does not exist or wrong password.");
-    return 0;
+    return res.status(403).send("User does not exist or wrong password.");
   }
 
   // else user successfully authenticated
+  // see https://www.sohamkamani.com/blog/javascript/2019-03-29-node-jwt-authentication/
   const token = jwt.sign({ username: req.body.username }, jwtKey, {
 		algorithm: "HS256",
 		expiresIn: jwtExpirySeconds,
@@ -121,7 +95,7 @@ app.post("/login", async (req, res) => {
 	// set the cookie as the token string, with a similar max age as the token
 	// here, the max age is in milliseconds, so we multiply by 1000
   res.cookie("token", token, { maxAge: jwtExpirySeconds * 1000 });
-  res.status(202).send("Access token created.");
+  return res.status(202).send("Access token created.");
 });
 
 // delte user account
