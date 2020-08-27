@@ -26,6 +26,19 @@ app.set('trust proxy', true);
 
 // register a new user
 app.post("/register", async (req, res) => {
+  // input validation username: allowed alphanumeric and _
+  if (!/^[a-zA-Z0-9_]+$/.match(req.body.username)){
+    res.status(400).json({
+      message: "Usernames can only contain alphanumeric characters and underscores."
+    });
+  }
+  // input validation username: allowed alphanumeric and _$*+
+  if (!/^[a-zA-Z0-9_$*+]+$/.match(req.body.password)){
+    res.status(400).json({
+      message: "Passwords can only contain alphanumeric characters and _$*+"
+    });
+  }
+
   // check if requested ip has created too many users already
   let [creationAllowed, updatedIps] = security.checkIp(req.ip, ips);
   // save updated ip list
