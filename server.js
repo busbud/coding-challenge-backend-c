@@ -10,13 +10,14 @@ const location = require('./src/location');
 let users = security.readArray('./data/users.txt');
 let ips = security.readArray('./data/ips.txt');
 
-
 // instantiate express app
 const app = express();
 const port = process.env.port || 3000;
 
 // this function serves static files from the ./client directory
 app.use(express.static(path.join(__dirname, 'client')));
+// this enables express to accept json formatted requests
+app.use(express.json());
 // to parse ip address via proxy
 app.set('trust proxy', true);
 
