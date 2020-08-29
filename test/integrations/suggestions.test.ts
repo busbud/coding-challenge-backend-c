@@ -1,7 +1,7 @@
-import app from '../../src/App';
-import Suggestion from '../../src/types/Suggestion';
 import { expect } from 'chai';
 import supertest, { Response } from 'supertest';
+import Suggestion from '../../src/types/Suggestion';
+import app from '../../src/App';
 
 const request = supertest(app);
 

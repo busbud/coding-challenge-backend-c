@@ -1,15 +1,40 @@
-import http, { IncomingMessage, ServerResponse } from 'http';
-var port = process.env.PORT || 2345;
+import express from 'express';
+import routes from './routes';
+import rateLimit from 'express-rate-limit';
 
-export default http.createServer(function (req: IncomingMessage, res: ServerResponse) {
-  res.writeHead(404, { 'Content-Type': 'text/plain' });
+class App {
+    exp: express.Application;
 
-  if (req.url && req.url.indexOf('/suggestions') === 0) {
-    res.end(JSON.stringify({
-      suggestions: []
-    }));
-  } else {
-    res.end();
-  }
-}).listen(port);
-console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+    constructor() {
+        this.exp = express();
+        this.middleware();
+        this.router()
+    }
+
+    middleware() {
+        const limiter = rateLimit({
+            windowMs: 10000,
+            max: 20,
+            message: 'Too many requests from this IP, please try again after 10 seconds'
+
+        });
+        this.exp.use(limiter);
+    }
+
+    router() {
+        this.exp.use(express.json());
+        this.exp.use(routes);
+    }
+
+    get express(): express.Application {
+        return this.express;
+    }
+}
+
+const app = new App().exp;
+const port = process.env.PORT || 3333;
+app.listen(port, () => {
+    console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+});
+
+export default app;
