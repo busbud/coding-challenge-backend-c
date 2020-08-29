@@ -7,7 +7,7 @@
     "dev": "ts-node-dev --respawn --transpile-only --inspect -- ./src/App.ts",
     "build": "rimraf ./dist && tsc",
     "start": "build & node ./dist/App.js",
-    "test": "mocha -r ts-node/register test/**/*.test.ts"
+    "test": "mocha -r ts-node/register --recursive test/**"
   },
   "author": "",
   "license": "WTFPL",

@@ -1,13 +1,13 @@
 import app from '../../src/App';
 import Suggestion from '../../src/types/Suggestion';
 import { expect } from 'chai';
-import * as supertest from 'supertest';
+import supertest from 'supertest';
 
 const request = supertest(app);
 
 describe('GET /suggestions', function () {
   describe('with a non-existent city', function () {
-    var response;
+    let response;
 
     before(function (done) {
       request
@@ -30,7 +30,7 @@ describe('GET /suggestions', function () {
   });
 
   describe('should with a valid city', function () {
-    var response;
+    let response;
 
     before(function (done) {
       request
@@ -51,7 +51,8 @@ describe('GET /suggestions', function () {
       expect(response.json.suggestions).to.have.length.above(0);
     });
 
-    describe.skip('Validate the shape of the data being returned', function () {
+    describe('Validate the shape of the data being returned', function () {
+
       it('should contains latitudes and longitudes', function () {
         expect(response.json.suggestions).to.satisfy(function (suggestions: Suggestion[]) {
           return suggestions.every(function (suggestion: Suggestion) {
@@ -63,7 +64,7 @@ describe('GET /suggestions', function () {
       it('should contains scores', function () {
         expect(response.json.suggestions).to.satisfy(function (suggestions: Suggestion[]) {
           return suggestions.every(function (suggestion: Suggestion) {
-            return suggestion.latitude && suggestion.longitude;
+            return suggestion.score !== undefined;
           });
         })
       });
