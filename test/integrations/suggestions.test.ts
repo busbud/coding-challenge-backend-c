@@ -1,7 +1,7 @@
 import app from '../../src/App';
 import Suggestion from '../../src/types/Suggestion';
 import { expect } from 'chai';
-import supertest from 'supertest';
+import supertest, { Response } from 'supertest';
 
 const request = supertest(app);
 
@@ -12,7 +12,7 @@ describe('GET /suggestions', function () {
     before(function (done) {
       request
         .get('/suggestions?q=SomeRandomCityInTheMiddleOfNowhere')
-        .end(function (err, res) {
+        .end(function (err: any, res: Response) {
           response = res;
           response.json = JSON.parse(res.text);
           done(err);
@@ -29,13 +29,13 @@ describe('GET /suggestions', function () {
     });
   });
 
-  describe('should with a valid city', function () {
+  describe('With a valid city', function () {
     let response;
 
     before(function (done) {
       request
         .get('/suggestions?q=Montreal')
-        .end(function (err, res) {
+        .end(function (err: any, res: Response) {
           response = res;
           response.json = JSON.parse(res.text);
           done(err);
@@ -78,4 +78,43 @@ describe('GET /suggestions', function () {
       })
     });
   });
+
+  describe('Validate params', () => {
+
+    it('should return invalid latitude', () => {
+      request.get('/suggestions?q=Montreal&latitude=hey&longitude=-79.4163')
+        .expect(400)
+        .end((err: any, res: Response) => {
+          expect(res.text).to.be.equals('Latitude must be a decimal number');
+        });
+    });
+
+    it('should return invalid longitude', () => {
+      request.get('/suggestions?q=Montreal&latitude=43.70011&longitude=hey')
+        .expect(400)
+        .end((err: any, res: Response) => {
+          expect(res.text).to.be.equals('Longitude must be a decimal number');
+        });
+    });
+
+    it('should return empty when q is missing', () => {
+      request.get('/suggestions')
+        .expect(404)
+        .end((err: any, res: Response) => {
+          const json = JSON.parse(res.text);
+          expect(json).to.be.instanceof(Array);
+          expect(json).to.have.length(0);
+        });
+
+      request.get('/suggestions?q=')
+        .expect(404)
+        .end((err: any, res: Response) => {
+          const json = JSON.parse(res.text);
+          expect(json).to.be.instanceof(Array);
+          expect(json).to.have.length(0);
+        });
+    });
+
+  });
+
 });
