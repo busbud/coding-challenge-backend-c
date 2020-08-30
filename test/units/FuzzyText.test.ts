@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { FuzzyVector } from '../../src/types/Fuzzy';
+import { FuzzyVector, SearchCityFuzzy } from '../../src/types/Fuzzy';
 import { describe } from 'mocha';
 import { City } from '../../src/types/City';
 import FuzzyResolver from '../../src/services/search/FuzzyResolver';
@@ -28,7 +28,11 @@ describe('Calculating vectors', () => {
 
     it('calculates the cosine similarity score', () => {
         const bananaGram: FuzzyVector[] = FuzzyResolver.getTriGram('banana');
-        const bananaMagnitude: number = FuzzyResolver.calculateMagnitude(bananaGram);
+        const searchCity: SearchCityFuzzy = {
+            searchGram: FuzzyResolver.convertVectorToMap(bananaGram),
+            magnitude: FuzzyResolver.calculateMagnitude(bananaGram)
+        }
+
         const city: City = {
             name: 'Banan',
             latitude: -27.5853589,
@@ -40,7 +44,7 @@ describe('Calculating vectors', () => {
         };
         city.magnitude = FuzzyResolver.calculateMagnitude(city.nGram);
 
-        const score = FuzzyResolver.calculateCosineSimilarity(FuzzyResolver.convertVectorToMap(bananaGram), bananaMagnitude, city);
+        const score = FuzzyResolver.calculateCosineSimilarity(searchCity, city);
 
         expect(score).to.be.closeTo(0.791, 0.001);
     });

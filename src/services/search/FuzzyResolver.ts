@@ -1,20 +1,36 @@
-import { FuzzyVector } from '../../types/Fuzzy';
+import { FuzzyVector, SearchCityFuzzy } from '../../types/Fuzzy';
 import { normalizeText } from '../../utils/textUtils';
-import { City } from '../../types/City';
-
+import { City, SuggestionResult } from '../../types/City';
+import CitySearchEngine from './CitySearchEngine';
+import haversine from 'haversine-distance';
 export default class FuzzyResolver {
 
     static convertVectorToMap(bananaGram: FuzzyVector[]): Map<string, number> {
         return bananaGram.reduce((map: Map<string, number>, curr: FuzzyVector) => map.set(curr.nGram, curr.count), new Map<string, number>());
     }
 
-    static calculateCosineSimilarity(searchGram: Map<string, number>, magnitude: number, city: City): number {
+    static calculateCosineSimilarity(searchCity: SearchCityFuzzy, city: City): number {
         const sum = city.nGram.reduce((acc: number, currCity: FuzzyVector) => {
-            const countGram = searchGram.get(currCity.nGram);
+            const countGram = searchCity.searchGram.get(currCity.nGram);
             const multiplier = countGram ? countGram : 0;
             return acc + multiplier * currCity.count;
         }, 0);
-        return sum / (magnitude * city.magnitude);
+
+        const nameScore = sum / (searchCity.magnitude * city.magnitude);
+
+        if (searchCity.latitude && searchCity.longitude) {
+            const scoreGeolocation = this.getScoreFromLocation(searchCity.latitude, searchCity.longitude, city);
+            return 0.6 * nameScore + 0.4 * scoreGeolocation;
+        }
+        return nameScore;
+    }
+
+    private static getScoreFromLocation(latitude: string, longitude: string, city: City): number {
+        const distanceKm: number = haversine({ latitude: Number(latitude), longitude: Number(longitude) }, { latitude: city.latitude, longitude: city.longitude }) / 1000;
+        if (distanceKm < 50) {
+            return 1.0;
+        }
+        return distanceKm > 2000 ? 0.0 : 1.0 - (distanceKm / 2000);
     }
 
     static calculateMagnitude(vector: FuzzyVector[]): number {

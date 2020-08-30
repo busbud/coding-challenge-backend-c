@@ -1,11 +1,12 @@
 import { RequestSearchParam, SuggestionResult, CityParam, City } from '../../types/City';
 import FuzzyCityIndexer from './FuzzyCityIndexer';
 import FuzzyResolver from './FuzzyResolver';
-import { FuzzyVector } from '../../types/Fuzzy';
+import { FuzzyVector, SearchCityFuzzy } from '../../types/Fuzzy';
 
 class CitySearchEngine {
 
     private static _instance: CitySearchEngine;
+
     private _indexes: FuzzyCityIndexer;
     private _maxResults: number;
     private _minScore: number;
@@ -16,14 +17,18 @@ class CitySearchEngine {
         }
         return new Promise((resolve, reject) => {
             const triGram: FuzzyVector[] = FuzzyResolver.getTriGram(params.q);
-            const magnitude: number = FuzzyResolver.calculateMagnitude(triGram);
-
             const citiesSimilarity: City[] = this._indexes.findCityByGram(triGram);
-            const searchMapGram: Map<string, number> = FuzzyResolver.convertVectorToMap(triGram);
 
-            const result = citiesSimilarity.map((city: City) => ({
+            const searchCity: SearchCityFuzzy = {
+                latitude: params.latitude,
+                longitude: params.longitude,
+                searchGram: FuzzyResolver.convertVectorToMap(triGram),
+                magnitude: FuzzyResolver.calculateMagnitude(triGram)
+            };
+
+            const result: SuggestionResult[] = citiesSimilarity.map((city: City) => ({
                 name: `${city.name}, ${city.province}, ${city.country}`,
-                score: FuzzyResolver.calculateCosineSimilarity(searchMapGram, magnitude, city),
+                score: FuzzyResolver.calculateCosineSimilarity(searchCity, city),
                 latitude: city.latitude,
                 longitude: city.longitude
             })).filter((city: SuggestionResult) => city.score > this._minScore);
@@ -32,6 +37,8 @@ class CitySearchEngine {
             resolve(result.length > this._maxResults ? result.slice(0, this._maxResults) : result);
         });
     }
+
+
 
     /**
      * Initialize the index, separating the gram and magnitude into each city
