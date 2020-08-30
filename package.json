@@ -8,8 +8,8 @@
   },
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only --inspect -- ./src/app.ts",
-    "build": "rimraf ./dist && tsc",
-    "start": "ts-node ./src/app.ts",
+    "build": "rimraf dist && tsc",
+    "start": "node dist/App.js",
     "test": "mocha -r ts-node/register --recursive test/**"
   },
   "author": "",
