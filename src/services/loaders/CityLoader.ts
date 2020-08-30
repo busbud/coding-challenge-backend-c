@@ -15,7 +15,7 @@ fromTo.set(1, { field: 'name', parser: (v: string) => v });
 fromTo.set(4, { field: 'latitude', parser: (v: string) => Number.parseFloat(v) });
 fromTo.set(5, { field: 'longitude', parser: (v: string) => Number.parseFloat(v) });
 fromTo.set(8, { field: 'country', parser: (v: string) => v });
-fromTo.set(14, { field: 'population', parser: (v: string) => Number.parseInt(v) });
+fromTo.set(14, { field: 'population', parser: (v: string) => Number.parseInt(v, 10) });
 fromTo.set(10, { field: 'province', parser: (value: string, city: City) => provinces.get(`${city.country}.${value}`) });
 
 export default class CityLoader {

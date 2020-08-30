@@ -1,6 +1,7 @@
-import SuggestionsController from "./controllers/SuggestionsController";
+import SuggestionsController from './controllers/SuggestionsController';
+import { Router } from 'express';
 
-const routes = require('express').Router();
+const routes = Router();
 const suggestionController = new SuggestionsController();
 
 routes.get('/suggestions', suggestionController.handler.bind(suggestionController));

@@ -18,7 +18,6 @@ class App {
             windowMs: 10000,
             max: 20,
             message: 'Too many requests from this IP, please try again after 10 seconds'
-
         });
         this._exp.use(limiter);
     }
@@ -30,7 +29,9 @@ class App {
     }
 
     initialize(): express.Application {
+        console.log('Initializing indexes')
         loader.loadCitiesFromTsv('data/cities_canada-usa.tsv')
+            .then(() => console.log('Initialized indexes'))
             .catch((error: any) => {
                 console.error(error);
                 process.exit(1);
