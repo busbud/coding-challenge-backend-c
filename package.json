@@ -3,10 +3,13 @@
   "version": "0.0.0",
   "description": "coding challenge in Nodejs",
   "main": "app.js",
+  "engines": {
+    "node": "12.x"
+  },
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only --inspect -- ./src/app.ts",
     "build": "rimraf ./dist && tsc",
-    "start": "build & node ./dist/app.js",
+    "start": "ts-node ./src/app.ts",
     "test": "mocha -r ts-node/register --recursive test/**"
   },
   "author": "",
