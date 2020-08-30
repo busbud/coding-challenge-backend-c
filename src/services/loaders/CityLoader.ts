@@ -1,7 +1,8 @@
 
-import fs from "fs";
-import provinces from "./ProvinceLoader";
-import City from "../../types/City";
+import fs from 'fs';
+import provinces from './ProvinceLoader';
+import { City } from '../../types/City';
+import CitySearchEngine from '../search/CitySearchEngine';
 
 interface ParserFromTo {
     field: string;
@@ -23,9 +24,9 @@ export default class CityLoader {
         return new Promise((resolve, reject) => {
             try {
                 const data = fs.readFileSync(fileTsv, 'utf8');
-                resolve(this.prepareData(data));
+                CitySearchEngine.instance.initialize(this.prepareData(data));
+                resolve();
             } catch (err) {
-                console.error(err);
                 reject(err);
             }
         });

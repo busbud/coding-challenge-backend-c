@@ -1,40 +1,47 @@
 import express from 'express';
 import routes from './routes';
 import rateLimit from 'express-rate-limit';
+import CityLoader from './services/loaders/CityLoader'
 
+const loader = new CityLoader();
 class App {
-    exp: express.Application;
+    private _exp: express.Application;
 
     constructor() {
-        this.exp = express();
+        this._exp = express();
         this.middleware();
         this.router()
     }
 
-    middleware() {
+    private middleware() {
         const limiter = rateLimit({
             windowMs: 10000,
             max: 20,
             message: 'Too many requests from this IP, please try again after 10 seconds'
 
         });
-        this.exp.use(limiter);
+        this._exp.use(limiter);
     }
 
-    router() {
-        this.exp.use(express.json());
-        this.exp.use(routes);
+
+    private router() {
+        this._exp.use(express.json());
+        this._exp.use(routes);
     }
 
-    get express(): express.Application {
-        return this.express;
+    initialize(): express.Application {
+        loader.loadCitiesFromTsv('data/cities_canada-usa.tsv')
+            .catch((error: any) => {
+                console.error(error);
+                process.exit(1);
+            });
+        const port = process.env.PORT || 3333;
+        this._exp.listen(port, () => {
+            console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+        });
+        return this._exp;
     }
+
 }
 
-const app = new App().exp;
-const port = process.env.PORT || 3333;
-app.listen(port, () => {
-    console.log('Server running at http://127.0.0.1:%d/suggestions', port);
-});
-
-export default app;
+export default new App().initialize();

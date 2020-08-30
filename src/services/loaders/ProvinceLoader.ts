@@ -12,7 +12,6 @@ class ProvinceLoader {
                     return prev;
                 }, new Map<string, string>());
         } catch (error) {
-            console.error(error);
             throw new Error(`Error to load ${path}`);
         }
     }

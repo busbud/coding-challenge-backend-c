@@ -4,9 +4,9 @@
   "description": "coding challenge in Nodejs",
   "main": "app.js",
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpile-only --inspect -- ./src/App.ts",
+    "dev": "ts-node-dev --respawn --transpile-only --inspect -- ./src/app.ts",
     "build": "rimraf ./dist && tsc",
-    "start": "build & node ./dist/App.js",
+    "start": "build & node ./dist/app.js",
     "test": "mocha -r ts-node/register --recursive test/**"
   },
   "author": "",

@@ -1,31 +1,64 @@
 import { expect } from 'chai';
-import CityStore from '../../src/services/search/CityStore'
+import CitySearchEngine from '../../src/services/search/CitySearchEngine'
 import CityLoader from '../../src/services/loaders/CityLoader'
-import City from '../../src/types/City';
+import { City, SuggestionResult } from '../../src/types/City';
 
 describe('Pre process cities', () => {
-    let cityStore: CityStore;
+    let cityStore: CitySearchEngine;
 
-    before('First load the cities from tsv', (done) => {
+    before('load the cities from tsv', (done) => {
         new CityLoader()
             .loadCitiesFromTsv('data/cities_canada-usa.tsv')
-            .then((data: City[]) => {
-                cityStore = new CityStore(data);
+            .then(() => {
+                cityStore = CitySearchEngine.instance;
                 done();
             })
             .catch(error => done(error));
     });
 
-    it('should be restricted to cities in the USA and Canada', () => {
+    it('restricts to cities in the USA and Canada', () => {
         cityStore.cities.every((value: City) => {
             expect(value.country).to.satisfy((country: string) => country === 'USA' || country === 'CA');
         })
     });
 
-    it('should be restricted with a population above 5000 people', () => {
+    it('restricts with a population above 5000 people', () => {
         cityStore.cities.every((value: City) => {
             expect(value.population).to.satisfy((population: number) => population > 5000);
         })
     });
 
+
 });
+
+describe('Searching a match', () => {
+    const cityEngine: CitySearchEngine = new CitySearchEngine();
+
+    before('build the indexes', (done) => {
+        cityEngine.initialize([{
+            name: 'Florianópolis',
+            latitude: -27.5853589,
+            longitude: -48.5087219,
+            country: 'BR',
+            population: 477798,
+            province: 'SC'
+        },
+        {
+            name: 'Metropolis',
+            latitude: 37.1611569,
+            longitude: -88.7298181,
+            country: 'US',
+            population: 6537,
+            province: 'IL'
+        }]);
+        done();
+    });
+
+    it('finds only Florianópolis', async () => {
+        const result: SuggestionResult[] = await cityEngine.findBy({ q: 'Florianó' });
+        expect(result.length).to.be.equals(1);
+        expect(result[0].name).to.be.equals('Florianópolis, SC, BR');
+        expect(result[0].score).to.be.greaterThan(0.3);
+    })
+});
+
