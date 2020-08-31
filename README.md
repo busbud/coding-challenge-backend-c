@@ -1,3 +1,102 @@
+# Solution
+
+Access my solution at https://city-search-node-api.herokuapp.com/.
+The index file contains further instructions as to how to communicate with the API.
+
+## Quickstart:
+
+Registering a user:
+
+``` http
+  POST https://city-search-node-api.herokuapp.com/register
+  Content-Type: application/json
+
+  {
+    "username": "test",
+    "password": "test"
+  }
+```
+
+Login as registered user:
+
+```http
+  POST https://city-search-node-api.herokuapp.com/login
+  Content-Type: application/json
+
+  {
+    "username": "test",
+    "password": "test"
+  }
+```
+
+Initiate a search:
+
+``` http
+  GET https://city-search-node-api.herokuapp.com/suggestions?q=Springfield&latitude=30.92&longitude=-83.01
+```
+NOTE: `latitude` and `longitude` are optional parameters and help to enhance the search result. The result will look something like this:
+    
+``` http
+  HTTP/1.1 200 OK
+  Server: Cowboy
+  Connection: close
+  X-Powered-By: Express
+  Content-Type: application/json; charset=utf-8
+  Content-Length: 642
+  Etag: W/"282-JHMr5fIloro00fO+IembddtCuG4"
+  Date: Mon, 31 Aug 2020 16:20:00 GMT
+  Via: 1.1 vegur
+
+  {
+    "suggestions": [
+      {
+        "name": "Springfield, FL, US",
+        "latitude": "30.15326",
+        "longitude": "-85.61132",
+        "score": 0.8244593514323569
+      },
+      {
+        "name": "Springfield, TN, US",
+        "latitude": "36.50921",
+        "longitude": "-86.885",
+        "score": 0.5218285550494224
+      },
+      {
+        "name": "Springfield, OH, US",
+        "latitude": "39.92423",
+        "longitude": "-83.80882",
+        "score": 0.3307838530379018
+      },
+      {
+        "name": "Springfield, IL, US",
+        "latitude": "39.80172",
+        "longitude": "-89.64371",
+        "score": 0.22963988476827168
+      },
+      {
+        "name": "Springfield, MO, US",
+        "latitude": "37.21533",
+        "longitude": "-93.29824",
+        "score": 0.21537737974225335
+      },
+      {
+        "name": "Springfield, PA, US",
+        "latitude": "39.93067",
+        "longitude": "-75.32019",
+        "score": 0.18715701620439196
+      }
+    ]
+  }
+```
+   
+Lastly you can also delete your 'account':
+
+``` http
+  DELETE https://city-search-node-api.herokuapp.com/deregister
+```
+
+
+
 # Busbud Coding Challenge
 
 ## Requirements
