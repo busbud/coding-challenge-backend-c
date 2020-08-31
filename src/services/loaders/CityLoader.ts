@@ -1,23 +1,8 @@
 
 import fs from 'fs';
-import provinces from './ProvinceLoader';
 import { City } from '../../types/City';
 import CitySearchEngine from '../search/CitySearchEngine';
-
-interface ParserFromTo {
-    field: string;
-    parser(value: string, prev?: City);
-}
-
-const fromTo: Map<number, ParserFromTo> = new Map<number, ParserFromTo>();
-
-fromTo.set(1, { field: 'name', parser: (v: string) => v });
-fromTo.set(4, { field: 'latitude', parser: (v: string) => Number.parseFloat(v) });
-fromTo.set(5, { field: 'longitude', parser: (v: string) => Number.parseFloat(v) });
-fromTo.set(8, { field: 'country', parser: (v: string) => v });
-fromTo.set(14, { field: 'population', parser: (v: string) => Number.parseInt(v, 10) });
-fromTo.set(10, { field: 'province', parser: (value: string, city: City) => provinces.get(`${city.country}.${value}`) });
-
+import columnDictionaryParser from '../../constants/loaderParser';
 export default class CityLoader {
 
     loadCitiesFromTsv(fileTsv: string): Promise<any> {
@@ -27,6 +12,7 @@ export default class CityLoader {
                 CitySearchEngine.instance.initialize(this.prepareData(data));
                 resolve();
             } catch (err) {
+                console.error(err);
                 reject(err);
             }
         });
@@ -39,14 +25,14 @@ export default class CityLoader {
             .filter((value: City) => value !== null && this.isAcceptPopulation(value?.population) && this.isAcceptCountry(value?.country))
     }
 
-    private convertLineToCity(line: string, index: number) {
+    private convertLineToCity(line: string, index: number): City {
         if (index === 0) {
             return null;
         }
         return line.split('\t')
-            .reduce((prev: any, current: string, currIndex: number, columns: string[]) => {
-                if (fromTo.get(currIndex)) {
-                    return { ...prev, [fromTo.get(currIndex).field]: fromTo.get(currIndex).parser(current, prev) };
+            .reduce((prev: any, current: string, currIndex: number) => {
+                if (columnDictionaryParser.get(currIndex)) {
+                    return { ...prev, [columnDictionaryParser.get(currIndex).field]: columnDictionaryParser.get(currIndex).parser(current, prev) };
                 }
                 return prev;
             }, {})

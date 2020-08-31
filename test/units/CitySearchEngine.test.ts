@@ -7,13 +7,12 @@ describe('Pre process cities', () => {
     let cityEngine: CitySearchEngine;
 
     before('load the cities from tsv', (done) => {
-        new CityLoader()
-            .loadCitiesFromTsv('data/cities_canada-usa.tsv')
-            .then(() => {
-                cityEngine = CitySearchEngine.instance;
-                done();
-            })
-            .catch(error => done(error));
+        const loader = new CityLoader().loadCitiesFromTsv('data/cities_canada-usa.tsv');
+        loader.then(() => {
+            cityEngine = CitySearchEngine.instance;
+            done();
+        })
+        loader.catch(error => done(error));
     });
 
     it('restricts to cities in the USA and Canada', () => {
@@ -57,8 +56,9 @@ describe('Searching a match', () => {
     it('finds only Florianópolis', async () => {
         const result: SuggestionResult[] = await cityEngine.findBy({ q: 'Florianó' });
         expect(result.length).to.be.equals(1);
-        expect(result[0].name).to.be.equals('Florianópolis, SC, BR');
-        expect(result[0].score).to.be.greaterThan(0.3);
+        const [florianopolis] = result;
+        expect(florianopolis.name).to.be.equals('Florianópolis, SC, BR');
+        expect(florianopolis.score).to.be.greaterThan(0.3);
     })
 });
 
@@ -66,9 +66,7 @@ describe('More accuracy with latitude and longitude', () => {
     let cityEngine: CitySearchEngine;
 
     before('load the cities from tsv', (done) => {
-
-        new CityLoader()
-            .loadCitiesFromTsv('data/cities_canada-usa.tsv')
+        new CityLoader().loadCitiesFromTsv('data/cities_canada-usa.tsv')
             .then(() => {
                 cityEngine = CitySearchEngine.instance;
                 done();
@@ -82,8 +80,8 @@ describe('More accuracy with latitude and longitude', () => {
             latitude: '43.70011',
             longitude: '-79.4163'
         }
-        const result: SuggestionResult[] = await cityEngine.findBy(params);
-        expect(result[0].name).to.be.equals('London, Ontario, CA');
+        const [london] = await cityEngine.findBy(params);
+        expect(london.name).to.be.equals('London, Ontario, CA');
     });
 })
 

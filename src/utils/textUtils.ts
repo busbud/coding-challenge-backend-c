@@ -9,7 +9,7 @@ const accentMap = {
     'n': 'ñ|Ñ'
 };
 
-export const normalizeText = (text: string) => {
+export const normalizeText = (text: string): string => {
     const noAccent = Object.keys(accentMap).reduce((acc, cur) => acc.replace(new RegExp(accentMap[cur], 'g'), cur), text)
     return noAccent.toLowerCase().trim();
 }

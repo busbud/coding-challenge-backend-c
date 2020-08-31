@@ -1,4 +1,4 @@
-import { RequestSearchParam, SuggestionResult, CityParam, City } from '../../types/City';
+import { RequestSearchParam, SuggestionResult, City } from '../../types/City';
 import FuzzyCityIndexer from './FuzzyCityIndexer';
 import FuzzyResolver from './FuzzyResolver';
 import { FuzzyVector, SearchCityFuzzy } from '../../types/Fuzzy';
@@ -11,34 +11,40 @@ class CitySearchEngine {
     private _maxResults: number;
     private _minScore: number;
 
-    findBy(params: RequestSearchParam): Promise<SuggestionResult[]> {
+    findBy(params: RequestSearchParam): SuggestionResult[] {
         if (this._indexes === undefined) {
             throw new Error('First initialize the indexer');
         }
-        return new Promise((resolve, reject) => {
-            const triGram: FuzzyVector[] = FuzzyResolver.getTriGram(params.q);
-            const citiesSimilarity: City[] = this._indexes.findCityByGram(triGram);
+        const triGram: FuzzyVector[] = FuzzyResolver.getTrigram(params.q);
+        const citiesSimilarity: City[] = this._indexes.findCityByGram(triGram);
 
-            const searchCity: SearchCityFuzzy = {
-                latitude: params.latitude,
-                longitude: params.longitude,
-                searchGram: FuzzyResolver.convertVectorToMap(triGram),
-                magnitude: FuzzyResolver.calculateMagnitude(triGram)
-            };
+        const searchCity: SearchCityFuzzy = {
+            latitude: params.latitude,
+            longitude: params.longitude,
+            searchGram: FuzzyResolver.convertVectorToMap(triGram),
+            magnitude: FuzzyResolver.calculateMagnitude(triGram)
+        };
 
-            const result: SuggestionResult[] = citiesSimilarity.map((city: City) => ({
-                name: `${city.name}, ${city.province}, ${city.country}`,
-                score: FuzzyResolver.calculateCosineSimilarity(searchCity, city),
-                latitude: city.latitude,
-                longitude: city.longitude
-            })).filter((city: SuggestionResult) => city.score > this._minScore);
+        const result: SuggestionResult[] = citiesSimilarity
+            .map((city: City) => this.createSuggestion(city, searchCity))
+            .filter((city: SuggestionResult) => city.score > this._minScore);
 
-            result.sort((a: SuggestionResult, b: SuggestionResult) => a.score > b.score ? -1 : 1);
-            resolve(result.length > this._maxResults ? result.slice(0, this._maxResults) : result);
-        });
+        result.sort((a: SuggestionResult, b: SuggestionResult) => a.score > b.score ? -1 : 1);
+        return this.limitResults(result);
     }
 
+    private limitResults(result: SuggestionResult[]): SuggestionResult[] | SuggestionResult[] {
+        return result.length > this._maxResults ? result.slice(0, this._maxResults) : result;
+    }
 
+    private createSuggestion(city: City, searchCity: SearchCityFuzzy): { name: string; score: number; latitude: number; longitude: number; } {
+        return ({
+            name: `${city.name}, ${city.province}, ${city.country}`,
+            score: FuzzyResolver.calculateCosineSimilarity(searchCity, city),
+            latitude: city.latitude,
+            longitude: city.longitude
+        });
+    }
 
     /**
      * Initialize the index, separating the gram and magnitude into each city
@@ -46,7 +52,7 @@ class CitySearchEngine {
      * @param maxResults Max results to be listed in the search
      * @param minScore Minimum score to be filtered in the search
      */
-    initialize(cities: City[], maxResults: number = 10, minScore: number = 0.3) {
+    initialize(cities: City[], maxResults = 10, minScore = 0.3): void {
         this._maxResults = maxResults;
         this._minScore = minScore;
         this._indexes = new FuzzyCityIndexer(cities);

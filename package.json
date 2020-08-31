@@ -10,11 +10,13 @@
     "dev": "ts-node-dev --respawn --transpile-only --inspect -- ./src/app.ts",
     "build": "rimraf dist && tsc",
     "start": "node dist/App.js",
-    "test": "mocha -r ts-node/register --recursive test/**"
+    "test": "mocha -r ts-node/register --recursive test/**",
+    "lint": "eslint . --ext .ts"
   },
   "author": "",
   "license": "WTFPL",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-rate-limit": "^5.1.3",
     "haversine-distance": "^1.2.1"
@@ -25,13 +27,14 @@
     "@types/mocha": "^8.0.3",
     "@types/sinon": "^9.0.5",
     "@types/supertest": "^2.0.10",
+    "@typescript-eslint/eslint-plugin": "^3.10.1",
+    "@typescript-eslint/parser": "^3.10.1",
     "chai": "^4.2.0",
+    "eslint": "^7.7.0",
     "mocha": "^8.1.2",
-    "sinon": "^9.0.3",
     "supertest": "^4.0.2",
     "ts-node": "^9.0.0",
     "ts-node-dev": "^1.0.0-pre.61",
-    "tslint": "^6.1.3",
     "typescript": "^4.0.2"
   }
 }

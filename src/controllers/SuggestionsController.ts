@@ -1,35 +1,33 @@
 import { Response, Request } from 'express';
 import CitySearchEngine from '../services/search/CitySearchEngine';
 import { RequestSearchParam, SuggestionResult } from '../types/City';
+import { HTTP_STATUS_CODE } from '../constants/httpStatus';
 
 export default class SuggestionsController {
 
-    handler(req: Request, res: Response) {
+    async handler(req: Request, res: Response) {
         const params = req.query as RequestSearchParam;
-        if (!params?.q?.trim()) {
-            res.status(404).send({
-                suggestions: []
-            });
+        const hasQuery = params?.q?.trim();
+
+        if (!hasQuery) {
+            res.status(HTTP_STATUS_CODE.NOT_FOUND).send({ suggestions: [] });
             return;
         }
         if (this.isValidCoordinate(params?.latitude)) {
-            res.status(400).send('Latitude must be a number');
+            res.status(HTTP_STATUS_CODE.ERROR).send('Latitude must be a number');
             return;
         }
         if (this.isValidCoordinate(params?.longitude)) {
-            res.status(400).send('Longitude must be a number');
+            res.status(HTTP_STATUS_CODE.ERROR).send('Longitude must be a number');
             return;
         }
-        CitySearchEngine.instance.findBy(params)
-            .then((cities: SuggestionResult[]) => {
-                res.status(cities.length ? 200 : 404).send({
-                    suggestions: cities
-                });
-            });
+
+        const cities: SuggestionResult[] = CitySearchEngine.instance.findBy(params)
+        res.status(cities.length ? HTTP_STATUS_CODE.OK : HTTP_STATUS_CODE.NOT_FOUND).send({ suggestions: cities });
     }
 
 
-    isValidCoordinate(coordinate: string) {
+    isValidCoordinate(coordinate: string): boolean {
         return coordinate && isNaN(Number.parseFloat(coordinate));
     }
 

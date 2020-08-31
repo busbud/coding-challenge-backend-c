@@ -2,7 +2,6 @@ import { expect } from 'chai';
 import supertest, { Response } from 'supertest';
 import Suggestion from '../../src/types/Suggestion';
 import app from '../../src/app';
-import { response } from 'express';
 
 const request = supertest(app);
 

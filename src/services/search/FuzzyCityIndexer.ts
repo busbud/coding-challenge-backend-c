@@ -11,9 +11,9 @@ export default class FuzzyCityIndexer {
         this.cities = cities;
     }
 
-    buildIndexes() {
+    buildIndexes(): void {
         this.cities.forEach((city: City, pos: number) => {
-            city.nGram = FuzzyResolver.getTriGram(city.name);
+            city.nGram = FuzzyResolver.getTrigram(city.name);
             city.magnitude = FuzzyResolver.calculateMagnitude(city.nGram);
             city.nGram.forEach(gram => {
                 let indexCities = this.dictionary.get(gram.nGram);
@@ -26,16 +26,11 @@ export default class FuzzyCityIndexer {
         });
     }
 
-    findCityByGram(gram: FuzzyVector[]): City[] {
-        const citiesIndexes: number[] = gram.map((fuzzy: FuzzyVector) => fuzzy.nGram)
+    findCityByGram(triGramSearched: FuzzyVector[]): City[] {
+        const citiesIndexes: number[] = triGramSearched.map((fuzzy: FuzzyVector) => fuzzy.nGram)
             .map((nGram: string) => this.dictionary.has(nGram) ? this.dictionary.get(nGram) : [])
             .reduce((prev: number[], curr: number[]) => prev.concat([...curr]), []);
 
-        const set = new Set(citiesIndexes)
-        const citiesFiltered: City[] = [];
-
-        set.forEach((index: number) => citiesFiltered.push(this.cities[index]));
-
-        return citiesFiltered;
+        return Array.from(new Set(citiesIndexes)).map(index => this.cities[index]);
     }
 }
