@@ -8,16 +8,13 @@ app.get("/", (req, res) => {
   res.send("test");
 });
 
+app.get("/suggestions", (req, res) => {
+  res.send("suggestions");
+});
+
 app.listen(port, () => {
   console.log("Server running at http://127.0.0.1:%d", port);
 });
-// // app.listen(port, "127.0.0.1");
-// console.log("Server running at http://127.0.0.1:%d", port);
-
-// app.get('/suggestions')
-
-// var http = require("http");
-// var port = process.env.PORT || 2345;
 
 // module.exports = http
 //   .createServer(function (req, res) {
