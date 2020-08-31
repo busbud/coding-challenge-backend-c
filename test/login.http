@@ -3,7 +3,7 @@ POST https://city-search-node-api.herokuapp.com/login
 Content-Type: application/json
 
 {
-  "username": "test7",
+  "username": "test13",
   "password": "test"
 }
 
