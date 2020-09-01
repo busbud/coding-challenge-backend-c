@@ -85,7 +85,7 @@ npm run test
 To start a local server run:
 
 ```
-npm run start
+npm run start-local
 ```
 
 it should produce an output similar to:

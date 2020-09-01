@@ -8,7 +8,8 @@
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only --inspect -- ./src/App.ts",
     "build": "rimraf dist && tsc",
-    "start": "ts-node src/App.ts",
+    "start": "node dist/App.js",
+    "start-local": "ts-node src/App.ts",
     "test": "nyc mocha --recursive -r ts-node/register  'test/**/*.test.ts'  --timeout 60000 --exit",
     "lint": "eslint . --ext .ts"
   },
