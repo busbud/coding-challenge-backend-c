@@ -7,7 +7,7 @@ const accentMap = {
     'u': 'ú|ù|û|ü|Ú|Ù|Û|Ü',
     'c': 'ç|Ç',
     'n': 'ñ|Ñ',
-    'any': /[^a-zA-Z0-9\u00C0-\u00FF, ]+/g
+    '': /[^a-zA-Z0-9\u00C0-\u00FF]+/g
 };
 
 export const normalizeText = (text: string): string => {
