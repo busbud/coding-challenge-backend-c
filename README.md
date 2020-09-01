@@ -23,7 +23,7 @@ The suggestions should be restricted to cities in the USA and Canada with a popu
 
 The API was developed using TypeScript and Express. The web application uses a rate limit to control the maximum of requests by an IP in a determined time.
 
-Click [here](https://gentle-island-08430.herokuapp.com/suggestions?q=Londo&latitude=43.70011&longitude=-79.4163) to access the API sample. Also, you can use [this](https://jonasalessi.github.io/codechallenge-busbud-demo/) UI to make tests.
+Click [here](https://gentle-island-08430.herokuapp.com/suggestions?q=Londo&latitude=43.70011&longitude=-79.4163) to access the API sample. Also, you can use [this](https://jonasalessi.github.io/codechallenge-busbud-demo/) UI to make tests. ([source](https://github.com/jonasalessi/codechallenge-busbud-demo))
 
 ![](screen.png)
 
