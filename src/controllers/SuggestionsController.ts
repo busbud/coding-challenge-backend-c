@@ -5,7 +5,7 @@ import { HTTP_STATUS_CODE } from '../constants/httpStatus';
 
 export default class SuggestionsController {
 
-    async handler(req: Request, res: Response) {
+    handler(req: Request, res: Response): Response  {
         const params = req.query as RequestSearchParam;
         const hasQuery = params?.q?.trim();
 
