@@ -1,5 +1,5 @@
 import express from 'express';
-import routes from './routes';
+import routes from './middleware/routes';
 import CityLoader from './services/loaders/CityLoader'
 import { trafficLimit } from './middleware/trafficLimit';
 import cors from 'cors';
