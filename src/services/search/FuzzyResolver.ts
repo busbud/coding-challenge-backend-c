@@ -21,7 +21,8 @@ export default class FuzzyResolver {
 
         if (searchCity.latitude && searchCity.longitude) {
             const scoreGeolocation = this.getScoreFromLocation(searchCity.latitude, searchCity.longitude, city);
-            return 0.7 * nameScore + 0.3 * scoreGeolocation;
+            const percentLocation = 0.3 * scoreGeolocation; 
+            return Math.min(nameScore * percentLocation + nameScore, 1);
         }
         return nameScore;
     }
