@@ -28,9 +28,13 @@ export default class FuzzyCityIndexer {
 
     findCityByGram(triGramSearched: FuzzyVector[]): City[] {
         const citiesIndexes: number[] = triGramSearched.map((fuzzy: FuzzyVector) => fuzzy.nGram)
-            .map((nGram: string) => this.dictionary.has(nGram) ? this.dictionary.get(nGram) : [])
+            .map((nGram: string) => this.getCitiesIndexFromGram(nGram))
             .reduce((prev: number[], curr: number[]) => prev.concat([...curr]), []);
 
         return Array.from(new Set(citiesIndexes)).map(index => this.cities[index]);
+    }
+
+    private getCitiesIndexFromGram(nGram: string): number[] {
+        return this.dictionary.has(nGram) ? this.dictionary.get(nGram) : [];
     }
 }

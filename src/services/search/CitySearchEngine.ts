@@ -27,17 +27,20 @@ class CitySearchEngine {
 
         const result: SuggestionResult[] = citiesSimilarity
             .map((city: City) => this.createSuggestion(city, searchCity))
-            .filter((city: SuggestionResult) => city.score > this._minScore);
+            .filter((city: SuggestionResult) => this.filterMinScore(city));
 
         result.sort((a: SuggestionResult, b: SuggestionResult) => a.score > b.score ? -1 : 1);
         return this.limitResults(result);
     }
 
+    private filterMinScore(city: SuggestionResult): boolean {
+        return city.score > this._minScore;
+    }
     private limitResults(result: SuggestionResult[]): SuggestionResult[] | SuggestionResult[] {
         return result.length > this._maxResults ? result.slice(0, this._maxResults) : result;
     }
 
-    private createSuggestion(city: City, searchCity: SearchCityFuzzy): { name: string; score: number; latitude: number; longitude: number; } {
+    private createSuggestion(city: City, searchCity: SearchCityFuzzy): SuggestionResult {
         return ({
             name: `${city.name}, ${city.province}, ${city.country}`,
             score: FuzzyResolver.calculateCosineSimilarity(searchCity, city),

@@ -32,7 +32,7 @@ export default class CityLoader {
         return line.split('\t')
             .reduce((prev: any, current: string, currIndex: number) => {
                 if (columnDictionaryParser.get(currIndex)) {
-                    return { ...prev, [columnDictionaryParser.get(currIndex).field]: columnDictionaryParser.get(currIndex).parser(current, prev) };
+                    return { ...prev, [columnDictionaryParser.get(currIndex).fieldDestination]: columnDictionaryParser.get(currIndex).parser(current, prev) };
                 }
                 return prev;
             }, {})

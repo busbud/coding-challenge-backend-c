@@ -21,7 +21,6 @@ export default class SuggestionsController {
             res.status(HTTP_STATUS_CODE.ERROR).send('Longitude must be a number');
             return;
         }
-
         const cities: SuggestionResult[] = CitySearchEngine.instance.findBy(params)
         res.status(cities.length ? HTTP_STATUS_CODE.OK : HTTP_STATUS_CODE.NOT_FOUND).send({ suggestions: cities });
     }

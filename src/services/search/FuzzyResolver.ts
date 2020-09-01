@@ -1,5 +1,5 @@
 import { FuzzyVector, SearchCityFuzzy } from '../../types/Fuzzy';
-import { normalizeText } from '../../utils/textUtils';
+import { chunk } from '../../services/textUtils';
 import { City } from '../../types/City';
 import haversine from 'haversine-distance';
 import { GEOLOCATION_MIN_KM, GEOLOCATION_MAX_KM } from '../../constants/fuzzyConstants';
@@ -21,7 +21,7 @@ export default class FuzzyResolver {
 
         if (searchCity.latitude && searchCity.longitude) {
             const scoreGeolocation = this.getScoreFromLocation(searchCity.latitude, searchCity.longitude, city);
-            return 0.6 * nameScore + 0.4 * scoreGeolocation;
+            return 0.7 * nameScore + 0.3 * scoreGeolocation;
         }
         return nameScore;
     }
@@ -33,8 +33,8 @@ export default class FuzzyResolver {
     }
 
     static getTrigram(word: string): FuzzyVector[] {
-        const chunk = this.chunk(word);
-        const dictCountNGram = this.countNGramRepeated(chunk);
+        const chunkVector = chunk(word);
+        const dictCountNGram = this.countNGramRepeated(chunkVector);
         return this.convertDictionaryToFuzzyVector(dictCountNGram);
     }
 
@@ -60,13 +60,6 @@ export default class FuzzyResolver {
         }, {});
     }
 
-    private static chunk(word: string): string[] {
-        const normalized = `-${normalizeText(word)}-`;
-        const result: string[] = [];
-        for (let x = 0; x < normalized.length - 2; ++x) {
-            result.push(normalized.slice(x, x + 3));
-        }
-        return result;
-    }
+
 
 }
