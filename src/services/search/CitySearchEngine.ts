@@ -36,7 +36,7 @@ class CitySearchEngine {
     private filterMinScore(city: SuggestionResult): boolean {
         return city.score > this._minScore;
     }
-    private limitResults(result: SuggestionResult[]): SuggestionResult[] | SuggestionResult[] {
+    private limitResults(result: SuggestionResult[]): SuggestionResult[] {
         return result.length > this._maxResults ? result.slice(0, this._maxResults) : result;
     }
 

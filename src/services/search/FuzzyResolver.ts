@@ -28,7 +28,7 @@ export default class FuzzyResolver {
 
     static calculateMagnitude(nGramVector: FuzzyVector[]): number {
         return Math.sqrt(nGramVector.reduce((sum: number, currNGram: FuzzyVector) =>
-            (sum += Math.pow(currNGram.count, 2))
+            (sum + Math.pow(currNGram.count, 2))
             , 0));
     }
 
@@ -53,8 +53,8 @@ export default class FuzzyResolver {
         }, []);
     }
 
-    private static countNGramRepeated(chunk: string[]) {
-        return chunk.reduce((prev: any, curr: string) => {
+    private static countNGramRepeated(chunkVector: string[]) {
+        return chunkVector.reduce((prev: any, curr: string) => {
             prev[curr] = prev[curr] ? prev[curr] + 1 : 1;
             return prev;
         }, {});
