@@ -22,7 +22,7 @@ export default class SuggestionsController {
             return;
         }
         const cities: SuggestionResult[] = CitySearchEngine.instance.findBy(params)
-        res.status(cities.length ? HTTP_STATUS_CODE.OK : HTTP_STATUS_CODE.NOT_FOUND).send({ suggestions: cities });
+        return res.status(cities.length ? HTTP_STATUS_CODE.OK : HTTP_STATUS_CODE.NOT_FOUND).send({ suggestions: cities });
     }
 
 

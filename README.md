@@ -1,6 +1,6 @@
 # Busbud Coding Challenge
 
-## Requirements
+## Challenge
 
 Design an API endpoint that provides autocomplete suggestions for large cities.
 The suggestions should be restricted to cities in the USA and Canada with a population above 5000 people.
@@ -17,83 +17,31 @@ The suggestions should be restricted to cities in the USA and Canada with a popu
 - the final application should be [deployed to Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs).
 - feel free to add more features if you like!
 
-#### Sample responses
+------------------
 
-These responses are meant to provide guidance. The exact values can vary based on the data source and scoring algorithm.
+## The solution
 
-**Near match**
+The API was developed using TypeScript and Express. The web application uses a rate limit to control the maximum of requests by an IP in a determined time.
 
-    GET /suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
+Click [here](https://gentle-island-08430.herokuapp.com/suggestions?q=Londo&latitude=43.70011&longitude=-79.4163) to access the API sample. Also, you can use [this](https://jonasalessi.github.io/codechallenge-busbud-demo/) UI to make tests.
 
-```json
-{
-  "suggestions": [
-    {
-      "name": "London, ON, Canada",
-      "latitude": "42.98339",
-      "longitude": "-81.23304",
-      "score": 0.9
-    },
-    {
-      "name": "London, OH, USA",
-      "latitude": "39.88645",
-      "longitude": "-83.44825",
-      "score": 0.5
-    },
-    {
-      "name": "London, KY, USA",
-      "latitude": "37.12898",
-      "longitude": "-84.08326",
-      "score": 0.5
-    },
-    {
-      "name": "Londontowne, MD, USA",
-      "latitude": "38.93345",
-      "longitude": "-76.54941",
-      "score": 0.3
-    }
-  ]
-}
-```
-
-**No match**
-
-    GET /suggestions?q=SomeRandomCityInTheMiddleOfNowhere
-
-```json
-{
-  "suggestions": []
-}
-```
+![](screen.png)
 
 
-### Non-functional
+## How the autocomplete works
 
-- All code should be written in Javascript or Typescript.
-- Mitigations to handle high levels of traffic should be implemented.
-- Challenge is submitted as pull request against this repo ([fork it](https://help.github.com/articles/fork-a-repo/) and [create a pull request](https://help.github.com/articles/creating-a-pull-request-from-a-fork/)).
-- Documentation and maintainability is a plus.
+The search was developed based on a [fuzzy string set](https://glench.github.io/fuzzyset.js/), which is a technique to find a string approximately. It's divide into 3 steps:
 
-## Dataset
+- Separating the work in chunks of 3;
+- Grouping each chunk with its total repeated, storing into a dictionary;
+- Calculating the magnitude;
+- In the end, to find a similarity it calculates the score using the [cosine similarity](https://en.wikipedia.org/wiki/https://en.wikipedia.org/wiki/Cosine_similarity) using the word received in the request and the data already indexed on initialization of the application.
 
-You can find the necessary dataset along with its description and documentation in the [`data`](data/) directory.
+References:
+- https://glench.github.io/fuzzyset.js/
+- https://en.wikipedia.org/wiki/https://en.wikipedia.org/wiki/Cosine_similarity
 
-## Evaluation
-
-We will use the following criteria to evaluate your solution:
-
-- Capacity to follow instructions
-- Developer Experience (how easy it is to run your solution locally, how clear your documentation is, etc)
-- Solution correctness
-- Performance
-- Tests (quality and coverage)
-- Code style and cleanliness
-- Attention to detail
-- Ability to make sensible assumptions
-
-It is ok to ask us questions!
-
-We know that the time for this project is limited and it is hard to create a "perfect" solution, so we will consider that along with your experience when evaluating the submission.
+----------------------------------------------------------------
 
 ## Getting Started
 
@@ -142,5 +90,13 @@ npm run start
 it should produce an output similar to:
 
 ```
-Server running at http://127.0.0.1:2345/suggestions
+Server running at http://127.0.0.1:3333/suggestions
 ```
+
+For development environment is better to run:
+
+```
+npm run dev
+```
+
+Because it restarts the target project when any of the required files changes.

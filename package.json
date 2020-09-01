@@ -10,7 +10,7 @@
     "dev": "ts-node-dev --respawn --transpile-only --inspect -- ./src/app.ts",
     "build": "rimraf dist && tsc",
     "start": "node dist/App.js",
-    "test": "mocha -r ts-node/register --recursive test/**",
+    "test": "mocha --recursive -r ts-node/register  'test/**'  --timeout 60000 --exit",
     "lint": "eslint . --ext .ts"
   },
   "author": "",
