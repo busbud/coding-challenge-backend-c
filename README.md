@@ -1,5 +1,5 @@
 # Busbud Coding Challenge
-
+[![Build Status](https://travis-ci.org/jonasalessi/coding-challenge-backend-c.svg?branch=master)](https://travis-ci.org/jonasalessi/coding-challenge-backend-c)
 ## Challenge
 
 Design an API endpoint that provides autocomplete suggestions for large cities.
