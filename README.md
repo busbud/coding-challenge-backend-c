@@ -78,6 +78,7 @@ The test suite can be run with:
 ```
 npm run test
 ```
+![](coverage.png)
 
 ### Starting the application
 

@@ -1,15 +1,15 @@
 {
   "name": "coding-challenge-backend-c",
   "version": "0.0.0",
-  "description": "coding challenge in Nodejs", 
+  "description": "coding challenge in Nodejs",
   "engines": {
     "node": "12.x"
   },
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only --inspect -- ./src/App.ts",
-    "build": "rimraf dist && tsc", 
+    "build": "rimraf dist && tsc",
     "start": "ts-node src/App.ts",
-    "test": "mocha --recursive -r ts-node/register  'test/**/*.test.ts'  --timeout 60000 --exit",
+    "test": "nyc mocha --recursive -r ts-node/register  'test/**/*.test.ts'  --timeout 60000 --exit",
     "lint": "eslint . --ext .ts"
   },
   "author": "",
@@ -31,6 +31,7 @@
     "chai": "^4.2.0",
     "eslint": "^7.7.0",
     "mocha": "^8.1.2",
+    "nyc": "^15.1.0",
     "supertest": "^4.0.2",
     "ts-node": "^9.0.0",
     "ts-node-dev": "^1.0.0-pre.61",
