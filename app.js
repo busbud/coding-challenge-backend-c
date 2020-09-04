@@ -16,18 +16,18 @@ app.get("/", async (req, res, next) => {
 
 app.get("/suggestions", async (req, res, next) => {
   try {
-    let { q, latitude, longitude } = req.query;
+    let { q, lat, long } = req.query;
 
     const suggestedCities = await database_pool.query(
-      "SELECT name, alt_name, lat, long FROM geoname WHERE population > 5000 AND country IN ('US', 'CA') AND name iLIKE $1",
-      [q + "%"]
+      "SELECT concat(name, ', ', admin1, ', ', country) AS name, lat AS latitude, long AS longitude FROM geoname WHERE population > 5000 AND country IN ('US', 'CA') AND name iLIKE $1 AND (lat = $2 OR $2 IS NULL ) AND (long = $3 OR $3 IS NULL)",
+      [q + "%", lat, long]
     );
 
-    if (!q || suggestedCities.rows.length === 0) {
+    // if (!q || suggestedCities.rows.length === 0) {
+    if (!q) {
       return res.status(404).send("Sorry, we cannot find that!");
     }
-
-    res.json(suggestedCities);
+    res.json(suggestedCities.rows);
   } catch (err) {
     next(err);
   }
