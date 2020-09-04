@@ -3,6 +3,11 @@ const app = express();
 const database_pool = require("./db/index");
 
 const port = process.env.PORT || 2345;
+// let params = {
+//   q,
+//   latitude,
+//   longitude,
+// };
 // app.use(express.json());
 
 //ROUTES
@@ -16,15 +21,17 @@ app.get("/", async (req, res, next) => {
   }
 });
 
-// //get suggestions
-// app.get("/suggestions", (req, res) => {
-//   res.send("suggestions");
-//   res.send(
-//     JSON.stringify({
-//       // suggestions:
-//     })
-//   );
-// });
+//get suggestions
+app.get("/suggestions", async (req, res) => {
+  try {
+    const suggestedCities = await database_pool.query(
+      "SELECT * FROM geoname WHERE population > 5000"
+    );
+    res.json(suggestedCities);
+  } catch (err) {
+    next(err);
+  }
+});
 
 app.listen(port, () => {
   console.log("Server running at http://127.0.0.1:%d", port);
