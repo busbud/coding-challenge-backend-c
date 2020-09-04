@@ -3,15 +3,8 @@ const app = express();
 const database_pool = require("./db/index");
 
 const port = process.env.PORT || 2345;
-// let params = {
-//   q,
-//   latitude,
-//   longitude,
-// };
-// app.use(express.json());
 
-//ROUTES
-/*get all rows from the table*/
+//GET all rows from TABLE geoname
 app.get("/", async (req, res, next) => {
   try {
     const allCities = await database_pool.query("SELECT *  FROM geoname");
@@ -21,12 +14,20 @@ app.get("/", async (req, res, next) => {
   }
 });
 
-//get suggestions
 app.get("/suggestions", async (req, res, next) => {
   try {
+    let { q, latitude, longitude } = req.query;
+
+    if (!q) {
+      return res.status(404).send("Sorry, we cannot find that!");
+    }
+
     const suggestedCities = await database_pool.query(
-      "SELECT country FROM geoname WHERE population > 5000 AND country IN ('US', 'CA')"
+      // "SELECT name, alt_name, lat, long FROM geoname WHERE population > 5000 AND country IN ('US', 'CA')"
+      "SELECT name, alt_name, lat, long FROM geoname WHERE population > 5000 AND country IN ('US', 'CA') AND name iLIKE $1",
+      [q + "%"]
     );
+
     res.json(suggestedCities);
   } catch (err) {
     next(err);
