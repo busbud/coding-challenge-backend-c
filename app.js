@@ -18,15 +18,14 @@ app.get("/suggestions", async (req, res, next) => {
   try {
     let { q, latitude, longitude } = req.query;
 
-    if (!q) {
-      return res.status(404).send("Sorry, we cannot find that!");
-    }
-
     const suggestedCities = await database_pool.query(
-      // "SELECT name, alt_name, lat, long FROM geoname WHERE population > 5000 AND country IN ('US', 'CA')"
       "SELECT name, alt_name, lat, long FROM geoname WHERE population > 5000 AND country IN ('US', 'CA') AND name iLIKE $1",
       [q + "%"]
     );
+
+    if (!q || suggestedCities.rows.length === 0) {
+      return res.status(404).send("Sorry, we cannot find that!");
+    }
 
     res.json(suggestedCities);
   } catch (err) {
@@ -37,3 +36,5 @@ app.get("/suggestions", async (req, res, next) => {
 app.listen(port, () => {
   console.log("Server running at http://127.0.0.1:%d", port);
 });
+
+module.exports = app;
