@@ -1,6 +1,6 @@
 # Tables
 
-The main 'geoname' table has the following fields :
+The main `geoname` table from [geonames.org](https://download.geonames.org/export/dump/) has the following fields :
 
 ```
 geonameid         : integer id of record in geonames database
