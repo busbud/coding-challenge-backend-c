@@ -17,10 +17,16 @@ app.get("/", async (req, res, next) => {
 app.get("/suggestions", async (req, res, next) => {
   try {
     let { q, lat, long } = req.query;
+    let latMax = parseInt(lat) + 3;
+    let latMin = parseInt(lat) - 3;
+    let longMax = parseInt(long) + 3;
+    let longMin = parseInt(long) - 3;
+
+    console.log(longMax, "\n", longMin);
 
     const suggestedCities = await database_pool.query(
-      "SELECT concat(name, ', ', admin1, ', ', country) AS name, lat AS latitude, long AS longitude FROM geoname WHERE population > 5000 AND country IN ('US', 'CA') AND name iLIKE $1 AND (lat = $2 OR $2 IS NULL ) AND (long = $3 OR $3 IS NULL)",
-      [q + "%", lat, long]
+      "SELECT concat(name, ', ', admin1, ', ', country) AS name, lat AS latitude, long AS longitude FROM geoname WHERE population > 5000 AND country IN ('US', 'CA') AND name iLIKE $1 AND (lat BETWEEN $2 AND $3 OR lat = $4 IS NULL) AND (long BETWEEN $5 AND $6 OR long = $7 IS NULL)",
+      [q + "%", latMin, latMax, lat, longMin, longMax, long]
     );
 
     // if (!q || suggestedCities.rows.length === 0) {
