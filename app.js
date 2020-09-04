@@ -22,10 +22,10 @@ app.get("/", async (req, res, next) => {
 });
 
 //get suggestions
-app.get("/suggestions", async (req, res) => {
+app.get("/suggestions", async (req, res, next) => {
   try {
     const suggestedCities = await database_pool.query(
-      "SELECT * FROM geoname WHERE population > 5000"
+      "SELECT country FROM geoname WHERE population > 5000 AND country IN ('US', 'CA')"
     );
     res.json(suggestedCities);
   } catch (err) {
