@@ -43,12 +43,12 @@ Challenge was written in Typescript (fully typed out) using Express. Suggestion 
 #### Added Features
 
 - Includes ESLint following standard TypeScript definitions.
-- Api versioning. This is great/all most must have when working with apps. (to support old app versions)
+- Api versioning. This is great to have when working with apps. (to support old app versions)
 - Great test coverage, added unit and integration tests as well. Updated the provided `suggestions.test.ts` with more tests.
 
 ### How to use the application
 
-To use the application you will need to make a GET request to the endpoint `/v1/suggestions` or `/suggestions`. With the following parameters listed below:
+To use the application you will need to make a `GET` request to the endpoint `/v1/suggestions` or `/suggestions`. With the following parameters listed below:
 
 |    Param    | Required |       Type       |                                         Description                                         |
 | :---------: | :------: | :--------------: | :-----------------------------------------------------------------------------------------: |
