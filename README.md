@@ -32,6 +32,8 @@ The suggestions should be restricted to cities in the USA and Canada with a popu
 
 Challenge was written in Typescript (fully typed out) using Express. Suggestion speed is extremely fast and has rate limiting added to the `suggestions` endpoint.
 
+[Heroku App](https://busbud-coding-challenge-dylan.herokuapp.com/)
+
 #### Speed results
 
 ![](https://i.imgur.com/cY1HT8v.png)
