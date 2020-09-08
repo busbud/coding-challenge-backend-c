@@ -1,0 +1,11 @@
+id	name	ascii	alt_name	lat	long	feat_class	feat_code	country	cc2	admin1	admin2	admin3	admin4	population	elevation	dem	tz	modified_at
+5881791	Abbotsford	Abbotsford	Abbotsford,YXX,Абботсфорд	49.05798	-122.25257	P	PPL	CA		02	5957659			151683		114	America/Vancouver	2013-04-22
+5882142	Acton Vale	Acton Vale		45.65007	-72.56582	P	PPL	CA		10	16			5135		90	America/Montreal	2008-04-11
+5882799	Airdrie	Airdrie	Erdri,ai er de li,ayrdray,ayrdry,eeodeuli,Ердри,إيردراي,ائرڈرائ,ایردری,艾尔德里,에어드리	51.30011	-114.03528	P	PPL	CA		01				24673		1086	America/Edmonton	2008-04-11
+5882873	Ajax	Ajax	Adzhaks,Ehjdzhaks,Ejdzaks,ajaks, awntaryw,eijegseu,Аджакс,Ејџакс,Эйджакс,أجاكس، أونتاريو,에이젝스	43.85012	-79.03288	P	PPL	CA		08				90167		97	America/Toronto	2011-12-30
+5884083	Alma	Alma	Al'ma,Alma,YTF,alma,alma, kbk,alma, kybk,Алма,Альма,آلما,آلما، کبک,ألما، كيبك	48.55009	-71.6491	P	PPL	CA		10	02			29526		90	America/Montreal	2010-01-29
+5884467	Amherst	Amherst		45.83345	-64.19874	P	PPL	CA		07				9336		20	America/Halifax	2008-04-11
+4423395	D'Iberville	D'Iberville		30.42631	-88.89086	P	PPL	US		MS	047			9486	4	5	America/Chicago	2011-05-14
+4423888	Diamondhead	Diamondhead		30.39464	-89.36394	P	PPL	US		MS	045			8425	20	31	America/Chicago	2011-05-14
+4426822	Flowood	Flowood		32.30959	-90.13898	P	PPL	US		MS	121			7823	82	88	America/Chicago	2011-05-14
+6093347	Olds	Olds		51.78341	-114.10199	P	PPL	CA		01				4947		1039	America/Edmonton	2008-04-11
