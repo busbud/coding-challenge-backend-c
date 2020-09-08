@@ -4,7 +4,7 @@
   "description": "coding challenge in Nodejs",
   "main": "app.ts",
   "scripts": {
-    "start": "ts-node ./src/app.ts",
+    "start": "node ./dist/app.js",
     "dev:windows": "cross-env NODE_ENV=dev nodemon src/app.ts",
     "build": "yarn lint && tsc",
     "lint": "eslint --ext .ts --ext .js .",
