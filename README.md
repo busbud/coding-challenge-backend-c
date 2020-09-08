@@ -42,7 +42,7 @@ Challenge was written in Typescript (fully typed out) using Express. Suggestion 
 
 #### Added Features
 
-- Includes ESLint following standard TypeScript definitions.
+- Includes ESLint following standard TypeScript definitions as well as Prettier.
 - Api versioning. This is great to have when working with apps. (to support old app versions)
 - Great test coverage, added unit and integration tests as well. Updated the provided `suggestions.test.ts` with more tests.
 
