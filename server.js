@@ -23,13 +23,13 @@ let users = security.readArray(userPath) || [];
 let ips = security.readArray(ipPath) || [];
 
 // instantiate express app
-const app = express();
+let app = express();
 const port = process.env.PORT || 3000;
 
-// this function serves static files from the ./client directory
-app.use(express.static(path.join(__dirname, 'client')));
 // this enables express to accept json formatted requests
 app.use(express.json());
+// this function serves static files from the ./client directory
+app.use(express.static(path.join(__dirname, 'client')));
 // to parse ip address via proxy
 app.set('trust proxy', true);
 
