@@ -1,6 +1,7 @@
 // node imports
 const path = require('path');
 const express = require('express');
+const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
@@ -26,12 +27,20 @@ let ips = security.readArray(ipPath) || [];
 let app = express();
 const port = process.env.PORT || 3000;
 
-// this enables express to accept json formatted requests
-app.use(express.json());
-// this function serves static files from the ./client directory
-app.use(express.static(path.join(__dirname, 'client')));
 // to parse ip address via proxy
 app.set('trust proxy', true);
+// handle cors
+app.use(cors());
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+// this enables express to accept json formatted requests
+app.use(express.json("*/json"));
+// this function serves static files from the ./client directory
+app.use(express.static(path.join(__dirname, 'client')));
+
 
 // register a new user
 app.post("/register", async (req, res) => {
@@ -61,8 +70,6 @@ app.post("/register", async (req, res) => {
       return res.status(409).send("This username is already taken, try a different one.");
     } else {
       // create new user object and update users list
-      console.log("req:");
-      console.log(req);
       console.log("req.body:");
       console.log(req.body);
       let newUser = await security.encryptUserPw(req.body);
