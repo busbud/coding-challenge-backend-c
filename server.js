@@ -61,6 +61,10 @@ app.post("/register", async (req, res) => {
       return res.status(409).send("This username is already taken, try a different one.");
     } else {
       // create new user object and update users list
+      console.log("req:");
+      console.log(req);
+      console.log("req.body:");
+      console.log(req.body);
       let newUser = await security.encryptUserPw(req.body);
       users.push(newUser);
       security.appendObject(newUser, userPath);
