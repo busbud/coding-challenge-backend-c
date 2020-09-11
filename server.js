@@ -33,7 +33,7 @@ app.set('trust proxy', true);
 app.use(cors());
 app.use(function(req, res, next) {
   // allow all incoming requests
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.header("Access-Control-Allow-Origin", "localhost:3000");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   res.header("Access-Control-Request-Methods","GET,POST,DELETE");
   next();
