@@ -35,13 +35,13 @@ app.use(function(req, res, next) {
   // allow all incoming requests
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Request-Methods","GET,POST,DELETE");
   next();
 });
 // this enables express to accept json formatted requests
 app.use(express.json("*/json"));
 // this function serves static files from the ./client directory
 app.use(express.static(path.join(__dirname, 'client')));
-
 
 // register a new user
 app.post("/register", async (req, res) => {
