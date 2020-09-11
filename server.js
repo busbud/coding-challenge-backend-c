@@ -33,7 +33,7 @@ app.set('trust proxy', true);
 app.use(cors());
 app.use(function(req, res, next) {
   // allow all incoming requests
-  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Origin", "https://city-search-node-api.herokuapp.com");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   res.header("Access-Control-Request-Methods","GET,POST,DELETE");
   next();
@@ -111,9 +111,7 @@ app.post("/login", async (req, res) => {
 	});
 	// set the cookie as the token string, with a similar max age as the token
 	// here, the max age is in milliseconds, so we multiply by 1000
-  return res.cookie("token", token, { maxAge: jwtExpirySeconds * 1000 })
-    .status(202)
-    .send("Access token created.");
+  return res.status(202).cookie("token", token, { maxAge: jwtExpirySeconds * 1000 });
 });
 
 // delte user account
