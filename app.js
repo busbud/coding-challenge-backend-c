@@ -15,11 +15,9 @@ app.get("/", async (req, res, next) => {
 
 app.get("/suggestions", async (req, res, next) => {
   try {
-    let { q, lat, long } = req.query;
-    let latMax = parseInt(lat) + 3;
-    let latMin = parseInt(lat) - 3;
-    let longMax = parseInt(long) + 3;
-    let longMin = parseInt(long) - 3;
+    let { q, latitude, longitude } = req.query;
+    let coordinateMax = (coordinate) => parseInt(coordinate) + 2;
+    let coordinateMin = (coordinate) => parseInt(coordinate) - 2;
     let score = 0;
 
     if (!q) {
@@ -27,10 +25,9 @@ app.get("/suggestions", async (req, res, next) => {
     }
 
     const suggestedCities = await database_pool.query(
-      "SELECT concat(name, ', ', admin1, ', ', country) AS name, lat AS latitude, long AS longitude, $8 AS score FROM geoname WHERE population > 5000 AND country IN ('US', 'CA') AND (name iLIKE $1 OR ascii iLIKE $1 OR ascii iLIKE $1) AND (lat BETWEEN $2 AND $3 OR lat = $4 IS NULL) AND (long BETWEEN $5 AND $6 OR long = $7 IS NULL)",
-      [q + "%", latMin, latMax, lat, longMin, longMax, long, score]
+      "SELECT concat(name, ', ', admin1, ', ', country) AS name, lat AS latitude, long AS longitude, $2 AS score FROM geoname WHERE population > 5000 AND country IN ('US', 'CA') AND (name iLIKE $1 OR ascii iLIKE $1 OR ascii iLIKE $1)",
+      [q + "%", score]
     );
-
     if (suggestedCities.rowCount === 0) {
       return res
         .status(404)
@@ -39,6 +36,33 @@ app.get("/suggestions", async (req, res, next) => {
           res.json({ suggestions: suggestedCities.rows })
         );
     } else {
+      suggestedCities.rows.forEach((x) => {
+        if (q.toLowerCase() === x.name.split(",")[0].toLowerCase()) {
+          x.score = parseInt(x.score) + 0.7;
+        } else {
+          x.score = parseInt(x.score) + 0.3;
+        }
+
+        if (latitude) {
+          if (
+            x.latitude <= coordinateMax(latitude) &&
+            x.latitude >= coordinateMin(latitude)
+          ) {
+            console.log(x);
+            x.score = x.score + 0.15;
+          }
+        }
+
+        if (longitude) {
+          if (
+            x.longitude <= coordinateMax(longitude) &&
+            x.latitude >= coordinateMin(longitude)
+          ) {
+            x.score = x.score + 0.15;
+          }
+        }
+      });
+
       res.json({ suggestions: suggestedCities.rows });
     }
   } catch (err) {
