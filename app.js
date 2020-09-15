@@ -25,7 +25,7 @@ app.get("/suggestions", async (req, res, next) => {
     }
 
     const suggestedCities = await database_pool.query(
-      "SELECT concat(name, ', ', admin1, ', ', country) AS name, lat AS latitude, long AS longitude, $2 AS score FROM geoname WHERE population > 5000 AND country IN ('US', 'CA') AND (name iLIKE $1 OR ascii iLIKE $1 OR ascii iLIKE $1)",
+      "SELECT concat(name, ', ', admin1, ', ', country) AS name, lat AS latitude, long AS longitude, $2 AS score FROM geoname WHERE population > 5000 AND country IN ('US', 'CA') AND (name iLIKE $1 OR ascii iLIKE $1 OR ascii iLIKE $1) ORDER BY $2 ASC",
       [q + "%", score]
     );
     if (suggestedCities.rowCount === 0) {
@@ -48,7 +48,6 @@ app.get("/suggestions", async (req, res, next) => {
             x.latitude <= coordinateMax(latitude) &&
             x.latitude >= coordinateMin(latitude)
           ) {
-            console.log(x);
             x.score = x.score + 0.15;
           }
         }
