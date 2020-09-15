@@ -65,12 +65,11 @@ describe("GET /suggestions", function () {
     });
 
     it("contains a match", function () {
-      expect(response.json.suggestions).to.satisfy(function (suggestions) {
-        return suggestions.some(function (suggestion) {
-          console.log("*******: ", suggestion.name);
-          return suggestion.name(/montreal/i);
-        });
-      });
+      expect(
+        response.json.suggestions.some((suggestion) => {
+          return suggestion.name.includes("Montréal");
+        })
+      ).to.equal(true);
     });
   });
 });
