@@ -30,14 +30,14 @@ const port = process.env.PORT || 3000;
 // to parse ip address via proxy
 app.set('trust proxy', true);
 // handle cors
-//app.use(cors());
-app.use(function(req, res, next) {
-  // allow all incoming requests
-  res.header("Access-Control-Allow-Origin", "https://city-search-react-ui.herokuapp.com/");
-  res.header("Access-Control-Allow-Headers", "Origin,X-Requested-With,Content-Type,Accept");
-  res.header("Access-Control-Request-Methods","GET,POST,DELETE");
-  next();
-});
+app.use(cors());
+// app.use(function(req, res, next) {
+//   // allow all incoming requests
+//   res.header("Access-Control-Allow-Origin", "https://city-search-react-ui.herokuapp.com/");
+//   res.header("Access-Control-Allow-Headers", "Origin,X-Requested-With,Content-Type,Accept");
+//   res.header("Access-Control-Request-Methods","GET,POST,DELETE");
+//   next();
+// });
 // this enables express to accept json formatted requests
 app.use(express.json("*/json"));
 // this function serves static files from the ./client directory
