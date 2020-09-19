@@ -20,31 +20,23 @@ const ipLimit = 20; // one ip address cannot create more than 50 users
 const jwtKey = "tHiSiSaVeRySeCrEtKeY";
 
 // write an array with object elements to file, use with readArray
-module.exports.writeArray = (arr, filePath) => {
+module.exports.serializeArray = (arr) => {
   const serialized = arr.reduce((accumulated, current) => {
     return accumulated += JSON.stringify(current) + '\n'
   }, "");
 
-  fs.writeFileSync(filePath, serialized);
+  return serialized;
 };
 
 // upload file to s3
-module.exports.uploadFile = (filePath, uploadPath) => {
-  // create a file stream from file
-  const fileStream = fs.createReadStream(filePath);
+module.exports.uploadArray = async (serializedData, uploadPath) => {
   const params = {
     Bucket: BUCKET,
     Key: uploadPath,
-    Body: fileStream
+    ContentType:'binary',
+    Body: Buffer.from(serializedData, 'binary')
   };
-  s3.upload(params, function (err, data) {
-    if (err) {
-      console.log("Error", err);
-    }
-    if (data) {
-      console.log("Uploaded in:", data.Location);
-    }
-  });
+  await s3.putObject(params).promise();
 };
 
 module.exports.appendObject = (obj, filePath) => {
