@@ -88,6 +88,9 @@ app.post("/register", async (req, res) => {
 
 // login for registered users
 app.post("/login", async (req, res) => {
+  // logging
+  console.log("LOGIN REQUEST");
+  console.log(req);
   // input validation username: allowed alphanumeric and _
   if (!/^[a-zA-Z0-9_]+$/.test(req.body.username)){
     return res.status(400).send("Usernames can only contain alphanumeric characters and underscores.");
