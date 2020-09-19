@@ -8,8 +8,8 @@ require('dotenv').config();
 
 // aws variables
 var BUCKET = process.env.BUCKET;
-var ACCESS_KEY = process.env.ACCESS_KEY;
-var SECRET_ACCESS_KEY = process.env.SECRET_ACCESS_KEY;
+const ACCESS_KEY = process.env.ACCESS_KEY;
+const SECRET_ACCESS_KEY = process.env.SECRET_ACCESS_KEY;
 var s3 = new AWS.S3({
   accessKeyId: ACCESS_KEY,
   secretAccessKey: SECRET_ACCESS_KEY
@@ -45,16 +45,11 @@ module.exports.appendObject = (obj, filePath) => {
 
 // read a file and return an array of objects, use with writeArray
 // if file cannot be found, return an empty array
-module.exports.readArray = (filePath) => {
-  try {
-    const str = fs.readFileSync(filePath, {encoding: 'utf-8'});
-    const arr = str.split("\n")
-      .filter(el => el !== '')
-      .map(el => JSON.parse(el));
-    return arr;
-  } catch (err) {
-    return [];
-  }
+module.exports.parseArray = (arrString) => {
+  const arr = arrString.split("\n")
+    .filter(el => el !== '')
+    .map(el => JSON.parse(el));
+  return arr;
 };
 
 // download file from s3
@@ -70,6 +65,7 @@ module.exports.downloadFile = async (downloadPath) => {
   } catch (err) {
     return err;
   }
+
 };
 
 // return true if ip is allowed to create a new user, false otherwise

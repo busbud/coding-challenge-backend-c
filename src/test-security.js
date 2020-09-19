@@ -5,6 +5,9 @@ const security = require('./security');
   let data1 = await security.downloadFile('users.txt');
   let data2 = await security.downloadFile('ips.txt');
 
-  console.log(data1.Body.toString('binary'));
-  console.log(data2);
+  let users = security.parseArray(data1);
+  let ips = security.parseArray(data2);
+
+  console.log(users);
+  console.log(ips);
 })()
