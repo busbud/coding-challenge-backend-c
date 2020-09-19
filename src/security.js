@@ -34,9 +34,14 @@ module.exports.uploadArray = async (serializedData, uploadPath) => {
     Bucket: BUCKET,
     Key: uploadPath,
     ContentType:'binary',
-    Body: Buffer.from(serializedData, 'binary')
+    Body: serializedData
   };
-  await s3.putObject(params).promise();
+  try {
+    await s3.putObject(params).promise();
+  } catch (err) {
+    console.error(err);
+  }
+  
 };
 
 module.exports.appendObject = (obj, filePath) => {
@@ -53,7 +58,7 @@ module.exports.parseArray = (arrString) => {
 };
 
 // download file from s3
-module.exports.downloadFile = async (downloadPath) => {
+module.exports.downloadArray = async (downloadPath) => {
   const params = {
     Bucket : BUCKET,
     Key: downloadPath
@@ -63,7 +68,7 @@ module.exports.downloadFile = async (downloadPath) => {
     let data = buffer.Body.toString('binary');
     return data;
   } catch (err) {
-    return err;
+    console.error(err);
   }
 
 };
