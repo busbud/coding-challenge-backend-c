@@ -29,6 +29,7 @@ const port = process.env.PORT || 3000;
 
 // to parse ip address via proxy
 app.set('trust proxy', true);
+
 // handle cors
 app.use(cors());
 // app.use(function(req, res, next) {
@@ -42,6 +43,10 @@ app.use(cors());
 app.use(express.json("*/json"));
 // this function serves static files from the ./client directory
 app.use(express.static(path.join(__dirname, 'client')));
+
+
+//allow OPTIONS on all resources
+app.options('*', cors())
 
 // register a new user
 app.post("/register", async (req, res) => {
