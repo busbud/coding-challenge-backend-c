@@ -14,11 +14,14 @@ const security = require('../src/security');
 })();
 
 // download data
-(async () => {
+let users = null;
+const getUsers  = async (users) => {
   // download from s3
   let data = await security.downloadArray('test.txt');
   console.log(data);
 
-  let users = security.parseArray(data);
-  console.log(users);
-})();
+  users = security.parseArray(data);
+};
+
+getUsers(users);
+console.log(users);

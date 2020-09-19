@@ -3,8 +3,8 @@ POST https://city-search-node-api.herokuapp.com/register
 Content-Type: application/json
 
 {
-  "username": "test13",
-  "password": "test"
+  "username": "hi",
+  "password": "hi"
 }
 
 ### create a valid user
@@ -12,8 +12,8 @@ POST http://localhost:3000/register
 Content-Type: application/json
 
 {
-  "username": "test2",
-  "password": "test"
+  "username": "hi",
+  "password": "hi"
 }
 
 ### invalid username

@@ -7,6 +7,15 @@ Content-Type: application/json
   "password": "test"
 }
 
+### attempt login for valid user
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+  "username": "hi",
+  "password": "hi"
+}
+
 ### attempt login for valid user with wrong password
 POST http://localhost:3000/login
 Content-Type: application/json
