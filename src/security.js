@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const AWS = require('aws-sdk');
 
 // This will read the .env (if it exists) into process.env, for local testing
-require('dotenv').config();
+//require('dotenv').config();
 
 // aws variables
 var BUCKET = process.env.BUCKET;
@@ -41,11 +41,6 @@ module.exports.uploadArray = async (serializedData, uploadPath) => {
   } catch (err) {
     console.error(err);
   }
-  
-};
-
-module.exports.appendObject = (obj, filePath) => {
-  fs.appendFileSync(filePath, JSON.stringify(obj)+'\n');
 };
 
 // read a file and return an array of objects, use with writeArray
@@ -57,7 +52,7 @@ module.exports.parseArray = (arrString) => {
   return arr;
 };
 
-// download file from s3
+// download array as string from s3
 module.exports.downloadArray = async (downloadPath) => {
   const params = {
     Bucket : BUCKET,
@@ -70,7 +65,6 @@ module.exports.downloadArray = async (downloadPath) => {
   } catch (err) {
     console.error(err);
   }
-
 };
 
 // return true if ip is allowed to create a new user, false otherwise

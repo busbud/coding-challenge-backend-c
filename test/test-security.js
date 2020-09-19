@@ -1,4 +1,4 @@
-const security = require('./security');
+const security = require('../src/security');
 
 // upload data
 (async () => {
