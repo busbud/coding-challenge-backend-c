@@ -4,13 +4,13 @@ const jwt = require('jsonwebtoken');
 const AWS = require('aws-sdk');
 
 // This will read the .env (if it exists) into process.env, for local testing
-//require('dotenv').config();
+require('dotenv').config();
 
 // aws variables
-const BUCKET = process.env.BUCKET;
-const ACCESS_KEY = process.env.ACCESS_KEY;
-const SECRET_ACCESS_KEY = process.env.SECRET_ACCESS_KEY;
-const s3 = new AWS.S3({
+var BUCKET = process.env.BUCKET;
+var ACCESS_KEY = process.env.ACCESS_KEY;
+var SECRET_ACCESS_KEY = process.env.SECRET_ACCESS_KEY;
+var s3 = new AWS.S3({
   accessKeyId: ACCESS_KEY,
   secretAccessKey: SECRET_ACCESS_KEY
 });
@@ -58,20 +58,18 @@ module.exports.readArray = (filePath) => {
 };
 
 // download file from s3
-module.exports.downloadFile = (filePath, downloadPath) => {
-  console.log("entered download function");
-  const s3 = new AWS.S3({
-    accessKeyId: ACCESS_KEY,
-    secretAccessKey: SECRET_ACCESS_KEY
-  });
+module.exports.downloadFile = async (downloadPath) => {
   const params = {
-        Bucket : BUCKET,
-        Key: downloadPath
-    };
-  const writeStream = fs.createWriteStream(filePath);
-  // download and write to file
-  s3.getObject(params).createReadStream().pipe(writeStream);
-  return 0;
+    Bucket : BUCKET,
+    Key: downloadPath
+  };
+  try {
+    let buffer = await s3.getObject(params).promise();
+    let data = buffer.Body.toString('binary');
+    return data;
+  } catch (err) {
+    return err;
+  }
 };
 
 // return true if ip is allowed to create a new user, false otherwise

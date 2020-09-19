@@ -1,13 +1,10 @@
 const security = require('./security');
 
-(async () =>{
-  arr = [
-    {'username':'one', 'password': 'one'},
-    {'username':'two', 'password': 'two'}
-  ];
-  
-  let serialized = security.serializeArray(arr);
-  console.log(serialized);
-  
-  security.uploadArray(serialized, 'test.txt');
+(async () => {
+  // download from s3
+  let data1 = await security.downloadFile('users.txt');
+  let data2 = await security.downloadFile('ips.txt');
+
+  console.log(data1.Body.toString('binary'));
+  console.log(data2);
 })()
