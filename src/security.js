@@ -115,7 +115,7 @@ module.exports.authenticateUser = (req, res, next) => {
   // if set verify it with jwt, handle result with callback
   jwt.verify(token, jwtKey, {algorithms: ["HS256"]} ,(err, user) => {
     if (err) { // authentication failed
-      console.log(err);
+      console.error(err);
       return res.status(401).send("Authentication failed.");
     }
     // else middleware executes next function

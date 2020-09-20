@@ -26,11 +26,11 @@ const port = process.env.PORT || 3000;
 app.set('trust proxy', true);
 
 // handle cors
-let corsParams = {
-  origin: 'https://city-search-react-ui.herokuapp.com',
-  credentials: true
-};
-app.use(cors(corsParams));
+// let corsParams = {
+//   origin: 'https://city-search-react-ui.herokuapp.com',
+//   credentials: true
+// };
+app.use(cors());
 // app.use(function(req, res, next) {
 //   // allow all incoming requests
 //   res.header("Access-Control-Allow-Origin", "https://city-search-react-ui.herokuapp.com");
