@@ -104,6 +104,7 @@ app.post("/login", async (req, res) => {
   }
   // check if user exists and password is correct
   const userIndex = users.findIndex((el) => el.username == req.body.username);
+  console.log(userIndex);
 
   // user does not exist
   if (userIndex === -1){
