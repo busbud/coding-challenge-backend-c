@@ -107,7 +107,7 @@ module.exports.encryptUserPw = async (userObj) => {
 module.exports.authenticateUser = (req, res, next) => {
   // retrieve the access token which is sored under that path in the reqest header
   //const token = req.headers.cookie && req.headers.cookie.split("=")[1];
-  const token = req.body.accessToken;
+  const token = req.body.accessToken.split("=")[1];
   console.log(token);
   if (!token) { // check if cookie was set
     return res.status(401).send("Login first before starting a request.");
