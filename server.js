@@ -26,7 +26,7 @@ const port = process.env.PORT || 3000;
 app.set('trust proxy', true);
 
 // handle cors
-app.use(cors());
+//app.use(cors());
 // app.use(function(req, res, next) {
 //   // allow all incoming requests
 //   res.header("Access-Control-Allow-Origin", "https://city-search-react-ui.herokuapp.com/");
@@ -45,6 +45,7 @@ let corsDelete = {
   origin: 'https://city-search-react-ui.herokuapp.com/'
 };
 app.options('/deregister', cors(corsDelete));
+app.options('*', cors());
 
 // register a new user
 app.post("/register", async (req, res) => {
