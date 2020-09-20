@@ -1,0 +1,25 @@
+version: "2.1"
+
+services:
+  postgres:
+    image: mdillon/postgis
+    environment:
+      POSTGRES_USER: docker
+      POSTGRES_PASSWORD: docker
+      POSTGRES_DB : suggestions-service
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d suggestions-service -U docker"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  flyway:
+    image: boxfuse/flyway:latest
+    volumes:
+      - ./resources/migrations/schema:/flyway/sql
+      - ./resources/migrations/data:/flyway/sql/tests
+    command: -url=jdbc:postgresql://postgres:5432/suggestions-service -user=docker -password=docker -schemas=suggestions_service migrate
+    depends_on:
+      postgres:
+        condition: service_healthy

@@ -1,16 +1,17 @@
-var http = require('http');
-var port = process.env.PORT || 2345;
+import bodyParser from 'body-parser';
+import express from 'express';
+import logger from './config/logger.js';
 
-module.exports = http.createServer(function (req, res) {
-  res.writeHead(404, {'Content-Type': 'text/plain'});
+import suggestionRoutes from './routes/suggestion.routes.js';
 
-  if (req.url.indexOf('/suggestions') === 0) {
-    res.end(JSON.stringify({
-      suggestions: []
-    }));
-  } else {
-    res.end();
-  }
-}).listen(port, '127.0.0.1');
+const app = express();
 
-console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+app.use(bodyParser.json());
+
+app.use('/suggestions', suggestionRoutes);
+
+const port = process.env.PORT || 2345;
+
+export default app.listen(port, () => {
+    logger.info(`Server running at http://localhost:${port}`);
+});
