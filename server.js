@@ -28,7 +28,7 @@ app.set('trust proxy', true);
 // handle cors
 let corsParams = {
   origin: 'https://city-search-react-ui.herokuapp.com',
-  credetials: true,
+  credetials: 'true',
   allowedHeaders: 'Origin,X-Requested-With,Content-Type,Accept,accessToken',
   methods: 'GET,POST,DELETE'
 };
