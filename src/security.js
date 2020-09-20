@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const AWS = require('aws-sdk');
 
 // This will read the .env (if it exists) into process.env, for local testing
-require('dotenv').config();
+//require('dotenv').config();
 
 // aws variables
 var BUCKET = process.env.BUCKET;
