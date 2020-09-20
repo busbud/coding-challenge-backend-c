@@ -44,7 +44,7 @@ app.use(express.static(path.join(__dirname, 'client')));
 
 
 //allow OPTIONS on all resources
-app.options('*', cors());
+// app.options('*', cors());
 
 // register a new user
 app.post("/register", async (req, res) => {
