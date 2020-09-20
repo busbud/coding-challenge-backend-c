@@ -29,7 +29,8 @@ app.use(function CORS(req, res, next) {
   // allow all incoming requests
   res.header("Access-Control-Allow-Origin", "https://city-search-react-ui.herokuapp.com");
   res.header("Access-Control-Allow-Headers", "Origin,X-Requested-With,Content-Type,Accept,accessToken");
-  res.header("Access-Control-Request-Methods","GET,POST,DELETE");
+  res.header("Access-Control-Request-Methods","GET,POST,OPTIONS,DELETE");
+  res.header("Access-Control-Allow-Methods","GET,POST,OPTIONS,DELETE");
   res.header("Access-Control-Allow-Credentials","true");
   next();
 });
