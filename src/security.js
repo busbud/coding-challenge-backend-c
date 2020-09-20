@@ -105,13 +105,10 @@ module.exports.encryptUserPw = async (userObj) => {
 
 // check if user has an jwt access cookie set
 module.exports.authenticateUser = (req, res, next) => {
-  console.log(req.headers);
   // retrieve the access token which is sored under that path in the reqest header
   let token = req.headers.cookie && req.headers.cookie.split("=")[1];
-  console.log(token);
   if (!token) {
     token = req.headers && req.headers.accesstoken && req.headers.accesstoken.split("=")[1];
-    console.log(token);
   }
   if (!token) { // check if cookie was set
     return res.status(401).send("Login first before starting a request.");
