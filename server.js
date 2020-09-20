@@ -102,7 +102,6 @@ app.post("/login", async (req, res) => {
     let userBuffer = await security.downloadArray(userPath);
     users = security.parseArray(userBuffer);
   }
-  console.log(users);
   // input validation username: allowed alphanumeric and _
   if (!/^[a-zA-Z0-9_]+$/.test(req.body.username)){
     return res.status(400).send("Usernames can only contain alphanumeric characters and underscores.");
@@ -113,7 +112,6 @@ app.post("/login", async (req, res) => {
   }
   // check if user exists and password is correct
   const userIndex = users.findIndex((el) => el.username == req.body.username);
-  console.log(userIndex);
 
   // user does not exist
   if (userIndex === -1){
