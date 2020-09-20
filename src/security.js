@@ -113,8 +113,9 @@ module.exports.authenticateUser = (req, res, next) => {
     return res.status(401).send("Login first before starting a request.");
   }
   // if set verify it with jwt, handle result with callback
-  jwt.verify(token, jwtKey, (err, user) => {
+  jwt.verify(token, jwtKey, {algorithms: ["HS256"]} ,(err, user) => {
     if (err) { // authentication failed
+      console.log(err);
       return res.status(401).send("Authentication failed.");
     }
     // else middleware executes next function
