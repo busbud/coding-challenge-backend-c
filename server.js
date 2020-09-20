@@ -26,21 +26,22 @@ const port = process.env.PORT || 3000;
 app.set('trust proxy', true);
 
 // handle cors
-let corsParams = {
-  origin: 'https://city-search-react-ui.herokuapp.com',
-  credetials: 'true',
-  allowedHeaders: 'Origin,X-Requested-With,Content-Type,Accept,accessToken',
-  methods: 'GET,POST,DELETE'
-};
+// let corsParams = {
+//   origin: 'https://city-search-react-ui.herokuapp.com',
+//   credetials: true,
+//   allowedHeaders: 'Origin,X-Requested-With,Content-Type,Accept,accessToken',
+//   methods: 'GET,POST,DELETE'
+// };
 // app.use(cors(corsParams));
 // custom CORS
-// app.use(function(req, res, next) {
-//   // allow all incoming requests
-//   res.header("Access-Control-Allow-Origin", "https://city-search-react-ui.herokuapp.com");
-//   res.header("Access-Control-Allow-Headers", "Origin,X-Requested-With,Content-Type,Accept,accessToken");
-//   res.header("Access-Control-Request-Methods","GET,POST,DELETE");
-//   next();
-// });
+app.use(function(req, res, next) {
+  // allow all incoming requests
+  res.header("Access-Control-Allow-Origin", "https://city-search-react-ui.herokuapp.com");
+  res.header("Access-Control-Allow-Headers", "Origin,X-Requested-With,Content-Type,Accept,accessToken");
+  res.header("Access-Control-Request-Methods","GET,POST,DELETE");
+  res.header("Access-Control-Allow-Credentials","true");
+  next();
+});
 // this enables express to accept json formatted requests
 app.use(express.json("*/json"));
 // this function serves static files from the ./client directory
@@ -48,7 +49,7 @@ app.use(express.static(path.join(__dirname, 'client')));
 
 
 //allow OPTIONS on all resources
-app.options('*', cors(corsParams));
+// app.options('*', cors(corsParams));
 
 // register a new user
 app.post("/register", async (req, res) => {
