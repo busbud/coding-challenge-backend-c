@@ -110,7 +110,7 @@ module.exports.authenticateUser = (req, res, next) => {
   let token = req.headers.cookie && req.headers.cookie.split("=")[1];
   console.log(token);
   if (!token) {
-    token = req.headers && req.headers.accessToken && req.headers.accessToken.split("=")[1];
+    token = req.headers && req.headers.accesstoken && req.headers.accesstoken.split("=")[1];
     console.log(token);
   }
   if (!token) { // check if cookie was set
