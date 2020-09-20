@@ -106,7 +106,7 @@ module.exports.encryptUserPw = async (userObj) => {
 // check if user has an jwt access cookie set
 module.exports.authenticateUser = (req, res, next) => {
   // retrieve the access token which is sored under that path in the reqest header
-  const token = req.headers.cookie && req.headers.cookie.split("=")[1];
+  let token = req.headers.cookie && req.headers.cookie.split("=")[1];
   if (!token) {
     token = req.headers && req.headers.accessToken && req.headers.accessToken.split("=")[1];
     console.log(token);
