@@ -27,7 +27,8 @@ app.set('trust proxy', true);
 
 // handle cors
 let corsParams = {
-  origin: 'https://city-search-react-ui.herokuapp.com'
+  origin: 'https://city-search-react-ui.herokuapp.com',
+  credentials: true
 };
 app.use(cors(corsParams));
 // app.use(function(req, res, next) {
