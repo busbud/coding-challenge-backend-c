@@ -15,12 +15,8 @@ const jwtExpirySeconds = 300;
 // temporary file paths
 const userPath = "users.txt";
 const ipPath = "ips.txt";
-// download from s3
-// let userBuffer = await security.downloadArray(userPath);
-// let ipBuffer = await security.downloadArray(ipPath);
-// parse to array
-let users = null; //security.parseArray(userBuffer) || [];
-let ips = null; //security.parseArray(ipBuffer) || [];
+let users = null;
+let ips = null;
 
 // instantiate express app
 let app = express();
@@ -102,11 +98,6 @@ app.post("/login", async (req, res) => {
     let userBuffer = await security.downloadArray(userPath);
     users = security.parseArray(userBuffer);
   }
-  // logging
-  console.log("LOGIN REQUEST");
-  console.log(req.body);
-  console.log("list of valid usernames:");
-  console.log(users);
   // input validation username: allowed alphanumeric and _
   if (!/^[a-zA-Z0-9_]+$/.test(req.body.username)){
     return res.status(400).send("Usernames can only contain alphanumeric characters and underscores.");
@@ -132,10 +123,11 @@ app.post("/login", async (req, res) => {
   const token = jwt.sign({ username: req.body.username }, jwtKey, {
 		algorithm: "HS256",
 		expiresIn: jwtExpirySeconds,
-	});
+  });
 	// set the cookie as the token string, with a similar max age as the token
-	// here, the max age is in milliseconds, so we multiply by 1000
-  return res.status(202).cookie("token", token, { maxAge: jwtExpirySeconds * 1000 });
+  // here, the max age is in milliseconds, so we multiply by 1000
+  res.cookie("token", token, { maxAge: jwtExpirySeconds * 1000 });
+  return res.status(202).send("There is your cookie");
 });
 
 // delte user account
