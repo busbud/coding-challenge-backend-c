@@ -32,7 +32,7 @@ let corsParams = {
   allowedHeaders: 'Origin,X-Requested-With,Content-Type,Accept,accessToken',
   methods: 'GET,POST,DELETE'
 };
-app.use(cors(corsParams));
+// app.use(cors(corsParams));
 // custom CORS
 // app.use(function(req, res, next) {
 //   // allow all incoming requests
@@ -48,7 +48,7 @@ app.use(express.static(path.join(__dirname, 'client')));
 
 
 //allow OPTIONS on all resources
-// app.options('*', cors(corsParams));
+app.options('*', cors(corsParams));
 
 // register a new user
 app.post("/register", async (req, res) => {
