@@ -1,3 +1,5 @@
+CREATE EXTENSION fuzzystrmatch;
+
 CREATE TABLE suggestions_service.cities (
     id INTEGER PRIMARY KEY,
     name VARCHAR(200),

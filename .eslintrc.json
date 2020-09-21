@@ -11,6 +11,7 @@
         "sourceType": "module"
     },
     "rules": {
-        "import/extensions": ["never"]
+        "import/extensions": 0,
+        "max-len": [2, 140]
     }
 }
