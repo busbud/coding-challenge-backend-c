@@ -1,13 +1,12 @@
 -- $1 searchTerm
 select
        name,
-       country,
-       admin1,
-       lat,
-       long,
-       1 - (levenshtein($1, name)::numeric / max(levenshtein($1, name)::numeric) over ()) as score
+       lat as latitude,
+       long as longitude,
+       1 - (levenshtein($1, ascii)::numeric / max(levenshtein($1, ascii)::numeric) over ()) as score
 from suggestions_service.cities
-where name ilike $1 || '%'
+where ascii ilike $1 || '%'
+and population > 5000
 order by
-      1 - (levenshtein($1, name)::numeric / max(levenshtein($1, name)::numeric) over ()) desc
+      1 - (levenshtein($1, ascii)::numeric / max(levenshtein($1, ascii)::numeric) over ()) desc
 limit 10;

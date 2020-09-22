@@ -1,82 +1,71 @@
-/* eslint-disable */
-// var expect  = require('chai').expect;
-// var app     = require('../app');
-// var request = require('supertest')(app);
+/* eslint-disable no-undef */
+import chai from 'chai';
+import supertest from 'supertest';
+import app from '../app.js';
 
-// describe('GET /suggestions', function() {
-//   describe('with a non-existent city', function () {
-//     var response;
+const { expect } = chai;
+const request = supertest(app);
 
-//     before(function (done) {
-//       request
-//         .get('/suggestions?q=SomeRandomCityInTheMiddleOfNowhere')
-//         .end(function (err, res) {
-//           response = res;
-//           response.json = JSON.parse(res.text);
-//           done(err);
-//         });
-//     });
+describe('GET /suggestions', () => {
+  describe('with a non-existent city', () => {
+    let response;
 
-//     it('returns a 404', function () {
-//       expect(response.statusCode).to.equal(404);
-//     });
+    before((done) => {
+      request
+        .get('/suggestions?q=SomeRandomCityInTheMiddleOfNowhere')
+        .end((err, res) => {
+          response = res;
+          response.json = JSON.parse(res.text);
+          done(err);
+        });
+    });
 
-//     it('returns an empty array of suggestions', function () {
-//       expect(response.json.suggestions).to.be.instanceof(Array);
-//       expect(response.json.suggestions).to.have.length(0);
-//     });
-//   });
+    it('returns a 404', () => {
+      expect(response.statusCode).to.equal(404);
+    });
 
-//   describe('with a valid city', function () {
-//     var response;
+    it('returns an empty array of suggestions', () => {
+      expect(response.json.suggestions).to.be.instanceof(Array);
+      expect(response.json.suggestions).to.have.length(0);
+    });
+  });
 
-//     before(function (done) {
-//       request
-//         .get('/suggestions?q=Montreal')
-//         .end(function (err, res) {
-//           response = res;
-//           response.json = JSON.parse(res.text);
-//           done(err);
-//         });
-//     });
+  describe('with a valid city', () => {
+    let response;
 
-//     it('returns a 200', function () {
-//       expect(response.statusCode).to.equal(200);
-//     });
+    before((done) => {
+      request
+        .get('/suggestions?q=Montreal')
+        .end((err, res) => {
+          response = res;
+          response.json = JSON.parse(res.text);
+          done(err);
+        });
+    });
 
-//     it('returns an array of suggestions', function () {
-//       expect(response.json.suggestions).to.be.instanceof(Array);
-//       expect(response.json.suggestions).to.have.length.above(0);
-//     });
+    it('returns a 200', () => {
+      expect(response.statusCode).to.equal(200);
+    });
 
-//     describe.skip('Validate the shape of the data being returned', function() {
-//       it('contains latitudes and longitudes', function () {	
-//         expect(response.json.suggestions).to.satisfy(function (suggestions) {	
-//           return suggestions.every(function (suggestion) {	
-//             return suggestion.latitude && suggestion.longitude;	
-//           });	
-//         })	
-//       });	
+    it('returns an array of suggestions', () => {
+      expect(response.json.suggestions).to.be.instanceof(Array);
+      expect(response.json.suggestions).to.have.length.above(0);
+    });
 
-//       it('contains scores', function () {	
-//         expect(response.json.suggestions).to.satisfy(function (suggestions) {	
-//           return suggestions.every(function (suggestion) {	
-//             return suggestion.latitude && suggestion.longitude;	
-//           });	
-//         })	
-//       });
-//     });
-    
-//     it('is a gratuitously failing test you should remove to prove you ran the tests', function () {	
-//       expect(true).to.equal(false);	
-//     });	    
+    describe('Validate the shape of the data being returned', () => {
+      it('contains latitudes and longitudes', () => {
+        expect(response.json.suggestions).to
+          .satisfy((suggestions) => suggestions.every((suggestion) => suggestion.latitude && suggestion.longitude));
+      });
 
-//     it('contains a match', function () {
-//       expect(response.json.suggestions).to.satisfy(function (suggestions) {
-//         return suggestions.some(function (suggestion) {
-//           return suggestion.name.test(/montreal/i);
-//         });
-//       })
-//     });
-//   });
-// });
+      it('contains scores', () => {
+        expect(response.json.suggestions).to
+          .satisfy((suggestions) => suggestions.every((suggestion) => suggestion.latitude && suggestion.longitude));
+      });
+    });
+
+    it('contains a match', () => {
+      expect(response.json.suggestions).to.satisfy((suggestions) => suggestions.some((suggestion) => suggestion.name === 'Montréal'));
+    });
+  });
+});

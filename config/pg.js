@@ -16,11 +16,11 @@ const executeQuery = async (query, values) => {
   const client = await pool.connect();
   let result;
   try {
-    result = client.query(query, values);
+    result = await client.query(query, values);
   } finally {
     client.release();
   }
-  return result;
+  return result.rows;
 };
 
 export default {
