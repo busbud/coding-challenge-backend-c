@@ -2,11 +2,10 @@ import pg from 'pg';
 
 const { Pool } = pg;
 
+const connectionString = process.env.DATABASE_URL || 'postgres://docker:docker@localhost:5432/suggestions-service';
+
 const pool = new Pool({
-  host: 'localhost',
-  database: 'suggestions-service',
-  user: 'docker',
-  password: 'docker',
+  connectionString,
   max: 10,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 2000,
