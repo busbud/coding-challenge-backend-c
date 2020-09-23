@@ -1,6 +1,8 @@
 -- $1 searchTerm
 select
        name,
+       admin1,
+       country,
        lat as latitude,
        long as longitude,
        1 - (levenshtein($1, ascii)::numeric / max(levenshtein($1, ascii)::numeric) over ()) as score

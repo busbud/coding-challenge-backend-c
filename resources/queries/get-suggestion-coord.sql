@@ -3,6 +3,8 @@
 -- $3 -> lat
 select
        name,
+       admin1,
+       country,
        lat as latitude,
        long as longitude,
        (0.3 * (1 - (levenshtein($1, ascii)::numeric / max(levenshtein($1, ascii)::numeric) over ()))) +
