@@ -18,7 +18,6 @@ services:
     image: boxfuse/flyway:latest
     volumes:
       - ./resources/migrations/schema:/flyway/sql
-      - ./resources/migrations/data:/flyway/sql/tests
     command: -url=jdbc:postgresql://postgres:5432/suggestions-service -user=docker -password=docker -schemas=suggestions_service migrate
     depends_on:
       postgres:

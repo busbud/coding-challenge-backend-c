@@ -1,4 +1,5 @@
-CREATE EXTENSION fuzzystrmatch;
+CREATE EXTENSION IF NOT EXISTS fuzzystrmatch;
+CREATE EXTENSION IF NOT EXISTS postgis;
 
 CREATE TABLE suggestions_service.cities (
     id INTEGER PRIMARY KEY,
