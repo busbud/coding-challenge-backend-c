@@ -44,7 +44,7 @@ const CitySchema = new Schema({
 CitySchema.index({location: '2dsphere'});
 
 CitySchema.statics.parse = (city, query, coordinates) => {
-  let score = stringCompare.compareTwoStrings(city.name.toLowerCase(), query.q.toLowerCase());
+  let score = stringCompare.compareTwoStrings(city.name.toLowerCase(), query.q ? query.q.toLowerCase() : '');
   if (coordinates) {
     const distance = calculateDistance(
         city.location.coordinates[0],

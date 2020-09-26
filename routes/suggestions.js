@@ -3,7 +3,7 @@ const {printDate} = require('../helpers/logger');
 const City = require('../models/City');
 
 module.exports = (res, reqUrl) => {
-  const sanitized = sanitize(reqUrl.query.q.trim()).split(' ').join('|');
+  const sanitized = sanitize(reqUrl.query.q ? reqUrl.query.q.trim() : '').split(' ').join('|');
   const coordinates = !!reqUrl.query.longitude && !!reqUrl.query.latitude;
   City.find({name: {$regex: sanitized, $options: 'i'}, population: {$gt: 5000}})
       .cache(300)
