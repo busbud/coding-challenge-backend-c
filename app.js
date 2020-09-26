@@ -33,6 +33,6 @@ module.exports = http.createServer((req, res) => {
     res.writeHead(404, {'Content-Type': 'text/plain'});
     res.end('404 Not Found');
   }
-}).listen(port, '127.0.0.1');
+}).listen(port);
 
 console.log(`${printDate()}  Server running at http://127.0.0.1:${port}/suggestions`);
