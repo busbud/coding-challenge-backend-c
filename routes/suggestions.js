@@ -6,6 +6,7 @@ module.exports = (res, reqUrl) => {
   const sanitized = sanitize(reqUrl.query.q ? reqUrl.query.q.trim() : '').split(' ').join('|');
   const coordinates = !!reqUrl.query.longitude && !!reqUrl.query.latitude;
   City.find({name: {$regex: sanitized, $options: 'i'}, population: {$gt: 5000}})
+      .limit(20)
       .cache(300)
       .then((cities) => {
         res.writeHead(cities.length > 0 ? 200 : 404, {'Content-Type': 'application/json'});
