@@ -18,18 +18,18 @@ class SuggestionController {
     const { q, latitude, longitude } = requestQuery;
 
     if (!q || q.length == 0) res.json({});
-
-    Suggestion.search({ query: q, latitude, longitude })
-      .then((response) => {
-        const { data, error } = response;
-        if (error) {
-          res.status(error.statusCode);
-        }
-        res.json(data);
-      })
-      .catch((err) => {
-        res.send(err);
-      });
+    else
+      Suggestion.search({ query: q, latitude, longitude })
+        .then((response) => {
+          const { data, error } = response;
+          if (error) {
+            res.status(error.statusCode);
+          }
+          res.json(data);
+        })
+        .catch((err) => {
+          res.send(err);
+        });
   }
 
   /**
