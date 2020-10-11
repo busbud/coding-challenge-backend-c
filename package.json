@@ -5,16 +5,36 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "test": "./node_modules/mocha/bin/mocha ./test/"
+    "test": "./node_modules/mocha/bin/mocha ./test/ --timeout 500000"
   },
   "author": "",
   "license": "WTFPL",
   "dependencies": {
+    "bluebird": "^3.7.2",
+    "body-parser": "^1.19.0",
     "chai": "^1.9.1",
+    "compression": "^1.7.4",
+    "config": "^3.3.2",
+    "csvtojson": "^2.0.10",
+    "express": "^4.17.1",
+    "express-sanitizer": "^1.0.5",
+    "fs": "0.0.1-security",
+    "jsdoc-to-markdown": "^6.0.1",
     "mocha": "^1.18.2",
-    "supertest": "^0.11.0"
+    "mongodb": "^3.6.2",
+    "mongoose": "^5.10.8",
+    "prettier": "^2.1.2",
+    "stream-transform": "^2.0.2",
+    "supertest": "^0.11.0",
+    "util": "^0.12.3"
   },
   "engines": {
     "node": "0.10.26"
+  },
+  "devDependencies": {
+    "eslint": "^7.10.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-security": "^1.4.0"
   }
 }

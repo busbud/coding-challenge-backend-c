@@ -1,16 +1,19 @@
-var http = require('http');
-var port = process.env.PORT || 2345;
+const config = require("config");
+const loaders = require("./src/loaders");
+const express = require("express");
+const url = config.get("server.ip");
+const port = config.get("server.port");
 
-module.exports = http.createServer(function (req, res) {
-  res.writeHead(404, {'Content-Type': 'text/plain'});
+const app = express();
 
-  if (req.url.indexOf('/suggestions') === 0) {
-    res.end(JSON.stringify({
-      suggestions: []
-    }));
-  } else {
-    res.end();
-  }
-}).listen(port, '127.0.0.1');
+const start = async () => {
+  await loaders(app);
 
-console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+  app.listen(port, async () => {
+    console.log("Server running at http://127.0.0.1:%d/suggestions", port);
+  });
+  return app;
+};
+start();
+
+module.exports = app;
