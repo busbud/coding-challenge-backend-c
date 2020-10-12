@@ -13,7 +13,7 @@ function calculateOveralScore(distanceScore, stringScore){
 }
 
 module.exports = http.createServer(function (req, res) {
-  let parsedUrl = url.parse(req.url);
+  var parsedUrl = url.parse(req.url);
   var parsedQs = querystring.parse(parsedUrl.query);
 
   var query = {
