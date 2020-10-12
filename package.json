@@ -5,13 +5,18 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "test": "./node_modules/mocha/bin/mocha ./test/"
+    "test": "./node_modules/mocha/bin/mocha ./test/suggestions.js"
   },
   "author": "",
   "license": "WTFPL",
   "dependencies": {
     "chai": "^1.9.1",
+    "d3": "^6.2.0",
     "mocha": "^1.18.2",
+    "node-fetch": "^2.6.1",
+    "node-fetch-polyfill": "^2.0.6",
+    "rbush": "^3.0.1",
+    "rbush-knn": "^3.0.1",
     "supertest": "^0.11.0"
   },
   "engines": {

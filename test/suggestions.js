@@ -48,34 +48,30 @@ describe('GET /suggestions', function() {
       expect(response.json.suggestions).to.have.length.above(0);
     });
 
-    describe.skip('Validate the shape of the data being returned', function() {
-      it('contains latitudes and longitudes', function () {	
-        expect(response.json.suggestions).to.satisfy(function (suggestions) {	
-          return suggestions.every(function (suggestion) {	
-            return suggestion.latitude && suggestion.longitude;	
-          });	
-        })	
-      });	
-
-      it('contains scores', function () {	
-        expect(response.json.suggestions).to.satisfy(function (suggestions) {	
-          return suggestions.every(function (suggestion) {	
-            return suggestion.latitude && suggestion.longitude;	
-          });	
-        })	
-      });
-    });
-    
-    it('is a gratuitously failing test you should remove to prove you ran the tests', function () {	
-      expect(true).to.equal(false);	
-    });	    
-
     it('contains a match', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
-        return suggestions.some(function (suggestion) {
-          return suggestion.name.test(/montreal/i);
+        return suggestions.every(function (suggestion) {
+          return /montreal/i.test(suggestion.name);
         });
       })
     });
+
+    it('contains scores', function () {	
+      expect(response.json.suggestions).to.satisfy(function (suggestions) {	
+        return suggestions.every(function (suggestion) {	
+          return suggestion.score >= 0;	
+        });	
+      })	
+    });
+
+    it('contains latitudes and longitudes', function () {
+      expect(response.json.suggestions).to.satisfy(function (suggestions) {
+        return suggestions.every(function (suggestion) {
+          return suggestion.latitude && suggestion.longitude;
+        });
+      })
+    });
+
+    
   });
 });
