@@ -10,7 +10,7 @@
   "author": "",
   "license": "WTFPL",
   "dependencies": {
-    "chai": "^1.9.1",
+    "chai": "^1.10.0",
     "d3": "^6.2.0",
     "mocha": "^1.18.2",
     "node-fetch": "^2.6.1",
