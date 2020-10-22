@@ -5,7 +5,7 @@ const City = require('./models/city')
 
 
 const COUNTRIES = {
-  'CA': 'Canada,',
+  'CA': 'Canada',
   'US': 'United States',
 }
 
@@ -45,13 +45,18 @@ class Datasource {
     this.cities = records.slice(1).map(r => {
       const city = new City()
       city.name = r[1]
-      city.latitude = r[4]
-      city.longitude = r[5]
+      city.asciiName = r[2]
+      city.latitude = Number(r[4])
+      city.longitude = Number(r[5])
       const countryCode = r[8]
       city.country = COUNTRIES[countryCode]
       city.state = countryCode === 'CA' ? PROVINCES[r[10]] : r[10]
       return city
     })
+  }
+
+  getCities() {
+    return this.cities
   }
 }
 
