@@ -32,11 +32,8 @@ class Datasource {
     let records
 
     try {
-      const raw = await fs.readFile('./data/cities_canada-usa.tsv')
-      records = parse(raw, {
-        delimiter: '\t',
-        relax: true,
-      })
+      const raw = await fs.readFile('./data/cities_canada-usa.tsv', { encoding: 'utf8' })
+      records = raw.split('\n').map(line => line.split('\t'))
     } catch (ex) {
       console.log('There was an error initializing data.')
       throw ex
@@ -51,8 +48,10 @@ class Datasource {
       const countryCode = r[8]
       city.country = COUNTRIES[countryCode]
       city.state = countryCode === 'CA' ? PROVINCES[r[10]] : r[10]
-      return city
-    })
+      city.population = Number(r[14])
+
+      if (city.isValid()) return city
+    }).filter(city => city)
   }
 
   getCities() {
