@@ -1,4 +1,3 @@
-const leven = require('leven')
 const haversineDistance = require('haversine-distance')
 const diacritics = require('diacritics')
 
@@ -10,7 +9,7 @@ class Services {
   computeScore(city, search, latitude, longitude) {
     const WEIGHTS = { search: 0.5, distance: 0.3, population: 0.2 } // Completely arbitrary
     const SCALES = {
-      search: // levenshtein distance
+      search: // difference in length
         [
           { threshold: 0, score: 1 },
           { threshold: 1, score: 0.7 },
@@ -36,7 +35,7 @@ class Services {
     }
 
     const searchScore = (city, search) => {
-      return toScore(leven(city.name, search), 'search')
+      return toScore(city.name.length - search.length, 'search')
     }
 
     const distanceScore = (city, latitude, longitude) => {

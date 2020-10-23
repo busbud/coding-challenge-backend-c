@@ -14,6 +14,28 @@ describe('GET /suggestions', () => {
     request = supertest(App(ds))
   })
 
+  describe('without required parameter q', () => {
+    let response
+
+    before(done => {
+      request
+        .get('/suggestions')
+        .end((err, res) => {
+          response = res
+          response.json = JSON.parse(res.text)
+          done(err)
+        })
+    })
+
+    it('returns a 400', () => {
+      expect(response.statusCode).to.equal(400)
+    })
+
+    it('returns an error message', () => {
+      expect(response.json.error).to.equal('Parameter q is required.')
+    })
+  })
+
   describe('with a non-existent city', () => {
     let response
 
