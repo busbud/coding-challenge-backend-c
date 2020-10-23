@@ -1,4 +1,5 @@
 const expect = require('chai').expect
+const sinon = require('sinon')
 const App = require('../app')
 const supertest = require('supertest')
 
@@ -6,34 +7,17 @@ const Services = require('../services')
 const Datasource = require('../datasource')
 
 let request
+let ds
+
+afterEach(() => {
+  sinon.restore()
+})
 
 describe('GET /suggestions', () => {
   before(async () => {
-    const ds = new Datasource()
+    ds = new Datasource()
     await ds.initialize()
     request = supertest(App(ds))
-  })
-
-  describe('without required param q', () => {
-    let response
-
-    before(done => {
-      request
-        .get('/suggestions')
-        .end((err, res) => {
-          response = res
-          response.json = JSON.parse(res.text)
-          done(err)
-        })
-    })
-
-    it('returns a 400', () => {
-      expect(response.statusCode).to.equal(400)
-    })
-
-    it('returns an error message', () => {
-      expect(response.json.error).to.equal('Parameter q is required.')
-    })
   })
 
   describe('with wrong latitude & longitude params', () => {
@@ -130,4 +114,32 @@ describe('GET /suggestions', () => {
       })
     })
   })
+
+  describe('internal error handling', () => {
+    before(() => {
+      sinon.replace(Services.prototype, 'getSuggestions', sinon.fake.throws(new Error('fake exception')))
+    })
+
+    describe('valid request', () => {
+      let response
+
+      before(done => {
+        request
+          .get('/suggestions?q=Montreal')
+          .end((err, res) => {
+            response = res
+            done(err)
+          })
+      })
+
+      it('returns a 500', () => {
+        expect(response.statusCode).to.equal(500)
+      })
+
+      it('no information is leaked', () => {
+        expect(response.text.length).to.equal(0)
+      })
+    })
+  })
+
 })

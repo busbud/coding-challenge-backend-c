@@ -23,5 +23,15 @@ module.exports = ds => {
     res.status(suggestions.length > 0 ? 200 : 404).json({ suggestions })
   })
 
+  app.use((err, req, res, next) => {
+    if (res.headersSent) {
+      return next(err)
+    }
+
+    // TODO: log error
+
+    res.status(500).end()
+  })
+
   return app
 }
