@@ -6,8 +6,16 @@ module.exports = ds => {
 
   app.get('/suggestions', function (req, res) {
     if (!req.query.q) {
-      res.status(400).json({ error: 'Parameter q is required.' })
-      return
+      return res.status(400).json({ error: 'Parameter q is required.' })
+    }
+
+    const latitude = Number(req.query.latitude)
+    const longitude = Number(req.query.longitude)
+
+    if (req.query.latitude || req.query.longitude) {
+      if (isNaN(latitude) || isNaN(longitude) || Math.abs(latitude) > 90 || Math.abs(longitude) > 180) {
+        return res.status(400).json({ error: 'Supplied latitude and longitude parameters are incorrect.' })
+      }
     }
 
     const services = new Services(ds)
