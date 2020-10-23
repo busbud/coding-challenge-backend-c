@@ -1,6 +1,6 @@
 const fs = require('fs/promises')
-const parse = require('csv-parse/lib/sync')
 
+const utils = require('./utils')
 const City = require('./models/city')
 
 
@@ -40,15 +40,19 @@ class Datasource {
     }
 
     this.cities = records.slice(1).map(r => {
+      if (!r[0]) return
+
       const city = new City()
       city.name = r[1]
-      city.asciiName = r[2]
+      city.normalizedName = utils.normalizeString(r[2])
       city.latitude = Number(r[4])
       city.longitude = Number(r[5])
       const countryCode = r[8]
       city.country = COUNTRIES[countryCode]
       city.state = countryCode === 'CA' ? PROVINCES[r[10]] : r[10]
       city.population = Number(r[14])
+
+      city.index = ` ${city.normalizedName}`
 
       if (city.isValid()) return city
     }).filter(city => city)
