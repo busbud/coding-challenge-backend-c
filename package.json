@@ -5,6 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
+    "dev": "./node_modules/nodemon/bin/nodemon.js app.js",
     "test": "./node_modules/mocha/bin/mocha --recursive"
   },
   "author": "",
@@ -13,6 +14,7 @@
   "devDependencies": {
     "chai": "^1.9.1",
     "mocha": "^8.2.0",
+    "nodemon": "^2.0.6",
     "supertest": "^5.0.0"
   },
   "engines": {
