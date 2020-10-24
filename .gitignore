@@ -1,0 +1,11 @@
+# Logs.
+*.log
+
+# Dependency directories.
+node_modules/
+
+# VSCode configuration files.
+.vscode/
+
+# Misc.
+.DS_Store
