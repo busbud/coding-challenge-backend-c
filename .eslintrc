@@ -1,0 +1,33 @@
+{
+  "plugins": ["mocha"],
+  "extends": ["eslint:recommended", "plugin:mocha/recommended", "airbnb-base", "prettier"],
+  "parserOptions": {
+    "ecmaVersion": 2018
+  },
+  "rules": {
+    "indent": ["error", 2, { "SwitchCase": 1 }],
+    "no-console": "off",
+    "max-len": [
+      "error",
+      {
+        "code": 90,
+        "tabWidth": 2,
+        "ignoreStrings": true,
+        "ignoreComments": true,
+        "ignoreTrailingComments": true,
+        "ignoreTemplateLiterals": true
+      }
+    ],
+    "mocha/no-skipped-tests": "error",
+    "mocha/no-exclusive-tests": "error"
+  },
+  "env": {
+    "es6": true,
+    "mocha": true,
+    "node": true
+  },
+  "globals": {
+    "assert": true,
+    "expect": true
+  }
+}
