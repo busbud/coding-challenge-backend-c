@@ -1,0 +1,6 @@
+{
+  "datafile": "cities_canada-usa.tsv",
+  "port": "2345",
+  "min_city_population": 5000,
+  "max_elements_in_response": 10
+}
