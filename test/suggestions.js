@@ -496,4 +496,31 @@ describe('GET /suggestions', () => {
       expect(secondResponse.statusCode).to.equal(200);
     });
   });
+
+  describe('with a request with many results', () => {
+    let response;
+    before((done) => {
+      request
+        .get('/suggestions?q=l')
+        .end((err, res) => {
+          response = res;
+          response.json = JSON.parse(res.text);
+          done(err);
+        });
+    });
+
+    it('returns a 200', () => {
+      expect(response.statusCode).to.equal(200);
+    });
+
+    it('doesnt include duplicates', () => {
+      //expect(isArrayUnique(response.json)).toBeTruthy(); //TODO
+    });
+
+    it('returns a limited amount of results', () => {
+      //expect(response.json.length).to.toBeLessThanOrEqual(10); //TODO
+    });
+
+  });
+
 });
