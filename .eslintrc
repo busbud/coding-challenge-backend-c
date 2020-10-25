@@ -18,8 +18,9 @@
         "ignoreTemplateLiterals": true
       }
     ],
-    "mocha/no-skipped-tests": "error",
-    "mocha/no-exclusive-tests": "error"
+    "mocha/no-exclusive-tests": "error",
+    "mocha/no-mocha-arrows": "warn",
+    "mocha/no-skipped-tests": "warn"
   },
   "env": {
     "es6": true,
