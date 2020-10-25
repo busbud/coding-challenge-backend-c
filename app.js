@@ -7,16 +7,22 @@ module.exports = http
   .createServer((req, res) => {
     const { pathname } = url.parse(req.url);
 
-    res.writeHead(404, { 'Content-Type': 'text/plain' });
+    res.setHeader('Content-Type', 'application/json');
 
-    if (pathname === '/suggestions') {
+    if (req.method === 'GET' && pathname === '/suggestions') {
+      res.statusCode = 200;
       res.end(
         JSON.stringify({
           suggestions: [],
         }),
       );
     } else {
-      res.end();
+      res.statusCode = 404;
+      res.end(
+        JSON.stringify({
+          message: 'Oops! Something went wrong! The requested resource was not found.',
+        }),
+      );
     }
   })
   .listen(port, '127.0.0.1');
