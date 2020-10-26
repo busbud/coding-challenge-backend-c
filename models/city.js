@@ -5,7 +5,11 @@ class City {
   }
 
   getDisplayName() {
-    return `${this.name}, ${this.state}, ${this.country}`
+    return `${this.name}, ${this.state}, ${this.countryName}`
+  }
+
+  getAdmin2Key() {
+    return `${this.countryCode}.${this.admin1}.${this.admin2}`
   }
 }
 
