@@ -13,7 +13,9 @@
   },
   "author": "",
   "license": "WTFPL",
-  "dependencies": {},
+  "dependencies": {
+    "csv-parser": "^2.3.3"
+  },
   "devDependencies": {
     "chai": "^1.9.1",
     "eslint": "^7.12.0",
