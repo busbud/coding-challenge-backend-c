@@ -112,8 +112,7 @@ class Datasource {
     })
 
     this.cities = this.cities.filter(city => !remove[city.id])
-
-    if (Object.keys(remove) > 0) {
+    if (Object.keys(remove).length > 0) {
       console.log('The following cities were duplicated and could not be disambiguated:')
       Object.values(remove).forEach(city => {
         console.log(`ID: ${city.id} - ${city.getDisplayName()} (population ${city.population})`)
