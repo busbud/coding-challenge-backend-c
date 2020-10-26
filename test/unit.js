@@ -13,7 +13,7 @@ const getOpts = fixture => ({
   cities: `${__dirname}/fixtures/${fixture}.tsv`,
 })
 
-describe.only('Datasource initialization', () => {
+describe('Datasource initialization', () => {
   it('should exclude any city outside of CA & US', async () => {
     const ds = new Datasource()
     await ds.initialize(getOpts('cities_world'))
