@@ -1,15 +1,13 @@
 const expect = require('chai').expect
-const sinon = require('sinon')
 
 const Services = require('../services/services')
 const Datasource = require('../services/datasource')
 
 afterEach(() => {
-  sinon.restore()
 })
 
 const getOpts = fixture => ({
-  admin2Codes: `${__dirname}/../data/admin2Codes.txt`,
+  admin2Codes: `${__dirname}/fixtures/admin2Codes.txt`,
   cities: `${__dirname}/fixtures/${fixture}.tsv`,
 })
 
@@ -47,5 +45,38 @@ describe('Datasource initialization', () => {
     expect(ds.cities.length).to.equal(2)
     expect(ds.cities[0].getDisplayName()).to.equal('Fairwood (King County), WA, United States')
     expect(ds.cities[1].getDisplayName()).to.equal('Fairwood (Spokane County), WA, United States')
+  })
+})
+
+describe('Get suggestions', () => {
+  let services
+  before(async () => {
+    const ds = new Datasource()
+    await ds.initialize(getOpts('cities_canada-usa'))
+    services = new Services(ds)
+  })
+  it('should find matches based on any word (for multi-word city names)', () => {
+    const results = services.getSuggestions('York')
+    expect(results.map(city => city.name)).to.include('New York City, NY, United States')
+  })
+  it('should rank exact match better than partial match', () => {
+    const results = services.getSuggestions('York')
+    const York = results.find(city => city.name.startsWith('York'))
+    const NewYork = results.find(city => city.name.startsWith('New York City'))
+    expect(York).to.exist
+    expect(NewYork).to.exist
+    expect(York.score).to.be.greaterThan(NewYork.score)
+  })
+  it('should improve score based on latitude & longitude', () => {
+    // New York City location is lat: 40.71427, lon: -74.00597
+    let results = services.getSuggestions('New York City', 0, 0)
+    expect(results.length).to.equal(1)
+    const scoreFromAfar = results[0].score
+
+    results = services.getSuggestions('New York City', 40, -74)
+    expect(results.length).to.equal(1)
+    const scoreFromNear = results[0].score
+
+    expect(scoreFromNear).to.be.greaterThan(scoreFromAfar)
   })
 })
