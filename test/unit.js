@@ -79,4 +79,14 @@ describe('Get suggestions', () => {
 
     expect(scoreFromNear).to.be.greaterThan(scoreFromAfar)
   })
+  it('should improve score based on population', () => {
+    // London, ON, Canada has a population of around 350k
+    // London, OH, United States has a population below 10k
+    let results = services.getSuggestions('London')
+    const LondonONCanada = results.find(city => city.name === 'London, ON, Canada')
+    const LondonOHUS = results.find(city => city.name === 'London, OH, United States')
+    expect(LondonONCanada).to.exist
+    expect(LondonOHUS).to.exist
+    expect(LondonONCanada.score).to.be.greaterThan(LondonOHUS.score)
+  })
 })
