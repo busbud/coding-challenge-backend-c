@@ -66,10 +66,9 @@ class Services {
   }
 
   getSuggestions(search, latitude, longitude) {
-    const normalizedSearch = utils.normalizeString(search)
-    const regexp = new RegExp(` ${normalizedSearch}`, 'i')
+    const normalizedSearch = ` ${utils.normalizeString(search)}`
 
-    const matches = this.ds.getCities().filter(city => regexp.test(city.index))
+    const matches = this.ds.getCities().filter(city => city.index.indexOf(normalizedSearch) !== -1)
 
     let maxDistance = 0
 
