@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node app.js",
     "dev": "./node_modules/nodemon/bin/nodemon.js app.js",
+    "debug": "nodemon --legacy-watch --watch ./src --inspect=0.0.0.0:5858 --nolazy app.js",
     "test": "./node_modules/mocha/bin/mocha --recursive",
     "lint": "eslint . --ext .js",
     "lint:fix": "eslint --fix . --ext .js"
