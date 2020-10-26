@@ -1,21 +1,31 @@
+/**
+ * Required Modules.
+ */
 const http = require('http');
 const url = require('url');
+
+const { filterCities, readAndParseCSVFile } = require('./helpers');
 
 const port = process.env.PORT || 2345;
 
 module.exports = http
-  .createServer((req, res) => {
-    const { pathname } = url.parse(req.url);
+  .createServer(async (req, res) => {
+    const { pathname, query } = url.parse(req.url, true);
 
     res.setHeader('Content-Type', 'application/json');
 
     if (req.method === 'GET' && pathname === '/suggestions') {
+      // Path to locate the .csv file.
+      const file = './data/cities_canada-usa.csv';
+
+      // Read and parse the .csv file.
+      const cities = await readAndParseCSVFile({ file });
+
+      // Create the suggestions based on the query filters.
+      const suggestions = filterCities({ cities, name: query.q });
+
       res.statusCode = 200;
-      res.end(
-        JSON.stringify({
-          suggestions: [],
-        }),
-      );
+      res.end(JSON.stringify({ suggestions }));
     } else {
       res.statusCode = 404;
       res.end(
