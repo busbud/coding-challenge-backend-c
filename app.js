@@ -22,7 +22,15 @@ module.exports = http
       const cities = await readAndParseCSVFile({ file });
 
       // Create the suggestions based on the query filters.
-      const suggestions = filterCities({ cities, name: query.q });
+      const suggestions = filterCities({
+        cities,
+        name: query.q,
+        latitude: Number(query.latitude),
+        longitude: Number(query.longitude),
+      });
+
+      // Sort suggestions by descending score.
+      suggestions.sort((a, b) => b.score - a.score);
 
       res.statusCode = 200;
       res.end(JSON.stringify({ suggestions }));
