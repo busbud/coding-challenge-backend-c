@@ -1,4 +1,7 @@
 const express = require('express')
+const morgan = require('morgan')
+
+const config = require('./config')
 const Services = require('./services')
 
 module.exports = ds => {
@@ -28,7 +31,9 @@ module.exports = ds => {
       return next(err)
     }
 
-    // TODO: log error
+    if (config.DEBUG) {
+      console.error(err)
+    }
 
     res.status(500).end()
   })

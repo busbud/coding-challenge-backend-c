@@ -9,6 +9,7 @@ const COUNTRIES = {
   'US': 'United States',
 }
 
+
 const PROVINCES = {
   '01': 'AB',
   '02': 'BC',
@@ -43,15 +44,18 @@ class Datasource {
       if (!r[0]) return
 
       const city = new City()
+      city.id = r[0]
       city.name = r[1]
       city.normalizedName = utils.normalizeString(r[2])
+      city.alternateNames = r[3]
       city.latitude = Number(r[4])
       city.longitude = Number(r[5])
       const countryCode = r[8]
       city.country = COUNTRIES[countryCode]
       city.state = countryCode === 'CA' ? PROVINCES[r[10]] : r[10]
+      city.admin2 = r[11]
+      city.admin3 = r[12]
       city.population = Number(r[14])
-
       city.index = ` ${city.normalizedName}`
 
       if (city.isValid()) return city
