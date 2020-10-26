@@ -2,7 +2,9 @@ const fs = require('fs/promises')
 const flatten = require('lodash/flatten')
 
 const utils = require('./utils')
-const City = require('./models/city')
+const City = require('../models/city')
+
+const DATA_DIRECTORY = `${__dirname}/../data`
 
 // Only cities from countries included here will be processed
 // The optional `states` attribute is used to map from state/province codes to names
@@ -34,7 +36,7 @@ const COUNTRIES = {
 
 class Datasource {
   async parseAdmin2Codes(opts) {
-    const raw = await fs.readFile(opts.admin2Codes ?? `${__dirname}/data/admin2Codes.txt`, { encoding: 'utf8' })
+    const raw = await fs.readFile(opts.admin2Codes ?? `${DATA_DIRECTORY}/admin2Codes.txt`, { encoding: 'utf8' })
     const records = raw.split('\n').map(line => line.split('\t'))
 
     this.admin2 = records.reduce((memo, curr) => {
@@ -46,7 +48,7 @@ class Datasource {
   }
 
   async parseCities(opts) {
-    const raw = await fs.readFile(opts.cities ?? `${__dirname}/data/cities_canada-usa.tsv`, { encoding: 'utf8' })
+    const raw = await fs.readFile(opts.cities ?? `${DATA_DIRECTORY}/cities_canada-usa.tsv`, { encoding: 'utf8' })
     const records = raw.split('\n').map(line => line.split('\t'))
 
     this.cities = []

@@ -2,7 +2,7 @@ const express = require('express')
 const morgan = require('morgan')
 
 const config = require('./config')
-const Services = require('./services')
+const Services = require('./services/services')
 
 module.exports = ds => {
   const app = express()

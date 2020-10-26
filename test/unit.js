@@ -1,8 +1,8 @@
 const expect = require('chai').expect
 const sinon = require('sinon')
 
-const Services = require('../services')
-const Datasource = require('../datasource')
+const Services = require('../services/services')
+const Datasource = require('../services/datasource')
 
 afterEach(() => {
   sinon.restore()

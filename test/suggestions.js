@@ -3,8 +3,8 @@ const sinon = require('sinon')
 const App = require('../app')
 const supertest = require('supertest')
 
-const Services = require('../services')
-const Datasource = require('../datasource')
+const Services = require('../services/services')
+const Datasource = require('../services/datasource')
 
 let request
 let ds

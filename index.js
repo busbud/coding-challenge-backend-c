@@ -1,7 +1,6 @@
 const App = require('./app')
 
-const Services = require('./services')
-const Datasource = require('./datasource')
+const Datasource = require('./services/datasource')
 
 const host = '127.0.0.1'
 const port = process.env.PORT || 2345
