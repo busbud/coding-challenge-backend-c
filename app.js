@@ -29,10 +29,17 @@ module.exports = http
         longitude: Number(query.longitude),
       });
 
-      // Sort suggestions by descending score.
-      suggestions.sort((a, b) => b.score - a.score);
+      // Default status code for an empty array.
+      let statusCode = 404;
+      if (suggestions.length > 0) {
+        // Set the status for records found.
+        statusCode = 200;
 
-      res.statusCode = 200;
+        // Sort suggestions by descending score.
+        suggestions.sort((a, b) => b.score - a.score);
+      }
+
+      res.statusCode = statusCode;
       res.end(JSON.stringify({ suggestions }));
     } else {
       res.statusCode = 404;
