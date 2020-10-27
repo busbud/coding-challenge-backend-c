@@ -8,6 +8,8 @@
     "dev": "./node_modules/nodemon/bin/nodemon.js app.js",
     "debug": "nodemon --legacy-watch --watch ./src --inspect=0.0.0.0:5858 --nolazy app.js",
     "test": "./node_modules/mocha/bin/mocha --recursive",
+    "coverage": "nyc npm run test",
+    "report": "nyc --reporter=lcov npm test",
     "lint": "eslint . --ext .js",
     "lint:fix": "eslint --fix . --ext .js"
   },
@@ -28,6 +30,7 @@
     "mocha": "^8.2.0",
     "nock": "^13.0.4",
     "nodemon": "^2.0.6",
+    "nyc": "^15.1.0",
     "prettier": "^2.1.2",
     "supertest": "^5.0.0"
   },
