@@ -32,7 +32,7 @@ const readAndParseCSVFile = ({ file }) =>
   });
 
 /**
- * Export only the public methods.
+ * Export the library methods.
  */
 module.exports = {
   readAndParseCSVFile,

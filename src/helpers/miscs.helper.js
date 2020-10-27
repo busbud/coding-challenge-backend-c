@@ -42,7 +42,7 @@ const filterCities = ({ cities, name, latitude, longitude }) =>
     }));
 
 /**
- * Export only the public methods.
+ * Export the helper methods.
  */
 module.exports = {
   filterCities,

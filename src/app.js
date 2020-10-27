@@ -17,6 +17,7 @@ module.exports = http
     // Set a default header.
     res.setHeader('Content-Type', 'application/json');
 
+    // Validate all the routes within the GET verb.
     if (req.method === 'GET' && route) {
       await route(req, res);
     } else {
