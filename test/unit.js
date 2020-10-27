@@ -55,10 +55,6 @@ describe('Get suggestions', () => {
     await ds.initialize(getOpts('cities_canada-usa'))
     services = new Services(ds)
   })
-  it('should find matches based on any word (for multi-word city names)', () => {
-    const results = services.getSuggestions('York')
-    expect(results.map(city => city.name)).to.include('New York City, NY, United States')
-  })
   it('should find matches containing all terms in the search string', () => {
     const results = services.getSuggestions('mon ou')
     const cityNames = results.map(city => city.name)
@@ -66,13 +62,17 @@ describe('Get suggestions', () => {
     expect(cityNames).to.not.include('Montréal, QC, Canada')
     expect(cityNames).to.not.include('Monmouth, IL, United States')
   })
-  it('should rank exact match better than partial match', () => {
+  it('should always match start of name', () => {
     const results = services.getSuggestions('York')
-    const York = results.find(city => city.name.startsWith('York'))
-    const NewYork = results.find(city => city.name.startsWith('New York City'))
-    expect(York).to.exist
-    expect(NewYork).to.exist
-    expect(York.score).to.be.greaterThan(NewYork.score)
+    expect(results.map(city => city.name)).to.not.include('New York City, NY, United States')
+  })
+  it('should rank exact match better than partial match', () => {
+    const results = services.getSuggestions('Montreal')
+    const Montreal = results.find(city => city.name.startsWith('Montréal, QC, Canada'))
+    const MontrealOuest = results.find(city => city.name.startsWith('Montréal-Ouest, QC, Canada'))
+    expect(Montreal).to.exist
+    expect(MontrealOuest).to.exist
+    expect(Montreal.score).to.be.greaterThan(MontrealOuest.score)
   })
   it('should improve score based on latitude & longitude', () => {
     let NewYork
@@ -98,5 +98,11 @@ describe('Get suggestions', () => {
     expect(LondonONCanada).to.exist
     expect(LondonOHUS).to.exist
     expect(LondonONCanada.score).to.be.greaterThan(LondonOHUS.score)
+  })
+  it('should not give score 1 unless its a perfect match', () => {
+    let results = services.getSuggestions('Londo', 42.98339, -81.23304)
+    const LondonONCanada = results.find(city => city.name === 'London, ON, Canada')
+    expect(LondonONCanada).to.exist
+    expect(LondonONCanada.score).to.be.lessThan(1)
   })
 })

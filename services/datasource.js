@@ -60,6 +60,7 @@ class Datasource {
 
       city.name = r[1]
       city.asciiName = r[2]
+      city.normalizedName = utils.normalizeString(city.asciiName)
       city.alternateNames = r[3]
       city.latitude = Number(r[4])
       city.longitude = Number(r[5])
@@ -130,13 +131,6 @@ class Datasource {
     })
   }
 
-  indexCities() {
-    this.cities.forEach(city => {
-      city.normalizedName = utils.normalizeString(city.asciiName)
-      city.index = ` ${city.normalizedName}`
-    })
-  }
-
   async initialize(opts = {}) {
     try {
       await this.parseAdmin2Codes(opts)
@@ -147,7 +141,6 @@ class Datasource {
     }
 
     this.fixDuplicates()
-    this.indexCities()
   }
 
   getCities() {
