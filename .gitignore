@@ -3,6 +3,8 @@
 
 # Dependency directories.
 node_modules/
+.nyc_output/
+coverage/
 
 # VSCode configuration files.
 .vscode/
