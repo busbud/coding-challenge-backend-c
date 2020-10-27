@@ -68,14 +68,19 @@ describe('Get suggestions', () => {
     expect(York.score).to.be.greaterThan(NewYork.score)
   })
   it('should improve score based on latitude & longitude', () => {
+    let NewYork
     // New York City location is lat: 40.71427, lon: -74.00597
-    let results = services.getSuggestions('New York City', 0, 0)
-    expect(results.length).to.equal(1)
-    const scoreFromAfar = results[0].score
+    let results = services.getSuggestions('New Yor', 0, 0)
+    NewYork = results.find(city => city.name.startsWith('New York City'))
+    expect(NewYork).to.exist
+    const scoreFromAfar = NewYork.score
+    console.log(scoreFromAfar)
 
-    results = services.getSuggestions('New York City', 40, -74)
-    expect(results.length).to.equal(1)
-    const scoreFromNear = results[0].score
+    results = services.getSuggestions('New Yor', 40, -74)
+    NewYork = results.find(city => city.name.startsWith('New York City'))
+    expect(NewYork).to.exist
+    const scoreFromNear = NewYork.score
+    console.log(scoreFromNear)
 
     expect(scoreFromNear).to.be.greaterThan(scoreFromAfar)
   })
