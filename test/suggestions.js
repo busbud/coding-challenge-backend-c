@@ -4,7 +4,7 @@ const { expect } = require('chai');
 const nock = require('nock');
 const supertest = require('supertest');
 
-const app = require('../app');
+const app = require('../src/app');
 
 const request = supertest(app);
 

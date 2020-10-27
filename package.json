@@ -4,14 +4,14 @@
   "description": "coding challenge in Nodejs",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
-    "dev": "./node_modules/nodemon/bin/nodemon.js app.js",
-    "debug": "nodemon --legacy-watch --watch ./src --inspect=0.0.0.0:5858 --nolazy app.js",
+    "start": "node ./src/app.js",
+    "dev": "./node_modules/nodemon/bin/nodemon.js ./src/app.js",
+    "debug": "nodemon --legacy-watch --watch ./src --inspect=0.0.0.0:5858 --nolazy ./src/app.js",
     "test": "./node_modules/mocha/bin/mocha --recursive",
     "coverage": "nyc npm run test",
     "report": "nyc --reporter=lcov npm test",
-    "lint": "eslint . --ext .js",
-    "lint:fix": "eslint --fix . --ext .js"
+    "lint": "eslint ./src",
+    "lint:fix": "eslint --fix ./src"
   },
   "author": "",
   "license": "WTFPL",
