@@ -36,7 +36,10 @@ class Services {
     }
 
     const searchScore = (city, normalizedQuery) => {
-      return stringSimilarity.compareTwoStrings(city.normalizedName, normalizedQuery)
+      const nbTerms = normalizedQuery.split(' ').length
+      const similarityScore = stringSimilarity.compareTwoStrings(city.normalizedName, normalizedQuery)
+      const multiTermBonus = nbTerms > 1 ? .5 : 0
+      return Math.min(Math.max(similarityScore + multiTermBonus, 0.1), 1)
     }
 
     const distanceModifier = (city, latitude, longitude) => {
@@ -64,10 +67,13 @@ class Services {
 
     const baseScore = searchScore(city, normalizedQuery)
     const modifiers = distanceModifier(city, latitude, longitude) + populationModifier(city)
+
+    // Apply modifiers relative to string similarity
     return baseScore * (1 + modifiers)
   }
 
   getMatches(normalizedQuery) {
+    // TODO: this could be improved by making sure matches are on consecutive words in order of appearance
     const terms = normalizedQuery.split(' ')
     return terms.reduce((candidates, term) => {
       return candidates.filter(city => city.index.indexOf(` ${term}`) !== -1)
