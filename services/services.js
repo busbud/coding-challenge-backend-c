@@ -36,7 +36,7 @@ class Services {
       if (latitude !== undefined && longitude !== undefined) {
         return toScore(haversine(city, { latitude, longitude }), 'distance')
       } else {
-        return 1 * WEIGHTS.distance
+        return 0
       }
     }
 
