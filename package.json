@@ -26,6 +26,7 @@
     "husky": "^4.3.0",
     "lint-staged": "^10.4.2",
     "mocha": "^8.2.0",
+    "nock": "^13.0.4",
     "nodemon": "^2.0.6",
     "prettier": "^2.1.2",
     "supertest": "^5.0.0"
