@@ -8,7 +8,8 @@ class Services {
     this.ds = datasource
   }
 
-  computeScore(city, normalizedQuery, latitude, longitude) {
+  computeScore(city, normalizedQuery, latitude, longitude, nbMatches) {
+    const DISTANCE_WEIGHT = 1
     const DISTANCE_MODIFIERS = [ // in kilometers
       { threshold: 0, score: +.4 },
       { threshold: 25, score: +.3 },
@@ -21,6 +22,7 @@ class Services {
       { threshold: 3200, score: -.4 },
     ]
 
+    const POPULATION_WEIGHT = .5
     const POPULATION_MODIFIERS = [
       { threshold: 0, score: -.4 },
       { threshold: 25000, score: -.3 },
@@ -35,19 +37,19 @@ class Services {
 
     const getSearchScore = (city, normalizedQuery) => {
       const similarityScore = stringSimilarity.compareTwoStrings(city.normalizedName, normalizedQuery)
-      return Math.min(Math.max(similarityScore, .1), 1)
+      return Math.max(similarityScore, .1)
     }
 
     const getDistanceModifier = (city, latitude, longitude) => {
       if (latitude !== undefined && longitude !== undefined) {
-        return getModifier(haversine(city, { latitude, longitude }), DISTANCE_MODIFIERS)
+        return getModifier(haversine(city, { latitude, longitude }), DISTANCE_MODIFIERS) * DISTANCE_WEIGHT
       } else {
         return 0
       }
     }
 
     const getPopulationModifier = (city) => {
-      return getModifier(city.population || 0, POPULATION_MODIFIERS)
+      return getModifier(city.population || 0, POPULATION_MODIFIERS) * POPULATION_WEIGHT
     }
 
     const getModifier = (value, modifiers) => {
@@ -59,14 +61,16 @@ class Services {
       }
     }
 
+    // If there is a single result, we can have certainty
+    if (nbMatches === 1) return 1
+
     const searchScore = getSearchScore(city, normalizedQuery)
     const modifiers = getDistanceModifier(city, latitude, longitude) + getPopulationModifier(city)
 
     // Apply modifiers relative to string similarity
     const score = searchScore * (1 + modifiers)
 
-    // Perfect score is reserved for perfect matches only
-    return searchScore === 1 ? score : Math.min(score, .9)
+    return Number(Math.min(score, .9).toFixed(1))
   }
 
   getMatches(normalizedQuery) {
@@ -88,16 +92,8 @@ class Services {
         name: city.getDisplayName(),
         latitude: city.latitude,
         longitude: city.longitude,
-        score: this.computeScore(city, normalizedQuery, latitude, longitude),
+        score: this.computeScore(city, normalizedQuery, latitude, longitude, matches.length),
       }
-    })
-
-    // Normalize scores
-    const maxScore = results.reduce((memo, curr) => {
-      return curr.score > memo ? curr.score : memo
-    }, 1)
-    results.forEach(result => {
-      result.score = Number((result.score / maxScore).toFixed(1))
     })
 
     return utils.sort(results, 'score', 'desc')

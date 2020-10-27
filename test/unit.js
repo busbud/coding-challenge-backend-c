@@ -74,6 +74,11 @@ describe('Get suggestions', () => {
     expect(MontrealOuest).to.exist
     expect(Montreal.score).to.be.greaterThan(MontrealOuest.score)
   })
+  it('should score 1 for single result', () => {
+    const results = services.getSuggestions('Montreal ou')
+    expect(results.length).to.equal(1)
+    expect(results[0].score).to.equal(1)
+  })
   it('should improve score based on latitude & longitude', () => {
     let NewYork
     // New York City location is lat: 40.71427, lon: -74.00597
@@ -86,6 +91,7 @@ describe('Get suggestions', () => {
     NewYork = results.find(city => city.name.startsWith('New York City'))
     expect(NewYork).to.exist
     const scoreFromNear = NewYork.score
+
     expect(scoreFromNear).to.be.greaterThan(scoreFromAfar)
   })
   it('should improve score based on population', () => {
@@ -98,11 +104,5 @@ describe('Get suggestions', () => {
     expect(LondonONCanada).to.exist
     expect(LondonOHUS).to.exist
     expect(LondonONCanada.score).to.be.greaterThan(LondonOHUS.score)
-  })
-  it('should not give score 1 unless its a perfect match', () => {
-    let results = services.getSuggestions('Londo', 42.98339, -81.23304)
-    const LondonONCanada = results.find(city => city.name === 'London, ON, Canada')
-    expect(LondonONCanada).to.exist
-    expect(LondonONCanada.score).to.be.lessThan(1)
   })
 })
