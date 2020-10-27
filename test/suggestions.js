@@ -34,6 +34,29 @@ describe('GET /suggestions', function () {
     });
   });
 
+  describe('with a non-existent method', function () {
+    let response;
+
+    before(function (done) {
+      request
+        .post('/suggestions?q=SomeRandomCityInTheMiddleOfNowhere')
+        .end((err, res) => {
+          response = res;
+          response.json = JSON.parse(res.text);
+          done(err);
+        });
+    });
+
+    it('returns a 400', function () {
+      expect(response.statusCode).to.equal(400);
+    });
+
+    it('returns an object with a message property', function () {
+      expect(response.json).to.be.an('object');
+      expect(response.json).to.have.property('message');
+    });
+  });
+
   describe('with a valid city', function () {
     let response;
 
