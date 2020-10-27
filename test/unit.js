@@ -59,6 +59,13 @@ describe('Get suggestions', () => {
     const results = services.getSuggestions('York')
     expect(results.map(city => city.name)).to.include('New York City, NY, United States')
   })
+  it('should find matches containing all terms in the search string', () => {
+    const results = services.getSuggestions('mon ou')
+    const cityNames = results.map(city => city.name)
+    expect(cityNames).to.include('Montréal-Ouest, QC, Canada')
+    expect(cityNames).to.not.include('Montréal, QC, Canada')
+    expect(cityNames).to.not.include('Monmouth, IL, United States')
+  })
   it('should rank exact match better than partial match', () => {
     const results = services.getSuggestions('York')
     const York = results.find(city => city.name.startsWith('York'))
@@ -74,13 +81,11 @@ describe('Get suggestions', () => {
     NewYork = results.find(city => city.name.startsWith('New York City'))
     expect(NewYork).to.exist
     const scoreFromAfar = NewYork.score
-    console.log(scoreFromAfar)
 
     results = services.getSuggestions('New Yor', 40, -74)
     NewYork = results.find(city => city.name.startsWith('New York City'))
     expect(NewYork).to.exist
     const scoreFromNear = NewYork.score
-    console.log(scoreFromNear)
 
     expect(scoreFromNear).to.be.greaterThan(scoreFromAfar)
   })
@@ -90,6 +95,7 @@ describe('Get suggestions', () => {
     let results = services.getSuggestions('London')
     const LondonONCanada = results.find(city => city.name === 'London, ON, Canada')
     const LondonOHUS = results.find(city => city.name === 'London, OH, United States')
+
     expect(LondonONCanada).to.exist
     expect(LondonOHUS).to.exist
     expect(LondonONCanada.score).to.be.greaterThan(LondonOHUS.score)

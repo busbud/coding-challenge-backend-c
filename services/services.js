@@ -8,7 +8,7 @@ class Services {
     this.ds = datasource
   }
 
-  computeScore(city, normalizedSearch, latitude, longitude) {
+  computeScore(city, normalizedQuery, latitude, longitude) {
     const SCALES = {
       distance: // in kilometres
         [
@@ -34,8 +34,8 @@ class Services {
         ],
     }
 
-    const searchScore = (city, normalizedSearch) => {
-      return stringSimilarity.compareTwoStrings(city.normalizedName, normalizedSearch)
+    const searchScore = (city, normalizedQuery) => {
+      return stringSimilarity.compareTwoStrings(city.normalizedName, normalizedQuery)
     }
 
     const distanceModifier = (city, latitude, longitude) => {
@@ -61,22 +61,29 @@ class Services {
       }
     }
 
-    const baseScore = searchScore(city, normalizedSearch)
+    const baseScore = searchScore(city, normalizedQuery)
     const modifiers = distanceModifier(city, latitude, longitude) + populationModifier(city)
     return baseScore * (1 + modifiers)
   }
 
-  getSuggestions(search, latitude, longitude) {
-    const normalizedSearch = ` ${utils.normalizeString(search)}`
+  getMatches(normalizedQuery) {
+    const terms = normalizedQuery.split(' ')
+    return terms.reduce((candidates, term) => {
+      return candidates.filter(city => city.index.indexOf(` ${term}`) !== -1)
+    }, this.ds.getCities())
+  }
 
-    const matches = this.ds.getCities().filter(city => city.index.indexOf(normalizedSearch) !== -1)
+  getSuggestions(query, latitude, longitude) {
+    const normalizedQuery = ` ${utils.normalizeString(query)}`
+
+    const matches = this.getMatches(normalizedQuery)
 
     const results = matches.map(city => {
       return {
         name: city.getDisplayName(),
         latitude: city.latitude,
         longitude: city.longitude,
-        score: this.computeScore(city, normalizedSearch, latitude, longitude),
+        score: this.computeScore(city, normalizedQuery, latitude, longitude),
       }
     })
 
