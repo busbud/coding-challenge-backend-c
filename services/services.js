@@ -23,7 +23,8 @@ class Services {
         ],
       population:
         [
-          { threshold: 0, score: -.3 },
+          { threshold: 0, score: -.4 },
+          { threshold: 25000, score: -.3 },
           { threshold: 50000, score: -.2 },
           { threshold: 100000, score: -.1 },
           { threshold: 250000, score: 0 },
@@ -74,7 +75,7 @@ class Services {
   }
 
   getSuggestions(query, latitude, longitude) {
-    const normalizedQuery = ` ${utils.normalizeString(query)}`
+    const normalizedQuery = utils.normalizeString(query)
 
     const matches = this.getMatches(normalizedQuery)
 
@@ -89,8 +90,7 @@ class Services {
 
     // Normalize scores
     const maxScore = results.reduce((memo, curr) => {
-      if (curr.score > memo) memo = curr.score
-      return memo
+      return curr.score > memo ? curr.score : memo
     }, 1)
     results.forEach(result => {
       result.score = Number((result.score / maxScore).toFixed(1))
