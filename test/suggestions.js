@@ -9,6 +9,10 @@ const app = require('../app');
 const request = supertest(app);
 
 describe('GET /suggestions', function () {
+  after(function (done) {
+    app.close(done);
+  });
+
   describe('with a non-existent city', function () {
     let response;
 
