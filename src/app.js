@@ -4,7 +4,7 @@
 const http = require('http');
 const url = require('url');
 
-const { getPageNotFound } = require('./controllers');
+const { resourceNotFound } = require('./controllers');
 const { routes } = require('./routes');
 
 const port = process.env.PORT || 2345;
@@ -21,7 +21,7 @@ module.exports = http
     if (req.method === 'GET' && route) {
       await route(req, res);
     } else {
-      await getPageNotFound(req, res);
+      await resourceNotFound(req, res);
     }
   })
   .listen(port, '127.0.0.1');
