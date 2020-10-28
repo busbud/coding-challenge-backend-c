@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node ./src/app.js",
     "dev": "./node_modules/nodemon/bin/nodemon.js ./src/app.js",
-    "debug": "nodemon --legacy-watch --watch ./src --inspect=0.0.0.0:5858 --nolazy ./src/app.js",
+    "debug": "./node_modules/nodemon/bin/nodemon.js --legacy-watch --watch ./src --inspect=0.0.0.0:5858 --nolazy ./src/app.js",
     "test:unit": "./node_modules/mocha/bin/mocha --recursive test/unit/**/*.js",
     "test:integration": "./node_modules/mocha/bin/mocha --recursive test/integration/**/*.js",
     "cover": "npm run cover:unit && npm run cover:integration && npm run cover:report",
