@@ -1,0 +1,6 @@
+*.log
+.gitignore
+.eslintcache
+node_modules/
+README.md
+docker_*
