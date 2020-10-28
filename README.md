@@ -386,3 +386,205 @@ it should produce an output similar to:
 
   2 passing (18ms)
 ```
+
+---
+
+## Load testing
+
+To perform some load testing we can use [artillery.io](https://artillery.io) which is really good and stright forward to use.
+
+#### Examples:
+
+To run a quick test for 60 number of arrivals with 20 number of requests for each arrival:
+
+```bash
+artillery quick -c 60 -n 20 "http://localhost:2345/suggestions?q=Londo&latitude=43.70011&longitude=-79.4163"
+```
+
+it should produce an output similar to:
+
+```bash
+Started phase 0, duration: 2s @ 10:29:42(-0300) 2020-10-28
+Report @ 10:29:52(-0300) 2020-10-28
+Elapsed time: 10 seconds
+  Scenarios launched:  60
+  Scenarios completed: 0
+  Requests completed:  97
+  Mean response/sec: 15.81
+  Response time (msec):
+    min: 557.8
+    max: 4776.7
+    median: 4473.8
+    p95: 4766
+    p99: 4775.7
+  Codes:
+    200: 97
+
+Report @ 10:30:02(-0300) 2020-10-28
+Elapsed time: 20 seconds
+  Scenarios launched:  0
+  Scenarios completed: 0
+  Requests completed:  150
+  Mean response/sec: 15.08
+  Response time (msec):
+    min: 4159
+    max: 4547
+    median: 4312.6
+    p95: 4487.2
+    p99: 4542.9
+  Codes:
+    200: 150
+
+Report @ 10:30:12(-0300) 2020-10-28
+Elapsed time: 30 seconds
+  Scenarios launched:  0
+  Scenarios completed: 0
+  Requests completed:  125
+  Mean response/sec: 12.94
+  Response time (msec):
+    min: 4047.5
+    max: 4991.7
+    median: 4479.6
+    p95: 4893.3
+    p99: 4988
+  Codes:
+    200: 125
+
+Report @ 10:30:22(-0300) 2020-10-28
+Elapsed time: 40 seconds
+  Scenarios launched:  0
+  Scenarios completed: 0
+  Requests completed:  148
+  Mean response/sec: 14.8
+  Response time (msec):
+    min: 4064.4
+    max: 4381.9
+    median: 4160.1
+    p95: 4362.9
+    p99: 4379.6
+  Codes:
+    200: 148
+
+Report @ 10:30:32(-0300) 2020-10-28
+Elapsed time: 50 seconds
+  Scenarios launched:  0
+  Scenarios completed: 0
+  Requests completed:  142
+  Mean response/sec: 14.43
+  Response time (msec):
+    min: 4096.6
+    max: 4604.3
+    median: 4315
+    p95: 4533.5
+    p99: 4555.1
+  Codes:
+    200: 142
+
+Report @ 10:30:42(-0300) 2020-10-28
+Elapsed time: 1 minute, 0 seconds
+  Scenarios launched:  0
+  Scenarios completed: 0
+  Requests completed:  122
+  Mean response/sec: 12.34
+  Response time (msec):
+    min: 4337.6
+    max: 5136.6
+    median: 4561.5
+    p95: 5097.5
+    p99: 5120.2
+  Codes:
+    200: 122
+
+Report @ 10:30:52(-0300) 2020-10-28
+Elapsed time: 1 minute, 10 seconds
+  Scenarios launched:  0
+  Scenarios completed: 0
+  Requests completed:  122
+  Mean response/sec: 12.39
+  Response time (msec):
+    min: 4557.7
+    max: 5122.7
+    median: 4886.5
+    p95: 5095.7
+    p99: 5120.7
+  Codes:
+    200: 122
+
+Report @ 10:31:02(-0300) 2020-10-28
+Elapsed time: 1 minute, 20 seconds
+  Scenarios launched:  0
+  Scenarios completed: 0
+  Requests completed:  133
+  Mean response/sec: 13.31
+  Response time (msec):
+    min: 4066.2
+    max: 4931.6
+    median: 4287.8
+    p95: 4726.7
+    p99: 4884.3
+  Codes:
+    200: 133
+
+Report @ 10:31:12(-0300) 2020-10-28
+Elapsed time: 1 minute, 29 seconds
+  Scenarios launched:  0
+  Scenarios completed: 60
+  Requests completed:  161
+  Mean response/sec: 10.84
+  Response time (msec):
+    min: 1973.7
+    max: 4924.5
+    median: 4266.9
+    p95: 4795.6
+    p99: 4922.5
+  Codes:
+    200: 161
+
+All virtual users finished
+Summary report @ 10:31:12(-0300) 2020-10-28
+  Scenarios launched:  60
+  Scenarios completed: 60
+  Requests completed:  1200
+  Mean response/sec: 13.43
+  Response time (msec):
+    min: 557.8
+    max: 5136.6
+    median: 4357.4
+    p95: 4936.9
+    p99: 5097.3
+  Scenario counts:
+    0: 60 (100%)
+  Codes:
+    200: 1200
+```
+
+We can perform tests with additional settings through a `.yaml` file, e.g:
+
+The `.yaml` file could be located anywhere in the file system, we can create it via the command line as follows:
+
+```bash
+touch <some-descriptive-name>.yaml
+```
+
+The content within the `.yaml` file might look like:
+
+```bash
+config:
+  target: http://localhost:2345
+  phases:
+    - duration: 120
+      arrivalRate: 10
+      rampTo: 20
+scenarios:
+  - flow:
+      - get:
+          url: "/suggestions?q=Londo&latitude=43.70011&longitude=-79.4163"
+```
+
+To run the load tests using the `.yaml` file we can run:
+
+```bash
+artillery run <the-file-name>.yaml
+```
+
+For further details we can take a look at the [official documentation](https://artillery.io/docs/guides/guides/test-script-reference.html#Overview).
