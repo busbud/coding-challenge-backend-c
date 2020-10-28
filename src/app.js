@@ -8,6 +8,7 @@ const { resourceNotFound } = require('./controllers');
 const { routes } = require('./routes');
 
 const port = process.env.PORT || 2345;
+const listener = process.env.REQUEST_LISTENER || '0.0.0.0';
 
 module.exports = http
   .createServer(async (req, res) => {
@@ -24,6 +25,6 @@ module.exports = http
       await resourceNotFound(req, res);
     }
   })
-  .listen(port, '127.0.0.1');
+  .listen(port, listener);
 
 console.log('Server running at http://127.0.0.1:%d/suggestions', port);
