@@ -9,6 +9,10 @@ const app = require('../../src/app');
 const request = supertest(app);
 
 describe('GET /suggestions', function () {
+  // Test domain to run exclusively the integration tests.
+  // The port number is exported by the `test:integration` script.
+  const testDomain = 'http://127.0.0.1:5432';
+
   after(function (done) {
     app.close(done);
   });
@@ -70,7 +74,7 @@ describe('GET /suggestions', function () {
         },
       ];
 
-      nock('http://127.0.0.1:2345')
+      nock(testDomain)
         .get('/suggestions?q=Montreal')
         .reply(200, { suggestions });
 
@@ -125,7 +129,7 @@ describe('GET /suggestions', function () {
           },
         ];
 
-        nock('http://127.0.0.1:2345')
+        nock(testDomain)
           .get('/suggestions?q=Londo&latitude=43.70011&longitude=-79.4163')
           .reply(200, { suggestions });
 
