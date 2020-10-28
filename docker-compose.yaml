@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  api:
+    container_name: coding-challenge-backend-c
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - '2345:2345'
+      - '5858:5858'
+    restart: always
