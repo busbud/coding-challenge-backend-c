@@ -15,7 +15,8 @@
     "cover:integration": "nyc --silent --no-clean npm run test:integration",
     "cover:report": "nyc report --reporter=lcov --reporter=text",
     "lint": "eslint ./src",
-    "lint:fix": "eslint --fix ./src"
+    "lint:fix": "eslint --fix ./src",
+    "ci_lint": "yaml-validator .travis.yml"
   },
   "author": "",
   "license": "WTFPL",
