@@ -1,0 +1,14 @@
+language: generic
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t coding-challenge-backend-c .
+
+script:
+  - docker run -e CI=true coding-challenge-backend-c npm run cover
+
+after_success:
+  - echo "Here we could perform some cool things such as:"
+  - echo "- Build the new image and push it to docker hub or any other registry."
