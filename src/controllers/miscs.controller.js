@@ -5,7 +5,7 @@
  * @param {Object} res  The HTTP response object.
  * @return {Object}     An object with a message property.
  */
-const resourceNotFound = async (req, res) => {
+const resourceNotFound = (req, res) => {
   // Default status code for a resource not found.
   let statusCode = 404;
   if (req.method !== 'GET') {

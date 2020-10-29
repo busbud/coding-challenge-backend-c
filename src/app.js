@@ -22,7 +22,7 @@ module.exports = http
     if (req.method === 'GET' && route) {
       await route(req, res);
     } else {
-      await resourceNotFound(req, res);
+      resourceNotFound(req, res);
     }
   })
   .listen(port, listener);
