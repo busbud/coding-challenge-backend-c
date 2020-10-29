@@ -12,14 +12,11 @@ const { getSuggestionsService } = require('../services');
  * @param {Object} res      The HTTP response object.
  * @return {Array<Object>}  An array of objects.
  */
-const getSuggestions = async (req, res) => {
+const getSuggestions = (req, res) => {
   const { query } = url.parse(req.url, true);
 
-  // Path to locate the .csv file.
-  const file = `${__dirname}/../../data/cities_canada-usa.csv`;
-
   // Instantiate the service to get the list of suggestions.
-  const suggestions = await getSuggestionsService({ file, query });
+  const suggestions = getSuggestionsService({ query });
 
   // Default status code for an empty array.
   let statusCode = 404;
