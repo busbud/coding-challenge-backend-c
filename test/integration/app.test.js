@@ -4,9 +4,9 @@ const { expect } = require('chai');
 const nock = require('nock');
 const supertest = require('supertest');
 
-const app = require('../../src/app');
+const { server } = require('../../src/app');
 
-const request = supertest(app);
+const request = supertest(server);
 
 describe('GET /suggestions', function () {
   // Test domain to run exclusively the integration tests.
@@ -14,7 +14,7 @@ describe('GET /suggestions', function () {
   const testDomain = 'http://127.0.0.1:5432';
 
   after(function (done) {
-    app.close(done);
+    server.close(done);
   });
 
   describe('with a non-existent city', function () {
@@ -74,9 +74,7 @@ describe('GET /suggestions', function () {
         },
       ];
 
-      nock(testDomain)
-        .get('/suggestions?q=Montreal')
-        .reply(200, { suggestions });
+      nock(testDomain).get('/suggestions?q=Montreal').reply(200, { suggestions });
 
       request.get('/suggestions?q=Montreal').end((err, res) => {
         response = res;
