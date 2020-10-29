@@ -574,7 +574,7 @@ config:
   phases:
     - duration: 120
       arrivalRate: 10
-      rampTo: 20
+      rampTo: 5
 scenarios:
   - flow:
       - get:
@@ -585,6 +585,223 @@ To run the load tests using the `.yaml` file we can run:
 
 ```bash
 artillery run <the-file-name>.yaml
+```
+
+it should produce an output similar to:
+
+```bash
+Started phase 0, duration: 120s @ 00:20:07(-0300) 2020-10-29
+Report @ 00:20:17(-0300) 2020-10-29
+Elapsed time: 10 seconds
+  Scenarios launched:  99
+  Scenarios completed: 99
+  Requests completed:  99
+  Mean response/sec: 10.04
+  Response time (msec):
+    min: 55.9
+    max: 182.5
+    median: 71.2
+    p95: 88.3
+    p99: 178.8
+  Codes:
+    200: 99
+
+Report @ 00:20:27(-0300) 2020-10-29
+Elapsed time: 20 seconds
+  Scenarios launched:  100
+  Scenarios completed: 100
+  Requests completed:  100
+  Mean response/sec: 10.01
+  Response time (msec):
+    min: 55
+    max: 267.2
+    median: 68.5
+    p95: 96.4
+    p99: 239.6
+  Codes:
+    200: 100
+
+Report @ 00:20:37(-0300) 2020-10-29
+Elapsed time: 30 seconds
+  Scenarios launched:  93
+  Scenarios completed: 93
+  Requests completed:  93
+  Mean response/sec: 9.31
+  Response time (msec):
+    min: 56.7
+    max: 88.2
+    median: 69.8
+    p95: 77.7
+    p99: 85.2
+  Codes:
+    200: 93
+
+Report @ 00:20:47(-0300) 2020-10-29
+Elapsed time: 40 seconds
+  Scenarios launched:  89
+  Scenarios completed: 89
+  Requests completed:  89
+  Mean response/sec: 8.91
+  Response time (msec):
+    min: 57.1
+    max: 248.8
+    median: 69.3
+    p95: 82
+    p99: 237.7
+  Codes:
+    200: 89
+
+Report @ 00:20:57(-0300) 2020-10-29
+Elapsed time: 50 seconds
+  Scenarios launched:  78
+  Scenarios completed: 78
+  Requests completed:  78
+  Mean response/sec: 7.81
+  Response time (msec):
+    min: 59.2
+    max: 79.4
+    median: 71.4
+    p95: 76.4
+    p99: 79.3
+  Codes:
+    200: 78
+
+Report @ 00:21:07(-0300) 2020-10-29
+Elapsed time: 1 minute, 0 seconds
+  Scenarios launched:  78
+  Scenarios completed: 77
+  Requests completed:  77
+  Mean response/sec: 7.7
+  Response time (msec):
+    min: 56
+    max: 79.5
+    median: 69.9
+    p95: 76.3
+    p99: 79.2
+  Codes:
+    200: 77
+
+Report @ 00:21:17(-0300) 2020-10-29
+Elapsed time: 1 minute, 10 seconds
+  Scenarios launched:  68
+  Scenarios completed: 68
+  Requests completed:  68
+  Mean response/sec: 6.8
+  Response time (msec):
+    min: 56
+    max: 86.5
+    median: 68.6
+    p95: 76.4
+    p99: 85.2
+  Codes:
+    200: 68
+
+Report @ 00:21:27(-0300) 2020-10-29
+Elapsed time: 1 minute, 20 seconds
+  Scenarios launched:  68
+  Scenarios completed: 68
+  Requests completed:  68
+  Mean response/sec: 6.8
+  Response time (msec):
+    min: 55.5
+    max: 92.5
+    median: 64.3
+    p95: 76.8
+    p99: 90.8
+  Codes:
+    200: 68
+
+Report @ 00:21:37(-0300) 2020-10-29
+Elapsed time: 1 minute, 30 seconds
+  Scenarios launched:  64
+  Scenarios completed: 64
+  Requests completed:  64
+  Mean response/sec: 6.4
+  Response time (msec):
+    min: 56.4
+    max: 80.4
+    median: 70
+    p95: 77.2
+    p99: 80.1
+  Codes:
+    200: 64
+
+Report @ 00:21:47(-0300) 2020-10-29
+Elapsed time: 1 minute, 40 seconds
+  Scenarios launched:  57
+  Scenarios completed: 57
+  Requests completed:  57
+  Mean response/sec: 5.7
+  Response time (msec):
+    min: 60
+    max: 80.8
+    median: 69.7
+    p95: 78.2
+    p99: 80.7
+  Codes:
+    200: 57
+
+Report @ 00:21:57(-0300) 2020-10-29
+Elapsed time: 1 minute, 50 seconds
+  Scenarios launched:  52
+  Scenarios completed: 53
+  Requests completed:  53
+  Mean response/sec: 5.3
+  Response time (msec):
+    min: 56.5
+    max: 81.2
+    median: 69.1
+    p95: 76.6
+    p99: 81.2
+  Codes:
+    200: 53
+
+Report @ 00:22:07(-0300) 2020-10-29
+Elapsed time: 2 minutes, 0 seconds
+  Scenarios launched:  58
+  Scenarios completed: 58
+  Requests completed:  58
+  Mean response/sec: 5.85
+  Response time (msec):
+    min: 54.7
+    max: 77.1
+    median: 70.1
+    p95: 76.6
+    p99: 77.1
+  Codes:
+    200: 58
+
+Report @ 00:22:08(-0300) 2020-10-29
+Elapsed time: 2 minutes, 1 second
+  Scenarios launched:  4
+  Scenarios completed: 4
+  Requests completed:  4
+  Mean response/sec: 4
+  Response time (msec):
+    min: 57.9
+    max: 73.9
+    median: 70.9
+    p95: 73.9
+    p99: 73.9
+  Codes:
+    200: 4
+
+All virtual users finished
+Summary report @ 00:22:08(-0300) 2020-10-29
+  Scenarios launched:  908
+  Scenarios completed: 908
+  Requests completed:  908
+  Mean response/sec: 7.51
+  Response time (msec):
+    min: 54.7
+    max: 267.2
+    median: 69.6
+    p95: 77.9
+    p99: 123.9
+  Scenario counts:
+    0: 908 (100%)
+  Codes:
+    200: 908
 ```
 
 For further details we can take a look at the [official documentation](https://artillery.io/docs/guides/guides/test-script-reference.html#Overview).
