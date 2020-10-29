@@ -4,8 +4,9 @@
 const http = require('http');
 const url = require('url');
 
-const { readAndParseCSVFile } = require('./libs');
 const { resourceNotFound } = require('./controllers');
+const { onProcessKill, onException } = require('./helpers');
+const { readAndParseCSVFile } = require('./libs');
 const { routes } = require('./routes');
 
 const port = process.env.PORT || 2345;
@@ -35,6 +36,14 @@ server.listen(port, listener);
 
 console.log('Server running at http://127.0.0.1:%d/suggestions', port);
 
+// Define some special events to handle some situations.
+process.on('SIGINT', () => onProcessKill(server));
+process.on('SIGTERM', () => onProcessKill(server));
+process.on('uncaughtException', (error) => onException(error));
+
+/**
+ * Export the server app.
+ */
 module.exports = {
   server,
 };

@@ -2,6 +2,7 @@
  * Required Modules.
  */
 const errors = require('./errors.helper');
+const events = require('./events.helper');
 const miscs = require('./miscs.helper');
 
 /**
@@ -9,5 +10,6 @@ const miscs = require('./miscs.helper');
  */
 module.exports = {
   ...errors,
+  ...events,
   ...miscs,
 };
