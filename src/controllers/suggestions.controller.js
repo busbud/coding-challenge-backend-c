@@ -3,6 +3,7 @@
  */
 const url = require('url');
 
+const { errorHandler } = require('../helpers');
 const { getSuggestionsService } = require('../services');
 
 /**
@@ -13,23 +14,27 @@ const { getSuggestionsService } = require('../services');
  * @return {Array<Object>}  An array of objects.
  */
 const getSuggestions = (req, res) => {
-  const { query } = url.parse(req.url, true);
+  try {
+    const { query } = url.parse(req.url, true);
 
-  // Instantiate the service to get the list of suggestions.
-  const suggestions = getSuggestionsService({ query });
+    // Instantiate the service to get the list of suggestions.
+    const suggestions = getSuggestionsService({ query });
 
-  // Default status code for an empty array.
-  let statusCode = 404;
-  if (suggestions.length > 0) {
-    // Set the status for records found.
-    statusCode = 200;
+    // Default status code for an empty array.
+    let statusCode = 404;
+    if (suggestions.length > 0) {
+      // Set the status for records found.
+      statusCode = 200;
 
-    // Sort suggestions by descending score.
-    suggestions.sort((a, b) => b.score - a.score);
+      // Sort suggestions by descending score.
+      suggestions.sort((a, b) => b.score - a.score);
+    }
+
+    res.statusCode = statusCode;
+    res.end(JSON.stringify({ suggestions }));
+  } catch (error) {
+    errorHandler(error, res);
   }
-
-  res.statusCode = statusCode;
-  res.end(JSON.stringify({ suggestions }));
 };
 
 /**

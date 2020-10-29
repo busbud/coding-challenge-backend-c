@@ -11,15 +11,22 @@ const { filterCities } = require('../helpers');
  * @return {Array<Object>}      An array of objects.
  */
 const getSuggestionsService = ({ query }) => {
-  // Create the suggestions based on the query filters.
-  const suggestions = filterCities({
-    cities: global.cities || [],
-    name: query.q,
-    latitude: Number(query.latitude),
-    longitude: Number(query.longitude),
-  });
+  try {
+    // Create the suggestions based on the query filters.
+    const suggestions = filterCities({
+      cities: global.cities || [],
+      name: query.q,
+      latitude: Number(query.latitude),
+      longitude: Number(query.longitude),
+    });
 
-  return suggestions;
+    return suggestions;
+  } catch (error) {
+    const errMsg =
+      'There was an error getting suggestions (service > getSuggestionsService).';
+    console.error(`${errMsg} ${JSON.stringify(error)}`);
+    throw error;
+  }
 };
 
 /**
