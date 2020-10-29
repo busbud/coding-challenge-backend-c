@@ -30,6 +30,7 @@ const server = http.createServer(async (req, res) => {
     resourceNotFound(req, res);
   }
 });
+server.on('error', (error) => console.error(error));
 server.listen(port, listener);
 
 console.log('Server running at http://127.0.0.1:%d/suggestions', port);
