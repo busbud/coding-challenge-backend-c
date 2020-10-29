@@ -199,7 +199,7 @@ npm run test:unit
 To get the coverage report:
 
 ```bash
-npm run cover
+npm run coverage
 ```
 
 ### Starting the application

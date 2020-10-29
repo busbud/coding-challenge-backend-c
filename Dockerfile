@@ -14,8 +14,8 @@ COPY . .
 # Perform a clean installation without updating the package-lock.json file (development).
 RUN npm ci
 
-# Run the tests and get reports.
-RUN npm run cover
+# Run the tests and get coverage reports.
+RUN npm run coverage
 
 # Remove the packages specified in devDependencies (production).
 RUN npm prune --production
