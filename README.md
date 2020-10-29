@@ -120,11 +120,17 @@ You are going to need:
 
 ### Setting up the project
 
-> **Note**:
+#### Create a `.csv` file in order to make the project work.
+
+> **_Heads up_**!
 >
-> In order to improve the development experience with vscode, we can add some debugging settings in order to debug locally and with docker.
+> A `.csv` file must be created based on the `.tsv` file provided within the `/data` directory.
 >
-> To launch the configurations follow the instructions detailed in the [official documentation](https://code.visualstudio.com/docs/editor/debugging#_launch-configurations).
+> Make sure the `.csv` file has a comma-separated delimiter and is located within the `/data` directory.
+
+In order to improve the development experience with _vscode_, we can add some debugging settings in order to debug locally and with docker.
+
+To launch the configurations follow the instructions detailed in the [official documentation](https://code.visualstudio.com/docs/editor/debugging#_launch-configurations).
 
 Once the configuration file has been launched, replace its content with the following settings:
 
