@@ -22,7 +22,7 @@ class Services {
       { threshold: 3200, score: -.4 },
     ]
 
-    const POPULATION_WEIGHT = .5
+    const POPULATION_WEIGHT = 1
     const POPULATION_MODIFIERS = [
       { threshold: 0, score: -.4 },
       { threshold: 25000, score: -.3 },
@@ -70,7 +70,7 @@ class Services {
     // Apply modifiers relative to string similarity
     const score = searchScore * (1 + modifiers)
 
-    return Number(Math.min(score, .9).toFixed(1))
+    return Number(Math.max(Math.min(score, .999), 0).toFixed(3))
   }
 
   getMatches(normalizedQuery) {
