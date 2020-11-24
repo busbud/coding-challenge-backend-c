@@ -69,7 +69,7 @@ These responses are meant to provide guidance. The exact values can vary based o
 
 ### Non-functional
 
-- All code should be written in Javascript or Typescript.
+- All code should be written in Javascript, Typescript or PHP.
 - Mitigations to handle high levels of traffic should be implemented.
 - Challenge is submitted as pull request against this repo ([fork it](https://help.github.com/articles/fork-a-repo/) and [create a pull request](https://help.github.com/articles/creating-a-pull-request-from-a-fork/)).
 - Documentation and maintainability is a plus.
