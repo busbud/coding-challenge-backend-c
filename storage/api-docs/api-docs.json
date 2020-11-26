@@ -1,0 +1,63 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "GeoName",
+        "version": "0.1"
+    },
+    "paths": {
+        "/suggestions": {
+            "get": {
+                "operationId": "App\\Http\\Controllers\\SuggestionController::index",
+                "parameters": [
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "description": "Name of city to be searched",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "latitude",
+                        "in": "query",
+                        "description": "latitude to search around",
+                        "required": false,
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "name": "longitude",
+                        "in": "query",
+                        "description": "longitude to search around",
+                        "required": false,
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "name": "radius",
+                        "in": "query",
+                        "description": "The radius of the bounding circle (in meters)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Display a listing of suggestions."
+                    },
+                    "404": {
+                        "description": "No result is found."
+                    }
+                }
+            }
+        }
+    },
+    "security": [
+        []
+    ]
+}
