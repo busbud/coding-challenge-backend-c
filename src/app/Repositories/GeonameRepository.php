@@ -14,7 +14,6 @@ final class GeonameRepository extends BaseRepository implements GeonameRepositor
     public function searchGeo(array $params)
     {
         $cacheKey = "v5_".http_build_query($params);
-
         return Cache::remember($cacheKey, self::CACHE_TIME, function () use ($params) {
 
             /** @var Collection $collection */

@@ -45,7 +45,7 @@ class GeonameImporter extends Command
            This is not an optimal solution. However for this kind of small files, it would be harmless.
            For bigger files, you can check the method described in https://josephsilber.com/posts/2020/07/29/lazy-collections-in-laravel
         */
-        $file = file('cities_canada-usa.tsv');
+        $file = file(storage_path('app/cities_canada-usa.tsv'));
         $rowCount = count($file);
         $bar = $this->output->createProgressBar($rowCount);
         $bar->start();

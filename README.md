@@ -1,4 +1,4 @@
-## geoname-suggestion (Docker is Not Included)
+## geoname-suggestion
 
 Genome Suggestion is an example Laravel project that has most of the key features of Laravel. Most of the features are listed below:
 * Laravel
@@ -17,14 +17,24 @@ Genome Suggestion is an example Laravel project that has most of the key feature
   * Cache
   * unit Tests
   * Algolia Entegration
+* Docker
+* Docker Compose
+* Redis
+* Mysql
 * Algolia
-* Heroku Deployment
 
-## Deployment
+## Installation
 
+
+
+```javascript
+docker-compose build -d
+docker compose exec src cp .env.example .env
+#fill the required env variables
+docker-compose exec src php artisan migrate
+docker-compose exec src php artisan import:start
+```
 Algolia is used as PaaS to handle geographical searches. You can see details about Algolia geo at **[link](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/)**. To make run Laravel with Algolia, **[Laravel/Scout](https://laravel.com/docs/8.x/scout)** is used.
-
-One running sample of this application can be monitored from **[Geo App](http://geo-name.herokuapp.com)**
 
 ## Testing
 

@@ -1,0 +1,60 @@
+version: "3"
+
+networks:
+  geoname:
+
+services:
+  nginx:
+    image: nginx
+    restart: always
+    volumes:
+      - ./config/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./src:/usr/share/nginx/html
+    ports:
+      - "82:80"
+    networks:
+      - geoname
+  src:
+    build:
+      context: .
+      dockerfile: ./config/Dockerfile
+    restart: always
+    expose:
+      - "9000"
+    volumes:
+      - ./src:/usr/share/nginx/html
+    networks:
+      - geoname
+  composer:
+    image: composer
+    volumes:
+      - ./src:/app
+    command: composer install
+  redis:
+    image: redis
+    restart: always
+    ports:
+    - "63794:6379"
+    volumes:
+      - ./data/redis:/data
+    command: redis-server --appendonly yes
+    networks:
+      - geoname
+  db:
+    image: mysql:5.7.22
+    restart: always
+    tty: true
+    ports:
+      - "33064:3306"
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+    command: --disable-partition-engine-check
+    environment:
+      MYSQL_DATABASE: geoname
+      MYSQL_USER: geoname
+      MYSQL_PASSWORD: geoname
+      MYSQL_ROOT_PASSWORD: geoname
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    networks:
+      - geoname

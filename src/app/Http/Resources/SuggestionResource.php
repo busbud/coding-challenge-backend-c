@@ -25,7 +25,8 @@ class SuggestionResource extends JsonResource
         ];
     }
 
-    private function convertToScore($distance) {
+    private function convertToScore($distance)
+    {
         //check if geo ranking is added
         if ($distance === "N/A") {
             return $distance;
