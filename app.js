@@ -1,16 +1,47 @@
-var http = require('http');
-var port = process.env.PORT || 2345;
+const http = require('http');
+const express = require('express');
+const db = require('./src/db');
+const PORT = process.env.PORT || 2345;
 
-module.exports = http.createServer(function (req, res) {
-  res.writeHead(404, { 'Content-Type': 'text/plain' });
+const app = express();
 
-  if (req.url.indexOf('/suggestions') === 0) {
-    res.end(JSON.stringify({
-      suggestions: []
-    }));
-  } else {
-    res.end();
+/**
+ * GET /suggestions
+ * TODO: Docs
+ */
+app.get('/suggestions', async (req, res) => {
+  try {
+    const {q, latitude=null, longitude=null} = req.query
+
+    // Form and execute query
+    const query = `SELECT * FROM cities_mv WHERE tsquery('${q}' || ':*') @@ to_tsvector(name);`
+    const data = await db(query);
+
+    // Build city response structure
+    const suggestions = data.rows.map((row) => {
+      const { ascii, country, admin1, lat, long } = row;
+      let countryFull;
+
+      if (country === "US") countryFull = "USA";
+      else if (country == "CA") countryFull = "Canada"
+      else countryFull = "";
+
+      const suggestion = {
+        name: `${ascii}, ${admin1}, ${countryFull}`,
+        latitude: lat,
+        longitude: long,
+        score: 0
+      };
+
+      return suggestion;
+    });
+
+    return res.json({ suggestions });
   }
-}).listen(port, '0.0.0.0');
+  catch (e) {
+    // TODO: handle error
+  }
+});
 
-console.log('Server running at http://0.0.0.0:%d/suggestions', port);
+const server = http.createServer(app);
+server.listen(PORT, () => console.log('Server running at http://0.0.0.0:%d/suggestions', PORT));
