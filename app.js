@@ -9,9 +9,10 @@ const app = express();
 
 const scoreCity = (searchCity, searchLat, searchLong, asciiName, lat, long) => {
   let score = 0;
+  // TODO: Fine tune wieghts
   const weights = {
-    doesNotStartWithWeight: 3,
-    letterMatchWeight: 2,
+    doesNotStartWithWeight: 5,
+    letterMatchWeight: 7,
     distanceWeight: 0.1
   }
 
@@ -24,7 +25,6 @@ const scoreCity = (searchCity, searchLat, searchLong, asciiName, lat, long) => {
 
   // Score strength of string match
   const nameLengthDiff = asciiName.length - searchCity.length;
-  weightTotal += weights.letterMatchWeight;
   score += nameLengthDiff * weights.letterMatchWeight;
 
   // Score gps distance
@@ -36,11 +36,38 @@ const scoreCity = (searchCity, searchLat, searchLong, asciiName, lat, long) => {
 
     const gpsDistance = distance(path);
 
-    weightTotal += weights.distanceWeight;
     score += gpsDistance * weights.distanceWeight;
   }
 
   return score;
+}
+
+const normalizeAndSort = (suggestions) => {
+  // Find max value for normalization
+  const scores = suggestions.reduce((scores, suggestion) => {
+    scores.push(suggestion.score);
+    return scores;
+  }, []);
+  const ratio = Math.max.apply(Math, scores) / 100;
+
+  // Normalize and invert; lowest score was closest
+  const normalized = suggestions.map((suggestion) => {
+    const normal = 1 - (Math.round(suggestion.score / ratio) / 100);
+
+    suggestion.score = Math.round((normal + Number.EPSILON) * 100) / 100
+
+    return suggestion
+  });
+
+  // Sort
+  const sorted = normalized.sort((a, b) => {
+    if (a.score < b.score) return 1;
+    if (a.score > b.score) return -1;
+    return 0;
+  });
+
+  console.log(sorted);
+  return sorted;
 }
 
 /**
@@ -78,11 +105,14 @@ app.get('/suggestions', async (req, res) => {
       };
 
       return suggestion;
-    });
+    })
 
-    return res.json({ suggestions });
+    const normalizedSuggestions = normalizeAndSort(suggestions);
+
+    return res.json({ suggestions: normalizedSuggestions });
   }
   catch (e) {
+    console.error(e);
     return res.json({ e });
     // TODO: handle error
   }
