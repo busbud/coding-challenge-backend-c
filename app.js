@@ -1,5 +1,6 @@
 const http = require('http');
 const express = require('express');
+const accents = require('remove-accents');
 const db = require('./src/db');
 const PORT = process.env.PORT || 2345;
 
@@ -13,8 +14,11 @@ app.get('/suggestions', async (req, res) => {
   try {
     const {q, latitude=null, longitude=null} = req.query
 
+    // Strip diacritics
+    const city = accents.remove(q).toLowerCase();
+
     // Form and execute query
-    const query = `SELECT * FROM cities_mv WHERE tsquery('${q}' || ':*') @@ to_tsvector(name);`
+    const query = `SELECT * FROM cities_mv WHERE tsquery('${city}' || ':*') @@ to_tsvector(ascii);`
     const data = await db(query);
 
     // Build city response structure

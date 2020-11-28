@@ -15,6 +15,7 @@
     "express": "^4.17.1",
     "mocha": "^1.18.2",
     "pg": "^8.5.1",
+    "remove-accents": "^0.4.2",
     "supertest": "^0.11.0"
   },
   "engines": {
