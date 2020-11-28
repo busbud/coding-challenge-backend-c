@@ -13,6 +13,7 @@
   "dependencies": {
     "chai": "^1.9.1",
     "express": "^4.17.1",
+    "gps-distance": "0.0.4",
     "mocha": "^1.18.2",
     "pg": "^8.5.1",
     "remove-accents": "^0.4.2",
