@@ -12,8 +12,8 @@ services:
       - "3000:3000"
     command: npm run dev
     volumes:
-      - .:/app/
-      - /app/node_modules
+      - .:/usr/src
+      - /usr/src/node_modules
 
   db:
     build: ./db
