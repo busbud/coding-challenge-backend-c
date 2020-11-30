@@ -1,0 +1,184 @@
+{
+	"info": {
+		"_postman_id": "f4b2f954-141d-4a8f-8f30-fa804b22f6ef",
+		"name": "Busbud",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Live",
+			"item": [
+				{
+					"name": "GET /suggestions - 200",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://code-challenge-app.herokuapp.com/suggestions?q=Londo&latitude=43.70011&longitude=-79.4163",
+							"protocol": "https",
+							"host": [
+								"code-challenge-app",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"suggestions"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "Londo"
+								},
+								{
+									"key": "latitude",
+									"value": "43.70011"
+								},
+								{
+									"key": "longitude",
+									"value": "-79.4163"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET /suggestions - 404",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://code-challenge-app.herokuapp.com/suggestions?q=SomeRandomCityInTheMiddleOfNowhere",
+							"protocol": "https",
+							"host": [
+								"code-challenge-app",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"suggestions"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "SomeRandomCityInTheMiddleOfNowhere"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "04c1a8e1-bf21-4745-9050-f11edb61509a",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "70eca6d2-7f11-4f78-b514-5a3fac15bd8b",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Local",
+			"item": [
+				{
+					"name": "GET /suggestions - 200",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/suggestions?q=Londo&latitude=43.70011&longitude=-79.4163",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"suggestions"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "Londo"
+								},
+								{
+									"key": "latitude",
+									"value": "43.70011"
+								},
+								{
+									"key": "longitude",
+									"value": "-79.4163"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET /suggestions - 404",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/suggestions?q=SomeRandomCityInTheMiddleOfNowhere",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"suggestions"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "SomeRandomCityInTheMiddleOfNowhere"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "8f4de1fd-c0b8-4f3c-8524-e97a053e2f79",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "55c0ed2b-0c7e-40fd-ac15-1af5f9eb1275",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

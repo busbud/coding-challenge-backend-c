@@ -1,5 +1,5 @@
 const { Client } = require('pg');
-const DATABASE_URL = process.env.DATABASE_URL
+const DATABASE_URL = process.env.DATABASE_URL || 'postgres://user:pass@localhost:35432/db'
 
 module.exports = async (query) => {
     try {
@@ -13,13 +13,11 @@ module.exports = async (query) => {
         const res = await client.query(query);
         await client.end()
 
-        console.log('db.js >>> sucess', res);
-
         return res;
     }
     catch(e) {
-        // TODO: Throw DB error
-        console.log('db.js >>> error', e);
+        console.error(e);
+
         return e;
     }
 }

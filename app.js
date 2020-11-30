@@ -3,10 +3,24 @@ const express = require('express');
 const accents = require('remove-accents');
 const db = require('./src/db');
 const distance = require('gps-distance');
-const PORT = process.env.PORT || 2345;
+const PORT = process.env.PORT || 3000;
 
 const app = express();
 
+/**
+ * Simple scoring function to see how close a city from the database is to the search
+ * terms. The higher the score, the "farther away" a city is from the search terms and
+ * thus the lower the end percentage match will be.
+ *
+ * @param {String} searchCity: Search query from api call
+ * @param {Number} searchLat: Optional latitude from api call
+ * @param {Number} searchLong: Optional Longitude from api call
+ * @param {String} asciiName: Full name of city for comparison to search
+ * @param {Number} lat: Latitude of city for comparison to search
+ * @param {Number} long: Longitude of city for comparison to search
+ *
+ * @returns {Number} score: The final calculated score
+ */
 const scoreCity = (searchCity, searchLat, searchLong, asciiName, lat, long) => {
   let score = 0;
   // TODO: Fine tune wieghts
@@ -42,6 +56,14 @@ const scoreCity = (searchCity, searchLat, searchLong, asciiName, lat, long) => {
   return score;
 }
 
+/**
+ * Normalize score values to fall between 0 and 1, then sort the normalized values to
+ * order suggestions from best to worst.
+ *
+ * @param {Array} suggestions An array of unsorted city suggestions matching search terms
+ *
+ * @returns {Array} sorted: A sorted array of city suggestions in decending order by score
+ */
 const normalizeAndSort = (suggestions) => {
   // Find max value for normalization
   const scores = suggestions.reduce((scores, suggestion) => {
@@ -72,7 +94,13 @@ const normalizeAndSort = (suggestions) => {
 
 /**
  * GET /suggestions
- * TODO: Docs
+ * Creates and returns an ordered list of potential city suggestions matching a partial or
+ * full search query q. Provides optional support for user supplied GPS coordinates to fine
+ * tune search results.
+ *
+ * @param {String} q: Partial of full city name used in primary search query
+ * @param {Number} latitude: [Optional] User supplied latitude for positional relevance in scoring
+ * @param {Number} longitude: [Optional] User supplied longitude for positional relevance in scoring
  */
 app.get('/suggestions', async (req, res) => {
   try {
@@ -105,16 +133,21 @@ app.get('/suggestions', async (req, res) => {
       };
 
       return suggestion;
-    })
+    });
 
+    // No results found - Return 404
+    if (suggestions.length == 0) {
+      return res.status(404).json({ suggestions });
+    }
+
+    // Sort and format final response
     const normalizedSuggestions = normalizeAndSort(suggestions);
 
     return res.json({ suggestions: normalizedSuggestions });
   }
-  catch (e) {
-    console.error(e);
-    return res.json({ e });
-    // TODO: handle error
+  catch (error) {
+    // Unhandled exception - Return 500
+    return res.status(500).json({ error });
   }
 });
 
