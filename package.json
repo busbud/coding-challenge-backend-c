@@ -3,18 +3,74 @@
   "version": "0.0.0",
   "description": "coding challenge in Nodejs",
   "main": "app.js",
-  "scripts": {
-    "start": "node app.js",
-    "test": "./node_modules/mocha/bin/mocha ./test/"
-  },
-  "author": "",
-  "license": "WTFPL",
-  "dependencies": {
-    "chai": "^1.9.1",
-    "mocha": "^1.18.2",
-    "supertest": "^0.11.0"
-  },
   "engines": {
-    "node": "0.10.26"
+    "node": "15.3.0",
+    "npm": "7.0.14"
+  },
+  "scripts": {
+    "start": "node -r source-map-support/register app.js",
+    "dev": "nodemon -r source-map-support/register app.js --watch dist --watch app.js",
+    "test": "NODE_ENV=test mocha ./test/",
+    "watch": "tsc -p src --watch",
+    "build": "tsc -p src",
+    "eslint": "eslint src --fix"
+  },
+  "author": "Alexandra D",
+  "license": "WTFPL",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.8.2",
+    "@typescript-eslint/parser": "^4.8.2",
+    "chai": "^1.9.1",
+    "eslint": "^7.14.0",
+    "mocha": "^8.2.1",
+    "nodemon": "^2.0.6",
+    "sinon": "^9.2.1",
+    "supertest": "^6.0.1"
+  },
+  "dependencies": {
+    "@types/csv-parse": "^1.2.2",
+    "@types/node": "^14.14.10",
+    "@types/string-similarity": "^4.0.0",
+    "csv-parse": "^4.14.1",
+    "npm-watch": "^0.7.0",
+    "source-map-support": "^0.5.19",
+    "string-similarity": "^4.0.3",
+    "typescript": "^4.1.2"
+  },
+  "eslintConfig": {
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/recommended"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "ecmaVersion": 12,
+      "sourceType": "module"
+    },
+    "plugins": [
+      "@typescript-eslint"
+    ],
+    "rules": {
+      "@typescript-eslint/no-explicit-any": "off",
+      "linebreak-style": [
+        "error",
+        "unix"
+      ],
+      "quotes": [
+        "error",
+        "single"
+      ],
+      "semi": [
+        "error",
+        "always"
+      ],
+      "indent": [
+        "error",
+        4
+      ]
+    }
   }
 }
