@@ -43,8 +43,10 @@ function startServer() {
     }).listen(port, '0.0.0.0');
 }
 
+/**
+ * Clusters are introduced to leverage all CPUs of the host machine, to help balance load between multiple requests
+ * Cluster use from https://www.sitepoint.com/how-to-create-a-node-js-cluster-for-speeding-up-your-apps/*/
 function getClusteredServer() {
-    // Cluster use from https://www.sitepoint.com/how-to-create-a-node-js-cluster-for-speeding-up-your-apps/
     if (cluster.isMaster && process.env.NODE_ENV !== 'test') {
         var numWorkers = os.cpus().length;
         console.log(`Optimizing to use ${numWorkers} workers...`);

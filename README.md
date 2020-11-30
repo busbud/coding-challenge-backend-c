@@ -7,9 +7,18 @@ The app can be found at https://salty-ridge-23634.herokuapp.com/suggestions/
 Cities receive a score based on the inputted name(q), latitude and longitude. The score is determined by how similar the input is to any of the given cities. Each of these paramater has a 1/3rd of scoring weight.
 
 #### Assumptions
-This implementation assumes that the provided TSV file is the source of truth for all American cities.
+This implementation assumes that the provided TSV file is the source of truth for all American cities and acts like a real DB.
 
 It also puts equal weight on the actual name of the city and its alt names which are often in other languages.
+
+#### Limitations
+
+Due to time constraints, some mitigations that could have been implemented were skipped, ie:
+* The use of a read local DB instead of using the TSV file as one
+* Dockerizing the app so it could be used in load balancing, rendering better results for a high-traffic app
+* The scoring algorithm is rather limited and could have been further developed
+* Unit tests per-module could be added to test each individual component of the app
+
 ## Requirements
 
 Design an API endpoint that provides auto-complete suggestions for large cities.
