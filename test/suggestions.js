@@ -4,11 +4,12 @@ var request = require('supertest')(app)
 var sinon = require('sinon');
 var CityService = require('../dist/service/CityService').CityService;
 
-
 describe('GET /suggestions', function () {
-
+  after(() => {
+    app.close();
+  })
   afterEach(() => {
-    sinon.restore()
+    sinon.restore();
   })
   describe('with a non-existent city', function () {
     var response;
