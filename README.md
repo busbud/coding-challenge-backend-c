@@ -1,13 +1,32 @@
-# Busbud Coding Challenge
+# Busbud Coding Challenge [![Build Status](https://circleci.com/gh/busbud/coding-challenge-backend-c/tree/master.png?circle-token=6e396821f666083bc7af117113bdf3a67523b2fd)](https://circleci.com/gh/busbud/coding-challenge-backend-c)
+
+## Solution:
+The app can be found at https://salty-ridge-23634.herokuapp.com/suggestions/
+
+#### Heuristics
+Cities receive a score based on the inputted name(q), latitude and longitude. The score is determined by how similar the input is to any of the given cities. Each of these paramater has a 1/3rd of scoring weight.
+
+#### Assumptions
+This implementation assumes that the provided TSV file is the source of truth for all American cities and acts like a real DB.
+
+It also puts equal weight on the actual name of the city and its alt names which are often in other languages.
+
+#### Limitations
+
+Due to time constraints, some mitigations that could have been implemented were skipped, ie:
+* The use of a read local DB instead of using the TSV file as one
+* Dockerizing the app so it could be used in load balancing, rendering better results for a high-traffic app
+* The scoring algorithm is rather limited and could have been further developed
+* Unit tests per-module could be added to test each individual component of the app
 
 ## Requirements
 
-Design an API endpoint that provides autocomplete suggestions for large cities.
+Design an API endpoint that provides auto-complete suggestions for large cities.
 The suggestions should be restricted to cities in the USA and Canada with a population above 5000 people.
 
 - the endpoint is exposed at `/suggestions`
-- the partial (or complete) search term is passed as a query string parameter `q`
-- the caller's location can optionally be supplied via query string parameters `latitude` and `longitude` to help improve relative scores
+- the partial (or complete) search term is passed as a querystring parameter `q`
+- the caller's location can optionally be supplied via querystring parameters `latitude` and `longitude` to help improve relative scores
 - the endpoint returns a JSON response with an array of scored suggested matches
     - the suggestions are sorted by descending score
     - each suggestion has a score between 0 and 1 (inclusive) indicating confidence in the suggestion (1 is most confident)
@@ -19,7 +38,7 @@ The suggestions should be restricted to cities in the USA and Canada with a popu
 
 #### Sample responses
 
-These responses are meant to provide guidance. The exact values can vary based on the data source and scoring algorithm.
+These responses are meant to provide guidance. The exact values can vary based on the data source and scoring algorithm
 
 **Near match**
 
@@ -69,77 +88,60 @@ These responses are meant to provide guidance. The exact values can vary based o
 
 ### Non-functional
 
-- All code should be written in Javascript, Typescript or PHP.
-- Mitigations to handle high levels of traffic should be implemented.
+- All code should be written in Javascript
+- Mitigations to handle high levels of traffic should be implemented
 - Challenge is submitted as pull request against this repo ([fork it](https://help.github.com/articles/fork-a-repo/) and [create a pull request](https://help.github.com/articles/creating-a-pull-request-from-a-fork/)).
-- Documentation and maintainability is a plus.
+- Documentation and maintainability is a plus
 
-## Dataset
+### References
 
-You can find the necessary dataset along with its description and documentation in the [`data`](data/) directory.
+- Geonames provides city lists Canada and the USA http://download.geonames.org/export/dump/readme.txt
+- http://www.nodejs.org/
+- http://ejohn.org/blog/node-js-stream-playground/
 
-## Evaluation
-
-We will use the following criteria to evaluate your solution:
-
-- Capacity to follow instructions
-- Developer Experience (how easy it is to run your solution locally, how clear your documentation is, etc)
-- Solution correctness
-- Performance
-- Tests (quality and coverage)
-- Code style and cleanliness
-- Attention to detail
-- Ability to make sensible assumptions
-
-It is ok to ask us questions!
-
-We know that the time for this project is limited and it is hard to create a "perfect" solution, so we will consider that along with your experience when evaluating the submission.
 
 ## Getting Started
 
-### Prerequisites
-
-You are going to need:
-
-- `Git`
-- `nvm` (or your preferred node version manager)
-- `Node.js`
-
-### Setting up your environment
-
-1. Begin by forking this repo and cloning your fork. GitHub has apps for [Mac](http://mac.github.com/) and
+Begin by forking this repo and cloning your fork. GitHub has apps for [Mac](http://mac.github.com/) and
 [Windows](http://windows.github.com/) that make this easier.
 
-2. Install [nvm](https://github.com/nvm-sh/nvm#install--update-script) or your preferred node version manager.
+### Setting up a Nodejs environment
 
-3. Install [Node.js](http://www.nodejs.org).
+Get started by installing [nodejs](http://www.nodejs.org).
 
-### Setting up the project
+For OS X users, use [Homebrew](http://brew.sh) and `brew install nvm`
 
-In the project directory run:
+Once that's done, from the project directory, run
 
 ```
 nvm use
+```
+
+### Setting up the project
+
+In the project directory run
+
+```
 npm install
 ```
 
 ### Running the tests
 
-The test suite can be run with:
+The test suite can be run with
 
 ```
-npm run test
+npm test
 ```
 
 ### Starting the application
 
-To start a local server run:
+To start a local server run
 
 ```
-npm run start
+PORT=3456 npm start
 ```
 
-it should produce an output similar to:
+which should produce output similar to
 
 ```
 Server running at http://127.0.0.1:2345/suggestions
