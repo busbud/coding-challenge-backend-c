@@ -1,16 +1,22 @@
 const { expect } = require('chai');
+const express = require('express');
+const supertest = require('supertest');
 
-const app = require('../app');
-// eslint-disable-next-line import/order
-const request = require('supertest')(app);
+const client = require('../client/geoNamesClient');
+const services = require('../service/citySuggestion');
+const suggestionApp = require('../routes');
 
 describe('GET /suggestions', () => {
+	const app = express();
+	suggestionApp(app, services, client);
+	const request = supertest(app);
+
 	describe('with a non-existent city', () => {
 		let response;
 
 		before((done) => {
 			request
-				.get('/suggestions?q=SomeRandomCityInTheMiddleOfNowhere')
+				.get('/v0/suggestions?q=SomeRandomCityInTheMiddleOfNowhere')
 				.end((err, res) => {
 					response = res;
 					response.json = JSON.parse(res.text);
@@ -33,7 +39,7 @@ describe('GET /suggestions', () => {
 
 		before((done) => {
 			request
-				.get('/suggestions?q=Montreal')
+				.get('/v0/suggestions?q=Montreal')
 				.end((err, res) => {
 					response = res;
 					response.json = JSON.parse(res.text);
@@ -50,7 +56,7 @@ describe('GET /suggestions', () => {
 			expect(response.json.suggestions).to.have.length.above(0);
 		});
 
-		describe.skip('Validate the shape of the data being returned', () => {
+		describe('Validate the shape of the data being returned', () => {
 			it('contains latitudes and longitudes', () => {
 				expect(response.json.suggestions).to.satisfy((suggestions) => suggestions.every(
 					(suggestion) => suggestion.latitude && suggestion.longitude,
@@ -64,12 +70,8 @@ describe('GET /suggestions', () => {
 			});
 		});
 
-		it('is a gratuitously failing test you should remove to prove you ran the tests', () => {
-			expect(true).to.equal(false);
-		});
-
 		it('contains a match', () => {
-			expect(response.json.suggestions).to.satisfy((suggestions) => suggestions.some((suggestion) => suggestion.name.test(/montreal/i)));
+			expect(response.json.suggestions).to.satisfy((suggestions) => suggestions.every((suggestion) => /montreal/i.test(suggestion.name)));
 		});
 	});
 });

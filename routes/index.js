@@ -33,6 +33,9 @@ module.exports = (app, service, client) => {
 				const suggestions = await service.suggestCities(
 					q, latitude, longitude, client,
 				);
+				if (!suggestions.length) {
+					return res.status(404).json({ suggestions });
+				}
 				return res.status(200).json({
 					suggestions,
 				});
