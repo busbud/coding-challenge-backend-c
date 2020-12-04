@@ -4,17 +4,31 @@
   "description": "coding challenge in Nodejs",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
-    "test": "./node_modules/mocha/bin/mocha ./test/"
+    "start": "node app.js | bunyan -o short",
+    "lint": "eslint . --ext .js --ignore-pattern node_modules/ --fix",
+    "test": "mocha test/*"
   },
   "author": "",
   "license": "WTFPL",
   "dependencies": {
+    "body-parser": "^1.19.0",
+    "boom": "^7.3.0",
+    "bunyan": "^1.8.14",
     "chai": "^1.9.1",
+    "express": "^4.17.1",
+    "geonames.js": "^3.0.2",
     "mocha": "^1.18.2",
-    "supertest": "^0.11.0"
+    "supertest": "^6.0.1"
   },
   "engines": {
     "node": "0.10.26"
+  },
+  "devDependencies": {
+    "eslint": "^7.2.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.21.5",
+    "eslint-plugin-react-hooks": "^4.0.0"
   }
 }
