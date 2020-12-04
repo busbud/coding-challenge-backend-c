@@ -7,7 +7,6 @@ const service = require('./service/citySuggestion');
 const routes = require('./routes');
 
 const port = process.env.PORT || 2345;
-const host = process.env.HOST || '127.0.0.1';
 
 async function startServer(app) {
 	app.log = bunyan.createLogger({
@@ -17,7 +16,7 @@ async function startServer(app) {
 
 	app.server = http.createServer(app);
 
-	app.log.info('starting server on %s:%d', host, port);
+	app.log.info('starting server on %d', port);
 
 	middleware.registerMiddleware(app);
 	routes(app, service, client);
@@ -25,7 +24,6 @@ async function startServer(app) {
 
 	app.server.listen(
 		port,
-		host,
 	);
 
 	return app;

@@ -6,7 +6,7 @@ const CITIES_POPULATION_QUERY = 'cities5000';
 module.exports = {
 	getCities: async (name) => {
 		const geonames = Geonames({
-			username: process.env.USERNAME || 'shamsazad',
+			username: process.env.USERNAME || 'badal_busbud',
 			lan: 'en',
 			encoding: 'JSON',
 		});
