@@ -20,12 +20,12 @@ What things you need know to run the code and how to install them
 
 ## Deployment
 
-Currently the application is deployed on [heroku](https://dashboard.heroku.com/apps), at this [link](https://badal-busbud.herokuapp.com/v0/suggestions).
+Currently the application is deployed on [heroku](https://dashboard.heroku.com/apps), at this [link](https://badal-busbud.herokuapp.com/suggestions).
 
 ### Consuming API
 Once the application is running locally, open postman or a browser and call GET end-point of this application.
 ```
-http://localhost:2345/v0/suggestions?q=london&longitude=-63.2505&latitude=-17.33866
+http://localhost:2345/suggestions?q=london&longitude=-63.2505&latitude=-17.33866
 ```
 **q** is the name of the place the client want to search.<br>
 **longitude** and **latitude** are optional parameters that a user can provide to get better suggestions.

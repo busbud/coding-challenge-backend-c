@@ -1,4 +1,3 @@
-const express = require('express');
 const boom = require('boom');
 
 const MIN_VALUE_LONGITUDE = -180;
@@ -8,9 +7,7 @@ const MIN_VALUE_LATITUDE = -90;
 const MAX_VALUE_LATITUDE = 90;
 
 module.exports = (app, service, client) => {
-	const router = express.Router();
-	app.use('/v0', router);
-	router.get(
+	app.get(
 		'/suggestions',
 		async (req, res, next) => {
 			const { q, latitude, longitude } = req.query;

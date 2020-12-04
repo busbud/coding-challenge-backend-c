@@ -16,7 +16,7 @@ describe('GET /suggestions', () => {
 
 		before((done) => {
 			request
-				.get('/v0/suggestions?q=SomeRandomCityInTheMiddleOfNowhere')
+				.get('/suggestions?q=SomeRandomCityInTheMiddleOfNowhere')
 				.end((err, res) => {
 					response = res;
 					response.json = JSON.parse(res.text);
@@ -39,7 +39,7 @@ describe('GET /suggestions', () => {
 
 		before((done) => {
 			request
-				.get('/v0/suggestions?q=Montreal')
+				.get('/suggestions?q=Montreal')
 				.end((err, res) => {
 					response = res;
 					response.json = JSON.parse(res.text);
