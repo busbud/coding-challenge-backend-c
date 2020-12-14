@@ -4,17 +4,22 @@
   "description": "coding challenge in Nodejs",
   "main": "app.js",
   "scripts": {
+    "prod": "NODE_ENV=prod YOUR_HOST=127.0.0.1 node app.js",
     "start": "node app.js",
-    "test": "./node_modules/mocha/bin/mocha ./test/"
+    "test": "YOUR_HOST=127.0.0.1 ./node_modules/mocha/bin/mocha ./test/suggestions.js --timeout 10000 --exit"
   },
   "author": "",
   "license": "WTFPL",
   "dependencies": {
-    "chai": "^1.9.1",
-    "mocha": "^1.18.2",
-    "supertest": "^0.11.0"
+    "chai": "^4.0.0",
+    "chai-http": "^4.2.1",
+    "cluster": "^0.7.7",
+    "diacritic": "0.0.2",
+    "express": "^4.17.1",
+    "mocha": "^4.0.0",
+    "supertest": "^6.0.1"
   },
   "engines": {
-    "node": "0.10.26"
+    "node": "^12.0.0"
   }
 }

@@ -1,5 +1,6 @@
 var expect  = require('chai').expect;
 var app     = require('../app');
+app.listen(2345);
 var request = require('supertest')(app);
 
 describe('GET /suggestions', function() {
@@ -48,7 +49,7 @@ describe('GET /suggestions', function() {
       expect(response.json.suggestions).to.have.length.above(0);
     });
 
-    describe.skip('Validate the shape of the data being returned', function() {
+    describe('Validate the shape of the data being returned', function() {
       it('contains latitudes and longitudes', function () {	
         expect(response.json.suggestions).to.satisfy(function (suggestions) {	
           return suggestions.every(function (suggestion) {	
@@ -66,14 +67,16 @@ describe('GET /suggestions', function() {
       });
     });
     
-    it('is a gratuitously failing test you should remove to prove you ran the tests', function () {	
-      expect(true).to.equal(false);	
-    });	    
+    // it('is a gratuitously failing test you should remove to prove you ran the tests', function () {	
+    //   expect(true).to.equal(false);	
+    // });	    
 
     it('contains a match', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
+        
         return suggestions.some(function (suggestion) {
-          return suggestion.name.test(/montreal/i);
+          let regex = new RegExp(/montreal/i)
+          return regex.test(suggestion.name);
         });
       })
     });
