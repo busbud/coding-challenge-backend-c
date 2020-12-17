@@ -22,4 +22,4 @@ php artisan set:cities
 ```
 
 ## Documentation
-- **Swagger** (http://busbud-city-app.herokuapp.com/api/documentation)
+- **Swagger** (https://busbud-city-app.herokuapp.com/api/documentation)
