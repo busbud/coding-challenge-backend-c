@@ -1,16 +1,23 @@
 var http = require('http');
 var port = process.env.PORT || 2345;
 
-module.exports = http.createServer(function (req, res) {
-  res.writeHead(404, {'Content-Type': 'text/plain'});
+var express = require('express');
+var app = express();
 
-  if (req.url.indexOf('/suggestions') === 0) {
-    res.end(JSON.stringify({
-      suggestions: []
-    }));
-  } else {
-    res.end();
+const { makeSuggestionsQuery } = require('./domain/suggestion-query-model');
+const { getHttpCode } = require('./error-handling');
+
+const service = require('./domain/suggestion-service');
+
+app.get('/suggestions', async (req, res) => {
+  try {
+    res.json(await service.getSuggestions(makeSuggestionsQuery(req.query.q, req.query.latitude, req.query.longitude)));
+  } catch (err) {
+    console.log({err});
+    res.status(getHttpCode(err.name)).json({ message: err.message });
   }
-}).listen(port, '127.0.0.1');
+});
 
-console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+app.listen(port, () => {
+  console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+});
