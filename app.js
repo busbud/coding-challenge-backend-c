@@ -1,5 +1,5 @@
 var http = require('http');
-var port = process.env.PORT || 2345;
+var port = process.env.PORT || 6555;
 
 var express = require('express');
 var app = express();
@@ -10,6 +10,7 @@ const { getHttpCode } = require('./error-handling');
 const service = require('./domain/suggestion-service');
 
 app.get('/suggestions', async (req, res) => {
+  
   try {
     res.json(await service.getSuggestions(makeSuggestionsQuery(req.query.q, req.query.latitude, req.query.longitude)));
   } catch (err) {

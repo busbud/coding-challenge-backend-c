@@ -1,10 +1,8 @@
-const { makeSuggestion } = require('./suggestion-model');
+const repository = require('../repository/suggestion-repo');
 
 module.exports.getSuggestions = async (query) => {
 
-    let suggestions = [];
-
-    suggestions.push(makeSuggestion('aaa', 123, 1234.2, 9));
+    let suggestions = repository.getSuggestions(query.q, query.latitude, query.longitude);
 
     return suggestions;
 }
