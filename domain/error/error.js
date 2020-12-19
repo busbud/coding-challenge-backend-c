@@ -12,5 +12,13 @@ class InternalServerError extends Error {
     }
 }
 
+class NotFoundError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = "NotFound";
+    }
+}
+
 module.exports.ValidationError = ValidationError;
 module.exports.InternalServerError = InternalServerError;
+module.exports.NotFoundError = NotFoundError;

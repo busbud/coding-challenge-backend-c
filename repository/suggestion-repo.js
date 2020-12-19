@@ -12,7 +12,7 @@ let db = [];
  * @param {number} latitude 
  * @param {number} longitude 
  */
-module.exports.getSuggestions = async (cityPartialName, latitude, longitude) => {
+module.exports.getSuggestions = async (cityPartialName) => {
     cityPartialName = cityPartialName.toUpperCase().replace(' ', '');
 
     const ret = db.filter(value => value.name.toUpperCase().replace(' ', '').startsWith(cityPartialName));
@@ -57,8 +57,8 @@ const canadaStatesDict = {
             });
         });
 
-        db = db.filter((value) => 
-        value.name &&
-        parseInt(value.population) >= 5000);
+        db = db.filter((value) =>
+            value.name &&
+            parseInt(value.population) >= 5000);
     }
 })();
