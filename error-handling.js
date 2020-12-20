@@ -10,3 +10,4 @@ module.exports.handleError = (error, res) => {
 const dict = {};
 dict['ValidationError'] = 400;
 dict['NotFound'] = 404;
+dict['InternalServerError'] = 500;

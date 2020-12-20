@@ -15,7 +15,7 @@ module.exports.getSuggestions = async (query) => {
             `${item.name}, ${item.state}, ${item.country}`,
             item.latitude,
             item.longitude,
-            calculateScore(item.longitude, item.latitude, query.longitude, query.latitude, item.name, query.q) || 1
+            calculateScore(item.longitude, item.latitude, query.longitude, query.latitude, item.name, query.q)
         );
     }).sort((a, b) => a.score > b.score);
 }
@@ -37,7 +37,9 @@ const calculateScore = (x1, y1, x2, y2, cityName, queryCityName) => {
 
     const score = 1 - (dist / (20 - nameScoreWeight));
 
-    if (score < 0) return 0.1;
+    if (!score && cityName.toUpperCase() === queryCityName.toUpperCase()) {
+        return 1;
+    } else if (!score || score < 0) return 0.1;
 
     return score.toFixed(1);
 }
