@@ -1,0 +1,13 @@
+{
+    "mocha.env": null,
+    "mocha.options": {},
+
+    // Mocha: Glob to search for test files
+    "mocha.files.glob": "test/**/*.js",
+
+    // Mocha: Globs to ignore when searching for test files
+    "mocha.files.ignore": [
+        "**/.git/**/*",
+        "**/node_modules/**/*"
+    ]
+}

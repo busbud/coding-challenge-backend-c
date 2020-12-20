@@ -12,11 +12,11 @@
   "dependencies": {
     "chai": "^1.9.1",
     "express": "^4.17.1",
-    "mocha": "^1.18.2",
+    "mocha": "^8.2.1",
     "supertest": "^0.11.0"
   },
   "engines": {
-    "node": "0.10.26"
+    "node": "^8 || ^10"
   },
   "devDependencies": {}
 }

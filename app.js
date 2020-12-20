@@ -4,10 +4,10 @@ var port = process.env.PORT || 2345;
 var express = require('express');
 var app = express();
 
-const { makeSuggestionsQuery } = require('./domain/suggestion-query-model');
-const { handleError } = require('./error-handling');
+let { makeSuggestionsQuery } = require('./domain/suggestion-query-model');
+let { handleError } = require('./error-handling');
 
-const service = require('./domain/suggestion-service');
+let service = require('./domain/suggestion-service');
 
 app.get('/suggestions', async (req, res) => {
   
