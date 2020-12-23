@@ -1,4 +1,4 @@
-# [Heroku](https://locationsapi.herokuapp.com/) - _Link to herku endpoint
+# [Heroku](https://locationsapi.herokuapp.com/) - Link to heroku endpoint
 
 # Busbud Coding Challenge
 
