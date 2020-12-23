@@ -1,0 +1,13 @@
+{
+  "semi": true,
+  "trailingComma": "all",
+  "singleQuote": true,
+  "printWidth": 80,
+  "tabWidth": 2,
+  "prettier.arrowParens": {
+    "type": "string",
+    "default": "always",
+    "markdownDescription": "%ext.config.arrowParens%",
+    "scope": "resource"
+  }
+}
