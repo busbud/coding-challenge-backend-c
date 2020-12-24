@@ -4,15 +4,21 @@
   "description": "coding challenge in Nodejs",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "nodemon app.js",
     "test": "./node_modules/mocha/bin/mocha ./test/"
   },
   "author": "",
   "license": "WTFPL",
   "dependencies": {
     "chai": "^1.9.1",
+    "csv-parser": "^3.0.0",
+    "fs": "0.0.1-security",
+    "geolib": "^3.3.1",
+    "lodash": "^4.17.20",
     "mocha": "^1.18.2",
-    "supertest": "^0.11.0"
+    "nodemon": "^2.0.6",
+    "supertest": "^0.11.0",
+    "url": "^0.11.0"
   },
   "engines": {
     "node": "0.10.26"
