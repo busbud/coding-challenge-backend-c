@@ -127,16 +127,27 @@ npm install
 
 The test suite can be run with:
 
-```
-npm run test
+```bash
+# unit tests
+$ npm run test
+
+# e2e tests
+$ npm run test:e2e
 ```
 
 ### Starting the application
 
 To start a local server run:
 
-```
-npm run start
+```bash
+# development
+$ npm run start
+
+# watch mode
+$ npm run start:dev
+
+# production mode
+$ npm run start:prod
 ```
 
 it should produce an output similar to:
