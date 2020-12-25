@@ -1,31 +1,43 @@
 import { Injectable } from '@nestjs/common';
-import { Observable } from 'rxjs';
+import { Observable, OperatorFunction } from 'rxjs';
 import { Suggestion } from './interfaces/suggestion';
 import { CitiesService } from '../cities/cities.service';
-import { map, take } from 'rxjs/operators';
+import { map, mergeMap, toArray } from 'rxjs/operators';
 import { SuggestionQuery } from './interfaces/suggestion-query';
-import { CityQueryResult } from '../cities/interfaces/city-query-result';
+import { SuggestionMapper } from './suggestion.mapper';
+import { ScoreCalculator } from './score.calculator';
+import { SuggestionsSorter } from './suggestion.sorter';
 
 @Injectable()
 export class SuggestionsService {
   constructor(private cities: CitiesService) {}
 
   suggest({ query }: SuggestionQuery): Observable<Suggestion> {
-    const mapper = new SuggestionMapper();
-    return this.cities.queryCities({ query }).pipe(
-      map((city) => mapper.toSuggestion(city)),
-      take(10),
+    return this.prepareSuggestionMapper().pipe(
+      mergeMap((mapper) =>
+        this.cities
+          .queryCities({ query })
+          .pipe(map((city) => mapper.toSuggestion(city))),
+      ),
     );
   }
-}
 
-class SuggestionMapper {
-  toSuggestion(city: CityQueryResult): Suggestion {
-    return {
-      name: city.name,
-      score: city.score,
-      longitude: String(city.location.lat),
-      latitude: String(city.location.lng),
-    };
+  private prepareSuggestionMapper(): Observable<SuggestionMapper> {
+    return this.cities
+      .getMaxPopulation()
+      .pipe(
+        map(
+          (maxPopulation) =>
+            new SuggestionMapper(new ScoreCalculator({ maxPopulation })),
+        ),
+      );
+  }
+
+  sort(): OperatorFunction<Suggestion, Suggestion[]> {
+    return (suggestions) =>
+      suggestions.pipe(
+        toArray(),
+        map((suggestions) => suggestions.sort(SuggestionsSorter())),
+      );
   }
 }

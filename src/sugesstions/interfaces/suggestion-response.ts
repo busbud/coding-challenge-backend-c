@@ -1,5 +1,5 @@
 import { Suggestion } from './suggestion';
 
-export class SuggestionResponse {
+export interface SuggestionResponse {
   suggestions: Suggestion[];
 }

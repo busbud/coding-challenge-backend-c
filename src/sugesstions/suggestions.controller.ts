@@ -11,7 +11,7 @@ import {
 import { SuggestionsService } from './suggestions.service';
 import { Observable } from 'rxjs';
 import { LocationParser } from '../location/location.parser';
-import { map, tap, toArray } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { SuggestionRequest } from './interfaces/suggestion-request';
 import { SuggestionResponse } from './interfaces/suggestion-response';
 
@@ -41,7 +41,8 @@ export class SuggestionsController {
   ): Observable<SuggestionResponse> {
     const location = this.locationParser.parse(longitude, latitude);
     return this.suggestionService.suggest({ query: q, location }).pipe(
-      toArray(),
+      this.suggestionService.sort(),
+      map((suggestions) => suggestions.slice(0, 10)),
       map((suggestions) => ({ suggestions })),
     );
   }

@@ -2,20 +2,31 @@ import { Test, TestingModule } from '@nestjs/testing';
 import {
   CITIES_SEEDER_CONFIG_INJECTION_TOKEN,
   CitiesSeeder,
-  TsvFileReader,
 } from './cities.seeder';
 import { count, first, mergeMap, take, takeLast } from 'rxjs/operators';
 import { forkJoin, Observable } from 'rxjs';
+import { TsvFileReader } from './tsv.file-reader';
+import { CityMetadataMapper } from './city-metadata.mapper';
+import { CountriesRepository } from './countries.repository';
+import { StatesRepository } from './states.repository';
+import { EventEmitter2, EventEmitterModule } from '@nestjs/event-emitter';
+import { CitiesSeederEvents } from '../app-events';
+import anything = jasmine.anything;
 
 const DATA_ROW_COUNT = 7237;
 const DATA_PATH = 'data/cities_canada-usa.tsv';
 
 describe('CitiesSeeder', () => {
   let service: CitiesSeeder;
+  let events: EventEmitter2;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [EventEmitterModule.forRoot()],
       providers: [
+        CountriesRepository,
+        StatesRepository,
+        CityMetadataMapper,
         {
           provide: CITIES_SEEDER_CONFIG_INJECTION_TOKEN,
           useValue: {
@@ -27,6 +38,7 @@ describe('CitiesSeeder', () => {
     }).compile();
 
     service = module.get<CitiesSeeder>(CitiesSeeder);
+    events = module.get<EventEmitter2>(EventEmitter2);
   });
 
   it('should be defined', () => {
@@ -45,7 +57,9 @@ describe('CitiesSeeder', () => {
     const firstCity = {
       alt_name: 'Abbotsford,YXX,Абботсфорд',
       name: 'Abbotsford',
-      country: 'CA',
+      country: 'Canada',
+      state: 'BC',
+      normalized_name: 'Abbotsford',
       id: '5881791',
       location: { lat: 49.05798, lng: -122.25257 },
       population: 151683,
@@ -53,18 +67,22 @@ describe('CitiesSeeder', () => {
     const randomMiddleCity = {
       alt_name: "Kollinsvil',Коллинсвиль",
       name: 'Collinsville',
-      country: 'US',
+      normalized_name: 'Collinsville',
+      country: 'USA',
       id: '4533909',
       location: { lat: 36.36454, lng: -95.83888 },
       population: 5606,
+      state: 'OK',
     };
     const lastCity = {
       alt_name: '',
       name: 'Cranberry Township',
-      country: 'US',
+      normalized_name: 'Cranberry Township',
+      country: 'USA',
       id: '8643098',
       location: { lat: 40.68496, lng: -80.10714 },
       population: 28098,
+      state: 'PA',
     };
     const cities$ = service.loadCities();
     const last$ = cities$.pipe(takeLast(1));
@@ -95,6 +113,17 @@ describe('CitiesSeeder', () => {
 
     first$.pipe(mergeMap(() => rows$)).subscribe(() => {
       expect(callCount).toBe(1);
+      done();
+    });
+  });
+
+  it('should initialize and emit events', (done) => {
+    const spy = spyOn(events, 'emit').and.callThrough();
+    service.onApplicationBootstrap();
+    events.addListener(CitiesSeederEvents.SEEDING_FINISHED, () => {
+      for (let i = 0; i < DATA_ROW_COUNT; i++) {
+        expect(spy).toBeCalledWith(CitiesSeederEvents.NEW_CITY, anything());
+      }
       done();
     });
   });
