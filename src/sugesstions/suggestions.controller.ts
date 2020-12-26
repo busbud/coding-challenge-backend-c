@@ -39,7 +39,7 @@ export class SuggestionsController {
   findAll(
     @Query() { q, longitude, latitude, limit }: SuggestionRequest,
   ): Observable<SuggestionResponse> {
-    const location = this.locationParser.parse(longitude, latitude);
+    const location = this.locationParser.parse(latitude, longitude);
     return this.suggestionService
       .suggest({ query: q, location, limit: limit || 5 })
       .pipe(map((suggestions) => ({ suggestions })));
