@@ -7,7 +7,6 @@ export type ScoreCalculatorParams = {
   maxDistance: number;
   callerGeohash?: string;
   callerLocation?: Location;
-  query: string;
 };
 
 export type ScoreCalculatorConfig = {
@@ -18,7 +17,16 @@ export type ScoreCalculatorConfig = {
   };
 };
 
-export class ScoreCalculator {
+export interface IScoreCalculator {
+  getScore(city: CityQueryResult);
+}
+
+type RelevantCityParams = Pick<
+  CityQueryResult,
+  'searchScore' | 'population' | 'geohash' | 'location'
+>;
+
+export class ScoreCalculator implements IScoreCalculator {
   constructor(
     private readonly params: ScoreCalculatorParams,
     private readonly config: ScoreCalculatorConfig,
@@ -27,7 +35,7 @@ export class ScoreCalculator {
   /**
    * Population should skew the score as the searchScore approaches to 0
    */
-  getScore({ searchScore, population, geohash, location }: CityQueryResult) {
+  getScore({ searchScore, population, geohash, location }: RelevantCityParams) {
     const PW = this.config.weights.population;
     const CW = this.config.weights.criteria;
     const DW = this.config.weights.nearBy;
