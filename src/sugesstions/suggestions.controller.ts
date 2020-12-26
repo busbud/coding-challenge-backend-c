@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { SuggestionsService } from './suggestions.service';
 import { Observable } from 'rxjs';
-import { LocationParser } from '../location/location.parser';
+import { LocationService } from '../location/location.service';
 import { map, tap } from 'rxjs/operators';
 import { SuggestionRequest } from './interfaces/suggestion-request';
 import { SuggestionResponse } from './interfaces/suggestion-response';
@@ -31,19 +31,17 @@ export class SuggestionsNotFoundInterceptor implements NestInterceptor {
 export class SuggestionsController {
   constructor(
     private suggestionService: SuggestionsService,
-    private locationParser: LocationParser,
+    private locationParser: LocationService,
   ) {}
 
   @Get()
   @UseInterceptors(SuggestionsNotFoundInterceptor)
   findAll(
-    @Query() { q, longitude, latitude }: SuggestionRequest,
+    @Query() { q, longitude, latitude, limit }: SuggestionRequest,
   ): Observable<SuggestionResponse> {
     const location = this.locationParser.parse(longitude, latitude);
-    return this.suggestionService.suggest({ query: q, location }).pipe(
-      this.suggestionService.sort(),
-      map((suggestions) => suggestions.slice(0, 10)),
-      map((suggestions) => ({ suggestions })),
-    );
+    return this.suggestionService
+      .suggest({ query: q, location, limit: limit || 5 })
+      .pipe(map((suggestions) => ({ suggestions })));
   }
 }

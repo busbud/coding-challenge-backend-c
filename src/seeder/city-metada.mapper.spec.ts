@@ -4,12 +4,14 @@ import { CountriesRepository } from './countries.repository';
 import { StatesRepository } from './states.repository';
 import { City } from '../cities';
 import { rxjsTest } from '../../test/util';
+import { LocationModule } from '../location';
 
 describe('CityMetadataMapper', () => {
   let service: CityMetadataMapper;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [LocationModule],
       providers: [CountriesRepository, StatesRepository, CityMetadataMapper],
     }).compile();
     service = module.get<CityMetadataMapper>(CityMetadataMapper);
@@ -31,6 +33,7 @@ describe('CityMetadataMapper', () => {
         lat: 45,
         lng: 45,
       },
+      geohash: '',
       id: '123',
     };
 

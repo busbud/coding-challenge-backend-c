@@ -10,3 +10,8 @@ export enum IndexesEvents {
 export enum CitiesRepositoryEvents {
   CITIES_READY = 'cities.repository.ready',
 }
+
+export enum SuggestionsEvents {
+  SUGGESTION_GENERATED = 'suggestions.generated',
+  SUGGESTION_RETURNED = 'suggestions.returned',
+}

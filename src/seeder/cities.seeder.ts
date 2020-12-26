@@ -69,7 +69,7 @@ class CityMapper {
     );
   }
 
-  toCity(row: string[]): Omit<City, 'normalized_name'> {
+  toCity(row: string[]): Omit<City, 'normalized_name' | 'geohash'> {
     const get = (col: string) => row[this.columnNames[col]];
     return {
       alt_name: get('alt_name'),

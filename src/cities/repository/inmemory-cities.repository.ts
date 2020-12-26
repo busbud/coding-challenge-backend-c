@@ -41,12 +41,19 @@ export class CitiesInMemoryRepository implements CitiesRepository {
   }
 
   private index() {
-    const options = {
-      includeScore: true,
-      keys: this.cacheState.indexes,
-    };
-    const index = Fuse.createIndex(options.keys, this.cacheState.cities);
-    this.fuse = new Fuse<City>(this.cacheState.cities, options, index);
+    const index = Fuse.createIndex(
+      this.cacheState.indexes,
+      this.cacheState.cities,
+    );
+    this.fuse = new Fuse<City>(
+      this.cacheState.cities,
+      {
+        includeScore: true,
+        keys: this.cacheState.indexes,
+        distance: 5,
+      },
+      index,
+    );
     this.events.emit(CitiesRepositoryEvents.CITIES_READY);
   }
 

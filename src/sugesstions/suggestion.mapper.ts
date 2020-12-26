@@ -1,19 +1,18 @@
-import { CityQueryResult } from '../cities/interfaces/city-query-result';
+import { CityQueryResult } from '../cities';
 import { Suggestion } from './interfaces/suggestion';
 import { ScoreCalculator } from './score.calculator';
+import { v4 as uuidv4 } from 'uuid';
 
 export class SuggestionMapper {
   constructor(private score: ScoreCalculator) {}
 
-  toSuggestion(city: CityQueryResult): Suggestion & Record<string, any> {
+  toSuggestion(city: CityQueryResult): Suggestion {
     return {
+      id: uuidv4(),
       name: `${city.name}, ${city.state}, ${city.country}`,
-      nativeScore: city.searchScore,
       score: this.score.getScore(city),
       longitude: String(city.location.lat),
       latitude: String(city.location.lng),
-      population: city.population,
-      normalized_name: city.normalized_name,
     };
   }
 }

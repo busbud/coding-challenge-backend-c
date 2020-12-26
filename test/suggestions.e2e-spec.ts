@@ -45,7 +45,7 @@ describe('SuggestionsController (e2e)', () => {
       test.expect((res) => {
         expect(res.body).toBeTruthy();
         expect(res.body.suggestions).toBeInstanceOf(Array);
-        expect(res.body.suggestions.length).toEqual(10);
+        expect(res.body.suggestions.length).toEqual(5);
       }));
   });
 });

@@ -1,15 +1,24 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { LocationParser } from './location.parser';
+import {
+  LOCATION_CONFIG_INJECTION_TOKEN,
+  LocationService,
+} from './location.service';
 
 describe('LocationService', () => {
-  let service: LocationParser;
+  let service: LocationService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [LocationParser],
+      providers: [
+        LocationService,
+        {
+          provide: LOCATION_CONFIG_INJECTION_TOKEN,
+          useValue: {},
+        },
+      ],
     }).compile();
 
-    service = module.get<LocationParser>(LocationParser);
+    service = module.get<LocationService>(LocationService);
   });
 
   it('should be defined', () => {

@@ -28,9 +28,11 @@
     "class-transformer": "^0.3.1",
     "class-validator": "^0.12.2",
     "fuse.js": "^6.4.3",
+    "ngeohash": "^0.6.3",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "rxjs": "^6.6.3"
+    "rxjs": "^6.6.3",
+    "uuid": "^8.3.2"
   },
   "author": "",
   "license": "WTFPL",

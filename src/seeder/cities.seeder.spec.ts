@@ -12,6 +12,7 @@ import { StatesRepository } from './states.repository';
 import { EventEmitter2, EventEmitterModule } from '@nestjs/event-emitter';
 import { CitiesSeederEvents } from '../app-events';
 import anything = jasmine.anything;
+import { LocationModule } from '../location';
 
 const DATA_ROW_COUNT = 7237;
 const DATA_PATH = 'data/cities_canada-usa.tsv';
@@ -22,7 +23,7 @@ describe('CitiesSeeder', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [EventEmitterModule.forRoot()],
+      imports: [EventEmitterModule.forRoot(), LocationModule],
       providers: [
         CountriesRepository,
         StatesRepository,
@@ -59,6 +60,7 @@ describe('CitiesSeeder', () => {
       name: 'Abbotsford',
       country: 'Canada',
       state: 'BC',
+      geohash: 'c29',
       normalized_name: 'Abbotsford',
       id: '5881791',
       location: { lat: 49.05798, lng: -122.25257 },
@@ -69,6 +71,7 @@ describe('CitiesSeeder', () => {
       name: 'Collinsville',
       normalized_name: 'Collinsville',
       country: 'USA',
+      geohash: '9y7',
       id: '4533909',
       location: { lat: 36.36454, lng: -95.83888 },
       population: 5606,
@@ -79,6 +82,7 @@ describe('CitiesSeeder', () => {
       name: 'Cranberry Township',
       normalized_name: 'Cranberry Township',
       country: 'USA',
+      geohash: 'dpp',
       id: '8643098',
       location: { lat: 40.68496, lng: -80.10714 },
       population: 28098,
