@@ -14,6 +14,7 @@ import { TopSuggestionsReducer } from './top-suggestions.reducer';
 import { LocationService } from '../location/location.service';
 import createSpy = jasmine.createSpy;
 import Spy = jasmine.Spy;
+import { ConfigModule } from '@nestjs/config';
 
 class CitiesStub {
   static cities = [
@@ -61,7 +62,11 @@ describe('SuggestionsService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [EventEmitterModule.forRoot(), LocationModule],
+      imports: [
+        EventEmitterModule.forRoot(),
+        LocationModule,
+        ConfigModule.forRoot({ isGlobal: true }),
+      ],
       providers: [
         {
           provide: CitiesService,
@@ -71,6 +76,11 @@ describe('SuggestionsService', () => {
           provide: SUGGESTIONS_CONFIG_INJECTION_TOKEN,
           useValue: {
             reportReturned: true,
+            weights: {
+              population: 0.3,
+              criteria: 0.6,
+              nearBy: 0.1,
+            },
           },
         },
         SuggestionsService,

@@ -13,6 +13,7 @@ import { EventEmitter2, EventEmitterModule } from '@nestjs/event-emitter';
 import { CitiesSeederEvents } from '../app-events';
 import anything = jasmine.anything;
 import { LocationModule } from '../location';
+import { ConfigModule } from '@nestjs/config';
 
 const DATA_ROW_COUNT = 7237;
 const DATA_PATH = 'data/cities_canada-usa.tsv';
@@ -23,7 +24,11 @@ describe('CitiesSeeder', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [EventEmitterModule.forRoot(), LocationModule],
+      imports: [
+        EventEmitterModule.forRoot(),
+        LocationModule,
+        ConfigModule.forRoot({ isGlobal: true }),
+      ],
       providers: [
         CountriesRepository,
         StatesRepository,

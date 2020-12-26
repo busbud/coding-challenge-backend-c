@@ -5,13 +5,14 @@ import { StatesRepository } from './states.repository';
 import { City } from '../cities';
 import { rxjsTest } from '../../test/util';
 import { LocationModule } from '../location';
+import { ConfigModule } from '@nestjs/config';
 
 describe('CityMetadataMapper', () => {
   let service: CityMetadataMapper;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [LocationModule],
+      imports: [LocationModule, ConfigModule.forRoot({ isGlobal: true })],
       providers: [CountriesRepository, StatesRepository, CityMetadataMapper],
     }).compile();
     service = module.get<CityMetadataMapper>(CityMetadataMapper);

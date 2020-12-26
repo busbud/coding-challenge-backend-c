@@ -3,13 +3,15 @@ import { CitiesModule } from './cities';
 import { SuggestionsModule } from './sugesstions';
 import { HealthCheckModule } from './health-check/health-check.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
-import { IndexesModule } from './indexes';
 import { MetricsModule } from './metrics/metrics.module';
 import { DebugModule } from './debug/debug.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
-    IndexesModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     CitiesModule,
     SuggestionsModule,
     HealthCheckModule,

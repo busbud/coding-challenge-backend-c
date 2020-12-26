@@ -5,6 +5,7 @@ import { StatesRepository } from './states.repository';
 import { CityMetadataMapper } from './city-metadata.mapper';
 import { CITIES_SEEDER_CONFIG_INJECTION_TOKEN } from './cities.seeder';
 import { LocationModule } from '../location';
+import config from './config';
 
 @Module({
   imports: [LocationModule],
@@ -14,9 +15,7 @@ import { LocationModule } from '../location';
     CityMetadataMapper,
     {
       provide: CITIES_SEEDER_CONFIG_INJECTION_TOKEN,
-      useValue: {
-        dataPath: 'data/cities_canada-usa.tsv',
-      },
+      useFactory: config,
     },
     CitiesSeeder,
   ],

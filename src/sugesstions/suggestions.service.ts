@@ -16,16 +16,15 @@ export const SUGGESTIONS_CONFIG_INJECTION_TOKEN = 'SUGGESTIONS_CONFIGURATION';
 
 export type SuggestionsServiceConfiguration = {
   reportReturned: boolean;
+  weights: {
+    population: number;
+    criteria: number;
+    nearBy: number;
+  };
 };
 
 @Injectable()
 export class SuggestionsService {
-  private weights = {
-    population: 0.3,
-    criteria: 0.6,
-    nearBy: 0.1,
-  };
-
   constructor(
     private cities: CitiesService,
     private locationService: LocationService,
@@ -65,7 +64,7 @@ export class SuggestionsService {
                 maxDistance: this.locationService.nearByDistanceDivider,
               },
               {
-                weights: this.weights,
+                weights: this.config.weights,
               },
             ),
           ),
