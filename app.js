@@ -53,8 +53,6 @@ module.exports = http.createServer(function (req, res) {
 
           // check if searched word is the beginning of the matched result
           let searchPos  = matchedName.toLowerCase().indexOf(params.q.toLowerCase()) === 0 ? 1 : 0;
-          console.log('matchedName: ', matchedName);
-          console.log('matchedName.indexOf(params.q): ', matchedName.toLowerCase().indexOf(params.q.toLowerCase()));
 
           // form result with the all necessary info
           suggestions.push({
