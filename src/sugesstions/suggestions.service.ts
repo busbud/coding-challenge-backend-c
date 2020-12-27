@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Observable, OperatorFunction } from 'rxjs';
 import { Suggestion } from './interfaces/suggestion';
 import { CitiesService } from '../cities/cities.service';
@@ -25,6 +25,7 @@ export type SuggestionsServiceConfiguration = {
 
 @Injectable()
 export class SuggestionsService {
+  private readonly logger = new Logger(SuggestionsService.name);
   constructor(
     private cities: CitiesService,
     private locationService: LocationService,
@@ -34,7 +35,12 @@ export class SuggestionsService {
   ) {}
 
   suggest(options: SuggestionQuery): Observable<Suggestion[]> {
-    const { query, limit } = options;
+    const { query, limit, location } = options;
+    this.logger.log(
+      `Suggesting cities for: ${query} with limit ${limit} ${
+        location ? 'with' : 'without'
+      } location`,
+    );
     return this.prepareSuggestionMapper(options).pipe(
       mergeMap((mapper) =>
         this.cities.queryCities({ query }).pipe(

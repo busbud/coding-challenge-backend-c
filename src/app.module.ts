@@ -17,7 +17,6 @@ import { ConfigModule } from '@nestjs/config';
     HealthCheckModule,
     EventEmitterModule.forRoot(),
     MetricsModule,
-    DebugModule,
-  ],
+  ].concat(process.env.DEBUG === 'true' ? [DebugModule] : []),
 })
 export class AppModule {}

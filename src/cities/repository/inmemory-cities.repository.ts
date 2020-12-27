@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import Fuse from 'fuse.js';
 import { City } from '../interfaces/city';
 import { from, fromEvent, Observable, of, Subject } from 'rxjs';
@@ -27,6 +27,7 @@ export interface CitiesInMemoryConfiguration {
 export class CitiesInMemoryRepository implements CitiesRepository {
   private cacheState = new CacheState();
   private fuse: Fuse<City>;
+  private readonly logger = new Logger(CitiesInMemoryRepository.name);
 
   constructor(
     @Inject(CITIES_IN_MEMORY_CONFIG_INJECTION_TOKEN)
@@ -66,6 +67,7 @@ export class CitiesInMemoryRepository implements CitiesRepository {
 
   query({ query }: CityQuery): Observable<CityQueryResult> {
     if (!this.cacheState.ready) {
+      this.logger.warn(`Attempted to query cities before cache was ready`);
       return from([]);
     }
     return from(this.fuse.search(query)).pipe(

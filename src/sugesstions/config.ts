@@ -32,8 +32,10 @@ export default function (c: ConfigService): SuggestionsServiceConfiguration {
         const [name, weight] = expression.split(':');
         return { ...acc, [name]: parseFloat(weight) };
       }, {});
-    const sum = Object.values(weights).reduce((sum, it) => sum + it, 0);
-    if (sum != 1) {
+    const sum = Object.values(weights)
+      .reduce((sum, it) => sum + it, 0)
+      .toPrecision(10);
+    if (sum != '1.000000000') {
       throw new Error(
         `Invalid SUGGESTION_SCORING_WEIGHTS values should sum to 1 but it sums to ${sum}`,
       );
@@ -43,6 +45,6 @@ export default function (c: ConfigService): SuggestionsServiceConfiguration {
 
   return {
     weights: getWeights(),
-    reportReturned: c.get<boolean>('LOCATION_GEOHASH_PRECISION', true),
+    reportReturned: c.get<boolean>('SUGGESTIONS_REPORT_RETURNED', true),
   };
 }

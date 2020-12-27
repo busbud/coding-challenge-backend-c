@@ -1,4 +1,9 @@
-import { Inject, Injectable, OnApplicationBootstrap } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  Logger,
+  OnApplicationBootstrap,
+} from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { City } from '../cities';
 import { createReadStream } from 'fs';
@@ -17,6 +22,7 @@ export interface CitiesSeederConfiguration {
 
 @Injectable()
 export class CitiesSeeder implements OnApplicationBootstrap {
+  private readonly logger = new Logger(CitiesSeeder.name);
   constructor(
     @Inject(CITIES_SEEDER_CONFIG_INJECTION_TOKEN)
     private readonly config: CitiesSeederConfiguration,
@@ -41,8 +47,13 @@ export class CitiesSeeder implements OnApplicationBootstrap {
   onApplicationBootstrap(): any {
     this.loadCities().subscribe({
       next: (city) => this.events.emit(CitiesSeederEvents.NEW_CITY, city),
-      complete: () => this.events.emit(CitiesSeederEvents.SEEDING_FINISHED),
-      error: console.error,
+      complete: () => {
+        this.events.emit(CitiesSeederEvents.SEEDING_FINISHED);
+        this.logger.log('Successfully loaded cities');
+      },
+      error: (err) => {
+        this.logger.error(`Error loading cities ${err}`);
+      },
     });
   }
 

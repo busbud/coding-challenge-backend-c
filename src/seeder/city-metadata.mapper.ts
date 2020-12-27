@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { City } from '../cities';
 import { CountriesRepository } from './countries.repository';
 import { StatesRepository } from './states.repository';
@@ -8,6 +8,7 @@ import { LocationService } from '../location/location.service';
 
 @Injectable()
 export class CityMetadataMapper {
+  private readonly logger = new Logger(CityMetadataMapper.name);
   constructor(
     private readonly countriesRepository: CountriesRepository,
     private readonly statesRepository: StatesRepository,
@@ -34,7 +35,7 @@ export class CityMetadataMapper {
         normalized_name: name.normalize('NFD').replace(/[\u0300-\u036f]/g, ''),
       })),
       catchError((err) => {
-        console.error('Error mapping city', err, 'Skipping...');
+        this.logger.error(`Error mapping city: ${err}. Skipping...`);
         return EMPTY;
       }),
     );
