@@ -13,9 +13,14 @@ module.exports = http.createServer(function (req, res) {
       const params = url.parse(req.url,true).query;
       let suggestions = [];
 
-      // no query param = nothing to search for
+      // no query param => nothing to search for
       if (!params.q) {
         throw new Error('No search query parameter provided.');
+      }
+
+      // query param to short
+      if (params.q.length < 3) {
+        throw new Error('Search query is too short.');
       }
 
       // check if data file is provided
@@ -25,7 +30,7 @@ module.exports = http.createServer(function (req, res) {
       }
 
       // regular expression to check for a match
-      let reg = new RegExp(params.q + ".*", 'gi');
+      let reg = new RegExp("([^,]*)" + params.q + "([^,]*)", 'gi');
 
       // reading a data file with a stream
       fs.createReadStream(filename)
@@ -34,11 +39,22 @@ module.exports = http.createServer(function (req, res) {
 
         // check againts name and alternative names of the cities excluding small cities
         if ((data.name.match(reg) || data.alt_name.match(reg)) && parseInt(data.population) > 5000) {
+          // get difference between length or search string and found match
+          let matchedName = !data.name.match(reg) && data.alt_name.match(reg) ? 
+              data.alt_name.match(reg)[0] : 
+              data.name;
+          let searchDiff = matchedName.length - params.q.length;
+
           // calculate distance if latitude and longitude parameters are present
           let distance  = params.latitude && params.longitude ? geolib.getDistance(
             {latitude: data.lat, longitude: data.long},
             {latitude: params.latitude, longitude: params.longitude},
           ) : 0;
+
+          // check if searched word is the beginning of the matched result
+          let searchPos  = matchedName.toLowerCase().indexOf(params.q.toLowerCase()) === 0 ? 1 : 0;
+          console.log('matchedName: ', matchedName);
+          console.log('matchedName.indexOf(params.q): ', matchedName.toLowerCase().indexOf(params.q.toLowerCase()));
 
           // form result with the all necessary info
           suggestions.push({
@@ -46,21 +62,25 @@ module.exports = http.createServer(function (req, res) {
             latitude: data.lat,
             longitude: data.long,
             distance: distance,
-            score: 1
+            searchDiff: searchDiff,
+            searchPos: searchPos
           });
         }
       })
       .on('end', () => {
         if (suggestions.length > 0) {
-          // sort by distance 
-          suggestions = _.orderBy(suggestions, ['distance'], ['asc']);
+          // sort by distance and search / result match difference
+          suggestions = _.orderBy(suggestions, ['distance', 'searchPos', 'searchDiff'], ['asc', 'asc', 'asc']);
 
           let n = suggestions.length;
-          let i = 1;
+          let i = 0;
+          let maxScore = 1;
           // basic score calculation
           suggestions.map(el => {
-            el.score = parseFloat((1 * (1- i/n)).toFixed(1));
+            el.score = parseFloat((maxScore * (1- i/n)).toFixed(2));
             delete el.distance;
+            delete el.searchDiff;
+            delete el.searchPos;
             i++;
             return el;
           });
