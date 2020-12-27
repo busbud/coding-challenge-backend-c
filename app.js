@@ -108,6 +108,6 @@ module.exports = http.createServer(function (req, res) {
       error: e.message
     }));
   }
-}).listen(port, '127.0.0.1');
+}).listen(port, '0.0.0.0');
 
-console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+console.log('Server running at http://0.0.0.0:%d/suggestions', port);
