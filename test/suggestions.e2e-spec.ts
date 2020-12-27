@@ -4,6 +4,7 @@ import request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { waitUntilHealthy } from './util';
 import { Suggestion } from '../src/sugesstions';
+import { FastifyAdapter } from '@nestjs/platform-fastify';
 
 describe('SuggestionsController (e2e)', () => {
   let app: INestApplication;
@@ -17,9 +18,10 @@ describe('SuggestionsController (e2e)', () => {
       imports: [AppModule],
     }).compile();
 
-    app = moduleFixture.createNestApplication();
+    app = moduleFixture.createNestApplication(new FastifyAdapter());
     app.useGlobalPipes(new ValidationPipe({ transform: true }));
     await app.init();
+    await app.getHttpAdapter().getInstance().ready();
     await waitUntilHealthy(app);
   });
 
