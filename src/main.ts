@@ -11,6 +11,6 @@ async function bootstrap() {
       : ['log', 'debug', 'error', 'warn'],
   });
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
-  await app.listen(2345);
+  await app.listen(process.env.PORT || 2345, '0.0.0.0');
 }
 bootstrap();
