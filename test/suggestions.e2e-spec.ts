@@ -25,6 +25,8 @@ describe('SuggestionsController (e2e)', () => {
     await waitUntilHealthy(app);
   });
 
+  afterAll(() => app.close());
+
   describe('with a non-existent city', () => {
     let test: request.Test;
 

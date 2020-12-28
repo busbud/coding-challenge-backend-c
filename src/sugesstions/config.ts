@@ -2,8 +2,8 @@ import { SuggestionsServiceConfiguration } from './suggestions.service';
 import { ConfigService } from '@nestjs/config';
 
 const DEFAULT_WEIGHTS = {
-  population: 0.3,
-  criteria: 0.6,
+  population: 0.5,
+  criteria: 0.4,
   nearBy: 0.1,
 };
 
@@ -46,5 +46,6 @@ export default function (c: ConfigService): SuggestionsServiceConfiguration {
   return {
     weights: getWeights(),
     reportReturned: c.get<boolean>('SUGGESTIONS_REPORT_RETURNED', true),
+    fetchLimit: c.get<number>('SUGGESTIONS_FETCH_LIMIT', 100),
   };
 }

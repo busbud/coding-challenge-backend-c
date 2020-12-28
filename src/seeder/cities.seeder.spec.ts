@@ -10,7 +10,7 @@ import { CityMetadataMapper } from './city-metadata.mapper';
 import { CountriesRepository } from './countries.repository';
 import { StatesRepository } from './states.repository';
 import { EventEmitter2, EventEmitterModule } from '@nestjs/event-emitter';
-import { CitiesSeederEvents } from '../app-events';
+import { CitiesRepositoryEvents, CitiesSeederEvents } from '../app-events';
 import anything = jasmine.anything;
 import { LocationModule } from '../location';
 import { ConfigModule } from '@nestjs/config';
@@ -45,6 +45,7 @@ describe('CitiesSeeder', () => {
 
     service = module.get<CitiesSeeder>(CitiesSeeder);
     events = module.get<EventEmitter2>(EventEmitter2);
+    await module.init();
   });
 
   it('should be defined', () => {
@@ -128,12 +129,12 @@ describe('CitiesSeeder', () => {
 
   it('should initialize and emit events', (done) => {
     const spy = spyOn(events, 'emit').and.callThrough();
-    service.onApplicationBootstrap();
+    events.emit(CitiesRepositoryEvents.SEEDING_REQUESTED);
     events.addListener(CitiesSeederEvents.SEEDING_FINISHED, () => {
       for (let i = 0; i < DATA_ROW_COUNT; i++) {
         expect(spy).toBeCalledWith(CitiesSeederEvents.NEW_CITY, anything());
       }
       done();
     });
-  });
+  }, 15000);
 });

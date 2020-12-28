@@ -1,17 +1,12 @@
-import {
-  Inject,
-  Injectable,
-  Logger,
-  OnApplicationBootstrap,
-} from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { City } from '../cities';
 import { createReadStream } from 'fs';
 import { map, mergeMap, share, take } from 'rxjs/operators';
 import { CityMetadataMapper } from './city-metadata.mapper';
 import { TsvFileReader } from './tsv.file-reader';
-import { EventEmitter2 } from '@nestjs/event-emitter';
-import { CitiesSeederEvents } from '../app-events';
+import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
+import { CitiesRepositoryEvents, CitiesSeederEvents } from '../app-events';
 
 export const CITIES_SEEDER_CONFIG_INJECTION_TOKEN =
   'CITIES_SEEDER_CONFIGURATION';
@@ -21,7 +16,7 @@ export interface CitiesSeederConfiguration {
 }
 
 @Injectable()
-export class CitiesSeeder implements OnApplicationBootstrap {
+export class CitiesSeeder {
   private readonly logger = new Logger(CitiesSeeder.name);
   constructor(
     @Inject(CITIES_SEEDER_CONFIG_INJECTION_TOKEN)
@@ -44,7 +39,8 @@ export class CitiesSeeder implements OnApplicationBootstrap {
     );
   }
 
-  onApplicationBootstrap(): any {
+  @OnEvent(CitiesRepositoryEvents.SEEDING_REQUESTED)
+  onSeedingRequested(): any {
     this.loadCities().subscribe({
       next: (city) => this.events.emit(CitiesSeederEvents.NEW_CITY, city),
       complete: () => {

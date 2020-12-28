@@ -5,7 +5,10 @@ import { CitiesRepositoryModule } from './repository';
 import { SeederModule } from '../seeder';
 
 @Module({
-  imports: [CitiesRepositoryModule, SeederModule],
+  imports: [
+    CitiesRepositoryModule.strategy(process.env.CITIES_REPOSITORY_STRATEGY),
+    SeederModule,
+  ],
   providers: [CitiesService],
   exports: [CitiesService],
   controllers: [CitiesController],

@@ -11,6 +11,8 @@ import { ConfigModule } from '@nestjs/config';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      cache: true,
+      ignoreEnvFile: true,
     }),
     CitiesModule,
     SuggestionsModule,

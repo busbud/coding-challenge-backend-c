@@ -16,6 +16,7 @@ export const SUGGESTIONS_CONFIG_INJECTION_TOKEN = 'SUGGESTIONS_CONFIGURATION';
 
 export type SuggestionsServiceConfiguration = {
   reportReturned: boolean;
+  fetchLimit: number;
   weights: {
     population: number;
     criteria: number;
@@ -43,7 +44,7 @@ export class SuggestionsService {
     );
     return this.prepareSuggestionMapper(options).pipe(
       mergeMap((mapper) =>
-        this.cities.queryCities({ query }).pipe(
+        this.cities.queryCities({ query, limit: this.config.fetchLimit }).pipe(
           map((city) => [mapper.toSuggestion(city), city]),
           this.reportGenerated(options),
           map(([suggestion]) => suggestion as Suggestion),

@@ -4,6 +4,7 @@ export enum CitiesSeederEvents {
 }
 
 export enum CitiesRepositoryEvents {
+  SEEDING_REQUESTED = 'cities.repository.seeding-requested',
   CITIES_READY = 'cities.repository.ready',
 }
 

@@ -1,4 +1,9 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  Logger,
+  OnApplicationBootstrap,
+} from '@nestjs/common';
 import Fuse from 'fuse.js';
 import { City } from '../interfaces/city';
 import { from, fromEvent, Observable, of, Subject } from 'rxjs';
@@ -8,29 +13,17 @@ import { CitiesRepository } from './cities.repository';
 import { CityQueryResult } from '../interfaces/city-query-result';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { CitiesRepositoryEvents, CitiesSeederEvents } from '../../app-events';
-
-export const CITIES_IN_MEMORY_CONFIG_INJECTION_TOKEN =
-  'CITIES_IN_MEMORY_CONFIGURATION';
-
-type WeightedIndex = {
-  name: string;
-  weight: number;
-};
-
-export interface CitiesInMemoryConfiguration {
-  indexes: WeightedIndex[];
-  textDistance: number;
-  scoreThreshold: number;
-}
+import { CITIES_IN_MEMORY_CONFIG, CitiesInMemoryConfiguration } from './config';
 
 @Injectable()
-export class CitiesInMemoryRepository implements CitiesRepository {
+export class CitiesInMemoryRepository
+  implements CitiesRepository, OnApplicationBootstrap {
   private cacheState = new CacheState();
   private fuse: Fuse<City>;
   private readonly logger = new Logger(CitiesInMemoryRepository.name);
 
   constructor(
-    @Inject(CITIES_IN_MEMORY_CONFIG_INJECTION_TOKEN)
+    @Inject(CITIES_IN_MEMORY_CONFIG)
     private readonly config: CitiesInMemoryConfiguration,
     private readonly events: EventEmitter2,
   ) {
@@ -80,6 +73,10 @@ export class CitiesInMemoryRepository implements CitiesRepository {
 
   getMaxPopulation(): Observable<number> {
     return of(this.cacheState.maxPopulation);
+  }
+
+  onApplicationBootstrap(): any {
+    this.events.emit(CitiesRepositoryEvents.SEEDING_REQUESTED);
   }
 }
 
