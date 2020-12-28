@@ -150,8 +150,6 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-it should produce an output similar to:
+## Development notes
 
-```
-Server running at http://127.0.0.1:2345/suggestions
-```
+Assumptions and decisions are documented in the [NOTES.md](./NOTES.md) file
