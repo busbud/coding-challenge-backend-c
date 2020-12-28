@@ -145,19 +145,19 @@ The locust file is available in this repo
 
 With in memory repository it reached **80 RPS** (request per second) with a high latency
 
-![Memory strategy graphs](https://github.com/abonifacio/coding-challenge-backend-c/blob/master/memory-graph.jpg?raw=true)
+![Memory strategy graphs](./img/memory-graphs.png)
 
-![Memory strategy grid](https://github.com/abonifacio/coding-challenge-backend-c/blob/master/memory-grid.jpg?raw=true)
+![Memory strategy grid](./img/memory-grid.png)
 
 With mongo repository it reached **330 RPS** with latency of 32ms (90% percentile).
 
-![Mongo strategy graphs](https://github.com/abonifacio/coding-challenge-backend-c/blob/master/mongo-vs-memory-graph.jpg?raw=true)
+![Mongo strategy graphs](./img/mongo-vs-memory-graph.png)
 
-![Mongo strategy grid](https://github.com/abonifacio/coding-challenge-backend-c/blob/master/mongo-grid.jpg?raw=true)
+![Mongo strategy grid](./img/mongo-grid.png)
 
 Then I did another load testing randomly including the location parameters, it performed similarly
 
-![Mongo strategy grid](https://github.com/abonifacio/coding-challenge-backend-c/blob/master/mongo-grid-with-location.jpg?raw=true)
+![Mongo strategy grid](./img/mongo-grid-withlocation.png)
 
 
 The deployed application uses free tiers for both heroku and MongoDB Atlas, so I can't rely on
