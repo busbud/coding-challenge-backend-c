@@ -17,4 +17,6 @@ const configs = {
 
 const config = {...configs.base, ...configs[env]}
 
+console.log(config)
+
 module.exports = config
