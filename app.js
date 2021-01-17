@@ -2,6 +2,7 @@
 
 var http = require('http');
 var port = process.env.PORT || 2345;
+const host = process.env.HOST || '127.0.0.1'
 const fs = require('fs');
 const DB = require('./DB')
 const Score = require('./Score');
@@ -85,6 +86,6 @@ module.exports = http.createServer(function (req, res) {
   } else {
     res.end();
   }
-}).listen(port, '127.0.0.1');
+}).listen(port, host);
 
 console.log('Server running at http://127.0.0.1:%d/suggestions', port);
