@@ -1,0 +1,48 @@
+{
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "default": {
+          "tokenizer": "standard",
+          "filter": [
+            "standard",
+            "asciifolding",
+            "lowercase"
+          ]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "id": {
+        "type": "integer"
+      },
+      "fullSuggestion": {
+        "type": "text"
+      },
+      "name": {
+        "type": "text"
+      },
+      "division": {
+        "type": "text"
+      },
+      "country": {
+        "properties": {
+          "code": {
+            "type": "text"
+          },
+          "name": {
+            "type": "text"
+          },
+          "display": {
+            "type": "text"
+          }
+        }
+      },
+      "location": {
+        "type": "geo_point"
+      }
+    }
+  }
+}
