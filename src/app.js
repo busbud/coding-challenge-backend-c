@@ -4,7 +4,7 @@ const querystring = require('querystring');
 const query = require('./query/suggestions.query')
 const suggestionResponse = require('./user/response/suggestion.response')
 const errorResponse = require('./user/response/error.response')
-const geoNamesImporterCsv = require('./user/importer/geoname.csv.importer')
+const geoNamesImporterCsv = require('./user/importer/geoname.importer')
 
 // geoNamesImporterCsv(process.cwd() + '/data/cities_canada-usa.tsv')
 
