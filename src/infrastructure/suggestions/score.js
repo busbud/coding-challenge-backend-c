@@ -1,7 +1,4 @@
-const calculateScore = (minScore, maxScore, score) => {
-    console.log(minScore, maxScore, score)
-    return (minScore - score) / (minScore - maxScore)
-}
+const calculateScore = (minScore, maxScore, score) => (minScore - score) / (minScore - maxScore)
 
 const minScore = (suggestions) => Math.min(...suggestions.map(suggestion => suggestion._score))
 

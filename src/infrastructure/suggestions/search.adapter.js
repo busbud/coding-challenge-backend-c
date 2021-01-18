@@ -10,16 +10,12 @@ const fulltextSearch = async (q, latitude, longitude) => {
             const parsed = parseResponse(response)
             resolve(parsed)
         })
-            .catch(reason => {
-                console.log(reason)
-                reject(reason)
-            })
+            .catch(reason => reject(reason))
     })
 }
 
 const buildRequest = (q, latitude, longitude) => {
     let functions = []
-    console.log(latitude, longitude)
     if (latitude !== null && longitude !== null) {
         functions.push({
             gauss: {
@@ -66,9 +62,6 @@ const parseResponse = (response) => {
 
     const maxScore = response.body.hits.max_score;
     const minScore = score.minScore(suggestions)
-
-    console.log('maxScore', maxScore)
-    console.log('minScore', minScore)
 
     return suggestions.map(suggestion => {
         return {

@@ -3,7 +3,7 @@ const of = (suggestion) => {
         name: suggestion.fullSuggestion,
         latitude: suggestion.location.lat,
         longitude: suggestion.location.lon,
-        score: suggestion.score
+        score: suggestion.score.toFixed(1)
     }
 }
 
