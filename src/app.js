@@ -9,13 +9,13 @@ module.exports = http.createServer(async function (req, res) {
     if (req.url.indexOf('/suggestions') === 0) {
         const rawQueryString = req.url.split('?').slice(-1)[0]
         const params = querystring.parse(rawQueryString)
-        if (params.term === undefined) {
-            return errorResponse.badRequest(res, "Querystring 'term' must be informed.")
+        if (params.q === undefined) {
+            return errorResponse.badRequest(res, "Querystring 'q' must be informed.")
         }
-        const term = params.term
-        const lat = params.lat || null
-        const lon = params.lon || null
-        return query.search(term, lat, lon)
+        const q = params.q
+        const latitude = params.latitude || null
+        const longitude = params.longitude || null
+        return query.search(q, latitude, longitude)
             .then(results => suggestionResponse.success(res, results))
             .catch((reason) => errorResponse.internalError(res, reason))
     }

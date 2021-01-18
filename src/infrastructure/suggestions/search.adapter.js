@@ -1,15 +1,13 @@
 const {index, client} = require('./elasticsearch.client')
 const score = require('./score')
 
-const fulltextSearch = async (term, lat, lon) => {
+const fulltextSearch = async (q, latitude, longitude) => {
     return new Promise((resolve, reject) => {
         client.search({
             index: index,
-            body: {}
+            body: buildRequest(q, latitude, longitude)
         }).then((response) => {
-            console.log(response)
             const parsed = parseResponse(response)
-            console.log(parsed)
             resolve(parsed)
         })
             .catch(reason => {
@@ -17,6 +15,47 @@ const fulltextSearch = async (term, lat, lon) => {
                 reject(reason)
             })
     })
+}
+
+const buildRequest = (q, latitude, longitude) => {
+    let functions = []
+    console.log(latitude, longitude)
+    if (latitude !== null && longitude !== null) {
+        functions.push({
+            gauss: {
+                location: {
+                    origin: {
+                        "lat": latitude,
+                        "lon": longitude
+                    },
+                    scale: "8000km"
+                }
+            }
+        })
+    }
+
+    return {
+        query: {
+            function_score: {
+                query: {
+                    bool: {
+                        must: [
+
+                            {
+                                match_bool_prefix: {
+                                    fullSuggestion: {
+                                        query: q,
+                                        analyzer: "standard"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                },
+                functions: functions
+            }
+        }
+    }
 }
 
 const parseResponse = (response) => {
