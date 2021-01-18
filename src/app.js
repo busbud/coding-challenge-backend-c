@@ -2,8 +2,11 @@ const config = require('../config')
 const http = require('http');
 const querystring = require('querystring');
 const query = require('./query/suggestions.query')
-const suggestionResponse = require('./user/suggestion.response')
-const errorResponse = require('./user/error.response')
+const suggestionResponse = require('./user/response/suggestion.response')
+const errorResponse = require('./user/response/error.response')
+const geoNamesImporterCsv = require('./user/importer/geoname.csv.importer')
+
+// geoNamesImporterCsv(process.cwd() + '/data/cities_canada-usa.tsv')
 
 module.exports = http.createServer(async function (req, res) {
     if (req.url.indexOf('/suggestions') === 0) {

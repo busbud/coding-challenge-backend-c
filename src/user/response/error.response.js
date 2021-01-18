@@ -1,4 +1,4 @@
-const config = require('../../config')
+const config = require('../../../config')
 
 const internalError = (res, reason) => {
     console.log(reason)
