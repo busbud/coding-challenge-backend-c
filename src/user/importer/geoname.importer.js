@@ -1,24 +1,29 @@
 const fs = require('fs');
 const readline = require('readline');
-const keys = ['geonameid',
+const countryAdapter = require('../../infrastructure/country.adapter')
+const divisionsAdapter = require('../../infrastructure/administrative.division.adapter')
+const suggestionCommand = require('../../command/suggestions.command')
+const keys = [
+    'geonameid',
     'name',
     'asciiname',
     'alternatenames',
     'latitude',
     'longitude',
-    'feature class',
-    'feature code',
-    'country code',
+    'feature_class',
+    'feature_code',
+    'country_code',
     'cc2',
-    'admin1 code',
-    'admin2 code',
-    'admin3 code',
-    'admin4 code',
+    'admin1_code',
+    'admin2_code',
+    'admin3_code',
+    'admin4_code',
     'population',
     'elevation',
     'dem',
     'timezone',
-    'modification date'];
+    'modification_date'
+];
 
 const importCsv = async (filepath) => {
     console.log(filepath)
@@ -28,13 +33,40 @@ const importCsv = async (filepath) => {
     });
 
     for await (const line of reader) {
-        processLine(parseLine(line))
+        const parsedLine = parseLine(line)
+        if (parsedLine.geonameid === 'id') {
+            continue
+        }
+        await processLine(parsedLine).catch(reason => console.log(reason))
     }
 }
 
-const processLine = (parsedLine) => {
-    console.log(parsedLine)
-}
+const processLine = async (parsedLine) => new Promise(async (resolve, reject) => {
+    const suggestion = await buildSuggestion(parsedLine).catch(reason => reject(reason))
+    const saved = await suggestionCommand.createOrUpdate(suggestion).catch(reason => reject(reason))
+    resolve(saved)
+})
+
+const buildSuggestion = async (parsedLine) => new Promise(async (resolve, reject) => {
+
+    const country = await countryAdapter.findByCode(parsedLine['country_code'])
+        .catch(reason => reject(reason))
+
+    const divisionCode = await divisionsAdapter.findCodeByFipsCode(parsedLine['country_code'], parsedLine['admin1_code'])
+        .catch(reason => reject(reason))
+
+    resolve({
+        id: parsedLine.geonameid,
+        fullSuggestions: `${parsedLine.name}, ${divisionCode}, ${country.display}`,
+        name: parsedLine.name,
+        division: divisionCode,
+        country: country,
+        location: {
+            lat: parsedLine.latitude,
+            lon: parsedLine.longitude
+        }
+    })
+})
 
 const parseLine = (line) => {
     const splitted = line.split("\t")
