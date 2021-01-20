@@ -25,6 +25,8 @@ const resolveCanadaDivisions = (fipsCode) => {
             return 'MB';
         case '04':
             return 'NB';
+        case '05':
+            return 'NL';
         case '13':
             return 'NT';
         case '07':

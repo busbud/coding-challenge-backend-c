@@ -1,8 +1,7 @@
 const fs = require('fs');
 const readline = require('readline');
-const countryAdapter = require('../../infrastructure/country.adapter')
-const divisionsAdapter = require('../../infrastructure/administrative.division.adapter')
-const suggestionCommand = require('../../command/suggestions.command')
+const countryAdapter = require('./country.adapter')
+const divisionsAdapter = require('./administrative.division.adapter')
 const keys = [
     'geonameid',
     'name',
@@ -25,7 +24,7 @@ const keys = [
     'modification_date'
 ];
 
-const importCsv = async (filepath) => {
+const performImport = async (filepath, suggestionCallback) => {
     console.log(filepath)
     const reader = readline.createInterface({
         input: fs.createReadStream(filepath),
@@ -37,7 +36,9 @@ const importCsv = async (filepath) => {
         if (parsedLine.geonameid === 'id') {
             continue
         }
-        await processLine(parsedLine).catch(reason => console.log(reason))
+        console.log('Processing suggestion ' + parsedLine.geonameid)
+        const suggestion = await buildSuggestion(parsedLine).catch(reason => console.log(reason))
+        await suggestionCallback(suggestion).catch(reason => console.log(reason))
     }
 }
 
@@ -57,7 +58,7 @@ const buildSuggestion = async (parsedLine) => new Promise(async (resolve, reject
 
     resolve({
         id: parsedLine.geonameid,
-        fullSuggestions: `${parsedLine.name}, ${divisionCode}, ${country.display}`,
+        fullSuggestion: `${parsedLine.name}, ${divisionCode}, ${country.display}`,
         name: parsedLine.name,
         division: divisionCode,
         country: country,
@@ -80,4 +81,4 @@ const parseLine = (line) => {
     return result
 }
 
-module.exports = importCsv
+module.exports = performImport

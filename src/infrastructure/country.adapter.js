@@ -3,7 +3,7 @@ const findByCode = async (code) => new Promise((resolve, reject) => {
         case 'US':
             return resolve(buildUSCountry());
         case 'CA':
-            return resolve(buildUSCountry());
+            return resolve(buildCACountry());
         default:
             return reject('Cannot found country with code ' + code)
     }
