@@ -13,6 +13,12 @@ const handler = async (req, res) => {
         maintenanceResponse.response(res, 'deleted', 200);
         return true
     }
+
+    if (req.url.indexOf('/maintenance/index') === 0 && req.method === 'POST') {
+        await elasticsearchIndex.createIndex(process.cwd() + '/suggestions_index.json')
+        maintenanceResponse.response(res, 'created', 201);
+        return true
+    }
     return false
 }
 

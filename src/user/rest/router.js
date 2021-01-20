@@ -3,7 +3,7 @@ const maintenanceController = require('./controller/maintenance.controller')
 
 const router = async (req, res) => {
     await suggestionsController(req, res) ||
-    await maintenanceController(req, res)
+    await maintenanceController(req, res) ||
     res.end();
 }
 
