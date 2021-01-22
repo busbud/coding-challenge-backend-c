@@ -50,7 +50,8 @@ const buildRequest = (q, latitude, longitude) => {
                 },
                 functions: functions
             }
-        }
+        },
+        size: 5
     }
 }
 

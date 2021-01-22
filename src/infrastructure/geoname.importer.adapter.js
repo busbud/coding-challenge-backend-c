@@ -42,7 +42,7 @@ const performImport = async (filepath, suggestionCallback) => {
     }
 }
 
-const processLine = async (parsedLine) => new Promise(async (resolve, reject) => {
+const processLine = async (parsedLine) => new Promise(async (resolve, zreject) => {
     const suggestion = await buildSuggestion(parsedLine).catch(reason => reject(reason))
     const saved = await suggestionCommand.createOrUpdate(suggestion).catch(reason => reject(reason))
     resolve(saved)
@@ -56,10 +56,12 @@ const buildSuggestion = async (parsedLine) => new Promise(async (resolve, reject
     const divisionCode = await divisionsAdapter.findCodeByFipsCode(parsedLine['country_code'], parsedLine['admin1_code'])
         .catch(reason => reject(reason))
 
+    const name = parsedLine.asciiname;
+
     resolve({
         id: parsedLine.geonameid,
-        fullSuggestion: `${parsedLine.name}, ${divisionCode}, ${country.display}`,
-        name: parsedLine.name,
+        fullSuggestion: `${name}, ${divisionCode}, ${country.display}`,
+        name: name,
         division: divisionCode,
         country: country,
         location: {

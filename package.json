@@ -5,17 +5,17 @@
   "main": "src/app.js",
   "scripts": {
     "start": "node src/app.js",
-    "test": "./node_modules/mocha/bin/mocha ./test/"
+    "test": "./node_modules/mocha/bin/mocha ./test/ --exit"
   },
   "author": "",
   "license": "WTFPL",
   "dependencies": {
     "@elastic/elasticsearch": "^7.10.0",
-    "chai": "^1.9.1",
-    "mocha": "^1.18.2",
-    "supertest": "^0.11.0"
+    "chai": "^4.2.0",
+    "mocha": "^8.2.1",
+    "supertest": "^6.0.1"
   },
   "engines": {
-    "node": "0.10.26"
+    "node": "14.4.0"
   }
 }

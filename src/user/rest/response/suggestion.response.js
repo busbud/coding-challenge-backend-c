@@ -10,7 +10,8 @@ const of = (suggestion) => {
 const fromList = (suggestions) => suggestions.map((suggestion) => of(suggestion))
 
 const success = (res, suggestions) => {
-    res.writeHead(200, {'Content-Type': 'application/json'});
+    const statusCode = suggestions.length === 0 ? 404 : 200;
+    res.writeHead(statusCode, {'Content-Type': 'application/json'});
     res.end(JSON.stringify({
         suggestions: fromList(suggestions)
     }));
