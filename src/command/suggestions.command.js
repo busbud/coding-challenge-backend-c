@@ -1,5 +1,5 @@
 const saveAdapter = require('../infrastructure/suggestions/save.adapter');
-const geonameImporter = require('../infrastructure/geoname.importer.adapter');
+const geonamesImporter = require('../infrastructure/geoname.importer.adapter');
 
 const createOrUpdate = (suggestion) => new Promise((resolve, reject) => {
   saveAdapter.save(suggestion)
@@ -8,7 +8,7 @@ const createOrUpdate = (suggestion) => new Promise((resolve, reject) => {
 });
 
 const importFile = async (source) => {
-  await geonameImporter(source, createOrUpdate);
+  await geonamesImporter(source, createOrUpdate);
 };
 
 module.exports.createOrUpdate = createOrUpdate;
