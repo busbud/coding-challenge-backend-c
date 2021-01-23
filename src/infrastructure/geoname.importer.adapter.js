@@ -3,7 +3,7 @@ const readline = require('readline');
 const countryAdapter = require('./country.adapter');
 const divisionsAdapter = require('./administrative.division.adapter');
 
-const keys = [
+const lineColumns = [
   'geonameid',
   'name',
   'asciiname',
@@ -49,13 +49,13 @@ const buildSuggestion = async (parsedLine) => new Promise((resolve, reject) => {
   })();
 });
 
-const parseLine = (line) => {
-  const splitted = line.split('\t');
+const lineToObject = (line) => {
+  const lineValues = line.split('\t');
   const result = {};
   // eslint-disable-next-line no-plusplus
-  for (let i = 0; i < keys.length; i++) {
-    const key = keys[i];
-    result[key] = splitted[i] || null;
+  for (let i = 0; i < lineColumns.length; i++) {
+    const key = lineColumns[i];
+    result[key] = lineValues[i] || null;
   }
 
   return result;
@@ -69,7 +69,7 @@ const performImport = (filepath, suggestionCallback) => new Promise((resolve) =>
 
   const callbacks = [];
   reader.on('line', async (line) => {
-    const parsedLine = parseLine(line);
+    const parsedLine = lineToObject(line);
     if (parsedLine.geonameid !== 'id') {
       console.log(`Processing suggestion ${parsedLine.geonameid}`);
       const suggestion = await buildSuggestion(parsedLine).catch((reason) => console.log(reason));
@@ -78,7 +78,10 @@ const performImport = (filepath, suggestionCallback) => new Promise((resolve) =>
   });
 
   reader.on('close', () => {
-    Promise.all(callbacks).then(() => resolve())
+    Promise.all(callbacks).then(() => {
+      console.log('Import finished');
+      resolve();
+    })
       .catch((reason) => console.log(reason));
   });
 });
