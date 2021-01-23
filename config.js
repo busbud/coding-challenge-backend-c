@@ -2,8 +2,6 @@ const defaultEnv = 'development';
 const env = process.env.NODE_ENV || defaultEnv;
 const crypto = require('crypto');
 
-console.log(crypto.randomBytes(64).toString('hex').slice(0, 64));
-
 const configs = {
   base: {
     env,
