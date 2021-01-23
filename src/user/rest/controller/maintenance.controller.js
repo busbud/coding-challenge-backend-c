@@ -6,6 +6,15 @@ const elasticsearchIndex = require('../../../infrastructure/suggestions/elastics
 let currentImporting = false;
 
 const handler = async (req, res) => {
+  if (req.url.indexOf('/maintenance') === 0
+      && (!('authorization' in req.headers)
+          || req.headers.authorization !== `Bearer ${config.maintenanceToken}`
+      )
+  ) {
+    maintenanceResponse.response(res, 'Unauthorized', 401);
+    return true;
+  }
+
   if (req.url.indexOf('/maintenance/populate') === 0 && req.method === 'POST') {
     if (!currentImporting) {
       suggestionCommand.importFile(config.suggestionDataSource)

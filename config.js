@@ -1,5 +1,8 @@
 const defaultEnv = 'development';
 const env = process.env.NODE_ENV || defaultEnv;
+const crypto = require('crypto');
+
+console.log(crypto.randomBytes(64).toString('hex').slice(0, 64));
 
 const configs = {
   base: {
@@ -11,8 +14,11 @@ const configs = {
       index: 'suggestions_index',
     },
     suggestionDataSource: `${process.cwd()}/data/cities_canada-usa.tsv`,
+    maintenanceToken: crypto.randomBytes(64).toString('hex').slice(0, 64),
   },
-  development: {},
+  development: {
+    maintenanceToken: 'dev',
+  },
   production: {},
 };
 
