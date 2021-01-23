@@ -1,11 +1,21 @@
+const config = require('../../../../config');
 const suggestionCommand = require('../../../command/suggestions.command');
 const maintenanceResponse = require('../response/maintenance.response');
 const elasticsearchIndex = require('../../../infrastructure/suggestions/elasticsearch.index');
 
+let currentImporting = false;
+
 const handler = async (req, res) => {
   if (req.url.indexOf('/maintenance/populate') === 0 && req.method === 'POST') {
-    suggestionCommand.importFile(`${process.cwd()}/data/cities_canada-usa.tsv`);
-    maintenanceResponse.response(res, 'executing', 202);
+    if (!currentImporting) {
+      suggestionCommand.importFile(config.suggestionDataSource)
+        .then(() => { currentImporting = false; })
+        .catch(() => { currentImporting = false; });
+      maintenanceResponse.response(res, 'running', 202);
+      currentImporting = true;
+      return true;
+    }
+    maintenanceResponse.response(res, 'import is already running', 409);
     return true;
   }
 

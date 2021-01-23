@@ -10,6 +10,7 @@ const configs = {
       baseUrl: 'http://localhost:9200',
       index: 'suggestions_index',
     },
+    suggestionDataSource: `${process.cwd()}/data/cities_canada-usa.tsv`,
   },
   development: {},
   production: {},
