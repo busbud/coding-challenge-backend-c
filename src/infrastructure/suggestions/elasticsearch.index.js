@@ -9,7 +9,7 @@ const createIndex = async (source) => {
   await client.indices.create({
     index,
     body: indexBody,
-  });
+  }).catch((reason) => console.log(reason));
 };
 
 module.exports.deleteIndex = deleteIndex;
