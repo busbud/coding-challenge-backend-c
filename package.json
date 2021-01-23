@@ -7,6 +7,7 @@
     "start": "node src/app.js",
     "test": "./node_modules/mocha/bin/mocha ./test/ --exit",
     "lint": "./node_modules/.bin/eslint ./",
+    "allchecks": "./node_modules/mocha/bin/mocha ./test/ --exit; ./node_modules/.bin/eslint ./",
     "lintfix": "./node_modules/.bin/eslint ./ --fix"
   },
   "author": "",
