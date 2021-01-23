@@ -22,7 +22,15 @@ const badRequest = (res, reason) => {
   res.end(JSON.stringify(body));
 };
 
+const notFound = (res) => {
+  const body = { error: 'Invalid endpoint' };
+
+  res.writeHead(404, { 'Content-Type': 'application/json' });
+  res.end(JSON.stringify(body));
+};
+
 module.exports = {
   internalError,
   badRequest,
+  notFound,
 };

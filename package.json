@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node src/app.js",
     "test": "./node_modules/mocha/bin/mocha ./test/ --exit",
-    "lint": "./node_modules/.bin/eslint ./"
+    "lint": "./node_modules/.bin/eslint ./",
+    "lintfix": "./node_modules/.bin/eslint ./ --fix"
   },
   "author": "",
   "license": "WTFPL",
