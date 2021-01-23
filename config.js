@@ -5,19 +5,26 @@ const crypto = require('crypto');
 const configs = {
   base: {
     env,
-    hostname: '127.0.0.1',
-    port: 2345,
+    hostname: process.env.HOST || '127.0.0.1',
+    port: process.env.PORT || 2345,
     elasticSearch: {
-      baseUrl: 'http://localhost:9200',
+      baseUrl: process.env.ELASTICSEARCH_BASEURL || 'http://localhost:9200',
       index: 'suggestions_index',
     },
     suggestionDataSource: `${process.cwd()}/data/cities_canada-usa.tsv`,
-    maintenanceToken: crypto.randomBytes(64).toString('hex').slice(0, 64),
+    maintenanceToken: process.env.MAINTANANCE_TOKEN || crypto.randomBytes(64).toString('hex').slice(0, 64),
   },
   development: {
     maintenanceToken: 'dev',
   },
-  production: {},
+  production: {
+    elasticSearch: {
+      agent: {
+        maxSockets: 2,
+        maxFreeSockets: 2,
+      },
+    },
+  },
 };
 
 const config = { ...configs.base, ...configs[env] };
