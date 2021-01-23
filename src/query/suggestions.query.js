@@ -1,5 +1,4 @@
-const adapter = require('../infrastructure/suggestions/search.adapter')
+const adapter = require('../infrastructure/suggestions/search.adapter');
 
-module.exports.search = async (q, latitude, longitude) => {
-    return adapter.fulltextSearch(q, latitude, longitude)
-}
+module.exports.search = async (q, latitude, longitude) => adapter
+  .fulltextSearch(q, latitude, longitude);

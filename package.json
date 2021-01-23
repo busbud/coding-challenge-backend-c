@@ -5,7 +5,8 @@
   "main": "src/app.js",
   "scripts": {
     "start": "node src/app.js",
-    "test": "./node_modules/mocha/bin/mocha ./test/ --exit"
+    "test": "./node_modules/mocha/bin/mocha ./test/ --exit",
+    "lint": "./node_modules/.bin/eslint ./src"
   },
   "author": "",
   "license": "WTFPL",
@@ -17,5 +18,10 @@
   },
   "engines": {
     "node": "14.4.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.18.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1"
   }
 }
