@@ -34,7 +34,8 @@ The benchmark results **with cache** and **without cache** are available below.
 The best benchmark results it was:
 - _throughput_ of **768,000 RPM**.
 - _response time avg_ of **78 milliseconds**.
-  ![Benchmark - Suggestions - With Cache](doc/wrk_suggestions_with_cache.png "Benchmark - Suggestions - With Cache")
+
+![Benchmark - Suggestions - With Cache](doc/wrk_suggestions_with_cache.png "Benchmark - Suggestions - With Cache")
 
 ### Only using elastic search - No Cache
 The best benchmark results it was:
