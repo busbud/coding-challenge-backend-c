@@ -5,29 +5,33 @@ You can find challenge requirements over [here](CHALLENGE.md).
 
 ## Solution
 In my solution, I choose to use ElasticSearch as search engine, because it has many features like full text and geolocation search.
-On the elasticsearch query, I search for `q` term in order to get the **most similar suggestion**. After that I use the **geolocation** to affect the **score**, if geolocation is provided.
+In the elasticsearch query, the term `q` is used for full text search get the **most similar suggestion**. After that, **geolocation position** is used to affect the **score**, if geolocation is provided.
 
 Solution hosted by Heroku: https://busbud-challenge-viniciusgava.herokuapp.com
-Please check Infrastructure for further details. 
+
+Please check Infrastructure section for further details. 
 
 ## Project structure
-The project is designed as **hexagonal architecture** separating in:
+The project was designed as **hexagonal architecture**, separated as:
 - **command:** Any operation that change a suggestion.
 - **infrastructure:** All data access including, elasticsearch, file importing, countries and **administrative divisions**.
 - **query:** Any operation for fetch data.
-- **user:** User interfaces:  REST API layer.
+- **user:** User interactions, in this project, REST API layer.
 
 ### administrative divisions 
 It refers to the column `admin1` of the provided file, which for:
-- **USA** it is the states.
-- **Canada** it is the provinces or territories.  
+- **USA** it is the states. I just use the provided value for USA values.
+- **Canada** it is the provinces or territories. I used the geonames fipscode to figure it out the correct values. 
 
 ## Benchmark
-The best benchmark results it was _throughput_ **254,000 RPM** and _response time avg_ of **236 milliseconds**.
+The best benchmark results it was:
+- _throughput_ of **254,000 RPM**.
+- _response time avg_ of **236 milliseconds**.
+
 ![Benchmark - Suggestions](doc/wrk_suggestions.png "Benchmark - Suggestions")
 
 ### Benchmark Hardware/Environment
-The benchmark was executed locally using docker container for elasticsearch and node app direct on OS.
+The benchmark was executed locally using docker container for elasticsearch and node app direct on the Operation System, Linux Ubuntu.
 - AMD Ryzen 5 2600 6-core 12-threads 3.4ghz base
 - 16GB RAM 16GB 3466MHz
 - Storage M2 Read 2000MB/s, Write 500MB/s 
@@ -36,11 +40,12 @@ The benchmark was executed locally using docker container for elasticsearch and 
 ![Infrastructure](doc/infra.jpg "Infrastructure")
 
 I used **heroku** to host the application and **bonsai.io** for ElasticSearch cloud.
-Since Bonsai.io free tier plan restrict to max of 2 concurrent operations, so the application performance is limited.
-Maintenance endpoint are not available in heroku also because of Bonsai.io free tier restrictions. 
+Since Bonsai.io free tier plan has restrictions to max of 2 concurrent operations(2 for search + 2 for index), the application performance in this environment is limited.
+
+Maintenance endpoint are _not available_ in **heroku** also because of Bonsai.io free tier restrictions. 
 
 ## API Reference
-### Search Suggestions
+### -Search Suggestions
 Search for suggestions using a **term**. 
 It will return the closest suggestion if geolocation is provided.
 
@@ -120,7 +125,7 @@ It will return the closest suggestion if geolocation is provided.
 }
 ```
 
-### Maintenance - Create Index
+### -Maintenance - Create Index
 It creates the elasticsearch index in order to persist suggestions. 
 
 **URL** : `/maintenance/index`
@@ -129,7 +134,8 @@ It creates the elasticsearch index in order to persist suggestions.
 
 #### Auth is Required
 Inform a `Authorization` with a **Barear token** to perform maintenance operations. 
-eg: `Authorization: Bearer dev`
+
+eg header: `Authorization: Bearer dev`
 
 For **development environment** just use the token `Bearer dev`. 
 
@@ -146,7 +152,7 @@ For **development environment** just use the token `Bearer dev`.
 ```
 
 
-### Maintenance - Populate Index
+### -Maintenance - Populate Index
 It Populates the index with the file data.
 
 **URL** : `/maintenance/populate`
@@ -155,12 +161,13 @@ It Populates the index with the file data.
 
 #### Auth is Required
 Inform a `Authorization` with a **Barear token** to perform maintenance operations.
-eg: `Authorization: Bearer dev`
+
+eg header: `Authorization: Bearer dev`
 
 For **development environment** just use the token `Bearer dev`.
 
 #### Success Responses
-**Condition** : Index deleted.
+**Condition** : Data importing is in progress.
 
 **Code** : `200 Ok`
 
@@ -171,8 +178,19 @@ For **development environment** just use the token `Bearer dev`.
 }
 ```
 
+#### Error response
+**Condition** : A import is already running.
 
-### Maintenance - Delete Index
+**Code** : `409 Conflict`
+
+**Content** :
+```json
+{
+  "status": "import is already running"
+}
+```
+
+### -Maintenance - Delete Index
 It deletes the elasticsearch index and all loaded data.
 
 **URL** : `/maintenance/index`
@@ -181,7 +199,8 @@ It deletes the elasticsearch index and all loaded data.
 
 #### Auth is Required
 Inform a `Authorization` with a **Barear token** to perform maintenance operations.
-eg: `Authorization: Bearer dev`
+
+eg header: `Authorization: Bearer dev`
 
 For **development environment** just use the token `Bearer dev`.
 
@@ -196,17 +215,6 @@ For **development environment** just use the token `Bearer dev`.
   "status": "deleted"
 }
 ```
-#### Error response
-**Condition** : A import is already running.
-
-**Code** : `409 Conflict`
-
-**Content** :
-```json
-{
-  "status": "import is already running"
-}
-```
 
 ## Setting up the project
 In the project directory run:
@@ -217,12 +225,14 @@ docker-compose up
 ```
 After that, let's create the elastic search index and load the data:
 ### Creating Elastic Search Index and load the data
-Check API Reference for details of these endpoints
-1. Call the endpoint create index. **Maintenance - Create Index**
-2. Call the endpoint to populate the elasticsearch documents. **Maintenance - Populate index**
+Application must be running to call the endpoints.
+
+Call the following endpoints:
+1. Create index. _Api Reference: **Maintenance - Create Index**_
+2. Populate the elasticsearch documents. _Api Reference: **Maintenance - Populate index**_
 
 ### Configs
-Application configs are available at `config.js` in the project directory.
+**Application configs** are available at `config.js` in the project directory.
 
 ### Running the tests
 ```
@@ -256,5 +266,5 @@ npm run allchecks
 ```
 
 ## Data
-all data was imported using the provided file. Endpoints to reimport all data can be found on the api doc.
+all data was imported using the provided file. Endpoints to reimport all data can be found on the Api Reference.
 
