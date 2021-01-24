@@ -31,7 +31,7 @@ const configs = {
     maintenanceToken: 'dev',
   },
   production: {
-    hostname: null,
+    hostname: 'localhost',
     elasticSearch: {
       agent: {
         maxSockets: 2,
