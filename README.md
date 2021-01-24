@@ -57,7 +57,9 @@ The benchmark was executed locally using docker container for elasticsearch and 
 I used **heroku** to host the application and **bonsai.io** for ElasticSearch cloud.
 Since Bonsai.io free tier plan has restrictions to max of 2 concurrent operations(2 for search + 2 for index), the application performance in this environment is limited.
 
-Maintenance endpoint are _not available_ in **heroku** also because of Bonsai.io free tier restrictions. 
+Maintenance endpoint are _not available_ in **heroku** also because of Bonsai.io free tier restrictions.
+
+**Cache Solution is not deployed on heroku.** 
 
 ## API Reference
 ### -Search Suggestions
