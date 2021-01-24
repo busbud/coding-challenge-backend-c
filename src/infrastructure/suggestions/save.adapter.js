@@ -8,7 +8,7 @@ const save = (suggestion) => new Promise((resolve, reject) => {
     index,
     body: suggestionEntity,
     refresh: true,
-  }).then(() => resolve(suggestion))
+  }).then(async () => { resolve(suggestion); })
     .catch((reason) => reject(reason));
 });
 
