@@ -1,6 +1,19 @@
-const defaultEnv = 'production';
+const defaultEnv = 'development';
 const env = process.env.NODE_ENV || defaultEnv;
 const crypto = require('crypto');
+
+const merge = (target, source) => {
+  // Iterate through `source` properties and if an `Object` set property
+  // to merge of `target` and `source` properties
+  // eslint-disable-next-line no-restricted-syntax
+  for (const key of Object.keys(source)) {
+    if (source[key] instanceof Object) Object.assign(source[key], merge(target[key], source[key]));
+  }
+
+  // Join `target` and modified `source`
+  Object.assign(target || {}, source);
+  return target;
+};
 
 const configs = {
   base: {
@@ -27,10 +40,6 @@ const configs = {
   },
 };
 
-const config = { ...configs.base, ...configs[env] };
-
-console.log(process.env);
-console.log(env);
-console.log(config);
+const config = merge(configs.base, configs[env]);
 
 module.exports = config;
