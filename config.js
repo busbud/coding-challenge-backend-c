@@ -42,4 +42,7 @@ const configs = {
 
 const config = merge(configs.base, configs[env]);
 
+console.log(env);
+console.log(config);
+
 module.exports = config;
