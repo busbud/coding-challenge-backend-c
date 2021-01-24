@@ -31,7 +31,7 @@ const configs = {
     maintenanceToken: 'dev',
   },
   production: {
-    hostname: 'localhost',
+    hostname: null,
     elasticSearch: {
       agent: {
         maxSockets: 2,
@@ -42,8 +42,5 @@ const configs = {
 };
 
 const config = merge(configs.base, configs[env]);
-
-console.log(process.env);
-console.log(config);
 
 module.exports = config;
