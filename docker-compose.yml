@@ -12,7 +12,7 @@ services:
       - 9300:9300
   redis:
     image: redis:latest
-    container_name: suggestions-redis
+    container_name: suggestions-cache-redis
     ports:
       - 6379:6379
 

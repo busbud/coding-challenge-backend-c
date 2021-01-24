@@ -24,6 +24,13 @@ const configs = {
       baseUrl: process.env.ELASTICSEARCH_BASEURL || 'http://localhost:9200',
       index: 'suggestions_index',
     },
+    redis: {
+      host: '127.0.0.1',
+      port: 6379,
+      expirationTime: 240, // in seconds
+    },
+    defaultSearchAdapter: `${process.cwd()}/src/infrastructure/suggestions/redis/search.cached.adapter.js`,
+    cacheSearchAdapterWhenMissing: `${process.cwd()}/src/infrastructure/suggestions/elasticsearch/search.adapter.js`,
     suggestionDataSource: `${process.cwd()}/data/cities_canada-usa.tsv`,
     maintenanceToken: process.env.MAINTANANCE_TOKEN || crypto.randomBytes(64).toString('hex').slice(0, 64),
   },
@@ -38,6 +45,7 @@ const configs = {
         maxFreeSockets: 2,
       },
     },
+    defaultSearchAdapter: `${process.cwd()}/src/infrastructure/suggestions/elasticsearch/search.adapter.js`,
   },
 };
 

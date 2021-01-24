@@ -7,6 +7,8 @@ You can find challenge requirements over [here](CHALLENGE.md).
 In my solution, I choose to use ElasticSearch as search engine, because it has many features like full text and geolocation search.
 In the elasticsearch query, the term `q` is used for full text search get the **most similar suggestion**. After that, **geolocation position** is used to affect the **score**, if geolocation is provided.
 
+In order to mitigate with level of traffic I implemented a **cache** using **Redis**. Check **Benchmark Section**.
+
 Solution hosted by Heroku: https://busbud-challenge-viniciusgava.herokuapp.com
 
 Please check Infrastructure section for further details. 
@@ -24,11 +26,22 @@ It refers to the column `admin1` of the provided file, which for:
 - **Canada** it is the provinces or territories. I used the geonames fipscode to figure it out the correct values. 
 
 ## Benchmark
+The benchmark results **with cache** and **without cache** are available below.
+
+**The cache implementation _reduces the response time in 3 times_ AND _increase the throughput in 3 times_.**
+
+### Elastic search + Redis - Cache enabled
+The best benchmark results it was:
+- _throughput_ of **768,000 RPM**.
+- _response time avg_ of **78 milliseconds**.
+  ![Benchmark - Suggestions - With Cache](doc/wrk_suggestions_with_cache.png "Benchmark - Suggestions - With Cache")
+
+### Only using elastic search - No Cache
 The best benchmark results it was:
 - _throughput_ of **254,000 RPM**.
 - _response time avg_ of **236 milliseconds**.
 
-![Benchmark - Suggestions](doc/wrk_suggestions.png "Benchmark - Suggestions")
+![Benchmark - Suggestions - No Cache](doc/wrk_suggestions_no_cache.png.png "Benchmark - Suggestions - No Cache")
 
 It's important mention that I could get betters throughput increasing the number of concurrent connections, but it did not worth since increases the error rate and affects the response time.
 

@@ -1,4 +1,4 @@
-const saveAdapter = require('../infrastructure/suggestions/save.adapter');
+const saveAdapter = require('../infrastructure/suggestions/elasticsearch/save.adapter');
 const geonamesImporter = require('../infrastructure/geoname.importer.adapter');
 
 const createOrUpdate = (suggestion) => new Promise((resolve, reject) => {

@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
-const { index, client } = require('./elasticsearch.client');
-const score = require('./score');
+const { index, client } = require('./client');
+const score = require('./score.calculate');
 
 const buildRequest = (q, latitude, longitude) => {
   const functions = [];

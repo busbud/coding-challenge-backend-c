@@ -1,5 +1,5 @@
 const { Client } = require('@elastic/elasticsearch');
-const elasticSearchConfig = require('../../../config').elasticSearch;
+const elasticSearchConfig = require('../../../../config').elasticSearch;
 
 const options = {
   node: elasticSearchConfig.baseUrl,

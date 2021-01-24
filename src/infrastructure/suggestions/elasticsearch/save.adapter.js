@@ -1,4 +1,4 @@
-const { index, client } = require('./elasticsearch.client');
+const { index, client } = require('./client');
 
 const save = (suggestion) => new Promise((resolve, reject) => {
   const suggestionEntity = JSON.parse(JSON.stringify(suggestion));

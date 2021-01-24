@@ -1,5 +1,5 @@
 const fs = require('fs');
-const { index, client } = require('./elasticsearch.client');
+const { index, client } = require('./client');
 
 const deleteIndex = async () => client.indices.delete({ index })
   .catch((reason) => console.log(reason));

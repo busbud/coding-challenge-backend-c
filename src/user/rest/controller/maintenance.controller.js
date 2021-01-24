@@ -1,7 +1,7 @@
 const config = require('../../../../config');
 const suggestionCommand = require('../../../command/suggestions.command');
 const maintenanceResponse = require('../response/maintenance.response');
-const elasticsearchIndex = require('../../../infrastructure/suggestions/elasticsearch.index');
+const elasticsearchIndex = require('../../../infrastructure/suggestions/elasticsearch/index.maintenance');
 
 let currentImporting = false;
 
