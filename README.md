@@ -30,6 +30,8 @@ The best benchmark results it was:
 
 ![Benchmark - Suggestions](doc/wrk_suggestions.png "Benchmark - Suggestions")
 
+It's important mention that I could get betters throughput increasing the number of concurrent connections, but it did not worth since increases the error rate and affects the response time.
+
 ### Benchmark Hardware/Environment
 The benchmark was executed locally using docker container for elasticsearch and node app direct on the Operation System, Linux Ubuntu.
 - AMD Ryzen 5 2600 6-core 12-threads 3.4ghz base
