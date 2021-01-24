@@ -7,6 +7,9 @@ You can find challenge requirements over [here](CHALLENGE.md).
 In my solution, I choose to use ElasticSearch as search engine, because it has many features like full text and geolocation search.
 On the elasticsearch query, I search for `q` term in order to get the **most similar suggestion**. After that I use the **geolocation** to affect the **score**, if geolocation is provided.
 
+Solution hosted by Heroku: https://busbud-challenge-viniciusgava.herokuapp.com
+Please check Infrastructure for further details. 
+
 ## Project structure
 The project is designed as **hexagonal architecture** separating in:
 - **command:** Any operation that change a suggestion.
