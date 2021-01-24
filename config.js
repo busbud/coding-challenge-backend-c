@@ -1,4 +1,4 @@
-const defaultEnv = 'development';
+const defaultEnv = 'production';
 const env = process.env.NODE_ENV || defaultEnv;
 const crypto = require('crypto');
 
@@ -29,6 +29,7 @@ const configs = {
 
 const config = { ...configs.base, ...configs[env] };
 
+console.log(process.env);
 console.log(env);
 console.log(config);
 
