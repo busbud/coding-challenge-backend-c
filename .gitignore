@@ -1,0 +1,9 @@
+tags
+node_modules/
+coverage/
+.aws
+.vscode
+.idea/
+*.iml
+**.DS_Store
+**/npm-debug.log

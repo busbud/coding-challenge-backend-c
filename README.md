@@ -107,8 +107,7 @@ You are going to need:
 
 ### Setting up your environment
 
-1. Begin by forking this repo and cloning your fork. GitHub has apps for [Mac](http://mac.github.com/) and
-[Windows](http://windows.github.com/) that make this easier.
+1. Begin by forking this repo.
 
 2. Install [nvm](https://github.com/nvm-sh/nvm#install--update-script) or your preferred node version manager.
 
@@ -128,7 +127,7 @@ npm install
 The test suite can be run with:
 
 ```
-npm run test
+npm test
 ```
 
 ### Starting the application
@@ -136,11 +135,40 @@ npm run test
 To start a local server run:
 
 ```
-npm run start
+npm start
 ```
 
 it should produce an output similar to:
 
 ```
-Server running at http://127.0.0.1:2345/suggestions
+{"message":"Listening on port 8080","level":"debug"}
 ```
+
+# Doubts
+
+Which fields from should be used in the fuzzy search? All of them? I'm assuming only the name, ascii and alt_name should be used.
+- The name has strange characters
+- The ASCII does get if the search has strange characters
+- using the alt_name has performance issues and match most of the cities that have huge alt_names
+Do you have a default function to decide on score?
+- For the fuzzy search on the name I've looked into the "fuzzy" and "fuzzball" packages
+  - fuzzy returns a small list with scores that it thinks are the best
+  - fuzzball returns a score for the full list. Not deciding on a
+- Right now, only the fuzz can cut results. If the score goes below the treshold when taking into consideration the location, we just reduce the score, we do not remove the entry
+Is there a limit to the array size? If not, is there a safe score where I can say that an entry shouldn't be returned?
+Could I add caching up to what point?
+Should I scape wildcards?
+What should be the logging format?
+Do I need to set rate limitting on the endpoint? If yes, by IP?
+Can just latitude or longitude be passed?
+Do I need to use a database for it? Since the data is immutable and less than 1Mb I thought it was alright to just load it in memory
+
+# Tools
+
+- Using [ESLint](https://eslint.org/) for code style. Install the eslint plugin for your desired IDE.
+- Using [go-wrk](https://github.com/tsliwowicz/go-wrk) for easy peformance testing.
+
+
+# Why MVC
+
+The [nodebestpractices](https://github.com/goldbergyoni/nodebestpractices#1-project-structure-practices) talks about organizing the repo by components. My experience so far is that breaking the repo into components is bad for microservices. Everything is good until you have components that do not belong to a single component. You may also end up with more files in a single folder than when using the usual MVC separation, since microservices usually endup having a single component.

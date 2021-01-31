@@ -1,0 +1,4 @@
+@baseUrl = localhost:8080
+
+GET /suggestions?q=Montreal&latitude=21.44472&longitude=-157.83778 HTTP/1.1
+Host: {{baseUrl}}
