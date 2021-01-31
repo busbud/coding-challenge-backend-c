@@ -12,7 +12,15 @@ $ docker-compose up -d
 ```
 *Make sure port 80 is open and useable for nginx*
 
-After that if everything is ok then you should get 200 response for below curl request
+You have to connect the php container for install requirements
+
+```shell
+$ docker-compose exec city_autocomplete bash
+$ composer install
+$ exit
+```
+
+After that if everything is ok then you should get 200 response for below curl request (try on you host, not inside docker container)
 
 ```shell
 $ curl -IL http://localhost
@@ -23,12 +31,6 @@ Connection: keep-alive
 X-Powered-By: PHP/8.0.0
 Cache-Control: no-cache, private
 Date: Sun, 31 Jan 2021 08:20:08 GMT
-```
-(Optionally)
-If you want, you can connect the php container for configure lumen framework and run php artisan commands
-
-```shell
-$ docker-compose exec city_autocomplete bash
 ```
 
 ## Testing
@@ -198,5 +200,8 @@ If i give USA location the results will change and london,USA is in the first pl
 }
 ```
 
+## Live Example
+
 For live test you can use server below
 
+http://34.123.102.111/suggestions?q=Londo
