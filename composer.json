@@ -1,5 +1,10 @@
 {
 	"require": {
 		"php": "~7.3.14"
+	},
+	"scripts": {
+		"post-root-package-install": [
+			"php -f ./init/copydata.php"
+		]
 	}
 }
