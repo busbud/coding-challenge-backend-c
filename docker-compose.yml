@@ -1,0 +1,39 @@
+version: '3'
+services:
+
+  #PHP & Composer Service
+  city_autocomplete:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: city_autocomplete
+    container_name: city_autocomplete
+    tty: true
+    environment:
+      SERVICE_NAME: city_autocomplete
+      SERVICE_TAGS: dev
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+      - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - app-network
+
+  #Nginx Service
+  city_autocomplete_webserver:
+    image: nginx:alpine
+    container_name: city_autocomplete_webserver
+    tty: true
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./:/var/www
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - app-network
+
+#Docker Networks
+networks:
+  app-network:
+    driver: bridge
