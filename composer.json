@@ -6,5 +6,9 @@
 		"post-root-package-install": [
 			"php -f ./init/copydata.php"
 		]
+	},
+	"require-dev": {
+		"php-curl-class/php-curl-class": "^8.9",
+		"kahlan/kahlan": "^5.0"
 	}
 }
