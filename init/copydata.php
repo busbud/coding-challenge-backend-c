@@ -1,29 +1,5 @@
 <?php
-$credentials = getenv("DATABASE_URL") ?: 'postgres://php_challenge:php_challenge@localhost:5432/php_challenge';
-try {
-	ob_start();
-	$connection = pg_connect($credentials);
-	ob_get_clean();
-	if(!$connection)
-	{
-		throw new RuntimeException('Connection Error!');
-	}
-} catch (\Exception $exception) {
-	throw $exception;
-}
-$pg_query_params = function(string $sql, ?array $params = [])use($connection) {
-	$result = pg_query_params($connection, $sql, $params);
-	$error = pg_last_error($connection);
-	if($error)
-	{
-		print_r($error);
-		return null;
-	}
-	$array = pg_fetch_all($result, PGSQL_ASSOC);
-	return $array;
-};
-
-$mapping = [
+require_once __DIR__.'/../lib/pgsql.php';
 $mappings = [
 	'id' => [
 		'geonameid',
@@ -34,19 +10,19 @@ $mappings = [
 	'name' => [
 		'name',
 		function($value) {
-			return filter_var($value, FILTER_SANITIZE_STRING);
+			return filter_var($value, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 		}
 	],
 	'ascii' => [
 		'asciiname',
 		function($value) {
-			return filter_var($value, FILTER_SANITIZE_STRING);
+			return filter_var($value, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 		}
 	],
 	'alt_name' => [
 		'alternatenames',
 		function($value) {
-			return filter_var($value, FILTER_SANITIZE_STRING);
+			return filter_var($value, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 		}
 	],
 	'lat' => [
@@ -76,7 +52,7 @@ $mappings = [
 	'country' => [
 		'country_code',
 		function($value) {
-			return filter_var($value, FILTER_SANITIZE_STRING);
+			return strtoupper(filter_var($value, FILTER_SANITIZE_STRING));
 		}
 	],
 	'cc2' => [
@@ -164,6 +140,7 @@ $pg_query_params('CREATE TABLE IF NOT EXISTS "public"."cities" (
 	"modification_date" date NOT NULL
 	);
 ');
+
 $columns = $pg_query_params('SELECT
 		"table_name",
 		"column_name",

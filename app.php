@@ -5,12 +5,14 @@
 //             see README.md inside ./web folder
 
 $endpoints = [
-	'index'
+	'index',
+	'suggestions',
 ];
-if(preg_match('#^/(?:' . implode('|', $endpoints) . ')$#', $_SERVER["REQUEST_URI"]))
+$uri = explode('?', $_SERVER["REQUEST_URI"])[0] ?? '';
+if(preg_match('#^/(?:' . implode('|', $endpoints) . ')$#', $uri))
 {
 	header('Content-Type: text/html; charset=UTF-8');
-	include __DIR__ . DIRECTORY_SEPARATOR . 'web' . $_SERVER["REQUEST_URI"] . '.php';
+	include __DIR__ . DIRECTORY_SEPARATOR . 'web' . $uri . '.php';
 }
 else
 {
