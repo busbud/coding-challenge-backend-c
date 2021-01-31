@@ -1,20 +1,40 @@
 {
-  "name": "coding-challenge-backend-c",
-  "version": "0.0.0",
-  "description": "coding challenge in Nodejs",
-  "main": "app.js",
+  "name": "busbudapi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "start": "node app.js",
-    "test": "./node_modules/mocha/bin/mocha ./test/"
+    "start": "pm2-runtime start ecosystem.config.js --env production",
+    "start:dev": "nodenv -E locals.env src/app.js",
+    "test": "node_modules/.bin/ava",
+    "doc": "jsdoc -c jsdoc.config.json" 
   },
-  "author": "",
-  "license": "WTFPL",
+  "author": "fatih-kurt",
+  "license": "ISC",
   "dependencies": {
-    "chai": "^1.9.1",
-    "mocha": "^1.18.2",
-    "supertest": "^0.11.0"
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "pg": "^8.5.1",
+    "pm2": "^4.5.2"
+  },
+  "devDependencies": {
+    "ava": "^3.15.0",
+    "dotenv": "^8.2.0",
+    "got": "^11.8.1",
+    "jsdoc": "^3.6.6",
+    "node-env-run": "^4.0.2",
+    "test-listen": "^1.1.0"
+  },
+  "ava": {
+    "files": [
+      "test/**/*"
+    ],
+    "concurrency": 5,
+    "failFast": true,
+    "failWithoutAssertions": false,
+    "verbose": true
   },
   "engines": {
-    "node": "0.10.26"
+    "node": "14.x"
   }
 }
