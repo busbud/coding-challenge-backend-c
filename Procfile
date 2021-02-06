@@ -1,1 +1,1 @@
-web: npm start
+web: ENV=production LOG_LEVEL=info npm start
