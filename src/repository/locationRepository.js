@@ -9,6 +9,7 @@ const COUNTRY_MAP = {
 // Json is easier to work with
 const locations = require('../../data/cities_canada-usa.json')
     .map((location) => ({
+        id: location.id,
         // FIXME: I'm not sure if the admin1 param is correct here
         name: `${location.name}, ${location.admin1}, ${COUNTRY_MAP[location.country]}`,
         altName: `${location.name},${location.ascii},${location.alt_name}`,

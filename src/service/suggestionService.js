@@ -1,6 +1,6 @@
 const GeoPoint = require('geopoint');
 
-const LocationDAO = require('../repository/locationRepository');
+const LocationRepository = require('../repository/cachedLocationRepository');
 
 // TODO: I have no idea how much the location should actually increase the score
 // I'm using the increment as a sum to the final score, but it could be a direct
@@ -11,7 +11,7 @@ const sortByHighestScore = (a, b) => b.score - a.score;
 
 class SuggestionService {
     static getSuggestions(query, latitude, longitude) {
-        const locations = LocationDAO.getLocations(query);
+        const locations = LocationRepository.getLocations(query);
 
         if (locations.length === 0) {
             return locations;
