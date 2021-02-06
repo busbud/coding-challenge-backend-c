@@ -18,8 +18,8 @@ const validateQuery = (query) => {
         };
     }
 
-    // TODO: should we allow queries with lenght greater than X?
-    // No city has a name bigger than
+    // TODO: should we allow queries with lenght greater than 57
+    // No city has a name bigger than 57
 
     return null;
 };
