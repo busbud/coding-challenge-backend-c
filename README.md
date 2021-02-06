@@ -1,9 +1,6 @@
 # Busbud Coding Challenge
 
-## Requirements
-
-Design an API endpoint that provides autocomplete suggestions for large cities.
-The suggestions should be restricted to cities in the USA and Canada with a population above 5000 people.
+This project contains an API endpoint that provides autocomplete suggestions for large cities. The suggestions are restricted to cities in the USA and Canada with a population above 5000 people (no cities in the data file have over 5000 people).
 
 - the endpoint is exposed at `/suggestions`
 - the partial (or complete) search term is passed as a query string parameter `q`
@@ -13,11 +10,9 @@ The suggestions should be restricted to cities in the USA and Canada with a popu
     - each suggestion has a score between 0 and 1 (inclusive) indicating confidence in the suggestion (1 is most confident)
     - each suggestion has a name which can be used to disambiguate between similarly named locations
     - each suggestion has a latitude and longitude
-- all functional tests should pass (additional tests may be implemented as necessary).
-- the final application should be [deployed to Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs).
-- feel free to add more features if you like!
+- the final application is [deployed in Heroku](https://pure-sands-75942.herokuapp.com/suggestions?q=Londo).
 
-#### Sample responses
+## Sample responses
 
 These responses are meant to provide guidance. The exact values can vary based on the data source and scoring algorithm.
 
@@ -26,31 +21,109 @@ These responses are meant to provide guidance. The exact values can vary based o
     GET /suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
 
 ```json
-{
+
   "suggestions": [
     {
-      "name": "London, ON, Canada",
+      "name": "New London, WI, USA",
+      "latitude": "44.39276",
+      "longitude": "-88.73983",
+      "score": 1
+    },
+    {
+      "name": "London, 08, Canada",
       "latitude": "42.98339",
       "longitude": "-81.23304",
-      "score": 0.9
+      "score": 1
     },
     {
-      "name": "London, OH, USA",
-      "latitude": "39.88645",
-      "longitude": "-83.44825",
-      "score": 0.5
+      "name": "Londonderry, NH, USA",
+      "latitude": "42.86509",
+      "longitude": "-71.37395",
+      "score": 1
     },
     {
-      "name": "London, KY, USA",
-      "latitude": "37.12898",
-      "longitude": "-84.08326",
-      "score": 0.5
+      "name": "New London, CT, USA",
+      "latitude": "41.35565",
+      "longitude": "-72.09952",
+      "score": 1
     },
     {
-      "name": "Londontowne, MD, USA",
-      "latitude": "38.93345",
-      "longitude": "-76.54941",
-      "score": 0.3
+      "name": "Thunder Bay, 08, Canada",
+      "latitude": "48.38202",
+      "longitude": "-89.25018",
+      "score": 1
+    },
+    {
+      "name": "Gatineau, 10, Canada",
+      "latitude": "45.47723",
+      "longitude": "-75.70164",
+      "score": 1
+    },
+    {
+      "name": "Richmond, IN, USA",
+      "latitude": "39.82894",
+      "longitude": "-84.89024",
+      "score": 1
+    },
+    {
+      "name": "Landover, MD, USA",
+      "latitude": "38.934",
+      "longitude": "-76.89664",
+      "score": 1
+    },
+    {
+      "name": "Cleveland, OH, USA",
+      "latitude": "41.4995",
+      "longitude": "-81.69541",
+      "score": 1
+    },
+    {
+      "name": "Dalton, GA, USA",
+      "latitude": "34.7698",
+      "longitude": "-84.97022",
+      "score": 0.98
+    },
+    {
+      "name": "Edmond, OK, USA",
+      "latitude": "35.65283",
+      "longitude": "-97.4781",
+      "score": 0.91
+    },
+    {
+      "name": "Redmond, OR, USA",
+      "latitude": "44.27262",
+      "longitude": "-121.17392",
+      "score": 0.86
+    },
+    {
+      "name": "Redondo Beach, CA, USA",
+      "latitude": "33.84918",
+      "longitude": "-118.38841",
+      "score": 0.86
+    },
+    {
+      "name": "Richmond, 02, Canada",
+      "latitude": "49.17003",
+      "longitude": "-123.13683",
+      "score": 0.86
+    },
+    {
+      "name": "Coronado, CA, USA",
+      "latitude": "32.68589",
+      "longitude": "-117.18309",
+      "score": 0.86
+    },
+    {
+      "name": "Redmond, WA, USA",
+      "latitude": "47.67399",
+      "longitude": "-122.12151",
+      "score": 0.86
+    },
+    {
+      "name": "Richmond, CA, USA",
+      "latitude": "37.93576",
+      "longitude": "-122.34775",
+      "score": 0.86
     }
   ]
 }
@@ -66,34 +139,14 @@ These responses are meant to provide guidance. The exact values can vary based o
 }
 ```
 
+## Considerations
 
-### Non-functional
-
-- All code should be written in Javascript, Typescript or PHP.
+- All code is written in Javascript.
 - Mitigations to handle high levels of traffic should be implemented.
-- Challenge is submitted as pull request against this repo ([fork it](https://help.github.com/articles/fork-a-repo/) and [create a pull request](https://help.github.com/articles/creating-a-pull-request-from-a-fork/)).
-- Documentation and maintainability is a plus.
 
 ## Dataset
 
 You can find the necessary dataset along with its description and documentation in the [`data`](data/) directory.
-
-## Evaluation
-
-We will use the following criteria to evaluate your solution:
-
-- Capacity to follow instructions
-- Developer Experience (how easy it is to run your solution locally, how clear your documentation is, etc)
-- Solution correctness
-- Performance
-- Tests (quality and coverage)
-- Code style and cleanliness
-- Attention to detail
-- Ability to make sensible assumptions
-
-It is ok to ask us questions!
-
-We know that the time for this project is limited and it is hard to create a "perfect" solution, so we will consider that along with your experience when evaluating the submission.
 
 ## Getting Started
 
@@ -107,7 +160,7 @@ You are going to need:
 
 ### Setting up your environment
 
-1. Begin by forking this repo.
+1. Begin by cloning this repo.
 
 2. Install [nvm](https://github.com/nvm-sh/nvm#install--update-script) or your preferred node version manager.
 
@@ -141,7 +194,7 @@ npm start
 it should produce an output similar to:
 
 ```
-{"message":"Listening on port 8080","level":"debug"}
+debug: Listening on port 8080
 ```
 
 # Doubts

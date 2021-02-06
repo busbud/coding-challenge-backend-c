@@ -22,7 +22,7 @@
     "morgan": "~1.9.1",
     "node-cache": "^5.1.2",
     "prom-client": "^13.1.0",
-    "winston": "^3.3.3"
+    "winston": "2.4.0"
   },
   "devDependencies": {
     "eslint": "^7.18.0",

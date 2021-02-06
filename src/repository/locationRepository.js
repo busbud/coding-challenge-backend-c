@@ -11,7 +11,7 @@ const locations = require('../../data/cities_canada-usa.json')
     .map((location) => ({
         // FIXME: I'm not sure if the admin1 param is correct here
         name: `${location.name}, ${location.admin1}, ${COUNTRY_MAP[location.country]}`,
-        altName: location.alt_name,
+        altName: `${location.name},${location.ascii},${location.alt_name}`,
         latitude: location.lat,
         longitude: location.long,
         geoPoint: new GeoPoint(Number(location.lat), Number(location.long)),
