@@ -102,45 +102,20 @@ We know that the time for this project is limited and it is hard to create a "pe
 You are going to need:
 
 - `Git`
-- `nvm` (or your preferred node version manager)
-- `Node.js`
+- `Docker` (or your preferred node version manager)
 
 ### Setting up your environment
+1. Install [Docker](https://docs.docker.com/get-docker/)
 
-1. Begin by forking this repo and cloning your fork. GitHub has apps for [Mac](http://mac.github.com/) and
-[Windows](http://windows.github.com/) that make this easier.
+### Steps to run(for dev)
+1. UP container: `docker-compose up` .
 
-2. Install [nvm](https://github.com/nvm-sh/nvm#install--update-script) or your preferred node version manager.
+### Scripts
+- To generate coverage report: `docker-compose run app npm run coverage`
+- To only run tests: `docker-compose run app npm test`
+- To create a migration: `npm run migrate create NAME_OF_YOUR_MIGRATION` - Locally the migrations runs when container up
 
-3. Install [Node.js](http://www.nodejs.org).
+---
 
-### Setting up the project
-
-In the project directory run:
-
-```
-nvm use
-npm install
-```
-
-### Running the tests
-
-The test suite can be run with:
-
-```
-npm run test
-```
-
-### Starting the application
-
-To start a local server run:
-
-```
-npm run start
-```
-
-it should produce an output similar to:
-
-```
-Server running at http://127.0.0.1:2345/suggestions
-```
+## Considerations / Next Improvements / Questions
+- .....

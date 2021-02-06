@@ -1,0 +1,35 @@
+version: "3"
+services:
+  postgres:
+    image: postgres:13
+    container_name: busbud_postgres
+    ports:
+      - "35432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 10s
+      retries: 6
+  app:
+    container_name: busbud_app
+    build: .
+    depends_on:
+      - postgres
+    links:
+      - postgres
+    environment:
+      DB_NAME: postgres
+      NODE_ENV: development
+      PORT: 3000
+      DATABASE_URL: 'postgres://postgres:postgres@host.docker.internal:35432/postgres'
+    ports:
+      - "3000:3000"
+    command: npm run dev
+    volumes:
+      - .:/app/
+      - /app/node_modules
+      - /app/migrations
