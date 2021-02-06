@@ -197,31 +197,33 @@ it should produce an output similar to:
 debug: Listening on port 8080
 ```
 
-# Doubts
+# Evaluation
+## Doubts
 
-Which fields from should be used in the fuzzy search? All of them? I'm assuming only the name, ascii and alt_name should be used.
-- The name has strange characters
-- The ASCII does get if the search has strange characters
-- using the alt_name has performance issues and match most of the cities that have huge alt_names
-Do you have a default function to decide on score?
-- For the fuzzy search on the name I've looked into the "fuzzy" and "fuzzball" packages
-  - fuzzy returns a small list with scores that it thinks are the best
-  - fuzzball returns a score for the full list. Not deciding on a
-- Right now, only the fuzz can cut results. If the score goes below the treshold when taking into consideration the location, we just reduce the score, we do not remove the entry
-Is there a limit to the array size? If not, is there a safe score where I can say that an entry shouldn't be returned?
-Could I add caching up to what point?
-Should I scape wildcards?
-What should be the logging format?
-Do I need to set rate limitting on the endpoint? If yes, by IP?
-Can just latitude or longitude be passed?
-Do I need to use a database for it? Since the data is immutable and less than 1Mb I thought it was alright to just load it in memory
+- Which fields from should be used in the fuzzy search? I'm assuming only the name, ascii and alt_name should be used, all together.
+  - The name has strange characters;
+  - The ASCII does get if the search has strange characters;
+  - Using the alt_name has performance issues and match most of the cities that have huge alt_names if the cutoff is not high enough (over 50).
+- Do you have a default function to decide on score?
+  - For the fuzzy search on the name I've looked into the "fuzzy" and "fuzzball" packages. The "fuzzy" package had better performance, but I went with "fuzzball" because it had the functionalities I was looking for.
+- Right now, only the fuzz can cut results from the final list. If the score goes below the treshold when taking into consideration the location, we just reduce the score, we do not remove the entry.
+- Is there a limit to the array size? If not, is there a safe score where I can say that an entry shouldn't be returned?
+- Could I add caching up to what point? The node-cache package doesn't have a max size, so it may incur in memory overflow. I usually only add in-memory caches if I have an idea of how big the cache is going to be.
+- Should I scape wildcards?
+- Is there a logging standard that I should follow?
+- Do I need to set rate limitting on the endpoint? If yes, by IP? I don't know much about heroku to set that up, but I'd usually do it using an API gateway.
+- Can just latitude or longitude be passed (one of them but not both)? What should I do in this case?
+- Did I need to use a database for it? Since the data is immutable and less than 1Mb I thought it was alright to just load it in memory, but postgresql has a fuzzy search.
 
-# Tools
+## Tools
 
 - Using [ESLint](https://eslint.org/) for code style. Install the eslint plugin for your desired IDE.
-- Using [go-wrk](https://github.com/tsliwowicz/go-wrk) for easy peformance testing.
+- Using [go-wrk](https://github.com/tsliwowicz/go-wrk) for easy peformance testing. After installing, just run:
+```console
+  go-wrk -d 5 http://localhost:8080/suggestions\?q\=lond
+```
+it isn't really a fair test because of the in-memory cache.
 
-
-# Why MVC
+## Why MVC
 
 The [nodebestpractices](https://github.com/goldbergyoni/nodebestpractices#1-project-structure-practices) talks about organizing the repo by components. My experience so far is that breaking the repo into components is bad for microservices. Everything is good until you have components that do not belong to a single component. You may also end up with more files in a single folder than when using the usual MVC separation, since microservices usually endup having a single component.
