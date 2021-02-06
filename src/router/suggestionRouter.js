@@ -3,7 +3,7 @@ const SuggestionRouter = require('express').Router();
 const SuggestionController = require('../controller/suggestionController');
 
 /**
- * This endpoint returns all events for a given device
+ * This endpoint returns suggestions for a given query and location
  */
 SuggestionRouter.get('/', SuggestionController.getSuggestions);
 
