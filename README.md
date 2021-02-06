@@ -1,6 +1,6 @@
 # Busbud Coding Challenge
 
-This project contains an API endpoint that provides autocomplete suggestions for large cities. The suggestions are restricted to cities in the USA and Canada with a population above 5000 people (no cities in the data file have over 5000 people).
+This project contains an API endpoint that provides autocomplete suggestions for large cities. The suggestions are restricted to cities in the USA and Canada with a population above 5000 people (no city in the data file has over 5000 people).
 
 - the endpoint is exposed at `/suggestions`
 - the partial (or complete) search term is passed as a query string parameter `q`
@@ -10,18 +10,19 @@ This project contains an API endpoint that provides autocomplete suggestions for
     - each suggestion has a score between 0 and 1 (inclusive) indicating confidence in the suggestion (1 is most confident)
     - each suggestion has a name which can be used to disambiguate between similarly named locations
     - each suggestion has a latitude and longitude
+    - I've added a limit of 20 results that could be changed to be a query parameter as well
 - the final application is [deployed in Heroku](https://pure-sands-75942.herokuapp.com/suggestions?q=Londo).
 
 ## Sample responses
 
-These responses are meant to provide guidance. The exact values can vary based on the data source and scoring algorithm.
+These responses are meant to provide guidance. The exact values can vary based on the query and location.
 
 **Near match**
 
     GET /suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
 
 ```json
-
+{
   "suggestions": [
     {
       "name": "New London, WI, USA",
@@ -142,7 +143,6 @@ These responses are meant to provide guidance. The exact values can vary based o
 ## Considerations
 
 - All code is written in Javascript.
-- Mitigations to handle high levels of traffic should be implemented.
 
 ## Dataset
 
@@ -183,6 +183,12 @@ The test suite can be run with:
 npm test
 ```
 
+or optionally with coverage:
+
+```
+npm run test:coverage
+```
+
 ### Starting the application
 
 To start a local server run:
@@ -195,35 +201,59 @@ it should produce an output similar to:
 
 ```
 debug: Listening on port 8080
+debug: Listening on port 8081
 ```
 
-# Evaluation
-## Doubts
+The application is started on the first port (in this case 8080) while we start another server at 8081 for health and metrics endpoints. There is also a swagger-ui configured together with the application at `/api-docs`.
 
-- Which fields from should be used in the fuzzy search? I'm assuming only the name, ascii and alt_name should be used, all together.
+# Evaluation
+## Doubts and Considerations
+
+- Which fields from the data should be used in the fuzzy search? I'm assuming only the name, ascii and alt_name should be used, all together.
   - The name has strange characters;
-  - The ASCII does get if the search has strange characters;
+  - The ASCII does match if the name has strange characters;
   - Using the alt_name has performance issues and match most of the cities that have huge alt_names if the cutoff is not high enough (over 50).
+
 - Do you have a default function to decide on score?
-  - For the fuzzy search on the name I've looked into the "fuzzy" and "fuzzball" packages. The "fuzzy" package had better performance, but I went with "fuzzball" because it had the functionalities I was looking for.
-- Right now, only the fuzz can cut results from the final list. If the score goes below the treshold when taking into consideration the location, we just reduce the score, we do not remove the entry.
-- Is there a limit to the array size? If not, is there a safe score where I can say that an entry shouldn't be returned?
-- Could I add caching up to what point? The node-cache package doesn't have a max size, so it may incur in memory overflow. I usually only add in-memory caches if I have an idea of how big the cache is going to be.
-- Should I scape wildcards?
+  - For the fuzzy search I've looked into the "fuzzy" and "fuzzball" npm packages. The "fuzzy" package had better performance, but I went with "fuzzball" because it had the functionalities I was looking for.
+
+- Right now, only the fuzz search can cut results from the final list. We could return more results from the repository and limit the result after the location was taken into consideration if that is an issue.
+
+- Is there a limit to the array size? If not, is there a safe score where I can say that an entry shouldn't be returned even after taking into consideration the location? For now I just limited it to 20 entries. The use case probably influences this decision a lot.
+
+- Could I add caching up to what point? The node-cache package doesn't have a max size (only max entries), so it may incur in memory overflow. I usually only add in-memory caches if I have an idea of how big the cache is going to be.
+
+- Should I scape wildcards and other strange characters from the query?
+
 - Is there a logging standard that I should follow?
+
 - Do I need to set rate limitting on the endpoint? If yes, by IP? I don't know much about heroku to set that up, but I'd usually do it using an API gateway.
+
 - Can just latitude or longitude be passed (one of them but not both)? What should I do in this case?
-- Did I need to use a database for it? Since the data is immutable and less than 1Mb I thought it was alright to just load it in memory, but postgresql has a fuzzy search.
+  - Should I just ignore it?
+  - Use just that value to take the location into consideration?
+  - Return an error? Right now that is what I'm doing (I'm returning an error if just one of them is passed).
+
+- Did I need to use a database for it? Since the data is immutable and less than 1Mb I thought it was alright to just load it in memory, but postgresql has a fuzzy search if we need to do so.
+  
+- How do you feel about adding a minimum length for the query? Like 3 characters? It's what is usually done when there are too many options.
+
+- There are still some testes missing for the /src/service/suggestionService.js
+
+- Do I know more about the use case? If I know that it will be used in a textbox to show suggestions, there are assumptions that could be used to improve the performance:
+  - In textboxes, people usually write continuously. Assuming that adding letters will only decrease the score for a given entry, we can improve caching by checking if there is already a smaller version of the string cached and using the list from that as a new list for the fuzzy search. A smaller list will significantly improve the endpoint response. E.g.: an user is looking for "London". First he types 'L', and we cache the resulting list. Then when he adds 'o', which then triggers a fuzzy search on the 'L' cached list. This may also be better cached as a search tree/graph.
+
+There are more considerations in TODOs and FIXMEs in the code.
 
 ## Tools
 
 - Using [ESLint](https://eslint.org/) for code style. Install the eslint plugin for your desired IDE.
-- Using [go-wrk](https://github.com/tsliwowicz/go-wrk) for easy peformance testing. After installing, just run:
+- Using [go-wrk](https://github.com/tsliwowicz/go-wrk) for easy local peformance testing. After installing, just run:
 ```console
   go-wrk -d 5 http://localhost:8080/suggestions\?q\=lond
 ```
 it isn't really a fair test because of the in-memory cache.
 
-## Why MVC
+## Why MVC vs resource/component folder separation
 
-The [nodebestpractices](https://github.com/goldbergyoni/nodebestpractices#1-project-structure-practices) talks about organizing the repo by components. My experience so far is that breaking the repo into components is bad for microservices. Everything is good until you have components that do not belong to a single component. You may also end up with more files in a single folder than when using the usual MVC separation, since microservices usually endup having a single component.
+The [nodebestpractices](https://github.com/goldbergyoni/nodebestpractices#1-project-structure-practices) talks about organizing the repo by components. My experience so far is that breaking the repo into components is bad for microservices. Everything is good until you have components that do not belong to a single component. You may also end up with more files in a single folder than when using the usual MVC separation, since microservices usually endup having just a few components.

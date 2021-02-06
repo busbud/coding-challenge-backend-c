@@ -13,10 +13,10 @@ const logger = require('../src/logger');
  */
 
 const service = new App();
-const { app, actuator } = service;
+const { appListener, actuatorListener } = service;
 
-const server = http.createServer(app);
-const actuatorServer = http.createServer(actuator);
+const appServer = http.createServer(appListener);
+const actuatorServer = http.createServer(actuatorListener);
 
 /**
  * Normalize a port into a number, string, or false.
@@ -43,7 +43,7 @@ const normalizePort = (val) => {
  * Event listener for HTTP server "listening" event.
  */
 
-const onListening = () => {
+const onListening = (server) => () => {
     const addr = server.address();
     const bind = typeof addr === 'string'
         ? `pipe ${addr}`
@@ -56,10 +56,10 @@ const onListening = () => {
  */
 
 const port = normalizePort(process.env.PORT || '8080');
-app.set('port', port);
+appListener.set('port', port);
 
 const actuatorPort = normalizePort(process.env.ACTUATOR_PORT || '8081');
-actuator.set('port', actuatorPort);
+actuatorListener.set('port', actuatorPort);
 
 /**
  * Event listener for HTTP server "error" event.
@@ -93,10 +93,13 @@ const onError = (error) => {
  * Listen on provided port, on all network interfaces.
  */
 
-if (process.env.NODE_ENV !== 'test') {
-    server.listen(port);
+const attachListeners = (server, serverPort) => {
+    server.listen(serverPort);
     server.on('error', onError);
-    server.on('listening', onListening);
+    server.on('listening', onListening(server));
+};
 
-    actuatorServer.listen(actuatorPort);
+if (process.env.NODE_ENV !== 'test') {
+    attachListeners(appServer, port);
+    attachListeners(actuatorServer, actuatorPort);
 }

@@ -36,14 +36,14 @@ const validateCoordinates = (latitude, longitude) => {
     if (isOutOfRange(latitude, MIN_LATITUDE_VALUE, MAX_LATITUDE_VALUE)) {
         return {
             code: 400,
-            message: outOfRangeMessage('Latitudes', MIN_LATITUDE_VALUE, MAX_LATITUDE_VALUE),
+            message: outOfRangeMessage('Latitude', MIN_LATITUDE_VALUE, MAX_LATITUDE_VALUE),
         };
     }
 
     if (isOutOfRange(longitude, MIN_LONGITUDE_VALUE, MAX_LONGITUDE_VALUE)) {
         return {
             code: 400,
-            message: outOfRangeMessage('Longitudes', MIN_LONGITUDE_VALUE, MAX_LONGITUDE_VALUE),
+            message: outOfRangeMessage('Longitude', MIN_LONGITUDE_VALUE, MAX_LONGITUDE_VALUE),
         };
     }
 
@@ -64,7 +64,8 @@ class SuggestionController {
             return response.status(coordinatesError.code).send(coordinatesError);
         }
 
-        const suggestions = SuggestionService.getSuggestions(query, latitude, longitude);
+        // We transform the query to uppercase to increase cache hits
+        const suggestions = SuggestionService.getSuggestions(query.toLocaleUpperCase(), latitude, longitude);
 
         if (suggestions.length === 0) {
             return response.status(404).send({ suggestions });
