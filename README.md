@@ -108,7 +108,8 @@ You are going to need:
 1. Install [Docker](https://docs.docker.com/get-docker/)
 
 ### Steps to run(for dev)
-1. UP container: `docker-compose up` .
+1. Install dependencies: `npm install` (only needed for create migrations)
+2. UP container: `docker-compose up` .
 
 ### Scripts
 - To generate coverage report: `docker-compose run app npm run coverage`
