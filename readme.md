@@ -1,7 +1,3 @@
-# About the Solution
-
-Main technical goal of the solution is to keep it simple and portable.
-
 # Requirements
 - Postgresql 
 - Composer
@@ -13,7 +9,7 @@ Main technical goal of the solution is to keep it simple and portable.
 ## Setting up locally
 
 ```
-git clone https://github.com/github-username/coding-challenge-backend-c.git
+https://github.com/agitelgun1/coding-challenge-backend-c.git
 ```
 
 # Author
