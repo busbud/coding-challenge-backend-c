@@ -1,0 +1,12 @@
+class_name: ApiTester
+modules:
+    enabled: [Laravel5, REST, ApiHelper, Asserts]
+    config:
+        Laravel5:
+            environment_file: .env.testing
+        DB:
+            dsn: 'pgsql:host=localhost;dbname=test'
+            user: 'testuser'
+            password: 'test'
+            cleanup: true
+            populate: true
