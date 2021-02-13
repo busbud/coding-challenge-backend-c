@@ -15,7 +15,6 @@ module.exports = {
 		    results = await GeoNameService.findWithText(query);
       }
 
-      console.log(JSON.stringify(results));
 	    return res.status(StatusCodes.OK).json(results);
     } catch (error) {
 	    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
