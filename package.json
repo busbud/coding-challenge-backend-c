@@ -12,6 +12,7 @@
   "dependencies": {
     "chai": "^1.9.1",
     "mocha": "^1.18.2",
+    "node-tsv-json": "^0.2.1",
     "supertest": "^0.11.0"
   },
   "engines": {
