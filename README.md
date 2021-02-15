@@ -116,3 +116,7 @@ You are going to need:
 - To only run tests: `docker-compose run app npm test`
 - To create a migration: `npm run migrate create NAME_OF_YOUR_MIGRATION` - Locally the migrations runs when container up
 
+---	
+
+## Considerations / Next Improvements / Questions	
+- Deploy the application in Heroku
