@@ -1,3 +1,119 @@
+## Busbud Challenge by Bünyamin AKÇAY<bunyamin@bunyam.in>
+
+This application based on PHP and Lumen Framework. For more information visit  [Lumen framework official website](https://lumen.laravel.com/)
+
+Visit live demo on [Heroku](https://thawing-bayou-65299.herokuapp.com/)
+
+Runs With Apache & Mysql and Filecache
+
+_** Before installation:  lumen has prefered for stability, laravel trust with lightweight development equipment. Under these conditions Pure-PHP might be chosen but being modern software development standarts would not match._
+
+Lumen Minimum System Requirements below
+
+```
+PHP >= 7.3
+OpenSSL PHP Extension
+PDO PHP Extension
+Mbstring PHP Extension
+```
+
+Before using this application follow instructions below
+
+_For mysql importing PhpMyAdmin is highly recommended_ 
+
+## 1- MYSQL database handling
+
+Cities database is included main directory of this repo
+
+Mainly required columns are only converted tsv to mysql format, for more rapid query responses mysql index are included.
+
+Before importing you need to have a database, Create new database from PhpMyadmin  or Run this command for
+
+
+>CREATE DATABASE newdatabase1
+
+
+## 2- MYSQL importing
+
+Download 'cities_canada_usa.sql' file from this repo and  import with phpmyadmin or via mysql cli
+
+
+>mysql -u mysqluser -pmysqlpassword newdatabase1 < cities_canada_usa.sql
+
+
+## 3- Env File
+_if you use heroku every single env file parameter should import by config , env files ignoring in heroku apps_
+
+rename .env.example file to .env and fill parameters for database.
+
+```ssh
+DB_HOST=host_or_ip_mysql_server
+DB_PORT=mysql_port_default_3306
+DB_DATABASE=database_name
+DB_USERNAME=attached_mysql_user
+DB_PASSWORD=attached_mysql_user_password
+```
+
+## 4- Composer
+use this command below , if composer not installed your enviroment visit [getcomposer.org](https://getcomposer.org)
+
+
+
+>composer install
+
+
+## 5- Run
+
+with command below built-in php server will serve in port 8000
+
+>php -S localhost:8000 -t public 
+
+
+
+
+##Test by browser
+
+you can check by visit with browser in [localhost:8000](http://localhost:8000)
+
+##Test by Get request
+You can use any agent or query builder for getting request such as postman
+```request
+Request:
+Host: thawing-bayou-65299.herokuapp.com
+Method: GET
+Headers:
+X-Busbud-Token: PARTNER_BaASYYHxTxuOINEOMWq5GA
+Query parameters:
+q:search_term
+```
+>please note  suggestion api does not work without 'X-Busbud-Token'
+
+
+
+
+##Unit Testing
+Unit test will make correct request is valid or not, If unit test not pass database connection or minimum requirement may not matched.
+
+To see  testcases use command below
+
+
+>php vendor/phpunit/phpunit/phpunit  --list-tests 
+
+
+To apply testcases use command below
+
+
+>php vendor/phpunit/phpunit/phpunit 
+
+
+##Technical 
+* Responses not directly queried on mysql, hits cache for query parameter and location parameters if defined.
+* Currently using file cache due tu minimum system requirements, memcache or redis may use for caching.
+* Browser may ask user's location to add location parameters to suggestion endpoint
+* On MySql Search case results are limited over 50K population field and wildcard search on name field
+
+---
+
 # Busbud Coding Challenge
 
 ## Requirements
