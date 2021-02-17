@@ -22,8 +22,8 @@ module.exports.index = async (request, response) => {
         : params.q;
 
     sortedResults = await sortResults(coordinateQuery, dataToSort);
-
-    response.send({
+    const responseStatus = sortedResults.length < 1 ? 404 : 200;
+    response.status(responseStatus).send({
       suggestions: sortedResults,
     });
   } catch (e) {

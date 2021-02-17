@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "test": "./node_modules/mocha/bin/mocha ./test/"
+    "test": "./node_modules/jest/bin/jest.js ./test/"
   },
   "author": "",
   "license": "WTFPL",
@@ -13,6 +13,7 @@
     "chai": "^1.9.1",
     "express": "^4.17.1",
     "express-rate-limit": "^5.2.5",
+    "jest": "^26.6.3",
     "mocha": "^1.18.2",
     "node-tsv-json": "^0.2.1",
     "supertest": "^0.11.0"
