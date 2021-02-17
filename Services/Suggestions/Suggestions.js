@@ -1,20 +1,27 @@
 const { parseDataSource, findObjects, sortResults } = require('../../helpers');
 
+const simpleCache = {};
 module.exports.index = async (request, response) => {
   const params = request.query;
   let sortedResults = [];
+  let dataToSort = [];
   try {
-    const result = await parseDataSource();
-    const dataTo = findObjects(params.q, result);
-    let coordinateQuery = {};
-    if (params.latitude && params.longitude) {
-      coordinateQuery = {
-        coordinates: { lat: params.latitude, lon: params.longitude },
-      };
+    if (simpleCache[params.q] !== undefined) {
+      dataToSort = simpleCache[params.q];
     } else {
-      coordinateQuery = params.q;
+      const result = await parseDataSource();
+      dataToSort = findObjects(params.q, result);
+      simpleCache[params.q] = dataToSort;
     }
-    sortedResults = await sortResults(coordinateQuery, dataTo);
+
+    let coordinateQuery =
+      params.latitude && params.longitude
+        ? {
+            coordinates: { lat: params.latitude, lon: params.longitude },
+          }
+        : params.q;
+
+    sortedResults = await sortResults(coordinateQuery, dataToSort);
 
     response.send({
       suggestions: sortedResults,
