@@ -1,0 +1,6 @@
+DirectorySlash Off
+DirectoryIndex index.php
+RewriteEngine On
+
+RewriteCond %{REQUEST_URI} !^index\.php$ [NC]
+RewriteRule ^(.+)$ index.php?q=$1 [L,QSA]

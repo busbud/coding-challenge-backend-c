@@ -1,146 +1,56 @@
-# Busbud Coding Challenge
+# Busbud Coding Challenge - PHP
 
-## Requirements
+## Matching Mechanism
+In first place the app will try to get the cities which start with q value. To make faster I created an index on Name Column.
 
-Design an API endpoint that provides autocomplete suggestions for large cities.
-The suggestions should be restricted to cities in the USA and Canada with a population above 5000 people.
+In case no record is founded, the app will make a new fetch using soundex function which is a phonetic algorithm for indexing names after English pronunciation of sound.
+For example : ttp://localhost:80/suggestions?q=qebec
 
-- the endpoint is exposed at `/suggestions`
-- the partial (or complete) search term is passed as a query string parameter `q`
-- the caller's location can optionally be supplied via query string parameters `latitude` and `longitude` to help improve relative scores
-- the endpoint returns a JSON response with an array of scored suggested matches
-    - the suggestions are sorted by descending score
-    - each suggestion has a score between 0 and 1 (inclusive) indicating confidence in the suggestion (1 is most confident)
-    - each suggestion has a name which can be used to disambiguate between similarly named locations
-    - each suggestion has a latitude and longitude
-- all functional tests should pass (additional tests may be implemented as necessary).
-- the final application should be [deployed to Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs).
-- feel free to add more features if you like!
+## Score Algorithm
 
-#### Sample responses
+It calculates the score based on two parameters :
+- A : The distance between the city and the user location if we have it.
+    - I split the distance to 3 categories : short, medium and long. 
+    - I used Haversine Formula to calculate the distance, then based on the distance category I can assign a score value to that city.
+- B : The similarity between q and the city's name using PHP similar_text function.
 
-These responses are meant to provide guidance. The exact values can vary based on the data source and scoring algorithm.
+Then I generate the new score : 40% of A + 60 of B.
+and in order to keep the score between 0 and 1, I normalize it using xi−min(x) / max(x)−min(x).
 
-**Near match**
+## Validation
+- q : required, at least one character.
+- latitude : optional, it should be between -90 and 90.
+- longitude : optional, it should be between -180 and 180.
+- For any endpoint diffrent then '/suggestions', the user will get : HTTP/1.1 404 NOT FOUND error.
+- For Invalid inputs, the response will be : HTTP/1.1 422 Unprocessable Entity
 
-    GET /suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
+## Working in Local
+Using Docker, you can run the application in your local :
+      
+    docker-compose up -d --build
 
-```json
-{
-  "suggestions": [
-    {
-      "name": "London, ON, Canada",
-      "latitude": "42.98339",
-      "longitude": "-81.23304",
-      "score": 0.9
-    },
-    {
-      "name": "London, OH, USA",
-      "latitude": "39.88645",
-      "longitude": "-83.44825",
-      "score": 0.5
-    },
-    {
-      "name": "London, KY, USA",
-      "latitude": "37.12898",
-      "longitude": "-84.08326",
-      "score": 0.5
-    },
-    {
-      "name": "Londontowne, MD, USA",
-      "latitude": "38.93345",
-      "longitude": "-76.54941",
-      "score": 0.3
-    }
-  ]
-}
-```
+You can stop the application using :
 
-**No match**
+    docker-compose down
 
-    GET /suggestions?q=SomeRandomCityInTheMiddleOfNowhere
+Using Adminer you connect to MySQL Server : http://localhost:8080/
+    - username : root
+    - password : root
 
-```json
-{
-  "suggestions": []
-}
-```
+Data file : data/script.sql
 
+## Test
+You can find test cases in test folder.
+After change your directory to the app directory, you run it using :
+      
+    php vendor/bin/phpunit test/SuggestionTestCases.php
 
-### Non-functional
+## Heroku Link
 
-- All code should be written in Javascript, Typescript or PHP.
-- Mitigations to handle high levels of traffic should be implemented.
-- Challenge is submitted as pull request against this repo ([fork it](https://help.github.com/articles/fork-a-repo/) and [create a pull request](https://help.github.com/articles/creating-a-pull-request-from-a-fork/)).
-- Documentation and maintainability is a plus.
+https://city-suggestion-challenge.herokuapp.com/suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
 
-## Dataset
-
-You can find the necessary dataset along with its description and documentation in the [`data`](data/) directory.
-
-## Evaluation
-
-We will use the following criteria to evaluate your solution:
-
-- Capacity to follow instructions
-- Developer Experience (how easy it is to run your solution locally, how clear your documentation is, etc)
-- Solution correctness
-- Performance
-- Tests (quality and coverage)
-- Code style and cleanliness
-- Attention to detail
-- Ability to make sensible assumptions
-
-It is ok to ask us questions!
-
-We know that the time for this project is limited and it is hard to create a "perfect" solution, so we will consider that along with your experience when evaluating the submission.
-
-## Getting Started
-
-### Prerequisites
-
-You are going to need:
-
-- `Git`
-- `nvm` (or your preferred node version manager)
-- `Node.js`
-
-### Setting up your environment
-
-1. Begin by forking this repo and cloning your fork. GitHub has apps for [Mac](http://mac.github.com/) and
-[Windows](http://windows.github.com/) that make this easier.
-
-2. Install [nvm](https://github.com/nvm-sh/nvm#install--update-script) or your preferred node version manager.
-
-3. Install [Node.js](http://www.nodejs.org).
-
-### Setting up the project
-
-In the project directory run:
-
-```
-nvm use
-npm install
-```
-
-### Running the tests
-
-The test suite can be run with:
-
-```
-npm run test
-```
-
-### Starting the application
-
-To start a local server run:
-
-```
-npm run start
-```
-
-it should produce an output similar to:
-
-```
-Server running at http://127.0.0.1:2345/suggestions
-```
+## Future Improvement
+- Use .env file for Global variable and Database credentials.
+- Use a PHP framework like Phalcon or Lavale, so we can easily handle the validations, the filter, dependency injection...
+- We can use Elasticsearch.
+- Define a better Scoring Algorithm after pursuing the user search behavior.

@@ -1,0 +1,38 @@
+version: '3.1'
+
+services:
+  php:
+    build:
+      context: ""
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+    volumes:
+      - . :/var/www/html/
+      - /var/www/html/vendor/
+
+  composer:
+    image: composer:1.9.3
+    environment:
+      - COMPOSER_CACHE_DIR=/var/cache/composer
+    volumes:
+      - .:/var/www/html/vendor/
+    restart: always
+
+  db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+volumes:
+  mysql-data:
