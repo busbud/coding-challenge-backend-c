@@ -2,7 +2,15 @@
   "name": "busbud-coding-challenge",
   "version": "1.0.0",
   "description": "Busbud backend coding challenge",
+  "main": "src/boot.js",
   "scripts": {
+    "start": "node src/boot.js",
+    "start.dev": "nodemon src/boot.js",
+    "test": "nyc mocha",
+    "coverage": "nyc report --reporter=text-lcov > coverage.lcov",
+    "docker-start": "docker-compose up",
+    "lint": "eslint ./",
+    "lint:fix": "eslint --fix ./"
   },
   "keywords": [],
   "author": "",
