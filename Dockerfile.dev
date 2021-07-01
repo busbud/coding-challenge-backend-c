@@ -5,6 +5,9 @@ WORKDIR /usr/src/app
 
 RUN apk add --no-cache tini
 
+ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.9.0/wait /wait
+RUN chmod +x /wait
+
 COPY --chown=node:node package*.json ./
 RUN npm install
 

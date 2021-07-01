@@ -3,7 +3,7 @@ services:
   elasticsearch-srv:
     container_name: elasticsearch-service
     image: docker.elastic.co/elasticsearch/elasticsearch:7.12.1
-    restart: "${RESTART:-always}"
+    restart: "${RESTART:-no}"
     environment:
       - node.name=es01
       - discovery.type=single-node
@@ -18,7 +18,7 @@ services:
   redis-srv:
     container_name: redis-service
     image: redis:6.2.4-alpine
-    restart: "${RESTART:-always}"
+    restart: "${RESTART:-no}"
     ports:
       - 6379:6379
     networks:
@@ -31,8 +31,10 @@ services:
       dockerfile: Dockerfile.dev
       target: "${TARGET:-dev}"
     image: suggestions-service
-    restart: "${RESTART:-always}"
+    restart: "${RESTART:-no}"
     env_file: .env.docker
+    environment:
+      WAIT_HOSTS: redis-srv:6379, elasticsearch-srv:9200
     ports:
       - 2345:2345
     volumes:
