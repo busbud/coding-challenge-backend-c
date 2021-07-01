@@ -95,7 +95,7 @@ describe('SearchEngineClient', () => {
         connection: mock.getConnection()
       })
       await searchEngineClient.connect()
-      chai.expect(searchEngineClient.isConnected).to.be.true
+      chai.expect(searchEngineClient.isConnected).to.be.true // eslint-disable-line no-unused-expressions
     })
 
     it('Should throw an error after reach the max retries value',
@@ -174,7 +174,7 @@ describe('SearchEngineClient', () => {
       })
       await searchEngineClient.connect()
       await searchEngineClient.close()
-      chai.expect(searchEngineClient.isConnected).to.be.false
+      chai.expect(searchEngineClient.isConnected).to.be.false // eslint-disable-line no-unused-expressions
     })
   })
 
@@ -215,8 +215,7 @@ describe('SearchEngineClient', () => {
       })
       await searchEngineClient.connect()
       searchEngineClient.addRepository('test', () => {})
-      chai.expect(
-        searchEngineClient.repositories.has('test')).to.be.true
+      chai.expect(searchEngineClient.repositories.has('test')).to.be.true // eslint-disable-line no-unused-expressions
     })
 
     it('Should throw an error if the client is not connected',
