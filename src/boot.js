@@ -1,20 +1,20 @@
 const config = require('./config')
-const initServices = require('./initServices')
-const initApp = require('./initApp')
+const buildServices = require('./buildServices')
+const buildApp = require('./buildApp')
 const initGracefulShutdown = require('./gracefulShutdown')
 const initComponents = require('./components')
 const { loadComponents } = require('./helpers')
 const applyMigrations = require('./migrations')
 
-;(async () => {
+module.exports = async () => {
   const components = initComponents()
   const { apiDocs, routers, repositories } = loadComponents(components)
 
-  const { cacheManager, logger, searchEngineClient } = await initServices(
+  const { cacheManager, logger, searchEngineClient } = await buildServices(
     config,
     repositories)
 
-  const app = await initApp(config, apiDocs, routers, {
+  const app = await buildApp(config, apiDocs, routers, {
     cacheManager,
     logger,
     searchEngineClient
@@ -42,4 +42,6 @@ const applyMigrations = require('./migrations')
   }
 
   await app.listen(config.server.port, config.server.host)
-})()
+
+  return app
+}
