@@ -156,7 +156,7 @@ class SearchEngineClient extends EventEmitter {
   addRepository (name, repositoryBuilder) {
     if (!this.isConnected) {
       throw new Error(
-        `You must connect to ${this.node} the before add repository`)
+        `You must connect to ${this.nodes} the before add repository`)
     }
     this.repositories.set(name, repositoryBuilder(this.rawClient))
   }
@@ -170,7 +170,7 @@ class SearchEngineClient extends EventEmitter {
   getRepository (name) {
     if (!this.isConnected) {
       throw new Error(
-        `You must connect to ${this.node} the before get repository`)
+        `You must connect to ${this.nodes} the before get repository`)
     }
     return this.repositories.get(name)
   }
