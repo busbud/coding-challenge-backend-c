@@ -69,8 +69,9 @@ class SearchEngineClient extends EventEmitter {
    */
   async connect () {
     if (this.isConnected) {
-      return
+      throw new Error('The client is already connected')
     }
+
     this.emit('connecting')
     const options = {
       nodes: this.nodes,
