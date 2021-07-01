@@ -1,7 +1,7 @@
 
 # Busbud Coding Challenge
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://standardjs.com/)
-
+![CI](https://github.com/arkerone/coding-challenge-backend-c/workflows/CI/badge.svg)
 ## Technical choice
 
 ### Search engine
