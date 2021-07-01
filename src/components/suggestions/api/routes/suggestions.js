@@ -13,7 +13,7 @@ module.exports = (fastify) => {
       response: {
         200: {
           description: 'Successful response',
-          type:'object',
+          type: 'object',
           properties: {
             suggestions: {
               type: 'array',
@@ -38,7 +38,7 @@ module.exports = (fastify) => {
                   }
                 }
               }
-            },
+            }
           }
         }
       },

@@ -29,7 +29,6 @@ module.exports = (searchEngineClient) => {
       limit = 5,
       minScore = 0.0001
     } = {}) => {
-
     const functions = []
     if (latitude && longitude) {
       functions.push({

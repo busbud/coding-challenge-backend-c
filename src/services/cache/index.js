@@ -61,10 +61,10 @@ module.exports = ({
         return redisCache.store.getClient().disconnect()
       }
     },
-    async healthCheck() {
+    async healthCheck () {
       if (isEnabled) {
         const redisClient = redisCache.store.getClient()
-        await redisClient.ping();
+        await redisClient.ping()
       }
       return {
         status: 'OK'
