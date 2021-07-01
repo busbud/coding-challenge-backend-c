@@ -23,14 +23,16 @@ class SearchEngineClient extends EventEmitter {
    * @param {string} [options.auth.username]
    * @param {string} [options.auth.password]
    * @param {string} [options.auth.apiKey]
+   * @param {Connection} [options.connection]
    */
   constructor ({
-    nodes,
+    nodes = 'http://localhost:9000',
     maxRetries = 5,
     requestTimeout = 60000,
     auth = {
       type: null
-    }
+    },
+    connection
   } = {}) {
     super()
     this.nodes = nodes
@@ -38,6 +40,7 @@ class SearchEngineClient extends EventEmitter {
     this.requestTimeout = requestTimeout
     this.isConnected = false
     this.repositories = new Map()
+    this.connection = connection
 
     // Retry with exponential backoff strategy
     this.operation = retry.operation({
@@ -68,15 +71,21 @@ class SearchEngineClient extends EventEmitter {
     if (this.isConnected) {
       return
     }
-
     this.emit('connecting')
-    this.rawClient = new Client({
+    const options = {
       nodes: this.nodes,
       maxRetries: this.maxRetries,
-      requestTimeout: this.requestTimeout,
-      sniffOnStart: true,
-      auth: this.auth
-    })
+      requestTimeout: this.requestTimeout
+    }
+
+    if (this.auth) {
+      options.auth = this.auth
+    }
+
+    if (this.connection) {
+      options.Connection = this.connection
+    }
+    this.rawClient = new Client(options)
 
     await new Promise((resolve, reject) => {
       this.operation.attempt(async () => {
