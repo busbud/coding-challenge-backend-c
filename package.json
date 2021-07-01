@@ -46,6 +46,7 @@
     "@elastic/elasticsearch-mock": "^0.3.0",
     "chai": "^4.3.4",
     "chai-as-promised": "^7.1.1",
+    "chai-json-schema": "^1.5.1",
     "eslint": "^7.29.0",
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-import": "^2.23.4",
