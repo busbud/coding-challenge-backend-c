@@ -182,4 +182,4 @@ This project use git hooks (via the library [husky](https://typicode.github.io/h
 - [ ] Improve the migration script (use a database to store the applied migrations and provide rollback)
 - [ ]  Add more unit and integration tests
 - [ ]  If the service run in a microservice architecture, use [jaeger](https://www.jaegertracing.io/) or [zipkin](https://zipkin.io/) to trace the request
-- [ ]  Add CI pipeline
+- [ ]  Add CI pipeline for tests
