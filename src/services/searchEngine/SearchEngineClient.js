@@ -117,6 +117,7 @@ class SearchEngineClient extends EventEmitter {
 
     if (this.isConnected) {
       await this.rawClient.close()
+      this.isConnected = false
       this.emit('closed')
     }
   }
