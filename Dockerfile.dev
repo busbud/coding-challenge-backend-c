@@ -19,7 +19,9 @@ USER node
 EXPOSE 2345
 
 FROM base as test
-ENTRYPOINT ["/sbin/tini", "--" , "npm", "run", "test"]
+ENTRYPOINT ["/sbin/tini", "--"]
+CMD /wait && npm run test
 
 FROM base as dev
-ENTRYPOINT ["/sbin/tini", "--" , "npm", "run", "start.dev"]
+ENTRYPOINT ["/sbin/tini", "--"]
+CMD /wait && npm run start.dev
