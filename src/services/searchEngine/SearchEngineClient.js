@@ -15,7 +15,7 @@ class SearchEngineClient extends EventEmitter {
    * @constructor
    * @description create a search engine client
    * @param {Object} options
-   * @param {string} options.node
+   * @param {string} [options.nodes='http://localhost:9000']
    * @param {number} [options.maxRetries=5]
    * @param {number} [options.requestTimeout=60000]
    * @param {Object} [options.auth]
