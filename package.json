@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/run.js",
     "start.dev": "nodemon src/run.js",
-    "test": "nodemon --exec 'nyc mocha'",
+    "test": "nodemon --exec 'nyc mocha --exit'",
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov",
     "docker-start": "docker-compose up",
     "lint": "eslint ./",
