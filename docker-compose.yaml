@@ -25,12 +25,12 @@ services:
       - suggestions-net
 
   suggestions-srv:
-    container_name: suggestions-service
+    container_name: "suggestions-service-${TARGET:-dev}"
     build:
       context: .
       dockerfile: Dockerfile.dev
       target: "${TARGET:-dev}"
-    image: suggestions-service
+    image: "suggestions-service-${TARGET:-dev}"
     restart: "${RESTART:-no}"
     env_file: .env.docker
     environment:
