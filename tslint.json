@@ -1,0 +1,30 @@
+{
+  "defaultSeverity": "error",
+  "extends": "tslint:recommended",
+  "jsRules": {},
+  "rules": {
+    "indent": [true, "spaces", 2],
+    "quotemark": [true, "single", "avoid-escape"],
+    "comment-format": false,
+    "trailing-comma": [
+      true,
+      { "multiline": "never", "singleline": "never" }
+    ],
+    "no-inferrable-types": true,
+    "object-literal-sort-keys": false,
+    "arrow-parens": false,
+    "interface-name": [false, "always-prefix"],
+    "semicolon": true,
+    "max-line-length": false,
+    "object-literal-key-quotes": false,
+    "no-shadowed-variable": false,
+    "interface-over-type-literal": false
+  },
+  "rulesDirectory": [],
+  "linterOptions": {
+    "exclude": [
+      "**/node_modules/**"
+    ]
+  }
+}
+

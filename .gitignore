@@ -1,0 +1,11 @@
+*.tmp
+*.tmp.*
+*.map
+.env
+node_modules/
+Session.vim
+redis-data/
+redis.conf
+dist/
+shell.sh
+nix/

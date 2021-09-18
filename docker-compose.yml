@@ -1,0 +1,13 @@
+version: "3.2"
+services:
+
+  redis:
+    image: redis:6.2.5
+    command: redis-server --requirepass busbud
+    ports:
+      - "6379:6379"
+    volumes:
+      - $PWD/redis-data:/var/lib/redis
+      - $PWD/redis.conf:/usr/local/etc/redit/redis.conf
+    environment:
+      - REDIS_REPLICATION_MODE=master
