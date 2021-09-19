@@ -27,7 +27,7 @@ export class Server {
     });
 
     // Configure the route(s)
-    this.routes(connection);
+    await this.routes(connection);
 
     // Listen and resolve with port.
     return new Promise((resolve, reject) => {
@@ -43,7 +43,7 @@ export class Server {
     this.app.use(express.json({ limit: '1mb' }));
   }
 
-  routes(connection: Connection) {
-    this.app.use('/suggestions', makeRouter(connection));
+  async routes(connection: Connection) {
+    this.app.use('/suggestions', await makeRouter(connection));
   }
 }

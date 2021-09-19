@@ -1,4 +1,3 @@
-require('module-alias/register');
 import { Server } from 'api/server';
 
 const init =

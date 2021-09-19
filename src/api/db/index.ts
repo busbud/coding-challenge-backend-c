@@ -1,8 +1,8 @@
-import { createClient, RedisClient } from 'redis';
 import { REDIS_URL } from 'api/config';
+import redis, { Redis } from 'ioredis';
 
-export type Connection = RedisClient;
+export type Connection = Redis;
 
-export async function connect() {
-  return createClient({ url: REDIS_URL });
+export async function connect(): Promise<Connection> {
+  return new redis(REDIS_URL);
 }

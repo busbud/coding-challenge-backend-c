@@ -2,10 +2,11 @@
   "name": "coding-challenge-backend-c",
   "version": "0.0.0",
   "description": "coding challenge in Nodejs",
-  "main": "dist/app.js",
+  "main": "dist/src/app.js",
   "scripts": {
-    "build": "tsc",
-    "start": "tsc && node dist/app.js",
+    "build": "tsc --project tsconfig.json && tscpaths -p tsconfig.json -s . -o ./dist",
+    "start": "npm run build && node -r tsconfig-paths/register dist/src/app.js",
+    "load": "npm run build && node -r tsconfig-paths/register dist/src/load.js",
     "test": "./node_modules/mocha/bin/mocha ./test/"
   },
   "author": "",
@@ -14,10 +15,9 @@
     "chai": "^1.9.1",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
-    "find-up": "^6.0.0",
+    "find-up": "^5.0.0",
+    "ioredis": "^4.27.9",
     "mocha": "^1.18.2",
-    "module-alias": "^2.2.2",
-    "redis": "^3.1.2",
     "supertest": "^0.11.0"
   },
   "engines": {
@@ -25,7 +25,11 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.13",
+    "@types/find-up": "^4.0.0",
+    "@types/ioredis": "^4.27.4",
     "@types/node": "^16.9.2",
-    "@types/redis": "^2.8.32"
+    "@types/redis": "^2.8.32",
+    "tsconfig-paths": "^3.11.0",
+    "tscpaths": "0.0.9"
   }
 }

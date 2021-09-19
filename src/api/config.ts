@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import { resolve, dirname } from 'path';
-import { findUpSync } from 'find-up';
+import findUp from 'find-up';
 
 // Used to retrieve an environment variable or fallback value if not defined.
 function get(name: string, fallback: string) {
@@ -8,15 +8,13 @@ function get(name: string, fallback: string) {
 }
 
 // Environment configuration
-export const PROJECT_ROOT = dirname(findUpSync('package.json') || '') || __dirname;
+export const REPO_ROOT_DIR = dirname(findUp.sync('package.json') || '') || __dirname;
 
 dotenv.config({
-  path: resolve(exports.PROJECT_ROOT, '.env')
+  path: resolve(REPO_ROOT_DIR, '.env')
 });
 
 // Server configuration
-export const HOST = get('HOST', '127.0.0.1');
-
 export const PORT = parseInt(get('PORT', '3000'), 10);
 
 export const REDIS_URL = getRedisUrl();
@@ -36,10 +34,19 @@ export function getRedisUrl() {
     }
 }
 
+// Data load configuration
+export const DATA_FILE_PATH = get('DATA_FILE_PATH', 'data/cities_canada-usa.tsv')
+
+export const DATA_ID_INDEX = 0;
+export const DATA_NAME_INDEX = 1;
+export const DATA_ASCII_NAME_INDEX = 2;
+export const DATA_LAT_INDEX = 4;
+export const DATA_LONG_INDEX = 5;
+
 // Return any configuration errors - e.g. if any required environment values are not defined.
 export function getConfigErrors() {
   const errors = [];
-  if (!exports.REDIS_URL) {
+  if (!REDIS_URL) {
     errors.push('REDIS connection parameters must be specified. Check your environment.');
   }
   return errors;

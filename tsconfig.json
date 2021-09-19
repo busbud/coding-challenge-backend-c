@@ -12,9 +12,9 @@
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "incremental": true,
-    "baseUrl": "src",
+    "baseUrl": ".",
     "paths": {
-      "api/*": ["api/*"]
+      "api/*": ["src/api/*"]
     },
     "types": [
       "node"
