@@ -61,7 +61,6 @@ export async function load(connection: Connection) {
     }
   }
   console.info(`Loaded data for ${loadCount} cities.`);
-  process.exit();
 }
 
 function createNamePrefixes(field: string): string[] {
