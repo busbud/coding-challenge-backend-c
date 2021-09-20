@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import { City, CityResult } from 'api/schema';
 
 export class SuggestionController {
-  private connection;
+  private connection: Connection;
 
   constructor(connection: Connection) {
     this.connection = connection;

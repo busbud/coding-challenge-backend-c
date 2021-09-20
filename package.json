@@ -21,7 +21,8 @@
     "supertest": "^6.1.6"
   },
   "engines": {
-    "node": "0.10.26"
+    "node": "14.17.6",
+    "npm": "6.14.14"
   },
   "devDependencies": {
     "@types/express": "^4.17.13",

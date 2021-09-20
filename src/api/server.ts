@@ -4,7 +4,7 @@ import * as config from 'api/config';
 import { makeRouter } from 'api/router';
 
 export class Server {
-  private app;
+  private app: Express;
 
   constructor(app: Express) {
     this.app = app; 
