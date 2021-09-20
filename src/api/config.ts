@@ -51,6 +51,13 @@ export const DATA_POPULATION_INDEX = parseInt(get('DATA_POPULATION_INDEX', '14')
 // Threshold for city population 
 export const DATA_CITY_MIN_POP = parseInt(get('DATA_CITY_MIN_POP', '5000'), 10);
 
+// Distance to consider when adjusting scores for proximity to specified coords (in km).
+export const LOC_RADIUS_THRESHOLD = parseFloat(get('LOC_RADIUS_THRESHOLD', '50'));
+
+// Adjustments to result scores based on distance from specified coords.
+export const DIST_SCORE_BONUS = parseFloat(get('DIST_SCORE_BONUS', '0.1'));
+export const DIST_SCORE_PENALTY = parseFloat(get('DIST_SCORE_PENALTY', '0.2'));
+
 // Return any configuration errors - e.g. if any required environment values are not defined and we shouldn't start the server.
 export function getConfigErrors() {
   const errors = [];

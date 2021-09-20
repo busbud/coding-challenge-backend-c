@@ -1,6 +1,7 @@
 import { Connection } from 'api/db';
 import { Request, Response } from 'express';
 import { City, CityResult } from 'api/schema';
+import * as config from 'api/config';
 
 export class SuggestionController {
   private connection: Connection;
@@ -9,6 +10,7 @@ export class SuggestionController {
     this.connection = connection;
   }
 
+  // Handler for GET /suggestions
   public get = async (req: Request, res: Response) => {
     try {
       const query = req.query.q;
@@ -24,7 +26,6 @@ export class SuggestionController {
 
       const scores = raw.filter((_element, index) => index % 2); 
       const hashes = raw.filter((_element, index) => !(index % 2));
-
 
       const suggestions = await this.connection.hmget('city-hash', hashes);
 
@@ -43,10 +44,10 @@ export class SuggestionController {
 
           if (lat && long) {
             const dist = distance(lat, long, city.latitude, city.longitude);
-            if (dist <= 10)
-              cityResult.score = Math.min(add(cityResult.score, 0.1, 10), 1.0);
+            if (dist <= config.LOC_RADIUS_THRESHOLD)
+              cityResult.score = Math.min(add(cityResult.score, config.DIST_SCORE_BONUS, 10), 1.0);
             else
-              cityResult.score = Math.max(add(cityResult.score, -0.3, 10), 0.0);
+              cityResult.score = Math.max(add(cityResult.score, -config.DIST_SCORE_PENALTY, 10), 0.0);
             
           }
           results.push(cityResult);
