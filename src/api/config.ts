@@ -16,7 +16,7 @@ dotenv.config({
 
 // Server configuration
 export const PORT = parseInt(get('PORT', '3000'), 10);
-export const HOST = get('HOST', '127.0.0.1');
+export const HOST = get('HOST', '0.0.0.0');
 export const REDIS_URL = getRedisUrl();
 export const LOAD_DATA = get('LOAD_DATA', 'false') === 'true';
 
