@@ -4,7 +4,8 @@
   "description": "coding challenge in Nodejs",
   "main": "dist/app.js",
   "scripts": {
-    "build": "tsc --project tsconfig.json && tscpaths -p tsconfig.json -s ./src -o ./dist",
+    "tsc": "tsc",
+    "build": "npm run tsc && tscpaths -p tsconfig.json -s ./src -o ./dist",
     "start": "npm run build && node -r tsconfig-paths/register dist/app.js",
     "load": "npm run build && node -r tsconfig-paths/register dist/load.js",
     "test": "./node_modules/mocha/bin/mocha ./test/"
