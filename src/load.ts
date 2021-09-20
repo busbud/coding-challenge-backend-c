@@ -1,8 +1,8 @@
-import { connect, Connection } from './api/db';
-import * as config from './api/config';
+import { connect, Connection } from 'api/db';
+import * as config from 'api/config';
 import readLine from 'readline';
 import fs from 'fs';
-import { City } from './api/schema';
+import { City } from 'api/schema';
 
 async function run() {
   await connect()
@@ -11,7 +11,7 @@ async function run() {
 }
 
 // Loads the data specified at the configured path into the Redis data store.
-async function load(connection: Connection) {
+export async function load(connection: Connection) {
   // Clear out any existing data in Redis.
   await connection.flushdb();
   

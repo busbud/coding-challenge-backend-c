@@ -32,6 +32,9 @@ export class Server {
     this.app.listen(config.PORT, config.HOST)
     console.info(`Server running at http://${config.HOST}:${config.PORT}/suggestions`)
 
+    if (config.LOAD_DATA) 
+      require('../load');
+
     return this.app;
   }
 

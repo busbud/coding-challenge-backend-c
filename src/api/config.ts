@@ -18,6 +18,7 @@ dotenv.config({
 export const PORT = parseInt(get('PORT', '3000'), 10);
 export const HOST = get('HOST', '127.0.0.1');
 export const REDIS_URL = getRedisUrl();
+export const LOAD_DATA = get('LOAD_DATA', 'false') === 'true';
 
 // Return the specified connection URL for the Redis instance.
 export function getRedisUrl() {

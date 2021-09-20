@@ -6,7 +6,7 @@
   "scripts": {
     "tsc": "./node_modules/typescript/bin/tsc",
     "build": "npm run tsc && tscpaths -p tsconfig.json -s ./src -o ./dist",
-    "start": "if [ $LOAD_DATA ]; then npm run load; fi && node -r tsconfig-paths/register dist/app.js",
+    "start": "node -r tsconfig-paths/register dist/app.js",
     "load": "node dist/load.js",
     "test": "./node_modules/mocha/bin/mocha ./test/"
   },
@@ -19,7 +19,8 @@
     "find-up": "^5.0.0",
     "ioredis": "^4.27.9",
     "mocha": "^9.1.1",
-    "supertest": "^6.1.6"
+    "supertest": "^6.1.6",
+    "tsconfig-paths": "^3.11.0"
   },
   "engines": {
     "node": "14.17.6",
@@ -31,7 +32,6 @@
     "@types/ioredis": "^4.27.4",
     "@types/node": "^16.9.2",
     "@types/redis": "^2.8.32",
-    "tsconfig-paths": "^3.11.0",
     "tscpaths": "0.0.9",
     "typescript": "^4.4.3"
   }
