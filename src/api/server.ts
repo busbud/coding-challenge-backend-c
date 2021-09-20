@@ -2,6 +2,7 @@ import express, { Express } from 'express';
 import { connect, Connection } from 'api/db';
 import * as config from 'api/config';
 import { makeRouter } from 'api/router';
+import rateLimit from 'express-rate-limit';
 
 export class Server {
   private app: Express;
@@ -28,6 +29,15 @@ export class Server {
 
     // Configure the route(s)
     this.routes(connection);
+
+    // Set up rate limiting to control traffic for all requests
+    const limiter = rateLimit({
+      windowMs: 15 * 60 * 1000,
+      max: 200,
+      message: 'Too many requests, please try again later.'
+    });
+
+    this.app.use(limiter);
 
     this.app.listen(config.PORT, config.HOST)
     console.info(`Server running at http://${config.HOST}:${config.PORT}/suggestions`)
