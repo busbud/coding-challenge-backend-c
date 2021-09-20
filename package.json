@@ -4,7 +4,7 @@
   "description": "coding challenge in Nodejs",
   "main": "dist/app.js",
   "scripts": {
-    "tsc": "tsc",
+    "tsc": "./node_modules/typescript/bin/tsc",
     "build": "npm run tsc && tscpaths -p tsconfig.json -s ./src -o ./dist",
     "start": "npm run build && node -r tsconfig-paths/register dist/app.js",
     "load": "npm run build && node -r tsconfig-paths/register dist/load.js",
@@ -32,6 +32,7 @@
     "@types/node": "^16.9.2",
     "@types/redis": "^2.8.32",
     "tsconfig-paths": "^3.11.0",
-    "tscpaths": "0.0.9"
+    "tscpaths": "0.0.9",
+    "typescript": "^4.4.3"
   }
 }
