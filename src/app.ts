@@ -1,11 +1,11 @@
 import { Server } from 'api/server';
+import { createServer } from 'http';
+import express from 'express';
 
-const init =
-  new Server()
-  .start()
-  .then((port: number) => console.log(`Server listening on port ${port}`))
+const app = express();
+new Server(app)
+  .init()
+  .then(app => createServer(app)) 
   .catch((error) => console.error(error));
 
-export default init;
-
-
+module.exports = app;

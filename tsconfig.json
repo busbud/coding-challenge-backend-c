@@ -12,9 +12,9 @@
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "incremental": true,
-    "baseUrl": ".",
+    "baseUrl": "src",
     "paths": {
-      "api/*": ["src/api/*"]
+      "api/*": ["api/*"]
     },
     "types": [
       "node"
@@ -22,8 +22,12 @@
     "outDir": "dist"
   },
   "include": [
-    "**/*.ts",
-    "**/*.js"
+    "src/**/*.ts",
+    "src/**/*.js"
+  ],
+  "exclude": [
+    "dist/*"
   ]
+
 }
 

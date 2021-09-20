@@ -2,11 +2,11 @@
   "name": "coding-challenge-backend-c",
   "version": "0.0.0",
   "description": "coding challenge in Nodejs",
-  "main": "dist/src/app.js",
+  "main": "dist/app.js",
   "scripts": {
-    "build": "tsc --project tsconfig.json && tscpaths -p tsconfig.json -s . -o ./dist",
-    "start": "npm run build && node -r tsconfig-paths/register dist/src/app.js",
-    "load": "npm run build && node -r tsconfig-paths/register dist/src/load.js",
+    "build": "tsc --project tsconfig.json && tscpaths -p tsconfig.json -s ./src -o ./dist",
+    "start": "npm run build && node -r tsconfig-paths/register dist/app.js",
+    "load": "npm run build && node -r tsconfig-paths/register dist/load.js",
     "test": "./node_modules/mocha/bin/mocha ./test/"
   },
   "author": "",
@@ -17,8 +17,8 @@
     "express": "^4.17.1",
     "find-up": "^5.0.0",
     "ioredis": "^4.27.9",
-    "mocha": "^1.18.2",
-    "supertest": "^0.11.0"
+    "mocha": "^9.1.1",
+    "supertest": "^6.1.6"
   },
   "engines": {
     "node": "0.10.26"
