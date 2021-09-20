@@ -1,9 +1,8 @@
-import { Connection } from 'api/db';
-import * as config from 'api/config';
+import { connect, Connection } from './api/db';
+import * as config from './api/config';
 import readLine from 'readline';
 import fs from 'fs';
-import { City } from 'api/schema';
-import { connect } from 'api/db';
+import { City } from './api/schema';
 
 async function run() {
   await connect()
