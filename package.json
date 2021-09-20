@@ -6,8 +6,7 @@
   "scripts": {
     "tsc": "./node_modules/typescript/bin/tsc",
     "build": "npm run tsc && tscpaths -p tsconfig.json -s ./src -o ./dist",
-    "start": "node -r tsconfig-paths/register dist/app.js",
-    "postinstall": "if [ $LOAD_DATA ]; then npm run load; fi",
+    "start": "if [ $LOAD_DATA ]; then npm run load; fi && node -r tsconfig-paths/register dist/app.js",
     "load": "node -r tsconfig-paths/register dist/load.js",
     "test": "./node_modules/mocha/bin/mocha ./test/"
   },
