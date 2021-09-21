@@ -40,8 +40,8 @@ The instructions for building and configuring my solution locally are listed bel
 
 | Name | Description |
 | --- | --- |
-| `HOST` | The IPv4 address for the back-end to bind to. Default to `3000` |
-| `PORT` | The TCP port for the back-end to bind to. Defaults to `0.0.0.0`. This variable needs to be set to `0.0.0.0` for deployment on Heroku. |
+| `HOST` | The IPv4 address for the back-end to bind to. Default to `0.0.0.0`. This variable needs to be set to `0.0.0.0` for deployment on Heroku. |
+| `PORT` | The TCP port for the back-end to bind to. Defaults to `3000`. |
 | `REDIS_URL` | The Redis key-value store to connect to. If this is not set, then the other `REDIS_x` environment variables must be provided. |
 | `REDIS_HOST` | The host for the Redis key-value store. Used to generate a `REDIS_URL` environment variable. |
 | `REDIS_PORT` | The port for the Redis key-value store. Used to generate a `REDIS_URL` environment variable. |
