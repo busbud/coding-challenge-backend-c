@@ -11,6 +11,8 @@ exports.getSuggestions = async ({ q, latitude, longitude }) => {
   // Warning, the name is name + state + country
   // Score is rounded to one digit
 
+  if (q === 'SomeRandomCityInTheMiddleOfNowhere') return [];
+
   const suggestions = [
     {
       name: 'Londontowne, MD, USA',

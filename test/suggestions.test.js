@@ -1,10 +1,10 @@
-var expect = require('chai').expect;
-var app = require('../src/app');
-var request = require('supertest')(app);
+const expect = require('chai').expect;
+const app = require('../src/app').createServer();
+const request = require('supertest')(app);
 
 describe('GET /suggestions', () => {
   describe('with a non-existent city', () => {
-    var response;
+    let response;
 
     before(done => {
       request.get('/suggestions?q=SomeRandomCityInTheMiddleOfNowhere').end((err, res) => {
@@ -25,7 +25,7 @@ describe('GET /suggestions', () => {
   });
 
   describe('with a valid city', () => {
-    var response;
+    let response;
 
     before(done => {
       request.get('/suggestions?q=Montreal').end((err, res) => {
