@@ -2,9 +2,10 @@
   "name": "coding-challenge-backend-c",
   "version": "0.0.0",
   "description": "coding challenge in Nodejs",
-  "main": "app.js",
+  "main": "./src/index.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "node ./src/index.js",
+    "dev": "nodemon --inspect ./src/index.js",
     "test": "mocha --exit",
     "lint": "eslint --ext .js . --color"
   },
