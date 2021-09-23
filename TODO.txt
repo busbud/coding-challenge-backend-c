@@ -1,3 +1,8 @@
+- use 1 / (1 + d) or similar function to adjust the scoring based on the distance
+- create a docker compose with postgres
+- copy the tsv using the example: https://medium.com/@rlwong2/importing-a-tsv-file-into-postgres-364572a004bf
+
+
 Calculate distance:
 https://stackoverflow.com/questions/61135374/postgresql-calculate-distance-between-two-points-without-using-postgis
 

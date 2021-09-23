@@ -2,7 +2,9 @@ const Joi = require('joi');
 const validator = require('express-joi-validation').createValidator({});
 
 const querySchema = Joi.object({
-  name: Joi.string().required()
-});
+  q: Joi.string().required(),
+  latitude: Joi.number().min(-180).max(180),
+  longitude: Joi.number().min(-180).max(180)
+}).and('latitude', 'longitude');
 
-export const suggestionValidator = validator.query(querySchema);
+module.exports = validator.query(querySchema);

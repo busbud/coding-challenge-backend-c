@@ -1,12 +1,12 @@
 const express = require('express');
 
-const { suggestionValidator } = require('./validation');
-const { suggestionController } = require('./controller');
+const { suggestionsValidator } = require('./validation');
+const { suggestionsController } = require('./controllers');
 
 exports.createServer = () => {
   const app = express();
 
-  app.get('/suggestions', suggestionValidator, suggestionController.get);
+  app.get('/suggestions', suggestionsValidator, suggestionsController.get);
 
   return app;
 };

@@ -1,3 +1,1 @@
-module.export = {
-  suggestionValidator: require('./suggestions.validation')
-};
+exports.suggestionsValidator = require('./suggestions.validation');

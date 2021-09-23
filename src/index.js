@@ -1,7 +1,9 @@
-const { createServer } = require('./create-server');
+const { createServer } = require('./app');
 
-const PORT = process.env.PORT ?? 2345;
+const port = process.env.PORT ?? 2345;
 
 const app = createServer();
 
-app.listen(PORT);
+app.listen(port, () => {
+  console.log(`Server listening on port ${port}`);
+});
