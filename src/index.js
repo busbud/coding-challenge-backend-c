@@ -6,4 +6,10 @@ const app = createServer();
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
+
+  console.log(`PGUSER: ${process.env.PGUSER}`);
+  console.log(`PGHOST: ${process.env.PGHOST}`);
+  console.log(`PGPASSWORD: ${process.env.PGPASSWORD}`);
+  console.log(`PGDATABASE: ${process.env.PGDATABASE}`);
+  console.log(`PGPORT: ${process.env.PGPORT}`);
 });
