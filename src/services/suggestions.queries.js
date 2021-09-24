@@ -1,37 +1,11 @@
-function formatRow(row) {
-  // WARNING latitude and longitude should be converted to strings with 5 digits
-  // Warning, the name is name + state + country
-  // Score is rounded to one digit
+const { Pool } = require('pg');
 
-  // WARNING latitude and longitude should be converted to strings with 5 digits
-  // Warning, the name is name + state + country
-  // Score is rounded to one digit
-
-  return row;
-}
-
-async function getSuggestionsByNameAndLocation(q, latitude, longitude) {
-  // WARNING latitude and longitude should be converted to strings with 5 digits
-  // Warning, the name is name + state + country
-  // Score is rounded to one digit
-
-  if (q === 'SomeRandomCityInTheMiddleOfNowhere') return [];
-
-  const suggestions = [
-    {
-      name: 'Londontowne, MD, USA',
-      latitude: '38.93345',
-      longitude: '-76.54941',
-      score: 0.3
-    }
-  ];
-
-  return [];
-}
-
-async function getSuggestionsByName(q) {
-  return [];
-}
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
 
 exports.getSuggestions = async ({ q, latitude, longitude }) => {
   const hasLocation = !!latitude && !!longitude;
@@ -42,3 +16,41 @@ exports.getSuggestions = async ({ q, latitude, longitude }) => {
 
   return suggestions.map(formatRow);
 };
+
+function formatRow({ name, country, state, lat, long, score }) {
+  return {
+    name: country === 'US' ? `${name}, ${state}, USA` : `${name}, Canada`,
+    latitude: lat.toFixed(5),
+    longitude: long.toFixed(5),
+    score: Math.round(score * 10) / 10
+  };
+}
+
+function getQuery(hasLocation) {
+  const locationWeight = hasLocation
+    ? ' * 1 / (1 + calculate_distance(c.lat, c.long, $2, $3) / 100)'
+    : '';
+
+  return `
+    SELECT c.name, c.country, case when c.country = 'US' then c.admin1 else '' end as state,
+    c.lat, c.long, SIMILARITY(c.name,$1)${locationWeight} as score
+    FROM cities c
+    WHERE c.population >= 5000 and c.country in ('CA', 'US')
+    ORDER BY SIMILARITY(c.name,$1)${locationWeight} DESC
+    LIMIT 10;`;
+}
+
+async function getSuggestionsByNameAndLocation(q, latitude, longitude) {
+  const query = getQuery(true);
+  const { rows } = await pool.query(query, [q, latitude, longitude]);
+
+  return rows;
+}
+
+async function getSuggestionsByName(q) {
+  const query = getQuery(false);
+
+  const { rows } = await pool.query(query, [q]);
+
+  return rows;
+}

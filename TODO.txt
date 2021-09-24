@@ -1,16 +1,8 @@
-- use 1 / (1 + d) or similar function to adjust the scoring based on the distance
 - create a docker compose with postgres
 - copy the tsv using the example: https://medium.com/@rlwong2/importing-a-tsv-file-into-postgres-364572a004bf
-
-
-Calculate distance:
-https://stackoverflow.com/questions/61135374/postgresql-calculate-distance-between-two-points-without-using-postgis
 
 
 Optimize the trgm, use GIN index:
 https://www.alibabacloud.com/blog/postgresql-fuzzy-search-best-practices-single-word-double-word-and-multi-word-fuzzy-search-methods_595635
 
 https://www.freecodecamp.org/news/fuzzy-string-matching-with-postgresql/
-
-
-https://towardsdatascience.com/fuzzy-matching-with-levenshtein-and-postgresql-ed66cad01c03
