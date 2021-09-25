@@ -1,8 +1,2 @@
-- create a docker compose with postgres
-- copy the tsv using the example: https://medium.com/@rlwong2/importing-a-tsv-file-into-postgres-364572a004bf
-
-
 Optimize the trgm, use GIN index:
 https://www.alibabacloud.com/blog/postgresql-fuzzy-search-best-practices-single-word-double-word-and-multi-word-fuzzy-search-methods_595635
-
-https://www.freecodecamp.org/news/fuzzy-string-matching-with-postgresql/
