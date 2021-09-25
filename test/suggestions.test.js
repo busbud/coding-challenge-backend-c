@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const expect = require('chai').expect;
 const app = require('../src/app').createServer();
 const request = require('supertest')(app);
@@ -63,9 +65,11 @@ describe('GET /suggestions', () => {
     });
 
     it('contains a match', () => {
+      const removeDiacritics = str => str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
       expect(response.json.suggestions).to.satisfy(suggestions => {
         return suggestions.some(suggestion => {
-          return suggestion.name.test(/montreal/i);
+          return /montreal/gi.test(removeDiacritics(suggestion.name));
         });
       });
     });

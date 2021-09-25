@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node ./src/index.js",
     "dev": "nodemon --inspect ./src/index.js",
-    "test": "mocha",
+    "test": "mocha --exit",
     "test:debug": "mocha --inspect",
     "lint": "eslint --ext .js . --color"
   },

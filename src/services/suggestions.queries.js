@@ -39,7 +39,7 @@ function getQuery(hasLocation) {
     SELECT c.name, c.country, case when c.country = 'US' then c.admin1 else '' end as state,
     c.lat, c.long, SIMILARITY(c.name,$1)${locationWeight} as score
     FROM cities c
-    WHERE c.population >= 5000 and c.country in ('CA', 'US')
+    WHERE c.population >= 5000 and c.country in ('CA', 'US') and SIMILARITY(c.name,$1)${locationWeight} > 0.2
     ORDER BY SIMILARITY(c.name,$1)${locationWeight} DESC
     LIMIT 10;`;
 }

@@ -1,5 +1,11 @@
 # Busbud Coding Challenge
 
+## Running the application locally
+To run the application with a local database:
+- In the root of the solution, run `docker-compose up`
+- Create a .env file with the following variables `DATABASE_URL=postgresql://sa:p@assword123@localhost:2345/busbud`
+- Run `npm run start`
+
 ## Requirements
 
 Design an API endpoint that provides autocomplete suggestions for large cities.
