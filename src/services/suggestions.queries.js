@@ -6,13 +6,7 @@ if (process.env.DATABASE_USE_SSL) {
   cn.ssl = { rejectUnauthorized: false };
 }
 
-console.log(process.env.DATABASE_USE_SSL);
-console.log(cn);
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL /*,
-  ssl: { rejectUnauthorized: false }*/
-});
+const pool = new Pool(cn);
 
 exports.getSuggestions = async ({ q, latitude, longitude }) => {
   const hasLocation = !!latitude && !!longitude;
