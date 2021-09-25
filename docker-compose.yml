@@ -5,3 +5,10 @@ services:
     image: postgres
     ports:
       - "2345:5432"
+    environment:
+      - POSTGRES_PASSWORD=p@assword123
+      - POSTGRES_USER=sa
+      - POSTGRES_DB=busbud
+    volumes:
+      - ./database/init:/docker-entrypoint-initdb.d
+      - ./database/files:/mnt/db

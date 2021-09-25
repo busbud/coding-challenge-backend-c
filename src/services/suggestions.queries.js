@@ -1,10 +1,14 @@
 const { Pool } = require('pg');
 
+const cn = { connectionString: process.env.DATABASE_URL };
+
+if (process.env.DATABASE_USE_SSL === 'true') {
+  cn.ssl = { rejectUnauthorized: false };
+}
+
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false
-  }
+  connectionString: process.env.DATABASE_URL /*,
+  ssl: { rejectUnauthorized: false }*/
 });
 
 exports.getSuggestions = async ({ q, latitude, longitude }) => {
