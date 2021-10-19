@@ -11,7 +11,7 @@
     "typeorm:runmigration": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:run",
     "typeorm:revertmigration": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:revert",
     "test": "ts-mocha --paths -p tsconfig.json src/**/*.spec.ts",
-    "postinstall": "tsc && mv -iRv src/data/ dist/ && rm -vrf src/data/ && npm run prod:cleanup",
+    "postinstall": "tsc && npm run cleanup",
     "start": "node dist/app.js",
     "cleanup": "npm prune --production"
   },
