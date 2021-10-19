@@ -22,7 +22,8 @@
             "controllers/*": ["src/controllers/*"],
             "services/*": ["src/services/*"],
             "repositories/*": ["src/repositories/*"],
-            "lib/*": ["src/lib/*"]
+            "lib/*": ["src/lib/*"],
+            "config/*": ["src/config/*"]
         },
         "esModuleInterop": true
     },
