@@ -1,0 +1,67 @@
+code	provinceCode	provinceName
+CA:00	CA	Canada (general)
+CA:01	AB	Alberta
+CA:02	BC	British Columbia
+CA:03	MB	Manitoba
+CA:04	NB	New Brunswick
+CA:05	NL	Newfoundland and Labrador
+CA:07	NS	Nova Scotia
+CA:08	ON	Ontario
+CA:09	PE	Prince Edward Island
+CA:10	QC	Quebec
+CA:11	SK	Saskatchewan
+CA:12	YT	Yukon
+CA:13	NT	Northwest Territories
+CA:14	NU	Nunavut
+US:00	US	United States (general)
+US:AK	AK	Alaska
+US:AL	AL	Alabama
+US:AR	AR	Arkansas
+US:AZ	AZ	Arizona
+US:CA	CA	California
+US:CO	CO	Colorado
+US:CT	CT	Connecticut
+US:DC	DC	Washington, D.C.
+US:DE	DE	Delaware
+US:FL	FL	Florida
+US:GA	GA	Georgia
+US:HI	HI	Hawaii
+US:IA	IA	Iowa
+US:ID	ID	Idaho
+US:IL	IL	Illinois
+US:IN	IN	Indiana
+US:KS	KS	Kansas
+US:KY	KY	Kentucky
+US:LA	LA	Louisiana
+US:MA	MA	Massachusetts
+US:MD	MD	Maryland
+US:ME	ME	Maine
+US:MI	MI	Michigan
+US:MN	MN	Minnesota
+US:MO	MO	Missouri
+US:MS	MS	Mississippi
+US:MT	MT	Montana
+US:NC	NC	North Carolina
+US:ND	ND	North Dakota
+US:NE	NE	Nebraska
+US:NH	NH	New Hampshire
+US:NJ	NJ	New Jersey
+US:NM	NM	New Mexico
+US:NV	NV	Nevada
+US:NY	NY	New York
+US:OH	OH	Ohio
+US:OK	OK	Oklahoma
+US:OR	OR	Oregon
+US:PA	PA	Pennsylvania
+US:RI	RI	Rhode Island
+US:SC	SC	South Carolina
+US:SD	SD	South Dakota
+US:TN	TN	Tennessee
+US:TX	TX	Texas
+US:UT	UT	Utah
+US:VA	VA	Virginia
+US:VT	VT	Vermont
+US:WA	WA	Washington
+US:WI	WI	Wisconsin
+US:WV	WV	West Virginia
+US:WY	WY	Wyoming
