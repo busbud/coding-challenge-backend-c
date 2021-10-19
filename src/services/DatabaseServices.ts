@@ -31,6 +31,7 @@ export abstract class DatabaseServices {
         const provincesDataFile = process.env.DATAFILE_PROVINCES
         const citiesDataFile = process.env.DATAFILE_CITIES
 
+        // Creates the tsv parser for country file
         const countryParser = parse({
             delimiter: '\t', 
             quote: '', 
@@ -42,6 +43,7 @@ export abstract class DatabaseServices {
             })
             .on('end', (total) => console.log(`Total countries: ${total}`))
 
+        // Creates the tsv parser for province file
         const provinceParser = parse({
             delimiter: '\t', 
             quote: '', 
@@ -52,7 +54,8 @@ export abstract class DatabaseServices {
                 await provinceRepository.save(new Province().FromInputObject(row))
             })
             .on('end', (total) => console.log(`Total provinces: ${total}`))
-
+        
+        // Creates the tsv parser for cities file
         const citiesParser = parse({
             delimiter: '\t', 
             quote: '', 
@@ -63,13 +66,16 @@ export abstract class DatabaseServices {
                 await cityRepository.save(new City().FromDataRow(row))
             })
             .on('end', (total) => console.log(`Total cities: ${total}`))
-
+        
+        // Starts the country file import
         fs.createReadStream(countriesDataFile)
             .pipe(countryParser)
 
+        // Starts the province file import
         fs.createReadStream(provincesDataFile)
             .pipe(provinceParser)
 
+        // Starts the cities file import
         fs.createReadStream(citiesDataFile)
             .pipe(citiesParser)
     }

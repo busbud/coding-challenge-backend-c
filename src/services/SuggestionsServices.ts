@@ -9,6 +9,7 @@ import { CacheServices } from "./CacheServices"
 
 export abstract class SuggestionsServices {
     
+    // Acquire the cities suggestions based on the provided query and calculates the score for each suggestion found
     public static async RetrieveSuggestions(cityQuery: string, longitude: string, latitude: string): Promise<ISuggestions> {
                 
         try {
@@ -28,11 +29,12 @@ export abstract class SuggestionsServices {
                 return suggestions
             }
             else {
-                cacheResult.suggestions = cacheResult.suggestions.map((city: Suggestion): ISuggestion => { 
-                    Object.setPrototypeOf(city, Suggestion.prototype)
-                    city.ReHidrateFromCache(longitude, latitude) 
-                    return city
+                cacheResult.suggestions = cacheResult.suggestions.map((suggestion: ISuggestion): ISuggestion => { 
+                    const newSuggestion = new Suggestion().FromCacheData(suggestion)
+                    newSuggestion.ReHidrateFromCache(longitude, latitude) 
+                    return newSuggestion
                 } )
+                
                 cacheResult.suggestions = cacheResult.suggestions.sort((a,b) => b.score - a.score)
             }
             

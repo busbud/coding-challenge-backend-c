@@ -1,6 +1,6 @@
 import { SuggestionsController } from "./controllers/SuggestionsController";
 import express from "express"
-///const express = require('express');
+
 const app = express();
 
 module.exports = () => {
