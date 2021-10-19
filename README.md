@@ -144,3 +144,127 @@ it should produce an output similar to:
 ```
 Server running at http://127.0.0.1:2345/suggestions
 ```
+
+## Summary of the challenge
+
+The application is deployed in the following Heroku dyno: https://busbudcodechallenge.herokuapp.com/suggestions
+
+The stack selected was NodeJS + Typescript using PostgreSQL database to store the countries/provinces/cities tables.
+Typeorm was selected to manage database entities due to its maturity and ease to implement
+Redis was selected as a cache engine since it is fast and scalable solution
+
+## Dev environment setup
+
+### Steps to start the dev environment
+
+* Make sure that NodeJS (LTS version) and npm are installed
+
+* Clone the repository at https://github.com/RenanFragoso/coding-challenge-backend-c
+```
+git clone https://github.com/RenanFragoso/coding-challenge-backend-c.git
+```
+
+* go to the cloned folder and run the npm install command
+```
+npm install
+```
+
+* create the .env file with the environment variables mentioned on the following topic
+
+* open a terminal, go to the project root's folder, and run the following command to start the source compilation in watch mode
+```
+npm run dev:tsc:watch
+```
+* open a second terminal, go to the project root's folder, and run the following command to initiate the database structure (assuming that postgre client is installed in the same environment)
+
+```
+createdb -h <host> -p <port> -U <user> testdb
+```
+
+* Check if the database connection string is correct in .env file
+
+* using the same terminal, run the following command to initiate the database structure
+```
+npm run typeorm:runmigration
+```
+
+* using the same terminal, run the following command to start the server in watch mode for source changes
+```
+npm run dev:server:watch
+```
+
+When running the server for the first time, it will check for data present in the postgre database and start populating from the data files if no cities are found
+
+If typeorm gets too verbose, it is possible to disable the logging feature by setting logging: false in src/config/getTypeormConfig.ts
+
+### Environment variables (.env file)
+
+.env files will not be present in the codebase (and should never be due to security concerns)
+
+The creation of .env file is necessary when running the application in the local environment. 
+The following values are mandatory in order for the application to run properly 
+
+PORT=2345
+HOST=0.0.0.0
+DATABASE_URL=postgres://<user>:<password>@<host>:<port>/<database>
+REDIS_URL=redis://<host>:<port>
+DISTANCE_KM_FACTOR=100
+DISTANCE_PENALTY_FACTOR=10
+DATAFILE_COUNTRIES=src/data/country_iso_names.tsv
+DATAFILE_PROVINCES=src/data/provinces_admin1_codes.tsv
+DATAFILE_CITIES=src/data/cities_canada-usa.tsv
+
+* PORT: server port to listen
+* HOST: internet interface to listen for connections
+* REDIS_URL: redis uri connection string used by the cache
+* DATABASE_URL: postgre URI connection string used by typeorm
+* DISTANCE_KM_FACTOR: this is the factor used by calculateDistance function in order to decrease the word score by 1/DISTANCE_PENALTY_FACTOR each DISTANCE_KM_FACTOR kilometers
+* DISTANCE_PENALTY_FACTOR: is the factor penalty applied to word score per each DISTANCE_KM_FACTOR kms distant from the query informed point
+* DATAFILE_COUNTRIES: path containing the countries tsv file 
+* DATAFILE_PROVINCES: path containing the provinces tsv file 
+* DATAFILE_CITIES: path containing the cities tsv file 
+
+### Environment data 
+
+The folder src/migrations will already contain a generated migration file. 
+The migration file is a result of typeorm client for the command: migration:generate.
+Migration files contain all database DDL commands in order to maintain the database structure synced with source code entities, it will contain the update (up) and rollback (down) commands.
+
+After changing any entity (src/models/entities) structure, an update in the corresponding database table is necessary. The command to generate the migration is available through npm:
+
+```
+$ npm run typeorm:generatemigration "migrationName"
+```
+
+After generating the migration file, the following command is necessary in order to apply the changes. This command will apply all pending migrations (generated migrations not synced with the database)
+
+```
+$ npm run typeorm:runmigration
+```
+
+Case a rollback is necessary, the following command will revert the last migration
+
+```
+$ npm run typeorm:revertmigration
+```
+
+Use those commands with caution since they can destroy the data
+
+### Performance considerations
+
+Based on the following query command, I decided that a search string with less than 3 characters is not necessary since it will not leave any city out of the result set (the minimum city name length found in the data file is 3). This will be used as one of the mitigation solutions to avoid unnecessary requests to the database or cache
+
+```
+SELECT CHAR_LENGTH("name"), "name"
+FROM cities
+ORDER BY CHAR_LENGTH("name") ASC
+```
+
+As a second mitigation solution, a cache using Redis was implemented.
+The Redis cache will store suggestions based on the query string after the first time a query is received. Score values are always recalculated since the latitude and longitude can change per each query request and those values do not affect the dataset returned as result of the query string search in the database
+
+### Unit tests
+
+Few unit tests were added to the solution (*.spec.ts), mostly to the score calculation functions
+
+TODO: Due to the complexity added to the project, structure change, and time restrictions, tests related to the controller could not be properly implemented. Mocking database and cache connections to a dedicated test environment will require a little more effort to complete.

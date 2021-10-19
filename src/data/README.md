@@ -1,5 +1,6 @@
 # Tables
 
+## Cities
 The main `geoname` table from [geonames.org](https://download.geonames.org/export/dump/) has the following fields :
 
 ```
@@ -25,3 +26,31 @@ dem               : digital elevation model, srtm3 or gtopo30, average elevation
 timezone          : the timezone id (see file timeZone.txt) varchar(40)
 modification date : date of last modification in yyyy-MM-dd format
 ```
+
+File: cities_canada-usa.tsv
+
+## Countries
+
+This table will contain countries and they iso2 codes to relates with Cities table
+
+```
+isoCode	        : iso 2 code for the country varchar(2), primary key field
+countryName     : country name varchar(200)
+
+```
+
+file: country_iso_names.tsv
+
+## Provinces
+
+This table will contain province codes related to the admin1 code from cities table.
+The relation between provinces and cities will be based on the "<cities.countryIso2Code>:<cities.admin1Code>" key from cities table
+
+```
+code	        : composite key based on "<cities.countryIso2Code>:<cities.admin1Code>" varchar(5)
+provinceCode	: province iso2 code for North America varchar(2)
+provinceName    : province full name varchar(200)
+```
+
+file: provinces_admin1_codes.tsv
+

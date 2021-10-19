@@ -1,3 +1,7 @@
+// Calculates the search score based on the word score
+// Decreases the word score by process.env.DISTANCE_PENALTY_FACTOR for each process.env.DISTANCE_KM_FACTOR kilometers 
+// when latitude and longitude are informed in que query
+
 export function calculateScore(wordScore: number, distance: number) {
     
     if(!distance || distance == 0)
