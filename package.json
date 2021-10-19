@@ -11,7 +11,7 @@
     "typeorm:runmigration": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:run",
     "typeorm:revertmigration": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:revert",
     "test": "ts-mocha --paths -p tsconfig.json src/**/*.spec.ts",
-    "postinstall": "tsc && npm run cleanup",
+    "postinstall": "tsc && npm run typeorm:runmigration && npm run cleanup",
     "start": "ts-node dist/app.js",
     "cleanup": "npm prune --production"
   },
@@ -31,6 +31,7 @@
     "redis": "^3.1.2",
     "string-similarity": "^4.0.4",
     "ts-node": "^10.3.0",
+    "tsconfig-paths": "^3.11.0",
     "typeorm": "^0.2.38",
     "typescript": "^4.4.4"
   },
@@ -47,8 +48,7 @@
     "sinon": "^11.1.2",
     "supertest": "^6.1.6",
     "ts-mocha": "^8.0.0",
-    "ts-node-dev": "^1.1.8",
-    "tsconfig-paths": "^3.11.0"
+    "ts-node-dev": "^1.1.8"
   },
   "_moduleAliases": {
     "models": "dist/src/models",
