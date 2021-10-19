@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { calculateScore } from "lib/calculateScore"
+import { calculateScore } from "./calculateScore"
 require("dotenv").config()
 
 describe('calculateScore', () => {
@@ -14,6 +14,11 @@ describe('calculateScore', () => {
     it('should decrease score by 0.1', () => {
         expect(calculateScore(1,100001)).to.equal(0.9)
     });
+
+    it('should never go lower than 0', () => {
+      expect(calculateScore(0,100001)).greaterThanOrEqual(0)
+    });
+
   })
 
 })

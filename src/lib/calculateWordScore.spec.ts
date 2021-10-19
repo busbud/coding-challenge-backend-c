@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { calculateWordScore } from "lib/calculateWordScore"
+import { calculateWordScore } from "./calculateWordScore"
 require("dotenv").config()
 
 describe('calculateWordScore', () => {

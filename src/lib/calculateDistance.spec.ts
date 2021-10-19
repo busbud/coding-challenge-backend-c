@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { calculateDistance } from "lib/calculateDistance"
+import { calculateDistance } from "./calculateDistance"
 require("dotenv").config()
 
 // Unit tests values taken from https://github.com/manuelbieh/geolib
