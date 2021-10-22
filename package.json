@@ -1,6 +1,6 @@
 {
   "name": "busbudcodechallenge",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "coding challenge in Nodejs",
   "main": "dist/app.js",
   "scripts": {
