@@ -13,7 +13,7 @@
     "typeorm:revertmigration": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:revert",
     "prod:ui": "webpack --config ./webpack.config.prod.js",
     "test": "ts-mocha --paths -p tsconfig.json src/**/*.spec.ts",
-    "postinstall": "tsc && npm run prod:ui && npm run typeorm:runmigration",
+    "postinstall": "npm install && tsc && npm run prod:ui && npm run typeorm:runmigration",
     "start": "ts-node dist/app.js",
     "cleanup": "npm prune --production"
   },
