@@ -25,11 +25,13 @@
             "lib/*": ["src/lib/*"],
             "config/*": ["src/config/*"]
         },
-        "esModuleInterop": true
+        "esModuleInterop": true,
+        "jsx": "react"
     },
     "exclude": [
         "dist/**/*",
         "src/**/*.spec.ts",
-        "node_modules"
+        "node_modules",
+        "src/ui/**"
     ]
 }
