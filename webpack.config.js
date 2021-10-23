@@ -7,7 +7,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 module.exports = {
     name: 'busbudcodechallenge',
     entry: { 
-        busbudcodechallenge: `${paths.SRC_DIR}\\busbudcodechallenge.tsx`,
+        busbudcodechallenge: `${paths.SRC_DIR}/busbudcodechallenge.tsx`,
     },
     output: {
         path: paths.DIST_DIR,
