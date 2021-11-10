@@ -4,23 +4,36 @@
   "description": "coding challenge in Nodejs",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon index.ts",
-    "build": "tsc --project ./"
+    "start": "./node_modules/nodemon/bin/nodemon.js app.ts",
+    "build": "tsc --project ./",
+    "reindex": "./node_modules/ts-node/dist/bin.js scripts/es-reindex.ts ./data/cities_canada-usa.tsv",
+    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register '__tests__/**/*.ts'"
   },
   "author": "Murilo Campaner",
   "license": "WTFPL",
   "dependencies": {
+    "chai": "^4.3.4",
     "dotenv": "^10.0.0",
-    "express": "^4.17.1"
+    "elasticsearch": "^16.7.2",
+    "express": "^4.17.1",
+    "p-queue": "^6.6.2"
   },
   "engines": {
     "node": "16.4.2"
   },
   "devDependencies": {
+    "@types/chai": "^4.2.22",
+    "@types/elasticsearch": "^5.0.40",
     "@types/express": "^4.17.13",
+    "@types/mocha": "^9.0.0",
     "@types/node": "^16.11.7",
-    "nodemon": "^2.0.14",
+    "@types/p-queue": "^3.2.1",
+    "@types/supertest": "^2.0.11",
+    "mocha": "^9.1.3",
+    "nodemon": "^2.0.15",
+    "readline": "^1.3.0",
     "ts-node": "^10.4.0",
+    "tsc": "^2.0.3",
     "typescript": "^4.4.4"
   }
 }
