@@ -6,7 +6,7 @@
   "scripts": {
     "start": "./node_modules/nodemon/bin/nodemon.js app.ts",
     "build": "tsc --project ./",
-    "reindex": "./node_modules/ts-node/dist/bin.js scripts/es-reindex.ts ./data/cities_canada-usa.tsv",
+    "seed": "./node_modules/ts-node/dist/bin.js ./scripts/seed/es-seed.ts ./data/cities_canada-usa.tsv",
     "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register '__tests__/**/*.ts'"
   },
   "author": "Murilo Campaner",
