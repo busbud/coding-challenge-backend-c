@@ -1,30 +1,85 @@
-# Busbud Coding Challenge
+# Busbud Coding Challenge - Murilo Campaner
+Code challenge implemented for Busbud during the hiring process
 
-## Requirements
+This API provides autocomplete suggestions for large cities.
+The results are restricted to the cities of the **United States** and **Canada**, with a population greater than **5000** peoples.
 
-Design an API endpoint that provides autocomplete suggestions for large cities.
-The suggestions should be restricted to cities in the USA and Canada with a population above 5000 people.
+## Development
 
-- the endpoint is exposed at `/suggestions`
-- the partial (or complete) search term is passed as a query string parameter `q`
-- the caller's location can optionally be supplied via query string parameters `latitude` and `longitude` to help improve relative scores
-- the endpoint returns a JSON response with an array of scored suggested matches
-    - the suggestions are sorted by descending score
-    - each suggestion has a score between 0 and 1 (inclusive) indicating confidence in the suggestion (1 is most confident)
-    - each suggestion has a name which can be used to disambiguate between similarly named locations
-    - each suggestion has a latitude and longitude
-- all functional tests should pass (additional tests may be implemented as necessary).
-- the final application should be [deployed to Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs).
-- feel free to add more features if you like!
+### Prerequisites
+You are going to need:
 
-#### Sample responses
+- `Git`
+- `nvm` (or your preferred node version manager)
+- `Node.js > 16.*`
+- `Docker` (for running Elasticsearch and Kibana locally)
 
-These responses are meant to provide guidance. The exact values can vary based on the data source and scoring algorithm.
+### Installation Instructions
+### 1. Installation
 
-**Near match**
+Clone the project and install the dependencies with following commands:
 
-    GET /suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
+```bash
+# Clone the project
+git clone https://github.com/luxurypresence/geocode-api.git
 
+# Open folder
+cd geocode-api
+
+# Install dependencies
+npm install
+```
+
+Copy the `.env.sample` file to `.env` and update the environment variables if necessary.
+
+```bash
+APP_PORT=8000
+ELASTIC_SEARCH_URL=http://0.0.0.0:9200
+```
+
+#### 2. Start Kibana and Elasticsearch using `docker-compose.yml` <small>(only for development)</small>
+```bash
+docker-compose up
+```
+
+
+#### 3. &nbsp;&nbsp;Create Elasticsearch indexes
+```bash
+yarn seed
+```
+
+#### 4. Start the project
+`yarn start` or `npm start`
+
+## Endpoints
+Id ipsum officia ut elit amet et excepteur voluptate anim. Non adipisicing culpa tempor deserunt aliquip Lorem occaecat cupidatat nostrud dolor reprehenderit cupidatat. Nulla eiusmod in consequat id sunt dolor nostrud sunt aute fugiat incididunt amet. Fugiat non pariatur nostrud elit magna culpa qui cupidatat sint irure dolore aliqua cillum. Do nisi mollit officia ut dolor ex Lorem velit voluptate. Pariatur laborum cillum enim deserunt nostrud culpa nisi.
+
+> [Download Postman Collection>](#)
+
+### Autocomplete endpoint
+#### `[GET] /suggestions`
+
+With this endpoint you can fetch autocomplete suggestions by sending an search query to API
+
+##### Query Params
+
+| Name                   | Default |  Type  |              Example               |
+| :--------------------- | :----: | :----: | :--------------------------------: |
+| **q** <small>*(required)*</small> | - |string  |  1109 N Highland St, Arlington VA  |
+| **latitude** <small>*(optional)*</small>       | - | number   | `42.98339` |
+| **longitude** <small>*(optional)*</small>      | - | number   | `-81.23304` |
+| **limit** <small>*(optional)*</small>      | 100 | number   | `100` |
+| **offset** <small>*(optional)*</small>      | 0 | number  | `0` |
+
+##### Request example:
+
+```
+http://<URL>/suggestions?q=searchTerm&latitude=38.886672&longitude=-77.094735&limit=100&offset=0
+```
+
+##### Response example
+
+##### HTTP 200
 ```json
 {
   "suggestions": [
@@ -56,91 +111,36 @@ These responses are meant to provide guidance. The exact values can vary based o
 }
 ```
 
-**No match**
-
-    GET /suggestions?q=SomeRandomCityInTheMiddleOfNowhere
-
+##### HTTP 404
 ```json
 {
   "suggestions": []
 }
 ```
+---
 
 
-### Non-functional
+### Debuging Queries with Kibana
+After starting the project, access Kibana on your browser at `http://localhost:5601`
 
-- All code should be written in Javascript, Typescript or PHP.
-- Mitigations to handle high levels of traffic should be implemented.
-- Challenge is submitted as pull request against this repo ([fork it](https://help.github.com/articles/fork-a-repo/) and [create a pull request](https://help.github.com/articles/creating-a-pull-request-from-a-fork/)).
-- Documentation and maintainability is a plus.
+### Tests
 
-## Dataset
+At the project folder, run `yarn test` or `npm run test` in terminal
+___
 
-You can find the necessary dataset along with its description and documentation in the [`data`](data/) directory.
+### Deployment - Heroku
 
-## Evaluation
+Do anim amet aute nulla veniam officia non nisi sit voluptate do excepteur. Incididunt enim non velit consequat veniam nulla. Ullamco elit minim nisi culpa cupidatat ut culpa tempor irure fugiat excepteur. Sunt ipsum amet fugiat id Lorem nisi ex. Ut nisi nisi exercitation ullamco aliquip ipsum fugiat aute in velit esse laboris sint exercitation. Aliquip Lorem eu do veniam magna fugiat occaecat do. Quis do dolore ipsum Lorem consequat occaecat aute ullamco exercitation aliqua pariatur.
 
-We will use the following criteria to evaluate your solution:
+___
 
-- Capacity to follow instructions
-- Developer Experience (how easy it is to run your solution locally, how clear your documentation is, etc)
-- Solution correctness
-- Performance
-- Tests (quality and coverage)
-- Code style and cleanliness
-- Attention to detail
-- Ability to make sensible assumptions
 
-It is ok to ask us questions!
-
-We know that the time for this project is limited and it is hard to create a "perfect" solution, so we will consider that along with your experience when evaluating the submission.
-
-## Getting Started
-
-### Prerequisites
-
-You are going to need:
-
-- `Git`
-- `nvm` (or your preferred node version manager)
-- `Node.js`
-
-### Setting up your environment
-
-1. Begin by forking this repo and cloning your fork. GitHub has apps for [Mac](http://mac.github.com/) and
-[Windows](http://windows.github.com/) that make this easier.
-
-2. Install [nvm](https://github.com/nvm-sh/nvm#install--update-script) or your preferred node version manager.
-
-3. Install [Node.js](http://www.nodejs.org).
-
-### Setting up the project
-
-In the project directory run:
-
-```
-nvm use
-npm install
-```
-
-### Running the tests
-
-The test suite can be run with:
-
-```
-npm run test
-```
-
-### Starting the application
-
-To start a local server run:
-
-```
-npm run start
-```
-
-it should produce an output similar to:
-
-```
-Server running at http://127.0.0.1:2345/suggestions
-```
+### Features
+- [x] Limit & Offset Params
+- [x] Batch queue to Elasticsearch
+- [x] Docker for Elasticsearch + Kibana
+- [x] .env structure
+- [x] Seed script (`es-seed.ts`)
+- [x] Typescript configuration
+- [ ] Mitigations to handle high levels of traffic should be implemented.
+- [ ] Deploy to Heroku
