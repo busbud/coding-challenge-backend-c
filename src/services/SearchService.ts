@@ -1,12 +1,13 @@
 import elasticsearch from "elasticsearch";
+import { EsSearchType } from "../types";
 
 const client = new elasticsearch.Client({
   hosts: ["http://localhost:9200"],
 });
 
-const search = (filters: any) => {
+const search: EsSearchType = (filters) => {
 
-  const query: { [key: string ]: any } = {
+  const query: any = {
     "bool": {
       "should": [
         {
@@ -48,6 +49,7 @@ const search = (filters: any) => {
     "sort": [{ "_score": { "order": "desc" } }],
     "query": { "function_score": { query }}
   };
+  
   return client.search({ index: "cities_index", body, type: "city_record" });
 };
 
