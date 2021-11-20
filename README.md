@@ -24,6 +24,15 @@ src
 
 1 - docker-compose up
 
+
+- Run tests
+
+1 - yarn test
+
+
+- Run lint
+
+1 - yarn lint
 ```
 
 
