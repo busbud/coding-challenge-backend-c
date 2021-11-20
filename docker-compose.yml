@@ -1,0 +1,13 @@
+version: '3.3'
+services:
+  busbud-api-test:
+    container_name: busbud-api-test
+    build: 
+      context: './'
+      dockerfile: ./docker/api.dockerfile
+    environment:
+      NODE_ENV: development
+    expose:
+      - '3000'
+    ports:
+      - '3000:3000'
