@@ -5,16 +5,16 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "test": "./node_modules/mocha/bin/mocha ./test/"
+    "test": "mocha"
   },
-  "author": "",
+  "author": "Weslley Alcobaça",
   "license": "WTFPL",
   "dependencies": {
     "chai": "^1.9.1",
-    "mocha": "^1.18.2",
+    "mocha": "^9.1.3",
     "supertest": "^0.11.0"
   },
   "engines": {
-    "node": "0.10.26"
+    "node": "13.14.0"
   }
 }

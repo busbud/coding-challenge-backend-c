@@ -1,43 +1,65 @@
-# Busbud Coding Challenge
+# Busbud Coding Challenge - Weslley Alcobaça
 
-## Requirements
+## Implementation
 
-Design an API endpoint that provides autocomplete suggestions for large cities.
-The suggestions should be restricted to cities in the USA and Canada with a population above 5000 people.
+This is an API endpoint that provides autocomplete suggestions for large cities.
+The suggestions are restricted to cities in the USA and Canada with a population above 5000 people.
+This API was designed as part of Busbud's hiring process.
 
-- the endpoint is exposed at `/suggestions`
-- the partial (or complete) search term is passed as a query string parameter `q`
-- the caller's location can optionally be supplied via query string parameters `latitude` and `longitude` to help improve relative scores
-- the endpoint returns a JSON response with an array of scored suggested matches
-    - the suggestions are sorted by descending score
-    - each suggestion has a score between 0 and 1 (inclusive) indicating confidence in the suggestion (1 is most confident)
-    - each suggestion has a name which can be used to disambiguate between similarly named locations
-    - each suggestion has a latitude and longitude
-- all functional tests should pass (additional tests may be implemented as necessary).
-- the final application should be [deployed to Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs).
-- feel free to add more features if you like!
+A live version of the API endpoint can be found at [Heroko](https://busbud-cod-chal-weslley.herokuapp.com/suggestions)
 
-#### Sample responses
+### Query Parameters
 
-These responses are meant to provide guidance. The exact values can vary based on the data source and scoring algorithm.
+- `q` - the query used for suggestions
+- `latitude` - caller's latitude, used to improve relative scores
+- `longitude` - caller's longitude, used to improve relative scores
+- `max_amount` - the maximun number of suggestions to be returned
+- `loose_match` - if "true", will attempt to match suggestions, even if there are small typos. However, the option reduces performance and score's accuracy
+
+### Sample queries
+
+A few examples of requests made to the API.
 
 **Near match**
 
-    GET /suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
+    GET /suggestions?q=Londo&latitude=43.70011&longitude=-79.4163&max_amount=3&loose_match=false
 
 ```json
 {
   "suggestions": [
     {
-      "name": "London, ON, Canada",
+      "name": "London, 08, Canada",
       "latitude": "42.98339",
       "longitude": "-81.23304",
-      "score": 0.9
+      "score": 0.8
     },
     {
       "name": "London, OH, USA",
       "latitude": "39.88645",
       "longitude": "-83.44825",
+      "score": 0.5
+    },
+    {
+      "name": "Londontowne, MD, USA",
+      "latitude": "38.93345",
+      "longitude": "-76.54941",
+      "score": 0.4
+    }
+  ]
+}
+```
+
+**Loose match**
+
+    GET /suggestions?q=Lodon&max_amount=3&loose_match=true
+
+```json
+{
+  "suggestions": [
+    {
+      "name": "London, 08, Canada",
+      "latitude": "42.98339",
+      "longitude": "-81.23304",
       "score": 0.5
     },
     {
@@ -50,7 +72,7 @@ These responses are meant to provide guidance. The exact values can vary based o
       "name": "Londontowne, MD, USA",
       "latitude": "38.93345",
       "longitude": "-76.54941",
-      "score": 0.3
+      "score": 0.5
     }
   ]
 }
@@ -69,31 +91,9 @@ These responses are meant to provide guidance. The exact values can vary based o
 
 ### Non-functional
 
-- All code should be written in Javascript, Typescript or PHP.
-- Mitigations to handle high levels of traffic should be implemented.
-- Challenge is submitted as pull request against this repo ([fork it](https://help.github.com/articles/fork-a-repo/) and [create a pull request](https://help.github.com/articles/creating-a-pull-request-from-a-fork/)).
-- Documentation and maintainability is a plus.
-
-## Dataset
-
-You can find the necessary dataset along with its description and documentation in the [`data`](data/) directory.
-
-## Evaluation
-
-We will use the following criteria to evaluate your solution:
-
-- Capacity to follow instructions
-- Developer Experience (how easy it is to run your solution locally, how clear your documentation is, etc)
-- Solution correctness
-- Performance
-- Tests (quality and coverage)
-- Code style and cleanliness
-- Attention to detail
-- Ability to make sensible assumptions
-
-It is ok to ask us questions!
-
-We know that the time for this project is limited and it is hard to create a "perfect" solution, so we will consider that along with your experience when evaluating the submission.
+- All code was written in Javascript.
+- In order to mitigate high levels of traffic, a simple memory cache was implemented. The implementation is naive and can bring many memory problems in a production environment. It is supposed to be used as a proof of concept only. In a production environment, more robust solutions, like Redis make much more sense.
+- No extra dependencies were directly added, however, node and mocha's version were updated.
 
 ## Getting Started
 
@@ -103,7 +103,7 @@ You are going to need:
 
 - `Git`
 - `nvm` (or your preferred node version manager)
-- `Node.js`
+- `Node.js` - 13.14.0 or higher
 
 ### Setting up your environment
 
@@ -128,7 +128,7 @@ npm install
 The test suite can be run with:
 
 ```
-npm run test
+npm test
 ```
 
 ### Starting the application
