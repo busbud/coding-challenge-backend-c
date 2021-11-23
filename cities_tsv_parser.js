@@ -19,8 +19,12 @@ const getCities = async () => {
     const cache = new cache_provider.MemoryCache(readFile);
 
     const file_content = await cache.getData(path.resolve(process.cwd(), "data", "cities_canada-usa.tsv"), "utf8");
+    let separator = /\r\n/;
 
-    const cities = file_content.split(/\r\n/).map((city, idx) => {
+    // Heroku changes \r\n to \n
+    if(file_content.indexOf("\r\n") == -1) separator = /\n/;
+
+    const cities = file_content.split(separator).map((city, idx) => {
         if(idx == 0) return;
 
         const [geonameid, name, asciiname, alternatenames, latitude, longitude, feature_class, feature_code, country_code, cc2,
