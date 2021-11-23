@@ -1,4 +1,8 @@
 const fs = require("fs");
+const path = require("path");
+const process = require('process');
+
+
 const cache_provider = require("./simple_memory_cache");
 
 const readFile = async (file_path, encoding) => {
@@ -14,7 +18,7 @@ const readFile = async (file_path, encoding) => {
 const getCities = async () => {
     const cache = new cache_provider.MemoryCache(readFile);
 
-    const file_content = await cache.getData("./data/cities_canada-usa.tsv", "utf8");
+    const file_content = await cache.getData(path.join(process.cwd(), "data", "cities_canada-usa.tsv"), "utf8");
 
     const cities = file_content.split(/\r\n/).map((city, idx) => {
         if(idx == 0) return;
