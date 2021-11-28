@@ -1,56 +1,48 @@
 # Busbud Coding Challenge
 
-## Requirements
+Author: Svetlana Brind
 
-Design an API endpoint that provides autocomplete suggestions for large cities.
-The suggestions should be restricted to cities in the USA and Canada with a population above 5000 people.
+## API Description
 
-- the endpoint is exposed at `/suggestions`
-- the partial (or complete) search term is passed as a query string parameter `q`
-- the caller's location can optionally be supplied via query string parameters `latitude` and `longitude` to help improve relative scores
-- the endpoint returns a JSON response with an array of scored suggested matches
-    - the suggestions are sorted by descending score
-    - each suggestion has a score between 0 and 1 (inclusive) indicating confidence in the suggestion (1 is most confident)
-    - each suggestion has a name which can be used to disambiguate between similarly named locations
-    - each suggestion has a latitude and longitude
-- all functional tests should pass (additional tests may be implemented as necessary).
-- the final application should be [deployed to Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs).
-- feel free to add more features if you like!
+The API exposes `/suggestions` endpoint that provides autocomplete suggestions for large cities.
+
+- Returned suggestions are restricted to cities in the USA and Canada with a population above 5000 people.
+- The suggestions are generated based on the value of a query string parameter `q` which must be passed with the call.
+- Returned suggestions include `name`, `latitude`, `longitude`, `score` and are sorted by descending score
+- The `score` is a value between 0 and 1 (inclusive) indicating confidence in the suggestion (1 is most confident)
 
 #### Sample responses
 
-These responses are meant to provide guidance. The exact values can vary based on the data source and scoring algorithm.
-
 **Near match**
 
-    GET /suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
+    GET /suggestions?q=Montr&latitude=37.5207&longitude=-77.37831
 
 ```json
 {
   "suggestions": [
     {
-      "name": "London, ON, Canada",
-      "latitude": "42.98339",
-      "longitude": "-81.23304",
-      "score": 0.9
+      "name": "Montrose, VA, US",
+      "latitude": 37.5207,
+      "longitude": -77.37831,
+      "score": "1.0"
     },
     {
-      "name": "London, OH, USA",
-      "latitude": "39.88645",
-      "longitude": "-83.44825",
-      "score": 0.5
+      "name": "Montréal-Ouest, PE, CA",
+      "latitude": 45.45286,
+      "longitude": -73.64918,
+      "score": "0.7"
     },
     {
-      "name": "London, KY, USA",
-      "latitude": "37.12898",
-      "longitude": "-84.08326",
-      "score": 0.5
+      "name": "Montréal, PE, CA",
+      "latitude": 45.50884,
+      "longitude": -73.58781,
+      "score": "0.3"
     },
     {
-      "name": "Londontowne, MD, USA",
-      "latitude": "38.93345",
-      "longitude": "-76.54941",
-      "score": 0.3
+      "name": "Montrose, CO, US",
+      "latitude": 38.47832,
+      "longitude": -107.87617,
+      "score": "0.0"
     }
   ]
 }
@@ -66,81 +58,55 @@ These responses are meant to provide guidance. The exact values can vary based o
 }
 ```
 
-
-### Non-functional
-
-- All code should be written in Javascript, Typescript or PHP.
-- Mitigations to handle high levels of traffic should be implemented.
-- Challenge is submitted as pull request against this repo ([fork it](https://help.github.com/articles/fork-a-repo/) and [create a pull request](https://help.github.com/articles/creating-a-pull-request-from-a-fork/)).
-- Documentation and maintainability is a plus.
-
-## Dataset
-
-You can find the necessary dataset along with its description and documentation in the [`data`](data/) directory.
-
-## Evaluation
-
-We will use the following criteria to evaluate your solution:
-
-- Capacity to follow instructions
-- Developer Experience (how easy it is to run your solution locally, how clear your documentation is, etc)
-- Solution correctness
-- Performance
-- Tests (quality and coverage)
-- Code style and cleanliness
-- Attention to detail
-- Ability to make sensible assumptions
-
-It is ok to ask us questions!
-
-We know that the time for this project is limited and it is hard to create a "perfect" solution, so we will consider that along with your experience when evaluating the submission.
-
-## Getting Started
-
-### Prerequisites
+## Prerequisites
 
 You are going to need:
 
 - `Git`
-- `nvm` (or your preferred node version manager)
+- `PostreSQL`
 - `Node.js`
 
-### Setting up your environment
+## Setting up local environment
 
-1. Begin by forking this repo and cloning your fork. GitHub has apps for [Mac](http://mac.github.com/) and
-[Windows](http://windows.github.com/) that make this easier.
-
-2. Install [nvm](https://github.com/nvm-sh/nvm#install--update-script) or your preferred node version manager.
-
-3. Install [Node.js](http://www.nodejs.org).
-
-### Setting up the project
-
-In the project directory run:
+1. Install dependencies by running:
 
 ```
-nvm use
 npm install
 ```
 
-### Running the tests
+2. Update `DB_HOST`, `DB_USERNAME`, `DB_PASSWORD` in `.env` according to your local information
+
+3. Initialize a database by running:
+
+```
+npm run set_db
+```
+
+4. Run database migration and seed the data by running:
+
+```
+npm run configure_db
+```
+
+5. Starte the server by running:
+
+```
+npm start
+```
+
+6. You should see following logs in the terminal
+
+```
+Server is running on port {PORT}
+Database connected...
+```
+
+Done!
+
+## Running the tests
 
 The test suite can be run with:
 
 ```
 npm run test
-```
-
-### Starting the application
-
-To start a local server run:
-
-```
-npm run start
-```
-
-it should produce an output similar to:
-
-```
-Server running at http://127.0.0.1:2345/suggestions
 ```

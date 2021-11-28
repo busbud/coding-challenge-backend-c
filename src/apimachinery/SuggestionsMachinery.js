@@ -1,4 +1,3 @@
-//import getGeoData from '../utils/tsvGeoParser';
 const sequelize = require('../config/db');
 const { QueryTypes } = require('sequelize');
 
