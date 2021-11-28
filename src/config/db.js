@@ -7,17 +7,15 @@ const {
   DB_USERNAME,
   DB_PASSWORD,
 } = process.env;
-const serverDialectOptions = {
-  require: true,
-  rejectUnauthorized: false,
-};
 
 module.exports = new Sequelize(DATABASE_URL, DB_USERNAME, DB_PASSWORD, {
   host: DB_HOST,
-  operatorsAliases: false,
   dialect: 'postgres',
   dialectOptions: {
-    ssl: process.env.DATABASE_URL ? serverDialectOptions : false,
+    ssl: {
+      require: true,
+      rejectUnauthorized: false,
+    },
   },
   pool: {
     max: 5,
