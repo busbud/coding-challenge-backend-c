@@ -25,9 +25,6 @@
     "sequelize": "^6.12.0-alpha.1",
     "supertest": "^0.11.0"
   },
-  "engines": {
-    "node": "0.10.26"
-  },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.7.0",
