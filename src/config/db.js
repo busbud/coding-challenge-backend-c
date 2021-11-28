@@ -7,20 +7,21 @@ const {
   DB_USERNAME,
   DB_PASSWORD,
 } = process.env;
+let sequelize;
 
-module.exports = new Sequelize(DATABASE_URL, DB_USERNAME, DB_PASSWORD, {
-  host: DB_HOST,
-  dialect: 'postgres',
-  dialectOptions: {
-    ssl: {
-      require: true,
-      rejectUnauthorized: false,
+if (process.env.DATABASE_URL) {
+  sequelize = new Sequelize(DATABASE_URL);
+} else {
+  sequelize = new Sequelize(DATABASE_URL, DB_USERNAME, DB_PASSWORD, {
+    host: DB_HOST,
+    dialect: 'postgres',
+    pool: {
+      max: 5,
+      min: 0,
+      aquire: 30000,
+      idle: 10000,
     },
-  },
-  pool: {
-    max: 5,
-    min: 0,
-    aquire: 30000,
-    idle: 10000,
-  },
-});
+  });
+}
+
+module.exports = sequelize;
