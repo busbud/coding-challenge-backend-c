@@ -4,7 +4,7 @@
   "description": "coding challenge in Nodejs - Svetlana Brind",
   "main": "src/index.js",
   "scripts": {
-    "start": "nodemon --exec babel-node src/index.js",
+    "start": "node src/index.js",
     "test": "node ./node_modules/mocha/bin/mocha ./test/",
     "configure_db": "npm run db:migrate && npm run db:seeds",
     "set_db": "npx sequelize-cli db:create",
