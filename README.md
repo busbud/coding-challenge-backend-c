@@ -74,7 +74,7 @@ You are going to need:
 npm install
 ```
 
-2. Update `DB_HOST`, `DB_USERNAME`, `DB_PASSWORD` in `.env` according to your local information
+2. Create `.env` and add `DB_HOST`, `DB_USERNAME`, `DB_PASSWORD` according to your local information
 
 3. Initialize a database by running:
 
