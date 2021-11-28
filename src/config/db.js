@@ -10,7 +10,12 @@ const {
 let sequelize;
 
 if (process.env.DATABASE_URL) {
-  sequelize = new Sequelize(DATABASE_URL);
+  sequelize = new Sequelize(DATABASE_URL, {
+    dialect: 'postgres',
+    dialectOptions: {
+      ssl: true,
+    },
+  });
 } else {
   sequelize = new Sequelize(DATABASE_URL, DB_USERNAME, DB_PASSWORD, {
     host: DB_HOST,
