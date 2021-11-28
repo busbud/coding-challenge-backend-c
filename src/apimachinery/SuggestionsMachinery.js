@@ -33,7 +33,7 @@ async function generateSuggestions(searchParam, latitude, longitude) {
     `SELECT CONCAT(name, ', ', state, ', ', country_code) as name, latitude, longitude,
     CAST(PERCENT_RANK() OVER (ORDER BY ${distanceCalcQuery} length(name) - length(:searchParam) DESC) as DECIMAL(10,1)) as score
     FROM public."geonames"
-    WHERE LOWER(name) LIKE :likeCondition
+    WHERE (LOWER(name) LIKE :likeCondition OR LOWER(ascii_name) LIKE :likeCondition)
       AND population >= 5000
     ORDER BY score DESC`,
     {

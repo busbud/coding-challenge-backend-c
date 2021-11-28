@@ -23,7 +23,11 @@ router.get('/', async (req, res) => {
       longitude
     );
 
-    return res.json(suggestions);
+    if (suggestions.length) {
+      res.status(200).json({ suggestions });
+    } else {
+      res.status(404).json({ suggestions: [] });
+    }
   } catch (e) {
     res.status(500).json({ error: e.message });
   }

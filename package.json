@@ -5,22 +5,21 @@
   "main": "src/index.js",
   "scripts": {
     "start": "nodemon --exec babel-node src/index.js",
-    "test": "./node_modules/mocha/bin/mocha ./test/",
-    "db:create": "sequelize-cli db:create",
-    "db:migrate": "sequelize-cli db:migrate",
-    "db:g:migration": "sequelize-cli migration:generate --name",
-    "db:seeds": "sequelize-cli db:seed:all",
-    "db:g:seed": "sequelize-cli seed:generate --name"
+    "test": "node ./node_modules/mocha/bin/mocha ./test/",
+    "configure_db": "npm run db:migrate && npm run db:seeds",
+    "set_db": "npx sequelize-cli db:create",
+    "db:migrate": "npx sequelize-cli db:migrate",
+    "db:g:migration": "npx sequelize-cli migration:generate --name",
+    "db:seeds": "npx sequelize-cli db:seed:all",
+    "db:g:seed": "npx sequelize-cli seed:generate --name"
   },
   "author": "Svetlana Brind",
   "license": "WTFPL",
   "dependencies": {
-    "chai": "^1.9.1",
     "csv-parser": "^3.0.0",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "geolib": "^3.3.3",
-    "mocha": "^1.18.2",
     "pg": "^8.7.1",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.12.0-alpha.1",
@@ -33,7 +32,9 @@
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-stage-0": "^6.24.1",
+    "chai": "^4.3.4",
     "eslint": "^8.3.0",
+    "mocha": "^9.1.3",
     "nodemon": "^2.0.15",
     "sequelize-cli": "^6.3.0"
   }

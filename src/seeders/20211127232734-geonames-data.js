@@ -32,6 +32,7 @@ module.exports = {
 
           cistiesDataArray.push({
             name: data.name,
+            ascii_name: data.ascii,
             country_code: data.country,
             state: stateOrProvince,
             latitude: data.lat ? parseFloat(data.lat) : null,

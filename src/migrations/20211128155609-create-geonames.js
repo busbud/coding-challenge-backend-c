@@ -10,6 +10,9 @@ module.exports = {
       name: {
         type: Sequelize.STRING(200),
       },
+      ascii_name: {
+        type: Sequelize.STRING(200),
+      },
       country_code: {
         type: Sequelize.CHAR(2),
       },
