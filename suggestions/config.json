@@ -1,0 +1,61 @@
+{
+  "limit": {
+    "population": {
+      "min":5000,
+      "max":null
+    },
+    "country": {
+      "include": ["US","CA"]
+    },
+    "query": {
+      "minLength": 3
+    }
+  },
+  "score": {
+    "distance": 1,
+    "exact-match": 10,
+    "popularity": 5,
+    "state": 2,
+    "near-match": 8
+  },
+  "data_columns": {
+    "id": 0,
+    "name": 1,
+    "ascii": 2,
+    "alt_name": 3,
+    "lat": 4,
+    "long": 5,
+    "feat_class": 6,
+    "feat_code": 7,
+    "country": 8,
+    "cc2": 9,
+    "admin1": 10,
+    "admin2": 11,
+    "admin3": 12,
+    "admin4": 13,
+    "population": 14,
+    "elevation": 15,
+    "dem": 16,
+    "tz": 17,
+    "modified_at": 18
+  },
+  "canada_provinces": {
+    "01":	"AB",
+    "02":	"BC",
+    "03":	"MB",
+    "04":	"NB",
+    "13":	"NT",
+    "07":	"NS",
+    "14":	"NU",
+    "08":	"ON",
+    "09":	"PE",
+    "10":	"QC",
+    "11":	"SK",
+    "12":	"YT",
+    "05":	"NL"
+  },
+  "country_names": {
+    "CA": "Canada",
+    "US": "USA"
+  }
+}

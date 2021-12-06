@@ -10,9 +10,11 @@ describe('GET /suggestions', function() {
       request
         .get('/suggestions?q=SomeRandomCityInTheMiddleOfNowhere')
         .end(function (err, res) {
-          response = res;
-          response.json = JSON.parse(res.text);
-          done(err);
+          res.on('end', function () {
+            response = res;
+            response.json = JSON.parse(res.text);
+            done(err);
+          })
         });
     });
 
@@ -33,9 +35,11 @@ describe('GET /suggestions', function() {
       request
         .get('/suggestions?q=Montreal')
         .end(function (err, res) {
-          response = res;
-          response.json = JSON.parse(res.text);
-          done(err);
+          res.on('end', function () {
+            response = res;
+            response.json = JSON.parse(res.text);
+            done(err);
+          })
         });
     });
 
@@ -60,15 +64,11 @@ describe('GET /suggestions', function() {
       it('contains scores', function () {	
         expect(response.json.suggestions).to.satisfy(function (suggestions) {	
           return suggestions.every(function (suggestion) {	
-            return suggestion.latitude && suggestion.longitude;	
+            return suggestion.score > 0;	
           });	
         })	
       });
-    });
-    
-    it('is a gratuitously failing test you should remove to prove you ran the tests', function () {	
-      expect(true).to.equal(false);	
-    });	    
+    });   
 
     it('contains a match', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
