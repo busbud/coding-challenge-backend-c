@@ -10,17 +10,7 @@ import fs from 'fs';
 import { parse } from 'csv-parse';
 import { IndicesCreateRequest } from '@elastic/elasticsearch/api/types';
 import { ElasticSearchClient } from '../src/clients/elasticsearch-client';
-
-// TODO: move this to a suggestion-service-like file
-interface City {
-  geoname_id: number;
-  name: string;
-  name_concat: string;
-  province: string;
-  country: string;
-  location: { lat: number, lon: number };
-  population: number;
-}
+import { City } from '../src/services/suggestion-service';
 
 interface TsvCity {
   id: number;
