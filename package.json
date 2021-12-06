@@ -5,10 +5,10 @@
   "main": "src/index.ts",
   "scripts": {
     "start": "node build/index.js",
-    "build": "tsc",    
+    "build": "tsc",
     "dev": "tsnd --respawn .",
     "test": "jest --coverage",
-    "seed": "ts-node scripts/seed-cities.ts"    
+    "seed": "ts-node scripts/seed-cities.ts"
   },
   "keywords": [],
   "author": "Eduardo Godoy",
@@ -36,6 +36,7 @@
   "dependencies": {
     "@elastic/elasticsearch": "^7.15.0",
     "dotenv": "^10.0.0",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "joi": "^17.5.0"
   }
 }
