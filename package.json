@@ -4,7 +4,11 @@
   "description": "coding challenge in Nodejs",
   "main": "src/index.ts",
   "scripts": {
-    "dev": "tsnd --respawn ."
+    "start": "node build/index.js",
+    "build": "tsc",    
+    "dev": "tsnd --respawn .",
+    "test": "jest --coverage",
+    "seed": "ts-node scripts/seed-cities.ts"    
   },
   "keywords": [],
   "author": "Eduardo Godoy",
