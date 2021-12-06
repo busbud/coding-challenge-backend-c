@@ -11,10 +11,17 @@ export interface City {
   population: number;
 }
 
+interface GetSuggestionResult {
+  score: number | null;
+  name: string;
+  latitude: number;
+  longitude: number;
+}
+
 export class SuggestionService {
   constructor(private esClient: ElasticSearchClient) {}
 
-  getSuggestions = async (term: string, location?: { lat: number, long: number }) => {
+  getSuggestions = async (term: string, location?: { lat: number, long: number }): Promise<GetSuggestionResult[]> => {
     // Initialize es search options
     const options: { query?: QueryDslQueryContainer, sort?: SearchSortContainerKeys } = {};
 
@@ -32,6 +39,17 @@ export class SuggestionService {
       };
     }
 
-    return this.esClient.searchAsYouType<City>('cities', 'name_concat', term, options);
+    const result = await this.esClient.searchAsYouType<City>('cities', 'name_concat', term, options);
+
+    return result.hits.map((hit) => {
+      const score = options.sort ? Number(hit.sort![0]) : hit._score!;
+
+      return {
+        score,
+        name: hit._source!.name_concat,
+        latitude: hit._source!.location.lat,
+        longitude: hit._source!.location.lon,
+      };
+    });
   };
 }

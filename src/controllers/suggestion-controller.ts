@@ -15,8 +15,8 @@ export class SuggestionController {
     }
 
     const { q: term } = req.query;
-    const result = await this.suggestionService.getSuggestions(term as string, location);
+    const suggestions = await this.suggestionService.getSuggestions(term as string, location);
 
-    res.json({ result });
+    res.json({ suggestions });
   };
 }
