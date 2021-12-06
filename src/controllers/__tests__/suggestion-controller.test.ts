@@ -31,35 +31,31 @@ describe('SuggestionController', () => {
       const term = '_term_';
 
       const mockedResJson = jest.fn();
-      const mockedReq = { query: { q: term } } as unknown as Request;      
+      const mockedReq = { query: { q: term } } as unknown as Request;
       const mockedRes = { json: mockedResJson } as unknown as Response;
 
-      mockGetSuggestions.mockResolvedValueOnce({ cities: [] });
+      mockGetSuggestions.mockResolvedValueOnce([]);
 
       await suggestionController.getSuggestions(mockedReq, mockedRes);
 
       expect(mockGetSuggestions).toHaveBeenCalledWith(term, undefined);
-      expect(mockedResJson).toHaveBeenCalledTimes(1);
+      expect(mockedResJson).toHaveBeenCalledWith({ suggestions: [] });
     });
 
     it('should call suggestion service with location', async () => {
       const term = '_term_';
       const location = { lat: 1, long: 2 };
-      
+
       const mockedResJson = jest.fn();
-      const mockedReq = { query: { q: term, ...location } } as unknown as Request;      
+      const mockedReq = { query: { q: term, ...location } } as unknown as Request;
       const mockedRes = { json: mockedResJson } as unknown as Response;
 
-      mockGetSuggestions.mockResolvedValueOnce({ cities: [] });
+      mockGetSuggestions.mockResolvedValueOnce([]);
 
       await suggestionController.getSuggestions(mockedReq, mockedRes);
 
       expect(mockGetSuggestions).toHaveBeenCalledWith(term, location);
-      expect(mockedResJson).toHaveBeenCalledTimes(1);
-    });
-
-    it('should return set of cities with scores', () => {
-      // TODO: still need to transform the return
+      expect(mockedResJson).toHaveBeenCalledWith({ suggestions: [] });
     });
   });
 });
