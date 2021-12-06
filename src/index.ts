@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import express, { NextFunction, Request, Response } from 'express';
+import suggestionRoutes from './routes/suggestion-routes';
 
 const app = express();
 
@@ -8,7 +9,7 @@ const app = express();
   app.use(express.json());
 
   // Routes
-  app.use('/suggestion', () => {});
+  app.use('/suggestion', suggestionRoutes);
 
   // Basic error handling
   app.use((err: any, req: Request, res: Response, next: NextFunction) => {
