@@ -83,3 +83,20 @@ These responses are meant to provide guidance. The exact values can vary based o
 
 ### Running tests
 - `npm run test`
+
+### Bonus
+In case you're using VSCode, here's a launch config that might help if you need to debug the application.
+```json
+{  
+      "name":"TSND",
+      "type":"node",
+      "request":"launch",
+      "protocol":"inspector",
+      "cwd":"${workspaceRoot}",
+      "runtimeExecutable":"${workspaceRoot}/node_modules/.bin/ts-node-dev",
+      "args":[  
+         "${workspaceRoot}/src/index.ts"
+      ],
+      "restart":true
+}
+```
