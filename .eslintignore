@@ -1,1 +1,2 @@
 jest.config.js
+scripts/seed-cities.ts
