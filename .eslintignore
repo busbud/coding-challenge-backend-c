@@ -1,5 +1,5 @@
 jest.config.js
 scripts/seed-cities.ts
 
-# TODO: figure out why the parser is complaing
+# TODO: figure out why the parser is complaining.
 /**/*.test.ts
