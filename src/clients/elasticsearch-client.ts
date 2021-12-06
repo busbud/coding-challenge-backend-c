@@ -7,13 +7,32 @@ import {
   SearchSortContainerKeys,
 } from '@elastic/elasticsearch/api/types';
 
+const { APP_ENV } = process.env;
+
 export class ElasticSearchClient {
   private client: NewTypes;
 
   constructor(options?: ClientOptions) {
+    // Default for localhost
+    let esClientOptions: ClientOptions = { node: `http://localhost:${process.env.ES_PORT}`, ...options };
+
+    // Quick and dirty for now - should probably find a common way to connect to local & cloud
+    /* istanbul ignore if */
+    if (APP_ENV === 'production') {
+      esClientOptions = {
+        cloud: {
+          id: process.env.ES_CLOUD_ID!,
+        },
+        auth: {
+          username: process.env.ES_CLOUD_USERNAME!,
+          password: process.env.ES_CLOUD_PASSWORD!,
+        },
+      };
+    }
+
     // @ts-expect-error @elastic/elasticsearch
     // https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/typescript.html - not fully supported yet
-    this.client = new Client({ node: `http://localhost:${process.env.ES_PORT}`, ...options });
+    this.client = new Client(esClientOptions);
   }
 
   isExistentIndex = async (index: string): Promise<boolean> => {

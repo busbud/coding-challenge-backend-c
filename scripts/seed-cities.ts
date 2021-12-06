@@ -6,6 +6,7 @@
  * All methods in here are intentionally city-specific.
 */
 
+import 'dotenv/config';
 import fs from 'fs';
 import { parse } from 'csv-parse';
 import { IndicesCreateRequest } from '@elastic/elasticsearch/api/types';
@@ -121,8 +122,8 @@ const transformCities = (tsvCities: TsvCity[]) => {
 };
 
 (async () => {
-  try {
-    const client = new ElasticSearchClient({node: 'http://localhost:9200'});
+  try {    
+    const client = new ElasticSearchClient();
     const citiesIndex = await client.isExistentIndex('cities');
 
     if (!citiesIndex) createCitiesIndex(client);
