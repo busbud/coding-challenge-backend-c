@@ -5,6 +5,7 @@ import { SuggestionController } from '../controllers/suggestion-controller';
 import { SuggestionService } from '../services/suggestion-service';
 import { suggestionSchema } from '../schemas/suggestion-schema';
 import { SuggestionMiddleware } from '../middlewares/suggestion-middleware';
+import { asyncHandler } from '../middlewares/async-handler-middleware';
 
 // eslint-disable-next-line new-cap
 const router = express.Router();
@@ -16,6 +17,10 @@ const suggestionService = new SuggestionService(esClient);
 const suggestionController = new SuggestionController(suggestionService, redisClient);
 const suggestionMiddleware = new SuggestionMiddleware(redisClient);
 
-router.post('/', [suggestionSchema, suggestionMiddleware.checkSuggestionCache], suggestionController.getSuggestions);
+router.post(
+  '/',
+  [suggestionSchema, suggestionMiddleware.checkSuggestionCache],
+  asyncHandler(suggestionController.getSuggestions),
+);
 
 export default router;
