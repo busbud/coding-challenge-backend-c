@@ -35,8 +35,10 @@
   },
   "dependencies": {
     "@elastic/elasticsearch": "^7.15.0",
+    "@types/redis": "^2.8.32",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
-    "joi": "^17.5.0"
+    "joi": "^17.5.0",
+    "redis": "^4.0.0"
   }
 }
