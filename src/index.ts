@@ -18,7 +18,7 @@ const app = express();
     else res.status(500).json({ message: 'Uh, something went wrong' });
   });
 
-  app.listen(process.env.EXPRESS_PORT, () => {
-    console.log(`Live at ${process.env.EXPRESS_PORT}!`);
+  app.listen(process.env.PORT, () => {
+    console.log(`Live at ${process.env.PORT}!`);
   });
 })();
