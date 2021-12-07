@@ -84,6 +84,26 @@ These responses are meant to provide guidance. The exact values can vary based o
 ### Running tests
 - `npm run test`
 
+### Running from Heroku
+```
+curl --request POST 'https://busbud-cc.herokuapp.com/suggestion?q=london on'
+```
+```
+curl --request POST 'https://busbud-cc.herokuapp.com/suggestion?lat=35.65283&long=-97.4781&q=dall'
+```
+
+### Notes
+- Secrets are stored in Heroku.
+- Caching with Redis improved response time to ~1/3.
+
+### What would be next
+A few things to consider moving from here...
+- Logging, metrics and error handling still need to properly be addressed.
+- Fine tune eslint and probably tsconfig for production.
+- Fine tune redis and elastic search.
+- Pre-commit/push using Husky.
+- Integration and e2e tests.
+
 ### Bonus
 In case you're using VSCode, here's a launch config that might help if you need to debug the application.
 ```json
