@@ -32,6 +32,7 @@ let suggestionController: SuggestionController;
 
 describe('SuggestionController', () => {
   beforeEach(() => {
+    jest.resetAllMocks();
     suggestionController = new SuggestionController(mockedSuggestionService, mockedRedisClient);
   });
 
