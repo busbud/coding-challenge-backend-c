@@ -11,7 +11,7 @@ export interface City {
   population: number;
 }
 
-interface GetSuggestionResult {
+export interface GetSuggestionResult {
   score: number | null;
   name: string;
   latitude: number;
