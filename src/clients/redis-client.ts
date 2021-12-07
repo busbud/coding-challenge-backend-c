@@ -15,11 +15,7 @@ export class RedisClient {
       };
     }
 
-    this.redisClient = createClient({
-      url: process.env.REDIS_URL || 'redis://redis-16820.c17.us-east-1-4.ec2.cloud.redislabs.com:16820',
-      password: process.env.REDIS_PASSWORD || 'mdyaxNOfqYQM0e8U4dkd3kuiwpidrP3r',
-    });
-
+    this.redisClient = createClient(redisClientOptions);
     this.redisClient.connect();
   }
 
