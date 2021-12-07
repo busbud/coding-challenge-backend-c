@@ -23,6 +23,11 @@ services:
       - elasticsearch
     ports:
       - 5601:5601
+  redis:
+    container_name: redis-container
+    image: redis:alpine
+    ports:
+      - 6379:6379
 networks:
   es-network:
     driver: bridge
