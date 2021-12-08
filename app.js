@@ -6,7 +6,13 @@ var port = process.env.PORT || 2345;
 module.exports = http.createServer(async function (req, res) {
   res.writeHead(404, { 'Content-Type': 'text/plain' });
   
-  if (req.url.indexOf('/suggestions') === 0) {
+
+  if (req.url === '/') {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({
+          msg: "App is running"
+        }));
+    } else if (req.url.indexOf('/suggestions') === 0) {
     res.writeHead(200, { 'Content-Type': 'application/json' });
     const params = url.parse(req.url,true).query
     console.log(params.q)
