@@ -1,5 +1,12 @@
 # Busbud Coding Challenge
 
+## Improvements to do
+1. use sanitizer on inputs
+2. No _admin1Codes.txt_ and _admin1Codes.txt_ found on repos. Find the equivalence an use it
+3. Use Express or similar framework if more endpoint needed 
+4. Use cache or DB to store (and search) cities 
+5. Add cache session: each time a new letter is tapped, search in prefeched data
+
 ## Requirements
 
 Design an API endpoint that provides autocomplete suggestions for large cities.
