@@ -3,7 +3,7 @@ const url = require('url');
 const suggestionsService = require('./src/suggestions')
 var port = process.env.PORT || 2345;
 
-http.createServer(async function (req, res) {
+module.exports = http.createServer(async function (req, res) {
   res.writeHead(404, { 'Content-Type': 'text/plain' });
   
   if (req.url.indexOf('/suggestions') === 0) {

@@ -13,7 +13,7 @@
     "d3": "^5.7.0"
   },
   "engines": {
-    "node": "0.10.26"
+    "node": "14.2.0"
   },
   "devDependencies": {
     "supertest": "^0.11.0",
