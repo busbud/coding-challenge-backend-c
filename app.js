@@ -2,7 +2,7 @@ var http = require('http');
 const url = require('url');
 const suggestionsService = require('./src/suggestions')
 var port = process.env.PORT || 2345;
-var host = process.env.HOST || '127.0.0.1';
+//var host = process.env.HOST || '127.0.0.1';
 
 module.exports = http.createServer(async function (req, res) {
   res.writeHead(404, { 'Content-Type': 'text/plain' });
@@ -35,7 +35,7 @@ module.exports = http.createServer(async function (req, res) {
   } else {
     res.end();
   }
-}).listen(port, host, () => {
-  console.log(`Server running at http://${host}:${port}/suggestions`);
+}).listen(port, () => {
+  console.log(`Server running at IP:${port}/suggestions`);
 
 });
