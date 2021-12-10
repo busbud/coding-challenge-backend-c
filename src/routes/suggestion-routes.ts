@@ -17,7 +17,7 @@ const suggestionService = new SuggestionService(esClient);
 const suggestionController = new SuggestionController(suggestionService, redisClient);
 const suggestionMiddleware = new SuggestionMiddleware(redisClient);
 
-router.post(
+router.get(
   '/',
   [suggestionSchema, suggestionMiddleware.checkSuggestionCache],
   asyncHandler(suggestionController.getSuggestions),

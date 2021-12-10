@@ -9,10 +9,10 @@ export class SuggestionController {
   getSuggestions = async (req: Request, res: Response): Promise<void> => {
     let location;
 
-    if (req.query.lat && req.query.long) {
+    if (req.query.latitude && req.query.longitude) {
       location = {
-        lat: Number(req.query.lat),
-        long: Number(req.query.long),
+        lat: Number(req.query.latitude),
+        long: Number(req.query.longitude),
       };
     }
 

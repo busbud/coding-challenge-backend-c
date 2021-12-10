@@ -8,7 +8,7 @@ const app = express();
 app.use(express.json());
 
 // Routes
-app.use('/suggestion', suggestionRoutes);
+app.use('/suggestions', suggestionRoutes);
 
 // Basic error handling
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {

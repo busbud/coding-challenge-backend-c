@@ -86,10 +86,10 @@ These responses are meant to provide guidance. The exact values can vary based o
 
 ### Running from Heroku
 ```
-curl --request POST 'https://busbud-cc.herokuapp.com/suggestion?q=london on'
+curl --request GET 'https://busbud-cc.herokuapp.com/suggestions?q=london on'
 ```
 ```
-curl --request POST 'https://busbud-cc.herokuapp.com/suggestion?lat=35.65283&long=-97.4781&q=dall'
+curl --request GET 'https://busbud-cc.herokuapp.com/suggestions?latitude=35.65283&longitude=-97.4781&q=dall'
 ```
 
 ### Notes
