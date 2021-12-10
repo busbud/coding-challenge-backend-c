@@ -4,9 +4,9 @@ import Joi, { ValidationOptions } from 'joi';
 export function suggestionSchema(req: Request, res: Response, next: NextFunction) {
   const schema = Joi.object().keys({
     q: Joi.string().required(),
-    lat: Joi.number(),
-    long: Joi.number(),
-  }).and('lat', 'long');
+    latitude: Joi.number(),
+    longitude: Joi.number(),
+  }).and('latitude', 'longitude');
 
   const options: ValidationOptions = {
     abortEarly: false,
