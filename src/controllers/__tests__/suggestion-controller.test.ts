@@ -54,7 +54,7 @@ describe('SuggestionController', () => {
 
     it('should call suggestion service with location', async () => {
       const term = '_term_';
-      const location = { lat: 1, long: 2 };
+      const location = { latitude: 1, longitude: 2 };
 
       const mockedResJson = jest.fn();
       const mockedReq = { query: { q: term, ...location } } as unknown as Request;
@@ -64,13 +64,13 @@ describe('SuggestionController', () => {
 
       await suggestionController.getSuggestions(mockedReq, mockedRes);
 
-      expect(mockGetSuggestions).toHaveBeenCalledWith(term, location);
+      expect(mockGetSuggestions).toHaveBeenCalledWith(term, { lat: 1, long: 2 });
       expect(mockedResJson).toHaveBeenCalledWith({ suggestions: [] });
     });
 
     it('should set cache', async () => {
       const term = '_term_';
-      const location = { lat: 1, long: 2 };
+      const location = { latitude: 1, longitude: 2 };
 
       const mockedResJson = jest.fn();
       const mockedReq = { query: { q: term, ...location } } as unknown as Request;
@@ -81,7 +81,7 @@ describe('SuggestionController', () => {
       await suggestionController.getSuggestions(mockedReq, mockedRes);
 
       expect(mockSetKey).toHaveBeenCalledTimes(1);
-      expect(mockSetKey).toHaveBeenCalledWith(`${term}:${location.lat}:${location.long}`, [{ hey: 'there' }]);
+      expect(mockSetKey).toHaveBeenCalledWith(`${term}:${location.latitude}:${location.longitude}`, [{ hey: 'there' }]);
     });
   });
 });
