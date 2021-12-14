@@ -1,0 +1,57 @@
+##### LA JAVANESS - AUTOMATICALLY GENERATED #####
+## DO NOT EDIT MANUALLY.
+## RUN `ljn dotfiles update` TO UPDATE YOUR LOCAL COPY.
+
+# Build
+/build/
+/dist/
+
+# NPM
+/node_modules
+/packages/*/node_modules
+package-lock.json
+/.pnp
+.pnp.js
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+ljn-dotfiles-*.log
+
+# Misc
+.DS_STORE
+
+# Webstorm
+.idea/
+*.iml
+
+# Atom
+.save.cson
+
+# VS Code
+.vscode/*
+
+# Jest and generic tests utilities
+/coverage/
+
+# Cypress
+/cypress/screenshots
+/cypress/videos
+
+# Istanbul
+/.nyc_output/*
+
+# SonarQube
+/.scannerwork/*
+
+# Local environment files
+/.env*local
+
+# Unit tests CI output
+junit.xml
+
+# ESLint cache file
+.eslintcache
+
+##### LA JAVANESS - AUTOMATICALLY GENERATED END #####

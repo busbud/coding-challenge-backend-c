@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "./src",
+    "moduleResolution": "Node",
+    "outDir": "./dist",
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "strict": false,
+    "target": "es2017",
+    "esModuleInterop": true,
+    "module": "commonjs"
+  },
+  "noImplicitAny": false,
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist"],
+  "typeRoots": ["./node_modules/@types/"]
+}
