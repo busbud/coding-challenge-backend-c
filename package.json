@@ -11,6 +11,7 @@
   "license": "WTFPL",
   "dependencies": {
     "express": "^4.17.1",
+    "express-rate-limit": "^5.5.1",
     "lodash": "^4.17.21",
     "string-similarity": "^4.0.4",
     "tsv-json": "^2.0.0"
