@@ -39,6 +39,15 @@ class CityController {
     )
   }
 
+  /**
+   * Find the distance between two point with lat lon.
+   * Source : https://www.geodatasource.com/developers/javascript
+   * @param lat1
+   * @param lon1
+   * @param lat2
+   * @param lon2
+   * @param unit
+   */
   distance(lat1, lon1, lat2, lon2, unit) {
     var radlat1 = Math.PI * lat1 / 180
     var radlat2 = Math.PI * lat2 / 180
