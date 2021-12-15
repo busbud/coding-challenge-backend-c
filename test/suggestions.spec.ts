@@ -3,6 +3,7 @@ import {expect} from 'chai';
 import Server from '../src/server';
 import {cityRepository} from "../src/repository/city";
 import * as path from "path";
+import deburr from 'lodash/deburr';
 
 const server = new Server().init()
 
@@ -72,7 +73,7 @@ describe('GET /suggestions', () => {
     it('contains a match', () => {
       expect(response.body.suggestions).to.satisfy(function (suggestions: any[]) {
         return suggestions.some(function (suggestion) {
-          return /montreal/i.test(suggestion.name);
+          return /montreal/i.test(deburr(suggestion.name));
         });
       })
     });
