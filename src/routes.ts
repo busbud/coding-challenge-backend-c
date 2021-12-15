@@ -18,13 +18,19 @@ export default (): Router => {
         let lat = req.query.latitude;
         let long = req.query.longitude;
 
-        const response = cityController.getCitiesLikeName(query);
+        let response = cityController.getCitiesLikeName(query);
 
-        if (response.length) {
+        // Sort by lat lon if they exist
+        if (lat && long) {
+          response = cityController.sortByDistance(response, lat, long)
+        }
+
+        // If there is no city found, return 404, otherwise return 200 and the values...
+        if (response.length) {  // Found
           res.status(200).json({
             suggestions: cityController.toDto(response)
           });
-        } else {
+        } else {                // Not found
           res.status(404).json({
             suggestions: []
           });
