@@ -1,5 +1,3 @@
-import server from "./server";
-import CityController from "./controller/city-controller";
 import {cityRepository} from "./repository/city"
 import path from "path";
 import Server from "./server";

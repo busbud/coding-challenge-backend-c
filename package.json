@@ -2,9 +2,9 @@
   "name": "coding-challenge-backend-c",
   "version": "0.0.0",
   "description": "coding challenge in Nodejs",
-  "main": "src/server.ts",
+  "main": "src/index.ts",
   "scripts": {
-    "start": "ts-node src/server.ts",
+    "start": "ts-node src/index.ts",
     "test": "jest"
   },
   "author": "",
