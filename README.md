@@ -2,150 +2,76 @@
 
 ## Solution explanation
 
-Design an API endpoint that provides autocomplete suggestions for large cities. The suggestions should be restricted to
-cities in the USA and Canada with a population above 5000 people.
+This API has been designed in NestJs / Postgres and Redis.
 
-- the endpoint is exposed at `/suggestions`
-- the partial (or complete) search term is passed as a query string parameter `q`
-- the caller's location can optionally be supplied via query string parameters `latitude` and `longitude` to help
-  improve relative scores
-- the endpoint returns a JSON response with an array of scored suggested matches
-    - the suggestions are sorted by descending score
-    - each suggestion has a score between 0 and 1 (inclusive) indicating confidence in the suggestion (1 is most
-      confident)
-    - each suggestion has a name which can be used to disambiguate between similarly named locations
-    - each suggestion has a latitude and longitude
-- all functional tests should pass (additional tests may be implemented as necessary).
-- the final application should
-  be [deployed to Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs).
-- feel free to add more features if you like!
+Below the explanations of my choice.
 
-#### Sample responses
+### NestJs
 
-These responses are meant to provide guidance. The exact values can vary based on the data source and scoring algorithm.
+This framework has been chosen in order of having objects classes, as I'm a Java developer, I make more sense for me to
+continue with objects programmatic.
 
-**Near match**
+### Postgres
 
-    GET /suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
+A database Postgres has been deployed with docker-compose, all data from the CSV file have been parsed into a DTO object
+and stored into the DB.
 
-```json
-{
-  "suggestions": [
-    {
-      "name": "London, ON, Canada",
-      "latitude": "42.98339",
-      "longitude": "-81.23304",
-      "score": 0.9
-    },
-    {
-      "name": "London, OH, USA",
-      "latitude": "39.88645",
-      "longitude": "-83.44825",
-      "score": 0.5
-    },
-    {
-      "name": "London, KY, USA",
-      "latitude": "37.12898",
-      "longitude": "-84.08326",
-      "score": 0.5
-    },
-    {
-      "name": "Londontowne, MD, USA",
-      "latitude": "38.93345",
-      "longitude": "-76.54941",
-      "score": 0.3
-    }
-  ]
-}
-```
+An index has been created on name column to earn time on our fetches.
 
-**No match**
+Two extensions have been installed, one called fuzzystrmatch and another PostGis, both are useful to generate score
+object.
 
-    GET /suggestions?q=SomeRandomCityInTheMiddleOfNowhere
+Fuzzystrmatch is used to provide help on distance string score. PostGIS is used to make better performance for
+geographic objects.
 
-```json
-{
-  "suggestions": []
-}
-```
+### Flyway
 
-### Non-functional
+To be able to easily migrate and manage our database, flyway has been added to docker-compose and a initialization
+script is under resources/flyway folder.
 
-- All code should be written in Javascript, Typescript or PHP.
-- Mitigations to handle high levels of traffic should be implemented.
-- Challenge is submitted as pull request against this repo ([fork it](https://help.github.com/articles/fork-a-repo/)
-  and [create a pull request](https://help.github.com/articles/creating-a-pull-request-from-a-fork/)).
-- Documentation and maintainability is a plus.
+### Redis
 
-## Dataset
+A redis has been deployed with docker-compose, it's important to note that the cache is only based on the keyword
+provided, we won't cache based on geographic position, it's not relevant enough.
 
-You can find the necessary dataset along with its description and documentation in the [`data`](resources/data/)
-directory.
+### HealthCheck
 
-## Evaluation
+A simple healthCheck has been implemented to be able to know quickly if our API is up, we used Terminus on this.
+https//xxxx/health
 
-We will use the following criteria to evaluate your solution:
+## Logs
 
-- Capacity to follow instructions
-- Developer Experience (how easy it is to run your solution locally, how clear your documentation is, etc)
-- Solution correctness
-- Performance
-- Tests (quality and coverage)
-- Code style and cleanliness
-- Attention to detail
-- Ability to make sensible assumptions
+Logs have been put in place for SuggestionController and SuggestionService.
 
-It is ok to ask us questions!
+## Score
 
-We know that the time for this project is limited and it is hard to create a "perfect" solution, so we will consider
-that along with your experience when evaluating the submission.
+With Fuzzystrmatch, we use the Levenshtein approach to calculate our score based on name. With PostGIS, we use ST_Point
+and ST_SetSRID method to calculate our score based on geographic points.
 
-## Getting Started
+## URL
 
-### Prerequisites
+The urls for the API depending on environments :
 
-You are going to need:
+Local  : localhost:3000/suggestions?q=Montreal Heroku : localhost:3000/suggestions?q=Montreal
 
-- `Git`
-- `nvm` (or your preferred node version manager)
-- `Node.js`
+## How to run the application
 
-### Setting up your environment
+You will need docker and docker-compose to run the application.
 
-1. Begin by forking this repo and cloning your fork. GitHub has apps for [Mac](http://mac.github.com/) and
-   [Windows](http://windows.github.com/) that make this easier.
+To run the application locally :
 
-2. Install [nvm](https://github.com/nvm-sh/nvm#install--update-script) or your preferred node version manager.
+- npm i -g @nestjs/cli
+- nvm use
+- npm install
+- docker-compose up
+- npm run build
+- npm run start
 
-3. Install [Node.js](http://www.nodejs.org).
+To run the tests locally :
 
-### Setting up the project
+- npm install -g jest
+- nvm use
+- npm install
+- docker-compose up
+- npm run test
 
-In the project directory run:
-
-```
-nvm use
-npm install
-```
-
-### Running the tests
-
-The test suite can be run with:
-
-```
-npm run test
-```
-
-### Starting the application
-
-To start a local server run:
-
-```
-npm run start
-```
-
-it should produce an output similar to:
-
-```
-Server running at http://127.0.0.1:2345/suggestions
-```

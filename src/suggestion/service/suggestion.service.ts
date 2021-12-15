@@ -11,7 +11,7 @@ const parse = require('csv-parse/lib/sync');
 @Injectable()
 export class SuggestionService implements OnModuleInit {
 
-    private readonly csvPath = './data/cities_canada-usa.tsv';
+    private readonly csvPath = './resources/data/cities_canada-usa.tsv';
     private readonly citiesNameSql = './resources/sql/cities-name.sql';
     private readonly citiesCoordSql = './resources/sql/cities-GEO.sql';
     private readonly logger = new Logger(SuggestionService.name);
@@ -52,6 +52,7 @@ export class SuggestionService implements OnModuleInit {
      */
     async findCitiesWithParams(q: string, latitude: string, longitude: string): Promise<CityDto[]> {
         this.logger.log('Find cities with params : keyword : ' + q + ', latitude : ' + latitude + ', longitude : ' + longitude);
+
         let promise;
         if (longitude && latitude) {
             this.logger.log('Starting finding cities with geolocation');
@@ -63,7 +64,7 @@ export class SuggestionService implements OnModuleInit {
                             name: city.name + ', ' + city.admin1 + ', ' + city.country,
                             latitude: city.lat,
                             longitude: city.long,
-                            score: city.score.substring(0, 3)
+                            score: city.score?.substring(0, 3)
                         }
                         return suggestionDto;
                     })
@@ -79,7 +80,7 @@ export class SuggestionService implements OnModuleInit {
                             name: city.name + ', ' + city.admin1 + ', ' + city.country,
                             latitude: city.lat,
                             longitude: city.long,
-                            score: city.score.substring(0, 3)
+                            score: city.score?.substring(0, 3)
                         }
                         return suggestionDto;
                     })
