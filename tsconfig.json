@@ -6,6 +6,7 @@
     "outDir": "./dist",
     "resolveJsonModule": true,
     "sourceMap": true,
+    "skipLibCheck": true,
     "strict": false,
     "target": "es2017",
     "esModuleInterop": true,

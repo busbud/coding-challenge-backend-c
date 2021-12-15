@@ -1,1 +1,1 @@
-web:ts-node/src/index.ts
+web: npm start
