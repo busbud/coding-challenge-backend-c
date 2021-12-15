@@ -15,7 +15,8 @@
     "lodash": "^4.17.21",
     "string-similarity": "^4.0.4",
     "ts-node": "^10.4.0",
-    "tsv-json": "^2.0.0"
+    "tsv-json": "^2.0.0",
+    "typescript": "^4.5.4"
   },
   "engines": {
     "node": "14.x"
@@ -35,6 +36,5 @@
     "supertest": "^6.1.6",
     "ts-jest": "^27.1.1",
     "ts-mocha": "^8.0.0",
-    "typescript": "^4.5.4"
   }
 }
