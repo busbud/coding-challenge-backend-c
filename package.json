@@ -17,7 +17,7 @@
     "tsv-json": "^2.0.0"
   },
   "engines": {
-    "node": "0.10.26"
+    "node": "14.x"
   },
   "devDependencies": {
     "@types/chai": "^4.3.0",
