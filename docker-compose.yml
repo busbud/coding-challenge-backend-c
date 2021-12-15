@@ -22,3 +22,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+  redis-server:
+    image: "redis:alpine"
+    command: redis-server --save 60 1
+    ports:
+      - "6379:6379"

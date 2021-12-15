@@ -3,7 +3,7 @@ select name,
        country,
        lat,
        long,
-       (max(ST_SetSRID(ST_Point($2, $3), 4326)) over ())                                    as score
+       (max(ST_SetSRID(ST_Point($2, $3), 4326)) over ()) as score
 from city
-where name like $1 || '%'
+where LOWER(name) like LOWER($1) || '%'
 order by score desc limit 20;

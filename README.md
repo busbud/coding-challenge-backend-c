@@ -1,6 +1,6 @@
 # Busbud Coding Challenge
 
-## Requirements
+## Solution explanation
 
 Design an API endpoint that provides autocomplete suggestions for large cities. The suggestions should be restricted to
 cities in the USA and Canada with a population above 5000 people.

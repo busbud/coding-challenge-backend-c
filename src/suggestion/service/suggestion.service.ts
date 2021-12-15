@@ -4,6 +4,7 @@ import {getConnection, Repository} from "typeorm";
 import {InjectRepository} from "@nestjs/typeorm";
 import {CityDto} from 'src/suggestion/dto/city.dto';
 import * as fs from 'fs';
+import {SuggestionDto} from "../dto/suggestion.dto";
 
 const parse = require('csv-parse/lib/sync');
 
@@ -16,10 +17,11 @@ export class SuggestionService implements OnModuleInit {
     private readonly logger = new Logger(SuggestionService.name);
     private readonly encoding = 'utf-8';
 
-    constructor (
+    constructor(
         @InjectRepository(CityEntity)
         private suggestionRepository: Repository<CityEntity>
-    ) {}
+    ) {
+    }
 
     /**
      * Initialization of DB's content
@@ -41,36 +43,6 @@ export class SuggestionService implements OnModuleInit {
         this.logger.log('Data loaded to DB');
     }
 
-
-    /**
-     * Load data to Postgres
-     * @param cities
-     * @private
-     */
-    private loadDataToDb(cities) {
-        // Load all data to Postgres DB
-        cities.forEach((city) => {
-            const cityDto = this.buildCityDto(city.name, city.lat, city.long, city.ascii, city.admin1, city.country, city.population);
-            if (cityDto.population >= 5000) {
-                this.create(cityDto);
-            }
-        });
-    }
-
-    /**
-     * ParseCSV to cities
-     * @private
-     */
-    private parseCSV() {
-        this.logger.log('Read CSV file ' + this.csvPath);
-        return parse(fs.readFileSync(this.csvPath), {
-            delimiter: '\t',
-            escape: '\\',
-            columns: true,
-            quote: null
-        });
-    }
-
     /**
      *
      * Retrieve cities in DB based in params, returns array of cities
@@ -84,11 +56,35 @@ export class SuggestionService implements OnModuleInit {
         if (longitude && latitude) {
             this.logger.log('Starting finding cities with geolocation');
             const citiesCoordonnees = fs.readFileSync(this.citiesCoordSql, {encoding: this.encoding});
-            promise = await getConnection().query(citiesCoordonnees, [q, longitude, latitude]);
+            promise = await getConnection().query(citiesCoordonnees, [q, longitude, latitude]).then(function (results) {
+                return {
+                    suggestions: results.map(function (city) {
+                        const suggestionDto: SuggestionDto = {
+                            name: city.name + ', ' + city.admin1 + ', ' + city.country,
+                            latitude: city.lat,
+                            longitude: city.long,
+                            score: city.score.substring(0, 3)
+                        }
+                        return suggestionDto;
+                    })
+                }
+            });
         } else {
             this.logger.log('Starting finding cities with keyword');
             const citiesNameScript = fs.readFileSync(this.citiesNameSql, {encoding: this.encoding});
-            promise = await getConnection().query(citiesNameScript, [q]);
+            promise = await getConnection().query(citiesNameScript, [q]).then(function (results) {
+                return {
+                    suggestions: results.map(function (city) {
+                        const suggestionDto: SuggestionDto = {
+                            name: city.name + ', ' + city.admin1 + ', ' + city.country,
+                            latitude: city.lat,
+                            longitude: city.long,
+                            score: city.score.substring(0, 3)
+                        }
+                        return suggestionDto;
+                    })
+                }
+            });
         }
         return promise;
     }
@@ -132,5 +128,34 @@ export class SuggestionService implements OnModuleInit {
             score: 0
         };
         return city;
+    }
+
+    /**
+     * Load data to Postgres
+     * @param cities
+     * @private
+     */
+    private loadDataToDb(cities) {
+        // Load all data to Postgres DB
+        cities.forEach((city) => {
+            const cityDto = this.buildCityDto(city.name, city.lat, city.long, city.ascii, city.admin1, city.country, city.population);
+            if (cityDto.population >= 5000) {
+                this.create(cityDto);
+            }
+        });
+    }
+
+    /**
+     * ParseCSV to cities
+     * @private
+     */
+    private parseCSV() {
+        this.logger.log('Read CSV file ' + this.csvPath);
+        return parse(fs.readFileSync(this.csvPath), {
+            delimiter: '\t',
+            escape: '\\',
+            columns: true,
+            quote: null
+        });
     }
 }
