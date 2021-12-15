@@ -1,6 +1,4 @@
 import express, {Application} from 'express'
-import * as path from 'path'
-import cityController from "./controller/city-controller";
 import getRouter from './routes'
 import rateLimit from 'express-rate-limit'
 
