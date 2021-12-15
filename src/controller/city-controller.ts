@@ -1,7 +1,9 @@
 import {City} from "../repository/city";
 import {cityRepository} from "../repository/city"
+import stringSimilarity from 'string-similarity';
+import deburr from 'lodash/deburr';
 
-const deburr = require('lodash/deburr');
+const POPULATION_MIN: number = 5000
 
 class CityController {
 
@@ -13,30 +15,31 @@ class CityController {
   }
 
   /**
-   * Return all cities that contains the string passed in parameter.
+   * Return all cities with their score matching the corresponding substring
    * Note that we tested the string with lower case only, and without any accent with the help of
    * lodash/deburr
    *
    * @param {string} substring Substring that needs to match the city name
    * @returns {Array<City>} All cities that matches the substring
    */
-  getCitiesLikeName = (substring: string) => {
-    return cityRepository.getCities().filter((city) =>
-        deburr(city.name).toLowerCase().includes(deburr(substring).toLowerCase())
-    )
-  }
+  findAllCitiesScores = (substring: string, lat?: number, lon?: number) => {
+    return cityRepository.getCities()
+        .filter((city) =>  // Filter by population > 5000 and those that actually have the substring inside their name
+            city.population > POPULATION_MIN && deburr(city.name).toLowerCase().includes(deburr(substring).toLowerCase())
+            || deburr(city.alt_name).toLowerCase().includes(deburr(substring).toLowerCase())
+        )
+        .map((city) => { // Calculate scores
+          return {
+            ...city,
+            name: `${city.name}, ${city.country}`,
+            score: stringSimilarity.compareTwoStrings(city.name, substring),
+            distance: this.distance(city.lat, city.long, lat, lon, 'K')
+          }
+        })// Sort by scores descending.
+        .sort((a, b) =>
+            b.score - a.score || a.distance - b.distance
+        )
 
-  sortByDistance = (cities: Array<City>, lat: number, lon: number) => {
-    const citiesDistances = cities.map((city) => {
-      return {
-        ...city,
-        distance: this.distance(city.lat, city.long, lat, lon, 'K')
-      }
-    })
-
-    return citiesDistances.sort((a, b) =>
-        a.distance - b.distance
-    )
   }
 
   /**
@@ -78,7 +81,7 @@ class CityController {
           name: city.name,
           latitude: city.lat,
           longitude: city.long,
-          score: 'todo'
+          score: city.score
         }
       })
 }

@@ -4,6 +4,8 @@ const {once} = require('events');
 const {tsv2json} = require('tsv-json');
 
 export type City = {
+  score?: number
+  distance?: number
   id: number
   name: string
   ascii: string

@@ -18,12 +18,7 @@ export default (): Router => {
         let lat = req.query.latitude;
         let long = req.query.longitude;
 
-        let response = cityController.getCitiesLikeName(query);
-
-        // Sort by lat lon if they exist
-        if (lat && long) {
-          response = cityController.sortByDistance(response, lat, long)
-        }
+        let response = cityController.findAllCitiesScores(query, lat, long);
 
         // If there is no city found, return 404, otherwise return 200 and the values...
         if (response.length) {  // Found

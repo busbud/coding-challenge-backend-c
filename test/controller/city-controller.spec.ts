@@ -50,7 +50,7 @@ describe('CityController', () => {
   it('should be able to filter cities by name given a substring', () => {
     cityRepository.setCities(cities)
 
-    const response = cityController.getCitiesLikeName("lon")
+    const response = cityController.findAllCitiesScores("lon")
     expect(response.length).to.equals(2)
   })
 })
