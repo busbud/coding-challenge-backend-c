@@ -19,6 +19,7 @@
     "@nestjs/swagger": "5.1.5",
     "@nestjs/terminus": "8.0.3",
     "@nestjs/typeorm": "8.0.2",
+    "axios": "0.24.0",
     "cache-manager": "3.6.0",
     "cache-manager-redis-store": "2.0.0",
     "class-validator": "0.13.2",
@@ -34,7 +35,8 @@
     "@nestjs/testing": "8.2.3",
     "@types/jest": "27.0.3",
     "chai": "1.10.0",
+    "eslint": "^8.4.1",
     "jest": "27.4.5",
-    "supertest": "^6.1.6"
+    "supertest": "©6.1.6"
   }
 }

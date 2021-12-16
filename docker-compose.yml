@@ -1,6 +1,14 @@
 version: "2.1"
 
 services:
+  api:
+    build: .
+    ports:
+      - "3002:3002"
+    volumes:
+      - .:/app
+      - /app/node_modules
+
   postgres:
     image: mdillon/postgis
     environment:

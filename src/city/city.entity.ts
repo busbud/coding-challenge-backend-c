@@ -1,7 +1,7 @@
-import {Column, Entity, Index, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, Index, PrimaryGeneratedColumn} from 'typeorm';
 
 @Entity('city')
-@Index(["name"])
+@Index(['name'])
 export class CityEntity {
 
     @PrimaryGeneratedColumn()

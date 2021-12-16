@@ -1,162 +1,65 @@
-import {Injectable, Logger, OnModuleInit} from '@nestjs/common';
-import {CityEntity} from "../entity/city.entity";
-import {getConnection, Repository} from "typeorm";
-import {InjectRepository} from "@nestjs/typeorm";
-import {CityDto} from 'src/suggestion/dto/city.dto';
-import * as fs from 'fs';
-import {SuggestionDto} from "../dto/suggestion.dto";
+import {CACHE_MANAGER, Inject, Injectable, Logger} from '@nestjs/common';
+import {InjectRepository} from '@nestjs/typeorm';
+import {Repository} from 'typeorm';
+import {Cache} from 'cache-manager';
+import {SuggestionDto} from '../dto/suggestion.dto';
+import {CityService} from '../../city/city.service';
+import {CityDto} from './../dto/city.dto';
+import {CityEntity} from '../../city/city.entity';
 
-const parse = require('csv-parse/lib/sync');
 
 @Injectable()
-export class SuggestionService implements OnModuleInit {
+export class SuggestionService {
 
-    private readonly csvPath = './resources/data/cities_canada-usa.tsv';
-    private readonly citiesNameSql = './resources/sql/cities-name.sql';
-    private readonly citiesCoordSql = './resources/sql/cities-GEO.sql';
     private readonly logger = new Logger(SuggestionService.name);
-    private readonly encoding = 'utf-8';
 
     constructor(
         @InjectRepository(CityEntity)
-        private suggestionRepository: Repository<CityEntity>
+        private cityRepository: Repository<CityEntity>,
+        private cityService: CityService,
+        @Inject(CACHE_MANAGER) private cacheManager: Cache,
     ) {
     }
 
     /**
-     * Initialization of DB's content
-     */
-    onModuleInit() {
-        this.logger.log('Loading all data to Postgres');
-
-        getConnection()
-            .createQueryBuilder()
-            .delete()
-            .from(CityEntity).execute()
-
-        // Parse CSV to cities
-        const cities = this.parseCSV();
-
-        // Load Data to DB
-        this.loadDataToDb(cities);
-
-        this.logger.log('Data loaded to DB');
-    }
-
-    /**
      *
-     * Retrieve cities in DB based in params, returns array of cities
+     * Retrieve suggestions in DB based in params, returns array of suggestions
      * @param q
      * @param latitude
      * @param longitude
      */
-    async findCitiesWithParams(q: string, latitude: string, longitude: string): Promise<CityDto[]> {
-        this.logger.log('Find cities with params : keyword : ' + q + ', latitude : ' + latitude + ', longitude : ' + longitude);
-
-        let promise;
-        if (longitude && latitude) {
-            this.logger.log('Starting finding cities with geolocation');
-            const citiesCoordonnees = fs.readFileSync(this.citiesCoordSql, {encoding: this.encoding});
-            promise = await getConnection().query(citiesCoordonnees, [q, longitude, latitude]).then(function (results) {
-                return {
-                    suggestions: results.map(function (city) {
-                        const suggestionDto: SuggestionDto = {
-                            name: city.name + ', ' + city.admin1 + ', ' + city.country,
-                            latitude: city.lat,
-                            longitude: city.long,
-                            score: city.score?.substring(0, 3)
-                        }
-                        return suggestionDto;
-                    })
-                }
-            });
-        } else {
-            this.logger.log('Starting finding cities with keyword');
-            const citiesNameScript = fs.readFileSync(this.citiesNameSql, {encoding: this.encoding});
-            promise = await getConnection().query(citiesNameScript, [q]).then(function (results) {
-                return {
-                    suggestions: results.map(function (city) {
-                        const suggestionDto: SuggestionDto = {
-                            name: city.name + ', ' + city.admin1 + ', ' + city.country,
-                            latitude: city.lat,
-                            longitude: city.long,
-                            score: city.score?.substring(0, 3)
-                        }
-                        return suggestionDto;
-                    })
-                }
-            });
-        }
-        return promise;
-    }
-
-    /**
-     * Retrieve all cities in DB, returns array of cities
-     */
-    findCities(): Promise<CityDto[]> {
-        this.logger.log('Find all cities');
-        return this.suggestionRepository.find();
-    }
-
-    /**
-     * Create a new city in DB
-     * @param cityDto
-     */
-    create(cityDto: CityDto): Promise<CityDto> {
-        this.logger.log('Save new city to DB : ' + cityDto.name);
-        return this.suggestionRepository.save(cityDto);
-    }
-
-    /**
-     * Build a city DTO object based on data from CSV
-     * @param name
-     * @param latitude
-     * @param longitude
-     * @param ascii
-     * @param admin1
-     * @param country
-     * @param population
-     */
-    buildCityDto(name: string, latitude: string, longitude: string, ascii: string, admin1: string, country: string, population: number): CityDto {
-        const city: CityDto = {
-            name: name,
-            lat: latitude,
-            long: longitude,
-            ascii: ascii,
-            admin1: admin1,
-            country: country,
-            population: population,
-            score: 0
-        };
-        return city;
-    }
-
-    /**
-     * Load data to Postgres
-     * @param cities
-     * @private
-     */
-    private loadDataToDb(cities) {
-        // Load all data to Postgres DB
-        cities.forEach((city) => {
-            const cityDto = this.buildCityDto(city.name, city.lat, city.long, city.ascii, city.admin1, city.country, city.population);
-            if (cityDto.population >= 5000) {
-                this.create(cityDto);
+    async findSuggestionsWithParams(q: string, latitude: string, longitude: string): Promise<SuggestionDto[]> {
+        this.logger.log('Find suggestions with params : keyword : ' + q + ', latitude : ' + latitude + ', longitude : ' + longitude);
+        if (!latitude || !longitude) {
+            const suggestionsInCache = await this.cacheManager.get(q);
+            if (suggestionsInCache != null) {
+                this.logger.log('Cities stored in cache for keyword: ' + q);
+                return suggestionsInCache;
             }
-        });
+        }
+
+        this.logger.log('Find suggestions called with params : keyword : ' + q + ', latitude : ' + latitude + ', longitude : ' + longitude);
+        const suggestionDtos = (await this.cityService.findCitiesWithParams(q, latitude, longitude)).map(this.formatCityToSuggestion);
+
+        await this.cacheManager.set(q, suggestionDtos);
+        this.logger.log('Store in Redis, keyword : ' + q);
+
+        return suggestionDtos;
     }
 
     /**
-     * ParseCSV to cities
+     * Format a city to a suggestion
+     * @param city
      * @private
      */
-    private parseCSV() {
-        this.logger.log('Read CSV file ' + this.csvPath);
-        return parse(fs.readFileSync(this.csvPath), {
-            delimiter: '\t',
-            escape: '\\',
-            columns: true,
-            quote: null
-        });
+    private formatCityToSuggestion(city: CityDto): SuggestionDto {
+        return {
+            name: city.name + ', ' + city.admin1 + ', ' + city.country,
+            latitude: city.lat,
+            longitude: city.long,
+            score: Math.round((city.score || 0) * 100) / 100,
+        };
     }
+
+
 }

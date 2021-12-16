@@ -1,9 +1,10 @@
 import {CacheModule, Module} from '@nestjs/common';
-import {SuggestionService} from "./service/suggestion.service";
-import {SuggestionController} from "./controller/suggestion.controller";
-import {CityEntity} from "./entity/city.entity";
 import {TypeOrmModule} from '@nestjs/typeorm';
 import * as redisStore from 'cache-manager-redis-store';
+import {SuggestionService} from "./service/suggestion.service";
+import {CityService} from "./../city/city.service";
+import {SuggestionController} from "./controller/suggestion.controller";
+import {CityEntity} from "./../city/city.entity";
 
 @Module({
     imports: [TypeOrmModule.forFeature([CityEntity]),
@@ -13,7 +14,8 @@ import * as redisStore from 'cache-manager-redis-store';
             port: 6379
         })],
     controllers: [SuggestionController],
-    providers: [SuggestionService]
+    providers: [SuggestionService, CityService]
 })
 export class SuggestionModule {
+
 }

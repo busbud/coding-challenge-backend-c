@@ -2,7 +2,7 @@ import {IsOptional, IsString, Validate} from "class-validator";
 import {LatitudeValidator} from '../validator/LatitudeValidator';
 import {LongitudeValidator} from "../validator/LongitudeValidator";
 
-export class CityQuery {
+export class SuggestionQuery {
 
     @IsString()
     q: string;
