@@ -54,7 +54,7 @@ export class CityService {
      * @param longitude
      */
     async findCitiesWithParams(q: string, latitude: string, longitude: string): Promise<CityDto[]> {
-        let cities: any[];
+        let cities: CityDto[];
         if (longitude && latitude) {
             this.logger.log('Starting finding cities with geolocation');
             cities = await this.cityRepository.query(this.citiesCoordSql, [q, longitude, latitude]);

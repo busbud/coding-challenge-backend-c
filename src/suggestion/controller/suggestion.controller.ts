@@ -3,6 +3,7 @@ import {ApiOperation, ApiTags} from "@nestjs/swagger";
 import {Cache} from 'cache-manager';
 import {SuggestionQuery} from "../entity/suggestion.query";
 import {SuggestionService} from '../service/suggestion.service';
+import {SuggestionsDto} from "../dto/suggestions.dto";
 
 @Controller('/suggestions')
 export class SuggestionController {
@@ -19,9 +20,9 @@ export class SuggestionController {
     @Get()
     async getSuggestions(
         @Query() suggestionQuery?: SuggestionQuery
-    ): Promise<any> {
-        this.logger.log('Find suggestions called');
-        const { q, latitude, longitude } = suggestionQuery;
+    ): Promise<SuggestionsDto> {
+        this.logger.log('Get suggestions called');
+        const {q, latitude, longitude} = suggestionQuery;
         return await this.suggestionService.findSuggestionsWithParams(q, latitude, longitude).then(value => value);
     }
 
