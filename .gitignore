@@ -1,5 +1,8 @@
-/node_modules
-/dist
-npm-debug.log
-.DS_Store
-/*.env
+.idea/
+.tmp/
+.versions/
+dist/
+node_modules/
+tmp/
+temp/
+$RECYCLE.BIN/
