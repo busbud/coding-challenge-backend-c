@@ -1,6 +1,8 @@
-var expect = require('chai').expect;
-var app = require('../app');
-var request = require('supertest')(app);
+import {before} from "@nestjs/swagger/dist/plugin";
+
+const expect = require('chai').expect;
+const app = require('../../../src/main');
+const request = require('supertest')(app);
 
 describe('GET /suggestions', function () {
     describe('with a non-existent city', function () {

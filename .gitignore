@@ -1,2 +1,5 @@
-node_modules
-.idea
+/node_modules
+/dist
+npm-debug.log
+.DS_Store
+/*.env
