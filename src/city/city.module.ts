@@ -8,8 +8,9 @@ import {CityService} from '../city/city.service';
     imports: [TypeOrmModule.forFeature([CityEntity]),
         CacheModule.register({
             store: redisStore,
-            host: 'localhost',
-            port: 6379,
+            host: process.env.REDISHOST,
+            port: process.env.REDISPORT,
+            auth_pass: process.env.REDISPASSWORD,
         }),
     ],
     providers: [CityService],
