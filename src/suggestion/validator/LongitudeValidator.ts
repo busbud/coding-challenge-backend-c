@@ -4,7 +4,7 @@ import {ValidationArguments, ValidatorConstraint, ValidatorConstraintInterface} 
 export class LongitudeValidator implements ValidatorConstraintInterface {
 
     validate(longitude: string, args: ValidationArguments) {
-        let longitudeFloat = parseFloat(longitude);
+        const longitudeFloat = parseFloat(longitude);
         return longitudeFloat >= -180.00 && longitudeFloat <= 180.00;
     }
 

@@ -17,7 +17,7 @@ import {CityModule} from './city/city.module';
         ThrottlerModule.forRoot({
             ttl: 60,
             limit: 20,
-        })
+        }),
     ],
     providers: [
         {

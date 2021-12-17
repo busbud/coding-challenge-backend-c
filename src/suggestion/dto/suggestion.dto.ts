@@ -4,4 +4,3 @@ export class SuggestionDto {
     longitude: string;
     score: number;
 }
-

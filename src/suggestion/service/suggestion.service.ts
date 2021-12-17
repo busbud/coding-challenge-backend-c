@@ -6,7 +6,7 @@ import {SuggestionDto} from '../dto/suggestion.dto';
 import {CityService} from '../../city/city.service';
 import {CityDto} from './../dto/city.dto';
 import {CityEntity} from '../../city/city.entity';
-import {SuggestionsDto} from "../dto/suggestions.dto";
+import {SuggestionsDto} from '../dto/suggestions.dto';
 
 @Injectable()
 export class SuggestionService {

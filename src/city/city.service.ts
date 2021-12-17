@@ -2,11 +2,10 @@ import {CACHE_MANAGER, Inject, Injectable, Logger} from '@nestjs/common';
 import {InjectRepository} from '@nestjs/typeorm';
 import {getConnection, Repository} from 'typeorm';
 import {Cache} from 'cache-manager';
+const parse = require('csv-parse/lib/sync');
 import * as fs from 'fs';
 import {CityDto} from './../city/city.dto';
 import {CityEntity} from '../city/city.entity';
-
-const parse = require('csv-parse/lib/sync');
 
 @Injectable()
 export class CityService {

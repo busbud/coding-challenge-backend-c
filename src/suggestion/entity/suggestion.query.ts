@@ -1,6 +1,6 @@
-import {IsOptional, IsString, Validate} from "class-validator";
+import {IsOptional, IsString, Validate} from 'class-validator';
 import {LatitudeValidator} from '../validator/LatitudeValidator';
-import {LongitudeValidator} from "../validator/LongitudeValidator";
+import {LongitudeValidator} from '../validator/LongitudeValidator';
 
 export class SuggestionQuery {
 

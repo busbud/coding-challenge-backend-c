@@ -1,83 +1,29 @@
-import {before} from "@nestjs/swagger/dist/plugin";
+import { SuggestionController } from './suggestion.controller';
+import { SuggestionService } from './../service/suggestion.service';
+import {Cache} from 'cache-manager';
+import {CityEntity} from '../../city/city.entity';
+import {Repository} from 'typeorm';
+import {CityService} from "../../city/city.service";
+import {SuggestionsDto} from "../dto/suggestions.dto";
 
-const expect = require('chai').expect;
-const app = require('../../../src/main');
-const request = require('supertest')(app);
+describe('SuggestionController', () => {
+    let suggestionController: SuggestionController;
+    let suggestionService: SuggestionService;
+    let cityService: CityService;
+    let repository: Repository<CityEntity>;
+    let cache = Cache;
 
-describe('GET /suggestions', function () {
-    describe('with a non-existent city', function () {
-        var response;
-
-        before(function (done) {
-            request
-                .get('/suggestions?q=SomeRandomCityInTheMiddleOfNowhere')
-                .end(function (err, res) {
-                    response = res;
-                    response.json = JSON.parse(res.text);
-                    done(err);
-                });
-        });
-
-        it('returns a 404', function () {
-            expect(response.statusCode).to.equal(404);
-        });
-
-        it('returns an empty array of suggestions', function () {
-            expect(response.json.suggestions).to.be.instanceof(Array);
-            expect(response.json.suggestions).to.have.length(0);
-        });
+    beforeEach(() => {
+        repository = new Repository<CityEntity>();
+        cache = new Cache();
+        suggestionService = new SuggestionService(repository, cityService, cache);
+        suggestionController = new SuggestionController(suggestionService, cache);
     });
 
-    describe('with a valid city', function () {
-        var response;
-
-        before(function (done) {
-            request
-                .get('/suggestions?q=Montreal')
-                .end(function (err, res) {
-                    response = res;
-                    response.json = JSON.parse(res.text);
-                    done(err);
-                });
-        });
-
-        it('returns a 200', function () {
-            expect(response.statusCode).to.equal(200);
-        });
-
-        it('returns an array of suggestions', function () {
-            expect(response.json.suggestions).to.be.instanceof(Array);
-            expect(response.json.suggestions).to.have.length.above(0);
-        });
-
-        describe.skip('Validate the shape of the data being returned', function () {
-            it('contains latitudes and longitudes', function () {
-                expect(response.json.suggestions).to.satisfy(function (suggestions) {
-                    return suggestions.every(function (suggestion) {
-                        return suggestion.latitude && suggestion.longitude;
-                    });
-                })
-            });
-
-            it('contains scores', function () {
-                expect(response.json.suggestions).to.satisfy(function (suggestions) {
-                    return suggestions.every(function (suggestion) {
-                        return suggestion.latitude && suggestion.longitude;
-                    });
-                })
-            });
-        });
-
-        it('is a gratuitously failing test you should remove to prove you ran the tests', function () {
-            expect(true).to.equal(false);
-        });
-
-        it('contains a match', function () {
-            expect(response.json.suggestions).to.satisfy(function (suggestions) {
-                return suggestions.some(function (suggestion) {
-                    return suggestion.name.test(/montreal/i);
-                });
-            })
+    describe('findSuggestionsWithParams', () => {
+        it('should return an array of cats', async () => {
+            const result = new SuggestionsDto();
+            expect(await suggestionService.findSuggestionsWithParams("fdsfs", "", "")).toBe(result);
         });
     });
 });

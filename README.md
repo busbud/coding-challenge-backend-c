@@ -56,6 +56,13 @@ Local  : localhost:3000/suggestions?q=Montreal Heroku : localhost:3000/suggestio
 
 ## How to run the application
 
+You will need to copy the .env.example file and rename it to .env.
+
+You can put the following entries to this new file : 
+DB_URL=postgres://docker:docker@localhost:5432/suggestions
+REDISPORT=6379
+REDISHOST=localhost
+
 You will need docker and docker-compose to run the application.
 
 To run the application locally :

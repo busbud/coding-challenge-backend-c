@@ -2,8 +2,7 @@ import {CacheModule, Module, OnModuleInit} from '@nestjs/common';
 import {TypeOrmModule} from '@nestjs/typeorm';
 import * as redisStore from 'cache-manager-redis-store';
 import {CityEntity} from './city.entity';
-import {CityService} from "../city/city.service";
-
+import {CityService} from '../city/city.service';
 
 @Module({
     imports: [TypeOrmModule.forFeature([CityEntity]),
@@ -13,7 +12,7 @@ import {CityService} from "../city/city.service";
             port: 6379,
         }),
     ],
-    providers: [CityService]
+    providers: [CityService],
 
 })
 export class CityModule implements OnModuleInit {
