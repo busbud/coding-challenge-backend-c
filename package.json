@@ -11,7 +11,7 @@
     "dev": "nest start --watch",
     "lint": "tslint -p tsconfig.json -c tslint.json",
     "test": "./node_modules/mocha/bin/mocha ./test/",
-    "perrinetest": "npm install nestjs && cd ./node_modules && ls -l",
+    "perrinetest": "npm install @nestjs/cli && cd ./node_modules && ls -l",
     "heroku-postbuild": "npm install --no-shrinkwrap && npm run perrinetest && npm run build"
   },
   "author": "Perrine Honore",
