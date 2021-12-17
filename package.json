@@ -12,7 +12,7 @@
     "dev": "nest start --watch",
     "lint": "tslint -p tsconfig.json -c tslint.json",
     "test": "./node_modules/mocha/bin/mocha ./test/",
-    "heroku-postbuild": "npm install --no-shrinkwrap && npm run build"
+    "heroku-postbuild": "npm install -g @nestjs/cli && npm install --no-shrinkwrap && npm run build"
   },
   "author": "Perrine Honore",
   "license": "WTFPL",
