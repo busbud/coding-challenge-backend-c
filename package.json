@@ -5,14 +5,14 @@
   "main": "main.ts",
   "scripts": {
     "build": "nest build",
+    "start": "nest start",
     "start:dev": "npm run start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main.js",
     "dev": "nest start --watch",
     "lint": "tslint -p tsconfig.json -c tslint.json",
     "test": "./node_modules/mocha/bin/mocha ./test/",
-    "perrinetest": "npm install @nestjs/cli && cd ./node_modules && ls -l",
-    "heroku-postbuild": "npm install --no-shrinkwrap && npm run perrinetest && npm run build"
+    "heroku-postbuild": "npm install --no-shrinkwrap && npm run build"
   },
   "author": "Perrine Honore",
   "license": "WTFPL",
