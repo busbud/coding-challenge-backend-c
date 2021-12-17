@@ -62,6 +62,8 @@ You can put the following entries to this new file :
 DB_URL=postgres://docker:docker@localhost:5432/suggestions
 REDISPORT=6379
 REDISHOST=localhost
+REDISPASSWORD=
+ENTITY_PATH=dist/**/**/*.entity{.js,.ts}
 
 You will need docker and docker-compose to run the application.
 
