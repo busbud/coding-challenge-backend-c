@@ -4,6 +4,7 @@
   "description": "Coding challenge in NestJs / Postgres / Redis",
   "main": "main.ts",
   "scripts": {
+    "build": "nest build",
     "start:dev": "npm run start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main.js",
@@ -23,7 +24,7 @@
     "@nestjs/terminus": "8.0.3",
     "@nestjs/throttler": "2.0.0",
     "@nestjs/typeorm": "8.0.2",
-    "axios": "0.21.1",
+    "axios": "^0.21.4",
     "cache-manager": "3.6.0",
     "cache-manager-redis-store": "2.0.0",
     "class-transformer": "0.5.1",
