@@ -4,9 +4,9 @@
   "description": "Coding challenge in NestJs / Postgres / Redis",
   "main": "main.ts",
   "scripts": {
-    "build": "nest build",
-    "start": "nest start",
-    "start:dev": "nest start --watch",
+    "build": "npm run build",
+    "start": "npm run start",
+    "start:dev": "npm run start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "dev": "nest start --watch",
