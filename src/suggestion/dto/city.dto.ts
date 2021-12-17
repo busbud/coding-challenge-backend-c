@@ -2,26 +2,26 @@ import {IsNumber, IsString} from 'class-validator';
 
 export class CityDto {
     @IsString()
-    name: string;
+      name: string;
 
     @IsString()
-    ascii: string;
+      ascii: string;
 
     @IsString()
-    admin1: string;
+      admin1: string;
 
     @IsString()
-    country: string;
+      country: string;
 
     @IsString()
-    lat: string;
+      lat: string;
 
     @IsString()
-    long: string;
+      long: string;
 
     @IsNumber()
-    score: number;
+      score: number;
 
     @IsNumber()
-    population: number;
+      population: number;
 }

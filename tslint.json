@@ -1,34 +1,18 @@
 {
   "defaultSeverity": "error",
-  "extends": [
-    "tslint:recommended"
-  ],
+  "extends": ["tslint:recommended"],
   "jsRules": {
     "no-unused-expression": true
   },
   "rules": {
     "variable-name": false,
     "prefer-for-of": false,
-    "quotemark": [
-      true,
-      "single"
-    ],
-    "member-access": [
-      false
-    ],
-    "ordered-imports": [
-      false
-    ],
-    "max-line-length": [
-      true,
-      150
-    ],
-    "member-ordering": [
-      false
-    ],
-    "interface-name": [
-      false
-    ],
+    "quotemark": [true, "single"],
+    "member-access": [false],
+    "ordered-imports": [false],
+    "max-line-length": [true, 150],
+    "member-ordering": [false],
+    "interface-name": [false],
     "arrow-parens": false,
     "object-literal-sort-keys": false
   },

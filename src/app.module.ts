@@ -8,22 +8,22 @@ import {SuggestionModule} from './suggestion/suggestion.module';
 import {CityModule} from './city/city.module';
 
 @Module({
-    imports: [
-        TypeOrmModule.forRoot(),
-        SuggestionModule,
-        TerminusModule,
-        HealthModule,
-        CityModule,
-        ThrottlerModule.forRoot({
-            ttl: 60,
-            limit: 20,
-        }),
-    ],
-    providers: [
-        {
-            provide: APP_GUARD,
-            useClass: ThrottlerGuard,
-        }],
+  imports: [
+    TypeOrmModule.forRoot(),
+    SuggestionModule,
+    TerminusModule,
+    HealthModule,
+    CityModule,
+    ThrottlerModule.forRoot({
+      ttl: 60,
+      limit: 20,
+    }),
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    }],
 })
 export class AppModule {
 }
