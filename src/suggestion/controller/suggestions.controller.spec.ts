@@ -1,29 +1,68 @@
-import {SuggestionController} from './suggestion.controller';
-import {SuggestionService} from './../service/suggestion.service';
-import {Cache} from 'cache-manager';
-import {CityEntity} from '../../city/city.entity';
-import {Repository} from 'typeorm';
-import {CityService} from '../../city/city.service';
-import {SuggestionsDto} from '../dto/suggestions.dto';
+import {INestApplication} from '@nestjs/common';
+import {Test} from '@nestjs/testing';
+import * as request from 'supertest';
+import {SuggestionModule} from '../../suggestion/suggestion.module';
+import {CityModule} from '../../city/city.module';
+import {AppModule} from '../../app.module';
+import {SuggestionService} from '../../suggestion/service/suggestion.service';
+import connection from '../utils/connection';
+import 'reflect-metadata';
 
-describe('SuggestionController', () => {
-  let suggestionController: SuggestionController;
-  let suggestionService: SuggestionService;
-  let cityService: CityService;
-  let repository: Repository<CityEntity>;
-  let cache = Cache;
+describe('Suggestions', () => {
+    let app: INestApplication;
+    const suggestionService = {findSuggestionsWithParams: () => ['test']};
 
-  beforeEach(() => {
-    repository = new Repository<CityEntity>();
-    cache = new Cache();
-    suggestionService = new SuggestionService(repository, cityService, cache);
-    suggestionController = new SuggestionController(suggestionService, cache);
-  });
-
-  describe('findSuggestionsWithParams', () => {
-    it('should return an array of cats', async () => {
-      const result = new SuggestionsDto();
-      expect(await suggestionService.findSuggestionsWithParams('fdsfs', '', '')).toBe(result);
+    afterAll(async () => {
+        await connection.close();
     });
-  });
+
+    beforeEach(async () => {
+        await connection.clear();
+    });
+
+    beforeAll(async () => {
+        await connection.create();
+
+        const moduleRef = await Test.createTestingModule({
+            imports: [SuggestionModule, CityModule, AppModule],
+        })
+            .overrideProvider(SuggestionService)
+            .useValue(suggestionService)
+            .compile();
+
+        app = moduleRef.createNestApplication();
+        await app.init();
+
+    });
+
+    it(`/GET suggestions valid name`, () => {
+        return request(app.getHttpServer())
+            .get('/suggestions?q=Montr')
+            .expect(200)
+            .expect({
+                data: suggestionService.findSuggestionsWithParams(),
+            });
+    });
+
+    it(`/GET suggestions valid name and coordinates`, () => {
+        return request(app.getHttpServer())
+            .get('/suggestions?q=Londo&latitude=48.70011&longitude=-73.4163')
+            .expect(200)
+            .expect({
+                data: suggestionService.findSuggestionsWithParams(),
+            });
+    });
+
+    it(`/GET suggestions invalid name`, () => {
+        return request(app.getHttpServer())
+            .get('/suggestions?q=fdfsdfs')
+            .expect(404)
+            .expect({
+                data: suggestionService.findSuggestionsWithParams(),
+            });
+    });
+
+    afterAll(async () => {
+        await app.close();
+    });
 });

@@ -34,7 +34,7 @@ script is under resources/flyway folder.
 A redis has been deployed with docker-compose, it's important to note that the cache is only based on the keyword
 provided, we won't cache based on geographic position, it's not relevant enough.
 
-There are no ttl set, as a city doesn't change its name every day :) 
+There are no ttl set, as a city doesn't change its name every day :)
 
 ### HealthCheck
 
@@ -67,8 +67,7 @@ and ST_SetSRID method to calculate our score based on geographic points.
 ### Heroku
 
 The integration to Heroku, I added Postgres and Redis add-ons and run the two flyway scripts located in the resources
-folder.
-And I added config variables needed in Heroku.
+folder. And I added config variables needed in Heroku.
 
 ## URL
 
@@ -94,6 +93,9 @@ You will need docker and docker-compose to run the application. To run the appli
 
 To run the tests locally :
 
+DB_URL=postgres://docker:docker@localhost:5432/suggestions ENTITY_PATH=dist/**/**/*.entity{.js,.ts} PORT=3000
+REDISPORT=6379 REDISPASSWORD= REDISHOST=localhost
+
 - npm install -g jest
 - npm install
 - docker-compose up
@@ -101,6 +103,6 @@ To run the tests locally :
 
 ## One more thing
 
-I know that I have high vulnerabilities with axios, the report is telling 
+I know that I have high vulnerabilities with axios, the report is telling
 'axios  <=0.21.1', I forced the axios' version to 0.21.4, the axios folder contains this 0.21.4 version but it's still
 telling me that my version deprecated. I'm sorry about this issue, if you have any idea to fix this issue, let me know. 

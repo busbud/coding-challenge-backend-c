@@ -4,31 +4,31 @@ import {Column, Entity, Index, PrimaryGeneratedColumn} from 'typeorm';
 @Index(['name'])
 export class CityEntity {
     @PrimaryGeneratedColumn()
-      id: number;
+    id: number;
 
     @Column({nullable: false})
-      name: string;
+    name: string;
 
     @Column({name: 'ascii', nullable: true})
-      ascii: string;
+    ascii: string;
 
     @Column({type: 'real', name: 'lat', nullable: true})
-      lat: string;
+    lat: string;
 
     @Column({type: 'real', name: 'long', nullable: true})
-      long: string;
+    long: string;
 
     @Column({name: 'country', nullable: true})
-      country: string;
+    country: string;
 
     @Column({name: 'admin1', nullable: true})
-      admin1: string;
+    admin1: string;
 
     @Column({name: 'population', nullable: true})
-      population: number;
+    population: number;
 
     @Column({type: 'geography', name: 'localisation', nullable: true})
-      localisation: string;
+    localisation: string;
 
     feat_class: string;
 
