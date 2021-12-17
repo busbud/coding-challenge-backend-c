@@ -1,8 +1,2 @@
 .idea/
-.tmp/
-.versions/
-dist/
 node_modules/
-tmp/
-temp/
-$RECYCLE.BIN/
