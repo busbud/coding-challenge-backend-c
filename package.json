@@ -6,7 +6,7 @@
   "scripts": {
     "start:dev": "npm run start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
+    "start:prod": "node dist/main.js",
     "dev": "nest start --watch",
     "lint": "tslint -p tsconfig.json -c tslint.json",
     "test": "./node_modules/mocha/bin/mocha ./test/",
