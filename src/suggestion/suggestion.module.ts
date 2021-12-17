@@ -12,6 +12,7 @@ import {CityEntity} from './../city/city.entity';
             store: redisStore,
             host: process.env.REDISHOST,
             port: process.env.REDISPORT,
+            auth_pass: process.env.REDISPASSWORD,
         })],
     controllers: [SuggestionController],
     providers: [SuggestionService, CityService],
