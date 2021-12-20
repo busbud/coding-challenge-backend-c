@@ -19,7 +19,9 @@
   "dependencies": {
     "@godaddy/terminus": "4.9.0",
     "@nestjs/common": "8.2.3",
+    "@nestjs/config": "^1.1.5",
     "@nestjs/core": "8.2.3",
+    "@nestjs/passport": "^8.0.1",
     "@nestjs/platform-express": "8.2.3",
     "@nestjs/swagger": "5.1.5",
     "@nestjs/terminus": "8.0.3",
@@ -32,26 +34,29 @@
     "class-validator": "0.13.2",
     "csv-parse": "4.16.3",
     "nest-csv-parser": "2.0.4",
+    "passport": "^0.4.1",
+    "passport-headerapikey": "^1.2.2",
     "pg": "8.7.1",
     "redis": "3.1.2",
     "rimraf": "3.0.2",
     "rxjs": "7.4.0",
     "swagger-ui-express": "4.3.0",
-    "typeorm": "0.2.41",
-    "tslint": "5.20.0"
+    "typeorm": "0.2.41"
   },
   "devDependencies": {
     "@nestjs/testing": "8.2.3",
     "@types/jest": "27.0.3",
-    "@typescript-eslint/eslint-plugin": "^5.7.0",
-    "@typescript-eslint/parser": "^5.7.0",
+    "@types/passport": "^1.0.7",
+    "@types/passport-http": "^0.3.9",
+    "@typescript-eslint/eslint-plugin": "5.7.0",
+    "@typescript-eslint/parser": "5.7.0",
     "chai": "1.10.0",
-    "tslint": "5.20.0",
     "jest": "27.4.5",
     "mocha": "9.1.3",
     "prettier": "1.18.2",
     "supertest": "6.1.6",
-    "ts-jest": "^27.1.2"
+    "ts-jest": "27.1.2",
+    "tslint": "5.20.0"
   },
   "jest": {
     "moduleFileExtensions": [

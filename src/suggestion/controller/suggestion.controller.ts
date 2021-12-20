@@ -1,5 +1,6 @@
-import {Controller, Get, Logger, Query} from '@nestjs/common';
+import {Controller, Get, Logger, Query, UseGuards} from '@nestjs/common';
 import {ApiOperation, ApiTags} from '@nestjs/swagger';
+import {AuthGuard} from '@nestjs/passport';
 import {SuggestionQuery} from '../query/suggestion.query';
 import {SuggestionService} from '../service/suggestion.service';
 import {SuggestionsDto} from '../dto/suggestions.dto';
@@ -11,6 +12,7 @@ export class SuggestionController {
     constructor(private suggestionService: SuggestionService) {
     }
 
+    @UseGuards(AuthGuard('api-key'))
     @ApiTags('suggestions')
     @ApiOperation({description: 'Get suggestions based on query'})
     @Get()

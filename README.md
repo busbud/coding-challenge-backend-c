@@ -64,6 +64,11 @@ Which means, you can do 20 requests per minute with the same IP.
 With Fuzzystrmatch, we use the Levenshtein approach to calculate our score based on name. With PostGIS, we use ST_Point
 and ST_SetSRID method to calculate our score based on geographic points.
 
+## API Security
+
+To secure our API, an X-API-KEY is required as a header. You will need to add in your Postman an Authorization, choose
+type : api key Params = key:X-API-KEY, value:testBusBudForPerrineApi
+
 ### Heroku
 
 The integration to Heroku, I added Postgres and Redis add-ons and run the two flyway scripts located in the resources
@@ -82,7 +87,7 @@ You will need to copy the .env.example file and rename it to .env.
 
 You can put the following entries to this new file :
 DB_URL=postgres://docker:docker@localhost:5432/suggestions REDISPORT=6379 REDISHOST=localhost REDISPASSWORD=
-ENTITY_PATH=dist/**/**/*.entity{.js,.ts}
+API_KEY=testBusBudForPerrineApi ENTITY_PATH=dist/**/**/*.entity{.js,.ts}
 
 You will need docker and docker-compose to run the application. To run the application locally :
 
