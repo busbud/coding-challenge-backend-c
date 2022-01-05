@@ -2,10 +2,15 @@
   "name": "coding-challenge-backend-c",
   "version": "0.0.0",
   "description": "coding challenge in Nodejs",
-  "main": "app.js",
+  "main": "dist/app.js",
+  "files": [
+    "dist/*"
+  ],
   "scripts": {
-    "start": "node app.js",
-    "test": "jest ./test/"
+    "build": "tsc -p tsconfig.prod.json",
+    "start": "node dist/app.js",
+    "start:dev": "ts-node src/app.ts",
+    "test": "jest"
   },
   "author": "",
   "license": "WTFPL",
