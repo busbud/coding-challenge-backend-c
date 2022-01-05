@@ -24,12 +24,12 @@ describe('GET /suggestions', () => {
     });
 
     it('returns an empty array of suggestions', () => {
-      expect(response.json.suggestions).toBeInstanceOf(Array);
-      expect(response.json.suggestions).toHaveLength(0);
+      expect(response.body.suggestions).toBeInstanceOf(Array);
+      expect(response.body.suggestions).toHaveLength(0);
     });
   });
 
-  describe('with a valid city',  () => {
+  describe('with a valid city', () => {
     let response;
 
     beforeAll(async () => {
@@ -41,24 +41,25 @@ describe('GET /suggestions', () => {
     });
 
     it('returns an array of suggestions', () => {
-      expect(response.json.suggestions).toBeInstanceOf(Array);
-      expect(response.json.suggestions.length).toBeGreaterThan(0);
+      expect(response.body.suggestions).toBeInstanceOf(Array);
+      expect(response.body.suggestions.length).toBeGreaterThan(0);
     });
 
     describe.skip('Validate the shape of the data being returned', () => {
       it('contains latitudes and longitudes', () => {
-        const hasLatLng = response.json.suggestions.every(s => s.latitude && s.longitude);
+        const hasLatLng = response.body.suggestions.every(s => s.latitude && s.longitude);
         expect(hasLatLng).toBeTruthy();
       });
 
       it('contains scores', () => {
-        const hasScores = response.json.suggestions.every(s => !!s.score);
+        const hasScores = response.body.suggestions.every(s => !!s.score);
         expect(hasScores).toBeTruthy();
       });
     });
 
     it('contains a match', () => {
-      expect(response.json.suggestions.some(s => s.name.test(/montreal/i))).toBeTruthy();
+      const montrealRegex = /montreal/i;
+      expect(response.body.suggestions.some(s => montrealRegex.test(s.name))).toBeTruthy();
     });
   });
 });
