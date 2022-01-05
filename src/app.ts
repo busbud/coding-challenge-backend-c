@@ -3,6 +3,10 @@ import { City, loadCities } from './data';
 import { getDistance } from 'geolib';
 import { compareTwoStrings } from 'string-similarity';
 
+const PORT = process.env.PORT || 2345;
+const IS_TEST = process.env.JEST_WORKER_ID !== undefined;
+export const app = fastify();
+
 export interface Suggestion {
   name: string;
   longitude: number;
@@ -18,8 +22,6 @@ interface Match {
   similarity?: number;
 }
 
-const PORT = process.env.PORT || 2345;
-export const app = fastify();
 
 /**
  * Valid query params for GET /suggestions route
@@ -103,10 +105,13 @@ app.get('/suggestions', async (req, res) => {
   res.send({ suggestions })
 });
 
-app.listen(PORT, '0.0.0.0', (err) => {
-  if (!!err) {
-    console.error(`Failed to start web server on port:`, err);
-  } else {
-    console.log(`Server is running at http://127.0.0.1:${PORT}`);
-  }
-})
+
+if (!IS_TEST) {
+  app.listen(PORT, '0.0.0.0', (err) => {
+    if (!!err) {
+      console.error(`Failed to start web server on port:`, err);
+    } else {
+      console.log(`Server is running at http://127.0.0.1:${PORT}`);
+    }
+  })
+}
