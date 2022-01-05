@@ -103,7 +103,7 @@ app.get('/suggestions', async (req, res) => {
   res.send({ suggestions })
 });
 
-app.listen(PORT, '127.0.0.1', (err) => {
+app.listen(PORT, '0.0.0.0', (err) => {
   if (!!err) {
     console.error(`Failed to start web server on port:`, err);
   } else {
