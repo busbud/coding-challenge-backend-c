@@ -1,7 +1,6 @@
 import { app } from './app';
 import * as supertest from 'supertest';
 
-
 describe('GET /suggestions', () => {
   let request: supertest.SuperTest<any>;
 
@@ -45,7 +44,7 @@ describe('GET /suggestions', () => {
       expect(response.body.suggestions.length).toBeGreaterThan(0);
     });
 
-    describe.skip('Validate the shape of the data being returned', () => {
+    describe('Validate the shape of the data being returned', () => {
       it('contains latitudes and longitudes', () => {
         const hasLatLng = response.body.suggestions.every(s => s.latitude && s.longitude);
         expect(hasLatLng).toBeTruthy();
