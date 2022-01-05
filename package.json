@@ -15,7 +15,10 @@
   "author": "",
   "license": "WTFPL",
   "dependencies": {
-    "fastify": "~3.25.3"
+    "fast-csv": "^4.3.6",
+    "fastify": "~3.25.3",
+    "geolib": "^3.3.3",
+    "string-similarity": "^4.0.4"
   },
   "engines": {
     "node": "14.18.0"
