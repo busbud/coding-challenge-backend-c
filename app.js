@@ -16,7 +16,7 @@ module.exports = http.createServer(function (req, res) {
         const query = params.q;
 
         if (!query) {
-            res.end(JSON.stringify({
+            return res.end(JSON.stringify({
                 suggestions: []
             }));
         }
@@ -56,7 +56,7 @@ module.exports = http.createServer(function (req, res) {
     } else {
         res.end();
     }
-}).listen(port, '127.0.0.1');
+}).listen(port);
 
 console.log('Server running at http://127.0.0.1:%d/suggestions', port);
 
