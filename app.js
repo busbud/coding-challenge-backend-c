@@ -3,6 +3,8 @@ var port = process.env.PORT || 2345;
 const url = require('url');
 const fs = require('fs');
 const QuickScore = require("quick-score").QuickScore;
+const NodeCache = require( "node-cache" );
+const cache = new NodeCache();
 
 const citiesData = './data/cities_canada-usa.tsv';
 
@@ -19,7 +21,15 @@ module.exports = http.createServer(function (req, res) {
             }));
         }
 
+        const key = JSON.stringify(params);
         const options = optionsFromParams(params);
+        const suggestions = cache.get(key);
+        if (suggestions){
+            res.writeHead(200, {'Content-Type': 'text/plain'});
+            return res.end(JSON.stringify({
+                suggestions
+            }));
+        }
 
         fs.readFile(citiesData, "utf8", function (err, data) {
             if (err) throw err;
@@ -27,17 +37,20 @@ module.exports = http.createServer(function (req, res) {
             const json = jsonFromTsv(data);
             const score = new QuickScore(json, options);
             const results = score.search(query);
+            const suggestions = results.map((record) => {
+                return {
+                    name: record.item.name,
+                    latitude: record.item.lat,
+                    longitude: record.item.long,
+                    score: record.score,
+                }
+            });
+
+            cache.set(key, suggestions);
 
             res.writeHead(200, {'Content-Type': 'text/plain'});
-            res.end(JSON.stringify({
-                suggestions: results.map((record) => {
-                    return {
-                        name: record.item.name,
-                        latitude: record.item.lat,
-                        longitude: record.item.long,
-                        score: record.score,
-                    }
-                })
+            return res.end(JSON.stringify({
+                suggestions
             }));
         });
     } else {
