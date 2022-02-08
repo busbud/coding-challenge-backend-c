@@ -1,5 +1,9 @@
 # Busbud Coding Challenge
 
+### Note
+
+Live version of the endpoint can be found [here](https://arcane-river-34933.herokuapp.com/suggestions).
+
 ## Requirements
 
 Design an API endpoint that provides autocomplete suggestions for large cities.
