@@ -4,15 +4,22 @@
   "description": "coding challenge in Nodejs",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "pm2-runtime start app.js",
     "test": "./node_modules/mocha/bin/mocha ./test/"
   },
   "author": "",
   "license": "WTFPL",
   "dependencies": {
     "chai": "^1.9.1",
-    "mocha": "^1.18.2",
-    "supertest": "^0.11.0"
+    "dotenv": "^16.0.0",
+    "geolib": "^3.3.3",
+    "mocha": "^9.2.1",
+    "mongoose": "^6.2.4",
+    "node-tsv-json": "^0.2.1",
+    "pm2": "^5.2.0",
+    "supertest": "^6.2.2",
+    "tsv-json": "^2.0.0",
+    "url": "^0.11.0"
   },
   "engines": {
     "node": "0.10.26"
