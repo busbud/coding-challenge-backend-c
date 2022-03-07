@@ -103,6 +103,7 @@ You are going to need:
 - `Git`
 - `nvm` (or your preferred node version manager)
 - `Node.js`
+- `MOngo DB`
 
 ### Setting up your environment
 
