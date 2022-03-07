@@ -10,6 +10,7 @@
   "author": "",
   "license": "WTFPL",
   "dependencies": {
+    "@pm2/pm2-version-check": "^1.0.4",
     "chai": "^1.9.1",
     "dotenv": "^16.0.0",
     "geolib": "^3.3.3",
