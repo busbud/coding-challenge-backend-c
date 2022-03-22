@@ -1,0 +1,16 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type citiesRes {
+  id: Int!
+  name: String!
+  latitude: Float!
+  longitude: Float!
+  distance: Float!
+  score: Float!
+}
+
+type Query {
+  searchCities(long: Float, lat: Float, search: String!): [citiesRes!]!
+}
