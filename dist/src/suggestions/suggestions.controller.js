@@ -69,7 +69,7 @@ let SuggestionsController = class SuggestionsController {
             score: element.similarity,
         }));
         if (!!result[0].score && result[0].score < 0.19) {
-            throw new common_1.NotFoundException({ suggestions: [] }, 'no close suggestions found');
+            throw new common_1.NotFoundException({ suggestions: [] }, "no close suggestions found");
         }
         else
             return { suggestions: result };

@@ -35,17 +35,22 @@ function tsvJSON(tsv) {
        //set conditionals to store dynamic state and country names
        if(tsvData.country !== undefined && tsvData.admin1 !== undefined){
        const adminCodeId = tsvData.country.concat('.', tsvData.admin1)
+
        let stateName = ''
        let countryName = ''
+
        if(adminCodeId === adminCode.id){
          stateName = adminCode.name ? adminCode.name : adminCode.alt_name
        }
+
        if(tsvData.country === 'CA'){
          countryName = 'Canada'
        }
+
        if(tsvData.country === 'US'){
          countryName = 'United States of America'
        }
+       
        if(stateName !== '' && countryName !== ''){
       //seed cities table 
        await prisma.cities.create({
