@@ -1,17 +1,16 @@
-import { INestApplication, ValidationPipe } from '@nestjs/common';
-import { Test, TestingModule } from '@nestjs/testing';
-import { SuggestionsController } from '.././src/suggestions/suggestions.controller';
-import * as request from 'supertest'
-import { AppModule } from '../src/app.module';
-import { PrismaService } from '../src/prisma.service'
-import { HttpModule, HttpService } from '@nestjs/axios';
+import { INestApplication, ValidationPipe } from "@nestjs/common";
+import { Test, TestingModule } from "@nestjs/testing";
+import { SuggestionsController } from ".././src/suggestions/suggestions.controller";
+import * as request from "supertest";
+import { AppModule } from "../src/app.module";
+import { PrismaService } from "../src/prisma.service";
+import { HttpModule, HttpService } from "@nestjs/axios";
 
-
-describe("GET /suggestions", () =>  {
-  let app: INestApplication
+describe("GET /suggestions", () => {
+  let app: INestApplication;
 
   beforeAll(async () => {
-    //configure nestjs to work with jest testing 
+    //configure nestjs to work with jest testing
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule, HttpModule],
     }).compile();
@@ -30,11 +29,13 @@ describe("GET /suggestions", () =>  {
     var response;
 
     beforeAll(function (done) {
-        request(app.getHttpServer()).get("/suggestions?q=SomeRandomCityInTheMiddleOfNowhere").end(function (err, res) {  
-          console.log(err, res)
+      request(app.getHttpServer())
+        .get("/suggestions?q=SomeRandomCityInTheMiddleOfNowhere")
+        .end(function (err, res) {
+          console.log(err, res);
           response = res;
           response.json = JSON.parse(res.text);
-          console.log(response)
+          console.log(response);
           done(err);
         });
     });
@@ -53,11 +54,13 @@ describe("GET /suggestions", () =>  {
     var response;
 
     beforeAll(function (done) {
-      request(app.getHttpServer()).get("/suggestions?q=Montreal").end(function (err, res) {
-        response = res;
-        response.json = JSON.parse(res.text);
-        done(err);
-      });
+      request(app.getHttpServer())
+        .get("/suggestions?q=Montreal")
+        .end(function (err, res) {
+          response = res;
+          response.json = JSON.parse(res.text);
+          done(err);
+        });
     });
 
     it("returns a 200", function () {
@@ -71,19 +74,17 @@ describe("GET /suggestions", () =>  {
 
     describe("Validate the shape of the data being returned", function () {
       it("contains latitudes and longitudes", function () {
-        expect(response.json.suggestions[0]).toHaveProperty('latitude')
-        expect(response.json.suggestions[0]).toHaveProperty('longitude')
+        expect(response.json.suggestions[0]).toHaveProperty("latitude");
+        expect(response.json.suggestions[0]).toHaveProperty("longitude");
       });
 
       it("contains scores", function () {
-        expect(response.json.suggestions[0]).toHaveProperty('score');
-  })
+        expect(response.json.suggestions[0]).toHaveProperty("score");
+      });
 
-    it("contains a match", function () {
-       expect(response.json.suggestions[0].name).toContain('Montréal')
-     } 
-    )
-})
-})
-
-})
+      it("contains a match", function () {
+        expect(response.json.suggestions[0].name).toContain("Montréal");
+      });
+    });
+  });
+});

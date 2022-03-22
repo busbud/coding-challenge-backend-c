@@ -6,7 +6,7 @@ import { citiesresolver } from "./resolvers.cities";
 import { SuggestionsController } from "./suggestions/suggestions.controller";
 import { SuggestionsService } from "./suggestions/suggestions.service";
 
-//set up app module with controller and providers 
+//set up app module with controller and providers
 @Module({
   imports: [
     GraphQLModule.forRoot({
