@@ -18,6 +18,7 @@ export class SuggestionsController {
     let res;
     //conditional for optional lat and long params
     if (!q.latitude && !q.longitude) {
+      //custom write pgsql queries using prismaService $queryRaw, safe from sqlinjection exploits
       res = await this.prismaService.$queryRaw`   
       SELECT 
         cities.name,
@@ -30,7 +31,7 @@ export class SuggestionsController {
     FROM 
         cities, 
         to_tsvector(cities.name || cities.alternate_name || cities.ascii_name || cities.state || cities.country) document,
-        phrase_to_tsquery(${q.q}) query,
+        phraseto_tsquery(${q.q}) query,
         SIMILARITY(${q.q}, cities.name || cities.ascii_name || cities.state) similarity
     WHERE query @@ document OR similarity > 0 AND cities.population > 5000
     ORDER BY similarity DESC NULLS LAST
@@ -50,7 +51,7 @@ export class SuggestionsController {
     FROM 
         cities, 
         to_tsvector(cities.name || cities.alternate_name || cities.ascii_name || cities.state || cities.country) document,
-        phrase_to_tsquery(${q.q}) query,
+        phraseto_tsquery(${q.q}) query,
         SQRT(POWER(69.1 * ( cities.latitude - ${parseFloat(
           q.latitude
         )}),  2) + POWER(69.1 * ( ${parseFloat(
