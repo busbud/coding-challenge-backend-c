@@ -1,0 +1,10 @@
+declare const PrismaClient: any;
+declare const prisma: any;
+declare var fs: any;
+declare var path: any;
+declare var citiesJson: any;
+declare var citiesTSV: any;
+declare var admin1JSON: any;
+declare var admin1TXT: any;
+declare function tsvJSON(tsv: any): any;
+declare const main: () => Promise<void>;

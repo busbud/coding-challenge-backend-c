@@ -1,0 +1,23 @@
+datasource db {
+  url      = env("DATABASE_URL")
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures= ["fullTextIndex", "fullTextSearch"]
+}
+
+model cities {
+  id    Int  @id
+  name String
+  ascii_name String
+  alternate_name String
+  latitude  Float
+  longitude Float
+  state String
+  country String
+  population Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
