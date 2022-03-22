@@ -59,7 +59,7 @@ export class SuggestionsController {
       )}  - cities.longitude )  * COS(cities.latitude / 57.3), 2)) distance,
         SIMILARITY(${
           q.q
-        }, cities.name || cities.alternate_name || cities.ascii_name) similarity
+        }, cities.name || cities.ascii_name) similarity
     WHERE query @@ document OR similarity > 0 AND cities.population > 5000 AND distance < 200
     ORDER BY similarity DESC NULLS LAST
     LIMIT 8`;

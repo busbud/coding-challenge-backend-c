@@ -57,7 +57,7 @@ let SuggestionsController = class SuggestionsController {
         to_tsvector(cities.name || cities.alternate_name || cities.ascii_name || cities.state || cities.country) document,
         phraseto_tsquery(${q.q}) query,
         SQRT(POWER(69.1 * ( cities.latitude - ${parseFloat(q.latitude)}),  2) + POWER(69.1 * ( ${parseFloat(q.longitude)}  - cities.longitude )  * COS(cities.latitude / 57.3), 2)) distance,
-        SIMILARITY(${q.q}, cities.name || cities.alternate_name || cities.ascii_name) similarity
+        SIMILARITY(${q.q}, cities.name || cities.ascii_name) similarity
     WHERE query @@ document OR similarity > 0 AND cities.population > 5000 AND distance < 200
     ORDER BY similarity DESC NULLS LAST
     LIMIT 8`;
