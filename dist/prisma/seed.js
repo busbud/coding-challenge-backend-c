@@ -27,7 +27,6 @@ const main = async () => {
                 const adminCodeId = tsvData.country.concat('.', tsvData.admin1);
                 let stateName = '';
                 let countryName = '';
-                console.log(adminCodeId);
                 if (adminCodeId === adminCode.id) {
                     stateName = adminCode.name ? adminCode.name : adminCode.alt_name;
                 }
