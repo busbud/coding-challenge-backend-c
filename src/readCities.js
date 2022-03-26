@@ -5,7 +5,7 @@ module.exports.readCities = (filePath) => {
     const valuesMatrix = fs
         .readFileSync(filePath)
         .toString()
-        .split('\n')
+        .split('\r\n')
         .map((line) => line.split('\t'));
 
     const keyDefinitions = valuesMatrix[0]; //tab-separated-values
