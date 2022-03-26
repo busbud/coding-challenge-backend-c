@@ -1,6 +1,5 @@
 const { buildSuggestions } = require('../../src/suggestionGeneration');
-
-var expect = require('chai').expect;
+const expect = require('chai').expect;
 
 describe('Suggestion generation function', function () {
     it('Never returns cities where population is not above 5000', function () {

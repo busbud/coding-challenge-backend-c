@@ -156,3 +156,7 @@ Leveraging the typescript type system would be a big plus for future maintainabi
 #### Update the scoring algorithms
 
 Being strapped for time, the scoring algorithms are heavily limited and are not production-ready. However, they are isolated and would be easy to change. Also notice that the tests validating them are using relative comparison (instead of hard-coding generating scores) to ensure future changes would not break them
+
+#### Assertions
+
+Being unfamiliar with the provided assertion libraries, I wasn't able to leverage their full potential. Normalizing them with the libraries' best practices could be a small plus.

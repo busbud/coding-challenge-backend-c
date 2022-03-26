@@ -1,3 +1,4 @@
+// Keep them outside of the function scope so the regexes are kept in memory
 const diacriticsRemovals = [
     [new RegExp(/[àáâãäå]/g), 'a'],
     [new RegExp(/æ/g), 'ae'],

@@ -1,8 +1,8 @@
-var http = require('http');
+const http = require('http');
 const { URLSearchParams } = require('url');
 const { readCities } = require('./src/readCities');
 const { buildSuggestions } = require('./src/suggestionGeneration');
-var port = process.env.PORT || 2345;
+const port = process.env.PORT || 2345;
 
 const citiesFilePath = './data/cities_canada-usa.tsv';
 

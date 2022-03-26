@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-module.exports.readCities = (filePath) => {
+module.exports.readCities = function (filePath) {
     const valuesMatrix = fs
         .readFileSync(filePath)
         .toString()

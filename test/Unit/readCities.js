@@ -1,4 +1,4 @@
-var expect = require('chai').expect;
+const expect = require('chai').expect;
 const { readCities } = require('../../src/readCities');
 
 const sampleCitiesFilePath = 'test/unit/samples/10_cities.tsv';

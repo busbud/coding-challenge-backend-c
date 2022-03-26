@@ -1,10 +1,10 @@
-var expect = require('chai').expect;
-var app = require('../../app');
-var request = require('supertest')(app);
+const expect = require('chai').expect;
+const app = require('../../app');
+const request = require('supertest')(app);
 
 describe('GET /suggestions', function () {
     describe('without search text parameter', function () {
-        var response;
+        let response;
 
         before(function (done) {
             request
@@ -26,7 +26,7 @@ describe('GET /suggestions', function () {
     });
 
     describe('with missing longitude search parameter', function () {
-        var response;
+        let response;
 
         before(function (done) {
             request
@@ -48,7 +48,7 @@ describe('GET /suggestions', function () {
     });
 
     describe('with missing latitude search parameter', function () {
-        var response;
+        let response;
 
         before(function (done) {
             request
@@ -70,7 +70,7 @@ describe('GET /suggestions', function () {
     });
 
     describe('with a non-existent city', function () {
-        var response;
+        let response;
 
         before(function (done) {
             request
@@ -98,7 +98,7 @@ describe('GET /suggestions', function () {
     });
 
     describe('with a valid city', function () {
-        var response;
+        let response;
 
         before(function (done) {
             request.get('/suggestions?q=Montreal').end(function (err, res) {
