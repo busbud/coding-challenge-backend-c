@@ -39,6 +39,7 @@ module.exports = http
     .listen(port);
 
 console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+console.log('Cities have been loaded to provide suggestions', cities.length);
 
 function searchInputIsInvalid(searchInput) {
     return (
