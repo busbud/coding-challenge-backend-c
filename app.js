@@ -6,6 +6,7 @@ var port = process.env.PORT || 2345;
 
 const citiesFilePath = './data/cities_canada-usa.tsv';
 
+// Only read the cities once and keep them in memory
 const cities = readCities(citiesFilePath);
 
 module.exports = http

@@ -24,6 +24,8 @@ function determineScore(city, searchInput) {
     return weightedScores.reduce((sum, value) => sum + value, 0);
 }
 
+// This is a very limited scoring algorithm
+// It also only checks for direct matches to the city name
 function determineTextScore(city, searchText) {
     const normalizedName = normalize(city.name);
     searchText = normalize(searchText);

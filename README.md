@@ -139,7 +139,7 @@ it should produce an output similar to:
 Server running at http://127.0.0.1:2345/suggestions
 ```
 
-### Evolution Path
+### Evolution Paths
 
 The project has just been updated to leverage the most recent LTS version of node (16.14.2).
 
@@ -152,3 +152,7 @@ I've quickly tried to switch from the `require` syntax to the ES6 `import/export
 #### Add support for typescript
 
 Leveraging the typescript type system would be a big plus for future maintainability and developer experience. If time permits, fully switching to it would be the best, but a cheaper, short-term, alternative would be to allow mix-and-matching js and ts files.
+
+#### Update the scoring algorithms
+
+Being strapped for time, the scoring algorithms are heavily limited and are not production-ready. However, they are isolated and would be easy to change. Also notice that the tests validating them are using relative comparison (instead of hard-coding generating scores) to ensure future changes would not break them
