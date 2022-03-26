@@ -11,7 +11,8 @@ const buildSuggestions = function (cities, searchInput) {
             longitude: city.long,
             score: determineScore(city, searchText),
         }))
-        .filter((suggestion) => suggestion.score > 0);
+        .filter((suggestion) => suggestion.score > 0)
+        .sort((left, right) => right.score - left.score);
 };
 
 const determineScore = function (city, searchText) {
