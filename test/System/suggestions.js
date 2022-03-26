@@ -78,7 +78,7 @@ describe('GET /suggestions', function () {
                 suggestions
             ) {
                 return suggestions.some(function (suggestion) {
-                    return suggestion.name.test(/montreal/i);
+                    return /Montréal/i.test(suggestion.name);
                 });
             });
         });
