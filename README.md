@@ -143,7 +143,7 @@ Server running at http://127.0.0.1:2345/suggestions
 
 The project has just been updated to leverage the most recent LTS version of node (16.14.2).
 
-Due to current time constraints, the project could be upgraded to the industry best practices. Here's a few suggestions :
+Due to current time constraints, some upgrades could not be done. You can find below future upgrades that could be done.
 
 #### Switch to ES6 style import/export
 

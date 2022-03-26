@@ -5,9 +5,9 @@ module.exports.readCities = function (filePath) {
         .readFileSync(filePath)
         .toString()
         .split('\r\n')
-        .map((line) => line.split('\t'));
+        .map((line) => line.split('\t')); //TSV is for tab-separated-values
 
-    const keyDefinitions = valuesMatrix[0]; //tab-separated-values
+    const keyDefinitions = valuesMatrix[0];
 
     const dataRows = valuesMatrix.slice(1);
 
