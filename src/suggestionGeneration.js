@@ -7,7 +7,7 @@ module.exports.buildSuggestions = function (cities, searchInput) {
             name: [city.name, city.country].join(', '),
             latitude: city.lat,
             longitude: city.long,
-            score: determineScore(city, searchInput),
+            score: determineScore(city, searchInput).toFixed(2),
         }))
         .filter((suggestion) => suggestion.score > 0)
         .sort((left, right) => right.score - left.score);
