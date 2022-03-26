@@ -11,7 +11,7 @@ const cities = readCities(citiesFilePath);
 module.exports = http
     .createServer(function (req, res) {
         if (req.url.indexOf('/suggestions') === 0) {
-            const queryString = new URLSearchParams(req.url);
+            const queryString = new URLSearchParams(req.url.split('?')[1]);
 
             const searchInput = {
                 searchText: queryString.get('q'),
