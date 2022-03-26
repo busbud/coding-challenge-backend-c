@@ -7,6 +7,26 @@ describe('GET /suggestions', function () {
         let response;
 
         before(function (done) {
+            request.get('/suggestions').end(function (err, res) {
+                response = res;
+                done(err);
+            });
+        });
+
+        after(function (done) {
+            app.close();
+            done();
+        });
+
+        it('returns a 400', function () {
+            expect(response.statusCode).to.equal(400);
+        });
+    });
+
+    describe('without search text parameter', function () {
+        let response;
+
+        before(function (done) {
             request
                 .get('/suggestions?invalid=parameters')
                 .end(function (err, res) {
