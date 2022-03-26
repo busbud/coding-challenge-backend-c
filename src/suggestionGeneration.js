@@ -5,7 +5,7 @@ const buildSuggestions = function (cities, searchInput) {
 
     return cities
         .map((city) => ({
-            name: [city.name, city.cc2, city.country].join(', '),
+            name: [city.name, city.country].join(', '),
             latitude: city.lat,
             longitude: city.long,
             score: determineScore(city, searchText),
