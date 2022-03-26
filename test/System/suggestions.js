@@ -3,6 +3,72 @@ var app = require('../../app');
 var request = require('supertest')(app);
 
 describe('GET /suggestions', function () {
+    describe('without search text parameter', function () {
+        var response;
+
+        before(function (done) {
+            request
+                .get('/suggestions?invalid=parameters')
+                .end(function (err, res) {
+                    response = res;
+                    done(err);
+                });
+        });
+
+        after(function (done) {
+            app.close();
+            done();
+        });
+
+        it('returns a 400', function () {
+            expect(response.statusCode).to.equal(400);
+        });
+    });
+
+    describe('with missing longitude search parameter', function () {
+        var response;
+
+        before(function (done) {
+            request
+                .get('/suggestions?latitude=124098')
+                .end(function (err, res) {
+                    response = res;
+                    done(err);
+                });
+        });
+
+        after(function (done) {
+            app.close();
+            done();
+        });
+
+        it('returns a 400', function () {
+            expect(response.statusCode).to.equal(400);
+        });
+    });
+
+    describe('with missing latitude search parameter', function () {
+        var response;
+
+        before(function (done) {
+            request
+                .get('/suggestions?longitude=124098')
+                .end(function (err, res) {
+                    response = res;
+                    done(err);
+                });
+        });
+
+        after(function (done) {
+            app.close();
+            done();
+        });
+
+        it('returns a 400', function () {
+            expect(response.statusCode).to.equal(400);
+        });
+    });
+
     describe('with a non-existent city', function () {
         var response;
 

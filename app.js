@@ -16,8 +16,14 @@ module.exports = http
             const searchInput = {
                 searchText: queryString.get('q'),
                 latitude: queryString.get('latitude'),
-                location: queryString.get('longitude'),
+                longitude: queryString.get('longitude'),
             };
+
+            if (searchInputIsInvalid(searchInput)) {
+                res.writeHead(400);
+                res.end();
+                return;
+            }
 
             const suggestions = buildSuggestions(cities, searchInput);
 
@@ -33,3 +39,11 @@ module.exports = http
     .listen(port, '127.0.0.1');
 
 console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+
+function searchInputIsInvalid(searchInput) {
+    return (
+        !searchInput.searchText ||
+        (searchInput.latitude && !searchInput.longitude) ||
+        (searchInput.longitude && !searchInput.latitude)
+    );
+}
