@@ -1,7 +1,7 @@
 var expect = require('chai').expect;
 const { readCities } = require('../../src/readCities');
 
-const sampleCitiesFilePath = 'test/Unit/samples/10_cities.tsv';
+const sampleCitiesFilePath = 'test/unit/samples/10_cities.tsv';
 
 describe('readCities function', function () {
     it('Returns a non-empty array of cities', function () {
