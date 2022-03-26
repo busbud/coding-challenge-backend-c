@@ -4,6 +4,7 @@ const buildSuggestions = function (cities, searchInput) {
     const { searchText, latitude, longitude } = searchInput;
 
     return cities
+        .filter((city) => city.population > 5000)
         .map((city) => ({
             name: [city.name, city.country].join(', '),
             latitude: city.lat,
