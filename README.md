@@ -116,12 +116,7 @@ You are going to need:
 
 ### Setting up the project
 
-In the project directory run:
-
-```
-nvm use
-npm install
-```
+In the project directory run the `setup.sh` bash script. It may require administrator privileges to run.
 
 ### Running the tests
 
