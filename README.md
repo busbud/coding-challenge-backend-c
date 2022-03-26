@@ -160,3 +160,9 @@ Being strapped for time, the scoring algorithms are heavily limited and are not 
 #### Assertions
 
 Being unfamiliar with the provided assertion libraries, I wasn't able to leverage their full potential. Normalizing them with the libraries' best practices could be a small plus.
+
+#### Adjustments for heroku
+
+I've managed to deploy the app [to heroku](https://boiling-tundra-10407.herokuapp.com/suggestions). However, the app doesn't respond properly because its unable to find the .tsv file containing the relevant data. That is most likely because the file isn't there ([see limitations in heroku](https://boiling-tundra-10407.herokuapp.com/suggestions)).
+
+I've moved the .tsv file to [an azure blob](https://samplestorageaccount1523.blob.core.windows.net/repos/cities_canada-usa.tsv) but I'm just way out of time to start adapting the code to fetch it instead. Since it's just a different way to fetch a text file, it should not take a big amount of time and the current `readCities` mechanic could easily be modified to accept direct text, whether it comes from a local file or a blob.
