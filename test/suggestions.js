@@ -18,6 +18,7 @@ describe('GET /suggestions', function () {
 
         after(function (done) {
             app.close();
+            done();
         });
 
         it('returns a 404', function () {
