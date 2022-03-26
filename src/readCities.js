@@ -1,5 +1,4 @@
 const fs = require('fs');
-const suggestionFilePath = './data/cities_canada-usa.tsv';
 
 module.exports.readCities = (filePath) => {
     const valuesMatrix = fs
