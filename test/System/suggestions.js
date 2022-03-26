@@ -51,7 +51,7 @@ describe('GET /suggestions', function () {
             expect(response.json.suggestions).to.have.length.above(0);
         });
 
-        describe.skip('Validate the shape of the data being returned', function () {
+        describe('Validate the shape of the data being returned', function () {
             it('contains latitudes and longitudes', function () {
                 expect(response.json.suggestions).to.satisfy(function (
                     suggestions
