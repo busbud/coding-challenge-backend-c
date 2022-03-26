@@ -6,7 +6,7 @@ const port = process.env.PORT || 2345;
 
 const citiesFilePath = './data/cities_canada-usa.tsv';
 
-let cities = null;
+const cities = readCities(citiesFilePath); // Only read the cities once and keep them in memory
 
 module.exports = http
     .createServer(function (req, res) {
@@ -24,9 +24,6 @@ module.exports = http
                 res.end();
                 return;
             }
-
-            // Only read the cities once and keep them in memory
-            cities ||= readCities(citiesFilePath);
 
             const suggestions = buildSuggestions(cities, searchInput);
 
