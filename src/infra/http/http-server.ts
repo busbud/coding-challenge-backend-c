@@ -2,6 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import type { Application } from 'express';
+import { errors } from 'celebrate';
 import config from '../../app/config';
 
 export default class HttpServer {
@@ -13,6 +14,9 @@ export default class HttpServer {
   }
 
   public run() {
+    // errors() middleware must be declared just before server launch
+    this.server.use(errors());
+
     this.server.listen(Number(config.api.port), config.api.hostname, () => {
       console.info(`
                 ################################################
@@ -20,6 +24,10 @@ export default class HttpServer {
                 ################################################
             `);
     });
+  }
+
+  public getServer(): Application {
+    return this.server;
   }
 
   private create(): void {

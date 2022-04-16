@@ -2795,7 +2795,7 @@ id	name	ascii	alt_name	lat	long	feat_class	feat_code	country	cc2	admin1	admin2	a
 4699626	Hutto	Hutto		30.5427	-97.54667	P	PPL	US		TX	491			14698	202	203	America/Chicago	2011-05-14
 4700033	Ingleside	Ingleside		27.8778	-97.21166	P	PPL	US		TX	409			9387	4	7	America/Chicago	2011-05-14
 4700122	Iowa Park	Iowa Park		33.95148	-98.66867	P	PPL	US		TX	485			6355	316	319	America/Chicago	2011-05-14
-4700168	Irving	Irving	"rving,Erving,Irving,abingu,ayrfyngh, tksas,ayrwyng, tgzas,eobing,ou wen,Ірвінг,Ервинг,Ирвинг,Ървинг,ايرفينغ، تكساس,ایروینگ، تگزاس,എർവിങ്,アービング,歐文,어빙	32.81402	-96.94889	P	PPL	US		TX	113			216290	147	151	America/Chicago	2011-05-14
+4700168	Irving	Irving	Irving,Erving,Irving,abingu,ayrfyngh, tksas,ayrwyng, tgzas,eobing,ou wen,Ірвінг,Ервинг,Ирвинг,Ървинг,ايرفينغ، تكساس,ایروینگ، تگزاس,എർവിങ്,アービング,歐文,어빙	32.81402	-96.94889	P	PPL	US		TX	113			216290	147	151	America/Chicago	2011-05-14
 4700401	Jacinto City	Jacinto City		29.76745	-95.23382	P	PPL	US		TX	201			10553	9	11	America/Chicago	2011-05-14
 4700550	Jacksonville	Jacksonville	Dzeksonvil,Dzheksonvill,JKV,jaegseunbil,jakswnfyl, tksas,jkswnwyl, tgzas,Џексонвил,Джексонвилл,جاكسونفيل، تكساس,جکسونویل، تگزاس,잭슨빌	31.96378	-95.2705	P	PPL	US		TX	073			14544	159	160	America/Chicago	2011-05-14
 4700731	Jasper	Jasper		30.9202	-93.99658	P	PPLA2	US		TX	241			7590	62	65	America/Chicago	2011-05-14
@@ -3892,7 +3892,7 @@ id	name	ascii	alt_name	lat	long	feat_class	feat_code	country	cc2	admin1	admin2	a
 4952731	Templeton	Templeton		42.55564	-72.06758	P	PPL	US		MA	027			6918	347	349	America/New_York	2006-01-17
 4952762	Tewksbury	Tewksbury		42.61065	-71.23422	P	PPL	US		MA	017			29326	37	40	America/New_York	2006-01-17
 4953542	Tyngsboro	Tyngsboro		42.67676	-71.42451	P	PPL	US		MA	017			11366	42	46	America/New_York	2010-07-31
-4953804	Uxbridge	Uxbridge	"ksbridzh,Aksbridz,Aksbridzas,Aksbridzh,Aksbridžas,a ke si bu li qi,awksbrydj,eogseubeuliji,uksbridge,Аксбридж,Аксбриџ,Ъксбридж,آکس‌بریج، ماساچوست,أوكسبريدج,ऊक्ष्ब्रिद्गे,阿克斯布里奇,억스브리지	42.07732	-71.62951	P	PPL	US		MA	027			12614	74	76	America/New_York	2010-02-15
+4953804	Uxbridge	Uxbridge	Aksbridzh,Aksbridz,Aksbridzas,Aksbridzh,Aksbridžas,a ke si bu li qi,awksbrydj,eogseubeuliji,uksbridge,Аксбридж,Аксбриџ,Ъксбридж,آکس‌بریج، ماساچوست,أوكسبريدج,ऊक्ष्ब्रिद्गे,阿克斯布里奇,억스브리지	42.07732	-71.62951	P	PPL	US		MA	027			12614	74	76	America/New_York	2010-02-15
 4954265	Wakefield	Wakefield	wykfyld, masachwst,ویکفیلد، ماساچوست	42.50648	-71.07283	P	PPL	US		MA	017			24932	31	35	America/New_York	2011-05-14
 4954364	Walpole	Walpole	Uolpol,Уолпол	42.14177	-71.2495	P	PPL	US		MA	021			5918	45	50	America/New_York	2011-05-14
 4954380	Waltham	Waltham	Uoltem,Voltam,waltham, masachwst,wo er se mu,Волтам,Уолтем,والتهام، ماساچوست,沃尔瑟姆	42.37649	-71.23561	P	PPL	US		MA	017			60632	20	22	America/New_York	2011-05-14
@@ -5929,7 +5929,7 @@ id	name	ascii	alt_name	lat	long	feat_class	feat_code	country	cc2	admin1	admin2	a
 5359488	Inglewood	Inglewood	Inglewood,Inglvud,Ingulud,anghlywwwd, lws anjlys, kalyfwrnya,ayngl wwd, kalyfrnya,ing-geul-udeu,inguruuddo,ying ge er wu de,Инглвуд,Ингълуд,אינגלווד,إنغليووود، لوس أنجليس، كاليفورنيا,انگل ووڈ,اینگل وود، کالیفرنیا,イングルウッド,英格爾伍德,잉글우드	33.96168	-118.35313	P	PPL	US		CA	037			109673	40	44	America/Los_Angeles	2011-05-14
 5359577	Interlaken	Interlaken		36.95134	-121.73384	P	PPL	US		CA	087			7321	39	37	America/Los_Angeles	2011-05-14
 5359634	Ione	Ione		38.35269	-120.93272	P	PPL	US		CA	005			7918	91	96	America/Los_Angeles	2011-05-14
-5359777	Irvine	Irvine	"rvajn,Ervajn,Irvajn,Irvin,Irvine,abain,arfayn, kalyfwrnya,arwayn,arwayn, kalyfrnya,eobain,er wan,ou wen,Ервайн,Ервајн,Ирвайн,Ирвин,Ървайн,إرفاين، كاليفورنيا,اروائن,ارواین، کالیفرنیا,アーバイン,歐文,爾灣,어바인	33.66946	-117.82311	P	PPL	US		CA	059			212375	17	22	America/Los_Angeles	2011-11-29
+5359777	Irvine	Irvine	Ervajn,Ervajn,Irvajn,Irvin,Irvine,abain,arfayn, kalyfwrnya,arwayn,arwayn, kalyfrnya,eobain,er wan,ou wen,Ервайн,Ервајн,Ирвайн,Ирвин,Ървайн,إرفاين، كاليفورنيا,اروائن,ارواین، کالیفرنیا,アーバイン,歐文,爾灣,어바인	33.66946	-117.82311	P	PPL	US		CA	059			212375	17	22	America/Los_Angeles	2011-11-29
 5359864	Isla Vista	Isla Vista		34.41333	-119.86097	P	PPL	US		CA	083			23096	14	15	America/Los_Angeles	2011-05-14
 5360403	Jamul	Jamul		32.717	-116.87613	P	PPL	US		CA	073			6163	304	307	America/Los_Angeles	2011-05-14
 5361298	Joshua Tree	Joshua Tree		34.13473	-116.31307	P	PPL	US		CA	071			7414	834	836	America/Los_Angeles	2011-05-14
