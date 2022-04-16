@@ -1,20 +1,32 @@
 {
   "name": "coding-challenge-backend-c",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "coding challenge in Nodejs",
-  "main": "app.js",
+  "main": "dist/app.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "node .",
+    "build": "tsc",
+    "lint": "eslint -c .eslintrc.json --fix './**/*.{ts,tsx}'",
     "test": "./node_modules/mocha/bin/mocha ./test/"
   },
-  "author": "",
+  "author": "Hama MOHAMED MAHMOUD",
   "license": "WTFPL",
   "dependencies": {
-    "chai": "^1.9.1",
-    "mocha": "^1.18.2",
-    "supertest": "^0.11.0"
+    "chai": "^4.3.6",
+    "mocha": "^9.2.2",
+    "supertest": "^6.2.2"
   },
   "engines": {
-    "node": "0.10.26"
+    "node": "16.14.2"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.19.0",
+    "@typescript-eslint/parser": "^5.19.0",
+    "eslint": "^8.13.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.3.8",
+    "typescript": "^4.6.3"
   }
 }
