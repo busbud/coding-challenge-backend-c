@@ -1,0 +1,15 @@
+version: '3.5'
+
+services:
+    db:
+        image: postgres:14.2
+
+    web:
+        build: ./docker/web
+        ports:
+            - "2345:2345"
+        working_dir: /var/www/busbud
+        volumes:
+            - .:/var/www/busbud
+        depends_on:
+            - db
