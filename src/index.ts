@@ -1,5 +1,5 @@
-import HttpServer from './app/http/http-server';
+import App from './app/app';
 
-const httpServer = new HttpServer();
+const app = new App();
 
-httpServer.start();
+app.run();

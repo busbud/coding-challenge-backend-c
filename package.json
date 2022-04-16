@@ -15,6 +15,7 @@
   "license": "WTFPL",
   "dependencies": {
     "body-parser": "^1.20.0",
+    "celebrate": "^15.0.1",
     "chai": "^4.3.6",
     "cors": "^2.8.5",
     "dotenv-flow": "^3.2.0",

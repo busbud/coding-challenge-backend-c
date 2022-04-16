@@ -2,27 +2,17 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import type { Application } from 'express';
-import config from '../config';
+import config from '../../app/config';
 
 export default class HttpServer {
-  public server: Application;
+  private server: Application;
  
-  public start(): void {
+  public init(): void {
     this.create();
-    this.setup();
-    this.run();
+    this.configurate();
   }
 
-  private create(): void {
-    this.server = express();
-  }
-
-  private setup(): void {
-    this.server.use(bodyParser.json({ limit: '64mb' }));
-    this.server.use(cors());
-  }
-
-  private run() {
+  public run() {
     this.server.listen(Number(config.api.port), config.api.hostname, () => {
       console.info(`
                 ################################################
@@ -30,5 +20,14 @@ export default class HttpServer {
                 ################################################
             `);
     });
+  }
+
+  private create(): void {
+    this.server = express();
+  }
+
+  private configurate(): void {
+    this.server.use(bodyParser.json());
+    this.server.use(cors());
   }
 }
