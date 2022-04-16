@@ -1,7 +1,5 @@
 import { Application, Request, Response } from 'express';
 import { celebrate, Joi, Segments } from 'celebrate';
-import TsvReader from '../../../infra/tsv/reader';
-import path from 'path';
 
 export default (app: Application) => {
     app.get(
@@ -18,9 +16,6 @@ export default (app: Application) => {
             .with('longitude', 'latitude'),
         }),
         (request: Request, response: Response) => {
-            const tsvReader = new TsvReader();
-            
-            tsvReader.init(path.resolve('data') + '/cities_canada-usa.tsv');
             //entity city load from json
             //5000 people limit
             

@@ -8,10 +8,16 @@ if (envFound.error) {
 
 export default {
   /**
-     * API configs
-     */
+   * API configs
+   */
   api: {
     port: process.env.API_PORT,
     hostname: process.env.API_HOSTNAME,
   },
+  /**
+   * Database settings
+   */
+  database: {
+    url: process.env.DATABASE_URL
+  }
 };
