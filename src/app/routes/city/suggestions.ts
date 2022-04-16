@@ -20,7 +20,7 @@ export default (app: Application) => {
         (request: Request, response: Response) => {
             const tsvReader = new TsvReader();
             
-            tsvReader.init(path.resolve('data') + '/cities_canada-usa.tsv', []);
+            tsvReader.init(path.resolve('data') + '/cities_canada-usa.tsv');
             //entity city load from json
             //5000 people limit
             

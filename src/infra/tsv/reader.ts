@@ -2,7 +2,7 @@ import Papa from 'papaparse';
 import fs from 'fs';
 
 export default class Reader {
-    public init(path: string, fields: string[]): void {
+    public init(path: string): void {
         const fileContent = fs.readFileSync(path, 'utf8');
 
         Papa.parse(fileContent, {
@@ -13,7 +13,7 @@ export default class Reader {
                 console.log("Row data:", results.data);
             },
             complete: function(results) {
-                //console.log("Finished:", results.data);
+                console.log("Finished:", results.data);
             }
         });
     }
