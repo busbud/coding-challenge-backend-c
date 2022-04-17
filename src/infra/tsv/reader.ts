@@ -11,13 +11,8 @@ export default class Reader {
             header: true,
             complete: function(results: Papa.ParseResult<unknown>) {
                 records = results.data;
-            },
-            /*error: function(err, file, inputElem, reason) {
-                // executed if an error occurs while loading the file,
-                // or if before callback aborted for some reason
-            }*/
+            }
         });
-        //@todo: error management
 
         return records;
     }
