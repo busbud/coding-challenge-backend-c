@@ -2,6 +2,7 @@
     "compilerOptions": {
         "baseUrl": ".",
         "esModuleInterop": true,
+        "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "module": "commonjs",
         "moduleResolution": "node",
