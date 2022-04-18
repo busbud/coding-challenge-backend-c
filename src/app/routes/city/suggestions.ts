@@ -1,13 +1,14 @@
 import { Application, Request, Response } from 'express';
 import { celebrate, Joi, Segments } from 'celebrate';
 import { City } from '../../../domain/model/entity/city';
-import { Op } from 'sequelize';
+import { Op, Sequelize } from 'sequelize';
 import { IScorerStrategy } from '../../../domain/scorer/scorer-strategy-interface';
 import { NameScorerStrategy } from '../../../domain/scorer/name-scorer-strategy';
 import { CityPresenter } from '../../../domain/model/value-object/city-presenter';
 import { SuggestionSearchCriteria } from '../../../domain/model/value-object/suggestion-search-criteria';
 import { PositionScorerStrategy } from '../../../domain/scorer/position-scorer-strategy';
 import { NameAndPositionScorerStrategy } from '../../../domain/scorer/name-and-position-scorer-strategy';
+import { deburr } from 'lodash';
 
 export default (app: Application) => {
     app.get(
@@ -27,9 +28,10 @@ export default (app: Application) => {
             const searchCriteria: SuggestionSearchCriteria = new SuggestionSearchCriteria(String(q), Number(latitude), Number(longitude));
             const cities: City[] = await City.findAll({
                 where: {
-                    name: {
-                        [Op.substring]: q ?? ''
-                    },
+                    name: Sequelize.where(
+                        Sequelize.fn('unaccent', Sequelize.col('name')),
+                        { [Op.substring]: deburr(String(q)) }
+                    ),
                     population: {
                         [Op.gte]: minPopulation
                     }
@@ -54,7 +56,9 @@ export default (app: Application) => {
                 .sort((a, b) => (a.score < b.score) ? 1 : -1)
             ;
 
-            return response.status(200).json(cityPresenters);
+            return response.status(200).json({
+                suggestions: cityPresenters
+            });
         }
     );
 };

@@ -1,7 +1,6 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-npm run lint
+make lint
 
-#Uncomment at the end
-#npm test
+make run_test

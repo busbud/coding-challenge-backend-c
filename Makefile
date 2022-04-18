@@ -4,6 +4,9 @@
 install: ## Installs the project
 	docker-compose build
 	$(MAKE) npm CMD='install'
+	$(MAKE) create_db
+	$(MAKE) migration_migrate
+	$(MAKE) load_data
 	$(MAKE) start_dev
 
 # ==============================================================================
@@ -34,7 +37,8 @@ lint:
 
 run_test:
 	$(MAKE) npm CMD="run pre:test"
-#$(MAKE) npm CMD="run test"
+	$(MAKE) build
+	$(MAKE) npm CMD="run test"
 
 # ==============================================================================
 # Servers (and other long-running processes) management ========================

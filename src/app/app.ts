@@ -13,7 +13,7 @@ export default class App {
         httpServer.init();
 
         // load routes
-        Routes(httpServer.getServer());
+        Routes(httpServer.getApplication());
 
         httpServer.run();
     }
