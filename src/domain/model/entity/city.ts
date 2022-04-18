@@ -79,4 +79,8 @@ export class City extends Model {
       modifiedAt: dto.modified_at
     });
   }
+
+  getCompleteName(): string {
+    return this.name + ', ' + this.country;
+  }
 }

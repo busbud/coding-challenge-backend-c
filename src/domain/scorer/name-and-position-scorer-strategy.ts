@@ -17,7 +17,7 @@ export class NameAndPositionScorerStrategy implements IScorerStrategy {
         for (const city of cities) {
             const score: number = this.determineScore(city, searchCriteria);
 
-            cityPresenters.push(new CityPresenter(city.name, city.latitude, city.longitude, score));
+            cityPresenters.push(new CityPresenter(city.getCompleteName(), city.latitude, city.longitude, score));
         }
 
         return cityPresenters;
