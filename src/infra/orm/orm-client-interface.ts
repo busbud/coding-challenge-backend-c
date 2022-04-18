@@ -1,4 +1,3 @@
-export interface IOrmClient
-{
+export interface IOrmClient {
   connectDatabase(): void;
 }

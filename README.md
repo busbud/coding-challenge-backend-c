@@ -15,7 +15,7 @@ This API helps you to find your next trip location, by making it easier for you 
 
 ### Suggestions route
 
-    GET /suggestions?q=Montréal&latitude=45.50884&longitude=-73.58781
+    GET /suggestions?q=Montréal&latitude=45.50884&longitude=-73.58781&minPopulation=5000
 
 ```json
 {
