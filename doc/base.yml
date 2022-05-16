@@ -1,0 +1,10 @@
+/:
+  get:
+    tags:
+      - Endpoints
+    summary: Ping
+    responses:
+      200:
+        content:
+          text/plain:
+            example: OK

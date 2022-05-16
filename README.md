@@ -1,5 +1,7 @@
 # Busbud Coding Challenge
 
+Please read my [solution](SOLUTION.md).
+
 ## Requirements
 
 Design an API endpoint that provides autocomplete suggestions for large cities.

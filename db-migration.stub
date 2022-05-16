@@ -1,0 +1,4 @@
+import { Knex } from 'knex';
+
+export const up = async (db: Knex) => {};
+export const down = async (db: Knex) => {};
