@@ -14,7 +14,7 @@ CI and deployment to Heroku are automated with a GitHub workflow.
 
 The suggestion engine works this way :
 
-- It normalize the input query string using ascii and case folding
+- It normalizes the input query string using ascii and case folding
 - It performs a search against the database for city names matching the query string
 - It calculates a population score for each match based on a maximum city polulation on earth
 - It calculates a distance score for each match based on a maximum possible distance on earth
