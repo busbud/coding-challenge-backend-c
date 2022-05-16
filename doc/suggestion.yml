@@ -1,0 +1,64 @@
+/suggestions:
+  get:
+    tags:
+      - Endpoints
+    summary: Autocomplete suggestions for large cities
+    parameters:
+      - in: query
+        name: q
+        description: Search term
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: latitude
+        description: Location's latitude
+        schema:
+          type: number
+      - in: query
+        name: longitude
+        description: Location's longitude
+        schema:
+          type: number
+    responses:
+      200:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                suggestions:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      score:
+                        type: number
+                        example: 0.9
+                      name:
+                        type: string
+                        example: New York City, New York, United States
+                      latitude:
+                        type: number
+                        example: 40.714270
+                      longitude:
+                        type: number
+                        example: -74.005970
+      400:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  example: q is required
+      404:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                suggestions:
+                  type: array
+                  example: []

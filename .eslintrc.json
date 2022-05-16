@@ -1,0 +1,23 @@
+{
+  "env": {
+    "node": true
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "plugins": ["@typescript-eslint", "import", "jest"],
+  "extends": ["airbnb-base", "airbnb-typescript/base"],
+  "rules": {
+    "no-restricted-syntax": ["off"],
+    "no-await-in-loop": ["off"]
+  },
+  "overrides": [
+    {
+      "files": ["src/seed/**/*.ts"],
+      "rules": {
+        "import/prefer-default-export": ["off"]
+      }
+    }
+  ]
+}

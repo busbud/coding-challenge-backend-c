@@ -1,0 +1,65 @@
+country	admin1	name	ascii	id
+CA	01	Alberta	Alberta	5883102
+CA	02	British Columbia	British Columbia	5909050
+CA	03	Manitoba	Manitoba	6065171
+CA	04	New Brunswick	New Brunswick	6087430
+CA	13	Northwest Territories	Northwest Territories	6091069
+CA	07	Nova Scotia	Nova Scotia	6091530
+CA	14	Nunavut	Nunavut	6091732
+CA	08	Ontario	Ontario	6093943
+CA	09	Prince Edward Island	Prince Edward Island	6113358
+CA	10	Quebec	Quebec	6115047
+CA	11	Saskatchewan	Saskatchewan	6141242
+CA	12	Yukon	Yukon	6185811
+CA	05	Newfoundland and Labrador	Newfoundland and Labrador	6354959
+US	AR	Arkansas	Arkansas	4099753
+US	DC	Washington, D.C.	Washington, D.C.	4138106
+US	DE	Delaware	Delaware	4142224
+US	FL	Florida	Florida	4155751
+US	GA	Georgia	Georgia	4197000
+US	KS	Kansas	Kansas	4273857
+US	LA	Louisiana	Louisiana	4331987
+US	MD	Maryland	Maryland	4361885
+US	MO	Missouri	Missouri	4398678
+US	MS	Mississippi	Mississippi	4436296
+US	NC	North Carolina	North Carolina	4482348
+US	OK	Oklahoma	Oklahoma	4544379
+US	SC	South Carolina	South Carolina	4597040
+US	TN	Tennessee	Tennessee	4662168
+US	TX	Texas	Texas	4736286
+US	WV	West Virginia	West Virginia	4826850
+US	AL	Alabama	Alabama	4829764
+US	CT	Connecticut	Connecticut	4831725
+US	IA	Iowa	Iowa	4862182
+US	IL	Illinois	Illinois	4896861
+US	IN	Indiana	Indiana	4921868
+US	ME	Maine	Maine	4971068
+US	MI	Michigan	Michigan	5001836
+US	MN	Minnesota	Minnesota	5037779
+US	NE	Nebraska	Nebraska	5073708
+US	NH	New Hampshire	New Hampshire	5090174
+US	NJ	New Jersey	New Jersey	5101760
+US	NY	New York	New York	5128638
+US	OH	Ohio	Ohio	5165418
+US	RI	Rhode Island	Rhode Island	5224323
+US	VT	Vermont	Vermont	5242283
+US	WI	Wisconsin	Wisconsin	5279468
+US	CA	California	California	5332921
+US	CO	Colorado	Colorado	5417618
+US	NM	New Mexico	New Mexico	5481136
+US	NV	Nevada	Nevada	5509151
+US	UT	Utah	Utah	5549030
+US	AZ	Arizona	Arizona	5551752
+US	ID	Idaho	Idaho	5596512
+US	MT	Montana	Montana	5667009
+US	ND	North Dakota	North Dakota	5690763
+US	OR	Oregon	Oregon	5744337
+US	SD	South Dakota	South Dakota	5769223
+US	WA	Washington	Washington	5815135
+US	WY	Wyoming	Wyoming	5843591
+US	HI	Hawaii	Hawaii	5855797
+US	AK	Alaska	Alaska	5879092
+US	KY	Kentucky	Kentucky	6254925
+US	MA	Massachusetts	Massachusetts	6254926
+US	PA	Pennsylvania	Pennsylvania	6254927
+US	VA	Virginia	Virginia	6254928

@@ -1,0 +1,25 @@
+/doc:
+  get:
+    tags:
+      - Endpoints
+    summary: Swagger UI
+    responses:
+      200:
+        content:
+          text/html:
+            example: <!DOCTYPE html>...
+/doc/swagger.json:
+  get:
+    tags:
+      - Endpoints
+    summary: Swagger JSON
+    responses:
+      200:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                openapi:
+                  type: string
+                  example: 3.0.0
