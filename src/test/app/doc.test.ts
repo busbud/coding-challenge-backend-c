@@ -16,21 +16,21 @@ afterAll(() => {
 });
 
 describe('GET /doc', () => {
-  test('Response status is 200', async () => {
+  test('Returns a 200', async () => {
     response = await request.get('/doc');
     expect(response.status).toBe(200);
   });
-  test('Response type is text/html', async () => {
+  test('Returns HTML content', async () => {
     expect(response.type).toBe('text/html');
   });
 });
 
 describe('GET /doc/swagger.json', () => {
-  test('Response status is 200', async () => {
+  test('Returns a 200', async () => {
     response = await request.get('/doc/swagger.json');
     expect(response.status).toBe(200);
   });
-  test('Response type is application/json', async () => {
+  test('Returns JSON content', async () => {
     expect(response.type).toBe('application/json');
   });
 });

@@ -4,5 +4,5 @@
   "testMatch": ["**/*.test.ts"],
   "coverageDirectory": "coverage",
   "coverageReporters": ["lcov", "text"],
-  "coveragePathIgnorePatterns": ["<rootDir>/src/config", "<rootDir>/src/service/cache"]
+  "coveragePathIgnorePatterns": ["<rootDir>/src/config"]
 }

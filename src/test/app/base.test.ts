@@ -16,14 +16,14 @@ afterAll(() => {
 });
 
 describe('GET /', () => {
-  test('Response status is 200', async () => {
+  test('Returns a 200', async () => {
     response = await request.get('/');
     expect(response.status).toBe(200);
   });
-  test('Response type is text/plain', async () => {
+  test('Returns text content', async () => {
     expect(response.type).toBe('text/plain');
   });
-  test('Response text is OK', async () => {
+  test('Returns OK', async () => {
     expect(response.text).toBe('OK');
   });
 });
