@@ -1,27 +1,40 @@
-import { CacheInterface } from 'service/cache';
+import { CacheAdapter } from 'service/cache';
 
-export default class BypassCache implements CacheInterface {
-  private object = null;
+export default class BypassCache implements CacheAdapter {
+  private NULL = null;
+
+  async get() {
+    return this.NULL;
+  }
+
+  async set() {
+    this.NULL = null;
+  }
+
+  async getSet(_: string, __: any, ___: number, value: () => Promise<string>) {
+    this.NULL = null;
+    return value();
+  }
 
   async getObject() {
-    return this.object;
+    return this.NULL;
   }
 
   async setObject() {
-    this.object = null;
+    this.NULL = null;
   }
 
-  async getSetObject(_: string, __: number, freshObject: () => Promise<any>) {
-    this.object = null;
-    return freshObject();
+  async getSetObject(_: string, __: any, ___: number, value: () => Promise<any>) {
+    this.NULL = null;
+    return value();
   }
 
   async delete() {
-    this.object = null;
+    this.NULL = null;
     return 0;
   }
 
   async disconnect() {
-    this.object = null;
+    this.NULL = null;
   }
 }

@@ -1,9 +1,12 @@
 import IORedis, { Redis } from 'ioredis';
+import hashObject from 'object-hash';
+import { CacheAdapter } from 'service/cache';
 import redisConfig from 'config/redis';
-import { CacheInterface } from 'service/cache';
 
-export default class RedisCache implements CacheInterface {
+export default class RedisCache implements CacheAdapter {
   private redis: Redis;
+
+  private readonly keySeparator = ':';
 
   constructor() {
     this.redis = redisConfig.url
@@ -11,41 +14,66 @@ export default class RedisCache implements CacheInterface {
       : new IORedis(redisConfig);
   }
 
-  async getObject(key: string) {
-    const object = await this.redis.get(key);
-    if (object) {
-      return JSON.parse(object);
-    }
-    return object;
+  private key(keyPrefix: string, keyObject: any) {
+    return `${keyPrefix}${this.keySeparator}${hashObject(keyObject)}`;
   }
 
-  async setObject(key: string, expireTime: number, object: any) {
-    await this.redis.set(key, JSON.stringify(object), 'EX', expireTime);
+  async get(keyPrefix: string, keyObject: any) {
+    return this.redis.get(this.key(keyPrefix, keyObject));
   }
 
-  async getSetObject(key: string, expireTime: number, freshObject: () => Promise<any>) {
-    let object = await this.getObject(key);
-    if (!object) {
-      object = await freshObject();
-      await this.setObject(key, expireTime, object);
+  async set(keyPrefix: string, keyObject: any, expireTime: number, value: string) {
+    await this.redis.set(this.key(keyPrefix, keyObject), value, 'EX', expireTime);
+  }
+
+  async getSet(
+    keyPrefix: string,
+    keyObject: any,
+    expireTime: number,
+    value: () => Promise<string>,
+  ) {
+    let v = await this.get(keyPrefix, keyObject);
+    if (v === null) {
+      v = await value();
+      await this.set(keyPrefix, keyObject, expireTime, v);
     }
-    return object;
+    return v;
+  }
+
+  async getObject(keyPrefix: string, keyObject: any) {
+    const value = await this.get(keyPrefix, keyObject);
+    return value === null ? null : JSON.parse(value);
+  }
+
+  async setObject(keyPrefix: string, keyObject: any, expireTime: number, value: any) {
+    await this.set(keyPrefix, keyObject, expireTime, JSON.stringify(value));
+  }
+
+  async getSetObject(
+    keyPrefix: string,
+    keyObject: any,
+    expireTime: number,
+    value: () => Promise<any>,
+  ) {
+    let v = await this.getObject(keyPrefix, keyObject);
+    if (v === null) {
+      v = await value();
+      await this.setObject(keyPrefix, keyObject, expireTime, v);
+    }
+    return v;
   }
 
   async delete(pattern: string) {
-    let deleted = 0;
-    if (this.redis) {
-      let batch: string[] = [];
-      const keys = await this.redis.keys(pattern);
-      do {
-        batch = keys.splice(0, 1000);
-        if (batch.length) {
-          await this.redis.del(batch);
-          deleted += batch.length;
-        }
-      } while (keys.length);
-    }
-    return deleted;
+    let batch: string[] = [];
+    const keys = await this.redis.keys(pattern);
+    const count = keys.length;
+    do {
+      batch = keys.splice(0, 1000);
+      if (batch.length) {
+        await this.redis.del(batch);
+      }
+    } while (keys.length);
+    return count;
   }
 
   async disconnect() {

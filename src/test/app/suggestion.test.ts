@@ -37,14 +37,14 @@ beforeAll(async () => {
   }]);
 
   await db<City>('city').insert([{
-    id: 6325494,
-    ascii: 'Quebec',
-    name: 'Québec',
+    id: 6077128,
+    ascii: 'Mont-Laurier',
+    name: 'Mont-Laurier',
     country: 'CA',
     admin1: '10',
-    lat: 46.812280,
-    long: -71.214540,
-    population: 528595,
+    lat: 46.550110,
+    long: -75.499300,
+    population: 13405,
   }]);
 
   await db<Country>('country').insert([{
@@ -79,12 +79,13 @@ beforeAll(async () => {
 
 afterAll(async () => {
   server.close();
+
   await db.migrate.rollback(migrationConfig);
   await db.destroy();
 });
 
 describe('GET /suggestions', () => {
-  describe('Without a search term', () => {
+  describe('With a missing search term', () => {
     test('Returns a 400', async () => {
       response = await request.get('/suggestions');
       expect(response.status).toBe(400);
@@ -164,18 +165,18 @@ describe('GET /suggestions', () => {
       expect(response.body.suggestions).toBeInstanceOf(Array);
       expect(response.body.suggestions.length).toBeGreaterThan(0);
     });
-    test('Contains names', async () => {
+    test('Suggestions have a score', async () => {
+      expect(response.body.suggestions.every((suggestion: any) => suggestion.score)).toBe(true);
+    });
+    test('Suggestions have a name', async () => {
       expect(response.body.suggestions.every((suggestion: any) => suggestion.name)).toBe(true);
     });
-    test('Contains latitudes and longitudes', async () => {
+    test('Suggestions have a latitude and longitude', async () => {
       expect(response.body.suggestions.every(
         (suggestion: any) => suggestion.latitude && suggestion.longitude,
       )).toBe(true);
     });
-    test('Contains scores', async () => {
-      expect(response.body.suggestions.every((suggestion: any) => suggestion.score)).toBe(true);
-    });
-    test('Contains a match', async () => {
+    test('Suggestions contain a match', async () => {
       expect(response.body.suggestions.some((suggestion: any) => /montréal/i.test(suggestion.name))).toBe(true);
     });
   });
@@ -188,6 +189,17 @@ describe('GET /suggestions', () => {
     test('Returns an array of suggestions', async () => {
       expect(response.body.suggestions).toBeInstanceOf(Array);
       expect(response.body.suggestions.length).toBeGreaterThan(0);
+    });
+  });
+
+  describe('With a multi-match query string', () => {
+    test('Returns a 200', async () => {
+      response = await request.get('/suggestions?q=Mont');
+      expect(response.status).toBe(200);
+    });
+    test('Returns an array of at least 2 matches', async () => {
+      expect(response.body.suggestions).toBeInstanceOf(Array);
+      expect(response.body.suggestions.length).toBeGreaterThan(1);
     });
   });
 });

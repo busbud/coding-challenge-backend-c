@@ -1,17 +1,18 @@
 import cacheConfig from 'config/cache';
-import BypassCache from 'service/cache/bypass';
-import RedisCache from 'service/cache/redis';
 
-export interface CacheInterface {
-  getObject(key: string): Promise<any>
-  setObject(key: string, object: any, expireTime: number): Promise<void>
-  getSetObject(key: string, expireTime: number, freshObject: () => Promise<any>): Promise<any>
+export interface CacheAdapter {
+  get(keyPrefix: string, keyObject: any): Promise<string | null>
+  set(keyPrefix: string, keyObject: any, expireTime: number, value: any): Promise<void>
+  getSet(
+    keyPrefix: string, keyObject: any, expireTime: number, value: () => Promise<any>
+  ): Promise<string>
+  getObject(keyPrefix: string, keyObject: any): Promise<any | null>
+  setObject(keyPrefix: string, keyObject: any, expireTime: number, value: any): Promise<void>
+  getSetObject(
+    keyPrefix: string, keyObject: any, expireTime: number, value: () => Promise<any>
+  ): Promise<any>
   delete(pattern: string): Promise<number>
   disconnect(): Promise<void>
 }
 
-const cache: CacheInterface = cacheConfig.bypass
-  ? new BypassCache()
-  : new RedisCache();
-
-export default cache;
+export default new cacheConfig.AdapterClass();

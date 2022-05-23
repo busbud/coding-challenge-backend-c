@@ -17,9 +17,9 @@ The suggestion engine works this way :
 - It normalizes the input query string using ascii and case folding
 - It performs a search against the database for city names matching the query string
 - It calculates a population score for each match based on a maximum city polulation on earth
-- It calculates a distance score for each match based on a maximum possible distance on earth
+- It calculates a distance score for each match based on a maximum city distance on earth
 - It computes a final score for each match using a weighted average of the population and distance scores
-- It returns the suggestion list sorted by descending score and limited to a few matches
+- It returns a suggestions list sorted by descending score and limited to a few matches
 
 ## Development environment
 
