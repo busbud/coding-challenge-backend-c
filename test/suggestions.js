@@ -64,11 +64,7 @@ describe('GET /suggestions', function() {
           });	
         })	
       });
-    });
-    
-    it('is a gratuitously failing test you should remove to prove you ran the tests', function () {	
-      expect(true).to.equal(false);	
-    });	    
+    });    
 
     it('contains a match', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
