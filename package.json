@@ -1,8 +1,9 @@
 {
   "name": "coding-challenge-backend-c",
-  "version": "0.0.0",
-  "description": "coding challenge in Nodejs",
+  "version": "0.0.1",
+  "description": "Coding challenge in NodeJs - Nery Campusano",
   "main": "app.js",
+  "type": "module",
   "scripts": {
     "start": "node app.js",
     "test": "./node_modules/mocha/bin/mocha ./test/"
@@ -11,10 +12,11 @@
   "license": "WTFPL",
   "dependencies": {
     "chai": "^1.9.1",
+    "csv": "^6.1.0",
     "mocha": "^1.18.2",
     "supertest": "^0.11.0"
   },
   "engines": {
-    "node": "0.10.26"
+    "node": ">=15.0.0"
   }
 }
