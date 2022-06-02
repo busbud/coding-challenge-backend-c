@@ -1,8 +1,11 @@
+import { FLAGS, FLAG_VALUES } from "../constants.js";
+import { isLastItemFromArray } from "../helpers.js";
 import TrieNode from "./node.js";
 
 export default class Trie {
   constructor() {
     this.root = new TrieNode(null);
+    this.generalFlags = [];
   }
 
   insert = (word, additionalInformation) => {
@@ -22,20 +25,19 @@ export default class Trie {
       if (exists) {
         newNode = parent.children.get(character);
       }
-      if (word === "London") {
-        console.log("london");
-      }
 
-      if (c === word.length - 1) {
+      if (isLastItemFromArray(word, c)) {
         newNode.end = true;
-        if (!newNode.nodeInformation) {
-          newNode.nodeInformation = {
+        if (!newNode.information) {
+          newNode.information = {
+            name: additionalInformation.name,
             latitude: additionalInformation.lat,
             longitue: additionalInformation.long,
             city: `${additionalInformation.name}, ${additionalInformation.admin1}, ${additionalInformation.country}`,
           };
         } else {
           newNode.similarItems.push({
+            name: additionalInformation.name,
             latitude: additionalInformation.lat,
             longitue: additionalInformation.long,
             city: `${additionalInformation.name}, ${additionalInformation.admin1}, ${additionalInformation.country}`,
@@ -44,11 +46,6 @@ export default class Trie {
       }
 
       if (!exists) {
-        // if it's the last character I want to mark it as a complete word.
-        // and add the word information
-        // TODO: Create a helper function to know if it's last.
-        // TODO: Create a helper function to set the node information
-
         parent.children.set(character, newNode);
       }
 
@@ -63,36 +60,23 @@ export default class Trie {
 
       let result = [];
       let parent = this.root;
-      let score = 1;
 
       for (let t = 0; t < term.length; t++) {
         const character = term[t].toLowerCase();
         const exists = parent.children.has(character);
 
         if (!exists) {
-          score -= 0.05;
+          this.generalFlags.push(FLAGS.CHAR_NOT_FOUND);
+          continue;
         }
 
-        if (exists) {
-          const node = parent.children.get(character);
-          parent = node;
+        const node = parent.children.get(character);
+        parent = node;
 
-          if (node.end) {
-            const scoredSimilarItems = node.similarItems.map((s) => {
-              {
-                score: score, { ...s };
-              }
-            });
-            result.push([
-              { score: score, ...node.nodeInformation },
-              ...scoredSimilarItems,
-            ]);
-          }
+        this.handleCompleteWord(node, result, term);
 
-          if (t === term.length - 1) {
-            const suggestions = this.traverse(node, score, result);
-            result.push(...suggestions);
-          }
+        if (isLastItemFromArray(term, t)) {
+          this.traverse(node, result, term);
         }
       }
 
@@ -100,35 +84,49 @@ export default class Trie {
     });
   };
 
-  traverse = (node, remainingScore, result) => {
-    if (!node) return [];
-    if (!node.children) return [];
-
-    let score = remainingScore;
+  traverse = (node, result, term) => {
+    if (!node) return;
+    if (!node.children) return;
 
     for (const value of node.children.values()) {
-      if (!value.end) {
-        score -= 0.05;
-      }
-      // TODO: fix duplication of results.
-      if (value.end) {
-        const scoredSimilarItems = value.similarItems.map((s) => {
-          return {
-            score: score,
-            ...s,
-          };
-        });
-        result.push([
-          { score: score, ...value.nodeInformation },
-          ...scoredSimilarItems,
-        ]);
-      }
+      value.flags.push(FLAGS.SIMILAR_WORD);
 
-      if (value.children) {
-        return this.traverse(value, score, result);
+      this.handleCompleteWord(value, result, term);
+
+      if (value.children.size) {
+        this.traverse(value, result, term);
       }
     }
+  };
 
-    return result;
+  /**
+   *
+   * @param {TrieNode} node holds a reference to the node that completed search
+   * @param {Array} result holds a reference to the list of cities resulting in similarities
+   * @param {string} term the search terms
+   */
+
+  handleCompleteWord = (node, result, term) => {
+    if (node.end) {
+      const score = this.calculateScore(node, term);
+      result.push({ score, ...node.information });
+      node.similarItems.forEach((item) => {
+        result.push({ score, ...item });
+      });
+    }
+  };
+  /**
+   *
+   * @param {EVENT_TYPE} event type of the event that requires calculation of the score.
+   * @returns number
+   */
+  calculateScore = (node, term) => {
+    const highestScore = 1;
+    const score = [...this.generalFlags, ...node.flags].reduce((a, b) => {
+      const calc = FLAG_VALUES[b](term, node.information.name);
+      return a + calc;
+    }, highestScore);
+
+    return score.toPrecision(1);
   };
 }

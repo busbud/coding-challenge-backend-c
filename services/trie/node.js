@@ -11,8 +11,9 @@ class TrieNode {
   parent = null;
   children = new Map();
   end = false;
-  nodeInformation = null;
+  information = null;
   similarItems = [];
+  flags = [];
 
   constructor(key) {
     this.key = key;
