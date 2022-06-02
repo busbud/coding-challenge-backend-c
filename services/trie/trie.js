@@ -1,5 +1,8 @@
-import { FLAGS, FLAG_VALUES } from "../constants.js";
-import { isLastItemFromArray } from "../helpers.js";
+import { distanceRangeKM, FLAGS, FLAG_VALUES } from "../constants.js";
+import {
+  getLocationBetweenTwoPoints,
+  isLastItemFromArray,
+} from "../helpers.js";
 import TrieNode from "./node.js";
 
 export default class Trie {
@@ -31,17 +34,19 @@ export default class Trie {
         if (!newNode.information) {
           newNode.information = {
             name: additionalInformation.name,
-            latitude: additionalInformation.lat,
-            longitue: additionalInformation.long,
+            latitude: Number(additionalInformation.lat),
+            longitude: Number(additionalInformation.long),
             city: `${additionalInformation.name}, ${additionalInformation.admin1}, ${additionalInformation.country}`,
           };
         } else {
-          newNode.similarItems.push({
+          const similarNode = new TrieNode();
+          similarNode.information = {
             name: additionalInformation.name,
-            latitude: additionalInformation.lat,
-            longitue: additionalInformation.long,
+            latitude: Number(additionalInformation.lat),
+            longitude: Number(additionalInformation.long),
             city: `${additionalInformation.name}, ${additionalInformation.admin1}, ${additionalInformation.country}`,
-          });
+          };
+          newNode.similarItems.push(similarNode);
         }
       }
 
@@ -52,8 +57,12 @@ export default class Trie {
       parent = newNode;
     }
   };
-
-  search = (term) => {
+  /**
+   *
+   * @param {string} term the search term
+   * @returns a Promise that will resolve to the result list
+   */
+  search = (term, latitude, longitude) => {
     return new Promise((resolve) => {
       if (!term) return resolve([]);
       if (!term.length) return resolve([]);
@@ -73,10 +82,10 @@ export default class Trie {
         const node = parent.children.get(character);
         parent = node;
 
-        this.handleCompleteWord(node, result, term);
+        this.handleCompleteWord(node, result, term, latitude, longitude);
 
         if (isLastItemFromArray(term, t)) {
-          this.traverse(node, result, term);
+          this.traverse(node, result, term, latitude, longitude);
         }
       }
 
@@ -84,17 +93,25 @@ export default class Trie {
     });
   };
 
-  traverse = (node, result, term) => {
+  /**
+   *
+   * @param {TrieNode} node holds a reference to a node being traversed
+   * @param {Array} result holds a reference to the list of cities resulting in similarities
+   * @param {string} term the search term
+   * @void
+   */
+
+  traverse = (node, result, term, latitude, longitude) => {
     if (!node) return;
     if (!node.children) return;
 
     for (const value of node.children.values()) {
       value.flags.push(FLAGS.SIMILAR_WORD);
 
-      this.handleCompleteWord(value, result, term);
+      this.handleCompleteWord(value, result, term, latitude, longitude);
 
       if (value.children.size) {
-        this.traverse(value, result, term);
+        this.traverse(value, result, term, latitude, longitude);
       }
     }
   };
@@ -103,15 +120,19 @@ export default class Trie {
    *
    * @param {TrieNode} node holds a reference to the node that completed search
    * @param {Array} result holds a reference to the list of cities resulting in similarities
-   * @param {string} term the search terms
+   * @param {string} term the search term
    */
 
-  handleCompleteWord = (node, result, term) => {
+  handleCompleteWord = (node, result, term, latitude, longitude) => {
     if (node.end) {
+      this.validateLocation(node, latitude, longitude);
       const score = this.calculateScore(node, term);
+
       result.push({ score, ...node.information });
       node.similarItems.forEach((item) => {
-        result.push({ score, ...item });
+        this.validateLocation(item, latitude, longitude);
+        const scoreSimilarItems = this.calculateScore(item, term, score);
+        result.push({ score: scoreSimilarItems, ...item.information });
       });
     }
   };
@@ -120,13 +141,31 @@ export default class Trie {
    * @param {EVENT_TYPE} event type of the event that requires calculation of the score.
    * @returns number
    */
-  calculateScore = (node, term) => {
-    const highestScore = 1;
+  calculateScore = (node, term, prev) => {
+    const highestScore = prev || 1;
     const score = [...this.generalFlags, ...node.flags].reduce((a, b) => {
       const calc = FLAG_VALUES[b](term, node.information.name);
       return a + calc;
     }, highestScore);
 
-    return score.toPrecision(1);
+    return parseFloat(score.toFixed(1));
+  };
+
+  validateLocation = (node, incomingLatitude, incomingLongitude) => {
+    if (incomingLatitude && incomingLongitude) {
+      const distance = getLocationBetweenTwoPoints(
+        node,
+        Number(incomingLatitude),
+        Number(incomingLongitude)
+      );
+
+      const distanceKM = distance / 1000;
+
+      if (distanceKM > distanceRangeKM) {
+        node.flags.push(FLAGS.OUTSIDE_LOCATION);
+      }
+    }
+
+    return 0;
   };
 }

@@ -11,7 +11,11 @@ export default createServer(async (req, res) => {
     const datasource = new FileDatasource(`data/cities_canada-usa.tsv`);
     const suggestions = new Suggestions(datasource);
     const query = parse(req.url, true).query || {};
-    const data = await suggestions.searchData(query.q);
+    const data = await suggestions.searchData(
+      query.q,
+      query.latitude,
+      query.longitude
+    );
 
     res.end(
       JSON.stringify({

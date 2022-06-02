@@ -9,3 +9,5 @@ export const FLAG_VALUES = {
   OUTSIDE_LOCATION: () => -0.5,
   SIMILAR_WORD: (term, word) => Math.max(0, word.length - term.length) * -0.03,
 };
+
+export const distanceRangeKM = 200;
