@@ -1,5 +1,30 @@
 # Busbud Coding Challenge
 
+## Deployed Environment
+
+This application currently lives at: https://gentle-ridge-22302.herokuapp.com
+
+## Notes
+
+I tried to keep this as simple and concise as possible. It it written in plain nodejs and there are two new files:
+- dataParser (which handles the reading and parsing of the data file)
+- suggestions (which handles the calculations and sorting of the data for the response)
+
+The commands to run and test the app are the same as the original code
+```
+npm run start
+npm run test
+```
+
+I used express for the web server and imported two libraries for doing:
+- the string comparison (string-similarity)
+- and distance calculations (geo-distance)
+
+geo-distance doesn't seem to be actively maintained and I probably wouldn't use it any serious deployment.
+
+
+### Below this line is the old readme text for reference
+
 ## Requirements
 
 Design an API endpoint that provides autocomplete suggestions for large cities.

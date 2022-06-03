@@ -8,7 +8,7 @@ let jsonData;
 
 // Use an arbitrary distance of 500
 // We could do some more complicated math, but this is a nice simple solution
-const distanceMax = 500;
+const distanceMax = 500.0;
 
 // Because this is an autocomplete, I opted to use startsWith to narrow results
 // If we wanted to let users type something like "ttawa" and match "Ottawa",
@@ -66,7 +66,9 @@ export const getSuggestions = async (input, lat, long) => {
   let results = findCities(input, jsonData);
   results = calculateScore(input, results);
 
-  if (lat && long) results = addDistanceScore(results, lat, long);
+  if (lat && long) {
+    results = addDistanceScore(results, lat, long);
+  }
 
   results = sortResults(results);
 

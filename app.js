@@ -4,7 +4,8 @@ import { getSuggestions } from "./src/suggestions.js";
 const app = express();
 const port = process.env.PORT || 2345;
 
-const emptyResponse = {suggestions: []};
+const EMPTY_RESPONSE = {suggestions: []};
+const NOT_FOUND = 404;
 
 app.get("/suggestions", async (req, res) => {
   const input = req.query.q;
@@ -13,12 +14,12 @@ app.get("/suggestions", async (req, res) => {
     const results = await getSuggestions(input);
 
     if (results.suggestions.length === 0) {
-      res.status(404).send(emptyResponse);  
+      res.status(NOT_FOUND).send(EMPTY_RESPONSE);  
     }
 
     res.send(results);    
   } else {
-    res.status(404).send(emptyResponse);
+    res.status(NOT_FOUND).send(EMPTY_RESPONSE);
   }
 });
 
