@@ -2,7 +2,7 @@ import express from "express";
 import { getSuggestions } from "./src/suggestions.js";
 
 const app = express();
-const port = 2345;
+const port = process.env.PORT || 2345;
 
 const emptyResponse = {suggestions: []};
 
