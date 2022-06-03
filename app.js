@@ -7,6 +7,10 @@ const port = process.env.PORT || 2345;
 const EMPTY_RESPONSE = {suggestions: []};
 const NOT_FOUND = 404;
 
+app.get("/", (req, res) => {
+  res.send("Hello World! The suggestions function lives at: /suggestions");
+});
+
 app.get("/suggestions", async (req, res) => {
   const input = req.query.q;
 
@@ -17,7 +21,7 @@ app.get("/suggestions", async (req, res) => {
       res.status(NOT_FOUND).send(EMPTY_RESPONSE);  
     }
 
-    res.send(results);    
+    res.send(results);  
   } else {
     res.status(NOT_FOUND).send(EMPTY_RESPONSE);
   }
