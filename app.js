@@ -1,16 +1,29 @@
-var http = require('http');
-var port = process.env.PORT || 2345;
+import express from "express";
+import { getSuggestions } from "./src/suggestions.js";
 
-module.exports = http.createServer(function (req, res) {
-  res.writeHead(404, {'Content-Type': 'text/plain'});
+const app = express();
+const port = 2345;
 
-  if (req.url.indexOf('/suggestions') === 0) {
-    res.end(JSON.stringify({
-      suggestions: []
-    }));
+const emptyResponse = {suggestions: []};
+
+app.get("/suggestions", async (req, res) => {
+  const input = req.query.q;
+
+  if (input && input !== "") {
+    const results = await getSuggestions(input);
+
+    if (results.suggestions.length === 0) {
+      res.status(404).send(emptyResponse);  
+    }
+
+    res.send(results);    
   } else {
-    res.end();
+    res.status(404).send(emptyResponse);
   }
-}).listen(port, '127.0.0.1');
+});
 
-console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+app.listen(port, () => {
+  console.log(`Server running at http://127.0.0.1:${port}/suggestions`);
+});
+
+export default app;

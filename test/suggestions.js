@@ -1,14 +1,18 @@
-var expect  = require('chai').expect;
-var app     = require('../app');
-var request = require('supertest')(app);
+import chai, { expect } from "chai";
+import chaiHttp from "chai-http";
+import app from "../app.js";
 
-describe('GET /suggestions', function() {
-  describe('with a non-existent city', function () {
+chai.use(chaiHttp);
+chai.should();
+
+describe("GET /suggestions", () => {
+  describe("with a non-existent city", () => {
     var response;
 
-    before(function (done) {
-      request
-        .get('/suggestions?q=SomeRandomCityInTheMiddleOfNowhere')
+    before((done) => {
+      chai
+        .request(app)
+        .get("/suggestions?q=SomeRandomCityInTheMiddleOfNowhere")
         .end(function (err, res) {
           response = res;
           response.json = JSON.parse(res.text);
@@ -16,22 +20,24 @@ describe('GET /suggestions', function() {
         });
     });
 
-    it('returns a 404', function () {
+    it("returns a 404", () => {
+      console.log(response.json);
       expect(response.statusCode).to.equal(404);
     });
 
-    it('returns an empty array of suggestions', function () {
+    it("returns an empty array of suggestions", () => {
       expect(response.json.suggestions).to.be.instanceof(Array);
       expect(response.json.suggestions).to.have.length(0);
     });
   });
 
-  describe('with a valid city', function () {
+  describe("with a valid city", () => {
     var response;
 
-    before(function (done) {
-      request
-        .get('/suggestions?q=Montreal')
+    before((done) => {
+      chai
+        .request(app)
+        .get("/suggestions?q=Montreal")
         .end(function (err, res) {
           response = res;
           response.json = JSON.parse(res.text);
@@ -39,43 +45,32 @@ describe('GET /suggestions', function() {
         });
     });
 
-    it('returns a 200', function () {
+    it("returns a 200", () => {
       expect(response.statusCode).to.equal(200);
     });
 
-    it('returns an array of suggestions', function () {
+    it("returns an array of suggestions", () => {
       expect(response.json.suggestions).to.be.instanceof(Array);
       expect(response.json.suggestions).to.have.length.above(0);
     });
 
-    describe.skip('Validate the shape of the data being returned', function() {
-      it('contains latitudes and longitudes', function () {	
-        expect(response.json.suggestions).to.satisfy(function (suggestions) {	
-          return suggestions.every(function (suggestion) {	
-            return suggestion.latitude && suggestion.longitude;	
-          });	
-        })	
-      });	
-
-      it('contains scores', function () {	
-        expect(response.json.suggestions).to.satisfy(function (suggestions) {	
-          return suggestions.every(function (suggestion) {	
-            return suggestion.latitude && suggestion.longitude;	
-          });	
-        })	
+    it("contains latitudes and longitudes", () => {
+      response.json.suggestions.forEach((suggestion) => {
+        expect(parseFloat(suggestion.latitude)).to.be.within(-180, 180);
+        expect(parseFloat(suggestion.longitude)).to.be.within(-180, 180);
       });
     });
-    
-    it('is a gratuitously failing test you should remove to prove you ran the tests', function () {	
-      expect(true).to.equal(false);	
-    });	    
 
-    it('contains a match', function () {
-      expect(response.json.suggestions).to.satisfy(function (suggestions) {
-        return suggestions.some(function (suggestion) {
-          return suggestion.name.test(/montreal/i);
-        });
-      })
+    it("contains scores", () => {
+      response.json.suggestions.forEach((suggestion) => {
+        expect(suggestion.score).to.be.above(0);
+      });
+    });
+
+    it("contains a match", () => {
+      response.json.suggestions.forEach((suggestion) => {
+        expect(suggestion.name).to.include("ontreal");
+      });
     });
   });
 });
