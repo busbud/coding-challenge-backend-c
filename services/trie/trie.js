@@ -1,5 +1,4 @@
-import { distanceRangeKM } from "../constants.js";
-import { getLocationBetweenTwoPoints, isEndOfTerm } from "../helpers.js";
+import { isEndOfTerm } from "../../utils/helpers.js";
 import TrieNode from "./node.js";
 
 export default class Trie {
@@ -99,7 +98,7 @@ export default class Trie {
     if (!node.children.size) return;
 
     for (const value of node.children.values()) {
-      value.accuracy = Math.max(0, node.accuracy - 5);
+      value.accuracy = Math.max(0, node.accuracy - 1);
       this.handleCompleteWord(value, result);
 
       if (value.children.size) {

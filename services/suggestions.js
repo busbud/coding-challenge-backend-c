@@ -3,8 +3,9 @@ import ScoringService from "./scoring-service.js";
 
 class Suggestions {
   indexedData = null;
-  constructor(datasource) {
+  constructor(datasource, lruCache) {
     this.datasource = datasource;
+    this.lruCache = lruCache;
   }
 
   initialize = async () => {
@@ -18,7 +19,7 @@ class Suggestions {
     if (!term.length) return [];
 
     const results = await this.indexedData.search(term);
-    const scoreAndSort = new ScoringService();
+    const scoreAndSort = new ScoringService(this.lruCache);
     const scoredAndSorted = scoreAndSort.score(results, lat, long);
 
     return scoredAndSorted;

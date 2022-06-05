@@ -1,7 +1,15 @@
-import { distanceRangeKM, SCORE_WEIGHT_PERCENTAGE } from "./constants.js";
-import { getLocationBetweenTwoPoints } from "./helpers.js";
+import {
+  distanceRangeKM,
+  SCORE_WEIGHT_PERCENTAGE,
+} from "../utils/constants.js";
+import { getLocationBetweenTwoPoints } from "../utils/helpers.js";
+import LRUCacheService from "./lru-cache-service.js";
 
 export default class ScoringService {
+  constructor(lruCache) {
+    this.lruCache = lruCache;
+  }
+
   scoreCategories = {
     ACCURACY: (obj) =>
       (Math.max(0, obj.result.accuracy / 100) *
@@ -11,8 +19,14 @@ export default class ScoringService {
       (this.locationProximity(obj.result, obj.latitude, obj.longitude) *
         SCORE_WEIGHT_PERCENTAGE.LOCATION_PROXIMITY) /
       100,
-    FREQUENTLY_USED: (obj) =>
-      1 * (SCORE_WEIGHT_PERCENTAGE.FREQUENTLY_SEARCHED / 100), // if in cache then return one
+    FREQUENTLY_USED: ({ result }) => {
+      const key = `${result.name}, ${result.state}, ${result.country}`;
+      const isRecentlyUsed = this.lruCache.isRecentlyUsed(key);
+      const frequencyScore = isRecentlyUsed ? 1 : 0;
+      return (
+        frequencyScore * (SCORE_WEIGHT_PERCENTAGE.FREQUENTLY_SEARCHED / 100)
+      );
+    },
   };
   /**
    *
