@@ -1,20 +1,25 @@
 {
   "name": "coding-challenge-backend-c",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "coding challenge in Nodejs",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "test": "./node_modules/mocha/bin/mocha ./test/"
+    "test": "mocha ./test",
+    "initdb": "node ./scripts/process_data.js"
   },
   "author": "",
   "license": "WTFPL",
   "dependencies": {
     "chai": "^1.9.1",
-    "mocha": "^1.18.2",
-    "supertest": "^0.11.0"
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "mocha": "^10.0.0",
+    "papaparse": "^5.3.2",
+    "pg": "^8.7.3",
+    "supertest": "^6.2.3"
   },
   "engines": {
-    "node": "0.10.26"
+    "node": "16.13.1"
   }
 }

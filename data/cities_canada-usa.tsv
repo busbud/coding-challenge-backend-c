@@ -782,7 +782,7 @@ id	name	ascii	alt_name	lat	long	feat_class	feat_code	country	cc2	admin1	admin2	a
 4159805	Iona	Iona		26.52036	-81.96398	P	PPL	US		FL	071			15369	2	6	America/New_York	2011-05-14
 4159839	Islamorada	Islamorada		24.9243	-80.62784	P	PPL	US		FL	087			7131	3	9	America/New_York	2006-01-17
 4159896	Ives Estates	Ives Estates		25.96231	-80.17671	P	PPL	US		FL	086			19525	3	11	America/New_York	2011-05-14
-4160021	Jacksonville	Jacksonville	Dzeksonvil,Dzeksonvila,Dzeksonvilis,Dzhaks"nvil,Dzhehksanvil,Dzhehksonvill,Dzheksonvill,Džeksonvila,Džeksonvilis,Iacsoniapolis,Iacsonvilla,JAX,Jacksonville,Tzaksonvil,g'qswnwwyl,jaegseunbil,jaiksanavila,jakcanvil,jakswnfyl, flwryda,jakusonbiru,jeksanavhila,jeksonvili,jekʼsonvili,jie ke xun wei er,Τζάκσονβιλ,Џексонвил,Джаксънвил,Джексонвілл,Джэксанвіл,Джэксонвилл,Ջեքսոնվիլ,ג'קסונוויל,جاكسونفيل، فلوريدا,جکسون‌ویل,जॅक्सनव्हिल,जैक्सनविल,ஜாக்சன்வில்,แจ็กสันวิลล์,ჯეკსონვილი,ჯექსონვილი,ジャクソンビル,杰克逊维尔,잭슨빌	30.33218	-81.65565	P	PPLA2	US		FL	031			821784	5	12	America/New_York	2011-05-14
+4160021	Jacksonville	Jacksonville	Dzeksonvil,Dzeksonvila,Dzeksonvilis,Dzhaksnvil,Dzhehksanvil,Dzhehksonvill,Dzheksonvill,Džeksonvila,Džeksonvilis,Iacsoniapolis,Iacsonvilla,JAX,Jacksonville,Tzaksonvil,g'qswnwwyl,jaegseunbil,jaiksanavila,jakcanvil,jakswnfyl, flwryda,jakusonbiru,jeksanavhila,jeksonvili,jekʼsonvili,jie ke xun wei er,Τζάκσονβιλ,Џексонвил,Джаксънвил,Джексонвілл,Джэксанвіл,Джэксонвилл,Ջեքսոնվիլ,ג'קסונוויל,جاكسونفيل، فلوريدا,جکسون‌ویل,जॅक्सनव्हिल,जैक्सनविल,ஜாக்சன்வில்,แจ็กสันวิลล์,ჯეკსონვილი,ჯექსონვილი,ジャクソンビル,杰克逊维尔,잭슨빌	30.33218	-81.65565	P	PPLA2	US		FL	031			821784	5	12	America/New_York	2011-05-14
 4160023	Jacksonville Beach	Jacksonville Beach		30.29469	-81.39314	P	PPL	US		FL	031			21362	3	3	America/New_York	2011-05-14
 4160086	Jan-Phyl Village	Jan-Phyl Village	Jan Phyl Village	28.01474	-81.77175	P	PPL	US		FL	105			5573	47	49	America/New_York	2011-05-15
 4160100	Jasmine Estates	Jasmine Estates		28.29306	-82.6901	P	PPL	US		FL	101			18989	1	9	America/New_York	2011-05-14
@@ -2019,7 +2019,7 @@ id	name	ascii	alt_name	lat	long	feat_class	feat_code	country	cc2	admin1	admin2	a
 4459343	Carrboro	Carrboro		35.91014	-79.07529	P	PPL	US		NC	135			19582	141	141	America/New_York	2011-05-14
 4459467	Cary	Cary	Kehri,ka rui,kaeli,keri,kry, karwlynay shmaly,Кэри,کری، کارولینای شمالی,ケーリー,卡瑞,캐리	35.79154	-78.78112	P	PPL	US		NC	183			135234	152	152	America/New_York	2011-05-14
 4460162	Chapel Hill	Chapel Hill		35.9132	-79.05584	P	PPL	US		NC	135			57233	148	149	America/New_York	2011-05-14
-4460243	Charlotte	Charlotte	CLT,Carlotta,Charlotte,Charlotte i Nord-Carolina,Sarlot,Sarlota,Sarlote,Sharl"t,Sharlot,Sharlott,carlat,charlxtt,sarlata,sarlet,sharloti,sharlwt,sharotto,syalleos,tsharlwt, karwlayna alshmalyt,xia luo te,Šarlota,Šarlotė,Σάρλοτ,Шарлот,Шарлотт,Шарлът,Շառլոթ,שארלוט,تشارلوت، كارولاينا الشمالية,شارلوت,शार्लट,சார்லட்,షార్లెట్,ಷಾರ್ಲೆಟ್,ชาร์ลอตต์,შარლოთი,შარლოტი,シャーロット,夏洛特,샬럿	35.22709	-80.84313	P	PPLA2	US		NC	119			731424	229	272	America/New_York	2012-02-20
+4460243	Charlotte	Charlotte	CLT,Carlotta,Charlotte,Charlotte i Nord-Carolina,Sarlot,Sarlota,Sarlote,Sharlt,Sharlot,Sharlott,carlat,charlxtt,sarlata,sarlet,sharloti,sharlwt,sharotto,syalleos,tsharlwt, karwlayna alshmalyt,xia luo te,Šarlota,Šarlotė,Σάρλοτ,Шарлот,Шарлотт,Шарлът,Շառլոթ,שארלוט,تشارلوت، كارولاينا الشمالية,شارلوت,शार्लट,சார்லட்,షార్లెట్,ಷಾರ್ಲೆಟ್,ชาร์ลอตต์,შარლოთი,შარლოტი,シャーロット,夏洛特,샬럿	35.22709	-80.84313	P	PPLA2	US		NC	119			731424	229	272	America/New_York	2012-02-20
 4460465	Cherryville	Cherryville		35.37874	-81.37897	P	PPL	US		NC	071			5760	298	299	America/New_York	2011-05-14
 4460943	Clayton	Clayton		35.65071	-78.45639	P	PPL	US		NC	101			16116	104	103	America/New_York	2011-05-14
 4461015	Clemmons	Clemmons		36.02153	-80.382	P	PPL	US		NC	067			18627	256	255	America/New_York	2011-05-14
@@ -2385,7 +2385,7 @@ id	name	ascii	alt_name	lat	long	feat_class	feat_code	country	cc2	admin1	admin2	a
 4552707	Tahlequah	Tahlequah	Takhlguakh,tahlkwah, aklahma,tallekwa,Тахлгуах,تاهلکواه، اکلاهما,ᏓᎵᏆ,탈레콰	35.91537	-94.96996	P	PPLA2	US		OK	021			15753	243	249	America/Chicago	2011-05-14
 4552820	Tecumseh	Tecumseh		35.25785	-96.93669	P	PPL	US		OK	125			6457	330	336	America/Chicago	2011-05-14
 4552969	The Village	The Village		35.56089	-97.55143	P	PPL	US		OK	109			8929	372	376	America/Chicago	2011-05-14
-4553433	Tulsa	Tulsa	T"lsa,TUL,Talsa,Tulsa,tarusa,tu er sa,Талса,Тълса,タルサ,圖爾薩	36.15398	-95.99278	P	PPLA2	US		OK	143			391906	220	226	America/Chicago	2012-02-20
+4553433	Tulsa	Tulsa	Tlsa,TUL,Talsa,Tulsa,tarusa,tu er sa,Талса,Тълса,タルサ,圖爾薩	36.15398	-95.99278	P	PPLA2	US		OK	143			391906	220	226	America/Chicago	2012-02-20
 4553574	Tuttle	Tuttle		35.29089	-97.81227	P	PPL	US		OK	051			6019	402	405	America/Chicago	2011-05-14
 4554496	Vinita	Vinita		36.63869	-95.15413	P	PPLA2	US		OK	035			5743	214	215	America/Chicago	2011-05-14
 4554548	Wagoner	Wagoner		35.95954	-95.36941	P	PPLA2	US		OK	145			8323	180	187	America/Chicago	2011-05-14
@@ -2652,7 +2652,7 @@ id	name	ascii	alt_name	lat	long	feat_class	feat_code	country	cc2	admin1	admin2	a
 4670866	Angleton	Angleton		29.16941	-95.43188	P	PPLA2	US		TX	039			18862	9	14	America/Chicago	2011-05-14
 4670871	Anna	Anna		33.349	-96.5486	P	PPL	US		TX	085			8249	217	221	America/Chicago	2011-05-14
 4671141	Aransas Pass	Aransas Pass		27.90947	-97.14999	P	PPL	US		TX	409			8204	5	6	America/Chicago	2011-05-14
-4671240	Arlington	Arlington	Arlin'nkton,Arlingt"n,Arlington,Arlingtona,Arlingtonas,a ling dun,allingteon,arinton,arlingtana,arlynghtwn, tksas,arlyngtwn, tgzas,Ārlingtona,Άρλινγκτον,Арлингтон,Арлингтън,Արլինգտոն,آرلنگٹن,آرلینگتون، تگزاس,أرلينغتون، تكساس,आर्लिंग्टन,არლინგტონი,アーリントン,阿灵顿,알링턴	32.73569	-97.10807	P	PPL	US		TX	439			365438	184	190	America/Chicago	2011-05-14
+4671240	Arlington	Arlington	Arlin'nkton,Arlingtn,Arlington,Arlingtona,Arlingtonas,a ling dun,allingteon,arinton,arlingtana,arlynghtwn, tksas,arlyngtwn, tgzas,Ārlingtona,Άρλινγκτον,Арлингтон,Арлингтън,Արլինգտոն,آرلنگٹن,آرلینگتون، تگزاس,أرلينغتون، تكساس,आर्लिंग्टन,არლინგტონი,アーリントン,阿灵顿,알링턴	32.73569	-97.10807	P	PPL	US		TX	439			365438	184	190	America/Chicago	2011-05-14
 4671524	Atascocita	Atascocita		29.99883	-95.1766	P	PPL	US		TX	201			65844	22	25	America/Chicago	2011-05-14
 4671545	Athens	Athens		32.20487	-95.85552	P	PPLA2	US		TX	213			12710	149	152	America/Chicago	2011-05-14
 4671576	Atlanta	Atlanta	Atlanta,Атланта	33.11374	-94.16435	P	PPL	US		TX	067			5675	79	83	America/Chicago	2011-05-14
@@ -2787,7 +2787,7 @@ id	name	ascii	alt_name	lat	long	feat_class	feat_code	country	cc2	admin1	admin2	a
 4697988	Hitchcock	Hitchcock		29.34829	-95.01604	P	PPL	US		TX	167			6961	5	10	America/Chicago	2011-05-14
 4698562	Hondo	Hondo		29.34746	-99.14142	P	PPLA2	US		TX	325			8803	272	274	America/Chicago	2011-05-14
 4698809	Hornsby Bend	Hornsby Bend		30.24743	-97.58333	P	PPL	US		TX	453			6791	135	139	America/Chicago	2011-05-14
-4699066	Houston	Houston	Chiouston,Gorad Kh'justan,HOU,Hiu-su-tun,Hiustonas,Hiû-sṳ̂-tûn,Hjustona,Hjūstona,Houston,Hustonia,Hyuston,Kh'juston,Khjust"n,Khjuston,hi'ustana,hiustoni,hiws tan,hiyustan,hyuseuteon,hyustan,hyustana,hyusuton,hywstn,hywstn, tksas,hywstwn,xiu si dun,ywstwn,Χιούστον,Горад Х'юстан,Х'юстон,Хьюстон,Хюстън,Хјустон,Հյուստոն,היוסטן,יוסטון,هيوستن، تكساس,هیوستون,ھیووستن,ہywsٹn,ہیوسٹن,ह्युस्टन,হিউস্টন,હ્યુસ્ટન,ஹியூஸ்டன்,హ్యూస్టన్,ഹ്യൂസ്റ്റൺ,ฮิวสตัน,ဟူစတန်မြို့,ჰიუსთონი,ჰიუსტონი,ሂውስተን,ヒューストン,休斯敦,휴스턴	29.76328	-95.36327	P	PPLA2	US		TX	201			2099451	12	30	America/Chicago	2011-06-16
+4699066	Houston	Houston	Chiouston,Gorad Kh'justan,HOU,Hiu-su-tun,Hiustonas,Hiû-sṳ̂-tûn,Hjustona,Hjūstona,Houston,Hustonia,Hyuston,Kh'juston,Khjustn,Khjuston,hi'ustana,hiustoni,hiws tan,hiyustan,hyuseuteon,hyustan,hyustana,hyusuton,hywstn,hywstn, tksas,hywstwn,xiu si dun,ywstwn,Χιούστον,Горад Х'юстан,Х'юстон,Хьюстон,Хюстън,Хјустон,Հյուստոն,היוסטן,יוסטון,هيوستن، تكساس,هیوستون,ھیووستن,ہywsٹn,ہیوسٹن,ह्युस्टन,হিউস্টন,હ્યુસ્ટન,ஹியூஸ்டன்,హ్యూస్టన్,ഹ്യൂസ്റ്റൺ,ฮิวสตัน,ဟူစတန်မြို့,ჰიუსთონი,ჰიუსტონი,ሂውስተን,ヒューストン,休斯敦,휴스턴	29.76328	-95.36327	P	PPLA2	US		TX	201			2099451	12	30	America/Chicago	2011-06-16
 4699442	Humble	Humble		29.99883	-95.26216	P	PPL	US		TX	201			15133	29	34	America/Chicago	2011-05-14
 4699540	Huntsville	Huntsville	HTV,Khantsvil,Khantsvill,hantsavhila,hantsfyl, tksas,hantswyl,heoncheubil,Хантсвил,Хантсвилл,هانتسفيل، تكساس,هانتسویل,हंट्सव्हिल,헌츠빌	30.72353	-95.55078	P	PPLA2	US		TX	471			38548	113	116	America/Chicago	2013-04-06
 4699575	Hurst	Hurst	Kherst,Херст	32.82346	-97.17057	P	PPL	US		TX	439			37337	169	174	America/Chicago	2011-05-14
@@ -2795,7 +2795,7 @@ id	name	ascii	alt_name	lat	long	feat_class	feat_code	country	cc2	admin1	admin2	a
 4699626	Hutto	Hutto		30.5427	-97.54667	P	PPL	US		TX	491			14698	202	203	America/Chicago	2011-05-14
 4700033	Ingleside	Ingleside		27.8778	-97.21166	P	PPL	US		TX	409			9387	4	7	America/Chicago	2011-05-14
 4700122	Iowa Park	Iowa Park		33.95148	-98.66867	P	PPL	US		TX	485			6355	316	319	America/Chicago	2011-05-14
-4700168	Irving	Irving	"rving,Erving,Irving,abingu,ayrfyngh, tksas,ayrwyng, tgzas,eobing,ou wen,Ірвінг,Ервинг,Ирвинг,Ървинг,ايرفينغ، تكساس,ایروینگ، تگزاس,എർവിങ്,アービング,歐文,어빙	32.81402	-96.94889	P	PPL	US		TX	113			216290	147	151	America/Chicago	2011-05-14
+4700168	Irving	Irving	rving,Erving,Irving,abingu,ayrfyngh, tksas,ayrwyng, tgzas,eobing,ou wen,Ірвінг,Ервинг,Ирвинг,Ървинг,ايرفينغ، تكساس,ایروینگ، تگزاس,എർവിങ്,アービング,歐文,어빙	32.81402	-96.94889	P	PPL	US		TX	113			216290	147	151	America/Chicago	2011-05-14
 4700401	Jacinto City	Jacinto City		29.76745	-95.23382	P	PPL	US		TX	201			10553	9	11	America/Chicago	2011-05-14
 4700550	Jacksonville	Jacksonville	Dzeksonvil,Dzheksonvill,JKV,jaegseunbil,jakswnfyl, tksas,jkswnwyl, tgzas,Џексонвил,Джексонвилл,جاكسونفيل، تكساس,جکسونویل، تگزاس,잭슨빌	31.96378	-95.2705	P	PPL	US		TX	073			14544	159	160	America/Chicago	2011-05-14
 4700731	Jasper	Jasper		30.9202	-93.99658	P	PPLA2	US		TX	241			7590	62	65	America/Chicago	2011-05-14
@@ -3268,7 +3268,7 @@ id	name	ascii	alt_name	lat	long	feat_class	feat_code	country	cc2	admin1	admin2	a
 4844309	Torrington	Torrington	Torington,Toringtun,Torrington,toringtana,tuo ling dun,Торингтон,Торингтън,Торрингтон,Торрінгтон,टॉरिंग्टन,托灵顿	41.80065	-73.12122	P	PPL	US		CT	005			36383	165	169	America/New_York	2011-05-14
 4844459	Trumbull	Trumbull	Trambal,Trumbull,Трамбал,Трумбулл	41.24287	-73.20067	P	PPL	US		CT	001			36018	71	75	America/New_York	2011-05-14
 4845056	Wallingford	Wallingford	Vallingford,Wallingford Center,wo ling fu de,wollingpeodeu,Валлингфорд,沃灵福德,월링퍼드	41.45704	-72.82316	P	PPL	US		CT	009			17712	27	23	America/New_York	2006-01-17
-4845193	Waterbury	Waterbury	Uot"rb"ri,Uoterberi,Vaterbjuri,Voterberi,Waterbury,u~otabari,u~otaberi,votarabari,wo te bo li,woteobeli,Ватербюри,Вотербери,Вотербері,Уотербери,Уотърбъри,वॉटरबरी,ウォーターバリー,ウォーターベリー,沃特伯里,워터베리	41.55815	-73.0515	P	PPL	US		CT	009			110366	82	84	America/New_York	2011-05-14
+4845193	Waterbury	Waterbury	Uotrbri,Uoterberi,Vaterbjuri,Voterberi,Waterbury,u~otabari,u~otaberi,votarabari,wo te bo li,woteobeli,Ватербюри,Вотербери,Вотербері,Уотербери,Уотърбъри,वॉटरबरी,ウォーターバリー,ウォーターベリー,沃特伯里,워터베리	41.55815	-73.0515	P	PPL	US		CT	009			110366	82	84	America/New_York	2011-05-14
 4845411	West Hartford	West Hartford	Vehst Khartford,West Hartford,Zapadnyj Khartford,Вэст Хартфорд,Западный Хартфорд	41.76204	-72.74204	P	PPL	US		CT	003			63268	40	41	America/New_York	2011-05-14
 4845419	West Haven	West Haven		41.27065	-72.94705	P	PPL	US		CT	009			55564	10	5	America/New_York	2011-05-14
 4845519	West Torrington	West Torrington		41.81843	-73.14372	P	PPL	US		CT	005			36000	193	201	America/New_York	2006-01-17
@@ -3892,7 +3892,7 @@ id	name	ascii	alt_name	lat	long	feat_class	feat_code	country	cc2	admin1	admin2	a
 4952731	Templeton	Templeton		42.55564	-72.06758	P	PPL	US		MA	027			6918	347	349	America/New_York	2006-01-17
 4952762	Tewksbury	Tewksbury		42.61065	-71.23422	P	PPL	US		MA	017			29326	37	40	America/New_York	2006-01-17
 4953542	Tyngsboro	Tyngsboro		42.67676	-71.42451	P	PPL	US		MA	017			11366	42	46	America/New_York	2010-07-31
-4953804	Uxbridge	Uxbridge	"ksbridzh,Aksbridz,Aksbridzas,Aksbridzh,Aksbridžas,a ke si bu li qi,awksbrydj,eogseubeuliji,uksbridge,Аксбридж,Аксбриџ,Ъксбридж,آکس‌بریج، ماساچوست,أوكسبريدج,ऊक्ष्ब्रिद्गे,阿克斯布里奇,억스브리지	42.07732	-71.62951	P	PPL	US		MA	027			12614	74	76	America/New_York	2010-02-15
+4953804	Uxbridge	Uxbridge	ksbridzh,Aksbridz,Aksbridzas,Aksbridzh,Aksbridžas,a ke si bu li qi,awksbrydj,eogseubeuliji,uksbridge,Аксбридж,Аксбриџ,Ъксбридж,آکس‌بریج، ماساچوست,أوكسبريدج,ऊक्ष्ब्रिद्गे,阿克斯布里奇,억스브리지	42.07732	-71.62951	P	PPL	US		MA	027			12614	74	76	America/New_York	2010-02-15
 4954265	Wakefield	Wakefield	wykfyld, masachwst,ویکفیلد، ماساچوست	42.50648	-71.07283	P	PPL	US		MA	017			24932	31	35	America/New_York	2011-05-14
 4954364	Walpole	Walpole	Uolpol,Уолпол	42.14177	-71.2495	P	PPL	US		MA	021			5918	45	50	America/New_York	2011-05-14
 4954380	Waltham	Waltham	Uoltem,Voltam,waltham, masachwst,wo er se mu,Волтам,Уолтем,والتهام، ماساچوست,沃尔瑟姆	42.37649	-71.23561	P	PPL	US		MA	017			60632	20	22	America/New_York	2011-05-14
@@ -5264,7 +5264,7 @@ id	name	ascii	alt_name	lat	long	feat_class	feat_code	country	cc2	admin1	admin2	a
 5196245	Kingston	Kingston	Kingston,Кингстон	41.26175	-75.89686	P	PPL	US		PA	079			13182	164	166	America/New_York	2011-05-14
 5196605	Kulpsville	Kulpsville		40.24288	-75.33656	P	PPL	US		PA	091			8194	88	88	America/New_York	2011-05-14
 5196621	Kutztown	Kutztown		40.51732	-75.77742	P	PPL	US		PA	011			5012	128	131	America/New_York	2011-05-14
-5197079	Lancaster	Lancaster	LNS,Lancaster,Lankast"r,Lankaster,Lengeschder,laengkeoseuteo,lamkestara,lan kai si te,lnkstr, pnsylwanya,rankasuta,Ланкастер,Ланкастър,لنکاسٹر، پنسلوینیا,لنکستر، پنسیلوانیا,लँकेस्टर,ランカスター,兰开斯特,랭커스터	40.03788	-76.30551	P	PPLA2	US		PA	071			59322	110	116	America/New_York	2011-05-14
+5197079	Lancaster	Lancaster	LNS,Lancaster,Lankastr,Lankaster,Lengeschder,laengkeoseuteo,lamkestara,lan kai si te,lnkstr, pnsylwanya,rankasuta,Ланкастер,Ланкастър,لنکاسٹر، پنسلوینیا,لنکستر، پنسیلوانیا,लँकेस्टर,ランカスター,兰开斯特,랭커스터	40.03788	-76.30551	P	PPLA2	US		PA	071			59322	110	116	America/New_York	2011-05-14
 5197159	Lansdale	Lansdale		40.2415	-75.28379	P	PPL	US		PA	091			16269	109	111	America/New_York	2011-05-14
 5197227	Latrobe	Latrobe	LBE,Latrob,ltrwb, pnsylwanya,Латроб,لتروب، پنسیلوانیا	40.32118	-79.37948	P	PPL	US		PA	129			8338	304	309	America/New_York	2011-05-14
 5197517	Lebanon	Lebanon	Lebanon,Lebanono,lai ba nen,lbnan, pnsylwanya,Лебанон,لبنان، پنسیلوانیا,萊巴嫩	40.34093	-76.41135	P	PPLA2	US		PA	075			25477	143	147	America/New_York	2011-05-14
@@ -5323,7 +5323,7 @@ id	name	ascii	alt_name	lat	long	feat_class	feat_code	country	cc2	admin1	admin2	a
 5205377	Penn Hills	Penn Hills		40.50118	-79.83922	P	PPLX	US		PA	003			44610	286	283	America/New_York	2010-09-05
 5205638	Perkasie	Perkasie		40.37205	-75.29268	P	PPL	US		PA	017			8511	110	115	America/New_York	2011-05-14
 5205849	Phoenixville	Phoenixville	Finiksvill,Финиксвилл	40.13038	-75.51491	P	PPL	US		PA	029			16440	42	47	America/New_York	2011-05-14
-5206379	Pittsburgh	Pittsburgh	Gorad Pitsburg,PIT,Pitsb"rg,Pitsburg,Pitsburga,Pitsburgas,Pitsmpernk,Pittsbarig,Pittsburg,Pittsburgh,Pittsburgum,bytsbrgh, bnsylfanya,phitts beirk,pi ci bao,pi zi bao,picheubeogeu,pitsabarga,pitsbarg,pitspark,pittsubagu,pytsbwrg,Πίτσμπεργκ,Горад Пітсбург,Питсбург,Питсбърг,Питтсбург,Піттсбург,פיטסבורג,بيتسبرغ، بنسيلفانيا,پٹس برگ,پیتسبورگ,पिट्सबर्ग,பிட்ஸ்பர்க்,పిట్స్బర్గ్,ಪಿಟ್ಸ್‌ಬರ್ಗ್,พิตต์สเบิร์ก,ピッツバーグ,匹兹堡,피츠버그	40.44062	-79.99589	P	PPLA2	US		PA	003			305704	233	239	America/New_York	2011-05-14
+5206379	Pittsburgh	Pittsburgh	Gorad Pitsburg,PIT,Pitsbrg,Pitsburg,Pitsburga,Pitsburgas,Pitsmpernk,Pittsbarig,Pittsburg,Pittsburgh,Pittsburgum,bytsbrgh, bnsylfanya,phitts beirk,pi ci bao,pi zi bao,picheubeogeu,pitsabarga,pitsbarg,pitspark,pittsubagu,pytsbwrg,Πίτσμπεργκ,Горад Пітсбург,Питсбург,Питсбърг,Питтсбург,Піттсбург,פיטסבורג,بيتسبرغ، بنسيلفانيا,پٹس برگ,پیتسبورگ,पिट्सबर्ग,பிட்ஸ்பர்க்,పిట్స్బర్గ్,ಪಿಟ್ಸ್‌ಬರ್ಗ್,พิตต์สเบิร์ก,ピッツバーグ,匹兹堡,피츠버그	40.44062	-79.99589	P	PPLA2	US		PA	003			305704	233	239	America/New_York	2011-05-14
 5206397	Pittston	Pittston	Pitston,pytstwn, pnsylwanya,Питстон,پیتستون، پنسیلوانیا	41.32591	-75.78936	P	PPL	US		PA	079			7739	179	181	America/New_York	2011-05-14
 5206510	Pleasant Hills	Pleasant Hills		40.33563	-79.96061	P	PPL	US		PA	003			8268	374	374	America/New_York	2011-05-14
 5206606	Plum	Plum		40.50035	-79.74949	P	PPL	US		PA	003			27126	347	344	America/New_York	2011-05-14
@@ -5411,7 +5411,7 @@ id	name	ascii	alt_name	lat	long	feat_class	feat_code	country	cc2	admin1	admin2	a
 5223687	North Smithfield	North Smithfield		41.96677	-71.54951	P	PPL	US		RI	007			11212	111	105	America/New_York	2010-02-17
 5223869	Pawtucket	Pawtucket	Pawtucket,Potaket,bo ta ji te,potaketto,Потакет,ポータケット,波塔基特	41.87871	-71.38256	P	PPL	US		RI	007			71148	11	-11	America/New_York	2011-05-14
 5224082	Portsmouth	Portsmouth	Portsmut,Портсмут	41.60232	-71.25033	P	PPL	US		RI	005			17756	43	21	America/New_York	2010-01-29
-5224151	Providence	Providence	Gorad Providehns,PVD,Provid"ns,Providence,Providens,Providensa,Providensas,Providentia,Provintens,brwfydns, rwd ayland,peulobideonseu,phr x wi den s,piravitens,prawydns,provhidansa,prwbydns,pu luo wei deng si,pu luo wei dun si,purobidensu,purovu~idensu,Πρόβιντενς,Горад Провідэнс,Провиденс,Провидънс,Провіденс,Փրովիդենս,פרובידנס,بروفيدنس، رود آيلاند,پراویدنس,پروویڈنس,پروویڈنس، رہوڈ آئی لینڈ,प्रॉव्हिडन्स,பிராவிடென்ஸ்,พรอวิเดนซ์,プロビデンス,プロヴィデンス,普洛威頓斯,普罗维登斯,프로비던스	41.82399	-71.41283	P	PPLA	US		RI	007			178042	2	-17	America/New_York	2012-02-20
+5224151	Providence	Providence	Gorad Providehns,PVD,Providns,Providence,Providens,Providensa,Providensas,Providentia,Provintens,brwfydns, rwd ayland,peulobideonseu,phr x wi den s,piravitens,prawydns,provhidansa,prwbydns,pu luo wei deng si,pu luo wei dun si,purobidensu,purovu~idensu,Πρόβιντενς,Горад Провідэнс,Провиденс,Провидънс,Провіденс,Փրովիդենս,פרובידנס,بروفيدنس، رود آيلاند,پراویدنس,پروویڈنس,پروویڈنس، رہوڈ آئی لینڈ,प्रॉव्हिडन्स,பிராவிடென்ஸ்,พรอวิเดนซ์,プロビデンス,プロヴィデンス,普洛威頓斯,普罗维登斯,프로비던스	41.82399	-71.41283	P	PPLA	US		RI	007			178042	2	-17	America/New_York	2012-02-20
 5224949	Smithfield	Smithfield		41.92204	-71.54951	P	PPL	US		RI	007			21872	84	82	America/New_York	2006-01-17
 5225245	Tiverton	Tiverton		41.62594	-71.21338	P	PPL	US		RI	005			7557	3	-16	America/New_York	2011-05-14
 5225388	Valley Falls	Valley Falls		41.90677	-71.39061	P	PPL	US		RI	007			11547	32	8	America/New_York	2011-05-14
@@ -5734,7 +5734,7 @@ id	name	ascii	alt_name	lat	long	feat_class	feat_code	country	cc2	admin1	admin2	a
 5327550	Benicia	Benicia	Benisha,Bunisha,bnysya, kalyfrnya,bnysya, kalyfwrnya,Бениша,Бъниша,بنيسيا، كاليفورنيا,بنیسیا، کالیفرنیا	38.04936	-122.15858	P	PPL	US		CA	095			26997	8	5	America/Los_Angeles	2011-05-14
 5327684	Berkeley	Berkeley	Berkeley,Berkli,Burkli,bakure,bakuri,beokeulli,bo ke li,brkly, kalyfrnya,brqly,byrkyly, kalyfwrnya,Беркли,Берклі,Бъркли,ברקלי,برکلی، کالیفرنیا,برکلے,بيركيلي، كاليفورنيا,バークリー,バークレー,伯克利,버클리	37.87159	-122.27275	P	PPL	US		CA	001			112580	52	55	America/Los_Angeles	2011-05-14
 5327717	Bermuda Dunes	Bermuda Dunes	UDD	33.7428	-116.28918	P	PPL	US		CA	065			7282	29	29	America/Los_Angeles	2011-05-14
-5328041	Beverly Hills	Beverly Hills	Bev"rli Khils,Beverly Hills,beverli hilsi,bibarihiruzu,bwrly hylz,bwwrly hyls,Бевърли Хилс,בוורלי הילס,بورلی هیلز,ბევერლი ჰილსი,ビバリーヒルズ	34.07362	-118.40036	P	PPL	US		CA	037			34109	79	84	America/Los_Angeles	2011-05-14
+5328041	Beverly Hills	Beverly Hills	Bevrli Khils,Beverly Hills,beverli hilsi,bibarihiruzu,bwrly hylz,bwwrly hyls,Бевърли Хилс,בוורלי הילס,بورلی هیلز,ბევერლი ჰილსი,ビバリーヒルズ	34.07362	-118.40036	P	PPL	US		CA	037			34109	79	84	America/Los_Angeles	2011-05-14
 5328152	Big Bear City	Big Bear City		34.26112	-116.84503	P	PPL	US		CA	071			12304	2064	2071	America/Los_Angeles	2011-05-14
 5328163	Big Bear Lake	Big Bear Lake		34.2439	-116.91142	P	PPL	US		CA	071			5019	2058	2061	America/Los_Angeles	2011-05-14
 5329204	Blackhawk	Blackhawk	Blackhawk-Camino Tassajara	37.82076	-121.90774	P	PPL	US		CA	013			9354	304	308	America/Los_Angeles	2011-05-15
@@ -5748,7 +5748,7 @@ id	name	ascii	alt_name	lat	long	feat_class	feat_code	country	cc2	admin1	admin2	a
 5330582	Brea	Brea		33.91668	-117.90006	P	PPL	US		CA	059			39282	110	112	America/Los_Angeles	2011-05-14
 5330642	Brentwood	Brentwood		37.92687	-121.72577	P	PPL	US		CA	013			51481	24	32	America/Los_Angeles	2011-05-14
 5331575	Buena Park	Buena Park	Buena Park,bwyna bark, awranj, kalyfwrnya,bwyna park,bywna park, kalyfrnya,pu an na gong yuan,Буена Парк,بوينا بارك، أورانج، كاليفورنيا,بوینا پارک,بیونا پارک، کالیفرنیا,普安那公园	33.86751	-117.99812	P	PPL	US		CA	059			80530	23	24	America/Los_Angeles	2011-05-14
-5331835	Burbank	Burbank	B"rbank,BUR,Berbank,Berbankas,Bermpan'k,Burbank,Burbank, Los Angeles County,babanku,beobaengkeu,bo ban ke,brbank, kalyfwrnya,brbnk,brbnk, kalyfrnya,brbnq,Μπέρμπανκ,Бербанк,Бърбанк,ברבנק,بربانك، كاليفورنيا,بربنک,بربنک، کالیفرنیا,เบอร์แบงก์,バーバンク,伯班克,버뱅크	34.18084	-118.30897	P	PPL	US		CA	037			103340	185	192	America/Los_Angeles	2011-05-14
+5331835	Burbank	Burbank	Brbank,BUR,Berbank,Berbankas,Bermpan'k,Burbank,Burbank, Los Angeles County,babanku,beobaengkeu,bo ban ke,brbank, kalyfwrnya,brbnk,brbnk, kalyfrnya,brbnq,Μπέρμπανκ,Бербанк,Бърбанк,ברבנק,بربانك، كاليفورنيا,بربنک,بربنک، کالیفرنیا,เบอร์แบงก์,バーバンク,伯班克,버뱅크	34.18084	-118.30897	P	PPL	US		CA	037			103340	185	192	America/Los_Angeles	2011-05-14
 5331920	Burlingame	Burlingame	Berlingejm,Berlingem,Burlingejm,beolling-geim,bo ling ge mu,brlyngym, kalyfrnya,bwrlynghamy, san matyw, kalyfwrnya,Берлингем,Берлингејм,Бърлингейм,برلینگیم، کالیفرنیا,بورلينغامي، سان ماتيو، كاليفورنيا,伯灵格姆,벌링게임	37.5841	-122.36608	P	PPL	US		CA	081			28806	12	12	America/Los_Angeles	2011-05-14
 5332593	Calabasas	Calabasas	Kalabasas,ka la ba sa si,kalabasas, kalyfrnya,kalabasas, lws anjlys, kalyfwrnya,Калабасас,كالاباساس، لوس أنجليس، كاليفورنيا,کالاباساس، کالیفرنیا,卡拉巴萨斯	34.15778	-118.63842	P	PPL	US		CA	037			23058	283	288	America/Los_Angeles	2011-05-14
 5332698	Calexico	Calexico	CXL	32.67895	-115.49888	P	PPL	US		CA	025			38572	1	-2	America/Los_Angeles	2011-05-14
@@ -5905,7 +5905,7 @@ id	name	ascii	alt_name	lat	long	feat_class	feat_code	country	cc2	admin1	admin2	a
 5355180	Hanford	Hanford	Khanford,Khehnford,Khenford,haenpeodeu,han fu de,hanfodo,hanfwrd,hanfwrd, kynghs, kalyfwrnya,Ханфорд,Хенфорд,Хэнфорд,هانفورد,هانفورد، كينغس، كاليفورنيا,ハンフォード,汉福德,핸퍼드	36.32745	-119.64568	P	PPLA2	US		CA	031			53967	76	80	America/Los_Angeles	2011-05-14
 5355782	Hawaiian Gardens	Hawaiian Gardens		33.8314	-118.07284	P	PPL	US		CA	037			14254	10	13	America/Los_Angeles	2011-05-14
 5355828	Hawthorne	Hawthorne	HHR,Hawthorne,Khotorn,hawthwrny, lws anjlys, kalyfwrnya,hawtwrn,huo sang,Хоторн,هاوتورن,هاوثورني، لوس أنجليس، كاليفورنيا,ہاتھورن,霍桑	33.9164	-118.35257	P	PPL	US		CA	037			84293	22	24	America/Los_Angeles	2011-05-14
-5355933	Hayward	Hayward	HWD,Hayward,Kheju"rd,Khejvard,hai wo de,hayward, kalyfwrnya,heiwado,hyward, kalyfrnya,Хейуърд,Хејвард,هايوارد، كاليفورنيا,هیوارد، کالیفرنیا,ہےوارڈ,ヘイワード,海沃德	37.66882	-122.0808	P	PPL	US		CA	001			144186	34	32	America/Los_Angeles	2011-05-14
+5355933	Hayward	Hayward	HWD,Hayward,Khejurd,Khejvard,hai wo de,hayward, kalyfwrnya,heiwado,hyward, kalyfrnya,Хейуърд,Хејвард,هايوارد، كاليفورنيا,هیوارد، کالیفرنیا,ہےوارڈ,ヘイワード,海沃德	37.66882	-122.0808	P	PPL	US		CA	001			144186	34	32	America/Los_Angeles	2011-05-14
 5356012	Healdsburg	Healdsburg	Khijldsburg,Khildsberg,Khildsburg,hiljeubeogeu,hirusubagu,hldzbrg, kalyfrnya,hyldsbwrgh, swnwma, kalyfwrnya,xi er ci bao,Хийлдсбърг,Хилдсберг,Хилдсбург,هلدزبرگ، کالیفرنیا,هيلدسبورغ، سونوما، كاليفورنيا,ヒールスバーグ,希尔兹堡,힐즈버그	38.61047	-122.86916	P	PPL	US		CA	097			11254	32	30	America/Los_Angeles	2011-05-14
 5356277	Hemet	Hemet	HMT,Hemet,Khemet,he mi te,hmt, kalyfrnya,hymyt, ryfyrsydy, kalyfwrnya,Хемет,همت، کالیفرنیا,هيميت، ريفيرسيدي، كاليفورنيا,ہیمٹ,赫米特	33.74752	-116.97197	P	PPL	US		CA	065			78657	486	487	America/Los_Angeles	2011-05-14
 5356451	Hercules	Hercules	Gerkules,Геркулес	38.01714	-122.28858	P	PPL	US		CA	013			24060	24	22	America/Los_Angeles	2011-05-14
@@ -5920,7 +5920,7 @@ id	name	ascii	alt_name	lat	long	feat_class	feat_code	country	cc2	admin1	admin2	a
 5357731	Home Gardens	Home Gardens		33.87807	-117.52088	P	PPL	US		CA	065			11570	204	207	America/Los_Angeles	2011-05-14
 5357755	Homeland	Homeland		33.74308	-117.1092	P	PPL	US		CA	065			5969	489	492	America/Los_Angeles	2011-05-14
 5358539	Hughson	Hughson		37.59688	-120.86604	P	PPL	US		CA	099			6640	38	38	America/Los_Angeles	2011-05-14
-5358705	Huntington Beach	Huntington Beach	Huntington Beach,Kh"ntingt"n Bijch,Khantington Bich,Khantington-Bich,han ting tan bich,hantintonbichi,hantyngtwn bych,heng ting dun bi qi,heontingteonbichi,hwntynghtwn bytsh, awranj, kalyfwrnya,Хантингтон Бич,Хантингтон-Бич,Хънтингтън Бийч,هانتینگتون بیچ,هونتينغتون بيتش، أورانج، كاليفورنيا,ہنٹنگٹن بیچ,ฮันติงตันบีช,ハンティントンビーチ,亨廷頓比奇,헌팅턴비치	33.6603	-117.99923	P	PPL	US		CA	059			189992	12	16	America/Los_Angeles	2011-05-14
+5358705	Huntington Beach	Huntington Beach	Huntington Beach,Khntingtn Bijch,Khantington Bich,Khantington-Bich,han ting tan bich,hantintonbichi,hantyngtwn bych,heng ting dun bi qi,heontingteonbichi,hwntynghtwn bytsh, awranj, kalyfwrnya,Хантингтон Бич,Хантингтон-Бич,Хънтингтън Бийч,هانتینگتون بیچ,هونتينغتون بيتش، أورانج، كاليفورنيا,ہنٹنگٹن بیچ,ฮันติงตันบีช,ハンティントンビーチ,亨廷頓比奇,헌팅턴비치	33.6603	-117.99923	P	PPL	US		CA	059			189992	12	16	America/Los_Angeles	2011-05-14
 5358736	Huntington Park	Huntington Park	Huntington Park	33.98168	-118.22507	P	PPL	US		CA	037			58114	52	55	America/Los_Angeles	2011-05-14
 5358769	Huron	Huron		36.20273	-120.10292	P	PPL	US		CA	019			6754	114	111	America/Los_Angeles	2011-05-14
 5359052	Imperial	Imperial	IPL	32.84755	-115.56944	P	PPL	US		CA	025			14758	-18	-19	America/Los_Angeles	2011-05-14
@@ -5929,7 +5929,7 @@ id	name	ascii	alt_name	lat	long	feat_class	feat_code	country	cc2	admin1	admin2	a
 5359488	Inglewood	Inglewood	Inglewood,Inglvud,Ingulud,anghlywwwd, lws anjlys, kalyfwrnya,ayngl wwd, kalyfrnya,ing-geul-udeu,inguruuddo,ying ge er wu de,Инглвуд,Ингълуд,אינגלווד,إنغليووود، لوس أنجليس، كاليفورنيا,انگل ووڈ,اینگل وود، کالیفرنیا,イングルウッド,英格爾伍德,잉글우드	33.96168	-118.35313	P	PPL	US		CA	037			109673	40	44	America/Los_Angeles	2011-05-14
 5359577	Interlaken	Interlaken		36.95134	-121.73384	P	PPL	US		CA	087			7321	39	37	America/Los_Angeles	2011-05-14
 5359634	Ione	Ione		38.35269	-120.93272	P	PPL	US		CA	005			7918	91	96	America/Los_Angeles	2011-05-14
-5359777	Irvine	Irvine	"rvajn,Ervajn,Irvajn,Irvin,Irvine,abain,arfayn, kalyfwrnya,arwayn,arwayn, kalyfrnya,eobain,er wan,ou wen,Ервайн,Ервајн,Ирвайн,Ирвин,Ървайн,إرفاين، كاليفورنيا,اروائن,ارواین، کالیفرنیا,アーバイン,歐文,爾灣,어바인	33.66946	-117.82311	P	PPL	US		CA	059			212375	17	22	America/Los_Angeles	2011-11-29
+5359777	Irvine	Irvine	rvajn,Ervajn,Irvajn,Irvin,Irvine,abain,arfayn, kalyfwrnya,arwayn,arwayn, kalyfrnya,eobain,er wan,ou wen,Ервайн,Ервајн,Ирвайн,Ирвин,Ървайн,إرفاين، كاليفورنيا,اروائن,ارواین، کالیفرنیا,アーバイン,歐文,爾灣,어바인	33.66946	-117.82311	P	PPL	US		CA	059			212375	17	22	America/Los_Angeles	2011-11-29
 5359864	Isla Vista	Isla Vista		34.41333	-119.86097	P	PPL	US		CA	083			23096	14	15	America/Los_Angeles	2011-05-14
 5360403	Jamul	Jamul		32.717	-116.87613	P	PPL	US		CA	073			6163	304	307	America/Los_Angeles	2011-05-14
 5361298	Joshua Tree	Joshua Tree		34.13473	-116.31307	P	PPL	US		CA	071			7414	834	836	America/Los_Angeles	2011-05-14
@@ -5982,7 +5982,7 @@ id	name	ascii	alt_name	lat	long	feat_class	feat_code	country	cc2	admin1	admin2	a
 5367314	Live Oak	Live Oak		36.98356	-121.98052	P	PPL	US		CA	087			17158	32	36	America/Los_Angeles	2011-05-14
 5367315	Live Oak	Live Oak		39.27572	-121.65997	P	PPL	US		CA	101			8392	24	23	America/Los_Angeles	2011-05-14
 5367427	Livingston	Livingston	Livingston,Ливингстон	37.38688	-120.72353	P	PPL	US		CA	047			13058	40	46	America/Los_Angeles	2011-05-14
-5367440	Livermore	Livermore	LVK,Liv"rmor,Livermor,Livermore,li fu mo,libeomo-eo,lyfyrmwry, alamyda, kalyfwrnya,lywrmwr,lywrmwr, kalyfrnya,ribamoa,Ливермор,Ливърмор,ليفيرموري، ألاميدا، كاليفورنيا,لیورمور,لیورمور، کالیفرنیا,リバモア,利佛摩,리버모어	37.68187	-121.76801	P	PPL	US		CA	001			80968	150	150	America/Los_Angeles	2011-05-14
+5367440	Livermore	Livermore	LVK,Livrmor,Livermor,Livermore,li fu mo,libeomo-eo,lyfyrmwry, alamyda, kalyfwrnya,lywrmwr,lywrmwr, kalyfrnya,ribamoa,Ливермор,Ливърмор,ليفيرموري، ألاميدا، كاليفورنيا,لیورمور,لیورمور، کالیفرنیا,リバモア,利佛摩,리버모어	37.68187	-121.76801	P	PPL	US		CA	001			80968	150	150	America/Los_Angeles	2011-05-14
 5367565	Lodi	Lodi	Lodaj,Lodi,Loudaj,lodi,luo di,lwdy, kalyfrnya,lwdy, san jwakwyn, kalyfwrnya,Лодај,Лоди,Лоудай,لودي، سان جواكوين، كاليفورنيا,لودی، کالیفرنیا,洛迪,로디	38.1302	-121.27245	P	PPL	US		CA	077			62134	15	15	America/Los_Angeles	2011-05-14
 5367696	Loma Linda	Loma Linda		34.04835	-117.26115	P	PPL	US		CA	071			23261	355	355	America/Los_Angeles	2011-05-14
 5367767	Lomita	Lomita		33.79224	-118.31507	P	PPL	US		CA	037			20256	29	33	America/Los_Angeles	2011-05-14
@@ -6106,12 +6106,12 @@ id	name	ascii	alt_name	lat	long	feat_class	feat_code	country	cc2	admin1	admin2	a
 5382514	Piedmont	Piedmont		37.82437	-122.23164	P	PPL	US		CA	001			10667	100	97	America/Los_Angeles	2011-05-14
 5383187	Pinole	Pinole		38.00437	-122.29886	P	PPL	US		CA	013			18390	31	34	America/Los_Angeles	2011-05-14
 5383431	Pismo Beach	Pismo Beach		35.14275	-120.64128	P	PPL	US		CA	079			7655	17	18	America/Los_Angeles	2011-05-14
-5383465	Pittsburg	Pittsburg	Pitsb"rg,Pittsburg,Питсбърг	38.02798	-121.88468	P	PPL	US		CA	013			63264	8	8	America/Los_Angeles	2011-05-14
+5383465	Pittsburg	Pittsburg	Pitsbrg,Pittsburg,Питсбърг	38.02798	-121.88468	P	PPL	US		CA	013			63264	8	8	America/Los_Angeles	2011-05-14
 5383526	Piñon Hills	Pinon Hills		34.43333	-117.64672	P	PPL	US		CA	071			7272	1272	1274	America/Los_Angeles	2011-05-14
 5383527	Placentia	Placentia		33.87224	-117.87034	P	PPL	US		CA	059			50533	83	80	America/Los_Angeles	2011-05-14
 5383559	Placerville	Placerville	PVF,Plaservil,Plejsurvil,blysrfyl,plysrwyl, kalyfrnya,pu lai se wei er,purasabiru,Пласервил,Плейсървил,بليسرفيل,پلیسرویل، کالیفرنیا,プラサービル,普莱瑟维尔	38.72963	-120.79855	P	PPLA2	US		CA	017			10389	569	570	America/Los_Angeles	2011-05-14
 5383720	Pleasant Hill	Pleasant Hill		37.94798	-122.0608	P	PPL	US		CA	013			33152	16	16	America/Los_Angeles	2011-05-14
-5383777	Pleasanton	Pleasanton	Pleasanton,Plezant"n,Plezanton,blysantwn, alamyda, kalyfwrnya,plyzantwn, kalyfrnya,pu lai sen dun,Плезантон,Плезантън,بليسانتون، ألاميدا، كاليفورنيا,پلیزانتون، کالیفرنیا,普莱森顿	37.66243	-121.87468	P	PPL	US		CA	001			70285	106	107	America/Los_Angeles	2011-05-14
+5383777	Pleasanton	Pleasanton	Pleasanton,Plezantn,Plezanton,blysantwn, alamyda, kalyfwrnya,plyzantwn, kalyfrnya,pu lai sen dun,Плезантон,Плезантън,بليسانتون، ألاميدا، كاليفورنيا,پلیزانتون، کالیفرنیا,普莱森顿	37.66243	-121.87468	P	PPL	US		CA	001			70285	106	107	America/Los_Angeles	2011-05-14
 5383844	Plumas Lake	Plumas Lake		39.02073	-121.55802	P	PPL	US		CA	115			5853	14	13	America/Los_Angeles	2011-05-14
 5384133	Pollock Pines	Pollock Pines		38.76129	-120.58659	P	PPL	US		CA	017			6871	1198	1205	America/Los_Angeles	2011-05-14
 5384170	Pomona	Pomona	Pomon,Pomona,bo mo na,bwmwna, kalyfwrnya,pomona,pwmwna,pwmwna, kalyfrnya,pwmwnh,Помона,פומונה,بومونا، كاليفورنيا,پومونا,پومونا، کالیفرنیا,ポモナ,波莫纳,포모나	34.05529	-117.75228	P	PPL	US		CA	037			149058	259	264	America/Los_Angeles	2011-05-14
@@ -6229,12 +6229,12 @@ id	name	ascii	alt_name	lat	long	feat_class	feat_code	country	cc2	admin1	admin2	a
 5398277	Spring Valley	Spring Valley	Spring-Vehlli,Спринг-Вэлли	32.74477	-116.99892	P	PPL	US		CA	073			28205	119	121	America/Los_Angeles	2011-05-14
 5398563	Stanford	Stanford	Stanford,si tan fu,Станфорд,斯坦福	37.42411	-122.16608	P	PPL	US		CA	085			13809	23	30	America/Los_Angeles	2011-05-14
 5398630	Stanton	Stanton	Stehnton,Стэнтон	33.80252	-117.99312	P	PPL	US		CA	059			38186	20	26	America/Los_Angeles	2011-05-14
-5399020	Stockton	Stockton	SCK,Stockton,Stokt"n,Stokton,astaktwn,seutogteon,si tuo ke dun,stwktwn, kalyfwrnya,sutokkuton,Стоктон,Стоктън,استاکتون,ستوكتون، كاليفورنيا,سٹوکٹن,ストックトン,斯托克顿,스톡턴	37.9577	-121.29078	P	PPLA2	US		CA	077			291707	4	6	America/Los_Angeles	2011-05-14
+5399020	Stockton	Stockton	SCK,Stockton,Stoktn,Stokton,astaktwn,seutogteon,si tuo ke dun,stwktwn, kalyfwrnya,sutokkuton,Стоктон,Стоктън,استاکتون,ستوكتون، كاليفورنيا,سٹوکٹن,ストックトン,斯托克顿,스톡턴	37.9577	-121.29078	P	PPLA2	US		CA	077			291707	4	6	America/Los_Angeles	2011-05-14
 5399319	Strawberry	Strawberry		37.89687	-122.50886	P	PPL	US		CA	041			5393	71	66	America/Los_Angeles	2011-05-14
 5399629	Suisun	Suisun		38.23825	-122.04024	P	PPL	US		CA	095			28111	2	2	America/Los_Angeles	2011-05-14
 5399901	Sun City	Sun City		33.70919	-117.19726	P	PPL	US		CA	065			19579	434	440	America/Los_Angeles	2006-01-17
 5400065	Sunnyslope	Sunnyslope		34.01196	-117.43338	P	PPL	US		CA	065			5153	275	279	America/Los_Angeles	2011-05-14
-5400075	Sunnyvale	Sunnyvale	S"nivejl,Sanivejl,Sannivejl,Sunnyvale,saniberu,sany wyl, kalyfrnya,sanyfal, kalyfwrnya,sen ni wei er,snywyl,Санивејл,Саннивейл,Саннівейл,Сънивейл,سانيفال، كاليفورنيا,سانی ویل، کالیفرنیا,سنیویل,サニーベール,森尼韦尔	37.36883	-122.03635	P	PPL	US		CA	085			140081	39	37	America/Los_Angeles	2011-05-14
+5400075	Sunnyvale	Sunnyvale	Snivejl,Sanivejl,Sannivejl,Sunnyvale,saniberu,sany wyl, kalyfrnya,sanyfal, kalyfwrnya,sen ni wei er,snywyl,Санивејл,Саннивейл,Саннівейл,Сънивейл,سانيفال، كاليفورنيا,سانی ویل، کالیفرنیا,سنیویل,サニーベール,森尼韦尔	37.36883	-122.03635	P	PPL	US		CA	085			140081	39	37	America/Los_Angeles	2011-05-14
 5400877	Taft	Taft	Taft,ta fu tuo,taft, kalyfrnya,taft, kyrn, kalyfwrnya,Тафт,تافت، كيرن، كاليفورنيا,تافت، کالیفرنیا,塔夫脱	35.14247	-119.45651	P	PPL	US		CA	029			9327	291	292	America/Los_Angeles	2011-05-14
 5401017	Tamalpais Valley	Tamalpais Valley		37.87965	-122.54581	P	PPL	US		CA	041			7000	33	33	America/Los_Angeles	2013-05-05
 5401121	Tara Hills	Tara Hills		37.99353	-122.31636	P	PPL	US		CA	013			5126	28	32	America/Los_Angeles	2011-05-14
@@ -6257,7 +6257,7 @@ id	name	ascii	alt_name	lat	long	feat_class	feat_code	country	cc2	admin1	admin2	a
 5404122	North Tustin	North Tustin		33.76446	-117.79394	P	PPL	US		CA	059			24917	78	78	America/Los_Angeles	2011-05-14
 5404198	Twentynine Palms	Twentynine Palms	TNP	34.13556	-116.05417	P	PPL	US		CA	071			25048	606	607	America/Los_Angeles	2011-05-14
 5404476	Ukiah	Ukiah	Jukaja,UKI,wkyah, myndwsynw, kalyfwrnya,you qi ya,yukaia,ywkyah, kalyfrnya,Јукаја,Юкайа,Юкая,وكياه، ميندوسينو، كاليفورنيا,یوکیاه، کالیفرنیا,ユカイア,尤奇亚,유카이아	39.15017	-123.20778	P	PPLA2	US		CA	045			16075	193	194	America/Los_Angeles	2011-05-14
-5404555	Union City	Union City	Juni"n Siti,Union City,Юниън Сити	37.59577	-122.01913	P	PPL	US		CA	001			69516	21	19	America/Los_Angeles	2011-05-14
+5404555	Union City	Union City	Junin Siti,Union City,Юниън Сити	37.59577	-122.01913	P	PPL	US		CA	001			69516	21	19	America/Los_Angeles	2011-05-14
 5404794	Universal City	Universal City	Juniversal-Siti,Юниверсал-Сити	34.1389	-118.35341	P	PPL	US		CA	037			105000	230	234	America/Los_Angeles	2010-03-30
 5404915	Upland	Upland	CCB,Upland	34.09751	-117.64839	P	PPL	US		CA	071			73732	377	380	America/Los_Angeles	2011-05-14
 5405228	Vacaville	Vacaville	Vacaville,Vakavil,fakafyly, swlanw, kalyfwrnya,wakawyl, kalyfrnya,Вакавил,فاكافيلي، سولانو، كاليفورنيا,واکاولے,واکاویل، کالیفرنیا	38.35658	-121.98774	P	PPL	US		CA	095			92428	53	55	America/Los_Angeles	2011-05-14
@@ -6276,7 +6276,7 @@ id	name	ascii	alt_name	lat	long	feat_class	feat_code	country	cc2	admin1	admin2	a
 5406602	Vista	Vista	Vista	33.20004	-117.24254	P	PPL	US		CA	073			93834	100	102	America/Los_Angeles	2011-05-14
 5406879	Waldon	Waldon		37.92631	-122.05552	P	PPL	US		CA	013			5364	28	24	America/Los_Angeles	2011-05-14
 5406976	Walnut	Walnut		34.02029	-117.86534	P	PPL	US		CA	037			29172	171	173	America/Los_Angeles	2011-05-14
-5406990	Walnut Creek	Walnut Creek	Uoln"t Krijk,Uolnat-Krik,Volnat Krik,Walnut Creek,u~orunattokuriku,walnat kryk, kalyfrnya,walnwt kryk, kwntra kwsta, kalyfwrnya,wolneoskeulig,Волнат Крик,Уолнат-Крик,Уолнът Крийк,والنات کریک، کالیفرنیا,والنوت كريك، كونترا كوستا، كاليفورنيا,ウォールナットクリーク,월넛크릭	37.90631	-122.06496	P	PPL	US		CA	013			64173	52	54	America/Los_Angeles	2011-05-14
+5406990	Walnut Creek	Walnut Creek	Uolnt Krijk,Uolnat-Krik,Volnat Krik,Walnut Creek,u~orunattokuriku,walnat kryk, kalyfrnya,walnwt kryk, kwntra kwsta, kalyfwrnya,wolneoskeulig,Волнат Крик,Уолнат-Крик,Уолнът Крийк,والنات کریک، کالیفرنیا,والنوت كريك، كونترا كوستا، كاليفورنيا,ウォールナットクリーク,월넛크릭	37.90631	-122.06496	P	PPL	US		CA	013			64173	52	54	America/Los_Angeles	2011-05-14
 5407030	Walnut Park	Walnut Park		33.96807	-118.22507	P	PPL	US		CA	037			15966	45	48	America/Los_Angeles	2011-05-14
 5407463	Waterford	Waterford	Uoterford,Уотерфорд	37.64132	-120.76048	P	PPL	US		CA	099			8456	52	52	America/Los_Angeles	2011-05-14
 5407529	Watsonville	Watsonville	Uotsunvil,Votsonvil,WVI,watosonbiru,watswn wyl, kalyfrnya,watswnfyl, kalyfwrnya,wo sen wei er,Вотсонвил,Уотсънвил,واتسون ویل، کالیفرنیا,واتسونفيل، كاليفورنيا,ワトソンビル,沃森维尔	36.91023	-121.75689	P	PPL	US		CA	087			51199	10	10	America/Los_Angeles	2011-05-14
@@ -6332,7 +6332,7 @@ id	name	ascii	alt_name	lat	long	feat_class	feat_code	country	cc2	admin1	admin2	a
 5417737	Commerce City	Commerce City		39.80832	-104.93387	P	PPL	US		CO	001			45913	1572	1574	America/Denver	2011-05-14
 5418104	Cortez	Cortez	CEZ	37.34888	-108.58593	P	PPLA2	US		CO	083			8482	1887	1895	America/Denver	2011-05-14
 5419334	Delta	Delta		38.74221	-108.06896	P	PPLA2	US		CO	029			8915	1511	1516	America/Denver	2011-05-14
-5419384	Denver	Denver	DEN,Dehnver,Denber,Denv"r,Denver,Denver County,Denvera,Denveris,Denverium,Denvero,Denwer,Dénwér,Gorad Dehnver,Ntenver,dan fu,denabhara ka'unti,denavara,denba,denbeo,denbhara,denvar,denveri,denvhara,denwexr,dnfr, kwlwradw,dnwr, klradw,dnwwr,tenvar,Ντένβερ,Горад Дэнвер,Денвер,Денвър,Дэнвер,Դենվեր,דנוור,دنفر، كولورادو,دنور، کلرادو,ڈینور,डॅनवर,डेन्वर्,डेन्व्हर,देन्भर,ডেনভার কাউন্টি,டென்வர்,డెన్వర్,ഡെൻവർ,เดนเวอร์,დენვერი,デンバー,丹佛,덴버	39.73915	-104.9847	P	PPLA	US		CO	031			600158	1609	1636	America/Denver	2011-06-16
+5419384	Denver	Denver	DEN,Dehnver,Denber,Denvr,Denver,Denver County,Denvera,Denveris,Denverium,Denvero,Denwer,Dénwér,Gorad Dehnver,Ntenver,dan fu,denabhara ka'unti,denavara,denba,denbeo,denbhara,denvar,denveri,denvhara,denwexr,dnfr, kwlwradw,dnwr, klradw,dnwwr,tenvar,Ντένβερ,Горад Дэнвер,Денвер,Денвър,Дэнвер,Դենվեր,דנוור,دنفر، كولورادو,دنور، کلرادو,ڈینور,डॅनवर,डेन्वर्,डेन्व्हर,देन्भर,ডেনভার কাউন্টি,டென்வர்,డెన్వర్,ഡെൻവർ,เดนเวอร์,დენვერი,デンバー,丹佛,덴버	39.73915	-104.9847	P	PPLA	US		CO	031			600158	1609	1636	America/Denver	2011-06-16
 5419431	Derby	Derby		39.83943	-104.91859	P	PPL	US		CO	001			7685	1563	1567	America/Denver	2011-05-14
 5420241	Durango	Durango	DRO,Durango,Kin Lani,Kin Łání,de~yurango,du lan ge,dwrangw, klradw,Дуранго,دورانگو، کلرادو,デュランゴ,杜兰戈	37.27528	-107.88007	P	PPLA2	US		CO	067			16887	1991	1998	America/Denver	2013-08-24
 5420328	Eagle	Eagle	EGE	39.65526	-106.82865	P	PPLA2	US		CO	037			6508	2012	2020	America/Denver	2013-05-09
@@ -6394,7 +6394,7 @@ id	name	ascii	alt_name	lat	long	feat_class	feat_code	country	cc2	admin1	admin2	a
 5445820	Liberal	Liberal	LBL,Liberal'naja,lybrl, kanzas,Либеральная,لیبرل، کانزاس	37.04308	-100.921	P	PPLA2	US		KS	175			20525	864	868	America/Chicago	2011-05-14
 5446683	Ulysses	Ulysses		37.58141	-101.35517	P	PPLA2	US		KS	067			6161	930	933	America/Chicago	2011-05-14
 5454627	Alamogordo	Alamogordo	ALM,Alamogordo,aellamogodo,alamwghwrdw, nywmksykw,almgrdww, nywmkzykw,aramogodo,Аламогордо,ألاموغوردو، نيومكسيكو,المگردوو، نیومکزیکو,アラモゴード,앨라모고도	32.89953	-105.96026	P	PPLA2	US		NM	035			30403	1323	1319	America/Denver	2011-05-14
-5454711	Albuquerque	Albuquerque	ABQ,Al'bukerke,Albak"rki,Albakerki,Albjukuehrokju,Albukerke,Albukerki,Albukerkė,Albukwer kwe,Albukwér kwé,Albuquerque,Alburquerque,Almpoukerki,Beeʼeldííl Dahsinil,Duke City,The Duke City,a bu kui ji,aelbeokeoki,albakrky, nywmksykw,albukarki,albukerke,albwkrky,alpukerkki,arubakaki,Αλμπουκέρκι,Албакерки,Албакърки,Албукерки,Албюкуэрокю,Альбукерке,Ալբուկերկե,אלבקרקי,ألباكركي، نيومكسيكو,البوکرکی,आल्बुकर्की,ஆல்புகெர்க்கி,แอลบูเคอร์คี,ალბუკერკე,ალბუქერქე,アルバカーキ,阿布奎基,앨버커키	35.08449	-106.65114	P	PPLA2	US		NM	001			545852	1511	1513	America/Denver	2011-05-14
+5454711	Albuquerque	Albuquerque	ABQ,Al'bukerke,Albakrki,Albakerki,Albjukuehrokju,Albukerke,Albukerki,Albukerkė,Albukwer kwe,Albukwér kwé,Albuquerque,Alburquerque,Almpoukerki,Beeʼeldííl Dahsinil,Duke City,The Duke City,a bu kui ji,aelbeokeoki,albakrky, nywmksykw,albukarki,albukerke,albwkrky,alpukerkki,arubakaki,Αλμπουκέρκι,Албакерки,Албакърки,Албукерки,Албюкуэрокю,Альбукерке,Ալբուկերկե,אלבקרקי,ألباكركي، نيومكسيكو,البوکرکی,आल्बुकर्की,ஆல்புகெர்க்கி,แอลบูเคอร์คี,ალბუკერკე,ალბუქერქე,アルバカーキ,阿布奎基,앨버커키	35.08449	-106.65114	P	PPLA2	US		NM	001			545852	1511	1513	America/Denver	2011-05-14
 5455381	Anthony	Anthony		32.00399	-106.60583	P	PPL	US		NM	013			9360	1159	1156	America/Denver	2011-05-14
 5455796	Artesia	Artesia	ATS	32.84233	-104.4033	P	PPL	US		NM	015			11301	1030	1036	America/Denver	2011-05-14
 5456049	Aztec	Aztec		36.82223	-107.99285	P	PPLA2	US		NM	045			6763	1721	1727	America/Denver	2011-05-14

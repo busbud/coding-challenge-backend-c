@@ -1,16 +1,26 @@
-var http = require('http');
-var port = process.env.PORT || 2345;
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
+const express = require('express');
+const pg = require('pg');
+const dbConfig = require('./config/db');
+const inputValidator = require('./validators/inuput-validator');
+const Pool = pg.Pool
 
-module.exports = http.createServer(function (req, res) {
-  res.writeHead(404, {'Content-Type': 'text/plain'});
+const app = express();
 
-  if (req.url.indexOf('/suggestions') === 0) {
-    res.end(JSON.stringify({
-      suggestions: []
-    }));
-  } else {
-    res.end();
-  }
-}).listen(port, '127.0.0.1');
+const pool = new Pool(dbConfig);
 
-console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+const port = process.env.PORT || 5000;
+
+app.use(express.json());
+app.use(express.urlencoded({extended : true}));
+app.use(inputValidator);
+
+require('./routes/suggestion-routes')(app, pool)
+
+app.listen(port, () => {
+  console.log(`Server running at http://127.0.0.1:${port}/suggestions`);
+})
+
+module.exports = app;
