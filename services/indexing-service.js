@@ -13,7 +13,19 @@ export default class IndexingService {
       const trie = new Trie();
 
       this.data.forEach((cityInformation) => {
-        return trie.insert(cityInformation.name, cityInformation);
+        trie.insert(cityInformation.ascii, cityInformation);
+
+        // index alt_names
+        const altNames = cityInformation.alt_name
+          ?.split(",")
+          .map((r) => r.replace(/[^a-zA-Z ]/g, " ").trim())
+          .filter((p) => p);
+
+        if (altNames?.length) {
+          altNames.forEach((alt) => {
+            trie.insert(alt, cityInformation);
+          });
+        }
       });
 
       resolve(trie);

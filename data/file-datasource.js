@@ -11,7 +11,7 @@ class FileDatasource extends DatasourceInterface {
   getData() {
     return new Promise((resolve, reject) => {
       const parser = parse(
-        { columns: true, delimiter: "\t", relaxQuotes: true },
+        { columns: true, delimiter: "\t", quote: "" },
         (err, records) => {
           if (err) {
             reject(err);

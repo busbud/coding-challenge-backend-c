@@ -1,5 +1,6 @@
 /**
  * The TrieNode class will be the representation of a node in the Trie tree.
+ * key: string -> The character of a word
  * parent: Node -> holds a referece to the parent node.
  * children: Map -> will have all the characters that follow.
  * end: boolean -> will let me know if I'm at the end of a word.
@@ -11,9 +12,8 @@ class TrieNode {
   parent = null;
   children = new Map();
   end = false;
-  information = null;
-  similarItems = [];
-  flags = [];
+  accuracy = 100;
+  details = new Map();
 
   constructor(key) {
     this.key = key;

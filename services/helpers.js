@@ -4,7 +4,7 @@
  * @param {number} i iterator
  * @returns boolean
  */
-export const isLastItemFromArray = (arr, i) => {
+export const isEndOfTerm = (arr, i) => {
   if (!arr) return true;
   if (!arr.length) return true;
   return arr.length - 1 === i;
@@ -15,9 +15,7 @@ export const getLocationBetweenTwoPoints = (
   incomingLatitude,
   incomingLongitude
 ) => {
-  const {
-    information: { latitude, longitude },
-  } = node;
+  const { latitude, longitude } = node;
   const R = 6371e3; // metres
   const φ1 = (incomingLatitude * Math.PI) / 180;
   const φ2 = (latitude * Math.PI) / 180;
