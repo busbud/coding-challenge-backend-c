@@ -5,3 +5,7 @@ export const SCORE_WEIGHT_PERCENTAGE = {
   LOCATION_PROXIMITY: 50,
   FREQUENTLY_SEARCHED: 20,
 };
+
+export const CACHE_KEYS = {
+  SUGGESTIONS_TREE: "suggestions-tree-indexed",
+};

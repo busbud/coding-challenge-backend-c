@@ -7,9 +7,9 @@ export default class Trie {
   }
 
   insert = (word, additionalInformation) => {
-    return new Promise((resolve) => {
-      if (!word) return;
-      if (!word.length) return;
+    return new Promise((resolve, reject) => {
+      if (!word) reject();
+      if (!word.length) reject();
 
       let parent = this.root;
 
@@ -29,7 +29,7 @@ export default class Trie {
           newNode.end = true;
           newNode.details.set(additionalInformation.id, {
             id: additionalInformation.id,
-            name: additionalInformation.name,
+            name: additionalInformation.ascii,
             latitude: Number(additionalInformation.lat),
             longitude: Number(additionalInformation.long),
             state: additionalInformation.admin1,
@@ -42,8 +42,9 @@ export default class Trie {
         }
 
         parent = newNode;
-        resolve();
       }
+
+      resolve();
     });
   };
   /**
@@ -53,8 +54,8 @@ export default class Trie {
    */
   search = (term) => {
     return new Promise((resolve) => {
-      if (!term) return resolve([]);
-      if (!term.length) return resolve([]);
+      if (!term) resolve([]);
+      if (!term.length) resolve([]);
 
       let result = new Map();
       let parent = this.root;

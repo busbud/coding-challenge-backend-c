@@ -56,7 +56,7 @@ export default class ScoringService {
       );
 
       scoredResults.push({
-        city: `${result.name}, ${result.state}, ${result.country}`,
+        name: `${result.name}, ${result.state}, ${result.country}`,
         latitude: result.latitude,
         longitude: result.longitude,
         score: Math.min(maxScore, score).toFixed(1),

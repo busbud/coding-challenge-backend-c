@@ -1,5 +1,7 @@
 import IndexingService from "./indexing-service.js";
 import ScoringService from "./scoring-service.js";
+import cache from "memory-cache";
+import { CACHE_KEYS } from "../utils/constants.js";
 
 class Suggestions {
   indexedData = null;
@@ -9,9 +11,15 @@ class Suggestions {
   }
 
   initialize = async () => {
+    const cached = cache.get(CACHE_KEYS);
+    if (cached) {
+      this.indexedData = cached;
+      return;
+    }
     const data = await this.datasource.getData();
     const indexService = new IndexingService(data);
     this.indexedData = await indexService.index();
+    cache.put(CACHE_KEYS, this.indexedData);
   };
 
   searchData = async (term, lat, long) => {

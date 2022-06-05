@@ -6,19 +6,21 @@
   "type": "module",
   "scripts": {
     "start": "node app.js",
-    "test": "./node_modules/mocha/bin/mocha ./test/"
+    "test": "./node_modules/.bin/mocha ./test/"
   },
-  "author": "",
+  "author": "Nery Campusano",
   "license": "WTFPL",
   "dependencies": {
-    "chai": "^1.9.1",
     "csv": "^6.1.0",
     "lru-cache": "^7.10.1",
-    "memory-cache": "^0.2.0",
-    "mocha": "^1.18.2",
-    "supertest": "^0.11.0"
+    "memory-cache": "^0.2.0"
   },
   "engines": {
     "node": ">=15.0.0"
+  },
+  "devDependencies": {
+    "chai": "^4.3.6",
+    "mocha": "^10.0.0",
+    "supertest": "^6.2.3"
   }
 }
