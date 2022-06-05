@@ -19,12 +19,17 @@ country_code_mapping['CA']= ['Canada'];
 country_code_mapping['US'] = ['USA'];
 
 initDataBase = async () => {
-  let response = await pool.query('CREATE EXTENSION IF NOT EXISTS pg_trgm');
-  response = await pool.query('CREATE EXTENSION IF NOT EXISTS cube');
-  response = await pool.query('CREATE EXTENSION IF NOT EXISTS earthdistance');
+  console.log('Creating extension pg_trgm...');
+  await pool.query('CREATE EXTENSION IF NOT EXISTS pg_trgm');
+  console.log('Creating extension cube...');
+  await pool.query('CREATE EXTENSION IF NOT EXISTS cube');
+  console.log('Creating extension earthdistance...');
+  await pool.query('CREATE EXTENSION IF NOT EXISTS earthdistance');
 
+  console.log('Creating table cities...');
   await pool.query("DROP TABLE IF EXISTS cities");
   await pool.query("CREATE TABLE cities(id SERIAL PRIMARY KEY, name VARCHAR(255), long_name VARCHAR(255), geolocation POINT, country VARCHAR(255), population INT)")
+  console.log('inserting data...');
   insertData();
 }
 
@@ -33,9 +38,6 @@ insertData = async () => {
     delimiter: '\t',
     header: true,
     encoding: 'utf-8',
-    complete: function(results) {
-      console.log("Finished:", results);
-    },
     step: function(results, parser) {
       const data = results.data;
       const country = data.country;

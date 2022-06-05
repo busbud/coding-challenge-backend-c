@@ -21,6 +21,7 @@ require('./routes/suggestion-routes')(app, pool)
 
 app.listen(port, () => {
   console.log(`Server running at http://127.0.0.1:${port}/suggestions`);
-})
+});
+
 
 module.exports = app;

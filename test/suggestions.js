@@ -26,6 +26,33 @@ describe('GET /suggestions', function() {
     });
   });
 
+  describe('with a invalid latitudes and longitudes', function () {
+    var response;
+
+    before(function (done) {
+      request
+        .get('/suggestions?q=london&latitude=InvalidLat&longitude=InvalidLong')
+        .end(function (err, res) {
+          response = res;
+          response.json = JSON.parse(res.text);
+          done(err);
+        });
+    });
+
+    it('returns a 400', function () {
+      expect(response.statusCode).to.equal(400);
+    });
+
+    it('returns an empty array of suggestions', function () {
+      expect(response.json.suggestions).to.be.instanceof(Array);
+      expect(response.json.suggestions).to.have.length(0);
+    });
+
+    it('returns a msg indicating the error', function () {
+      expect(response.json.msg).to.equal('Please check your query parameters');
+    });
+  });
+
   describe('with a valid city', function () {
     var response;
 

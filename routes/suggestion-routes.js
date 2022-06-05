@@ -2,7 +2,6 @@ const suggestionServices = require('../services/suggestion-services');
 
 module.exports = function(app, dbPool) {
   app.get('/suggestions', async (req, res) => {
-    console.log(req.query);
     let q = req?.query?.q;
     q = q.replaceAll("'", "''");
     const latitude = req?.query?.latitude;
@@ -11,7 +10,6 @@ module.exports = function(app, dbPool) {
     const searchQuery = suggestionServices.createDBQuery(q, longitude, latitude);
     const result = await dbPool.query(searchQuery);
     const cities = result.rows;
-    
     if(latitude && longitude) {
       suggestionServices.improveSuggestionsScore(cities);
     }
@@ -24,3 +22,4 @@ module.exports = function(app, dbPool) {
   });
 }
 
+  
