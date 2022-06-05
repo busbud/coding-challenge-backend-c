@@ -29,6 +29,7 @@ initDataBase = async () => {
   console.log('Creating table cities...');
   await pool.query("DROP TABLE IF EXISTS cities");
   await pool.query("CREATE TABLE cities(id SERIAL PRIMARY KEY, name VARCHAR(255), long_name VARCHAR(255), geolocation POINT, country VARCHAR(255), population INT)")
+  await pool.query("CREATE INDEX index_city_name ON cities USING btree (name)")
   console.log('inserting data...');
   insertData();
 }
