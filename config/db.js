@@ -1,8 +1,8 @@
 // db configuration file
 module.exports = {
   user: process.env.DB_USER,
-  host: '127.0.0.1',
-  database: 'suggestions',
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
   password: process.env.DB_PASSWORD,
   port: process.env.DB_PORT,
 }
