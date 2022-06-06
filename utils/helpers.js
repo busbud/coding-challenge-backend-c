@@ -30,3 +30,23 @@ export const getLocationBetweenTwoPoints = (
   const d = R * c; // in metres
   return d;
 };
+
+export const locationProximity = (
+  result,
+  incomingLatitude,
+  incomingLongitude
+) => {
+  if (incomingLatitude && incomingLongitude) {
+    const distance = getLocationBetweenTwoPoints(
+      result,
+      Number(incomingLatitude),
+      Number(incomingLongitude)
+    );
+
+    const distanceKM = distance / 1000;
+
+    return distanceKM > distanceRangeKM ? 0 : 1;
+  }
+
+  return 1;
+};

@@ -1,22 +1,19 @@
-import {
-  distanceRangeKM,
-  SCORE_WEIGHT_PERCENTAGE,
-} from "../utils/constants.js";
-import { getLocationBetweenTwoPoints } from "../utils/helpers.js";
-import LRUCacheService from "./lru-cache-service.js";
+import { SCORE_WEIGHT_PERCENTAGE } from "../utils/constants.js";
+import { locationProximity } from "../utils/helpers.js";
 
+/**
+ * ScoringService: service to manage the scoring algorithm
+ */
 export default class ScoringService {
   constructor(lruCache) {
     this.lruCache = lruCache;
   }
 
   scoreCategories = {
-    ACCURACY: (obj) =>
-      (Math.max(0, obj.result.accuracy / 100) *
-        SCORE_WEIGHT_PERCENTAGE.ACCURACY) /
-      100,
-    LOCATION: (obj) =>
-      (this.locationProximity(obj.result, obj.latitude, obj.longitude) *
+    ACCURACY: ({ result: accuracy }) =>
+      (Math.max(0, accuracy / 100) * SCORE_WEIGHT_PERCENTAGE.ACCURACY) / 100,
+    LOCATION: ({ result, latitude, longitude }) =>
+      (locationProximity(result, latitude, longitude) *
         SCORE_WEIGHT_PERCENTAGE.LOCATION_PROXIMITY) /
       100,
     FREQUENTLY_USED: ({ result }) => {
@@ -65,20 +62,4 @@ export default class ScoringService {
 
     return (scoredResults || []).sort((a, b) => b.score - a.score);
   }
-
-  locationProximity = (result, incomingLatitude, incomingLongitude) => {
-    if (incomingLatitude && incomingLongitude) {
-      const distance = getLocationBetweenTwoPoints(
-        result,
-        Number(incomingLatitude),
-        Number(incomingLongitude)
-      );
-
-      const distanceKM = distance / 1000;
-
-      return distanceKM > distanceRangeKM ? 0 : 1;
-    }
-
-    return 1;
-  };
 }

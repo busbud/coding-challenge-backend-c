@@ -1,6 +1,9 @@
 import DatasourceInterface from "./datasource.js";
 
-class FileDatasource extends DatasourceInterface {
+/**
+ * InMemoryDatasource: implementation of DatasourceInterface to return data from in memory.
+ */
+export default class InMemoryDatasource extends DatasourceInterface {
   constructor(data) {
     super();
     this.data = data;
@@ -10,5 +13,3 @@ class FileDatasource extends DatasourceInterface {
     return this.data;
   }
 }
-
-export default FileDatasource;

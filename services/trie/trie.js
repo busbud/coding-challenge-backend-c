@@ -1,11 +1,20 @@
 import { isEndOfTerm } from "../../utils/helpers.js";
 import TrieNode from "./node.js";
 
+/**
+ * Trie implementation to index all cities to speed search, and provide suggestions
+ */
 export default class Trie {
   constructor() {
     this.root = new TrieNode(null);
   }
 
+  /**
+   *
+   * @param {string} word the word to be indexed
+   * @param {Object} additionalInformation additional information to be stored as details to the node.
+   * @returns Promise
+   */
   insert = (word, additionalInformation) => {
     return new Promise((resolve, reject) => {
       if (!word) reject();
@@ -50,7 +59,7 @@ export default class Trie {
   /**
    *
    * @param {string} term the search term
-   * @returns a Promise that will resolve to the result list
+   * @returns Promise<Array>
    */
   search = (term) => {
     return new Promise((resolve) => {
@@ -60,10 +69,12 @@ export default class Trie {
       let result = new Map();
       let parent = this.root;
 
+      // Iterate each word character
       for (let t = 0; t < term.length; t++) {
         const character = term[t].toLowerCase();
         const exists = parent.children.has(character);
 
+        // If the word is not found, it will break the ireration and do the traverse of the remaining tree for that parent.
         if (!exists) {
           if (parent.children.size) {
             this.traverse(parent, result);
@@ -89,7 +100,7 @@ export default class Trie {
   /**
    *
    * @param {TrieNode} node holds a reference to a node being traversed
-   * @param {Map} result holds a reference to the list of cities resulting in similarities
+   * @param {Map} result holds a reference to the list of matched suggestions
    * @void
    */
 
@@ -110,8 +121,8 @@ export default class Trie {
 
   /**
    *
-   * @param {TrieNode} node holds a reference to the node that completed search
-   * @param {Map} result holds a reference to the list of cities resulting in similarities
+   * @param {TrieNode} node holds a reference to the node that holds the complete word details
+   * @param {Map} result holds a reference to the list of matched suggestions
    */
 
   handleCompleteWord = (node, result) => {

@@ -1,23 +1,21 @@
 /**
  * The TrieNode class will be the representation of a node in the Trie tree.
- * key: string -> The character of a word
+ * key: string -> The key of the node. In our case this will be each character of the word to index.
  * parent: Node -> holds a referece to the parent node.
- * children: Map -> will have all the characters that follow.
- * end: boolean -> will let me know if I'm at the end of a word.
- * similarItems -> if words are found to be similar
- *      if I reach the end of it, then I'll add it as a similar item containing the city information (latitude, longitude, province, etc)
+ * children: Map -> All following characters of a specific character.
+ * end: boolean -> Flag to determine if that node forms a complete word.
+ * details: Map -> Stores all the similar words that end at that node. Having a map will not allow repeated items to be added
+ * accuracy: number, default = 100 -> this is a value that represents how accurate a word is vs the searched term
  */
-class TrieNode {
+export default class TrieNode {
   key = null;
   parent = null;
   children = new Map();
   end = false;
-  accuracy = 100;
   details = new Map();
+  accuracy = 100;
 
   constructor(key) {
     this.key = key;
   }
 }
-
-export default TrieNode;
