@@ -21,6 +21,7 @@ export default class SuggestionsService {
     }
     const data = await this.datasource.getData();
     this.indexedData = await this.index(data);
+
     cache.put(CACHE_KEYS, this.indexedData);
   };
 
@@ -70,7 +71,19 @@ export default class SuggestionsService {
     if (!term.length) return [];
     if (term.length < 3) return [];
 
-    const results = await this.indexedData.search(term);
+    const cachedResult = cache.get(term);
+    let results = [];
+
+    if (cachedResult) {
+      results = cachedResult;
+    } else {
+      results = await this.indexedData.search(term);
+    }
+
+    if (results.length && results.length >= 50) {
+      cache.put(term, results);
+    }
+
     const scoreAndSort = new ScoringService(this.lruCache);
     const scoredAndSorted = scoreAndSort.score(results, lat, long);
 

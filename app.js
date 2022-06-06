@@ -20,17 +20,6 @@ export default createServer(async (req, res) => {
   }
 
   if (req.url.indexOf("/suggestions") === 0) {
-    const cachedResult = cache.get(req.url);
-
-    if (cachedResult) {
-      res.end(
-        JSON.stringify({
-          suggestions: cachedResult,
-        })
-      );
-      return;
-    }
-
     const query = parse(req.url, true).query || {};
 
     const data = await suggestions.searchData(
@@ -55,9 +44,6 @@ export default createServer(async (req, res) => {
       suggestions: data,
     });
 
-    if (data.length > 50) {
-      cache.put(req.url, result);
-    }
     res.end(result);
   }
 }).listen(PORT, LOCAL_ADDRESS);

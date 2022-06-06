@@ -33,6 +33,13 @@ export const getLocationBetweenTwoPoints = (
   return d;
 };
 
+/**
+ *
+ * @param {Object} result
+ * @param {Number} incomingLatitude
+ * @param {Number} incomingLongitude
+ * @returns a based 1 number representing how far or close it's from one point to another
+ */
 export const locationProximity = (
   result,
   incomingLatitude,
@@ -47,7 +54,12 @@ export const locationProximity = (
 
     const distanceKM = distance / 1000;
 
-    return distanceKM > distanceRangeKM ? 0 : 1;
+    if (distanceKM === 0) return 1;
+
+    const remainingDistance = distanceKM - distanceRangeKM;
+
+    // gets a percentage of how close or far the city is
+    return 1 - remainingDistance / distanceKM;
   }
 
   return 1;
