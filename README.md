@@ -10,7 +10,11 @@ Node >=15.0.0
 
 ### Deployment
 
-The API is deployed in Heroku, here
+The API is deployed in Heroku, [here](https://young-sea-27694.herokuapp.com/suggestions)
+
+```
+GET https://young-sea-27694.herokuapp.com/suggestions
+```
 
 ### Indexing the data, and searching
 

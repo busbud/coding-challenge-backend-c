@@ -5,7 +5,7 @@ import FileDatasource from "./data/file-datasource.js";
 import LRUCacheService from "./services/lru-cache-service.js";
 import SuggestionsService from "./services/suggestions-service.js";
 
-const port = process.env.PORT || 5000;
+const { PORT = 2345, LOCAL_ADDRESS = "0.0.0.0" } = process.env;
 const lruCache = new LRUCacheService();
 const datasource = new FileDatasource(`data/cities_canada-usa.tsv`);
 const suggestions = new SuggestionsService(datasource, lruCache);
@@ -60,6 +60,6 @@ export default createServer(async (req, res) => {
     }
     res.end(result);
   }
-}).listen(port, "127.0.0.1");
+}).listen(PORT, LOCAL_ADDRESS);
 
-console.log("Server running at http://127.0.0.1:%d/suggestions", port);
+console.log(`Server running at http://${LOCAL_ADDRESS}:${PORT}/suggestions`);

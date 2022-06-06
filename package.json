@@ -1,6 +1,6 @@
 {
   "name": "coding-challenge-backend-c",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Coding challenge in NodeJs - Nery Campusano",
   "main": "app.js",
   "type": "module",
