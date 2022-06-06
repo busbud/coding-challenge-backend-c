@@ -1,4 +1,8 @@
-import { SCORE_WEIGHT_PERCENTAGE } from "../utils/constants.js";
+import {
+  CANADA_PROVINCES,
+  COUNTRIES,
+  SCORE_WEIGHT_PERCENTAGE,
+} from "../utils/constants.js";
 import { locationProximity } from "../utils/helpers.js";
 
 /**
@@ -10,7 +14,7 @@ export default class ScoringService {
   }
 
   scoreCategories = {
-    ACCURACY: ({ result: accuracy }) =>
+    ACCURACY: ({ result: { accuracy } }) =>
       (Math.max(0, accuracy / 100) * SCORE_WEIGHT_PERCENTAGE.ACCURACY) / 100,
     LOCATION: ({ result, latitude, longitude }) =>
       (locationProximity(result, latitude, longitude) *
@@ -52,8 +56,13 @@ export default class ScoringService {
         initialScore
       );
 
+      const provinceOrStateName =
+        result.country === COUNTRIES.Canada
+          ? CANADA_PROVINCES[result.state].init
+          : result.state;
+
       scoredResults.push({
-        name: `${result.name}, ${result.state}, ${result.country}`,
+        name: `${result.name}, ${provinceOrStateName}, ${result.country}`,
         latitude: result.latitude,
         longitude: result.longitude,
         score: Math.min(maxScore, score).toFixed(1),

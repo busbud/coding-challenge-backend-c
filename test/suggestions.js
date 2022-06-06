@@ -65,5 +65,106 @@ describe("GET /suggestions", function () {
         });
       });
     });
+
+    it("scores have valid values", function () {
+      expect(response.json.suggestions).to.satisfy(function (suggestions) {
+        return suggestions.every(
+          (suggestion) => suggestion.score >= 0 && suggestion.score <= 1
+        );
+      });
+    });
+  });
+
+  describe("with a less-than 3 characters search term", function () {
+    var response;
+
+    before(async function () {
+      const res = await request(app).get("/suggestions?q=x");
+      response = res;
+      response.json = JSON.parse(res.text);
+    });
+
+    it("returns a 404", function () {
+      expect(response.statusCode).to.equal(404);
+    });
+
+    it("returns an empty array of suggestions", function () {
+      expect(response.json.suggestions).to.be.instanceof(Array);
+      expect(response.json.suggestions).to.have.length(0);
+    });
+  });
+
+  describe("with no search query", function () {
+    var response;
+
+    before(async function () {
+      const res = await request(app).get("/suggestions");
+      response = res;
+      response.json = JSON.parse(res.text);
+    });
+
+    it("returns a 404", function () {
+      expect(response.statusCode).to.equal(404);
+    });
+
+    it("returns an empty array of suggestions", function () {
+      expect(response.json.suggestions).to.be.instanceof(Array);
+      expect(response.json.suggestions).to.have.length(0);
+    });
+  });
+
+  describe("with a valid city and location", function () {
+    var response;
+
+    before(async function () {
+      const res = await request(app).get(
+        "/suggestions?q=Londo&latitude=43.70011&longitude=-79.4163"
+      );
+      response = res;
+      response.json = JSON.parse(res.text);
+    });
+
+    it("returns a 200", function () {
+      expect(response.statusCode).to.equal(200);
+    });
+
+    it("returns an array of suggestions", function () {
+      expect(response.json.suggestions).to.be.instanceof(Array);
+      expect(response.json.suggestions).to.have.length.above(0);
+    });
+
+    describe("Validate the shape of the data being returned", function () {
+      it("contains latitudes and longitudes", function () {
+        expect(response.json.suggestions).to.satisfy(function (suggestions) {
+          return suggestions.every(function (suggestion) {
+            return suggestion.latitude && suggestion.longitude;
+          });
+        });
+      });
+
+      it("contains scores", function () {
+        expect(response.json.suggestions).to.satisfy(function (suggestions) {
+          return suggestions.every(function (suggestion) {
+            return suggestion.latitude && suggestion.longitude;
+          });
+        });
+      });
+    });
+
+    it("contains a match", function () {
+      expect(response.json.suggestions).to.satisfy(function (suggestions) {
+        return suggestions.some(function (suggestion) {
+          return /london/i.test(suggestion.name);
+        });
+      });
+    });
+
+    it("scores have valid values", function () {
+      expect(response.json.suggestions).to.satisfy(function (suggestions) {
+        return suggestions.every(
+          (suggestion) => suggestion.score >= 0 && suggestion.score <= 1
+        );
+      });
+    });
   });
 });

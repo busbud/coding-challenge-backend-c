@@ -1,3 +1,5 @@
+import { distanceRangeKM } from "./constants.js";
+
 /**
  * This helper does all the checking for you to see if it's the last iteration from the array.
  * @param {array} arr
