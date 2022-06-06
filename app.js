@@ -5,7 +5,7 @@ import FileDatasource from "./data/file-datasource.js";
 import LRUCacheService from "./services/lru-cache-service.js";
 import SuggestionsService from "./services/suggestions-service.js";
 
-const port = process.env.PORT || 2345;
+const port = process.env.PORT || 5000;
 const lruCache = new LRUCacheService();
 const datasource = new FileDatasource(`data/cities_canada-usa.tsv`);
 const suggestions = new SuggestionsService(datasource, lruCache);
