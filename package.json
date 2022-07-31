@@ -1,25 +1,28 @@
 {
   "name": "coding-challenge-backend-c",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "coding challenge in Nodejs",
-  "main": "index.ts",
+  "main": "dist/index.js",
+  "type": "module",
   "scripts": {
-    "start": "node ./src/index.ts",
+    "build": "tsc",
+    "start": "tsc && node ./dist/index.js",
     "test": "./node_modules/mocha/bin/mocha ./test/"
   },
+  "files": [
+    "dist/*"
+  ],
   "author": "Guillaume Bergeron Geoffroy",
   "license": "WTFPL",
   "dependencies": {
-    "@types/body-parser": "^1.19.2",
     "chai": "^1.9.1",
     "d3-dsv": "^3.0.1",
     "express": "^4.18.1",
-    "http": "^0.0.1-security",
     "mocha": "^1.18.2",
     "supertest": "^0.11.0"
   },
   "engines": {
-    "node": "0.10.26"
+    "node": ">=12"
   },
   "devDependencies": {
     "@types/d3-dsv": "^3.0.0",

@@ -1,3 +1,6 @@
+interface CanadianStates {
+    [key: string]: string
+}
 interface TypedRequestQuery<T> extends Express.Request {
     query: T
 }
@@ -8,6 +11,8 @@ interface SearchParams {
 }
 interface LargeCity {
     name: string,
+    country: string,
+    state: string,
     latitude: string,
     longitude: string
 }

@@ -1,8 +1,8 @@
-import express, { Express, Request, Response } from 'express';
-import { getCitiesSuggestions } from './utils/searchEngine'
-import { getCitiesSearchableObject } from './utils/dataParser'
+import express, { Express, Response } from 'express';
+import { getCitiesSuggestions } from './helpers/searchEngine.js'
+import { getCitiesSearchableObject } from './helpers/dataParser.js'
 
-const port = process.env.PORT;
+const port = process.env.PORT || 2345;
 
 let citiesSearchableObject: LargeCity[] = getCitiesSearchableObject();
 let citiesSuggestionsCache: CitiesSuggestionsCache = {};
@@ -16,7 +16,7 @@ app.get('/suggestions', (req: TypedRequestQuery<{ q: string, latitude: string, l
     res.status(200);
     res.send(citiesSuggestions);
   } else {
-    res.status(400);
+    res.status(404);
     res.send([]);
   }
 });

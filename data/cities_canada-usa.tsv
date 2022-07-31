@@ -4,7 +4,7 @@ id	name	ascii	alt_name	lat	long	feat_class	feat_code	country	cc2	admin1	admin2	a
 5882799	Airdrie	Airdrie	Erdri,ai er de li,ayrdray,ayrdry,eeodeuli,Ердри,إيردراي,ائرڈرائ,ایردری,艾尔德里,에어드리	51.30011	-114.03528	P	PPL	CA		01				24673		1086	America/Edmonton	2008-04-11
 5882873	Ajax	Ajax	Adzhaks,Ehjdzhaks,Ejdzaks,ajaks, awntaryw,eijegseu,Аджакс,Ејџакс,Эйджакс,أجاكس، أونتاريو,에이젝스	43.85012	-79.03288	P	PPL	CA		08				90167		97	America/Toronto	2011-12-30
 5884083	Alma	Alma	Al'ma,Alma,YTF,alma,alma, kbk,alma, kybk,Алма,Альма,آلما,آلما، کبک,ألما، كيبك	48.55009	-71.6491	P	PPL	CA		10	02			29526		90	America/Montreal	2010-01-29
-5884467	Amherst	Amherst		45.83345	-64.19874	P	PPL	CA		07				9336		20	America/Halifaprex	2008-04-11
+5884467	Amherst	Amherst		45.83345	-64.19874	P	PPL	CA		07				9336		20	America/Halifax	2008-04-11
 5884473	Amherstburg	Amherstburg		42.11679	-83.04985	P	PPL	CA		08				11459		183	America/Toronto	2006-01-22
 5884588	Amos	Amos	Amos,YEY,amws,amws, kbk,amws, kybk,Амос,آموس، کبک,أموس، كيبك,اموس	48.56688	-78.11624	P	PPL	CA		10	08			17918		298	America/Montreal	2010-09-22
 5885280	Angus	Angus		44.31681	-79.88295	P	PPLL	CA		08				10269		193	America/Toronto	2006-01-27
