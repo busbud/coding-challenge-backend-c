@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "start": "tsc && node ./dist/index.js",
+    "start": "tsc && node ./dist/src/index.js",
     "test": "tsc && mocha ./dist/test/"
   },
   "files": [
