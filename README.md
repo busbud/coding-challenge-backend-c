@@ -13,7 +13,7 @@ Suggestions are restricted to cities in the USA and Canada with a population abo
   - each suggestion has a score between 0 and 1 (inclusive) indicating confidence in the suggestion (1 is most confident)
   - each suggestion has a name which can be used to disambiguate between similarly named locations
   - each suggestion has a latitude and longitude
-- the final application is [deployed to Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs).
+- the final application is [deployed to Heroku](https://guillaumebusbudcodechallengec.herokuapp.com/suggestions).
 
 #### Sample responses
 
