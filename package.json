@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "start": "tsc && node ./dist/src/index.js",
-    "test": "tsc && mocha ./dist/test/"
+    "start": "node ./dist/src/index.js",
+    "test": "mocha ./dist/test/"
   },
   "files": [
     "dist/*"
