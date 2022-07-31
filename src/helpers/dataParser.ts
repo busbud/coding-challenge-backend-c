@@ -47,7 +47,7 @@ export const getCitiesSearchableObject = (): LargeCity[] => {
 
         if (parseInt(rr['population']!) > 5000) {
             pr = {
-                name: rr['name']!,
+                name: rr['name']!.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase(),
                 country: getCountryFullName(rr['country']!),
                 state: rr['country'] === 'US' ? rr['admin1']! : getCanadianStateByKey(rr['admin1']!),
                 latitude: rr['lat']!,

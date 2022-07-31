@@ -21,7 +21,10 @@ interface CitiesSuggestionsCache {
 }
 interface CitySuggestion {
     name: string,
-    lattitude: string,
+    latitude: string,
     longitude: string,
-    score: Number
+    score: number
+}
+interface CityDistances {
+    [key: number]: number
 }
