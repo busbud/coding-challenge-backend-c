@@ -92,6 +92,14 @@ nvm use
 npm install
 ```
 
+### Building the application
+
+To compile the application run:
+
+```
+npm run build
+```
+
 ### Running the tests
 
 The test suite can be run with:
@@ -100,17 +108,9 @@ The test suite can be run with:
 npm run test
 ```
 
-### Building the application
-
-To compile the application using the TypeScript compiler:
-
-```
-npm run build
-```
-
 ### Starting the application
 
-To compile the application and start a local server run:
+To start a local server run:
 
 ```
 npm run start
