@@ -7,7 +7,7 @@ const port = process.env.PORT || 2345;
 let citiesSearchableObject: City[] = getCitiesSearchableObject();
 let citiesSuggestionsCache: CitiesSuggestionsCache = {};
 
-export const app: Express = express();
+const app: Express = express();
 
 app.get('/suggestions', (req: TypedRequestQuery<{ q: string, latitude: string, longitude: string }>, res: Response) => {
   const searchParams: SearchParams = { name: req.query.q, latitude: req.query.latitude, longitude: req.query.longitude };
@@ -24,3 +24,5 @@ app.get('/suggestions', (req: TypedRequestQuery<{ q: string, latitude: string, l
 app.listen(port, () => {
   console.log('Server running at http://127.0.0.1:%d/suggestions', port);
 });
+
+export default app;

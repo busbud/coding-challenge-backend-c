@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
       "outDir": "dist",
-      "target": "es2021",
+      "target": "ESNext",
+      "module": "ESNext",
       "strict": true,
       "moduleResolution": "node",
       "allowSyntheticDefaultImports": true,
@@ -10,11 +11,12 @@
       "noImplicitAny": true,
       "types": [
           "node",
+          "mocha"
       ],
       "paths": {
           "@/*": [
               "src/*"
-          ]
+          ],
       },
   },
   "exclude": [
@@ -22,6 +24,6 @@
       "dist"
   ],
   "include": [
-      "./"
+      "./",
   ]
 }

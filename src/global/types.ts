@@ -18,7 +18,7 @@ interface CitySuggestion {
     score: number
 }
 interface CitiesSuggestionsCache {
-    [query: string]: CitySuggestion[]
+    [cacheKey: string]: CitySuggestion[]
 }
 interface SearchParams {
     name: string,

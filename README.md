@@ -100,9 +100,17 @@ The test suite can be run with:
 npm run test
 ```
 
+### Building the application
+
+To compile the application using the TypeScript compiler:
+
+```
+npm run build
+```
+
 ### Starting the application
 
-To start a local server run:
+To compile the application and start a local server run:
 
 ```
 npm run start
