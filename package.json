@@ -19,8 +19,7 @@
     "d3-dsv": "^3.0.1",
     "express": "^4.18.1",
     "geolib": "^3.3.3",
-    "string-similarity": "^4.0.4",
-    "supertest": "^0.11.0"
+    "string-similarity": "^4.0.4"
   },
   "engines": {
     "node": ">=12"
@@ -33,6 +32,7 @@
     "@types/node": "^18.6.3",
     "@types/string-similarity": "^4.0.0",
     "@types/supertest": "^2.0.12",
+    "supertest": "^0.11.0",
     "mocha": "^10.0.0",
     "typescript": "^4.7.4"
   },
