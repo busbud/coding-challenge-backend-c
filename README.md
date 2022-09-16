@@ -144,3 +144,7 @@ it should produce an output similar to:
 ```
 Server running at http://127.0.0.1:2345/suggestions
 ```
+
+```
+App is running at https://busbud-challenge-ercan-tirman.herokuapp.com/suggestions
+```
