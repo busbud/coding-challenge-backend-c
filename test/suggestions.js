@@ -48,7 +48,7 @@ describe('GET /suggestions', function() {
       expect(response.json.suggestions).to.have.length.above(0);
     });
 
-    describe.skip('Validate the shape of the data being returned', function() {
+    describe('Validate the shape of the data being returned', function() {
       it('contains latitudes and longitudes', function () {	
         expect(response.json.suggestions).to.satisfy(function (suggestions) {	
           return suggestions.every(function (suggestion) {	
@@ -60,7 +60,7 @@ describe('GET /suggestions', function() {
       it('contains scores', function () {	
         expect(response.json.suggestions).to.satisfy(function (suggestions) {	
           return suggestions.every(function (suggestion) {	
-            return suggestion.latitude && suggestion.longitude;	
+            return 'score' in suggestion;	
           });	
         })	
       });
@@ -69,8 +69,7 @@ describe('GET /suggestions', function() {
     it('contains a match', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.some(function (suggestion) {
-          reg = new RegExp(/montreal/i);
-          return (reg.test(suggestion));
+          return suggestion.name.toLowerCase().includes('montreal');
         });
       })
     });
