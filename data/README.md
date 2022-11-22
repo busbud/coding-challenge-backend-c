@@ -25,3 +25,11 @@ dem               : digital elevation model, srtm3 or gtopo30, average elevation
 timezone          : the timezone id (see file timeZone.txt) varchar(40)
 modification date : date of last modification in yyyy-MM-dd format
 ```
+
+# Cleaned data
+
+In order to make the data easier to read and filter out cities under 5000 the script `./clean_and_convert_json.js` was created to handle the filtering and conversion. The script does the following:
+- Removed cities under 5000 or outside of CA or US
+- Adds Canada province short names
+- Removes unneeded attributes
+- Writes data to JSON file

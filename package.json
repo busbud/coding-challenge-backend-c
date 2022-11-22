@@ -20,5 +20,6 @@
   },
   "engines": {
     "node": "18.12.1"
-  }
+  },
+  "type": "module"
 }
