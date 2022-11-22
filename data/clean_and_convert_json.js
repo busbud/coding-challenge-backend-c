@@ -6,11 +6,18 @@
  * - Write cleaned data as JSON
  */
 
-import {readFileSync, writeFileSync} from 'fs';
+const readFileSync = require('fs').readFileSync;
+const writeFileSync = require('fs').writeFileSync;
 
-const desiredAttributes = ["name", "ascii", "lat", "long", "country", "population", "admin1"];
 const desiredCountries = ["CA", "US"];
 const resultPath = "./cities_canada-usa.json";
+const nameIndex = 2;
+const countryIndex = 8;
+const stateIndex = 10;
+const latitudeIndex = 4;
+const longitudeIndex = 5;
+const populationIndex = 14;
+
 // Ref https://download.geonames.org/export/dump/admin1CodesASCII.txt
 const provinceMap = {
 	1: {full: "Alberta", short: "AB"},
@@ -32,29 +39,32 @@ const provinceMap = {
 try {
 	const data = readFileSync("./cities_canada-usa.tsv", "utf8");
 	const lines = data.split("\n");
+	lines.shift(); // Remove header
 	console.log(`Inital number of cities: ${lines.length}`)
-	const attributes = lines.shift().split("\t");
-	const cities = lines.map(line => {
+	let cities = lines.map(line => {
 		const data = line.split("\t");
-		return attributes.reduce((obj, attribute, index) => {
-			if (desiredAttributes.includes(attribute)) {
-				if (attribute === "admin1") {
-					if (/^\d+$/.test(data[index])) {
-						obj["state"] = provinceMap[parseInt(data[index])].short;
-					} else {
-						obj["state"] = data[index];
-					}
-				} else {
-					obj[attribute] = data[index];
-				}
+		if (
+			parseInt(data[populationIndex]) > 5000 && 
+			desiredCountries.includes(data[countryIndex])
+		) {
+			let state;
+			if (/^\d+$/.test(data[stateIndex])) {
+				state = provinceMap[parseInt(data[stateIndex])].short;
+			} else {
+				state = data[stateIndex];
 			}
-			return obj;
-		}, {});
+			return {
+				"name": `${data[nameIndex]}, ${state}, ${data[countryIndex]}`,
+				"latitude": parseFloat(data[latitudeIndex]),
+				"longitude": parseFloat(data[longitudeIndex]),
+			}
+		}
 	})
-	const big_cities = cities.filter(city => city.population >= 5000 & desiredCountries.includes(city.country));
-	console.log(`Resulting number of filtered cities: ${big_cities.length}`);
-	console.log(big_cities);
-	writeFileSync(resultPath, JSON.stringify(big_cities));
+	//Filter null values
+	cities = cities.filter(city => !!city);
+	console.log(`Resulting number of filtered cities: ${cities.length}`);
+	console.log(`Cities written to ${resultPath}`);
+	writeFileSync(resultPath, JSON.stringify(cities))
 } catch (e) {
 	console.error(e);
 }
