@@ -1,5 +1,4 @@
 import levenshtein from 'js-levenshtein';
-import distFrom from 'distance-from';
 import { headingDistanceTo } from 'geolocation-utils'
 import cities from '../data/cities_canada-usa.json';
 import { City } from './types';
