@@ -49,7 +49,10 @@ h1 {font-size:2.25rem;}
 					});
 			}
 			if (navigator.geolocation) {
-				navigator.geolocation.getCurrentPosition(locationSearch, (e) => {console.error(e)});
+				navigator.geolocation.getCurrentPosition(locationSearch, (e) => {
+					const placeholder = document.querySelector('#result');
+					placeholder.textContent = "Location Permission Error";
+				});
 			}
 		}
 		document.querySelector('#search').addEventListener('click', search);
