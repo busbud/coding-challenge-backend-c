@@ -24,7 +24,7 @@ h1 {font-size:2.25rem;}
 				const longitude = position.coords.longitude || null
 
 				let result = await fetch(
-					`http://localhost:2345/suggestions?q=${query}&latitude=${latitude}&longitude=${longitude}`, 
+					`/suggestions?q=${query}&latitude=${latitude}&longitude=${longitude}`, 
 					{"method": "GET"}
 				)
 					.then((response) => response.json())
