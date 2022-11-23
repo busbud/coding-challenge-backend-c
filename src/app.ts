@@ -85,7 +85,7 @@ function scoreWordDiffrence(filteredCities: City[], q: string) {
     } else {
       // Set the word match floor to be percentage of word matching
       const percentageMatch = q.length/city.name.length;
-      levenshtein = ((1 - percentageMatch) * (maxDiffrence - city.levenshtein))/(maxDiffrence - minDiffrence) + 0.1;
+      levenshtein = ((1 - percentageMatch) * (maxDiffrence - city.levenshtein))/(maxDiffrence - minDiffrence) + percentageMatch;
     }
     return {
       ...city,

@@ -30,11 +30,11 @@ h1 {font-size:2.25rem;}
 					.then((response) => response.json())
 					.then((data) => {
 						console.log(data);
-						let result = data;
-						if (result.suggestions) {
+						let result = data;							
+						const placeholder = document.querySelector('#result');
+						placeholder.textContent = "";								
+						if (result.suggestions && result.suggestions.length > 0) {
 							const suggestions = result.suggestions;
-							const placeholder = document.querySelector('#result');
-							placeholder.textContent = "";								
 							const div = document.createElement('div');
 							div.textContent = `Name, Longitude, Latitude, Score`;
 							placeholder.append(div);
@@ -44,6 +44,8 @@ h1 {font-size:2.25rem;}
 								div.style = `opacity: ${suggestion.score};`;
 								placeholder.append(div);
 							}
+						} else {
+							placeholder.textContent = "No City Found";								
 						}
 
 					});
