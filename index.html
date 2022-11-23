@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<head>
+	<title>Coding Challenge</title>
+	<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, width=device-width, user-scalable=no" />
+	<style>
+body {color:#444;}
+h1 {font-size:2.25rem;}
+.max-width {width: 40rem;}
+.space-around {justify-content: space-around;}
+.row {display:flex;flex-direction:row;}
+.column {display:flex;flex-direction:column;}
+.marg {margin:1rem;}
+	</style>
+
+</head>
+
+<script>
+	window.onload = function() {
+		function search() {
+			const query = document.querySelector('#q').value;
+
+			async function locationSearch(position) {
+				const latitude  = position.coords.latitude || null;
+				const longitude = position.coords.longitude || null
+
+				let result = await fetch(
+					`http://localhost:2345/suggestions?q=${query}&latitude=${latitude}&longitude=${longitude}`, 
+					{"method": "GET"}
+				)
+					.then((response) => response.json())
+					.then((data) => {
+						console.log(data);
+						let result = data;
+						if (result.suggestions) {
+							const suggestions = result.suggestions;
+							const placeholder = document.querySelector('#result');
+							placeholder.textContent = "";								
+							const div = document.createElement('div');
+							div.textContent = `Name, Longitude, Latitude, Score`;
+							placeholder.append(div);
+							for (let suggestion of suggestions) {
+								const div = document.createElement('div');
+								div.textContent = `${suggestion.name},\t${suggestion.longitude},\t${suggestion.latitude},\t${suggestion.score}`;
+								div.style = `opacity: ${suggestion.score};`;
+								placeholder.append(div);
+							}
+						}
+
+					});
+			}
+			if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(locationSearch, (e) => {console.error(e)});
+			}
+		}
+		document.querySelector('#search').addEventListener('click', search);
+	};
+
+</script>
+
+<body>
+	<div class="space-around row">
+		<div class="column max-width">
+			<h1>City Search</h1>
+			<div>
+				<input type="text" id="q" name="q" class="marg">
+				<button id="search" class="marg">Search</button>
+
+			</div>
+			<div id="result" class="marg">
+			</div>
+		</div>
+	</div>
+</body>

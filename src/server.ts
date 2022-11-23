@@ -1,10 +1,19 @@
 import { createServer, IncomingMessage, ServerResponse } from 'http';
 import { queryDataSet, formatPosition, parseUrl } from './app';
+import { readFileSync } from 'fs';
 const port = process.env.PORT || 2345;
 
 module.exports = createServer((req: IncomingMessage, res: ServerResponse) => {
   res.writeHead(404, {'Content-Type': 'application/json'});
+  
+  if(req.url === "/"){
+    res.writeHead(200, { 'Content-Type':'text/html'});
+    const file = readFileSync("./index.html");
+    res.end(file);
+  }
+
   const urlObj = (req.url) ? parseUrl(`http://localhost${port}${req.url}`) : null;
+
   if (urlObj) {
     const path = urlObj.pathname;
     const params = urlObj.searchParams;
