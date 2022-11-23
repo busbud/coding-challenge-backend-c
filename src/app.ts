@@ -1,4 +1,6 @@
 import levenshtein from 'js-levenshtein';
+import distFrom from 'distance-from';
+import { headingDistanceTo } from 'geolocation-utils'
 import cities from '../data/cities_canada-usa.json';
 import { City } from './types';
 
@@ -14,7 +16,7 @@ import { City } from './types';
  */
 export function queryDataSet(q: string, latitude: number | null, longitude: number | null) {
   let filteredCities = cities.filter((city: any) => city.name.toLowerCase().includes(q.toLowerCase()));
-  if (filteredCities.length) {
+  if (filteredCities.length > 0) {
     let scoredCities: City[] = scoreWordDiffrence(filteredCities, q);
     if (latitude && longitude) {
       scoredCities = scoreDistance(scoredCities, longitude, latitude);
@@ -37,7 +39,7 @@ function sumCityScores(scoredCities: City[]) {
   let result;
   if ('distance' in scoredCities[0]) {
     result = scoredCities.map(city => {
-      city.score = ((city.levenshtein || 0) + (city.distance || 0))/2.0 || 0;
+      city.score = ((city.levenshtein || 0) + (city.distance || 0))/2.0;
       delete city.distance;
       delete city.levenshtein;
       return city;
@@ -77,7 +79,15 @@ function scoreWordDiffrence(filteredCities: City[], q: string) {
   })
   // Normalize to 0-1
   scoredCities = scoredCities.map(city => {
-    let levenshtein = (maxDiffrence - city.levenshtein)/(maxDiffrence - minDiffrence)
+    let levenshtein;
+    if (new RegExp("\\b" + q + "\\b").test(city.name)) {
+      // Give full score on full word match
+      levenshtein = 1;
+    } else {
+      // Set the word match floor to be percentage of word matching
+      const percentageMatch = q.length/city.name.length;
+      levenshtein = ((1 - percentageMatch) * (maxDiffrence - city.levenshtein))/(maxDiffrence - minDiffrence) + 0.1;
+    }
     return {
       ...city,
       levenshtein
@@ -100,7 +110,10 @@ function scoreDistance(filteredCities: City[], longitude: number, latitude: numb
   let minDistance = Number.MAX_VALUE;
   let scoredCities = filteredCities.map(city => {
     // Use distance between points
-    const distance = distanceBetweenPoints(longitude, latitude, city.longitude, city.latitude);
+    const { distance } = headingDistanceTo(
+      {lon:longitude, lat:latitude},
+      {lon:city.longitude, lat:city.latitude}
+    );
     maxDistance = (maxDistance < distance) ? distance : maxDistance;
     minDistance = (minDistance > distance) ? distance : minDistance;
     return {
@@ -111,7 +124,7 @@ function scoreDistance(filteredCities: City[], longitude: number, latitude: numb
 
   // Normalise to 0-1
   scoredCities = scoredCities.map(city => {
-    let distance = (maxDistance - city.distance)/(maxDistance - minDistance)
+    let distance = (maxDistance - city.distance)/(maxDistance - minDistance) || 0
     return {
       ...city,
       distance
@@ -131,7 +144,7 @@ function scoreDistance(filteredCities: City[], longitude: number, latitude: numb
  * @param {number} y2
  */
 function distanceBetweenPoints(x1: number, y1: number, x2: number, y2: number) {
-  return Math.sqrt((x2 - x1) * 2 + (y2 - y1) * 2);
+  return Math.sqrt((x2 - x1) * 2.0 + (y2 - y1) * 2.0);
 }
 
 /**
