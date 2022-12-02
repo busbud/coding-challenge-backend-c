@@ -1,5 +1,6 @@
 const path = require('path');
 const { readFileSync } = require('fs');
+const { getStateCode, countryCodeMap } = require('./StateCodes');
 
 class DataParser {
   constructor(fileName, config = {}) {
@@ -9,7 +10,7 @@ class DataParser {
 
     const filePath = path.resolve(__dirname, `../data/${fileName}`);
     const tsvData = readFileSync(filePath);
-    this.data = this.convertToJSON(tsvData.toString());
+    this.data = this.convertTsvToJson(tsvData.toString());
   }
 
   validateObject = (obj = {}) => {
@@ -19,7 +20,7 @@ class DataParser {
     return true;
   }
 
-  convertToJSON = (tsv) => {
+  convertTsvToJson = (tsv = "") => {
     const lines = tsv.split("\n");
     const result = [];
     const headers = lines[0].split("\t");
@@ -33,18 +34,21 @@ class DataParser {
       }
 
       if (this.validateObject(obj)) {
-        result.push(this.serializeObject(obj));
+        result.push(this.deserializeObject(obj));
       }
     }
     return result;
   }
 
-  serializeObject = (obj = {}) => {
+  deserializeObject = (obj = {}) => {
+    const state = getStateCode(obj?.admin1);
+    const country = countryCodeMap[obj?.country] ? countryCodeMap[obj?.country] : obj?.country;
+    const name = `${obj?.ascii}, ${state}, ${country}`;
+
     return ({
-      name: obj?.name,
+      name,
       latitude: obj?.lat,
-      longitude: obj?.long,
-      score: 1
+      longitude: obj?.long
     });
   }
 }
