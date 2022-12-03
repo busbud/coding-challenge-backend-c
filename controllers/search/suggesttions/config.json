@@ -1,0 +1,6 @@
+{
+  "Method": "GET",
+  "Routes": [
+    "suggestions"
+  ]
+}
