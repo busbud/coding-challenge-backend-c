@@ -1,4 +1,4 @@
-# Busbud Coding Challenge
+<!-- # Busbud Coding Challenge
 
 ## Requirements
 
@@ -143,7 +143,7 @@ it should produce an output similar to:
 
 ```
 Server running at http://127.0.0.1:2345/suggestions
-```
+``` -->
 
 
 # Busbud Coding Challenge SOLUTION
