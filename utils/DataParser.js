@@ -2,8 +2,13 @@ const path = require('path');
 const { readFileSync } = require('fs');
 const { getStateCode, countryCodeMap } = require('./StateCodes');
 
+// This is the DataParser class
+// it's main function is to load the tsv file supplied by a fileName to the constructor
+// and return a JSON representation of that data
+
 class DataParser {
   constructor(fileName, config = {}) {
+    // we can pass desiredCountries and desiredPopulation as config params to help when parsing data
     const { desiredCountries, desiredPopulation } = config;
     this.desiredCountries = desiredCountries ? new Set(desiredCountries) : null;
     this.desiredPopulation = desiredPopulation ? desiredPopulation : Infinity;
@@ -13,6 +18,7 @@ class DataParser {
     this.data = this.convertTsvToJson(tsvData.toString());
   }
 
+  // validate the object by checking the config object values
   validateObject = (obj = {}) => {
     if (!obj?.id) return false;
     if (this.desiredCountries && !this.desiredCountries.has(obj?.country)) return false;
@@ -41,8 +47,10 @@ class DataParser {
   }
 
   deserializeObject = (obj = {}) => {
+    // for the state (or province) we need to map the admin1 values to actual state/province codes
     const state = getStateCode(obj?.admin1);
     const country = countryCodeMap[obj?.country] ? countryCodeMap[obj?.country] : obj?.country;
+    // here was actually want to use the ascii name to remove non-alpha numeric character (i.e: è)
     const name = `${obj?.ascii}, ${state}, ${country}`;
 
     return ({

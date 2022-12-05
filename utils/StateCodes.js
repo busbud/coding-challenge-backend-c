@@ -1,4 +1,9 @@
-// https://download.geonames.org/export/dump/admin1CodesASCII.txt
+// this took a while to figure out..
+// Looks like for US values the admin1 maps to an actual state code
+// but for Canadian provinces we need to map admin1 code to a province code
+// this list was found here: https://download.geonames.org/export/dump/admin1CodesASCII.txt
+
+const { COUNTRY_CODES } = require('../constants');
 
 const provinceMap = {
   1: "AB",
@@ -15,13 +20,17 @@ const provinceMap = {
   13: "NT"
 };
 
+// map the country code to a country name
 const countryCodeMap = {
-  'CA': 'CANADA',
-  'US': 'USA'
+  [COUNTRY_CODES.CA]: 'CANADA',
+  [COUNTRY_CODES.CA]: 'USA'
 };
 
 const getStateCode = (code) => {
   return provinceMap[+code] ? provinceMap[+code] : code;
 };
 
-module.exports = { getStateCode, countryCodeMap };
+module.exports = {
+  getStateCode,
+  countryCodeMap
+};

@@ -3,6 +3,8 @@ const app = express();
 const port = process.env.PORT || 3000;
 const routes = require('./routes');
 
+// this is just a health check used for deployment
+// we can check if the service is up by pinging this route
 app.get('/health-check', (req, res) => {
   res.status(200).send({
     success: 'true',
@@ -12,8 +14,9 @@ app.get('/health-check', (req, res) => {
 
 app.use('/suggestions', routes());
 
+// handle unkown routes
 app.get('/*', (req, res) => {
-   res.status(404).send('Not Found!');
+  res.status(404).send({ message: 'Route not found' });
 });
 
 app.listen(port, () => {
