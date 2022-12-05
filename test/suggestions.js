@@ -1,13 +1,19 @@
-var expect  = require('chai').expect;
-var app     = require('../app');
-var request = require('supertest')(app);
+var chai = require("chai");
+var chaiHttp = require("chai-http");
+var app = require("../app");
+
+chai.should();
+chai.use(chaiHttp);
+
+const request = chai.request;
+const expect = chai.expect;
 
 describe('GET /suggestions', function() {
   describe('with a non-existent city', function () {
     var response;
 
     before(function (done) {
-      request
+      request(app)
         .get('/suggestions?q=SomeRandomCityInTheMiddleOfNowhere')
         .end(function (err, res) {
           response = res;
@@ -30,7 +36,7 @@ describe('GET /suggestions', function() {
     var response;
 
     before(function (done) {
-      request
+      request(app)
         .get('/suggestions?q=Montreal')
         .end(function (err, res) {
           response = res;
@@ -48,7 +54,15 @@ describe('GET /suggestions', function() {
       expect(response.json.suggestions).to.have.length.above(0);
     });
 
-    describe.skip('Validate the shape of the data being returned', function() {
+    it('contains a match', function () {
+      expect(response.json.suggestions).to.satisfy(function (suggestions) {
+        return suggestions.some(function (suggestion) {
+          return suggestion.name.match(/montreal/i)?.length !== 0;
+        });
+      })
+    });
+
+    describe('Validate the shape of the data being returned', function() {
       it('contains latitudes and longitudes', function () {	
         expect(response.json.suggestions).to.satisfy(function (suggestions) {	
           return suggestions.every(function (suggestion) {	
@@ -64,18 +78,6 @@ describe('GET /suggestions', function() {
           });	
         })	
       });
-    });
-    
-    it('is a gratuitously failing test you should remove to prove you ran the tests', function () {	
-      expect(true).to.equal(false);	
-    });	    
-
-    it('contains a match', function () {
-      expect(response.json.suggestions).to.satisfy(function (suggestions) {
-        return suggestions.some(function (suggestion) {
-          return suggestion.name.test(/montreal/i);
-        });
-      })
     });
   });
 });
