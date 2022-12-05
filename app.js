@@ -1,7 +1,11 @@
 const express = require('express');
+const rateLimiter = require('./middlewares/RateLimiter');
 const app = express();
 const port = process.env.PORT || 3000;
 const routes = require('./routes');
+
+// adding a rate limiter to handle large traffic or network attacks
+app.use(rateLimiter);
 
 // this is just a health check used for deployment
 // we can check if the service is up by pinging this route
