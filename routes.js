@@ -21,7 +21,7 @@ const serializeObject = (obj = {}, score = 0) => {
 const routes = function () {
 
   router.get('/', (req, res) => {
-    const { q } = req?.query;
+    const { q, latitude, longitude } = req?.query;
     const locationQuery = q?.toLowerCase();
 
     if (!locationQuery) {
@@ -31,11 +31,13 @@ const routes = function () {
     const result = [];
     for (let i = 0; i < data.length; i++) {
       const obj = data[i];
-      const score = getScore(obj?.name?.toLowerCase(), locationQuery);
+      const score = getScore(obj, locationQuery, { latitude, longitude });
       if (score >= 0.3) {
         result.push(serializeObject(obj, score));
       }
     }
+    result.sort((a, b) => b?.score - a?.score);
+
 
     if (!result?.length) {
       return res.status(404).send({ suggestions: [] });
