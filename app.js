@@ -4,6 +4,10 @@ const app = express();
 const port = process.env.PORT || 3000;
 const routes = require('./routes');
 
+/////////////////////////////////////////////////////////////////////////////////////////
+///////// LIVE VERSION OF APP FOUND HERE: https://busbud-conner.herokuapp.com/suggestions
+/////////////////////////////////////////////////////////////////////////////////////////
+
 // adding a rate limiter to handle large traffic or network attacks
 app.use(rateLimiter);
 
