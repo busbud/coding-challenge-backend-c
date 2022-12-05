@@ -144,3 +144,46 @@ it should produce an output similar to:
 ```
 Server running at http://127.0.0.1:2345/suggestions
 ```
+
+
+# Busbud Coding Challenge SOLUTION
+
+- Live server available at https://busbud-conner.herokuapp.com/suggestions
+
+## Getting Started
+
+### Setting up the project
+
+In the project directory run:
+
+```
+nvm use
+npm install
+```
+
+### Running the tests
+
+The test suite can be run with:
+
+```
+npm run test
+```
+
+### Starting the application
+
+To start a local server run:
+
+```
+npm run start
+```
+
+Server should be running at
+
+```
+Server running at http://127.0.0.1:3000/suggestions
+```
+
+### API Documentation
+
+- check out the api.yaml file in https://editor.swagger.io/ to view the API docs
+- code has been documented via comments in the code
