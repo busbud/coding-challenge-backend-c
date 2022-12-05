@@ -1,0 +1,85 @@
+openapi: 3.0.0
+info:
+  title: Busbud Coding Challenge API
+  description: API documentation for Busbud challenge
+  version: 0.1.9
+servers:
+  - url: https://busbud-conner.herokuapp.com
+    description: Main (production) server
+paths:
+  /suggestions:
+    get:
+      summary: Returns a list of suggestions.
+      parameters:
+        - name: q
+          in: query
+          description: location search value
+          schema:
+            type: string
+            example: "Londo"
+        - name: latitude
+          in: query
+          description: latitude value for searching
+          schema:
+            type: string
+            example: "-42.312"
+        - name: longitude
+          in: query
+          description: longitude value for searching
+          schema:
+            type: string
+            example: "93.312"
+      responses:
+        '200':
+          description: A JSON array of suggested locations compared to the search query
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocationsArray' 
+        '404':
+          description: When no data is found
+          content:
+            application/json:
+              schema:
+                example: { suggestions: [] }
+        '500':
+          description: When an error occurs
+          content:
+            application/json:
+              schema:
+                example: { message: 'Error!' }
+
+  /health-check:
+    get:
+      summary: Health check route.
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                example: {
+                  success: 'true',
+                  message: 'unconditionally healthy'
+                }
+                  
+components:
+  schemas:
+    LocationsArray:
+      type: object
+      properties:
+        suggestions:
+          type: array
+          items: 
+            $ref: '#/components/schemas/Location'
+    Location:
+      type: object
+      properties:
+        name:
+          type: string
+        latitude:
+          type: string
+        longitude:
+          type: string
+        score:
+          type: number
