@@ -2,6 +2,11 @@
 
 This is an API to get city search suggestions based on client query and location
 
+### Live API
+
+The dpeloyed API is hosted here
+https://baila-busbud.herokuapp.com/
+
 ## API Documentation
 
 This API has been made for the sake of simplicity and ease of running it locally without having to install too many dependencies.
@@ -102,7 +107,7 @@ GET /suggestions
 ## Getting Started
 
 - This api uses path aliases to avoid the `../../../../../foler` hell
-- ALiases can be found in package.json and are self explanatory
+- Aliases can be found in package.json and are self explanatory
 - This also allows to move folders arround without worring about import/require being broken
 
 ### Prerequisites
