@@ -134,10 +134,9 @@ CACHE_TTL=10, the amount of time you want to cache GET requests, DEFAULT: 10 sec
 In the project directory run:
 
 ```
-npm install 16.0.0
+nvm install 16.0.0
 nvm use 16.0.0
 npm install
-npm run postinstall
 ```
 
 ### Endpoint Structure
