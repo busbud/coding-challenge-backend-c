@@ -1,1 +1,0 @@
-module.exports.suggesttions = require("./suggesttions.js")

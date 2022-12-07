@@ -50,22 +50,24 @@ app.use((error, req, res, next) => {
 
   // if its an internal error and its not running on local
   // then send a general error message
-  if (ENV_NAME !== "development")
-    return res.status(500).json({
-      type: "InternalServerError",
-      code: "errors.internal",
-      message: "Internal Server Error",
-    });
+  // if (ENV_NAME !== "development")
+  //   return res.status(500).json({
+  //     type: "InternalServerError",
+  //     code: "errors.internal",
+  //     message: "Internal Server Error",
+  //   });
 
   return res.status(error.status || 500).json({
     type: error.type || "InternalServerError",
     code: error.code || "errors.internal",
     message: error.message || "Internal Server Error",
+    ...(error.payload && error.payload),
   });
 });
 
 app.listen(port, () => console.log(`Server running on port ${port}!`));
 
+module.exports = app;
 // const express = require("express");
 // const app = express();
 // var port = process.env.PORT || 2345;

@@ -28,7 +28,7 @@ module.exports = (app) => {
           handler({ req, res, next })
             .then((response) => {
               res
-                .status(200)
+                .status(response?.status || 200)
                 .send(
                   response && typeof response === "object"
                     ? response
@@ -53,7 +53,7 @@ module.exports = (app) => {
             handler({ req, res, next })
               .then((response) => {
                 res
-                  .status(200)
+                  .status(response?.status || 200)
                   .send(
                     response && typeof response === "object"
                       ? response

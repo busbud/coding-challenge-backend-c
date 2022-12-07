@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "nodemon app.js",
-    "test": "./node_modules/mocha/bin/mocha ./test/",
+    "test": "npx mocha ./test/",
     "new:endpoint": "node cli/newEndpoint.js",
     "new:unit": "node cli/newUnit.js"
   },
@@ -20,8 +20,10 @@
     "mocha": "^10.1.0",
     "ora": "^5.4.0",
     "stack-trace": "^0.0.10",
+    "string-similarity": "^4.0.4",
     "supertest": "^6.3.2",
-    "yargs": "^16.2.0"
+    "yargs": "^16.2.0",
+    "yup": "^0.32.11"
   },
   "engines": {
     "node": "16.0.0"
