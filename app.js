@@ -1,3 +1,4 @@
+require("module-alias/register");
 const express = require("express");
 var stackTrace = require("stack-trace");
 require("dotenv").config();
