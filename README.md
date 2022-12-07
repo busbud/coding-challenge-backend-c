@@ -120,6 +120,12 @@ You are going to need:
 
 ### Setting up the project
 
+### Environement Variables
+
+```
+CACHE_TTL=10, the amount of time you want to cache GET requests, DEFAULT: 10 seconds
+```
+
 In the project directory run:
 
 ```
