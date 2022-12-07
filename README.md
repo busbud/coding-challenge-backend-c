@@ -1,29 +1,48 @@
-# Busbud Coding Challenge
+# Busbud Coding Challenge By Baila Kahn
 
-## Requirements
+This is an API to get city search suggestions based on client query and location
 
-Design an API endpoint that provides autocomplete suggestions for large cities.
-The suggestions should be restricted to cities in the USA and Canada with a population above 5000 people.
+## API Documentation
 
-- the endpoint is exposed at `/suggestions`
-- the partial (or complete) search term is passed as a query string parameter `q`
-- the caller's location can optionally be supplied via query string parameters `latitude` and `longitude` to help improve relative scores
-- the endpoint returns a JSON response with an array of scored suggested matches
-    - the suggestions are sorted by descending score
-    - each suggestion has a score between 0 and 1 (inclusive) indicating confidence in the suggestion (1 is most confident)
-    - each suggestion has a name which can be used to disambiguate between similarly named locations
-    - each suggestion has a latitude and longitude
-- all functional tests should pass (additional tests may be implemented as necessary).
-- the final application should be [deployed to Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs).
-- feel free to add more features if you like!
+This API has been made for the sake of simplicity and ease of running it locally without having to install too many dependencies.
+Here are few details:
 
-#### Sample responses
+- API does not have authentication.
+- MongoDB or ElasticSearch would have been better to query the data especially with geo data in play
+- I acknowledge that using simple javascript array functions `filter`, `map` and `sort` is not best for performance especially with big data
 
-These responses are meant to provide guidance. The exact values can vary based on the data source and scoring algorithm.
+## Endpoints
 
-**Near match**
+```
+GET /suggestions
+```
 
-    GET /suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
+### REQUEST
+
+#### Params
+
+- `q`: [String]
+- `latitude`: [String, Optional]
+- `longitue`: [String, Optional]
+
+### Response
+
+```
+200
+```
+
+- Attributes (Array[Suggestion])
+
+#### Data structures
+
+##### Suggestion
+
+- `name`: [String] Formated city name
+- `latitude`: [String], User location latitude
+- `longitude`: [String], User location longitude
+- `score`: [Number], Suggestion confidence
+
+#### Example
 
 ```json
 {
@@ -56,71 +75,92 @@ These responses are meant to provide guidance. The exact values can vary based o
 }
 ```
 
-**No match**
+```
+5xx, 4xx
+```
 
-    GET /suggestions?q=SomeRandomCityInTheMiddleOfNowhere
+- Attributes ([Error])
+
+#### Data structures
+
+##### Error
+
+- `type`: [String] Error Type
+- `code`: [String], Error code
+- `message`: [String], Error Message
+
+#### Example
 
 ```json
 {
-  "suggestions": []
+  "type": "InternalServerError",
+  "code": "errors.internal",
+  "message": "baila is not defined"
 }
 ```
 
-
-### Non-functional
-
-- All code should be written in Javascript, Typescript or PHP.
-- Mitigations to handle high levels of traffic should be implemented.
-- Challenge is submitted as pull request against this repo ([fork it](https://help.github.com/articles/fork-a-repo/) and [create a pull request](https://help.github.com/articles/creating-a-pull-request-from-a-fork/)).
-- Documentation and maintainability is a plus.
-
-## Dataset
-
-You can find the necessary dataset along with its description and documentation in the [`data`](data/) directory.
-
-## Evaluation
-
-We will use the following criteria to evaluate your solution:
-
-- Capacity to follow instructions
-- Developer Experience (how easy it is to run your solution locally, how clear your documentation is, etc)
-- Solution correctness
-- Performance
-- Tests (quality and coverage)
-- Code style and cleanliness
-- Attention to detail
-- Ability to make sensible assumptions
-
-It is ok to ask us questions!
-
-We know that the time for this project is limited and it is hard to create a "perfect" solution, so we will consider that along with your experience when evaluating the submission.
-
 ## Getting Started
 
+This api uses aliases
+
 ### Prerequisites
+
+All dependencies have been updated to recent version.
+
+- `Note` This change may require updates of the application core and tests
 
 You are going to need:
 
 - `Git`
 - `nvm` (or your preferred node version manager)
-- `Node.js`
-
-### Setting up your environment
-
-1. Begin by forking this repo and cloning your fork. GitHub has apps for [Mac](http://mac.github.com/) and
-[Windows](http://windows.github.com/) that make this easier.
-
-2. Install [nvm](https://github.com/nvm-sh/nvm#install--update-script) or your preferred node version manager.
-
-3. Install [Node.js](http://www.nodejs.org).
+- `Node.js v16.x`
+- `NPM v7.x`
 
 ### Setting up the project
 
 In the project directory run:
 
 ```
-nvm use
+npm install 16.0.0
+nvm use 16.0.0
 npm install
+```
+
+### Endpoint Structure
+
+```
+endpoints
+└───category
+│   └───endpoint
+│       │   index.js Endpoint entry file
+│       │   config.json Endpoint configuration, Here you can specify API METHOD, Custom ROUTES etc...
+│   └───────units
+|       |       index.js all the endpoint functions are imported from here
+|       |       function1.js an endpoint function
+```
+
+### Creating a new endpoint
+
+New endpoints will be found under `endpoints/[category]`
+
+```
+YARN
+yarn new:endpoint --p=[category]/[endpoint]
+
+NPM
+npm run -- new:endpoint --p=[category]/[endpoint]
+```
+
+### Creating a new unit/function
+
+New units will be found under `endpoints/[category]/[endpoint]/[name]`
+
+```
+YARN
+yarn new:unit --p=[category]/[endpoint]/[name]
+
+NPM
+npm run -- new:unit --p=[category]/[endpoint]/[name]
 ```
 
 ### Running the tests

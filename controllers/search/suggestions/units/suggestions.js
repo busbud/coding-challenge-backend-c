@@ -33,6 +33,7 @@ module.exports = async ({ q, location }) => {
           latitude: lat,
           longitude: long,
         }),
-      })),
+      }))
+      .sort((a, b) => b.score - a.score),
   };
 };
