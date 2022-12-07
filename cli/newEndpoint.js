@@ -10,7 +10,7 @@ const [section, endpoint] = endpointPath.split("/");
 
 const spinner = ora(`Adding new Endpoint to ${section}`).start();
 
-const path = `controllers/${section}/${endpoint}`;
+const path = `endpoints/${section}/${endpoint}`;
 
 if (fs.existsSync(path)) {
   spinner.fail("This endpoint already exists");

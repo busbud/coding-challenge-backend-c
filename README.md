@@ -101,7 +101,9 @@ GET /suggestions
 
 ## Getting Started
 
-This api uses aliases
+- This api uses path aliases to avoid the `../../../../../foler` hell
+- ALiases can be found in package.json and are self explanatory
+- This also allows to move folders arround without worring about import/require being broken
 
 ### Prerequisites
 
@@ -124,6 +126,7 @@ In the project directory run:
 npm install 16.0.0
 nvm use 16.0.0
 npm install
+npm run postinstall
 ```
 
 ### Endpoint Structure
@@ -182,5 +185,5 @@ npm run start
 it should produce an output similar to:
 
 ```
-Server running at http://127.0.0.1:2345/suggestions
+Server running on port 2345!
 ```

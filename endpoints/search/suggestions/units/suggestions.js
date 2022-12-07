@@ -1,6 +1,6 @@
-const { tsvToJson, getScore, getNameScore } = require("../../../../lib");
-const countries = require("../../../../constants/countries");
-const provinces = require("../../../../constants/provinces");
+const { tsvToJson, getScore } = require("_lib");
+const countries = require("_constants/countries");
+const provinces = require("_constants/provinces");
 module.exports = async ({ q, location }) => {
   // gets json data
   const data = tsvToJson();

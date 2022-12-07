@@ -9,16 +9,16 @@ const [section, endpoint, unit] = newUnitPath.split("/");
 
 const spinner = ora(`Adding new unit to ${section}/${endpoint}`).start();
 
-const path = `controllers/${section}/${endpoint}`;
+const path = `endpoints/${section}/${endpoint}`;
 
 // make sure section exists
-if (!fs.existsSync(`controllers/${section}`)) {
+if (!fs.existsSync(`endpoints/${section}`)) {
   spinner.fail("This section does not exist");
   return;
 }
 
 // make sure endpoint exists
-if (!fs.existsSync(`controllers/${section}/${endpoint}`)) {
+if (!fs.existsSync(`endpoints/${section}/${endpoint}`)) {
   spinner.fail("This endpoint does not exist");
   return;
 }

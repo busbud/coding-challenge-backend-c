@@ -1,5 +1,5 @@
 const getDirectories = require("./getDirectories");
-const mainDirectory = "controllers";
+const mainDirectory = "endpoints";
 
 module.exports = (app) => {
   // get all directories from `mainDirectory`

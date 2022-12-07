@@ -1,5 +1,6 @@
 const yup = require("yup");
-const { error } = require("../../../../lib");
+const { error } = require("_lib");
+
 const schema = yup.object().shape(
   {
     q: yup.string().required("Please enter a valid string"),
