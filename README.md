@@ -15,15 +15,26 @@ The `build` command transpiles the typescript files in the `src/` directory. The
 
 To start a local server run:
 
-```
-npm run start
-```
+1. Optional but recommended: Create a `googleMapApiKey` using [these](https://developers.google.com/maps/documentation/javascript/get-api-key) steps.
+2. `npm run api:build`.
+3. `npm run start`
+4. `create .env with following values:                 NODE_ENV=development API_KEY=API_KEY_GOTTEN_IN_STEP_1_IF_AVAILABLE` (never check this in to git)
 
 it should produce an output similar to:
 
 ```
 Server running at http://127.0.0.1:2345/suggestions
 ```
+
+## Hosting
+The application is hosted in Heroku and can be run by hitting:
+
+```
+https://maryam-busbud-city-search.herokuapp.com/suggestions?q=SAMPLE_CITY_TO_SEARCH_FOR&lon=SAMPLE_LONGITUDE_TO_SEARCH_FOR&lat=SAMPLE_LATITUDE_TO_SEARCH_FOR
+```
+
+1. q is required
+2. lon and lat are optional
 
 ## Formatting
 
