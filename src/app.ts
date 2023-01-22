@@ -4,7 +4,7 @@ import config from "./config/env";
 
 const app = new ExpressServer().getInstance();
 
-http.createServer(app).listen(config.port, "127.0.0.1");
+http.createServer(app).listen(config.port);
 console.log("Server running at http://127.0.0.1:%d/suggestions", config.port);
 
 export default app;
