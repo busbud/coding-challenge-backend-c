@@ -60,7 +60,7 @@ export class CitiesService implements ICitiesService {
             longitude: Number(location?.long),
           };
           const locationCountry = location?.country || "";
-          const locationState = _.isNaN(Number(location?.admin1)) ? location?.admin1 : null;
+          const locationState = _.isNaN(Number(location?.admin1)) ? location?.admin1 : "";
 
           return {
             name: `${location?.name}, ${locationState}, ${ACCEPTED_COUNTRIES_ENUM[locationCountry]}`,
@@ -77,6 +77,7 @@ export class CitiesService implements ICitiesService {
         return;
       });
 
+      console.log("googleApiKey: ", googleApiKey);
       const formattedResult = !_.isNull(googleApiKey)
         ? await this.getDetailedAddress(result)
         : result;

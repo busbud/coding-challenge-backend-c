@@ -10,7 +10,8 @@ export const calculateLocationAccuracyScoreByCoordinates = (
 
   let score = 10 - (lat + long) / 2;
   score = score > 0 ? Math.round(score) / 10 : 0;
-  return score;
+
+  return Number(score.toFixed(1));
 };
 
 export const findSpecificAddressInformation = (
