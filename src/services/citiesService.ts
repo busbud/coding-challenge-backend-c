@@ -90,7 +90,7 @@ export class CitiesService implements ICitiesService {
 
   /**
    *
-   * Function: Gets
+   * Function: Gets breakdown of an address to: city, state and country
    * @param cities
    * @returns CitiesDTO[]
    */
