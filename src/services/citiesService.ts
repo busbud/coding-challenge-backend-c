@@ -60,9 +60,10 @@ export class CitiesService implements ICitiesService {
             longitude: Number(location?.long),
           };
           const locationCountry = location?.country || "";
+          const locationState = _.isNaN(Number(location?.admin1)) ? location?.admin1 : null;
 
           return {
-            name: `${location?.name}, ${location?.admin1}, ${ACCEPTED_COUNTRIES_ENUM[locationCountry]}`,
+            name: `${location?.name}, ${locationState}, ${ACCEPTED_COUNTRIES_ENUM[locationCountry]}`,
             ...suggestedLocationCoordinates,
             score: paramContainsCoordinates
               ? this.getSuggestionAccuracyByLatAndLong({
@@ -76,7 +77,9 @@ export class CitiesService implements ICitiesService {
         return;
       });
 
-      const formattedResult = await this.getFormattedAddress(result);
+      const formattedResult = !_.isNull(googleApiKey)
+        ? await this.getDetailedAddress(result)
+        : result;
       const suggestedCities = _.orderBy(formattedResult, ["score"], ["desc"]);
 
       return suggestedCities;
@@ -91,7 +94,7 @@ export class CitiesService implements ICitiesService {
    * @param cities
    * @returns CitiesDTO[]
    */
-  private async getFormattedAddress(cities: CitiesDTO[]): Promise<CitiesDTO[]> {
+  private async getDetailedAddress(cities: CitiesDTO[]): Promise<CitiesDTO[]> {
     return Promise.all(
       cities.map(async (city) => {
         const cityName = city?.name?.split(",");
