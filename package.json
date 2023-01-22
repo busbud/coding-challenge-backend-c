@@ -9,9 +9,10 @@
   },
   "type": "module",
   "scripts": {
-    "postinstall": "tsc",
-    "api:build": "npm install && npm run postinstall",
-    "start": "node --experimental-specifier-resolution=node src/dist/app.js",
+    "build": "tsc",
+    "api:build": "npm install && npm run build",
+    "start": "npm run build && node --experimental-specifier-resolution=node src/dist/app.js",
+    "postinstall": "npm run build",
     "lint": "prettier --write .",
     "watch": "cd ./src && tsc-watch --onsuccess \"node --experimental-specifier-resolution=node dist/app.js\"",
     "test": "mocha  --timeout 10000  --exit --require ./node_modules/ts-node/register 'test/**/*.ts'",
