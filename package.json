@@ -4,7 +4,8 @@
   "description": "coding challenge in Nodejs",
   "main": "app.js",
   "engines": {
-    "node": "12.14.1"
+    "node": "16.14.0",
+    "npm": "8.12.1"
   },
   "type": "module",
   "scripts": {
