@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "es2015",
+    "module": "ES6",
+    "sourceMap": true,
+    "outDir": "./src/dist",
+    "strict": true,
+    "noImplicitAny": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strictPropertyInitialization": false
+  },
+  "ts-node": {
+    "esm": true
+  },
+  "include": ["src/**/*", "test"],
+  "exclude": ["node_modules", "./**/*.spec.ts", "test/**/*.ts"]
+}

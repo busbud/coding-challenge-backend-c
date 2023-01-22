@@ -1,20 +1,56 @@
 {
   "name": "coding-challenge-backend-c",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "coding challenge in Nodejs",
   "main": "app.js",
+  "engines": {
+    "node": "12.14.1"
+  },
+  "type": "module",
   "scripts": {
-    "start": "node app.js",
-    "test": "./node_modules/mocha/bin/mocha ./test/"
+    "build": "tsc",
+    "api:build": "npm install && npm run build",
+    "start": "npm run build && node --experimental-specifier-resolution=node src/dist/app.js",
+    "lint": "prettier --write .",
+    "watch": "cd ./src && tsc-watch --onsuccess \"node --experimental-specifier-resolution=node dist/app.js\"",
+    "test": "mocha  --timeout 10000  --exit --require ./node_modules/ts-node/register 'test/**/*.ts'"
   },
   "author": "",
   "license": "WTFPL",
   "dependencies": {
+    "axios": "^1.2.3",
+    "body-parser": "^1.20.1",
     "chai": "^1.9.1",
-    "mocha": "^1.18.2",
-    "supertest": "^0.11.0"
+    "d3-dsv": "^3.0.1",
+    "dotenv": "^16.0.3",
+    "eslint": "^7.17.0",
+    "eslint-config-prettier": "^7.1.0",
+    "eslint-plugin-prettier": "^3.3.0",
+    "express": "^4.18.2",
+    "fs": "0.0.1-security",
+    "joi": "^17.7.0",
+    "lodash": "^4.17.21",
+    "node-cache": "^5.1.2",
+    "prettier": "^2.2.1",
+    "sinon": "^15.0.1",
+    "string-similarity": "^4.0.4",
+    "supertest": "^0.11.0",
+    "typescript": "^4.9.4"
   },
-  "engines": {
-    "node": "0.10.26"
+  "devDependencies": {
+    "@types/chai": "^4.3.4",
+    "@types/d3-dsv": "^3.0.1",
+    "@types/express": "^4.17.11",
+    "@types/lodash": "^4.14.191",
+    "@types/mocha": "^10.0.1",
+    "@types/sinon": "^10.0.13",
+    "@types/string-similarity": "^4.0.0",
+    "@types/supertest": "^2.0.12",
+    "@types/unidecode": "^0.1.1",
+    "@typescript-eslint/eslint-plugin": "^5.48.2",
+    "@typescript-eslint/parser": "^5.48.2",
+    "ts-node": "^10.9.1",
+    "tsc-watch": "^4.2.9",
+    "unidecode": "^0.1.8"
   }
 }
