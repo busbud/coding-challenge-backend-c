@@ -5,11 +5,10 @@
 To run the application locally, following the instructions below:
 
 1. Install node modules `npm i`
-2. Start the app with `npm run start` or `npm run watch` (puts the app in a watch mode so it refreshes if any change is made)
+2. Install node modules `run api:build`
+3. Start the app with `npm run start` or `npm run watch` (puts the app in a watch mode so it refreshes if any change is made)
 
 ### Starting the application
-
-The `npm run start` command will run the `build` command before starting the application. If you only care about getting the application running, feel free to skip this section.
 
 The `build` command transpiles the typescript files in the `src/` directory. The `build` command currently transpiles the files into the `dist` directory, which is then targeted by the start script. Transpiling these files is important since some environments are not equiped to run ES6 JavaScript/TypeScript code. AWS Lambda is a good example of this, as it only started supporting Node.js 12.x and ES6 in late 2019.
 
