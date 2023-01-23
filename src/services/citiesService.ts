@@ -56,30 +56,43 @@ export class CitiesService implements ICitiesService {
         );
 
         if (searchNameMatchCity && Number(location?.population) > ACCEPTED_MIN_POPULATION) {
+          const locationState = _.isNaN(Number(location?.admin1)) ? location?.admin1 : "";
+          const name = `${location?.name}, ${locationState}, ${
+            ACCEPTED_COUNTRIES_ENUM[location?.country]
+          }`;
           const suggestedLocationCoordinates = {
             latitude: Number(location?.lat),
             longitude: Number(location?.long),
           };
-          const locationCountry = location?.country || "";
-          const locationState = _.isNaN(Number(location?.admin1)) ? location?.admin1 : "";
+
+          /**
+           * Criteria for calculating score:
+           *    - if longitude and latitude values are provided, calculate location accuracy using coordinates
+           *    - if only city name query is provided, calculate accuracy using the name of city
+           */
+
+          const score = paramContainsCoordinates
+            ? this.getSuggestionAccuracyByLatAndLong({
+                suggestedLocationCoordinates,
+                longitude: Number(longitude),
+                latitude: Number(latitude),
+              })
+            : this.getSuggestionAccuracyByName(cityName, location?.name);
 
           return {
-            name: `${location?.name}, ${locationState}, ${ACCEPTED_COUNTRIES_ENUM[locationCountry]}`,
+            name,
             ...suggestedLocationCoordinates,
-            score: paramContainsCoordinates
-              ? this.getSuggestionAccuracyByLatAndLong({
-                  suggestedLocationCoordinates,
-                  longitude: Number(longitude),
-                  latitude: Number(latitude),
-                })
-              : this.getSuggestionAccuracyByName(cityName, location?.name),
+            score,
           };
         }
         return;
       });
 
+      // Format response of addresses without state by using google api endpoint to get detailed address if api key is provided
       const apiKeyProvided = !!googleApiKey;
       const formattedResult = apiKeyProvided ? await this.getDetailedAddress(result) : result;
+
+      // Sort response using score in descending order
       const suggestedCities = _.orderBy(formattedResult, ["score"], ["desc"]);
 
       return suggestedCities;
