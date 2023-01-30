@@ -4,7 +4,8 @@
   "description": "coding challenge in Nodejs",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "node dist/app.js",
+    "build": "tsc",
     "test": "./node_modules/mocha/bin/mocha ./test/"
   },
   "author": "",
@@ -12,7 +13,8 @@
   "dependencies": {
     "typescript": "^4.9.5",
     "jest": "^29.4.1",
-    "@types/jest": "^29.4.0"
+    "@types/jest": "^29.4.0",
+    "@types/node": "^18.11.18"
   },
   "engines": {
     "node": "19.1.0"
