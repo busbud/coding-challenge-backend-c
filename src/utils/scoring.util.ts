@@ -44,7 +44,17 @@ export function scoreByDistance(
 
 /** Sorts object on descending order based on score */
 export function sortByScore(cities: IGetCitySuggestion[]): IGetCitySuggestion[] {
-  return cities.sort((a, b) => (a.score >= b.score ? 1 : 0));
+  return cities.sort((a, b) => {
+    if (a.score > b.score) {
+      return -1
+    }
+
+    if (a.score < b.score) {
+      return 1
+    }
+
+    return 0
+  });
 }
 
 /** Calculates score for strings to be similar on the scale of 0 to 1 */
