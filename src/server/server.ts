@@ -1,4 +1,4 @@
-import express, {Express} from 'express';
+import express from 'express';
 import {CitiesSuggestionService} from '../services/suggestion_service';
 import {getCitiesDataFromFile} from '../utils/parser/tsv_parser';
 import {getSuggestionRequestValidator} from './requestValidators';
@@ -7,58 +7,22 @@ import {IApiConfig} from "../interfaces/interfaces";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const compression = require('compression');
 
-/**
- *  Main app to run this api server
- *  @constructor
- *  @param {number} port - HTTP port to run this app on
- *  @param {IApiConfig} config - API configuration for endpoints
-* */
-export class App {
-  private suggestionService: CitiesSuggestionService | undefined;
-  private server: Express;
-  private readonly serverPort: number;
-  private apiConfig: IApiConfig;
+const countriesSupported = process.env.COUNTRIES_SUPPORTED?.split(',') || ['CA', 'US'];
+const populationLimit = Number(process.env.POPULATION_LIMIT) || 5000;
+const apiConfig: IApiConfig = { countriesSupported, populationLimit }
 
-  constructor(port: number, config: IApiConfig) {
-    this.server = express();
-    this.server.use(compression())
-    this.serverPort = port;
-    this.apiConfig = config;
-  }
+let suggestionService: CitiesSuggestionService;
 
-  /** Initializes the application. */
-  public async init() {
-    try {
-      await this.initializeServices();
-      this.setupRoutes();
-      this.server.listen(this.serverPort, () => {
-        console.log('Server running at http://127.0.0.1:%d', this.serverPort);
-      });
-    } catch (e) {
-      console.error('Failed to start application', e);
-    }
-  }
+export const server = express();
+server.use(compression())
 
-  /** Initializes services by setting up all the params needed. */
-  private initializeServices() {
-    return new Promise((resolve, reject) => {
-      getCitiesDataFromFile(this.apiConfig.countriesSupported)
-        .then((data) => {
-          this.suggestionService = new CitiesSuggestionService(data);
-          resolve(true);
-        })
-        .catch((error) => {
-          reject(error);
-        });
+getCitiesDataFromFile(apiConfig.countriesSupported)
+    .then((data) => {
+      suggestionService = new CitiesSuggestionService(data);
+      const suggestionRouteHandler = setupSuggestionRoute(suggestionService);
+      server.get('/suggestions', getSuggestionRequestValidator, suggestionRouteHandler);
+    })
+    .catch((error) => {
+      console.log("Failed to get cities data from file. cannot start api server", error)
+      process.exit(1)
     });
-  }
-
-  /** Setup all express server routes */
-  private setupRoutes() {
-    if (this.suggestionService) {
-      const suggestionRouteHandler = setupSuggestionRoute(this.suggestionService);
-      this.server.get('/suggestions', getSuggestionRequestValidator, suggestionRouteHandler);
-      console.log('setup /suggestion route');
-    }
-  }
-}

@@ -16,11 +16,9 @@ export class CitiesSuggestionService {
 
   /** gets suggestions from cache or evaluate new ones */
   public get(params: GetSuggestionParams): IGetCitySuggestion[] {
-    console.log(params);
     let cacheKey = params.q;
     cacheKey += params.latitude && params.longitude ? params.longitude + params.latitude : '';
     if (this.#cache.has(cacheKey)) {
-      console.log("cache hit")
       const hit =  this.#cache.get<IGetCitySuggestion[] | undefined>(cacheKey);
       if (hit) {
         return hit
@@ -44,7 +42,6 @@ export class CitiesSuggestionService {
         ['CA', 'US'],
       );
     } else {
-      console.log("get cities")
       return this.getCities(params.q, 5000, ['CA', 'US']);
     }
   }
