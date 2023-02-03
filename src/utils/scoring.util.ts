@@ -4,6 +4,8 @@ import {getCityDetailString} from "./geography.util";
 /* eslint @typescript-eslint/no-var-requires: "off" */
 const distance = require('jaro-winkler');
 
+const SCORE_THRESHOLD = 0.7
+
 /** Calculates score for distance range on the scale of 0 to 1 */
 function calculateScoreForDistance(distances: number[]) {
   const min = Math.min(...distances);
@@ -14,17 +16,17 @@ function calculateScoreForDistance(distances: number[]) {
   });
 }
 
-/** Calculates score by factoring in string similarity and  distance score on the scale of 0 to 1 */
-function updateScoreBasedOnDistance(citySuggestions: IGetCitySuggestion[], scores: number[]) {
+/** Calculates score by factoring in string similarity and distance score on the scale of 0 to 1 */
+function updateScoreBasedOnDistance(citySuggestions: IGetCitySuggestion[], distanceScores: number[]) {
   const distanceWeight = 0.5;
   const spellingWeight = 0.5;
   return citySuggestions.map((suggestion, idx) => {
-    const score = suggestion.score * spellingWeight + scores[idx] * distanceWeight;
+    const score = suggestion.score * spellingWeight + distanceScores[idx] * distanceWeight;
     return {
       ...suggestion,
       score: Number(score.toFixed(1))
     };
-  });
+  }).filter(x => x.score > SCORE_THRESHOLD);
 }
 
 /** Calculates score for distance on the scale of 0 to 1 and updates the existing similarity score */
@@ -61,11 +63,12 @@ export function sortByScore(cities: IGetCitySuggestion[]): IGetCitySuggestion[] 
 export function scoreByNameSimilarity(cities: ICityRawData[], searchString: string): IGetCitySuggestion[] {
   const suggestedCities: IGetCitySuggestion[] = [];
   cities.forEach((c) => {
-    if (!c.ascii.toLowerCase().startsWith(searchString.toLowerCase())) {
-      return;
-    }
-    const similarityScore = distance(searchString, c.ascii, { caseSensitive: false });
-    if (similarityScore > 0.33) {
+    const specialCharsRegex = /[-.'\s]/g;
+    const cityNameSanitized = c.ascii.replace(specialCharsRegex, '');
+    const searchStringSanitized = searchString.replace(specialCharsRegex, '');
+
+    const similarityScore = distance(cityNameSanitized, searchStringSanitized, { caseSensitive: false });
+    if (similarityScore > SCORE_THRESHOLD) {
       suggestedCities.push({
         name: getCityDetailString(c),
         latitude: c.latitude,
