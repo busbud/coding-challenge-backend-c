@@ -5,25 +5,36 @@
   "main": "app.js",
   "scripts": {
     "start": "node dist/app.js",
-    "build": "tsc",
+    "build": "tsc --build --verbose",
     "test": "./node_modules/mocha/bin/mocha ./test/"
   },
   "author": "",
   "license": "WTFPL",
   "devDependencies": {
-    "prettier": "^2.8.0",
+    "@types/express": "^4.17.16",
+    "@types/jest": "^29.4.0",
+    "@types/node": "^18.11.18",
+    "@typescript-eslint/eslint-plugin": "^5.49.0",
     "eslint": "^8.28.0",
     "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-prettier": "^4.2.1",
     "eslint-import-resolver-typescript": "^3.5.2",
-    "@typescript-eslint/eslint-plugin": "^5.49.0",
     "eslint-plugin-import": "^2.26.0",
-    "typescript": "^4.9.5",
+    "eslint-plugin-prettier": "^4.2.1",
     "jest": "^29.4.1",
-    "@types/jest": "^29.4.0",
-    "@types/node": "^18.11.18"
+    "prettier": "^2.8.0",
+    "typescript": "^4.9.5"
   },
   "engines": {
     "node": "19.1.0"
-  }
+  },
+  "dependencies": {
+    "compression": "^1.7.4",
+    "express": "^4.18.2",
+    "geo-position.ts": "^1.4.1",
+    "jaro-winkler": "^0.2.8",
+    "memory-cache": "^0.2.0",
+    "node-cache": "^5.1.2",
+    "strings-similarity": "^1.1.0"
+  },
+  "type": "commonjs"
 }
