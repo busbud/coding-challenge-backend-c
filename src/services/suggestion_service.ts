@@ -17,7 +17,7 @@ export class CitiesSuggestionService {
   /** gets suggestions from cache or evaluate new ones */
   public get(params: GetSuggestionParams): IGetCitySuggestion[] {
     let cacheKey = params.q;
-    cacheKey += params.latitude && params.longitude ? params.longitude + params.latitude : '';
+    cacheKey += params.latitude && params.longitude ? Number(params.latitude).toFixed(3) + Number(params.longitude).toFixed(3) : '';
     if (this.#cache.has(cacheKey)) {
       const hit =  this.#cache.get<IGetCitySuggestion[] | undefined>(cacheKey);
       if (hit) {
