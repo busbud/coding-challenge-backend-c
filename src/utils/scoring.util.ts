@@ -51,10 +51,10 @@ export function sortByScore(cities: IGetCitySuggestion[]): IGetCitySuggestion[] 
 export function scoreByNameSimilarity(cities: ICityRawData[], searchString: string): IGetCitySuggestion[] {
   const suggestedCities: IGetCitySuggestion[] = [];
   cities.forEach((c) => {
-    if (!c.name.startsWith(searchString)) {
+    if (!c.ascii.toLowerCase().startsWith(searchString.toLowerCase())) {
       return;
     }
-    const similarityScore = distance(searchString, c.name, { caseSensitive: false });
+    const similarityScore = distance(searchString, c.ascii, { caseSensitive: false });
     if (similarityScore > 0.33) {
       suggestedCities.push({
         name: getCityDetailString(c),

@@ -31,7 +31,7 @@ export const CountryCodesMap: CountryCodeMap = {
 
 export function getCityDetailString(cityRawData: ICityRawData): string {
   const cityDetailsArray = [];
-  cityDetailsArray[0] = cityRawData.name;
+  cityDetailsArray[0] = cityRawData.ascii;
   if (cityRawData.country == 'CA') {
     cityDetailsArray[1] = CanadaProvincesAlphabetCode[Number(cityRawData.admin1)] || '';
   } else {

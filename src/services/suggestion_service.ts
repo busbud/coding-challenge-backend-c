@@ -7,11 +7,11 @@ import NodeCache from 'node-cache';
  * @param {ICityRawData[]} cities - cities data
  * */
 export class CitiesSuggestionService {
-  #citiesData: ICityRawData[];
+  private citiesData: ICityRawData[];
   #cache = new NodeCache({ deleteOnExpire: true });
 
   constructor(cities: ICityRawData[]) {
-    this.#citiesData = cities;
+    this.citiesData = cities;
   }
 
   /** gets suggestions from cache or evaluate new ones */
@@ -52,8 +52,8 @@ export class CitiesSuggestionService {
     minPopulation: number,
     countries: string[],
   ): IGetCitySuggestion[] {
-    const filteredCities = this.#citiesData.filter(
-      (c) => c.population > minPopulation && countries.includes(c.country),
+    const filteredCities = this.citiesData.filter(
+      (c) => Number(c.population) > minPopulation && countries.includes(c.country),
     );
     const suggestedCities: IGetCitySuggestion[] = scoreByNameSimilarity(filteredCities, searchString);
     return sortByScore(suggestedCities)

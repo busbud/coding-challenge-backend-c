@@ -18,7 +18,12 @@ export function setupSuggestionRoute(
       latitude,
     };
     const suggestions = suggestionService.get(params);
-    res.status(200);
-    suggestions.length ? res.json({ suggestions: suggestions }) : res.json({ suggestions: [] });
+    if (suggestions.length) {
+      res.status(200);
+      res.json({ suggestions: suggestions })
+    } else {
+      res.status(404);
+      res.json({ suggestions: [] });
+    }
   };
 }
