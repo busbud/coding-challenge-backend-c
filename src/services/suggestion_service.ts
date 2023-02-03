@@ -1,17 +1,17 @@
 import type {GetSuggestionParams, ICityRawData, IGetCitySuggestion,} from '../interfaces/interfaces';
 import {scoreByDistance, scoreByNameSimilarity, sortByScore} from '../utils/scoring.util';
-import NodeCache from 'node-cache';
+import NodeCache, {prototype} from 'node-cache';
 
 /** Service to get suggestions pulled from cities data
  * @constructor
  * @param {ICityRawData[]} cities - cities data
  * */
 export class CitiesSuggestionService {
-  private citiesData: ICityRawData[];
+  #citiesData: ICityRawData[];
   #cache = new NodeCache({ deleteOnExpire: true });
 
   constructor(cities: ICityRawData[]) {
-    this.citiesData = cities;
+    this.#citiesData = cities;
   }
 
   /** gets suggestions from cache or evaluate new ones */
@@ -52,7 +52,7 @@ export class CitiesSuggestionService {
     minPopulation: number,
     countries: string[],
   ): IGetCitySuggestion[] {
-    const filteredCities = this.citiesData.filter(
+    const filteredCities = this.#citiesData.filter(
       (c) => Number(c.population) > minPopulation && countries.includes(c.country),
     );
     const suggestedCities: IGetCitySuggestion[] = scoreByNameSimilarity(filteredCities, searchString);
