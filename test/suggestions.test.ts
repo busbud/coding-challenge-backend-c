@@ -56,10 +56,59 @@ describe('GET /suggestions', function() {
     });
 
     it('contains a match', function () {
-      json.suggestions.some((c: IGetCitySuggestion) => {
-        expect(c.name).toMatch(/montreal/i)
-      })
+      expect(json.suggestions.map(c => c.name)).toContainEqual(expect.stringContaining("Montreal"))
 
+    });
+  });
+
+  describe('returns error when query parameters are invalid', function () {
+    it('returns 400 when q is not present', async ()=> {
+      const result = await supertest(await createServer())
+          .get('/suggestions')
+      const json = JSON.parse(result.text);
+      expect(result.statusCode).toEqual(400);
+      expect(json.error).toStrictEqual('q must not be empty')
+    });
+
+    it('returns 400 when q length is more than 100 characters', async ()=> {
+      const s = "s".repeat(100);
+      const result = await supertest(await createServer())
+          .get(`/suggestions?q=${s}`)
+      const json = JSON.parse(result.text);
+      expect(result.statusCode).toEqual(400);
+      expect(json.error).toStrictEqual('q length must not be less than 100')
+    });
+
+    it('returns 400 when longitude is not present', async ()=> {
+      const result = await supertest(await createServer())
+          .get('/suggestions?q=some&latitude=12')
+      const json = JSON.parse(result.text);
+      expect(result.statusCode).toEqual(400);
+      expect(json.error).toStrictEqual('latitude and longitude must be provided and be valid')
+    });
+
+    it('returns 400 when longitude is not valid', async ()=> {
+      const result = await supertest(await createServer())
+          .get('/suggestions?q=some&longitude=s&latitude=12')
+      const json = JSON.parse(result.text);
+      expect(result.statusCode).toEqual(400);
+      expect(json.error).toStrictEqual('latitude and longitude must be provided and be valid')
+    });
+
+    it('returns 400 when latitude is not present', async ()=> {
+      const result = await supertest(await createServer())
+          .get('/suggestions?q=some&latitude=12')
+      const json = JSON.parse(result.text);
+      expect(result.statusCode).toEqual(400);
+      expect(json.error).toStrictEqual('latitude and longitude must be provided and be valid')
+    });
+
+    it('returns 400 when latitude is not valid', async ()=> {
+      const result = await supertest(await createServer())
+          .get('/suggestions?q=some&latitude=s&longitude=12')
+      const json = JSON.parse(result.text);
+      expect(result.statusCode).toEqual(400);
+      expect(json.error).toStrictEqual('latitude and longitude must be provided and be valid')
     });
   });
 

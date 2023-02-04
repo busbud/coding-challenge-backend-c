@@ -14,6 +14,11 @@ export const getSuggestionRequestValidator = (req: Request, res: Response, next:
     res.json({error: 'q must not be empty'});
     res.end();
     return;
+  } else if (q?.length >= 100) {
+    res.status(400)
+    res.json({error: 'q length must not be less than 100'});
+    res.end();
+    return;
   }
 
   if (!latitude && !longitude) {
