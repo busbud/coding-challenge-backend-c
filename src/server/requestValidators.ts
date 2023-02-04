@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express';
+import {NextFunction, Request, Response} from 'express';
 
 /** Validates GET suggestions query parameters */
 export const getSuggestionRequestValidator = (req: Request, res: Response, next: NextFunction) => {

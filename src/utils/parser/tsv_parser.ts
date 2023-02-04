@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as readline from 'readline';
-import { tabbedGeoDataToObject } from './tsv_utils';
-import { ICityRawData } from '../../interfaces/interfaces';
+import {tabbedGeoDataToObject} from './tsv_utils';
+import {ICityRawData} from '../../interfaces/interfaces';
 
 /** Parses tsv file to array of ICityRawData objects */
 async function parseCitiesDataFile(fileLocation: string): Promise<ICityRawData[]> {
@@ -32,10 +32,7 @@ export async function getCitiesDataFromFile(countries: string[]): Promise<ICityR
   return filterCitiesByCountries(cities, countries);
 }
 
-function filterCitiesByCountries(
-    cities: ICityRawData[],
-    countryCodes: string[],
-): ICityRawData[] {
+function filterCitiesByCountries(cities: ICityRawData[], countryCodes: string[]): ICityRawData[] {
   const countryCodeSet = new Set(countryCodes);
   return cities.filter((c) => countryCodeSet.has(c.country));
 }
