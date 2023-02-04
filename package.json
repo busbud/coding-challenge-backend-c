@@ -39,7 +39,7 @@
     "express": "^4.18.2",
     "geo-position.ts": "^1.4.1",
     "node-cache": "^5.1.2",
-    "string-similarity": "^4.0.4"
+    "jaro-winkler-typescript": "^1.0.1"
   },
   "type": "commonjs"
 }
