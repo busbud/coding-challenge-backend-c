@@ -1,3 +1,5 @@
+import * as dotenv from 'dotenv'
+dotenv.config()
 import {startServer} from './server/server';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const cluster = require('cluster');
