@@ -10,7 +10,8 @@ export const getSuggestionRequestValidator = (req: Request, res: Response, next:
   const longitude = req.query.longitude as string;
 
   if (!q || (q && !q.length)) {
-    res.send('q must not be empty');
+    res.status(400)
+    res.json({error: 'q must not be empty'});
     res.end();
     return;
   }
@@ -20,7 +21,8 @@ export const getSuggestionRequestValidator = (req: Request, res: Response, next:
   } else if (latitude && longitude && regexExp.test(latitude) && regexExp.test(longitude)) {
     next();
   } else {
-    res.send('latitude and longitude must be provided and be valid');
+    res.status(400)
+    res.json({error: 'latitude and longitude must be provided and be valid'});
     res.end();
     return;
   }
