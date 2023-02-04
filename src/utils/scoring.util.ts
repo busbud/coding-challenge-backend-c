@@ -4,7 +4,7 @@ import {getCityDetailString} from './geography.util';
 /* eslint @typescript-eslint/no-var-requires: "off" */
 const distance = require('jaro-winkler');
 
-const SCORE_THRESHOLD = 0.7;
+export const SCORE_THRESHOLD = 0.77;
 
 /** Calculates score for distance range on the scale of 0 to 1 */
 function calculateScoreForDistance(distances: number[]) {
