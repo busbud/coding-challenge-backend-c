@@ -9,7 +9,7 @@ export interface ICityRawData {
   feat_code: string;
   country: string;
   cc2: string | undefined;
-  admin1: string | undefined;
+  admin1: string;
   admin2: string | undefined;
   admin3: string | undefined;
   admin4: string | undefined;

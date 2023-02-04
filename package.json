@@ -4,6 +4,7 @@
   "description": "coding challenge in Nodejs",
   "main": "app.js",
   "scripts": {
+    "lint": "eslint",
     "start": "node dist/app.js",
     "dev": "nodemon src/app.ts",
     "build": "tsc --build --verbose",
