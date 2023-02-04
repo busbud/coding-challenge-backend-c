@@ -2,9 +2,9 @@ import {GeoPosition} from 'geo-position.ts';
 import {ICityRawData, IGetCitySuggestion} from '../interfaces/interfaces';
 import {getCityDetailString} from './geography.util';
 /* eslint @typescript-eslint/no-var-requires: "off" */
-const distance = require('jaro-winkler');
+const stringSimilarity = require("string-similarity");
 
-export const SCORE_THRESHOLD = 0.77;
+export const SCORE_THRESHOLD = 0.33;
 
 /** Calculates score for distance range on the scale of 0 to 1 */
 function calculateScoreForDistance(distances: number[]) {
@@ -74,8 +74,10 @@ export function scoreByNameSimilarity(
     const specialCharsRegex = /[-.'\s]/g;
     const cityNameSanitized = c.ascii.replace(specialCharsRegex, '');
     const searchStringSanitized = searchString.replace(specialCharsRegex, '');
-
-    const similarityScore = distance(cityNameSanitized, searchStringSanitized, {
+    if (searchStringSanitized > cityNameSanitized) {
+      return;
+    }
+    const similarityScore = stringSimilarity.compareTwoStrings(cityNameSanitized, searchStringSanitized, {
       caseSensitive: false,
     });
     if (similarityScore > SCORE_THRESHOLD) {
