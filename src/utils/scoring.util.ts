@@ -1,7 +1,7 @@
-import {GeoPosition} from 'geo-position.ts';
-import {ICityRawData, IGetCitySuggestion} from '../interfaces/interfaces';
-import {getCityDetailString} from './geography.util';
-import { jaroWinkler}  from 'jaro-winkler-typescript';
+import { GeoPosition } from 'geo-position.ts';
+import { ICityRawData, IGetCitySuggestion } from '../interfaces/interfaces';
+import { getCityDetailString } from './geography.util';
+import { jaroWinkler } from 'jaro-winkler-typescript';
 
 export const SCORE_THRESHOLD = 0.7;
 

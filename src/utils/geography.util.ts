@@ -30,6 +30,9 @@ export const CountryCodesMap: CountryCodeMap = {
 };
 
 export function getCityDetailString(cityRawData: ICityRawData): string {
-  const provinceCode = cityRawData.country === 'CA' ? CanadaProvincesAlphabetCode[Number(cityRawData.admin1)] : cityRawData.admin1
-  return `${cityRawData.ascii}, ${provinceCode}, ${CountryCodesMap[cityRawData.country]}`
+  const provinceCode =
+    cityRawData.country === 'CA'
+      ? CanadaProvincesAlphabetCode[Number(cityRawData.admin1)]
+      : cityRawData.admin1;
+  return `${cityRawData.ascii}, ${provinceCode}, ${CountryCodesMap[cityRawData.country]}`;
 }

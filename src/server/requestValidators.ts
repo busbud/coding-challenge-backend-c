@@ -10,13 +10,13 @@ export const getSuggestionRequestValidator = (req: Request, res: Response, next:
   const longitude = req.query.longitude as string;
 
   if (!q || (q && !q.length)) {
-    res.status(400)
-    res.json({error: 'q must not be empty'});
+    res.status(400);
+    res.json({ error: 'q must not be empty' });
     res.end();
     return;
   } else if (q?.length >= 100) {
-    res.status(400)
-    res.json({error: 'q length must not be less than 100'});
+    res.status(400);
+    res.json({ error: 'q length must not be less than 100' });
     res.end();
     return;
   }
@@ -26,8 +26,8 @@ export const getSuggestionRequestValidator = (req: Request, res: Response, next:
   } else if (latitude && longitude && regexExp.test(latitude) && regexExp.test(longitude)) {
     next();
   } else {
-    res.status(400)
-    res.json({error: 'latitude and longitude must be provided and be valid'});
+    res.status(400);
+    res.json({ error: 'latitude and longitude must be provided and be valid' });
     res.end();
     return;
   }
