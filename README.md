@@ -14,7 +14,7 @@ The suggestions should be restricted to cities in the USA and Canada with a popu
     - each suggestion has a name which can be used to disambiguate between similarly named locations
     - each suggestion has a latitude and longitude
 - all functional tests should pass (additional tests may be implemented as necessary).
-- the final application should be [deployed to Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs).
+- the final application should be available publicly. You can use any hosting solution of your choice ([Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs), [GCP](https://cloud.google.com/run/docs/quickstarts/deploy-container), etc.).
 - feel free to add more features if you like!
 
 #### Sample responses
@@ -69,7 +69,7 @@ These responses are meant to provide guidance. The exact values can vary based o
 
 ### Non-functional
 
-- All code should be written in Javascript, Typescript or PHP.
+- All code should be written in Javascript or Typescript.
 - Mitigations to handle high levels of traffic should be implemented.
 - Challenge is submitted as pull request against this repo ([fork it](https://help.github.com/articles/fork-a-repo/) and [create a pull request](https://help.github.com/articles/creating-a-pull-request-from-a-fork/)).
 - Documentation and maintainability is a plus.
