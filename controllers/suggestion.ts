@@ -53,7 +53,7 @@ export const getSuggestions = async (req: Request, res: Response) => {
             const cityName = city.name as string;
             const country = city.country === 'CA' ? 'Canada' : 'USA';
             const state = city.admin1 as string;
-            const state_provinceName = country === 'Canada' ? checkForFIPSCodes(state, country) : state;
+            const state_provinceName = checkForFIPSCodes(state, country);
 
             // Calculate score based on search term and optionally caller's location
             const score = calculateScore(q, qLatitude, qLongitude, cityName, city);

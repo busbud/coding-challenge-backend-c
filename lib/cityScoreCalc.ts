@@ -1,15 +1,15 @@
 import { City } from "../utils/interfaces";
 import { getDistanceFromLatLonInKm } from "./distanceCalculator";
 
-export const  calculateScore = (q: string, qLatitude: string, qLongitude: string, cityName: string, city: City): number => {
+export const  calculateScore = (queryString: string, qLatitude: string, qLongitude: string, cityName: string, city: City): number => {
     let score = 0;
 
     // console.log(`cityName: ${cityName}`);
     // console.log(`city: ${JSON.stringify(city)}`);
 
-    if (cityName.toLowerCase().startsWith(q.toLowerCase())) {
+    if (cityName.toLowerCase().startsWith(queryString.toLowerCase())) {
         score = 0.8;
-    } else if (cityName.toLowerCase().includes(q.toLowerCase())) {
+    } else if (cityName.toLowerCase().includes(queryString.toLowerCase())) {
         score = 0.6;
     }
 

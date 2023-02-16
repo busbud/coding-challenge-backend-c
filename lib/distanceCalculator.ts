@@ -1,4 +1,6 @@
 
+
+// simple algorithm to calculate the score based on the Levenshtein distance between the search term and the city name.
 // Function to calculate distance between two points given their latitude and longitude
 export const getDistanceFromLatLonInKm = (lat1: number, lon1: number, lat2: number, lon2: number): number  => {
     const R = 6371; // Radius of the earth in km
