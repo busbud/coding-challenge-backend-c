@@ -1,11 +1,12 @@
 {
     "compilerOptions": {
-        "target": "es6",
-        "module": "commonjs",
-        "outDir": "./dist",
-        "strict": true,
-        "esModuleInterop": true,
-        "skipLibCheck": true
+    "module": "CommonJS",
+    "esModuleInterop": true,
+    "target": "es6",
+    "moduleResolution": "node",
+    "outDir": "./dist",
+    "strict": true,
+    "sourceMap": true
     },
     "exclude": [
         "node_modules",

@@ -17,7 +17,6 @@ const fipsCodesCanada: { [key: string]: string } = {
 export const checkForFIPSCodes = (stateAdminCode: string, country: string) => {
   if (country === 'Canada' && stateAdminCode) {
     if (fipsCodesCanada[stateAdminCode]) {
-      console.log(fipsCodesCanada[stateAdminCode])
       return fipsCodesCanada[stateAdminCode];
     }
   }

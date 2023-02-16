@@ -4,7 +4,7 @@
   "description": "coding challenge in Nodejs",
   "main": "app.ts",
   "scripts": {
-    "start": "node app.ts",
+    "start": "tsc && node dist/app.js",
     "dev": "nodemon app.ts",
     "test": "./node_modules/mocha/bin/mocha ./test/"
   },
