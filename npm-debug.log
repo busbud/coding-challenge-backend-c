@@ -1,0 +1,701 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/Users/extraboost/.nvm/v0.10.26/bin/node',
+1 verbose cli   '/Users/extraboost/.nvm/v0.10.26/bin/npm',
+1 verbose cli   'install' ]
+2 info using npm@1.4.3
+3 info using node@v0.10.26
+4 warn package.json coding-challenge-backend-c@0.0.1 No repository field.
+5 verbose readDependencies using package.json deps
+6 verbose install where, deps [ '/Users/extraboost/Documents/GitHub/coding-challenge-backend-c',
+6 verbose install   [ 'express',
+6 verbose install     'redis',
+6 verbose install     'supertest',
+6 verbose install     'typescript',
+6 verbose install     'tsc',
+6 verbose install     '@types/chai',
+6 verbose install     '@types/express',
+6 verbose install     '@types/mocha',
+6 verbose install     '@types/supertest',
+6 verbose install     'chai',
+6 verbose install     'mocha' ] ]
+7 info preinstall coding-challenge-backend-c@0.0.1
+8 verbose readDependencies using package.json deps
+9 verbose cache add [ 'express@^4.18.2', null ]
+10 verbose cache add name=undefined spec="express@^4.18.2" args=["express@^4.18.2",null]
+11 verbose parsed url { protocol: null,
+11 verbose parsed url   slashes: null,
+11 verbose parsed url   auth: null,
+11 verbose parsed url   host: null,
+11 verbose parsed url   port: null,
+11 verbose parsed url   hostname: null,
+11 verbose parsed url   hash: null,
+11 verbose parsed url   search: null,
+11 verbose parsed url   query: null,
+11 verbose parsed url   pathname: 'express@^4.18.2',
+11 verbose parsed url   path: 'express@^4.18.2',
+11 verbose parsed url   href: 'express@^4.18.2' }
+12 verbose cache add name="express" spec="^4.18.2" args=["express","^4.18.2"]
+13 verbose parsed url { protocol: null,
+13 verbose parsed url   slashes: null,
+13 verbose parsed url   auth: null,
+13 verbose parsed url   host: null,
+13 verbose parsed url   port: null,
+13 verbose parsed url   hostname: null,
+13 verbose parsed url   hash: null,
+13 verbose parsed url   search: null,
+13 verbose parsed url   query: null,
+13 verbose parsed url   pathname: '^4.18.2',
+13 verbose parsed url   path: '^4.18.2',
+13 verbose parsed url   href: '^4.18.2' }
+14 verbose addNamed [ 'express', '^4.18.2' ]
+15 verbose addNamed [ null, '>=4.18.2-0 <5.0.0-0' ]
+16 verbose cache add [ 'redis@^4.6.4', null ]
+17 verbose cache add name=undefined spec="redis@^4.6.4" args=["redis@^4.6.4",null]
+18 verbose parsed url { protocol: null,
+18 verbose parsed url   slashes: null,
+18 verbose parsed url   auth: null,
+18 verbose parsed url   host: null,
+18 verbose parsed url   port: null,
+18 verbose parsed url   hostname: null,
+18 verbose parsed url   hash: null,
+18 verbose parsed url   search: null,
+18 verbose parsed url   query: null,
+18 verbose parsed url   pathname: 'redis@^4.6.4',
+18 verbose parsed url   path: 'redis@^4.6.4',
+18 verbose parsed url   href: 'redis@^4.6.4' }
+19 verbose cache add name="redis" spec="^4.6.4" args=["redis","^4.6.4"]
+20 verbose parsed url { protocol: null,
+20 verbose parsed url   slashes: null,
+20 verbose parsed url   auth: null,
+20 verbose parsed url   host: null,
+20 verbose parsed url   port: null,
+20 verbose parsed url   hostname: null,
+20 verbose parsed url   hash: null,
+20 verbose parsed url   search: null,
+20 verbose parsed url   query: null,
+20 verbose parsed url   pathname: '^4.6.4',
+20 verbose parsed url   path: '^4.6.4',
+20 verbose parsed url   href: '^4.6.4' }
+21 verbose addNamed [ 'redis', '^4.6.4' ]
+22 verbose addNamed [ null, '>=4.6.4-0 <5.0.0-0' ]
+23 silly lockFile c00c43a5-express-4-18-2 express@^4.18.2
+24 verbose lock express@^4.18.2 /Users/extraboost/.npm/c00c43a5-express-4-18-2.lock
+25 silly lockFile 064025de-redis-4-6-4 redis@^4.6.4
+26 verbose lock redis@^4.6.4 /Users/extraboost/.npm/064025de-redis-4-6-4.lock
+27 verbose cache add [ 'typescript@^4.9.5', null ]
+28 verbose cache add name=undefined spec="typescript@^4.9.5" args=["typescript@^4.9.5",null]
+29 verbose parsed url { protocol: null,
+29 verbose parsed url   slashes: null,
+29 verbose parsed url   auth: null,
+29 verbose parsed url   host: null,
+29 verbose parsed url   port: null,
+29 verbose parsed url   hostname: null,
+29 verbose parsed url   hash: null,
+29 verbose parsed url   search: null,
+29 verbose parsed url   query: null,
+29 verbose parsed url   pathname: 'typescript@^4.9.5',
+29 verbose parsed url   path: 'typescript@^4.9.5',
+29 verbose parsed url   href: 'typescript@^4.9.5' }
+30 verbose cache add name="typescript" spec="^4.9.5" args=["typescript","^4.9.5"]
+31 verbose parsed url { protocol: null,
+31 verbose parsed url   slashes: null,
+31 verbose parsed url   auth: null,
+31 verbose parsed url   host: null,
+31 verbose parsed url   port: null,
+31 verbose parsed url   hostname: null,
+31 verbose parsed url   hash: null,
+31 verbose parsed url   search: null,
+31 verbose parsed url   query: null,
+31 verbose parsed url   pathname: '^4.9.5',
+31 verbose parsed url   path: '^4.9.5',
+31 verbose parsed url   href: '^4.9.5' }
+32 verbose addNamed [ 'typescript', '^4.9.5' ]
+33 verbose addNamed [ null, '>=4.9.5-0 <5.0.0-0' ]
+34 silly lockFile 301df0be-typescript-4-9-5 typescript@^4.9.5
+35 verbose lock typescript@^4.9.5 /Users/extraboost/.npm/301df0be-typescript-4-9-5.lock
+36 verbose cache add [ 'supertest@^0.11.0', null ]
+37 verbose cache add name=undefined spec="supertest@^0.11.0" args=["supertest@^0.11.0",null]
+38 verbose parsed url { protocol: null,
+38 verbose parsed url   slashes: null,
+38 verbose parsed url   auth: null,
+38 verbose parsed url   host: null,
+38 verbose parsed url   port: null,
+38 verbose parsed url   hostname: null,
+38 verbose parsed url   hash: null,
+38 verbose parsed url   search: null,
+38 verbose parsed url   query: null,
+38 verbose parsed url   pathname: 'supertest@^0.11.0',
+38 verbose parsed url   path: 'supertest@^0.11.0',
+38 verbose parsed url   href: 'supertest@^0.11.0' }
+39 verbose cache add name="supertest" spec="^0.11.0" args=["supertest","^0.11.0"]
+40 verbose parsed url { protocol: null,
+40 verbose parsed url   slashes: null,
+40 verbose parsed url   auth: null,
+40 verbose parsed url   host: null,
+40 verbose parsed url   port: null,
+40 verbose parsed url   hostname: null,
+40 verbose parsed url   hash: null,
+40 verbose parsed url   search: null,
+40 verbose parsed url   query: null,
+40 verbose parsed url   pathname: '^0.11.0',
+40 verbose parsed url   path: '^0.11.0',
+40 verbose parsed url   href: '^0.11.0' }
+41 verbose addNamed [ 'supertest', '^0.11.0' ]
+42 verbose addNamed [ null, '>=0.11.0-0 <0.12.0-0' ]
+43 silly lockFile 6541f036-supertest-0-11-0 supertest@^0.11.0
+44 verbose lock supertest@^0.11.0 /Users/extraboost/.npm/6541f036-supertest-0-11-0.lock
+45 verbose cache add [ 'tsc@^4.4.4', null ]
+46 verbose cache add name=undefined spec="tsc@^4.4.4" args=["tsc@^4.4.4",null]
+47 verbose parsed url { protocol: null,
+47 verbose parsed url   slashes: null,
+47 verbose parsed url   auth: null,
+47 verbose parsed url   host: null,
+47 verbose parsed url   port: null,
+47 verbose parsed url   hostname: null,
+47 verbose parsed url   hash: null,
+47 verbose parsed url   search: null,
+47 verbose parsed url   query: null,
+47 verbose parsed url   pathname: 'tsc@^4.4.4',
+47 verbose parsed url   path: 'tsc@^4.4.4',
+47 verbose parsed url   href: 'tsc@^4.4.4' }
+48 verbose cache add name="tsc" spec="^4.4.4" args=["tsc","^4.4.4"]
+49 verbose parsed url { protocol: null,
+49 verbose parsed url   slashes: null,
+49 verbose parsed url   auth: null,
+49 verbose parsed url   host: null,
+49 verbose parsed url   port: null,
+49 verbose parsed url   hostname: null,
+49 verbose parsed url   hash: null,
+49 verbose parsed url   search: null,
+49 verbose parsed url   query: null,
+49 verbose parsed url   pathname: '^4.4.4',
+49 verbose parsed url   path: '^4.4.4',
+49 verbose parsed url   href: '^4.4.4' }
+50 verbose addNamed [ 'tsc', '^4.4.4' ]
+51 verbose addNamed [ null, '>=4.4.4-0 <5.0.0-0' ]
+52 silly lockFile a665e258-tsc-4-4-4 tsc@^4.4.4
+53 verbose lock tsc@^4.4.4 /Users/extraboost/.npm/a665e258-tsc-4-4-4.lock
+54 verbose cache add [ '@types/chai@^4.3.4', null ]
+55 verbose cache add name=undefined spec="@types/chai@^4.3.4" args=["@types/chai@^4.3.4",null]
+56 verbose parsed url { protocol: null,
+56 verbose parsed url   slashes: null,
+56 verbose parsed url   auth: null,
+56 verbose parsed url   host: null,
+56 verbose parsed url   port: null,
+56 verbose parsed url   hostname: null,
+56 verbose parsed url   hash: null,
+56 verbose parsed url   search: null,
+56 verbose parsed url   query: null,
+56 verbose parsed url   pathname: '@types/chai@^4.3.4',
+56 verbose parsed url   path: '@types/chai@^4.3.4',
+56 verbose parsed url   href: '@types/chai@^4.3.4' }
+57 verbose cache add [ '@types/express@^4.17.17', null ]
+58 verbose cache add name=undefined spec="@types/express@^4.17.17" args=["@types/express@^4.17.17",null]
+59 verbose parsed url { protocol: null,
+59 verbose parsed url   slashes: null,
+59 verbose parsed url   auth: null,
+59 verbose parsed url   host: null,
+59 verbose parsed url   port: null,
+59 verbose parsed url   hostname: null,
+59 verbose parsed url   hash: null,
+59 verbose parsed url   search: null,
+59 verbose parsed url   query: null,
+59 verbose parsed url   pathname: '@types/express@^4.17.17',
+59 verbose parsed url   path: '@types/express@^4.17.17',
+59 verbose parsed url   href: '@types/express@^4.17.17' }
+60 verbose cache add [ '@types/mocha@^10.0.1', null ]
+61 verbose cache add name=undefined spec="@types/mocha@^10.0.1" args=["@types/mocha@^10.0.1",null]
+62 verbose parsed url { protocol: null,
+62 verbose parsed url   slashes: null,
+62 verbose parsed url   auth: null,
+62 verbose parsed url   host: null,
+62 verbose parsed url   port: null,
+62 verbose parsed url   hostname: null,
+62 verbose parsed url   hash: null,
+62 verbose parsed url   search: null,
+62 verbose parsed url   query: null,
+62 verbose parsed url   pathname: '@types/mocha@^10.0.1',
+62 verbose parsed url   path: '@types/mocha@^10.0.1',
+62 verbose parsed url   href: '@types/mocha@^10.0.1' }
+63 verbose cache add [ '@types/supertest@^2.0.12', null ]
+64 verbose cache add name=undefined spec="@types/supertest@^2.0.12" args=["@types/supertest@^2.0.12",null]
+65 verbose parsed url { protocol: null,
+65 verbose parsed url   slashes: null,
+65 verbose parsed url   auth: null,
+65 verbose parsed url   host: null,
+65 verbose parsed url   port: null,
+65 verbose parsed url   hostname: null,
+65 verbose parsed url   hash: null,
+65 verbose parsed url   search: null,
+65 verbose parsed url   query: null,
+65 verbose parsed url   pathname: '@types/supertest@^2.0.12',
+65 verbose parsed url   path: '@types/supertest@^2.0.12',
+65 verbose parsed url   href: '@types/supertest@^2.0.12' }
+66 silly addNameRange { name: 'express', range: '>=4.18.2-0 <5.0.0-0', hasData: false }
+67 silly addNameRange { name: 'redis', range: '>=4.6.4-0 <5.0.0-0', hasData: false }
+68 silly addNameRange { name: 'typescript',
+68 silly addNameRange   range: '>=4.9.5-0 <5.0.0-0',
+68 silly addNameRange   hasData: false }
+69 silly addNameRange { name: 'supertest',
+69 silly addNameRange   range: '>=0.11.0-0 <0.12.0-0',
+69 silly addNameRange   hasData: false }
+70 verbose cache add name="" spec="types/chai@^4.3.4" args=["","types/chai@^4.3.4"]
+71 verbose parsed url { protocol: null,
+71 verbose parsed url   slashes: null,
+71 verbose parsed url   auth: null,
+71 verbose parsed url   host: null,
+71 verbose parsed url   port: null,
+71 verbose parsed url   hostname: null,
+71 verbose parsed url   hash: null,
+71 verbose parsed url   search: null,
+71 verbose parsed url   query: null,
+71 verbose parsed url   pathname: 'types/chai@^4.3.4',
+71 verbose parsed url   path: 'types/chai@^4.3.4',
+71 verbose parsed url   href: 'types/chai@^4.3.4' }
+72 verbose cache add name="" spec="types/express@^4.17.17" args=["","types/express@^4.17.17"]
+73 verbose parsed url { protocol: null,
+73 verbose parsed url   slashes: null,
+73 verbose parsed url   auth: null,
+73 verbose parsed url   host: null,
+73 verbose parsed url   port: null,
+73 verbose parsed url   hostname: null,
+73 verbose parsed url   hash: null,
+73 verbose parsed url   search: null,
+73 verbose parsed url   query: null,
+73 verbose parsed url   pathname: 'types/express@^4.17.17',
+73 verbose parsed url   path: 'types/express@^4.17.17',
+73 verbose parsed url   href: 'types/express@^4.17.17' }
+74 verbose cache add name="" spec="types/mocha@^10.0.1" args=["","types/mocha@^10.0.1"]
+75 verbose parsed url { protocol: null,
+75 verbose parsed url   slashes: null,
+75 verbose parsed url   auth: null,
+75 verbose parsed url   host: null,
+75 verbose parsed url   port: null,
+75 verbose parsed url   hostname: null,
+75 verbose parsed url   hash: null,
+75 verbose parsed url   search: null,
+75 verbose parsed url   query: null,
+75 verbose parsed url   pathname: 'types/mocha@^10.0.1',
+75 verbose parsed url   path: 'types/mocha@^10.0.1',
+75 verbose parsed url   href: 'types/mocha@^10.0.1' }
+76 verbose cache add name="" spec="types/supertest@^2.0.12" args=["","types/supertest@^2.0.12"]
+77 verbose parsed url { protocol: null,
+77 verbose parsed url   slashes: null,
+77 verbose parsed url   auth: null,
+77 verbose parsed url   host: null,
+77 verbose parsed url   port: null,
+77 verbose parsed url   hostname: null,
+77 verbose parsed url   hash: null,
+77 verbose parsed url   search: null,
+77 verbose parsed url   query: null,
+77 verbose parsed url   pathname: 'types/supertest@^2.0.12',
+77 verbose parsed url   path: 'types/supertest@^2.0.12',
+77 verbose parsed url   href: 'types/supertest@^2.0.12' }
+78 verbose cache add [ 'chai@^4.3.7', null ]
+79 verbose cache add name=undefined spec="chai@^4.3.7" args=["chai@^4.3.7",null]
+80 verbose parsed url { protocol: null,
+80 verbose parsed url   slashes: null,
+80 verbose parsed url   auth: null,
+80 verbose parsed url   host: null,
+80 verbose parsed url   port: null,
+80 verbose parsed url   hostname: null,
+80 verbose parsed url   hash: null,
+80 verbose parsed url   search: null,
+80 verbose parsed url   query: null,
+80 verbose parsed url   pathname: 'chai@^4.3.7',
+80 verbose parsed url   path: 'chai@^4.3.7',
+80 verbose parsed url   href: 'chai@^4.3.7' }
+81 verbose cache add name="chai" spec="^4.3.7" args=["chai","^4.3.7"]
+82 verbose parsed url { protocol: null,
+82 verbose parsed url   slashes: null,
+82 verbose parsed url   auth: null,
+82 verbose parsed url   host: null,
+82 verbose parsed url   port: null,
+82 verbose parsed url   hostname: null,
+82 verbose parsed url   hash: null,
+82 verbose parsed url   search: null,
+82 verbose parsed url   query: null,
+82 verbose parsed url   pathname: '^4.3.7',
+82 verbose parsed url   path: '^4.3.7',
+82 verbose parsed url   href: '^4.3.7' }
+83 verbose addNamed [ 'chai', '^4.3.7' ]
+84 verbose addNamed [ null, '>=4.3.7-0 <5.0.0-0' ]
+85 silly lockFile 21630b6c-chai-4-3-7 chai@^4.3.7
+86 verbose lock chai@^4.3.7 /Users/extraboost/.npm/21630b6c-chai-4-3-7.lock
+87 verbose cache add [ 'mocha@^10.2.0', null ]
+88 verbose cache add name=undefined spec="mocha@^10.2.0" args=["mocha@^10.2.0",null]
+89 verbose parsed url { protocol: null,
+89 verbose parsed url   slashes: null,
+89 verbose parsed url   auth: null,
+89 verbose parsed url   host: null,
+89 verbose parsed url   port: null,
+89 verbose parsed url   hostname: null,
+89 verbose parsed url   hash: null,
+89 verbose parsed url   search: null,
+89 verbose parsed url   query: null,
+89 verbose parsed url   pathname: 'mocha@^10.2.0',
+89 verbose parsed url   path: 'mocha@^10.2.0',
+89 verbose parsed url   href: 'mocha@^10.2.0' }
+90 verbose cache add name="mocha" spec="^10.2.0" args=["mocha","^10.2.0"]
+91 verbose parsed url { protocol: null,
+91 verbose parsed url   slashes: null,
+91 verbose parsed url   auth: null,
+91 verbose parsed url   host: null,
+91 verbose parsed url   port: null,
+91 verbose parsed url   hostname: null,
+91 verbose parsed url   hash: null,
+91 verbose parsed url   search: null,
+91 verbose parsed url   query: null,
+91 verbose parsed url   pathname: '^10.2.0',
+91 verbose parsed url   path: '^10.2.0',
+91 verbose parsed url   href: '^10.2.0' }
+92 verbose addNamed [ 'mocha', '^10.2.0' ]
+93 verbose addNamed [ null, '>=10.2.0-0 <11.0.0-0' ]
+94 silly lockFile 4b63c34d-mocha-10-2-0 mocha@^10.2.0
+95 verbose lock mocha@^10.2.0 /Users/extraboost/.npm/4b63c34d-mocha-10-2-0.lock
+96 silly addNameRange { name: 'tsc', range: '>=4.4.4-0 <5.0.0-0', hasData: false }
+97 verbose cache add name="types/chai" spec="^4.3.4" args=["types/chai","^4.3.4"]
+98 verbose parsed url { protocol: null,
+98 verbose parsed url   slashes: null,
+98 verbose parsed url   auth: null,
+98 verbose parsed url   host: null,
+98 verbose parsed url   port: null,
+98 verbose parsed url   hostname: null,
+98 verbose parsed url   hash: null,
+98 verbose parsed url   search: null,
+98 verbose parsed url   query: null,
+98 verbose parsed url   pathname: '^4.3.4',
+98 verbose parsed url   path: '^4.3.4',
+98 verbose parsed url   href: '^4.3.4' }
+99 verbose addNamed [ 'types/chai', '^4.3.4' ]
+100 verbose addNamed [ null, '>=4.3.4-0 <5.0.0-0' ]
+101 silly lockFile d38352b9-types-chai-4-3-4 types/chai@^4.3.4
+102 verbose lock types/chai@^4.3.4 /Users/extraboost/.npm/d38352b9-types-chai-4-3-4.lock
+103 verbose cache add name="types/express" spec="^4.17.17" args=["types/express","^4.17.17"]
+104 verbose parsed url { protocol: null,
+104 verbose parsed url   slashes: null,
+104 verbose parsed url   auth: null,
+104 verbose parsed url   host: null,
+104 verbose parsed url   port: null,
+104 verbose parsed url   hostname: null,
+104 verbose parsed url   hash: null,
+104 verbose parsed url   search: null,
+104 verbose parsed url   query: null,
+104 verbose parsed url   pathname: '^4.17.17',
+104 verbose parsed url   path: '^4.17.17',
+104 verbose parsed url   href: '^4.17.17' }
+105 verbose addNamed [ 'types/express', '^4.17.17' ]
+106 verbose addNamed [ null, '>=4.17.17-0 <5.0.0-0' ]
+107 silly lockFile ef7ec0df-types-express-4-17-17 types/express@^4.17.17
+108 verbose lock types/express@^4.17.17 /Users/extraboost/.npm/ef7ec0df-types-express-4-17-17.lock
+109 verbose cache add name="types/mocha" spec="^10.0.1" args=["types/mocha","^10.0.1"]
+110 verbose parsed url { protocol: null,
+110 verbose parsed url   slashes: null,
+110 verbose parsed url   auth: null,
+110 verbose parsed url   host: null,
+110 verbose parsed url   port: null,
+110 verbose parsed url   hostname: null,
+110 verbose parsed url   hash: null,
+110 verbose parsed url   search: null,
+110 verbose parsed url   query: null,
+110 verbose parsed url   pathname: '^10.0.1',
+110 verbose parsed url   path: '^10.0.1',
+110 verbose parsed url   href: '^10.0.1' }
+111 verbose addNamed [ 'types/mocha', '^10.0.1' ]
+112 verbose addNamed [ null, '>=10.0.1-0 <11.0.0-0' ]
+113 silly lockFile e98d4fde-types-mocha-10-0-1 types/mocha@^10.0.1
+114 verbose lock types/mocha@^10.0.1 /Users/extraboost/.npm/e98d4fde-types-mocha-10-0-1.lock
+115 verbose cache add name="types/supertest" spec="^2.0.12" args=["types/supertest","^2.0.12"]
+116 verbose parsed url { protocol: null,
+116 verbose parsed url   slashes: null,
+116 verbose parsed url   auth: null,
+116 verbose parsed url   host: null,
+116 verbose parsed url   port: null,
+116 verbose parsed url   hostname: null,
+116 verbose parsed url   hash: null,
+116 verbose parsed url   search: null,
+116 verbose parsed url   query: null,
+116 verbose parsed url   pathname: '^2.0.12',
+116 verbose parsed url   path: '^2.0.12',
+116 verbose parsed url   href: '^2.0.12' }
+117 verbose addNamed [ 'types/supertest', '^2.0.12' ]
+118 verbose addNamed [ null, '>=2.0.12-0 <3.0.0-0' ]
+119 silly lockFile 6f21dc9f-types-supertest-2-0-12 types/supertest@^2.0.12
+120 verbose lock types/supertest@^2.0.12 /Users/extraboost/.npm/6f21dc9f-types-supertest-2-0-12.lock
+121 silly addNameRange { name: 'chai', range: '>=4.3.7-0 <5.0.0-0', hasData: false }
+122 silly addNameRange { name: 'mocha', range: '>=10.2.0-0 <11.0.0-0', hasData: false }
+123 verbose url raw redis
+124 verbose url resolving [ 'https://registry.npmjs.org/', './redis' ]
+125 verbose url resolved https://registry.npmjs.org/redis
+126 info trying registry request attempt 1 at 10:01:50
+127 verbose etag "6a4d733b4e7e90182ae984f5a252e588"
+128 http GET https://registry.npmjs.org/redis
+129 verbose url raw supertest
+130 verbose url resolving [ 'https://registry.npmjs.org/', './supertest' ]
+131 verbose url resolved https://registry.npmjs.org/supertest
+132 info trying registry request attempt 1 at 10:01:50
+133 verbose etag "ec4baa24df83f09b231883690560e6a8"
+134 http GET https://registry.npmjs.org/supertest
+135 verbose url raw tsc
+136 verbose url resolving [ 'https://registry.npmjs.org/', './tsc' ]
+137 verbose url resolved https://registry.npmjs.org/tsc
+138 info trying registry request attempt 1 at 10:01:50
+139 verbose etag "ce95ffd359e11250085846e97fc9d191"
+140 http GET https://registry.npmjs.org/tsc
+141 verbose url raw express
+142 verbose url resolving [ 'https://registry.npmjs.org/', './express' ]
+143 verbose url resolved https://registry.npmjs.org/express
+144 info trying registry request attempt 1 at 10:01:50
+145 verbose etag "cc0cb2149cd449ccd26bae43133fc607"
+146 http GET https://registry.npmjs.org/express
+147 silly addNameRange { name: 'types/chai',
+147 silly addNameRange   range: '>=4.3.4-0 <5.0.0-0',
+147 silly addNameRange   hasData: false }
+148 silly addNameRange { name: 'types/mocha',
+148 silly addNameRange   range: '>=10.0.1-0 <11.0.0-0',
+148 silly addNameRange   hasData: false }
+149 silly addNameRange { name: 'types/supertest',
+149 silly addNameRange   range: '>=2.0.12-0 <3.0.0-0',
+149 silly addNameRange   hasData: false }
+150 silly addNameRange { name: 'types/express',
+150 silly addNameRange   range: '>=4.17.17-0 <5.0.0-0',
+150 silly addNameRange   hasData: false }
+151 verbose url raw typescript
+152 verbose url resolving [ 'https://registry.npmjs.org/', './typescript' ]
+153 verbose url resolved https://registry.npmjs.org/typescript
+154 info trying registry request attempt 1 at 10:01:50
+155 verbose etag "9b9b8d6933252d9fe30d6676b044c7a3"
+156 http GET https://registry.npmjs.org/typescript
+157 verbose url raw chai
+158 verbose url resolving [ 'https://registry.npmjs.org/', './chai' ]
+159 verbose url resolved https://registry.npmjs.org/chai
+160 info trying registry request attempt 1 at 10:01:50
+161 verbose etag "38c1a32344b64e4c490f0bcbce99fd22"
+162 http GET https://registry.npmjs.org/chai
+163 verbose url raw mocha
+164 verbose url resolving [ 'https://registry.npmjs.org/', './mocha' ]
+165 verbose url resolved https://registry.npmjs.org/mocha
+166 info trying registry request attempt 1 at 10:01:50
+167 verbose etag "56510969684678306098bfe22c46a6ad"
+168 http GET https://registry.npmjs.org/mocha
+169 verbose url raw types/chai
+170 verbose url resolving [ 'https://registry.npmjs.org/', './types/chai' ]
+171 verbose url resolved https://registry.npmjs.org/types/chai
+172 info trying registry request attempt 1 at 10:01:50
+173 http GET https://registry.npmjs.org/types/chai
+174 verbose url raw types/mocha
+175 verbose url resolving [ 'https://registry.npmjs.org/', './types/mocha' ]
+176 verbose url resolved https://registry.npmjs.org/types/mocha
+177 info trying registry request attempt 1 at 10:01:50
+178 http GET https://registry.npmjs.org/types/mocha
+179 verbose url raw types/supertest
+180 verbose url resolving [ 'https://registry.npmjs.org/', './types/supertest' ]
+181 verbose url resolved https://registry.npmjs.org/types/supertest
+182 info trying registry request attempt 1 at 10:01:50
+183 http GET https://registry.npmjs.org/types/supertest
+184 verbose url raw types/express
+185 verbose url resolving [ 'https://registry.npmjs.org/', './types/express' ]
+186 verbose url resolved https://registry.npmjs.org/types/express
+187 info trying registry request attempt 1 at 10:01:50
+188 http GET https://registry.npmjs.org/types/express
+189 http 304 https://registry.npmjs.org/redis
+190 silly registry.get cb [ 304,
+190 silly registry.get   { date: 'Fri, 17 Feb 2023 15:01:51 GMT',
+190 silly registry.get     connection: 'keep-alive',
+190 silly registry.get     'cf-ray': '79af6691cd68a228-YYZ',
+190 silly registry.get     age: '153',
+190 silly registry.get     'cache-control': 'public, max-age=300',
+190 silly registry.get     etag: '"6a4d733b4e7e90182ae984f5a252e588"',
+190 silly registry.get     'last-modified': 'Sun, 12 Feb 2023 08:12:13 GMT',
+190 silly registry.get     vary: 'Accept-Encoding',
+190 silly registry.get     'cf-cache-status': 'HIT',
+190 silly registry.get     'x-amz-replication-status': 'COMPLETED',
+190 silly registry.get     'x-amz-server-side-encryption': 'AES256',
+190 silly registry.get     server: 'cloudflare' } ]
+191 verbose etag redis from cache
+192 http 304 https://registry.npmjs.org/tsc
+193 silly registry.get cb [ 304,
+193 silly registry.get   { date: 'Fri, 17 Feb 2023 15:01:51 GMT',
+193 silly registry.get     connection: 'keep-alive',
+193 silly registry.get     'cf-ray': '79af6691fcf55413-YYZ',
+193 silly registry.get     age: '72',
+193 silly registry.get     'cache-control': 'public, max-age=300',
+193 silly registry.get     etag: '"ce95ffd359e11250085846e97fc9d191"',
+193 silly registry.get     'last-modified': 'Mon, 27 Jun 2022 22:26:47 GMT',
+193 silly registry.get     vary: 'Accept-Encoding',
+193 silly registry.get     'cf-cache-status': 'HIT',
+193 silly registry.get     'x-amz-replication-status': 'COMPLETED',
+193 silly registry.get     server: 'cloudflare' } ]
+194 verbose etag tsc from cache
+195 silly addNameRange number 2 { name: 'redis', range: '>=4.6.4-0 <5.0.0-0', hasData: true }
+196 silly addNameRange versions [ 'redis',
+196 silly addNameRange   [ '0.0.1',
+196 silly addNameRange     '0.0.2',
+196 silly addNameRange     '0.0.3',
+196 silly addNameRange     '0.0.4',
+196 silly addNameRange     '0.0.7',
+196 silly addNameRange     '0.0.8',
+196 silly addNameRange     '0.1.0',
+196 silly addNameRange     '0.1.1',
+196 silly addNameRange     '0.1.2',
+196 silly addNameRange     '0.2.0',
+196 silly addNameRange     '0.2.1',
+196 silly addNameRange     '0.2.2',
+196 silly addNameRange     '0.2.3',
+196 silly addNameRange     '0.2.4',
+196 silly addNameRange     '0.2.6',
+196 silly addNameRange     '0.3.0',
+196 silly addNameRange     '0.3.1',
+196 silly addNameRange     '0.3.2',
+196 silly addNameRange     '0.3.3',
+196 silly addNameRange     '0.3.4',
+196 silly addNameRange     '0.3.5',
+196 silly addNameRange     '0.3.6',
+196 silly addNameRange     '0.3.7',
+196 silly addNameRange     '0.3.9',
+196 silly addNameRange     '0.4.0',
+196 silly addNameRange     '0.4.1',
+196 silly addNameRange     '0.4.2',
+196 silly addNameRange     '0.5.0',
+196 silly addNameRange     '0.5.1',
+196 silly addNameRange     '0.5.2',
+196 silly addNameRange     '0.5.3',
+196 silly addNameRange     '0.5.4',
+196 silly addNameRange     '0.5.5',
+196 silly addNameRange     '0.5.6',
+196 silly addNameRange     '0.5.7',
+196 silly addNameRange     '0.5.8',
+196 silly addNameRange     '0.5.9',
+196 silly addNameRange     '0.5.10',
+196 silly addNameRange     '0.5.11',
+196 silly addNameRange     '0.6.0',
+196 silly addNameRange     '0.6.1',
+196 silly addNameRange     '0.6.2',
+196 silly addNameRange     '0.6.3',
+196 silly addNameRange     '0.6.4',
+196 silly addNameRange     '0.6.5',
+196 silly addNameRange     '0.6.6',
+196 silly addNameRange     '0.6.7',
+196 silly addNameRange     '0.7.0',
+196 silly addNameRange     '0.7.1',
+196 silly addNameRange     '0.7.2',
+196 silly addNameRange     '0.7.3',
+196 silly addNameRange     '0.8.0',
+196 silly addNameRange     '0.8.1',
+196 silly addNameRange     '0.8.2',
+196 silly addNameRange     '0.8.3',
+196 silly addNameRange     '0.8.4',
+196 silly addNameRange     '0.8.5',
+196 silly addNameRange     '0.8.6',
+196 silly addNameRange     '0.9.0',
+196 silly addNameRange     '0.9.1',
+196 silly addNameRange     '0.9.2',
+196 silly addNameRange     '0.10.0',
+196 silly addNameRange     '0.10.1',
+196 silly addNameRange     '0.10.2',
+196 silly addNameRange     '0.10.3',
+196 silly addNameRange     '0.11.0',
+196 silly addNameRange     '0.12.0',
+196 silly addNameRange     '0.12.1',
+196 silly addNameRange     '1.0.0',
+196 silly addNameRange     '2.0.0',
+196 silly addNameRange     '2.0.1',
+196 silly addNameRange     '2.1.0',
+196 silly addNameRange     '2.2.0',
+196 silly addNameRange     '2.2.1',
+196 silly addNameRange     '2.2.2',
+196 silly addNameRange     '2.2.3',
+196 silly addNameRange     '2.2.4',
+196 silly addNameRange     '2.2.5',
+196 silly addNameRange     '2.3.0',
+196 silly addNameRange     '2.3.1',
+196 silly addNameRange     '2.4.0',
+196 silly addNameRange     '2.4.1',
+196 silly addNameRange     '2.4.2',
+196 silly addNameRange     '2.5.0-1',
+196 silly addNameRange     '2.5.0',
+196 silly addNameRange     '2.5.1',
+196 silly addNameRange     '2.5.2',
+196 silly addNameRange     '2.5.3',
+196 silly addNameRange     '2.6.0-0',
+196 silly addNameRange     '2.6.0-1',
+196 silly addNameRange     '2.6.0-2',
+196 silly addNameRange     '2.6.0',
+196 silly addNameRange     '2.6.1',
+196 silly addNameRange     '2.6.2',
+196 silly addNameRange     '2.6.3',
+196 silly addNameRange     '2.6.4',
+196 silly addNameRange     '2.6.5',
+196 silly addNameRange     '2.7.0',
+196 silly addNameRange     '2.7.1',
+196 silly addNameRange     '2.8.0',
+196 silly addNameRange     '3.0.0',
+196 silly addNameRange     '3.0.1',
+196 silly addNameRange     '3.0.2',
+196 silly addNameRange     '3.1.0',
+196 silly addNameRange     '3.1.1',
+196 silly addNameRange     '3.1.2',
+196 silly addNameRange     '4.0.0-next.0',
+196 silly addNameRange     '4.0.0-next.1',
+196 silly addNameRange     '4.0.0-next.2',
+196 silly addNameRange     '4.0.0-next.3',
+196 silly addNameRange     '4.0.0-next.4',
+196 silly addNameRange     '4.0.0-next.5',
+196 silly addNameRange     '4.0.0-next.6',
+196 silly addNameRange     '4.0.0-next.7',
+196 silly addNameRange     '4.0.0-rc.0',
+196 silly addNameRange     '4.0.0-rc.1',
+196 silly addNameRange     '4.0.0-rc.2',
+196 silly addNameRange     '4.0.0-rc.3',
+196 silly addNameRange     '4.0.0-rc.4',
+196 silly addNameRange     '4.0.0',
+196 silly addNameRange     '4.0.1',
+196 silly addNameRange     '4.0.2',
+196 silly addNameRange     '4.0.3',
+196 silly addNameRange     '4.0.4',
+196 silly addNameRange     '4.0.5',
+196 silly addNameRange     '4.0.6',
+196 silly addNameRange     '4.1.0',
+196 silly addNameRange     '4.1.1',
+196 silly addNameRange     '4.2.0',
+196 silly addNameRange     '4.3.0',
+196 silly addNameRange     '4.3.1',
+196 silly addNameRange     '4.4.0',
+196 silly addNameRange     '4.5.0',
+196 silly addNameRange     '4.5.1',
+196 silly addNameRange     '4.6.0',
+196 silly addNameRange     '4.6.1',
+196 silly addNameRange     '4.6.2',
+196 silly addNameRange     '4.6.3',
+196 silly addNameRange     '4.6.4' ] ]
+197 verbose addNamed [ 'redis', '4.6.4' ]
+198 verbose addNamed [ '4.6.4', '4.6.4' ]
+199 silly lockFile 24c6a6d7-redis-4-6-4 redis@4.6.4
+200 verbose lock redis@4.6.4 /Users/extraboost/.npm/24c6a6d7-redis-4-6-4.lock
+201 silly addNameRange number 2 { name: 'tsc', range: '>=4.4.4-0 <5.0.0-0', hasData: true }
+202 silly addNameRange versions [ 'tsc',
+202 silly addNameRange   [ '1.0.0',
+202 silly addNameRange     '1.20150619.0',
+202 silly addNameRange     '1.20150622.0',
+202 silly addNameRange     '1.20150623.0',
+202 silly addNameRange     '2.0.0',
+202 silly addNameRange     '2.0.1',
+202 silly addNameRange     '2.0.2',
+202 silly addNameRange     '2.0.3',
+202 silly addNameRange     '2.0.4' ] ]
+203 silly lockFile a665e258-tsc-4-4-4 tsc@^4.4.4
+204 silly lockFile a665e258-tsc-4-4-4 tsc@^4.4.4
+205 error notarget No compatible version found: tsc@'>=4.4.4-0 <5.0.0-0'
+205 error notarget Valid install targets:
+205 error notarget ["1.0.0","1.20150619.0","1.20150622.0","1.20150623.0","2.0.0","2.0.1","2.0.2","2.0.3","2.0.4"]
+205 error notarget
+205 error notarget This is most likely not a problem with npm itself.
+205 error notarget In most cases you or one of your dependencies are requesting
+205 error notarget a package version that doesn't exist.
+206 error System Darwin 22.2.0
+207 error command "/Users/extraboost/.nvm/v0.10.26/bin/node" "/Users/extraboost/.nvm/v0.10.26/bin/npm" "install"
+208 error cwd /Users/extraboost/Documents/GitHub/coding-challenge-backend-c
+209 error node -v v0.10.26
+210 error npm -v 1.4.3
+211 error code ETARGET
+212 verbose exit [ 1, true ]

@@ -2,20 +2,20 @@
   "name": "coding-challenge-backend-c",
   "version": "0.0.1",
   "description": "coding challenge in Nodejs",
-  "main": "app.ts",
+  "main": "dist/app.js",
   "scripts": {
-    "start": "tsc && node dist/app.js",
+    "build": "tsc",
+    "start": "node dist/app.js",
     "dev": "nodemon app.ts",
     "pretest": "redis-cli flushall",
-    "test": "tsc &&  mocha ./dist/test/*.js"
+    "test": "tsc && mocha ./dist/test/*.js"
   },
   "author": "",
   "license": "WTFPL",
   "dependencies": {
     "express": "^4.18.2",
     "redis": "^4.6.4",
-    "supertest": "^0.11.0",
-     "typescript": "^4.4.4"
+    "supertest": "^0.11.0"
   },
   "engines": {
     "node": "16.x"
