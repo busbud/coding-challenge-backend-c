@@ -2,10 +2,10 @@
   "name": "coding-challenge-backend-c",
   "version": "1.0.0",
   "description": "coding challenge in Nodejs",
-  "main": "dist/app.js",
+  "main": "./dist/app.js",
   "scripts": {
     "build": "tsc",
-    "start": "node dist/app.js",
+    "start": "node ./dist/app.js",
     "dev": "nodemon app.ts",
     "pretest": "redis-cli flushall",
     "test": "tsc && mocha ./dist/test/*.js"
