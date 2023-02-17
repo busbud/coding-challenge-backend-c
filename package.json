@@ -17,8 +17,7 @@
     "express": "^4.18.2",
     "qs": "^6.11.0",
     "redis": "^4.6.4",
-    "supertest": "^0.11.0",
-    "typescript": "^4.9.5"
+    "supertest": "^0.11.0"
   },
   "engines": {
     "node": "18.x"
