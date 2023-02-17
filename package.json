@@ -4,11 +4,13 @@
   "description": "coding challenge in Nodejs",
   "main": "dist/app.js",
   "scripts": {
-    "build": "tsc",
-    "start": "npm run build && node dist/app.js",
+    "start": "node dist/app.js",
+    "postinstall": "tsc",
+    "watch-ts": "tsc -w",
     "dev": "nodemon app.ts",
     "pretest": "redis-cli flushall",
-    "test": "tsc && mocha ./dist/test/*.js"
+    "test": "tsc && mocha ./dist/test/*.js",
+    "deploy": "git add . && git commit -m Heroku && git push heroku master"
   },
   "author": "",
   "license": "WTFPL",
@@ -20,7 +22,7 @@
     "typescript": "^4.9.5"
   },
   "engines": {
-    "node": "16.x"
+    "node": "18.x"
   },
   "devDependencies": {
     "@types/chai": "^4.3.4",
