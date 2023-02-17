@@ -2,7 +2,7 @@
   "name": "coding-challenge-backend-c",
   "version": "0.0.1",
   "description": "coding challenge in Nodejs",
-  "main": "build/app.js",
+  "main": "app.ts",
   "scripts": {
     "build": "tsc",
     "start": "node build/app.js",

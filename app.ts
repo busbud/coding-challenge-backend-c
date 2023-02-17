@@ -4,7 +4,10 @@ export const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// app.use(require('./routes/main'));
+
+// app.get("/", (req, res) => { res.send('Welcome'); });
+
+app.use(require('./routes/api'));
 
  
 
