@@ -1,16 +1,14 @@
 {
   "name": "coding-challenge-backend-c",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "coding challenge in Nodejs",
   "main": "dist/app.js",
   "scripts": {
+    "build": "tsc",
     "start": "node dist/app.js",
-    "postinstall": "tsc",
-    "watch-ts": "tsc -w",
     "dev": "nodemon app.ts",
     "pretest": "redis-cli flushall",
-    "test": "tsc && mocha ./dist/test/*.js",
-    "deploy": "git add . && git commit -m Heroku && git push heroku master"
+    "test": "tsc && mocha ./dist/test/*.js"
   },
   "author": "",
   "license": "WTFPL",
@@ -22,7 +20,7 @@
     "typescript": "^4.9.5"
   },
   "engines": {
-    "node": "18.x"
+    "node": "16.x"
   },
   "devDependencies": {
     "@types/chai": "^4.3.4",
