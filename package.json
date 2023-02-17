@@ -5,7 +5,7 @@
   "main": "dist/app.js",
   "scripts": {
     "build": "tsc",
-    "start": "node dist/app.js",
+    "start": "npm run build && node dist/app.js",
     "dev": "nodemon app.ts",
     "pretest": "redis-cli flushall",
     "test": "tsc && mocha ./dist/test/*.js"
