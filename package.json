@@ -9,7 +9,7 @@
     "dev": "nodemon app.ts",
     "pretest": "redis-cli flushall",
     "test": "tsc && mocha dist/test/*.js",
-    "postinstall": "npm install typescript",
+    "postinstall": "tsc",
     "deploy": "git add . && git commit -m Heroku && git push heroku master"
   },
   "author": "",
