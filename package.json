@@ -9,6 +9,7 @@
     "pretest": "redis-cli flushall",
     "test": "tsc && mocha ./build/test/*.js",
     "postinstall": "tsc",
+    "heroku-postbuild": "npm install --dev && tsc",
     "deploy": "git add . && git commit -m Heroku && git push heroku master"
   },
   "author": "",
