@@ -4,7 +4,6 @@
   "description": "coding challenge in Nodejs",
   "main": "app.ts",
   "scripts": {
-    "build": "tsc",
     "start": "node build/app.js",
     "dev": "nodemon app.ts",
     "pretest": "redis-cli flushall",
