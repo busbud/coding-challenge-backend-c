@@ -5,6 +5,7 @@
   "main": "dist/app.js",
   "scripts": {
     "build": "tsc",
+    "heroku-postbuild": "npm install --only=dev",
     "start": "npm run build && node dist/app.js",
     "dev": "nodemon app.ts",
     "pretest": "redis-cli flushall",
