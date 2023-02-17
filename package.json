@@ -10,7 +10,7 @@
     "pretest": "redis-cli flushall",
     "test": "tsc && mocha dist/test/*.js",
     "postinstall": "npm install typescript",
-    "deploy": "git add . && git commit -m Heroku && git push heroku master"
+    "deploy": "git add . && git commit -m Heroku && git push origin master"
   },
   "author": "",
   "license": "WTFPL",
