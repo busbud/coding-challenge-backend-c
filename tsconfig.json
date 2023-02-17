@@ -7,11 +7,11 @@
     "outDir": "./build",
     "strict": true,
     "sourceMap": true,
-    "types": [ "node", "mocha", "express", "dotenv"],
-    "lib": ["es2015"],
-    "typeRoots": [
-        "node_modules/@types"
-    ]
+    // "types": [ "node", "mocha", "express", "dotenv"],
+    // "lib": ["es2015"],
+    // "typeRoots": [
+    //     "node_modules/@types"
+    // ]
     
     },
     "include": [ "/**/*"]
