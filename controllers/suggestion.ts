@@ -38,7 +38,7 @@ export const getSuggestions = async (req: Request, res: Response) => {
         const cachedResult = await redisClient.get(cacheKey);
         if (cachedResult) {
             const statusCode = JSON.parse(cachedResult).suggestions.length > 0 ? 200 : 404;
-            return res.status(statusCode).json({ suggestions: JSON.parse(cachedResult) });
+            return res.status(statusCode).json(cachedResult);
         }
 
         // If not, calculate the suggestions
