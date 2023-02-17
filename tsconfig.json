@@ -7,7 +7,7 @@
     "outDir": "dist",
     "strict": true,
     "sourceMap": true,
-    "types": [ "node", "mocha" ],
+    // "types": [ "node", "mocha" ],
     "lib": ["es2015"],
     "typeRoots": [
         "node_modules/@types"
