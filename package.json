@@ -8,7 +8,8 @@
     "start": "npm run build && node dist/app.js",
     "dev": "nodemon app.ts",
     "pretest": "redis-cli flushall",
-    "test": "tsc && mocha dist/test/*.js"
+    "test": "tsc && mocha dist/test/*.js",
+    "postinstall": "npm install typescript"
   },
   "author": "",
   "license": "WTFPL",
