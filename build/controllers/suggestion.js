@@ -39,7 +39,7 @@ const getSuggestions = (req, res) => __awaiter(void 0, void 0, void 0, function*
         const cachedResult = yield redisClient_1.redisClient.get(cacheKey);
         if (cachedResult) {
             const statusCode = JSON.parse(cachedResult).suggestions.length > 0 ? 200 : 404;
-            return res.status(statusCode).json({ suggestions: JSON.parse(cachedResult) });
+            return res.status(statusCode).json(JSON.parse(cachedResult));
         }
         // If not, calculate the suggestions
         const suggestions = [];
