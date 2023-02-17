@@ -4,7 +4,7 @@
     "esModuleInterop": true,
     "target": "es6",
     // "moduleResolution": "node",
-    "outDir": "dist",
+    "outDir": "./build",
     "strict": true,
     "sourceMap": true,
     "types": [ "node", "mocha", "express" ],
@@ -14,8 +14,9 @@
     ]
     
     },
-    "exclude": [
-        "node_modules",
-        "**/*.spec.ts"
+    "include": [
+        "app/**/*",
+        "test/**/*"
     ]
+   
 }
