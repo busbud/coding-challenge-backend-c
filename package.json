@@ -8,7 +8,8 @@
     "start": "node dist/app.js",
     "dev": "nodemon app.ts",
     "pretest": "redis-cli flushall",
-    "test": "tsc && mocha ./dist/test/*.js"
+    "test": "tsc && mocha ./dist/test/*.js",
+    "postinstall": "npm run build"
   },
   "author": "",
   "license": "WTFPL",
