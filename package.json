@@ -6,14 +6,13 @@
   "scripts": {
     "start": "tsc && node dist/app.js",
     "dev": "nodemon app.ts",
-    "test": "./node_modules/mocha/bin/mocha ./test/"
+    "pretest": "redis-cli flushall",
+    "test": "tsc &&  mocha ./dist/test/*.js"
   },
   "author": "",
   "license": "WTFPL",
   "dependencies": {
-    "chai": "^1.9.1",
     "express": "^4.18.2",
-    "mocha": "^1.18.2",
     "redis": "^4.6.4",
     "supertest": "^0.11.0"
   },
@@ -21,7 +20,12 @@
     "node": "0.10.26"
   },
   "devDependencies": {
+    "@types/chai": "^4.3.4",
     "@types/express": "^4.17.17",
+    "@types/mocha": "^10.0.1",
+    "@types/supertest": "^2.0.12",
+    "chai": "^4.3.7",
+    "mocha": "^10.2.0",
     "typescript": "^4.9.5"
   }
 }

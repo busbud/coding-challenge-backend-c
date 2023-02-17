@@ -17,6 +17,8 @@ import { checkForFIPSCodes } from '../data/FIPSCodesCanada';
 
 
 export const getSuggestions = async (req: Request, res: Response) => {
+
+    console.log('getSuggestions called')
     try {
         // Load cities from TSV file
         const cities = tsvToJsonArray('./data/cities_canada-usa.tsv');
@@ -35,7 +37,8 @@ export const getSuggestions = async (req: Request, res: Response) => {
         // Check if the cache has the data
         const cachedResult = await redisClient.get(cacheKey);
         if (cachedResult) {
-            return res.json({ suggestions: JSON.parse(cachedResult) });
+            const statusCode = JSON.parse(cachedResult).suggestions.length > 0 ? 200 : 404;
+            return res.status(statusCode).json({ suggestions: JSON.parse(cachedResult) });
         }
 
         // If not, calculate the suggestions
@@ -46,8 +49,7 @@ export const getSuggestions = async (req: Request, res: Response) => {
             const city_population = city.population as string;
             const cities = city.country === 'US' || city.country === 'CA' && city.population !== undefined && parseInt(city_population.replace(/,/g, '')) >= 5000;
             return cities;
-        });
-
+        })
         for (const city of filteredCities) {
             // Get city name, state and country
             const cityName = city.name as string;
@@ -77,7 +79,8 @@ export const getSuggestions = async (req: Request, res: Response) => {
         await redisClient.setEx(cacheKey, 3600, JSON.stringify({ suggestions: recommendedSuggestions }));
 
         // Return the results
-        res.json({ suggestions: recommendedSuggestions });
+        const statusCode = recommendedSuggestions.length > 0 ? 200 : 404;
+        return res.status(statusCode).json({ suggestions: recommendedSuggestions } );
     } catch (error) {
         console.log(`Error occurred: ${error}`);
     } finally {
