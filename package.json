@@ -16,7 +16,8 @@
     "debug": "^4.3.4",
     "express": "^4.18.2",
     "redis": "^4.6.4",
-    "supertest": "^0.11.0"
+    "supertest": "^0.11.0",
+    "typescript": "^4.9.5"
   },
   "engines": {
     "node": "16.x"
