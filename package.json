@@ -7,6 +7,7 @@
     "start": "node app.js",
     "seed": "node seed.js",
     "test": "jest ./test/*.spec.js",
+    "test:load": "k6 run ./test/suggestions.load.test.js",
     "swagger": "node scripts/swagger-autogen.js"
   },
   "author": "",
@@ -17,6 +18,7 @@
     "extended": "^0.0.6",
     "jest": "^29.4.3",
     "jest-extended": "^3.2.4",
+    "k6": "^0.0.0",
     "supertest": "^0.11.0",
     "swagger-autogen": "^2.23.1",
     "swagger-ui-express": "^4.6.1"
