@@ -12,7 +12,8 @@ npm run swagger // generates swagger based on routes
 ```
 
 ### Live site
-https://suggestionapp.herokuapp.com/
+https://suggestionapp.herokuapp.com/ 
+<br/>
 https://suggestionapp.herokuapp.com/suggestions
 
 ### Tests
