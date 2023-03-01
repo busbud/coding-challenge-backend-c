@@ -4,17 +4,39 @@
   "description": "coding challenge in Nodejs",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "node ./build/index.js",
+    "build": "rm -rf build && ./node_modules/typescript/bin/tsc",
+    "lint": "./node_modules/.bin/eslint . --ext .ts --ignore-pattern node_modules/",
+    "lint:fix": "./node_modules/.bin/eslint --fix . --ext .ts --ignore-pattern node_modules/",
     "test": "./node_modules/mocha/bin/mocha ./test/"
   },
   "author": "",
   "license": "WTFPL",
   "dependencies": {
+    "ajv": "^8.12.0",
     "chai": "^1.9.1",
+    "eslint": "^8.35.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "inversify": "^6.0.1",
+    "inversify-restify-utils": "^3.6.0",
     "mocha": "^1.18.2",
-    "supertest": "^0.11.0"
+    "pino": "^8.11.0",
+    "reflect-metadata": "^0.1.13",
+    "restify": "^11.1.0",
+    "supertest": "^0.11.0",
+    "typescript-eslint": "^0.0.1-alpha.0",
+    "uuidv4": "^6.2.13"
   },
   "engines": {
     "node": "0.10.26"
+  },
+  "devDependencies": {
+    "@types/pino": "^7.0.5",
+    "@types/restify": "^8.5.6",
+    "@types/restify-errors": "^4.3.5",
+    "@typescript-eslint/eslint-plugin": "^5.54.0",
+    "@typescript-eslint/parser": "^5.54.0",
+    "typescript": "^4.9.5"
   }
 }

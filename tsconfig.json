@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "alwaysStrict": true,
+        "emitDecoratorMetadata": true,
+        "esModuleInterop": true,
+        "experimentalDecorators": true,
+        "forceConsistentCasingInFileNames": true,
+        "isolatedModules": false,
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "noImplicitReturns": true,
+        "outDir": "./build/",
+        "removeComments": true,
+        "resolveJsonModule": true,
+        "skipLibCheck": true,
+        "sourceMap": false,
+        "target": "ES2017"
+    },
+    "exclude": ["node_modules"]
+}

@@ -1,0 +1,98 @@
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "es2020": true,
+    "node": true,
+    "mocha": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:sonarjs/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json",
+    "ecmaVersion": 11,
+    "sourceType": "module"
+  },
+  "plugins": ["@typescript-eslint", "sonarjs", "prettier"],
+  "rules": {
+    "no-undef": 2,
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": 2,
+    "@typescript-eslint/no-explicit-any": 0,
+    "@typescript-eslint/explicit-module-boundary-types": 2,
+    "camelcase": [2, { "properties": "always" }],
+    "eqeqeq": ["error", "smart"],
+    "no-caller": 2,
+    "default-case": 2,
+    "use-isnan": 2,
+    "no-duplicate-imports": 2,
+    "no-unreachable-loop": "error",
+    "no-sequences": "error",
+    "eol-last": ["error", "always"],
+    "no-console": "error",
+    "curly": "error",
+    "no-empty-function": "off",
+    "@typescript-eslint/no-empty-function": ["error", { "allow": ["constructors"] }],
+    "max-lines": [
+      "error",
+      { "max": 1000, "skipBlankLines": true, "skipComments": true }
+    ],
+    "complexity": ["error", 10],
+    "max-lines-per-function": ["error", { "max": 300 }],
+    "max-params": ["error", 10],
+    "consistent-return": "error",
+    "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
+    "max-len": [
+      "error",
+      {
+        "code": 180,
+        "tabWidth": 4,
+        "ignoreComments": true,
+        "ignoreUrls": true,
+        "ignoreTemplateLiterals": true,
+        "ignoreStrings": true
+      }
+    ],
+    "prefer-const": "error",
+    "no-magic-numbers": [0, { "ignore": [-1, 0, 1, 2] }],
+    "object-shorthand": "error",
+    "no-labels": ["error", { "allowLoop": true, "allowSwitch": true }],
+    "prefer-promise-reject-errors": ["error", { "allowEmptyReject": true }],
+    "quotes": ["error", "single", { "avoidEscape": true }],
+    "no-shadow": "off",
+    "@typescript-eslint/no-shadow": ["error"],
+    "no-self-compare": "error",
+    "@typescript-eslint/prefer-for-of": 2,
+    "@typescript-eslint/explicit-function-return-type": [
+      2,
+      {
+        "allowExpressions": true,
+        "allowTypedFunctionExpressions": true,
+        "allowHigherOrderFunctions": true,
+        "allowConciseArrowFunctionExpressionsStartingWithVoid": true
+      }
+    ],
+    "@typescript-eslint/no-non-null-assertion": 2,
+    "@typescript-eslint/no-require-imports": 2,
+    "@typescript-eslint/switch-exhaustiveness-check": 2,
+    "@typescript-eslint/prefer-readonly": 2,
+    "@typescript-eslint/no-inferrable-types": 2,
+    "@typescript-eslint/consistent-type-assertions": [
+      2,
+      { "assertionStyle": "as" }
+    ]
+  },
+  "overrides": [
+    {
+      "files": "*.test.ts",
+      "rules": {
+        "no-magic-numbers": "off"
+      }
+    }
+  ]
+}
