@@ -3,11 +3,14 @@ import { inject, injectable } from 'inversify'
 import { TYPES } from '../utils/Types'
 import { Logger } from 'pino'
 import { SuggestionsResponse } from '../entities/SuggestionsResponseSchema'
+import { Firestore } from '@google-cloud/firestore'
 @injectable()
-export class FirebaseRepository implements IDatabaseRepository {
+export class FirestoreRepository implements IDatabaseRepository {
     constructor(
         @inject(TYPES.Logger)
-        private readonly logger: Logger
+        private readonly logger: Logger,
+        @inject(TYPES.Firestore)
+        private readonly firestoreDb: Firestore
     ) {}
     public async fetchSuggestions(
         requestId: string,

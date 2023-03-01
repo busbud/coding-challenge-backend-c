@@ -1,7 +1,7 @@
 import { inject, injectable, named } from 'inversify'
 import { TYPES } from '../utils/Types'
 import { Logger } from 'pino'
-import { FirebaseRepository } from '../repositories/FirebaseRepository'
+import { FirestoreRepository } from '../repositories/FirestoreRepository'
 import { SuggestionsResponse } from '../entities/SuggestionsResponseSchema'
 
 @injectable()
@@ -10,8 +10,8 @@ export class SuggestionsService {
         @inject(TYPES.Logger)
         private readonly logger: Logger,
         @inject(TYPES.IDatabaseRepository)
-        @named(TYPES.FirebaseRepository)
-        private readonly db: FirebaseRepository
+        @named(TYPES.FirestoreRepository)
+        private readonly db: FirestoreRepository
     ) {}
 
     public async fetchSuggestions(

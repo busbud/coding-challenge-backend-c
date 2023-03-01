@@ -7,5 +7,6 @@ export const TYPES = {
     Service: 'Service',
     SuggestionsService: 'SuggestionsService',
     IDatabaseRepository: 'IDatabaseRepository',
-    FirebaseRepository: 'FirebaseRepository'
+    FirestoreRepository: 'FirestoreRepository',
+    Firestore: 'Firestore'
 }

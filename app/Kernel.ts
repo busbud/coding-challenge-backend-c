@@ -1,12 +1,12 @@
 import { Container } from 'inversify'
 import pino, { Logger } from 'pino'
 import 'reflect-metadata'
+import { Firestore } from '@google-cloud/firestore'
 
 import { TYPES } from './utils/Types'
 import { SuggestionsController } from './controllers/SuggestionsController'
 import { SuggestionsService } from './services/SuggestionsService'
-import { IDatabaseRepository } from './repositories/IDatabaseRepository'
-import { FirebaseRepository } from './repositories/FirebaseRepository'
+import { FirestoreRepository } from './repositories/FirestoreRepository'
 
 if (!process.env.npm_package_name || !process.env.npm_package_version) {
     /* eslint camelcase: 0 */
@@ -15,6 +15,9 @@ if (!process.env.npm_package_name || !process.env.npm_package_version) {
     process.env.npm_package_name = p.name
     process.env.npm_package_version = p.version
 }
+
+//process.env.GOOGLE_APPLICATION_CREDENTIALS = '../googleApplicationCred.json'
+process.env.GOOGLE_APPLICATION_CREDENTIALS = 'AIzaSyCsP138Gimko8NIcci5USqzG81sV_svYmw'
 
 const kernel = new Container()
 
@@ -36,10 +39,18 @@ kernel
     .inSingletonScope()
     .whenTargetNamed(TYPES.SuggestionsService)
 
+// bind DB repositories
+const firestoreDb = new Firestore({
+    projectId: 'abiding-cistern-379308',
+    keyFilename: 'googleApplicationCred.json'
+})
+
+kernel.bind<Firestore>(TYPES.Firestore).toConstantValue(firestoreDb)
+
 kernel
-    .bind<FirebaseRepository>(TYPES.IDatabaseRepository)
-    .to(FirebaseRepository)
+    .bind<FirestoreRepository>(TYPES.IDatabaseRepository)
+    .to(FirestoreRepository)
     .inSingletonScope()
-    .whenTargetNamed(TYPES.FirebaseRepository)
+    .whenTargetNamed(TYPES.FirestoreRepository)
 
 export { kernel }

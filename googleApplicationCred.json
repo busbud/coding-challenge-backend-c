@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "abiding-cistern-379308",
+  "private_key_id": "e9a3c7224cc168af1599516fa07afe8ff9e94c16",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCXNCPD+GjAzwxF\nHQ/IZIkifj4CqEiFxvEw/uz/1PIoOednDHGBm0DGPfh+fKqpJ+tFRiMnjWKi9//S\n5lyn5xxUmIKWSkVuyOEswuHMuxKFCix7mngXK/lRk1loYxsD5cQo/rJBIh/1M8DE\nP8oRP3MA8BRTyINFLMml3vaetXuWJZEgyCf/VLeZpp3jB37meESp/XOa2EitiMXG\nLDgXBG5lDDjP7VhQyIMJbj5ZTtuIYzodFlzbX9pi/jc2r1rIEbGhLoaPrRlQXrvF\nNMm9w/l2q431UeDTpYfBt5gPyyPNUmE+tzdOu8WQRCgRTHwnrw43CWQIpzDmz+12\nuSb6AVfpAgMBAAECggEABQ3/SZZ48wQg7AEPFWMGAhcQDeDwDrfSOZH2HI3S/BUG\ndzePZlapNU9eSqUyg9Xjq7TO6Uw00U+i19svWwYS+IGCMRHBzTSuMWPA7moNEhE/\nYDDvZY/o5Wkcfqy8exZ/5qJwFVUVlioBHlZnFAlH2A7OkSf1encnNRI1cqQMwf3J\nms/3j/XCJBfCVC5CWyvdRVY03/lg3u3sb813kr8qzsYWIMwXygDi9EVISjEDiDRj\nbWV8d7wZWwaut9GOtvPvvvc+s0JLk3la7l5FW+DhrtOzM2xZq+iygn+EJ36BKTOf\noH2ZgOUBIywhssLoLywfg20t8WXVKWpp/GDwYoV9kQKBgQDHVIU6BOcU3uEl3wQm\n8a/YVRL+w0CuvWRj23MoNBzBKUsqcsIY3TY4uRu3KNe/QdI6Jx2dTEiycc/VzZkU\nkdCvxvu/NP6LZo8Otyxt7u3zoDph/DN2XsagfsZGjXmZhAE/m73rlXXcIAY07H4q\nW4d2wVeGGDG5dT94UqwJszcOGQKBgQDCMOr42oj3Y5IFWci17MhBMPGeK7U9kA70\n2zy0xzLNxJiJK6SsH6sgILVQ9c0ZaqNUYTCpVPrWxr8GV3vXO+sDS46O6oIN7tf/\ndxW5zz8A+owaH++ItF0nIB5rK6+ocDku078A+IBvPQB1eKlX6HvRSzokVNQbUtMH\nXxj8zB0yUQKBgAdFryKhwSiCxSYTj9w33xl+aRYAW6DEaiA2hmoGFLJ7ZjGjRC+S\nCoNhRYCWLeDdbuUOPkdZ3CEeg92iBZ65fyqakN61+T9uu3Nm/Wj5WZcU1mxyvhHo\nfUint2YljTUrmrwOW4x3xHgGdxOBOU0kT7nmbeIHifDhNTKXmY01C6IpAoGASZH4\n45D/xSIPB0HtvabYc4JUd8U9Y/Z5BCEvTZoOUFDELWvAdomE7qYVq3eEXbW97VDo\n+647XjVr1747J98GeXgdqV2FKjwrzxhRvdSbnQZPH/KrcFJM3G7Zt2aUpS7nKyuD\nuJ1tIzesPdUZ6zkj97YVcABHX5awZqGLuPKnuRECgYEAg3XgzuzR4W8/c2JO/3EL\nQxJnmqcVOSILzi/QnH9aEAijGOS5zvZQ6xRv2dZ1rBVVNlaCSI0ljnw9dICRvqpV\nHnADtsbi/405ADIGE9NCc7QlhF56stfeI5KE7K+xSvDkZuHsq6Yl9uhPVUNawur7\nyG7kWpG3vJfyyOnjudnvKOg=\n-----END PRIVATE KEY-----\n",
+  "client_email": "codingchallenge@abiding-cistern-379308.iam.gserviceaccount.com",
+  "client_id": "104066761033139378410",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/codingchallenge%40abiding-cistern-379308.iam.gserviceaccount.com"
+}

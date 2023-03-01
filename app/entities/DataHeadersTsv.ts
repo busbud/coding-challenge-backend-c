@@ -1,0 +1,21 @@
+export const DataHeadersTsv = [
+    'id',
+    'name',
+    'ascii',
+    'alt_name',
+    'lat',
+    'long',
+    'feat_class',
+    'feat_code',
+    'country',
+    'cc2',
+    'admin1',
+    'admin2',
+    'admin3',
+    'admin4',
+    'population',
+    'elevation',
+    'dem',
+    'tz',
+    'modified_at'
+]
