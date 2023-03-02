@@ -1,10 +1,12 @@
 export interface SuggestionsResponse {
-    suggestions: []
+    suggestions: Suggestion[]
 }
 
 export interface Suggestion {
     name: string
-    latitude: string
-    longitude: string
+    latitude: number
+    longitude: number
     score: number
+    stringSimilarity: number
+    distance: number
 }

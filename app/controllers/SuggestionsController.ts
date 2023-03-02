@@ -27,7 +27,9 @@ export class SuggestionsController {
             } else {
                 const response = await this.suggestionsService.fetchSuggestions(
                     requestId,
-                    req.query
+                    req.query.q,
+                    req.query.longitude,
+                    req.query.latitude
                 )
                 res.json(200, response)
             }
@@ -40,7 +42,7 @@ export class SuggestionsController {
                 stack: e.stack,
                 error: e
             })
-            return next(new ServiceUnavailableError(e.message))
+            return next(new ServiceUnavailableError(e))
         }
     }
 }

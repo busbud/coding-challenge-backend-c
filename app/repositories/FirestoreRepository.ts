@@ -2,8 +2,9 @@ import { IDatabaseRepository } from './IDatabaseRepository'
 import { inject, injectable } from 'inversify'
 import { TYPES } from '../utils/Types'
 import { Logger } from 'pino'
-import { SuggestionsResponse } from '../entities/SuggestionsResponseSchema'
 import { Firestore } from '@google-cloud/firestore'
+import { City } from '../entities/City'
+
 @injectable()
 export class FirestoreRepository implements IDatabaseRepository {
     constructor(
@@ -12,23 +13,18 @@ export class FirestoreRepository implements IDatabaseRepository {
         @inject(TYPES.Firestore)
         private readonly firestoreDb: Firestore
     ) {}
-    public async fetchSuggestions(
-        requestId: string,
-        q: string,
-        longitude?: number,
-        latitude?: number
-    ): Promise<SuggestionsResponse> {
-        const loggerOutput = {
-            msg: 'Inside Firebase Repository',
-            requestId,
-            tags: ['dbRepository', 'suggestions', 'info'],
-            q,
-            longitude,
-            latitude
-        }
-        this.logger.info([loggerOutput])
-        return {
-            suggestions: []
-        }
+    public async fetchCities(): Promise<City[]> {
+        const cities: City[] = []
+        const query = await this.firestoreDb
+            .collection('cities')
+            .where('population', '>', 5000)
+            .where('country', 'in', ['USA', 'US', 'CA'])
+            .get()
+
+        query.forEach((doc) => {
+            cities.push(doc.data() as City)
+        })
+
+        return cities
     }
 }
