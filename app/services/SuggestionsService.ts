@@ -6,6 +6,9 @@ import { Suggestion, SuggestionsResponse } from '../entities/SuggestionsResponse
 import { City } from '../entities/City'
 import levenshtein from 'damerau-levenshtein'
 import haversine from 'haversine-distance'
+import { Cacheable } from '@type-cacheable/core'
+import { RedisClientType } from 'redis'
+import { RedisAdapter, useAdapter } from '@type-cacheable/redis-adapter'
 
 @injectable()
 export class SuggestionsService {
@@ -16,9 +19,28 @@ export class SuggestionsService {
         private readonly logger: Logger,
         @inject(TYPES.IDatabaseRepository)
         @named(TYPES.FirestoreRepository)
-        private readonly db: FirestoreRepository
-    ) {}
+        private readonly db: FirestoreRepository,
+        @inject(TYPES.Redis)
+        private readonly redisClient: RedisClientType
+    ) {
+        SuggestionsService.redisClientAdapter = useAdapter(redisClient as any)
+    }
 
+    static setCacheKey: any = (args: any[]) => {
+        let cacheKey = args[1]
+        if (args[2] && args[3]) {
+            cacheKey = cacheKey + ':' + args[2] + ':' + args[3]
+        }
+        return cacheKey
+    }
+    private static redisClientAdapter: RedisAdapter
+
+    @Cacheable({
+        cacheKey: SuggestionsService.setCacheKey,
+        hashKey: 'cities',
+        client: SuggestionsService.redisClientAdapter,
+        ttlSeconds: 86400
+    })
     public async fetchSuggestions(
         requestId: string,
         q: string,

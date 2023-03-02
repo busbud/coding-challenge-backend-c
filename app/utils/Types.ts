@@ -8,5 +8,7 @@ export const TYPES = {
     SuggestionsService: 'SuggestionsService',
     IDatabaseRepository: 'IDatabaseRepository',
     FirestoreRepository: 'FirestoreRepository',
-    Firestore: 'Firestore'
+    Firestore: 'Firestore',
+    Redis: 'Redis',
+    RedisAdapter: 'RedisAdapter'
 }
