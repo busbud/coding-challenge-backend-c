@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  coding-challenge:
+    build:
+      context: .
+      target: develop
+    ports:
+      - 5053:8080
+    container_name: coding-challenge
+    volumes:
+      - /code/node_modules
+      - /code/build
+      - ./:/code
+    command: npm run dev
