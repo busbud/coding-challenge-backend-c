@@ -6,6 +6,7 @@
   "scripts": {
     "start": "NODE_ENV=prod node ./build/index.js",
     "build": "rm -rf build && ./node_modules/typescript/bin/tsc",
+    "dev": "NODE_ENV=development ./node_modules/nodemon/bin/nodemon.js --watch app -e ts --exec 'ts-node app/index.ts'",
     "refreshData": "node ./build/updateFirestoreFromTsv.js",
     "lint": "./node_modules/.bin/eslint . --ext .ts --ignore-pattern node_modules/",
     "lint:fix": "./node_modules/.bin/eslint --fix . --ext .ts --ignore-pattern node_modules/",
@@ -30,12 +31,14 @@
     "inversify": "^6.0.1",
     "inversify-restify-utils": "^3.6.0",
     "mocha": "^1.18.2",
+    "nodemon": "^2.0.20",
     "path": "^0.12.7",
     "pino": "^8.11.0",
     "redis": "^4.6.5",
     "reflect-metadata": "^0.1.13",
     "restify": "^11.1.0",
     "supertest": "^0.11.0",
+    "ts-node": "^10.9.1",
     "typescript-eslint": "^0.0.1-alpha.0",
     "uuidv4": "^6.2.13"
   },
