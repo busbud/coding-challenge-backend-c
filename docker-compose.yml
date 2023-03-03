@@ -13,3 +13,15 @@ services:
       - /code/build
       - ./:/code
     command: npm run dev
+  coding-challenge-test:
+    build:
+      context: .
+      target: develop
+    ports:
+      - 5053:80
+    container_name: coding-challenge-tests
+    volumes:
+      - /code/node_modules
+      - /code/build
+      - ./:/code
+    command: npm run test
