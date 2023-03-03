@@ -6,7 +6,7 @@ services:
       context: .
       target: develop
     ports:
-      - 5053:8080
+      - 5053:80
     container_name: coding-challenge
     volumes:
       - /code/node_modules

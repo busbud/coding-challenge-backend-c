@@ -20,7 +20,6 @@ export class FirestoreRepository implements IDatabaseRepository {
             .where('population', '>', 5000)
             .where('country', 'in', ['USA', 'US', 'CA'])
             .get()
-
         query.forEach((doc) => {
             cities.push(doc.data() as City)
         })

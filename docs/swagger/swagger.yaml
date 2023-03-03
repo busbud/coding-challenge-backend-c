@@ -1,0 +1,70 @@
+openapi: 3.0.3
+info:
+  title: Coding Challenge - API
+  description: |-
+    This is the OpenAPI 3.0 specification for BusBud Coding Challenge API.
+  version: 1.0.0
+servers:
+  - url: https://petstore3.swagger.io/api/v3
+paths:
+  /suggestions:
+    get:
+      summary: Get Cities Suggestion
+      description: Get suggestions for cities based on search keyword and optionally latitude and longitude
+      operationId: searchCitiesByInputSearchKeyword
+      parameters:
+        - name: q
+          in: query
+          description: search keyword
+          required: true
+          explode: true
+          schema:
+            type: string
+        - name: latitude
+          in: query
+          description: latitude
+          required: false
+          explode: true
+          schema:
+            type: number
+        - name: longitude
+          in: query
+          description: longitude
+          required: false
+          explode: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Suggestion'
+        '500':
+          description: Internal Server Error
+components:
+  schemas:
+    Suggestion:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Montreal
+        latitude:
+          type: number
+          example: -99.99
+        longitude:
+          type: number
+          example: -11.11
+        score:
+          type: number
+          example: 0.568392
+        stringSimilarity:
+          type: number
+          example: 0.12348
+        distance:
+          type: number
+          example: 0.12729
