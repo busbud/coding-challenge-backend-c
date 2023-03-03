@@ -3,7 +3,7 @@ import { City } from '../../app/entities/City'
 export const mockCities: City[] = [
     {
         country: 'CA',
-        id: '6090405',
+        id: '6090408',
         latitude: 43.7251,
         longitude: -80.96723,
         name: 'North Perth',
@@ -20,10 +20,10 @@ export const mockCities: City[] = [
     {
         country: 'CA',
         id: '6090405',
-        latitude: 43.7251,
-        longitude: -80.96723,
-        name: 'North Perth',
-        population: 12254
+        latitude: 50.7251,
+        longitude: -10.96723,
+        name: 'Northhampton',
+        population: 20000
     }
 ]
 export const fireStoreDbQueryResponse: any = {

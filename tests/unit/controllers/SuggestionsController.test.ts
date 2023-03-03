@@ -56,7 +56,7 @@ describe('SuggestionsService', () => {
                     }
                 ])
             })
-            it('should respond with 400 if latitude is passed but as a string with missing q property message', async () => {
+            it('should respond with 400 with missing incorrect format message if latitude is passed but as a string', async () => {
                 req.query = {
                     q: 'tor',
                     latitude: 'incorrect latitude format'
@@ -80,7 +80,7 @@ describe('SuggestionsService', () => {
                     }
                 ])
             })
-            it('should respond with 400 if longitude is passed but as a string with missing q property message', async () => {
+            it('should respond with 400 with missing incorrect format message if longitude is passed but as a string', async () => {
                 req.query = {
                     q: 'tor',
                     longitude: 'incorrect longitude format'
@@ -111,13 +111,13 @@ describe('SuggestionsService', () => {
                     q: 'tor'
                 }
                 suggestionsService.fetchSuggestions.resolves(
-                    mockfetchSuggestionsReturns.suggestion1
+                    mockfetchSuggestionsReturns.suggestion2
                 )
                 await suggestionController.suggestions(req, res, next)
                 expect(resJsonStub.callCount).to.equal(1)
                 expect(resJsonStub.lastCall.args).to.deep.equal([
                     200,
-                    mockfetchSuggestionsReturns.suggestion1
+                    mockfetchSuggestionsReturns.suggestion2
                 ])
             })
             it('should respond with 200 if q is passed along with only longitude', async () => {
@@ -126,13 +126,13 @@ describe('SuggestionsService', () => {
                     longitude: '-99.87'
                 }
                 suggestionsService.fetchSuggestions.resolves(
-                    mockfetchSuggestionsReturns.suggestion1
+                    mockfetchSuggestionsReturns.suggestion2
                 )
                 await suggestionController.suggestions(req, res, next)
                 expect(resJsonStub.callCount).to.equal(1)
                 expect(resJsonStub.lastCall.args).to.deep.equal([
                     200,
-                    mockfetchSuggestionsReturns.suggestion1
+                    mockfetchSuggestionsReturns.suggestion2
                 ])
             })
             it('should respond with 200 if q is passed along with only latitude', async () => {
@@ -141,13 +141,13 @@ describe('SuggestionsService', () => {
                     latitude: 33.87
                 }
                 suggestionsService.fetchSuggestions.resolves(
-                    mockfetchSuggestionsReturns.suggestion1
+                    mockfetchSuggestionsReturns.suggestion2
                 )
                 await suggestionController.suggestions(req, res, next)
                 expect(resJsonStub.callCount).to.equal(1)
                 expect(resJsonStub.lastCall.args).to.deep.equal([
                     200,
-                    mockfetchSuggestionsReturns.suggestion1
+                    mockfetchSuggestionsReturns.suggestion2
                 ])
             })
         })

@@ -10,7 +10,9 @@
     "refreshData": "node ./build/updateFirestoreFromTsv.js",
     "lint": "./node_modules/.bin/eslint . --ext .ts --ignore-pattern node_modules/",
     "lint:fix": "./node_modules/.bin/eslint --fix . --ext .ts --ignore-pattern node_modules/",
-    "test:unit": "mocha -r ts-node/register -r reflect-metadata 'tests/**/*.ts'  --bail"
+    "test": "npm run test:unit && npm run test:functional",
+    "test:unit": "mocha -r ts-node/register -r reflect-metadata 'tests/unit/**/*.ts'  --bail",
+    "test:functional": "mocha -r ts-node/register -r reflect-metadata 'tests/functional/**/*.ts' --bail"
   },
   "author": "",
   "license": "WTFPL",
@@ -37,7 +39,6 @@
     "reflect-metadata": "^0.1.13",
     "restify": "^11.1.0",
     "sinon": "^15.0.1",
-    "supertest": "^0.11.0",
     "ts-node": "^10.9.1",
     "ts-sinon": "^2.0.2",
     "typescript-eslint": "^0.0.1-alpha.0",
@@ -54,9 +55,11 @@
     "@types/restify": "^8.5.6",
     "@types/restify-errors": "^4.3.5",
     "@types/sinon": "^10.0.13",
+    "@types/supertest": "^2.0.12",
     "@typescript-eslint/eslint-plugin": "^5.54.0",
     "@typescript-eslint/parser": "^5.54.0",
     "mocha": "^10.2.0",
+    "supertest": "^6.3.3",
     "typescript": "^4.9.5"
   }
 }
