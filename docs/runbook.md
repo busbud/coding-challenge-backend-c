@@ -38,7 +38,7 @@ http://localhost:8080/
 
 ### For running the unit and functional tests together using docker-compose
 ```sh
-npm run coding-challenge-test
+docker-compose up coding-challenge-test
 ```
 
 
@@ -48,9 +48,11 @@ npm run coding-challenge-test
 
 From the root folder, run
 ```sh
+npm i
+```
+```sh
 npm run dev
 ```
-
 Expected output
 ```sh
 > coding-challenge-backend-c@0.0.0 dev
