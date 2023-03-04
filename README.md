@@ -11,6 +11,7 @@ The deployed application can be accessed at
 - [RUNBOOK](docs/runbook.md)
 - [ARCHITECTURE](docs/architecture.md)
 - [Updating Firestore Database](docs/refreshFirestoreDatabase.md)
+- [Scoring Algorithm](docs/scoringAlgorithm.md)
 
 ## Suggestions API
 ### Endpoint

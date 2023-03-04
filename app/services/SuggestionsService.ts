@@ -4,7 +4,7 @@ import { Logger } from 'pino'
 import { FirestoreRepository } from '../repositories/FirestoreRepository'
 import { Suggestion, SuggestionsResponse } from '../entities/SuggestionsResponseSchema'
 import { City } from '../entities/City'
-import levenshtein from 'damerau-levenshtein'
+import distance from 'jaro-winkler'
 import haversine from 'haversine-distance'
 import { Cacheable } from '@type-cacheable/core'
 import { RedisClientType } from 'redis'
@@ -66,7 +66,13 @@ export class SuggestionsService {
         let maxHaversineDistance = 0
         const suggestionsWithStringSimilarityScores: Suggestion[] = []
         cities.map((city) => {
-            const similarityScore = levenshtein(q, city.name).similarity
+            const similarityScore = distance(
+                q.toLowerCase(),
+                city.name
+                    .normalize('NFD')
+                    .replace(/[\u0300-\u036f]/g, '')
+                    .toLowerCase()
+            ) //levenshtein(q, city.name).similarity
             let haversineDistance = 0
             if (longitude && latitude) {
                 haversineDistance = haversine(
