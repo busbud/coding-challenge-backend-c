@@ -31,7 +31,7 @@ describe('SuggestionsService', () => {
         resJsonStub = sandbox.stub(res, 'json' as any)
         errorStub = sandbox.stub(req.logger, 'error' as any)
         suggestionsService = sandbox.createStubInstance(SuggestionsService)
-        suggestionController = new SuggestionsController(suggestionsService)
+        suggestionController = new SuggestionsController(logger, suggestionsService)
     })
     describe('suggestions', () => {
         describe('when query params are missed or params in incorrect format are passed', () => {

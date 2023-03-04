@@ -7,11 +7,14 @@ import { TYPES } from '../utils/Types'
 import { Request, ajv } from '../utils/Request'
 import { v4 as uuidv4 } from 'uuid'
 import { SuggestionsRequestSchema } from '../entities/SuggestionsRequestSchema'
+import { Logger } from 'pino'
 
 @injectable()
 @Controller('/')
 export class SuggestionsController {
     constructor(
+        @inject(TYPES.Logger)
+        private readonly logger: Logger,
         @inject(TYPES.Service)
         @named(TYPES.SuggestionsService)
         private readonly suggestionsService: SuggestionsService
@@ -33,9 +36,10 @@ export class SuggestionsController {
                 )
                 res.json(200, response)
             }
+            this.logger.info({ msg: 'Suggestions Request Success', requestId, query: req.query })
             return next()
         } catch (e) {
-            req.logger.error({
+            this.logger.error({
                 msg: e.message,
                 requestId,
                 tags: ['controller', 'suggestions', 'error'],

@@ -2,17 +2,17 @@
   "name": "coding-challenge-backend-c",
   "version": "0.0.0",
   "description": "coding challenge in Nodejs",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node ./build/app/index.js",
+    "start": "NODE_ENV=production node ./build/app/index.js",
     "build": "rm -rf build && ./node_modules/typescript/bin/tsc",
-    "dev": "./node_modules/nodemon/bin/nodemon.js --watch app -e ts --exec 'ts-node app/index.ts'",
+    "dev": "NODE_ENV=development ./node_modules/nodemon/bin/nodemon.js --watch app -e ts --exec 'ts-node app/index.ts'",
     "refreshData": "node ./build/updateFirestoreFromTsv.js",
     "lint": "./node_modules/.bin/eslint . --ext .ts --ignore-pattern node_modules/",
     "lint:fix": "./node_modules/.bin/eslint --fix . --ext .ts --ignore-pattern node_modules/",
     "test": "npm run test:unit && npm run test:functional",
-    "test:unit": "mocha -r ts-node/register -r reflect-metadata 'tests/unit/**/*.ts'  --bail",
-    "test:functional": "mocha -r ts-node/register -r reflect-metadata 'tests/functional/**/*.ts' --bail"
+    "test:unit": "NODE_ENV=test mocha -r ts-node/register -r reflect-metadata 'tests/unit/**/*.ts'  --bail",
+    "test:functional": "NODE_ENV=test mocha -r ts-node/register -r reflect-metadata 'tests/functional/**/*.ts' --bail"
   },
   "author": "",
   "license": "WTFPL",

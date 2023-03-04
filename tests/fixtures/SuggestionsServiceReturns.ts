@@ -5,16 +5,16 @@ export const mockfetchSuggestionsReturns = {
                 name: 'North Perth',
                 latitude: 43.7251,
                 longitude: -80.96723,
-                score: 0.09090909090909094,
-                stringSimilarity: 0.09090909090909094,
+                score: 0.5303030303030303,
+                stringSimilarity: 0.5303030303030303,
                 distanceScore: 0
             },
             {
                 name: 'Northhampton',
                 latitude: 50.7251,
                 longitude: -10.96723,
-                score: 0.08333333333333337,
-                stringSimilarity: 0.08333333333333337,
+                score: 0.5277777777777778,
+                stringSimilarity: 0.5277777777777778,
                 distanceScore: 0
             },
             {
