@@ -14,8 +14,8 @@
     "test:unit": "NODE_ENV=test mocha -r ts-node/register -r reflect-metadata 'tests/unit/**/*.ts'  --bail",
     "test:functional": "NODE_ENV=test mocha -r ts-node/register -r reflect-metadata 'tests/functional/**/*.ts' --bail",
     "coverage": "NODE_ENV=test nyc --reporter=lcov --report-dir=tests/reports/coverage mocha --exit -r ts-node/register 'tests/{,!(mock)/**}/*.ts' -r reflect-metadata && nyc check-coverage --statements 90 --branches 65 --functions 90",
-    "coverage:unit": "nyc --report-dir tests/coverage/unit --reporter lcov npm run test:unit",
-    "coverage:functional": "nyc --report-dir tests/coverage/functional --reporter lcov npm run test:functional"
+    "coverage:unit": "NODE_ENV=test nyc --report-dir tests/coverage/unit --reporter lcov npm run test:unit",
+    "coverage:functional": "NODE_ENV=test nyc --report-dir tests/coverage/functional --reporter lcov npm run test:functional"
   },
   "author": "",
   "license": "WTFPL",
@@ -55,7 +55,8 @@
   "nyc": {
     "exclude": [
       "app/Kernel.ts",
-      "app/App.ts"
+      "app/App.ts",
+      "tests/**/*.ts"
     ]
   },
   "devDependencies": {
