@@ -13,7 +13,7 @@
     "test": "npm run test:unit && npm run test:functional",
     "test:unit": "NODE_ENV=test mocha -r ts-node/register -r reflect-metadata 'tests/unit/**/*.ts'  --bail",
     "test:functional": "NODE_ENV=test mocha -r ts-node/register -r reflect-metadata 'tests/functional/**/*.ts' --bail",
-    "coverage": "NODE_ENV=test nyc --reporter=lcov --report-dir=tests/reports/coverage mocha --exit -r ts-node/register 'tests/{,!(mock)/**}/*.ts' -r reflect-metadata && nyc check-coverage --statements 90 --branches 65 --functions 90",
+    "coverage": "NODE_ENV=test nyc --reporter=lcov --report-dir=tests/reports/coverage mocha --exit -r ts-node/register 'tests/{,!(mock)/**}/*.ts' -r reflect-metadata && nyc check-coverage --statements 95 --branches 95 --functions 95",
     "coverage:unit": "NODE_ENV=test nyc --report-dir tests/coverage/unit --reporter lcov npm run test:unit",
     "coverage:functional": "NODE_ENV=test nyc --report-dir tests/coverage/functional --reporter lcov npm run test:functional"
   },
