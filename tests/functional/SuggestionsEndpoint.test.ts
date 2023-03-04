@@ -155,7 +155,7 @@ describe('Validate /suggestions endpoint', () => {
                 // if both latitude and longitude are not given then stringSimilarity score should be same as the final score for a suggestion
                 const suggestionScore =
                     suggestion.stringSimilarity * SuggestionsService.NAME_PRIORITY_WEIGHT +
-                    suggestion.distance * SuggestionsService.DISTANCE_PRIORITY_WEIGHT
+                    suggestion.distanceScore * SuggestionsService.DISTANCE_PRIORITY_WEIGHT
 
                 const isScoreBasedOnStringSimilarityCompletely =
                     suggestion.score === suggestion.stringSimilarity

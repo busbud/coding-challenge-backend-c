@@ -83,17 +83,17 @@ export class SuggestionsService {
                 longitude: city.longitude,
                 score: similarityScore,
                 stringSimilarity: similarityScore,
-                distance: haversineDistance
+                distanceScore: haversineDistance
             })
         })
 
         // if latitude and longitude are given, then normalize distance and include it in final calculation of scores
         if (longitude && latitude) {
             suggestionsWithStringSimilarityScores.forEach((suggestion) => {
-                suggestion.distance = suggestion.distance / maxHaversineDistance
+                suggestion.distanceScore = suggestion.distanceScore / maxHaversineDistance
                 suggestion.score =
                     suggestion.stringSimilarity * SuggestionsService.NAME_PRIORITY_WEIGHT +
-                    suggestion.distance * SuggestionsService.DISTANCE_PRIORITY_WEIGHT
+                    suggestion.distanceScore * SuggestionsService.DISTANCE_PRIORITY_WEIGHT
             })
         }
 

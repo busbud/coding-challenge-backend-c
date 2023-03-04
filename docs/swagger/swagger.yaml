@@ -65,6 +65,6 @@ components:
         stringSimilarity:
           type: number
           example: 0.12348
-        distance:
+        distanceScore:
           type: number
           example: 0.12729

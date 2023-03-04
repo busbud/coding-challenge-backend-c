@@ -8,5 +8,5 @@ export interface Suggestion {
     longitude: number
     score: number
     stringSimilarity: number
-    distance: number
+    distanceScore: number
 }

@@ -5,7 +5,7 @@ import { TYPES } from './utils/Types'
 
 const logger = kernel.get<Logger>(TYPES.Logger)
 
-const app = new App(80)
+const app = new App(8080)
 
 function uncaughtException(err: Error): void {
     logger.error(err.message, {

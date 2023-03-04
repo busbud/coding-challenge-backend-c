@@ -117,7 +117,7 @@ describe('SuggestionsService', () => {
                     const found = isSuggesionCityInArrayOfCities(suggestion, mockCities)
                     const suggestionScore =
                         suggestion.stringSimilarity * SuggestionsService.NAME_PRIORITY_WEIGHT +
-                        suggestion.distance * SuggestionsService.DISTANCE_PRIORITY_WEIGHT
+                        suggestion.distanceScore * SuggestionsService.DISTANCE_PRIORITY_WEIGHT
 
                     expect(found && suggestionScore === suggestion.score).to.equal(true)
                 }
