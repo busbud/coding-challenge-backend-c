@@ -12,7 +12,10 @@
     "lint:fix": "./node_modules/.bin/eslint --fix . --ext .ts --ignore-pattern node_modules/",
     "test": "npm run test:unit && npm run test:functional",
     "test:unit": "NODE_ENV=test mocha -r ts-node/register -r reflect-metadata 'tests/unit/**/*.ts'  --bail",
-    "test:functional": "NODE_ENV=test mocha -r ts-node/register -r reflect-metadata 'tests/functional/**/*.ts' --bail"
+    "test:functional": "NODE_ENV=test mocha -r ts-node/register -r reflect-metadata 'tests/functional/**/*.ts' --bail",
+    "coverage": "NODE_ENV=test nyc --reporter=lcov --report-dir=tests/reports/coverage mocha --exit -r ts-node/register 'tests/{,!(mock)/**}/*.ts' -r reflect-metadata && nyc check-coverage --statements 90 --branches 65 --functions 90",
+    "coverage:unit": "nyc --report-dir tests/coverage/unit --reporter lcov npm run test:unit",
+    "coverage:functional": "nyc --report-dir tests/coverage/functional --reporter lcov npm run test:functional"
   },
   "author": "",
   "license": "WTFPL",
@@ -34,6 +37,7 @@
     "inversify-restify-utils": "^3.6.0",
     "jaro-winkler": "^0.2.8",
     "nodemon": "^2.0.20",
+    "nyc": "^15.1.0",
     "path": "^0.12.7",
     "pino": "^8.11.0",
     "redis": "^4.6.5",
@@ -47,6 +51,12 @@
   },
   "engines": {
     "node": "0.10.26"
+  },
+  "nyc": {
+    "exclude": [
+      "app/Kernel.ts",
+      "app/App.ts"
+    ]
   },
   "devDependencies": {
     "@types/chai": "^4.3.4",
