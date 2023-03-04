@@ -2,7 +2,15 @@ export const SuggestionsRequestSchema = {
     type: 'object',
     properties: {
         q: {
-            type: 'string'
+            type: 'string',
+            allOf: [
+                {
+                    transform: ['trim']
+                },
+                {
+                    minLength: 1
+                }
+            ]
         },
         latitude: {
             type: 'number'

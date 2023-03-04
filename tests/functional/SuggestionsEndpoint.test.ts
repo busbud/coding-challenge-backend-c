@@ -61,6 +61,23 @@ describe('Validate /suggestions endpoint', () => {
                 ]
             })
         })
+        it('should respond with 400 when q is passed but as an empty string', async () => {
+            const response = await supertest(app.getServer()).get('/suggestions?q= ').expect(400)
+            expect(response.status).to.be.equal(400)
+            expect(JSON.parse(response.text)).to.deep.equal({
+                errors: [
+                    {
+                        instancePath: '/q',
+                        keyword: 'minLength',
+                        message: 'must NOT have fewer than 1 characters',
+                        params: {
+                            limit: 1
+                        },
+                        schemaPath: '#/properties/q/allOf/1/minLength'
+                    }
+                ]
+            })
+        })
         it('should respond with 400 with missing incorrect format message if latitude is passed but as a string', async () => {
             const response = await supertest(app.getServer())
                 .get('/suggestions?q=ut&latitude=u897')

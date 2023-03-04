@@ -56,6 +56,27 @@ describe('SuggestionsService', () => {
                     }
                 ])
             })
+            it('should respond with 400 if q is passed as an empty string with missing q property message', async () => {
+                req.query = { q: ' ' }
+                await suggestionController.suggestions(req, res, next)
+                expect(resJsonStub.callCount).to.equal(1)
+                expect(resJsonStub.lastCall.args).to.deep.equal([
+                    400,
+                    {
+                        errors: [
+                            {
+                                instancePath: '/q',
+                                keyword: 'minLength',
+                                message: 'must NOT have fewer than 1 characters',
+                                params: {
+                                    limit: 1
+                                },
+                                schemaPath: '#/properties/q/allOf/1/minLength'
+                            }
+                        ]
+                    }
+                ])
+            })
             it('should respond with 400 with missing incorrect format message if latitude is passed but as a string', async () => {
                 req.query = {
                     q: 'tor',

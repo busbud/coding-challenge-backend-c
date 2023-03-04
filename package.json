@@ -21,6 +21,7 @@
     "@type-cacheable/core": "^11.0.1",
     "@type-cacheable/redis-adapter": "^14.0.2",
     "ajv": "^8.12.0",
+    "ajv-keywords": "^5.1.0",
     "chai": "^1.10.0",
     "csv-parse": "^5.3.5",
     "csv-parser": "^3.0.0",
