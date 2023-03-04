@@ -54,7 +54,7 @@ npm i
 npm run dev
 ```
 Expected output
-```sh
+```
 > coding-challenge-backend-c@0.0.0 dev
 > NODE_ENV=development ./node_modules/nodemon/bin/nodemon.js --watch app -e ts --exec 'ts-node app/index.ts'
 
@@ -68,11 +68,11 @@ Expected output
 ```
 
 The api can now be accessed at
-```sh
+```
 http://0.0.0.0:8080/
 ```
 OR at
-```sh
+```
 http://localhost:8080/
 ```
 
@@ -89,3 +89,20 @@ OR
 ```sh
 npm run lint:fix
 ```
+
+## Using your other instance of Redis
+To use a different instance of Redis, just update the following variables in `.env` file at the root of the project
+
+```
+REDIS_HOST=
+REDIS_PORT=
+REDIS_PASSWORD=
+```
+
+## Using your other instance of Firestore
+To use a different instance of Redis, just update the variables `.env` file at the root of the project
+```
+GOOGLE_APPLICATION_CREDENTIALS=
+FIRESTORE_PROJECT_ID=
+```
+AND replace the keyfile named `googleApplicationCred.json` from your own keyfile

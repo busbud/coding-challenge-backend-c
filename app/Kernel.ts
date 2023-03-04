@@ -18,8 +18,6 @@ if (!process.env.npm_package_name || !process.env.npm_package_version) {
     process.env.npm_package_version = p.version
 }
 
-process.env.GOOGLE_APPLICATION_CREDENTIALS = 'AIzaSyCsP138Gimko8NIcci5USqzG81sV_svYmw'
-
 const kernel = new Container()
 
 //bind utils
@@ -42,7 +40,7 @@ kernel
 
 // bind DB repositories
 const firestoreDb = new Firestore({
-    projectId: 'abiding-cistern-379308',
+    projectId: process.env.FIRESTORE_PROJECT_ID,
     keyFilename: 'googleApplicationCred.json'
 })
 
@@ -54,10 +52,10 @@ kernel
     .whenTargetNamed(TYPES.FirestoreRepository)
 
 const redisClient: RedisClientType = createClient({
-    password: '5oZNoQd5VKZWgsw7VMhtB6TPdfgSVEog',
+    password: process.env.REDIS_PASSWORD,
     socket: {
-        host: 'redis-14313.c253.us-central1-1.gce.cloud.redislabs.com',
-        port: 14313
+        host: process.env.REDIS_HOST,
+        port: +process.env.REDIS_PORT
     }
 })
 cacheManager.setOptions({
