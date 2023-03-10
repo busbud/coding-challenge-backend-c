@@ -1,16 +1,42 @@
-var http = require('http');
-var port = process.env.PORT || 2345;
+import Fastify from 'fastify'
+import openapiGlue from 'fastify-openapi-glue'
+import Swagger from '@fastify/swagger'
+import SwaggerUI from '@fastify/swagger-ui'
 
-module.exports = http.createServer(function (req, res) {
-  res.writeHead(404, {'Content-Type': 'text/plain'});
+import { Service } from './service.js'
 
-  if (req.url.indexOf('/suggestions') === 0) {
-    res.end(JSON.stringify({
-      suggestions: []
-    }));
-  } else {
-    res.end();
+const options = {
+  specification: './spec/cities.yaml',
+  service: new Service(),
+  prefix: 'v1'
+}
+
+const fastify = Fastify({
+  logger: true
+})
+
+fastify.register(openapiGlue, options)
+fastify.register(Swagger, {
+  mode: 'static',
+  specification: {
+    path: './spec/cities.yaml'
   }
-}).listen(port, '127.0.0.1');
+})
+fastify.register(SwaggerUI, {
+  routePrefix: '/documentation',
+  uiConfig: {
+    docExpansion: 'full',
+    deepLinking: false
+  }
+})
 
-console.log('Server running at http://127.0.0.1:%d/suggestions', port);
+fastify.listen({ host: '0.0.0.0', port: 3000 }, (err, address) => {
+  if (err) {
+    fastify.log.error(`Problem starting up: ${err}`)
+    process.exit(1)
+  }
+  if (process.env.NODE_ENV === 'development') {
+    fastify.log.info(`Server up at ${address}`)
+  }
+
+})
