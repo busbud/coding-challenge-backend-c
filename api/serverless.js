@@ -5,6 +5,7 @@ import openapiGlue from 'fastify-openapi-glue'
 
 import { Service } from './../service.js'
 
+const Suggestions = new Service()
 const specification = {
   openapi: "3.0.0",
   info: {
@@ -140,7 +141,8 @@ const fastify = Fastify({
   logger: true
 })
 
-fastify.register(openapiGlue, options)
+//fastify.register(openapiGlue, options)
+fastify.get('/suggestions', Suggestions.getSuggestions)
 
 export default async (req, resp) => {
   await fastify.ready()

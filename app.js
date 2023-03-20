@@ -5,9 +5,10 @@ import SwaggerUI from '@fastify/swagger-ui'
 
 import { Service } from './service.js'
 
+const Suggestions = new Service()
 const options = {
   specification: './spec/cities.yaml',
-  service: new Service(),
+  service: Suggestions,
   prefix: 'v1'
 }
 
@@ -15,7 +16,7 @@ const fastify = Fastify({
   logger: true
 })
 
-fastify.register(openapiGlue, options)
+//fastify.register(openapiGlue, options)
 fastify.register(Swagger, {
   mode: 'static',
   specification: {
@@ -29,6 +30,8 @@ fastify.register(SwaggerUI, {
     deepLinking: false
   }
 })
+
+fastify.get('/suggestions', Suggestions.getSuggestions)
 
 fastify.listen({ host: '0.0.0.0', port: 3000 }, (err, address) => {
   if (err) {
