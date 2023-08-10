@@ -8,6 +8,5 @@
     "rootDirs": ["src", "test"],
     "baseUrl": "src"
   },
-  "include": ["src", "test"],
-  "exclude": []
+  "include": ["src", "test"]
 }
