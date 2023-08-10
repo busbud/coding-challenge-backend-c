@@ -19,6 +19,9 @@
   },
   "devDependencies": {
     "@types/node": "^20.4.9",
+    "@typescript-eslint/eslint-plugin": "^6.3.0",
+    "@typescript-eslint/parser": "^6.3.0",
+    "eslint": "^8.46.0",
     "git-commit-msg-linter": "^5.0.4",
     "typescript": "^5.1.6"
   }

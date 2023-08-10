@@ -1,0 +1,21 @@
+{
+  "plugins": ["@typescript-eslint"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "rules": {
+    "keyword-spacing": ["warn", { "after": true, "before": true }],
+    "object-curly-spacing": ["warn", "always"],
+    "quotes": ["warn", "single"],
+    "semi": "warn",
+    "semi-style": ["warn", "last"]
+  },
+  "ignorePatterns": ["/commands/*.js"],
+  "settings": {
+    "import/resolver": {
+      "typescript": {}
+    }
+  }
+}
