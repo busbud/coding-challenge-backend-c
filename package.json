@@ -16,5 +16,8 @@
   },
   "engines": {
     "node": "0.10.26"
+  },
+  "devDependencies": {
+    "git-commit-msg-linter": "^5.0.4"
   }
 }
