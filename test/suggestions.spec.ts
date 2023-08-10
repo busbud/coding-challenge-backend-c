@@ -11,14 +11,13 @@ describe('GET /suggestions', () => {
   });
 
   describe('with a non-existent city', function () {
-    let response;
+    let response: request.Response;
 
     beforeAll((done) => {
       request(app)
         .get('/suggestions?q=SomeRandomCityInTheMiddleOfNowhere')
         .end((err, res) => {
           response = res;
-          response.json = JSON.parse(res.text);
           done(err);
         });
     });
@@ -28,8 +27,10 @@ describe('GET /suggestions', () => {
     });
 
     test('returns an empty array of suggestions', () => {
-      expect(response.json.suggestions).toBeInstanceOf(Array);
-      expect(response.json.suggestions).toHaveLength(0);
+      const json = JSON.parse(response.text);
+
+      expect(json.suggestions).toBeInstanceOf(Array);
+      expect(json.suggestions).toHaveLength(0);
     });
   });
 });
