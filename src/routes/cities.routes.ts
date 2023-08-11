@@ -1,6 +1,6 @@
-import { getCitySuggestions } from '../controllers/cities/get-suggestions.controller';
+import { getCitiesSuggestionsController } from '../controllers/cities/get-cities-suggestions.controller';
 import { Router } from 'express';
 
 export default function (router: Router) {
-  router.get('/suggestions', getCitySuggestions);
+  router.get('/suggestions', getCitiesSuggestionsController);
 }
