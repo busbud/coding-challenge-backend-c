@@ -16,4 +16,4 @@ RUN npm install
 
 EXPOSE 4000
 
-CMD npm run docker
+CMD npm run start

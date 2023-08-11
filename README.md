@@ -1,146 +1,71 @@
-# Busbud Coding Challenge
+# Busbud Backend Challenge
 
-## Requirements
+See the live site at https://busbud-gcp.onrender.com/suggestions?q=Montreal
 
-Design an API endpoint that provides autocomplete suggestions for large cities.
-The suggestions should be restricted to cities in the USA and Canada with a population above 5000 people.
+It may take a while to respond upon first load.
 
-- the endpoint is exposed at `/suggestions`
-- the partial (or complete) search term is passed as a query string parameter `q`
-- the caller's location can optionally be supplied via query string parameters `latitude` and `longitude` to help improve relative scores
-- the endpoint returns a JSON response with an array of scored suggested matches
-    - the suggestions are sorted by descending score
-    - each suggestion has a score between 0 and 1 (inclusive) indicating confidence in the suggestion (1 is most confident)
-    - each suggestion has a name which can be used to disambiguate between similarly named locations
-    - each suggestion has a latitude and longitude
-- all functional tests should pass (additional tests may be implemented as necessary).
-- the final application should be available publicly. You can use any hosting solution of your choice ([Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs), [GCP](https://cloud.google.com/run/docs/quickstarts/deploy-container), etc.).
-- feel free to add more features if you like!
+Manually add query parameters for latitude/longitude to the link.
 
-#### Sample responses
+-   e.g. https://busbud-gcp.onrender.com/suggestions?q=Lon&latitude=43.70011&longitude=-79.4163
 
-These responses are meant to provide guidance. The exact values can vary based on the data source and scoring algorithm.
+### Tech used
 
-**Near match**
+This TypeScript Express server uses Prisma to send SQL queries. A Postgres database responds from a Docker container hosted on Google Cloud Platforms. The repo also contains instructions to run these services in a local Docker container.
 
-    GET /suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
+---
 
-```json
-{
-  "suggestions": [
-    {
-      "name": "London, ON, Canada",
-      "latitude": "42.98339",
-      "longitude": "-81.23304",
-      "score": 0.9
-    },
-    {
-      "name": "London, OH, USA",
-      "latitude": "39.88645",
-      "longitude": "-83.44825",
-      "score": 0.5
-    },
-    {
-      "name": "London, KY, USA",
-      "latitude": "37.12898",
-      "longitude": "-84.08326",
-      "score": 0.5
-    },
-    {
-      "name": "Londontowne, MD, USA",
-      "latitude": "38.93345",
-      "longitude": "-76.54941",
-      "score": 0.3
-    }
-  ]
-}
-```
+## To get started, run Docker locally
 
-**No match**
+You'll need Node v20.4.0 and Docker CLI.
 
-    GET /suggestions?q=SomeRandomCityInTheMiddleOfNowhere
+In repo directory:
 
-```json
-{
-  "suggestions": []
-}
-```
+-   `npm install`
+-   Ensure the URL for locally hosted Docker is present in `.env`
+-   `npm run build` starts pulling the image and drawing up a containerized DB **_and_** server
+-   Upon seeing `Listening on port 4000`, open a new terminal for `npm run db-init`
+-   Server should be listening and the seed command should now have executed
+-   Test at http://localhost:4000/suggestions?q=Mont
 
+Note that subsequent compose up and down commands might create errors from the Postgres terminal about duplicate keys. At that point, just use `npm run server`.
 
-### Non-functional
+---
 
-- All code should be written in Javascript or Typescript.
-- Mitigations to handle high levels of traffic should be implemented.
-- Challenge is submitted as pull request against this repo ([fork it](https://help.github.com/articles/fork-a-repo/) and [create a pull request](https://help.github.com/articles/creating-a-pull-request-from-a-fork/)).
-- Documentation and maintainability is a plus.
+## Testing
 
-## Dataset
+To call the entire test suite, `npm run test` while the `Listening on port 4000` terminal is active.
 
-You can find the necessary dataset along with its description and documentation in the [`data`](data/) directory.
+Test were added to:
 
-## Evaluation
+-   Verify SQL injection doesn't work
+-   Ensure latitude/longitude values are between -90 and 90
+-   Show that coordinates provide a more confident autocomplete suggestion
+-   Confirm a 429 Too Many Requests error code is possible
 
-We will use the following criteria to evaluate your solution:
+---
 
-- Capacity to follow instructions
-- Developer Experience (how easy it is to run your solution locally, how clear your documentation is, etc)
-- Solution correctness
-- Performance
-- Tests (quality and coverage)
-- Code style and cleanliness
-- Attention to detail
-- Ability to make sensible assumptions
+## Discussion
 
-It is ok to ask us questions!
+### Why Prisma?
 
-We know that the time for this project is limited and it is hard to create a "perfect" solution, so we will consider that along with your experience when evaluating the submission.
+Prisma makes it really easy to both migrate schemas and seed databases. There's also great TypeScript integration that is baked in to schema definitions.
 
-## Getting Started
+Prisma can integrate with many different databases and QL languages and generally does a good job at serving as a query builder. In my case, I still had to use $queryRaw, which is just SQL, but there are great features to it that allows for interpolating variables and preventing SQL injections.
 
-### Prerequisites
+### Why Docker?
 
-You are going to need:
+I thought it would be interesting and fun to make something with it, as I feel like there's a lot of hype around containerization and wanted to see what the hubbub was all about. Once things were set up, it's certainly easy to get going. Hopefully it's easy for you to get started now, too!
 
-- `Git`
-- `nvm` (or your preferred node version manager)
-- `Node.js`
+### Why Google Cloud Platform?
 
-### Setting up your environment
+GCP let me open up an SSH terminal on a virtual Debian machine in the browser and then install Docker via the command line. I then spun up a simple Postgres image. From my Linux machine, I made a VM running Linux that itself was running Linux in Docker. It's Linuxes all the way down!
 
-1. Begin by forking this repo and cloning your fork. GitHub has apps for [Mac](http://mac.github.com/) and
-[Windows](http://windows.github.com/) that make this easier.
+I knew this option would be free because the VM itself has low enough specs to be within the free tier. I felt like Google would be a reliable choice. Since I don't need to persist my data, most choices would have been fine, but I can apparently still persist with this option, too.
 
-2. Install [nvm](https://github.com/nvm-sh/nvm#install--update-script) or your preferred node version manager.
+---
 
-3. Install [Node.js](http://www.nodejs.org).
+# ???
 
-### Setting up the project
+It would've been fun to try:
 
-In the project directory run:
-
-```
-nvm use
-npm install
-```
-
-### Running the tests
-
-The test suite can be run with:
-
-```
-npm run test
-```
-
-### Starting the application
-
-To start a local server run:
-
-```
-npm run start
-```
-
-it should produce an output similar to:
-
-```
-Server running at http://127.0.0.1:2345/suggestions
-```
+-   Multiple containers to _'horizontally scale'_ and thereby mitigate high levels of traffic. Each instance of a database/server could individually handle requests, so the load is more evenly distributed.
