@@ -1,20 +1,38 @@
 {
-  "name": "coding-challenge-backend-c",
-  "version": "0.0.0",
-  "description": "coding challenge in Nodejs",
-  "main": "app.js",
-  "scripts": {
-    "start": "node app.js",
-    "test": "./node_modules/mocha/bin/mocha ./test/"
-  },
-  "author": "",
-  "license": "WTFPL",
-  "dependencies": {
-    "chai": "^1.9.1",
-    "mocha": "^1.18.2",
-    "supertest": "^0.11.0"
-  },
-  "engines": {
-    "node": "0.10.26"
-  }
+    "name": "coding-challenge-backend-c",
+    "version": "0.0.0",
+    "description": "coding challenge in Nodejs",
+    "scripts": {
+        "start": "node dist/api/startServer.js",
+        "docker-start": "npx prisma db push && npx node dist/api/startServer.js",
+        "docker-db-init": "docker exec -it prisma-postgres-api sh -c \"npx prisma db seed\" && docker exec -it busbud-postgres bash -c \"psql -U user -d mydb -c 'CREATE EXTENSION IF NOT EXISTS pg_trgm;'\"",
+        "docker-test": "docker exec -it prisma-postgres-api sh -c \"npx mocha test/suggestions.js\"",
+        "gcp-seed": "npx prisma db push && npx prisma db seed && npx node dist/api/startServer.js",
+        "gcp-test": "npx mocha test/suggestions.js"
+    },
+    "prisma": {
+        "seed": "ts-node prisma/seed.ts"
+    },
+    "author": "Michael Nolan",
+    "license": "WTFPL",
+    "dependencies": {
+        "@prisma/client": "^5.1.1",
+        "csv-parser": "^3.0.0",
+        "express": "^4.18.2",
+        "express-rate-limit": "^6.9.0",
+        "prisma": "^5.1.1"
+    },
+    "devDependencies": {
+        "@types/express": "^4.17.17",
+        "@types/express-serve-static-core": "^4.17.35",
+        "@types/morgan": "^1.9.4",
+        "@types/node": "^20.4.8",
+        "chai": "^4.3.7",
+        "mocha": "^10.2.0",
+        "morgan": "^1.10.0",
+        "prettier": "^3.0.1",
+        "supertest": "^6.3.3",
+        "ts-node": "^10.9.1",
+        "typescript": "^5.1.6"
+    }
 }

@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  busbud-postgres:
+    image: postgres
+    container_name: busbud-postgres
+    ports:
+      - 5432:5432
+    expose:
+      - 5432
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: db
+    restart: unless-stopped
+    volumes:
+      - ./scripts:/docker-entrypoint-initdb.d
+
+  prisma-postgres-api:
+    stdin_open: true
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: prisma-postgres-api
+    depends_on:
+      - busbud-postgres
+    ports:
+      - 4000:4000
+    restart: unless-stopped

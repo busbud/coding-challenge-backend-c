@@ -1,0 +1,19 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model City {
+  id         String @id @default(cuid())
+  name       String
+  ascii      String
+  fullName   String
+  latitude   Float
+  longitude  Float
+  country    String
+  population Int
+}
