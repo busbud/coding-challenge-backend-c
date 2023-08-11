@@ -6,3 +6,15 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model City {
+  id Int @id
+  name String @db.VarChar(200)
+  asciiName String @db.VarChar(200)
+  alternateNames String[]
+  latitude Float
+  longitude Float
+  countryCode String @db.VarChar(2)
+  stateCode String @db.VarChar(2)
+  population Int
+}
