@@ -1,8 +1,9 @@
 import 'dotenv/config';
+import env from './config/env';
 import { setupApp } from './app';
 
-const url = process.env.SERVER_URL || '127.0.0.1';
-const port = parseInt(process.env.SERVER_PORT ?? '') || 2345;
+const url = env.serverUrl;
+const port = env.serverPort;
 
 const app = setupApp();
 
