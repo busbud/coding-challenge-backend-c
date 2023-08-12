@@ -17,4 +17,6 @@ model City {
   countryCode String @db.VarChar(2)
   stateCode String @db.VarChar(2)
   population Int
+
+  @@index([name(ops: raw("gin_trgm_ops"))], type: Gin)
 }

@@ -1,0 +1,1 @@
+CREATE extension if not exists pg_trgm;
