@@ -1,21 +1,49 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { getCitiesSuggestions } from '../../services/cities/get-cities-suggestions.service';
+import { TypedRequestQuery } from '../../helpers/express';
+import { MissingParamError } from '../../helpers/errors';
+import {
+  sendBadRequest,
+  sendNotFound,
+  sendOk,
+  sendServerError,
+} from '../../helpers/http';
+
+type GetCitiesSuggestionsQuery = {
+  q: string;
+};
 
 export async function getCitiesSuggestionsController(
-  req: Request,
+  req: TypedRequestQuery<GetCitiesSuggestionsQuery>,
   res: Response
 ) {
-  const suggestions = await getCitiesSuggestions(req.context.prisma);
+  try {
+    const query = req.query.q;
 
-  if (!suggestions.length) {
-    res.writeHead(404, { 'Content-Type': 'text/plain' });
+    if (!query) {
+      sendBadRequest(res, new MissingParamError('query'));
+    }
 
-    res.end(
+    const suggestions = await getCitiesSuggestions(req.context.prisma, query);
+
+    if (!suggestions.length) {
+      sendNotFound(
+        res,
+        JSON.stringify({
+          suggestions: [],
+        })
+      );
+
+      return;
+    }
+
+    sendOk(
+      res,
       JSON.stringify({
-        suggestions: [],
+        suggestions,
       })
     );
-
-    return;
+  } catch (error) {
+    sendServerError(res, error);
   }
 }
