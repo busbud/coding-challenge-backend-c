@@ -18,6 +18,7 @@ export const findCities = async (req: SuggestionRequest, res: Response) => {
     const findDistance = latitude && longitude ? true : false
     // latitude/longitude may be undefined, so check before verifying lat/long
     if (findDistance) {
+        // Math.abs checks for absolute value, so that |-90| = |90| and our if statement is a bit cleaner
         if (Math.abs(latitude!) > 90 || Math.abs(longitude!) > 90) {
             res.status(404).json({
                 message:
