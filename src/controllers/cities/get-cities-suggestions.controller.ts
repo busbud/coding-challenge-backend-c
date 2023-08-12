@@ -27,22 +27,16 @@ export async function getCitiesSuggestionsController(
     const suggestions = await getCitiesSuggestions(req.context.prisma, query);
 
     if (!suggestions.length) {
-      sendNotFound(
-        res,
-        JSON.stringify({
-          suggestions: [],
-        })
-      );
+      sendNotFound(res, {
+        suggestions: [],
+      });
 
       return;
     }
 
-    sendOk(
-      res,
-      JSON.stringify({
-        suggestions,
-      })
-    );
+    sendOk(res, {
+      suggestions,
+    });
   } catch (error) {
     sendServerError(res, error);
   }
