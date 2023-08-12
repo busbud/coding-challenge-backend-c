@@ -1,13 +1,15 @@
 import { PrismaClient } from '@prisma/client';
 import env from '../../config/env';
-import { CitySuggestion } from '../../domain/models';
+import { CitySuggestion, Location } from '../../domain/models';
 import { findManyCitiesSuggestions } from '../../infra/db/cities/find-many-cities-suggestions';
+import { addCityLocationScore } from '../../helpers/cities/city-distance-score';
 
 const LIMIT = 10;
 
 export async function getCitiesSuggestions(
   prisma: PrismaClient,
-  name: string
+  name: string,
+  location?: Location
 ): Promise<CitySuggestion[]> {
   const cities = await findManyCitiesSuggestions(prisma, {
     name,
@@ -16,5 +18,13 @@ export async function getCitiesSuggestions(
     limit: LIMIT,
   });
 
-  return cities;
+  if (!location) {
+    return cities;
+  }
+
+  const citiesWithScore = cities
+    .map((city) => addCityLocationScore(city, location))
+    .sort((a, b) => (a.score > b.score ? -1 : 1));
+
+  return citiesWithScore;
 }

@@ -1,4 +1,5 @@
 import { Response } from 'express';
+import { Location } from '../../domain/models';
 import { getCitiesSuggestions } from '../../services/cities/get-cities-suggestions.service';
 import { TypedRequestQuery } from '../../helpers/express';
 import { MissingParamError } from '../../helpers/errors';
@@ -11,6 +12,8 @@ import {
 
 type GetCitiesSuggestionsQuery = {
   q: string;
+  latitude: string;
+  longitude: string;
 };
 
 export async function getCitiesSuggestionsController(
@@ -18,13 +21,25 @@ export async function getCitiesSuggestionsController(
   res: Response
 ) {
   try {
-    const query = req.query.q;
+    const { q: query, latitude, longitude } = req.query;
 
     if (!query) {
       sendBadRequest(res, new MissingParamError('query'));
     }
 
-    const suggestions = await getCitiesSuggestions(req.context.prisma, query);
+    let location: Location | undefined;
+    if (latitude && longitude) {
+      location = {
+        latitude: parseFloat(latitude),
+        longitude: parseFloat(longitude),
+      };
+    }
+
+    const suggestions = await getCitiesSuggestions(
+      req.context.prisma,
+      query,
+      location
+    );
 
     if (!suggestions.length) {
       sendNotFound(res, {
