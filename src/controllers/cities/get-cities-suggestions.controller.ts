@@ -53,6 +53,10 @@ export async function getCitiesSuggestionsController(
       suggestions,
     });
   } catch (error) {
-    sendServerError(res, error);
+    let err;
+    if (error instanceof Error) {
+      err = error;
+    }
+    sendServerError(res, err);
   }
 }

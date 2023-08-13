@@ -84,4 +84,52 @@ describe('GET /suggestions', () => {
       );
     });
   });
+
+  describe('with a valid city and location', () => {
+    let response: request.Response;
+
+    beforeAll((done) => {
+      request(app)
+        .get('/suggestions?q=Londo&latitude=43.70011&longitude=-79.4163')
+        .end((err, res) => {
+          response = res;
+          done(err);
+        });
+    });
+
+    test('returns a 200', () => {
+      expect(response.statusCode).toEqual(200);
+    });
+
+    test('returns an array of suggestions', () => {
+      const json = JSON.parse(response.text);
+
+      expect(json.suggestions).toBeInstanceOf(Array);
+      expect(json.suggestions.length).toBeGreaterThan(0);
+    });
+
+    describe('Validate the shape of the data being returned', () => {
+      test('contains latitudes and longitudes', () => {
+        const json = JSON.parse(response.text);
+
+        expect(json.suggestions).toSatisfyAll(
+          (suggestion) => suggestion.latitude && suggestion.longitude
+        );
+      });
+
+      test('contains scores', function () {
+        const json = JSON.parse(response.text);
+
+        expect(json.suggestions).toSatisfyAll((suggestion) => suggestion.score);
+      });
+    });
+
+    test('contains a match', function () {
+      const json = JSON.parse(response.text);
+
+      expect(json.suggestions).toSatisfyAny((suggestion) =>
+        /london/i.test(suggestion.name)
+      );
+    });
+  });
 });

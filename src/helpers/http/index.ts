@@ -5,8 +5,8 @@ export function sendBadRequest(res: Response, error: Error) {
   res.status(400).send(error);
 }
 
-export function sendServerError(res: Response, error: Error) {
-  res.status(500).send(new ServerError(error.stack));
+export function sendServerError(res: Response, error?: Error) {
+  res.status(500).send(new ServerError(error?.stack));
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -6,7 +6,18 @@
     "esModuleInterop": true,
     "sourceMap": true,
     "rootDirs": ["src", "test"],
-    "baseUrl": "src"
+    "baseUrl": "src",
+    "strict": true,
+    "alwaysStrict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
   },
   "include": ["src", "test"]
 }
