@@ -4,7 +4,7 @@
     "description": "coding challenge in Nodejs",
     "scripts": {
         "server": "docker compose up && node dist/api/startServer.js",
-        "build": "docker build -t busbud-pg-node . && docker compose up",
+        "build": "tsc && docker build -t busbud-pg-node . && docker compose up",
         "start": "npx prisma db push && npx node dist/api/startServer.js",
         "db-init": "docker exec -it prisma-postgres-api sh -c \"npx prisma db seed\" && docker exec -it busbud-postgres bash -c \"psql -U user -d mydb -c 'CREATE EXTENSION IF NOT EXISTS pg_trgm;'\"",
         "test": "docker exec -it prisma-postgres-api sh -c \"npx mocha test/suggestions.js\"",

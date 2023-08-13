@@ -1,9 +1,6 @@
-import { Response, Router } from 'express'
-import { findCities } from '../findCities'
-import { SuggestionRequest } from './server'
+import { Router } from 'express'
+import { findCities } from './handlers/findCities'
 
 export const suggestionsRouter: Router = Router()
 
-suggestionsRouter.get('/', async (req: SuggestionRequest, res: Response) =>
-    findCities(req, res)
-)
+suggestionsRouter.get('/', findCities)

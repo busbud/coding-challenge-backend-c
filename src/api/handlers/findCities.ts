@@ -1,6 +1,6 @@
 import { PrismaClient, Prisma } from '@prisma/client'
 import { Response } from 'express'
-import { SuggestionRequest } from './api/server'
+import { SuggestionRequest } from '../server'
 const prisma = new PrismaClient()
 
 type Result = {
@@ -11,6 +11,8 @@ type Result = {
     distance: number
     score: number
 }
+
+// this function takes city name, latitude/longitude (req query parameters) and returns the suggestions from the DB
 
 export const findCities = async (req: SuggestionRequest, res: Response) => {
     const { q, latitude, longitude } = req.query
@@ -48,29 +50,29 @@ export const findCities = async (req: SuggestionRequest, res: Response) => {
     try {
         // prisma.sql enables conditional rendering in an SQL query and properly formats SQL syntax
         const suggestions: Result[] = await prisma.$queryRaw`
-      SELECT
-        name,
-        "fullName",
-        latitude,
-        longitude,
-        ${
-            findDistance
-                ? Prisma.sql`
-                      PERCENT_RANK() OVER (ORDER BY( POWER(${distanceFormula},-1) 
-                        * SIMILARITY("ascii", ${cityNoAccents})  ))`
-                : Prisma.sql`SIMILARITY("ascii", ${cityNoAccents})`
-        }
-          AS score
-      FROM  
-        "City"
-      WHERE 
-          "ascii" ILIKE LOWER(${cityNoAccents})||'%' 
-        AND 
-          population >= 5000
-      ORDER BY
-        score DESC
-      LIMIT
-        5
+             SELECT
+               name,
+               "fullName",
+               latitude,
+               longitude,
+               ${
+                   findDistance
+                       ? Prisma.sql`
+                             PERCENT_RANK() OVER (ORDER BY( POWER(${distanceFormula},-1) 
+                               * SIMILARITY("ascii", ${cityNoAccents})  ))`
+                       : Prisma.sql`SIMILARITY("ascii", ${cityNoAccents})`
+               }
+                 AS score
+             FROM  
+               "City"
+             WHERE 
+                 "ascii" ILIKE LOWER(${cityNoAccents})||'%' 
+               AND 
+                 population >= 5000
+             ORDER BY
+               score DESC
+             LIMIT
+               5
     `
         if (suggestions.length > 0) {
             res.status(200).json({

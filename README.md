@@ -12,24 +12,26 @@ Manually add query parameters to the link for latitude/longitude.
 
 This TypeScript Express server (hosted on Render) uses Prisma to send SQL queries. A Postgres database responds from a Docker container hosted on Google Cloud Platforms.
 
-The repo also contains instructions to run these services in a local Docker container.
-
 ---
 
 ## To get started, run Docker locally
 
-You'll need Node v20.4.0 and Docker CLI.
+You'll need Node v20.4.0, TypeScript and Docker (verify you have working `npm`, `tsc`, and `docker` commands).
 
 In repo directory:
 
--   `npm install`
--   Ensure the URL for locally hosted Docker is active in `.env`
+-   `nvm use` and `npm install`
+-   Ensure you have the `.env` file in root directory
 -   `npm run build` starts pulling the image and drawing up a containerized DB **_and_** server
 -   Upon seeing `Listening on port 4000`, open a new terminal for `npm run db-init`
 -   After a moment, the server should be listening and the seed command should have executed
 -   Test at http://localhost:4000/suggestions?q=Mont
 
 Note that subsequent docker compose up and down commands (from an `npm run xyz`) might create errors from the Postgres terminal about duplicate keys. At that point, just use `npm run server`.
+
+This local repo has been tested on 3 machines, Pop!_OS 22.04 and two different Windows 10 installations. All worked without issue.
+
+An **M1 Mac** came across the following error and was unable to seed the DB: https://github.com/prisma/prisma/issues/18207. I don't actually own the M1 Mac and so can't offer much help on troubleshooting it.
 
 ---
 
@@ -46,7 +48,7 @@ Tests were added to:
 
 ---
 
-# Discussion
+# Architecture Decisions
 
 ## Why Prisma?
 

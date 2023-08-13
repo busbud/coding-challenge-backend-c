@@ -1,9 +1,10 @@
 var expect = require('chai').expect
 const { createServer } = require('../dist/api/server.js')
+const {TEST_MAX_TIME_PER_WINDOW, TEST_MAX_SERVER_REQUESTS_PER_WINDOW}  = require ('../src/constants.ts')
 const app = createServer(
-    {
-        windowMs: 60 * 1000, // 60 sec
-        max: 7, // limits IP to 100 requests per 15 min window
+    { // limit IP to max # of requests per time window
+        windowMs: TEST_MAX_TIME_PER_WINDOW, 
+        max: TEST_MAX_SERVER_REQUESTS_PER_WINDOW,
         message:
             'Too many requests from this IP. Please try again later (test).',
         statusCode: 429,
