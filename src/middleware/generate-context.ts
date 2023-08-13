@@ -6,7 +6,10 @@ export async function generateContext(
   _res: Response,
   next: NextFunction
 ) {
-  req.context = { prisma: new PrismaClient() };
+  const prisma = new PrismaClient();
+  const redis = req.app.redis;
+
+  req.context = { prisma, redis };
 
   next();
 }

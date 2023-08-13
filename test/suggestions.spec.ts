@@ -10,7 +10,11 @@ let app: Express;
 
 describe('GET /suggestions', () => {
   beforeAll(async () => {
-    app = setupApp();
+    app = await setupApp();
+  });
+
+  afterAll(() => {
+    app.disconnect();
   });
 
   describe('with a non-existent city', () => {

@@ -36,7 +36,7 @@ export async function getCitiesSuggestionsController(
     }
 
     const suggestions = await getCitiesSuggestions(
-      req.context.prisma,
+      req.context,
       query,
       location
     );
