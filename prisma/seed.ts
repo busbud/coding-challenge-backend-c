@@ -1,5 +1,6 @@
 import fs from 'fs';
 import { City, PrismaClient } from '@prisma/client';
+import { adminCodeToStateCode } from '../src/helpers/cities';
 
 const headers = [
   'id',
@@ -67,7 +68,7 @@ async function seed() {
       lat: rawLatitude,
       long: rawLongitude,
       country: countryCode,
-      admin1: stateCode,
+      admin1: adminCode,
       population: rawPopulation,
     } = raw;
 
@@ -75,6 +76,7 @@ async function seed() {
     const latitude = parseFloat(rawLatitude);
     const longitude = parseFloat(rawLongitude);
     const alternateNames = rawAlternateNames?.split(',');
+    const stateCode = adminCodeToStateCode(countryCode, adminCode);
     const population = parseInt(rawPopulation);
 
     return {

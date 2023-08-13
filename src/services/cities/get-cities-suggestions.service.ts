@@ -2,7 +2,7 @@ import env from '../../config/env';
 import { Context } from '../../types/express';
 import { CitySuggestion, Location } from '../../domain/models';
 import { findManyCitiesSuggestions } from '../../infra/db/cities/find-many-cities-suggestions';
-import { addCityLocationScore } from '../../helpers/cities/city-distance-score';
+import { addCityLocationScore } from '../../helpers/cities';
 import {
   getCitiesSuggestionsFromCache,
   setCitiesSuggestionsToCache,
