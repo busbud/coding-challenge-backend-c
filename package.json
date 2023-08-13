@@ -15,6 +15,7 @@
     "@prisma/client": "^5.1.1",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "express-rate-limit": "^6.9.0",
     "redis": "^4.6.7"
   },
   "engines": {
