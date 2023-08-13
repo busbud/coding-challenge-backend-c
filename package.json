@@ -15,7 +15,7 @@
         "seed": "ts-node prisma/seed.ts"
     },
     "engines": {
-        "node": "20.4.0"
+        "node": ">=20.4.0"
     },
     "author": "Michael Nolan",
     "license": "WTFPL",
