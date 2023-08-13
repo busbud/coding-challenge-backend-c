@@ -52,7 +52,7 @@ async function seed() {
       const header = headers[index];
       obj[header] = cell;
       return obj;
-    }, {});
+    }, {} as RawCity);
 
     acc.push(row as RawCity);
     return acc;
