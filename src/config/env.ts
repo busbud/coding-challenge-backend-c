@@ -5,6 +5,7 @@ export default {
   },
   cache: {
     url: process.env.CACHE_URL || '',
+    timeout: parseInt(process.env.CACHE_TIMEOUT || '') || 5000,
   },
   cities: {
     acceptedCountryCodes: (process.env.ACCEPTED_COUNTRY_CODES ?? '').split(','),
