@@ -4,11 +4,11 @@
   "description": "coding challenge in Nodejs",
   "main": "src/server.ts",
   "scripts": {
-    "build": "rimraf dist && npm run prisma:update && prisma db seed && tsc -p tsconfig.build.json",
+    "build": "rimraf dist && npm run prisma:deploy && prisma db seed && tsc -p tsconfig.build.json",
     "dev": "ts-node-dev --files ./src/server.ts",
     "start": "node ./dist/server.js",
     "test": "jest",
-    "prisma:update": "prisma db push"
+    "prisma:deploy": "prisma migrate deploy"
   },
   "author": "",
   "license": "WTFPL",
