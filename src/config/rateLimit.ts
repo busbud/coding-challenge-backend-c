@@ -1,4 +1,5 @@
 import { Express } from 'express';
+import env from './env';
 import { rateLimit } from 'express-rate-limit';
 
 export function setupRateLimit(app: Express) {
@@ -10,4 +11,5 @@ export function setupRateLimit(app: Express) {
   });
 
   app.use(limiter);
+  app.set('trust proxy', env.server.trustProxy);
 }
