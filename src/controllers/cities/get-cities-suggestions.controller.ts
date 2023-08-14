@@ -2,7 +2,7 @@ import { Response } from 'express';
 import { Location } from '../../domain/models';
 import { getCitiesSuggestions } from '../../services/cities/get-cities-suggestions.service';
 import { TypedRequestQuery } from '../../helpers/express';
-import { MissingParamError } from '../../helpers/errors';
+import { InvalidParamError, MissingParamError } from '../../helpers/errors';
 import {
   sendBadRequest,
   sendNotFound,
@@ -21,17 +21,39 @@ export async function getCitiesSuggestionsController(
   res: Response
 ) {
   try {
-    const { q: query, latitude, longitude } = req.query;
+    const {
+      q: query,
+      latitude: queryLatitude,
+      longitude: queryLongitude,
+    } = req.query;
 
     if (!query) {
-      sendBadRequest(res, new MissingParamError('query'));
+      return sendBadRequest(res, new MissingParamError('query'));
     }
 
     let location: Location | undefined;
-    if (latitude && longitude) {
+    if (queryLatitude || queryLongitude) {
+      if (!queryLatitude || !queryLongitude) {
+        return sendBadRequest(
+          res,
+          new Error('Latitude and longitude should be provided.')
+        );
+      }
+
+      const latitude = parseFloat(queryLatitude);
+      const longitude = parseFloat(queryLongitude);
+
+      if (isNaN(latitude) || Math.abs(latitude) > 90) {
+        return sendBadRequest(res, new InvalidParamError('latitude'));
+      }
+
+      if (isNaN(longitude) || Math.abs(longitude) > 180) {
+        return sendBadRequest(res, new InvalidParamError('longitude'));
+      }
+
       location = {
-        latitude: parseFloat(latitude),
-        longitude: parseFloat(longitude),
+        latitude,
+        longitude,
       };
     }
 
@@ -42,11 +64,9 @@ export async function getCitiesSuggestionsController(
     );
 
     if (!suggestions.length) {
-      sendNotFound(res, {
+      return sendNotFound(res, {
         suggestions: [],
       });
-
-      return;
     }
 
     sendOk(res, {
