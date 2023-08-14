@@ -26,79 +26,98 @@ const headers = [
 
 export interface RawCity extends Record<(typeof headers)[number], string> {}
 
-const prisma = new PrismaClient();
-async function seed() {
-  await prisma.city.deleteMany({});
+function readFileLines(file: string, separator: string): string[] {
+  const lines = fs.readFileSync(file).toString().split(separator);
 
-  const lines = fs
-    .readFileSync('data/cities_canada-usa.tsv')
-    .toString()
-    .split('\n');
+  return lines;
+}
 
-  const skipLines = 1;
-
-  const rawCities = lines.reduce((acc, rawLine, index) => {
+function readRows<T>(
+  lines: string[],
+  separator: string,
+  skipLines: number,
+  buildRow: (cells: string[]) => T
+): T[] {
+  const rows = lines.reduce((acc, line, index) => {
     if (index + 1 <= skipLines) {
       return acc;
     }
 
-    const line = rawLine.trim();
-    if (!line) {
+    const trimmedLine = line.trim();
+    if (!trimmedLine) {
       return acc;
     }
 
-    const cells = line.split('\t');
+    const cells = trimmedLine.split(separator);
+    const row = buildRow(cells);
 
-    const row = cells.reduce((obj, cell, index) => {
-      const header = headers[index];
-      obj[header] = cell;
-      return obj;
-    }, {} as RawCity);
+    acc.push(row);
 
-    acc.push(row as RawCity);
     return acc;
-  }, [] as RawCity[]);
+  }, [] as T[]);
 
-  const cities: City[] = rawCities.map((raw) => {
-    const {
-      id: rawId,
-      name,
-      ascii: asciiName,
-      alt_name: rawAlternateNames,
-      lat: rawLatitude,
-      long: rawLongitude,
-      country: countryCode,
-      admin1: adminCode,
-      population: rawPopulation,
-    } = raw;
+  return rows;
+}
 
-    const id = parseInt(rawId);
-    const latitude = parseFloat(rawLatitude);
-    const longitude = parseFloat(rawLongitude);
-    const alternateNames = rawAlternateNames?.split(',');
-    const stateCode = adminCodeToStateCode(countryCode, adminCode);
-    const population = parseInt(rawPopulation);
+function buildRawCity(cells: string[]): RawCity {
+  const rawCity = cells.reduce((obj, cell, index) => {
+    const header = headers[index];
+    obj[header] = cell;
+    return obj;
+  }, {} as RawCity);
 
-    return {
-      id,
-      name,
-      asciiName,
-      alternateNames,
-      latitude,
-      longitude,
-      countryCode,
-      stateCode,
-      population,
-    };
-  });
+  return rawCity;
+}
+
+function rawCityToCity(rawCity: RawCity): City {
+  const {
+    id: rawId,
+    name,
+    ascii: asciiName,
+    alt_name: rawAlternateNames,
+    lat: rawLatitude,
+    long: rawLongitude,
+    country: countryCode,
+    admin1: adminCode,
+    population: rawPopulation,
+  } = rawCity;
+
+  const id = parseInt(rawId);
+  const latitude = parseFloat(rawLatitude);
+  const longitude = parseFloat(rawLongitude);
+  const alternateNames = rawAlternateNames?.split(',');
+  const stateCode = adminCodeToStateCode(countryCode, adminCode);
+  const population = parseInt(rawPopulation);
+
+  return {
+    id,
+    name,
+    asciiName,
+    alternateNames,
+    latitude,
+    longitude,
+    countryCode,
+    stateCode,
+    population,
+  };
+}
+
+const prisma = new PrismaClient();
+
+async function seed() {
+  await prisma.city.deleteMany({});
+
+  const lines = readFileLines('data/cities_canada-usa.tsv', '\n');
+
+  const rawCities = readRows(lines, '\t', 1, buildRawCity);
+
+  const cities: City[] = rawCities.map(rawCityToCity);
 
   await prisma.city.createMany({
     data: cities,
   });
 
   console.log(`${cities.length} Cities imported successfully`);
-
-  return;
 }
 
 seed()
