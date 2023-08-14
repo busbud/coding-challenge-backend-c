@@ -1,5 +1,5 @@
 import express from 'express';
-import { setupRateLimit } from './config/rateLimit';
+import { setupRateLimit } from './config/rate-limit';
 import setupRoutes from './config/routes';
 import { setupRedisClient } from './config/redis';
 
