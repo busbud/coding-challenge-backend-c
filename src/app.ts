@@ -11,7 +11,7 @@ export async function setupApp() {
   setupRoutes(app);
 
   app.disconnect = () => {
-    app.redis.disconnect();
+    app.redis.quit();
   };
 
   return app;
