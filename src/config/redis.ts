@@ -12,6 +12,9 @@ export async function createRedisClient() {
     modules,
     scripts,
     url: env.cache.url,
+    socket: {
+      connectTimeout: env.cache.timeout,
+    },
   });
 
   client.on('error', (err) => console.error('Redis Client Error', err));
