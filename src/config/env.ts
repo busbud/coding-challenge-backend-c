@@ -1,4 +1,5 @@
 export default {
+  env: process.env.NODE_ENV,
   server: {
     url: process.env.SERVER_URL || '127.0.0.1',
     port: parseInt(process.env.SERVER_PORT ?? '') || 2345,
