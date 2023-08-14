@@ -13,7 +13,7 @@ const DEFAULT_CACHE_EXPIRE_SECONDS = 60;
 
 export async function getCitiesSuggestions(
   context: Context,
-  name: string,
+  term: string,
   location?: Location,
   limit?: number
 ): Promise<CitySuggestion[]> {
@@ -21,17 +21,17 @@ export async function getCitiesSuggestions(
 
   let cities: CitySuggestion[] | null | undefined;
 
-  cities = await getCitiesSuggestionsFromCache(redis, name);
+  cities = await getCitiesSuggestionsFromCache(redis, term);
 
   if (!cities) {
     cities = await findManyCitiesSuggestions(prisma, {
-      name,
+      term,
       minimumPopulation: env.cities.largeCitiesMinimumPopulation,
       countryCodes: env.cities.acceptedCountryCodes,
       limit: limit || DEFAULT_LIMIT,
     });
 
-    setCitiesSuggestionsToCache(redis, name, cities, {
+    setCitiesSuggestionsToCache(redis, term, cities, {
       EX: DEFAULT_CACHE_EXPIRE_SECONDS,
     });
   }

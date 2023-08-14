@@ -2,7 +2,7 @@ import { Prisma, PrismaClient } from '@prisma/client';
 import { City, CitySuggestion } from '../../../domain/models';
 
 type Params = {
-  name: string;
+  term: string;
   minimumPopulation: number;
   countryCodes: string[];
   limit: number;
@@ -19,13 +19,13 @@ export async function findManyCitiesSuggestions(
   prisma: PrismaClient,
   params: Params
 ): Promise<CitySuggestion[]> {
-  const { name, minimumPopulation, countryCodes, limit } = params;
+  const { term, minimumPopulation, countryCodes, limit } = params;
 
   const rawCities = await prisma.$queryRaw<QueryResult[]>`
     SELECT c."name", c."countryCode", c."stateCode", c."latitude", c."longitude"
-      , similarity("name", ${name}) AS "score"
+      , similarity("name", ${term}) AS "score"
     FROM "City" c
-    WHERE "name" % ${name} AND "population" >= ${minimumPopulation} 
+    WHERE "name" % ${term} AND "population" >= ${minimumPopulation} 
     AND "countryCode" in (${Prisma.join(countryCodes)})
     ORDER by "score" desc
     LIMIT ${limit};`;

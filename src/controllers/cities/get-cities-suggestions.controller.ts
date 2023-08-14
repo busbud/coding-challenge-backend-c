@@ -22,12 +22,12 @@ export async function getCitiesSuggestionsController(
 ) {
   try {
     const {
-      q: query,
+      q: term,
       latitude: queryLatitude,
       longitude: queryLongitude,
     } = req.query;
 
-    if (!query) {
+    if (!term) {
       return sendBadRequest(res, new MissingParamError('query'));
     }
 
@@ -57,11 +57,7 @@ export async function getCitiesSuggestionsController(
       };
     }
 
-    const suggestions = await getCitiesSuggestions(
-      req.context,
-      query,
-      location
-    );
+    const suggestions = await getCitiesSuggestions(req.context, term, location);
 
     if (!suggestions.length) {
       return sendNotFound(res, {
