@@ -5,7 +5,7 @@
   "main": "src/server.ts",
   "scripts": {
     "build": "rimraf dist && npm run prisma:deploy && prisma db seed && tsc -p tsconfig.build.json",
-    "dev": "ts-node-dev --files ./src/server.ts",
+    "dev": "npm run prisma:deploy && prisma db seed && ts-node-dev --files ./src/server.ts",
     "start": "node ./dist/server.js",
     "test": "jest",
     "prisma:deploy": "prisma migrate deploy"
