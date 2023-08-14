@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { Express } from 'express';
 import request from 'supertest';
 import { toSatisfyAll, toSatisfyAny } from 'jest-extended';
