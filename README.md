@@ -2,9 +2,46 @@
 
 ## Summary
 
-This project was developed over the template provided for the [**Busbud Coding Challenge**](https://github.com/busbud/coding-challenge-backend-c). It features an Express REST API written in TypeScript. The endpoint gives preference for cached results on Redis and queries the data on PostgreSQL database otherwise. The endpoint, parameters and responses are all according to the challenge's description.
+This project was developed over the template provided for the [**Busbud Coding Challenge**](https://github.com/busbud/coding-challenge-backend-c). It features an Express REST API written in TypeScript. The endpoint gives preference for cached results on Redis and queries the data on PostgreSQL database otherwise.
 
 It was not built on top of any boilerplate, each choice was planned ahead and each package and feature was carefully embedded. It's always a good time to learn and practice.
+
+### Endpoints
+
+#### `/suggestions`
+
+    GET /suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
+
+```json
+{
+    "suggestions": [
+        {
+            "name": "London, ON, CA",
+            "latitude": 42.98339,
+            "longitude": -81.23304,
+            "score": 0.7289320385764426
+        },
+        {
+            "name": "London, OH, US",
+            "latitude": 39.88645,
+            "longitude": -83.44825,
+            "score": 0.5425958235183592
+        },
+        {
+            "name": "Londontowne, MD, US",
+            "latitude": 38.93345,
+            "longitude": -76.54941,
+            "score": 0.40155805130905853
+        }
+    ]
+}
+```
+
+#### `/docs`
+
+    GET /docs
+
+Documentation built with Swagger.
 
 ## Getting started
 
@@ -104,7 +141,7 @@ npm run dev
 
 It's not necessary to execute the `init` command, as it's already executed during the `dev` and `build` commands.
 
-## API description
+## Project description
 
 These improvements were planned thinking on a real world scenario, addressing some main goals:
 
