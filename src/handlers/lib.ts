@@ -1,6 +1,8 @@
 import { stringSimilarity } from 'string-similarity-js';
 import { distance, point } from '@turf/turf';
 
+import redisClient from '../modules/redis';
+
 import type { Location } from '@prisma/client';
 
 type Suggestion = Omit<
@@ -8,9 +10,11 @@ type Suggestion = Omit<
   'id' | 'createdAt' | 'updatedAt' | 'population'
 >;
 
-type TransformationFunction = (
-  suggestion: Suggestion,
-) => Omit<Suggestion, 'country' | 'state'> & { score: number };
+type ScoredSuggestion = Omit<Suggestion, 'country' | 'state'> & {
+  score: number;
+};
+
+type TransformationFunction = (suggestion: Suggestion) => ScoredSuggestion;
 
 const scoreAndSort = (
   transformFn: TransformationFunction,
@@ -49,4 +53,25 @@ const getScoresBasedOnSearchTermAndLocation = (
     };
   }, suggestions);
 
-export { getScoresBasedOnSearchTerm, getScoresBasedOnSearchTermAndLocation };
+const getRedisClientCache = async (
+  term: string,
+  latitude?: number,
+  longitude?: number,
+) => {
+  let cacheResults: string | null;
+
+  if (latitude && longitude) {
+    cacheResults = await redisClient.get(`${term},${latitude},${longitude}`);
+  } else {
+    cacheResults = await redisClient.get(term);
+  }
+
+  return cacheResults;
+};
+
+export {
+  getScoresBasedOnSearchTerm,
+  getScoresBasedOnSearchTermAndLocation,
+  getRedisClientCache,
+};
+export type { ScoredSuggestion };

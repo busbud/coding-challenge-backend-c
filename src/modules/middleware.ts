@@ -22,12 +22,22 @@ const handleInputErrors = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const validateEnv = () => {
+  if (process.env.NODE_ENV === 'development') {
+    cleanEnv(process.env, {
+      POSTGRES_HOST: str(),
+      POSTGRES_PORT: port(),
+      POSTGRES_USER: str(),
+      POSTGRES_PASSWORD: str(),
+      POSTGRES_DB: str(),
+    });
+  }
+
   cleanEnv(process.env, {
     DOMAIN: str(),
     DATABASE_URL: str(),
     MORGAN_FORMAT: str(),
-    NODE_ENV: str(),
     PORT: port(),
+    REDIS_URL: str(),
   });
 };
 
