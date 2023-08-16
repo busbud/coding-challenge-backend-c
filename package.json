@@ -9,12 +9,8 @@
   },
   "author": "",
   "license": "WTFPL",
-  "dependencies": {
-    "chai": "^1.9.1",
-    "mocha": "^1.18.2",
-    "supertest": "^0.11.0"
-  },
-  "engines": {
-    "node": "0.10.26"
+  "engines": { "node": "18.17.1" },
+  "devDependencies": {
+    "typescript": "^5.1.6"
   }
 }

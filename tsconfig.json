@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    /* Emit */
+    "outDir": "./dist",
+    "removeComments": true,
+    "sourceMap": true,
+    // Modules
+    "module": "CommonJS",
+    /* Interop Constraints */
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    /* Language and Environment */
+    "lib": ["esnext"],
+    "target": "ESNext",
+    /* Modules */
+    "moduleResolution": "node",
+    "paths": { "@/*": ["./*"] },
+    /* Projects */
+    "incremental": true,
+    /* Type Checking */
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "strict": true,
+    "strictNullChecks": true,
+    "allowJs": true
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
+}
