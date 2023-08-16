@@ -12,3 +12,6 @@ CREATE TABLE "Location" (
 
     CONSTRAINT "Location_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE INDEX "Location_name_idx" ON "Location" USING GIN ("name" gin_trgm_ops);
