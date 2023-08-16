@@ -1,3 +1,5 @@
 .vscode
 package-lock.json
 dist
+# TODO: Remove the below when implementing tests
+test
