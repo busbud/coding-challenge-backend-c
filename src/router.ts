@@ -1,6 +1,7 @@
 import { Router } from 'express';
-import { query, matchedData, validationResult } from 'express-validator';
+import { query, matchedData } from 'express-validator';
 
+import { handleInputErrors } from './modules/middleware';
 import { coordinateValidator } from './validators/suggestions';
 
 const router = Router();
@@ -28,16 +29,10 @@ router.get(
     .isFloat({ min: -180, max: 180 })
     .withMessage('Longitude must be a valid number between -180 and 180.')
     .custom(coordinateValidator),
+  handleInputErrors,
   (req, res) => {
-    const result = validationResult(req);
-
-    if (result.isEmpty()) {
-      const data = matchedData(req);
-      return res.status(200).json({ data });
-    }
-
-    const errors = result.array().map((error) => error.msg);
-    return res.status(400).send({ errors });
+    const data = matchedData(req);
+    res.status(200).json({ data });
   },
 );
 
