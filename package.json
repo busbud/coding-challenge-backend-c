@@ -24,6 +24,7 @@
     "@prisma/client": "^5.1.1",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "express-validator": "^7.0.1",
     "morgan": "^1.10.0"
   },
   "devDependencies": {
