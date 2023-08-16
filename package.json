@@ -9,8 +9,13 @@
   },
   "author": "",
   "license": "WTFPL",
-  "engines": { "node": "18.17.1" },
+  "engines": {
+    "node": "18.17.1"
+  },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.4.0",
+    "@typescript-eslint/parser": "^6.4.0",
+    "eslint": "^8.47.0",
     "typescript": "^5.1.6"
   }
 }

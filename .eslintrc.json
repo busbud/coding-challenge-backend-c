@@ -1,0 +1,25 @@
+{
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "project": "./tsconfig.json",
+    "sourceType": "module"
+  },
+  "plugins": ["@typescript-eslint"],
+  "env": {
+    "node": true
+  },
+  "rules": {
+    "arrow-body-style": [1, "as-needed"],
+    "no-nested-ternary": 1,
+    "no-unneeded-ternary": 1,
+    // "no-ternary": 1,
+    "@typescript-eslint/consistent-type-imports": 1,
+    "@typescript-eslint/no-empty-function": 1,
+    "@typescript-eslint/no-unnecessary-boolean-literal-compare": 1
+  }
+}
