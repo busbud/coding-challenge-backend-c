@@ -1,7 +1,10 @@
 import { matchedData } from 'express-validator';
 
 import prisma from '../db';
-import { getScoresBasedOnSearchTerm } from './lib';
+import {
+  getScoresBasedOnSearchTerm,
+  getScoresBasedOnSearchTermAndLocation,
+} from './lib';
 
 import type { Request, Response } from 'express';
 
@@ -35,7 +38,14 @@ const getSuggestions = async (req: Request, res: Response) => {
     });
 
     if (latitude && longitude) {
-      console.log('to implement');
+      res.status(200).json({
+        suggestions: getScoresBasedOnSearchTermAndLocation(
+          latitude,
+          longitude,
+          suggestions,
+          q,
+        ),
+      });
     } else {
       res
         .status(200)
