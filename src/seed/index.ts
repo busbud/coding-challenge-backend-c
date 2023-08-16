@@ -37,6 +37,6 @@ const FILE_PATH = './data/cities_canada-usa.tsv';
   fileStream.close();
   console.log('File parsing complete.');
 
-  await prisma.location.createMany({ data });
+  await prisma.location.createMany({ data, skipDuplicates: true });
   console.log('Seed complete!');
 })();

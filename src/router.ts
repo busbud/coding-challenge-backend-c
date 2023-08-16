@@ -1,8 +1,9 @@
 import { Router } from 'express';
-import { query, matchedData } from 'express-validator';
+import { query } from 'express-validator';
 
 import { handleInputErrors } from './modules/middleware';
 import { coordinateValidator } from './validators/suggestions';
+import { getSuggestions } from './handlers/suggestions';
 
 const router = Router();
 
@@ -30,10 +31,7 @@ router.get(
     .withMessage('Longitude must be a valid number between -180 and 180.')
     .custom(coordinateValidator),
   handleInputErrors,
-  (req, res) => {
-    const data = matchedData(req);
-    res.status(200).json({ data });
-  },
+  getSuggestions,
 );
 
 export default router;
