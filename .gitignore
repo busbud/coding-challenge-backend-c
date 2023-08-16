@@ -8,3 +8,6 @@ node_modules
 
 # local env files
 .env
+
+# typescript
+dist

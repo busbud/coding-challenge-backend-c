@@ -4,8 +4,12 @@
   "description": "coding challenge in Nodejs",
   "main": "app.js",
   "scripts": {
+    "check": "npm run format ; npm run lint ; npm run typecheck",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md,css}\"",
+    "lint": "eslint",
     "start": "node app.js",
-    "test": "./node_modules/mocha/bin/mocha ./test/"
+    "test": "./node_modules/mocha/bin/mocha ./test/",
+    "typecheck": "tsc --noEmit"
   },
   "author": "",
   "license": "WTFPL",
@@ -16,6 +20,8 @@
     "@typescript-eslint/eslint-plugin": "^6.4.0",
     "@typescript-eslint/parser": "^6.4.0",
     "eslint": "^8.47.0",
+    "eslint-config-prettier": "^9.0.0",
+    "prettier": "^3.0.2",
     "typescript": "^5.1.6"
   }
 }
