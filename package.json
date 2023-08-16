@@ -7,7 +7,9 @@
     "check": "npm run format ; npm run lint ; npm run typecheck",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md,css}\"",
     "lint": "eslint",
+    "seed": "ts-node src/seed/index.ts",
     "start": "node app.js",
+    "studio": "npx prisma studio --browser chrome",
     "test": "./node_modules/mocha/bin/mocha ./test/",
     "typecheck": "tsc --noEmit"
   },
