@@ -1,8 +1,10 @@
 import express from 'express';
 import morgan from 'morgan';
 
-import { rateLimiter } from './modules/middleware';
+import { rateLimiter, validateEnv } from './modules/middleware';
 import router from './router';
+
+validateEnv();
 
 const app = express();
 

@@ -52,8 +52,7 @@ const getSuggestions = async (req: Request, res: Response) => {
         .json({ suggestions: getScoresBasedOnSearchTerm(suggestions, q) });
     }
   } catch (error) {
-    // TODO: Implement custom error handling
-    res.status(500).json({ message: 'Something went wrong...' });
+    res.status(500).json({ message: 'An unexpected error occurred.' });
   }
 };
 

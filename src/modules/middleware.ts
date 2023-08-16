@@ -1,5 +1,6 @@
 import { validationResult } from 'express-validator';
 import rateLimit from 'express-rate-limit';
+import { cleanEnv, port, str } from 'envalid';
 
 import type { Request, Response, NextFunction } from 'express';
 
@@ -20,4 +21,14 @@ const handleInputErrors = (req: Request, res: Response, next: NextFunction) => {
   res.status(400).send({ errors });
 };
 
-export { rateLimiter, handleInputErrors };
+const validateEnv = () => {
+  cleanEnv(process.env, {
+    DOMAIN: str(),
+    DATABASE_URL: str(),
+    MORGAN_FORMAT: str(),
+    NODE_ENV: str(),
+    PORT: port(),
+  });
+};
+
+export { rateLimiter, handleInputErrors, validateEnv };
