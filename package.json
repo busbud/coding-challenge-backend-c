@@ -4,11 +4,13 @@
   "description": "coding challenge in Nodejs",
   "main": "app.js",
   "scripts": {
+    "build": "tsc -p tsconfig.json",
     "check": "npm run format ; npm run lint ; npm run typecheck",
     "dev": "nodemon src/index.ts",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md,css}\"",
     "lint": "eslint",
     "seed": "ts-node src/seed/index.ts",
+    "start": "node dist/index.js",
     "studio": "npx prisma studio --browser chrome",
     "test": "./node_modules/mocha/bin/mocha ./test/",
     "typecheck": "tsc --noEmit"
