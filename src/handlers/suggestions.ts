@@ -1,6 +1,7 @@
 import { matchedData } from 'express-validator';
 
 import prisma from '../db';
+import { getScoresBasedOnSearchTerm } from './lib';
 
 import type { Request, Response } from 'express';
 
@@ -15,30 +16,35 @@ const VALID_COUNTRIES = ['CA', 'US'];
 
 const getSuggestions = async (req: Request, res: Response) => {
   const data = matchedData(req) as Search;
-  const { q } = data;
+  const { latitude, longitude, q } = data;
 
-  const suggestions = await prisma.location.findMany({
-    select: {
-      country: true,
-      lat: true,
-      long: true,
-      name: true,
-      state: true,
-    },
-    where: {
-      name: { contains: q },
-      country: { in: VALID_COUNTRIES },
-      population: { gt: MINIMUM_POPULATION },
-    },
-  });
+  try {
+    const suggestions = await prisma.location.findMany({
+      select: {
+        country: true,
+        lat: true,
+        long: true,
+        name: true,
+        state: true,
+      },
+      where: {
+        name: { contains: q },
+        country: { in: VALID_COUNTRIES },
+        population: { gt: MINIMUM_POPULATION },
+      },
+    });
 
-  const filteredSuggestions = suggestions.map((suggestion) => ({
-    name: `${suggestion.name}, ${suggestion.state}, ${suggestion.country}`,
-    latitude: suggestion.lat,
-    longitude: suggestion.long,
-  }));
-
-  res.status(200).json({ filteredSuggestions });
+    if (latitude && longitude) {
+      console.log('to implement');
+    } else {
+      res
+        .status(200)
+        .json({ suggestions: getScoresBasedOnSearchTerm(suggestions, q) });
+    }
+  } catch (error) {
+    // TODO: Implement custom error handling
+    res.status(500).json({ message: 'Something went wrong...' });
+  }
 };
 
 export { getSuggestions };
