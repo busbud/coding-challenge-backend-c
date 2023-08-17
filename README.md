@@ -80,12 +80,12 @@ GET /suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
 
 ## Environment Variables
 
-Ensure you set up the necessary environment variables by creating a .env file based on the provided env.example.txt.
+Ensure you set up the necessary environment variables by creating a `.env` file based on the provided `env.example.txt`.
 
 ## Prerequisites
 
 1. Make sure you have [Docker](https://www.docker.com/products/docker-desktop/) installed.
-2. Use [`Node LTS`](https://nodejs.org/en), which at the time of writing is `18.7.1`.
+2. Use [Node LTS](https://nodejs.org/en), which at the time of writing is `18.7.1`.
 
 ## Run Locally
 
@@ -117,7 +117,22 @@ Use Docker to set up Redis and PostgreSQL containers:
 docker compose up
 ```
 
-#### 4. Run Prisma Migrations and Seed (Optional)
+#### 4. Ensure pg_trgm extension is enabled in PostgreSQL
+
+`psql` into your PostgreSQL:
+
+```bash
+psql "postgresql://admin:password123@127.0.0.1:6500/node_prisma"
+```
+
+Enable the `pg_trgm` extension and exit:
+
+```sql
+CREATE EXTENSION IF NOT EXISTS pg_trgm WITH SCHEMA pg_catalog;
+\q
+```
+
+#### 5. Run Prisma Migrations and Seed (Optional)
 
 If needed, run Prisma migrations to set up the database schema and seed initial data:
 
@@ -126,7 +141,7 @@ npx prisma migrate dev --name init
 npm run seed
 ```
 
-#### 5. Start the Server
+#### 6. Start the Server
 
 Start the development server:
 

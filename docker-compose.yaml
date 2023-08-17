@@ -7,7 +7,6 @@ services:
       - '6500:5432'
     volumes:
       - progresDB:/data/postgres
-      - ./docker:/docker-entrypoint-initdb.d
     env_file:
       - ./.env
 
