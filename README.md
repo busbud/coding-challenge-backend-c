@@ -1,29 +1,51 @@
 # Busbud Coding Challenge
 
-## Requirements
+This repository contains a project developed as part of the [Busbud Coding Challenge](https://github.com/busbud/coding-challenge-backend-c). The project features an Express API written in TypeScript, with routing capabilities. The primary endpoint of this API is used for retrieving city suggestions based on user queries. The project employs caching using Redis for improved performance and queries data from a PostgreSQL database when necessary.
 
-Design an API endpoint that provides autocomplete suggestions for large cities.
-The suggestions should be restricted to cities in the USA and Canada with a population above 5000 people.
+## Demo
 
-- the endpoint is exposed at `/suggestions`
-- the partial (or complete) search term is passed as a query string parameter `q`
-- the caller's location can optionally be supplied via query string parameters `latitude` and `longitude` to help improve relative scores
-- the endpoint returns a JSON response with an array of scored suggested matches
-  - the suggestions are sorted by descending score
-  - each suggestion has a score between 0 and 1 (inclusive) indicating confidence in the suggestion (1 is most confident)
-  - each suggestion has a name which can be used to disambiguate between similarly named locations
-  - each suggestion has a latitude and longitude
-- all functional tests should pass (additional tests may be implemented as necessary).
-- the final application should be available publicly. You can use any hosting solution of your choice ([Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs), [GCP](https://cloud.google.com/run/docs/quickstarts/deploy-container), etc.).
-- feel free to add more features if you like!
+You can access a live demo of the service at [jaskarn-busbud](https://jaskarn-busbud.onrender.com/). Please note that there might be a slight delay during the initial request due to a cold-start for free tier users of [Render](https://render.com).
 
-#### Sample responses
+To manually query the service, you can use the `/suggestions` route with various parameters.
 
-These responses are meant to provide guidance. The exact values can vary based on the data source and scoring algorithm.
+## API Reference
 
-**Near match**
+#### Get results with a search term
 
-    GET /suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
+```http
+GET /suggestions?q=Toronto
+```
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `q`       | `string` | **Required**. A city name. |
+
+#### Get results with a search term and location
+
+```http
+GET /suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
+```
+
+| Parameter   | Type     | Description                |
+| :---------- | :------- | :------------------------- |
+| `q`         | `string` | **Required**. A city name. |
+| `latitude`  | `number` | **Required**. A latitude.  |
+| `longitude` | `number` | **Required**. A longitude. |
+
+Please note that `latitude` and `longitude` are required together. You cannot specify one without the other. Otherwise they are optional.
+
+#### Examples
+
+1. [Search Term](https://jaskarn-busbud.onrender.com/suggestions?q=Toronto)
+2. [Search Term & Location](https://jaskarn-busbud.onrender.com/suggestions?q=Londo&latitude=43.70011&longitude=-79.4163)
+
+#### Raw Example
+
+https://jaskarn-busbud.onrender.com/suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
+
+```bash
+GET /suggestions?q=Londo&latitude=43.70011&longitude=-79.4163
+```
 
 ```json
 {
@@ -56,90 +78,137 @@ These responses are meant to provide guidance. The exact values can vary based o
 }
 ```
 
-**No match**
+## Environment Variables
 
-    GET /suggestions?q=SomeRandomCityInTheMiddleOfNowhere
+Ensure you set up the necessary environment variables by creating a .env file based on the provided env.example.txt.
 
-```json
-{
-  "suggestions": []
-}
+## Prerequisites
+
+1. Make sure you have [Docker](https://www.docker.com/products/docker-desktop/) installed.
+2. Use [`Node LTS`](https://nodejs.org/en), which at the time of writing is `18.7.1`.
+
+## Run Locally
+
+Follow these steps to run the project locally:
+
+#### 1. Clone the Project
+
+Clone the project repository:
+
+```bash
+git clone https://github.com/jaskarnmankoo/coding-challenge-backend-c
+cd coding-challenge-backend-c
 ```
 
-### Non-functional
+#### 2. Install Dependencies
 
-- All code should be written in Javascript or Typescript.
-- Mitigations to handle high levels of traffic should be implemented.
-- Challenge is submitted as pull request against this repo ([fork it](https://help.github.com/articles/fork-a-repo/) and [create a pull request](https://help.github.com/articles/creating-a-pull-request-from-a-fork/)).
-- Documentation and maintainability is a plus.
+Navigate to the project directory and install the required dependencies:
 
-## Dataset
-
-You can find the necessary dataset along with its description and documentation in the [`data`](data/) directory.
-
-## Evaluation
-
-We will use the following criteria to evaluate your solution:
-
-- Capacity to follow instructions
-- Developer Experience (how easy it is to run your solution locally, how clear your documentation is, etc)
-- Solution correctness
-- Performance
-- Tests (quality and coverage)
-- Code style and cleanliness
-- Attention to detail
-- Ability to make sensible assumptions
-
-It is ok to ask us questions!
-
-We know that the time for this project is limited and it is hard to create a "perfect" solution, so we will consider that along with your experience when evaluating the submission.
-
-## Getting Started
-
-### Prerequisites
-
-You are going to need:
-
-- `Git`
-- `nvm` (or your preferred node version manager)
-- `Node.js`
-
-### Setting up your environment
-
-1. Begin by forking this repo and cloning your fork. GitHub has apps for [Mac](http://mac.github.com/) and
-   [Windows](http://windows.github.com/) that make this easier.
-
-2. Install [nvm](https://github.com/nvm-sh/nvm#install--update-script) or your preferred node version manager.
-
-3. Install [Node.js](http://www.nodejs.org).
-
-### Setting up the project
-
-In the project directory run:
-
-```
-nvm use
-npm install
+```bash
+cd coding-challenge-backend-c
+npm ci
 ```
 
-### Running the tests
+#### 3. Set Up Redis and PostgreSQL
 
-The test suite can be run with:
+Use Docker to set up Redis and PostgreSQL containers:
 
-```
-npm run test
-```
-
-### Starting the application
-
-To start a local server run:
-
-```
-npm run start
+```bash
+docker compose up
 ```
 
-it should produce an output similar to:
+#### 4. Run Prisma Migrations and Seed (Optional)
 
+If needed, run Prisma migrations to set up the database schema and seed initial data:
+
+```bash
+npx prisma migrate dev --name init
+npm run seed
 ```
-Server running at http://127.0.0.1:2345/suggestions
+
+#### 5. Start the Server
+
+Start the development server:
+
+```bash
+npm run dev
 ```
+
+The API should now be up and running locally, and you can access it at `http://localhost:3000`.
+
+## Running Tests
+
+Ensure `Redis` and `PostgreSQL` are running via `Docker`, and then run the tests:
+
+```bash
+npm test
+```
+
+## Deployment
+
+To deploy the project, choose a hosting provider like [Render](https://render.com) or any other of your choice. They generally provide [documentation](https://render.com/docs/web-services) for deploying `Node.js` applications.
+
+For manual deployment, assuming you have the production `PostgreSQL` and `Redis` URLs, follow these steps:
+
+#### 1) Build you application
+
+```bash
+npm run build
+```
+
+#### 2) Upload Your Build
+
+Upload the `/dist` folder generated during the build process to your chosen hosting environment. This folder contains the compiled and optimized version of your application.
+
+#### 3) Start you Application
+
+Once the build is uploaded, start your `Node.js` application service. Run the following command to initiate your application:
+
+```bash
+npm start
+```
+
+# Design Decisions
+
+This section outlines the key design decisions made during the development of this project, detailing the technologies, algorithms, and methodologies employed to ensure a robust and efficient system.
+
+## Technologies Used
+
+- **Node.js**: The backend of the application is built using Node.js, providing a non-blocking and event-driven architecture for optimal performance.
+
+- **Prisma and PostgreSQL**: Prisma is utilized as the database toolkit, with PostgreSQL as the chosen database system. This combination ensures reliable data storage and efficient querying.
+
+- **Redis**: Redis is employed for caching purposes, enhancing response times and reducing the load on the database.
+
+- **GIN Index**: GIN (Generalized Inverted Index) is utilized to accelerate full-text searches, optimizing search performance and enabling faster retrieval of relevant data.
+
+- **Jest and Supertest**: Jest is chosen as the testing framework, coupled with Supertest for API endpoint testing, guaranteeing the reliability and accuracy of the application's functionalities.
+
+- **Typescript, ESLint, and Prettier**: Typescript is used to enhance code quality and maintainability. ESLint and Prettier enforce consistent code formatting and style, promoting a clean and standardized codebase.
+
+- **npm Packages ([string-similarity-js](https://www.npmjs.com/package/string-similarity-js), [@turf/turf](https://www.npmjs.com/package/@turf/turf))**: The npm package 'string-similarity-js' is employed to implement the Sørensen–Dice coefficient algorithm for search term similarity scoring. Additionally, the '@turf/turf' package is utilized to calculate distances using the Haversine Formula when considering search terms along with latitude and longitude.
+
+- **Docker**: Docker is utilized for local testing and development, ensuring a consistent environment across different stages of the application's lifecycle.
+
+- **Render**: Render is chosen as the deployment platform, enabling seamless and reliable deployment of the application to a live environment.
+
+## Search Algorithm
+
+The decision to incorporate the Sørensen–Dice coefficient algorithm for search term similarity scoring ensures accurate and effective search result ranking. This algorithm provides a robust mechanism for evaluating the similarity between search terms and database entries.
+
+Furthermore, the integration of the Haversine Formula, in conjunction with the Sørensen–Dice coefficient, enhances result scoring when geographic coordinates are provided. This allows the application to prioritize search results based on both textual relevance and geographical proximity.
+
+## Rate Limiting
+
+To maintain the stability and responsiveness of the application, a rate limiting mechanism has been implemented. This restricts the API to a maximum of 100 calls every 15 minutes, preventing excessive traffic and potential overload.
+
+## Optimizations
+
+An optimization that has been identified but not yet implemented is the integration of a pagination mechanism within the application's search results. Pagination provides a structured approach to displaying large sets of search results, enhancing user experience and performance.
+
+# Acknowledgements
+
+1. [docker-compose.yaml](https://codevoweb.com/api-node-typescript-prisma-postgresql-project-setup/#google_vignette) Used for quick local Redis setup.
+2. [GIN Index](https://www.prisma.io/docs/concepts/components/prisma-schema/indexes) Prisma documentation on indexes.
+3. [Scott Moss](https://frontendmasters.com/courses/api-design-nodejs-v4/) API design knowledge.
+4. [Brian Holt](https://frontendmasters.com/courses/sql/) Indexing insights.
