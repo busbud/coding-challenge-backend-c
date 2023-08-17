@@ -27,6 +27,9 @@
     "strictNullChecks": true,
     "allowJs": true
   },
-  "include": ["src/**/*.ts", "test/**/*.ts"],
+  // DEV
+  // "include": ["src/**/*.ts", "test/**/*.ts"],
+  // PROD
+  "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]
 }
