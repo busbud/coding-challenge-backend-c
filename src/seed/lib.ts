@@ -1,12 +1,13 @@
 import type { Attributes, CSVLocation } from './types';
 
 const attributes: Attributes[] = [
+  'admin1',
+  'ascii',
+  'country',
   'id',
-  'name',
   'lat',
   'long',
-  'country',
-  'admin1',
+  'name',
   'population',
 ];
 
@@ -15,6 +16,7 @@ const attributes: Attributes[] = [
 const locationIndexes = {
   id: 0,
   name: 1,
+  ascii: 2,
   lat: 4,
   long: 5,
   country: 8,
@@ -42,13 +44,14 @@ const provinces: Record<string, string> = {
 
 const createLocation = (col: string[]): CSVLocation => {
   const location = {
+    ascii: col[locationIndexes.ascii],
+    country: col[locationIndexes.country],
     id: col[locationIndexes.id],
-    name: col[locationIndexes.name],
     lat: parseFloat(col[locationIndexes.lat]),
     long: parseFloat(col[locationIndexes.long]),
-    country: col[locationIndexes.country],
-    state: col[locationIndexes.admin1],
+    name: col[locationIndexes.name],
     population: parseInt(col[locationIndexes.population]),
+    state: col[locationIndexes.admin1],
   };
 
   if (isNaN(location.lat) || isNaN(location.long) || isNaN(location.population))

@@ -1,12 +1,13 @@
 import type { Location } from '@prisma/client';
 
 type Attributes =
+  | 'admin1'
+  | 'ascii'
+  | 'country'
   | 'id'
-  | 'name'
   | 'lat'
   | 'long'
-  | 'country'
-  | 'admin1'
+  | 'name'
   | 'population';
 
 type CSVLocation = Omit<Location, 'createdAt' | 'updatedAt'>;

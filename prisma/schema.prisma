@@ -12,11 +12,13 @@ model Location {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   name String @db.VarChar(255)
+  ascii String @db.VarChar(255)
   lat Float
   long Float
   country String @db.VarChar(2)
   state String @db.VarChar(2)
   population Int
-
+  
   @@index([name(ops: raw("gin_trgm_ops"))], type: Gin)
+  @@index([ascii(ops: raw("gin_trgm_ops"))], type: Gin)
 }

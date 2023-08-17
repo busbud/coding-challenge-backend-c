@@ -32,8 +32,14 @@ const getSuggestions = async (req: Request, res: Response) => {
       longitude,
     );
 
-    if (cacheResults)
-      return res.status(200).json({ suggestions: JSON.parse(cacheResults) });
+    if (cacheResults) {
+      const parsedResults = JSON.parse(cacheResults);
+
+      if (parsedResults.length === 0)
+        return res.status(404).json({ suggestions: parsedResults });
+
+      return res.status(200).json({ suggestions: parsedResults });
+    }
 
     const suggestions = await prisma.location.findMany({
       select: {
@@ -44,11 +50,16 @@ const getSuggestions = async (req: Request, res: Response) => {
         state: true,
       },
       where: {
-        name: { contains: searchTerm },
+        OR: [
+          { ascii: { contains: searchTerm } },
+          { name: { contains: searchTerm } },
+        ],
         country: { in: VALID_COUNTRIES },
         population: { gt: MINIMUM_POPULATION },
       },
     });
+
+    if (suggestions.length === 0) return res.status(404).json({ suggestions });
 
     let scoredSuggestions: ScoredSuggestion[];
 

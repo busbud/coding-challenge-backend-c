@@ -7,7 +7,7 @@ import type { Location } from '@prisma/client';
 
 type Suggestion = Omit<
   Location,
-  'id' | 'createdAt' | 'updatedAt' | 'population'
+  'ascii' | 'id' | 'createdAt' | 'updatedAt' | 'population'
 >;
 
 type ScoredSuggestion = Omit<Suggestion, 'country' | 'state'> & {
