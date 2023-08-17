@@ -23,32 +23,32 @@ const scoreAndSort = (
 
 const getScoresBasedOnSearchTerm = (suggestions: Suggestion[], term: string) =>
   scoreAndSort(
-    ({ country, lat, long, name, state }) => ({
+    ({ country, latitude, longitude, name, state }) => ({
       name: `${name}, ${state}, ${country}`,
-      lat,
-      long,
+      latitude,
+      longitude,
       score: parseFloat(stringSimilarity(term, name).toFixed(1)),
     }),
     suggestions,
   );
 
 const getScoresBasedOnSearchTermAndLocation = (
-  latitude: number,
-  longitude: number,
+  lat: number,
+  long: number,
   suggestions: Suggestion[],
   term: string,
 ) =>
-  scoreAndSort(({ country, lat, long, name, state }) => {
-    const from = point([latitude, longitude]);
-    const to = point([lat, long]);
+  scoreAndSort(({ country, latitude, longitude, name, state }) => {
+    const from = point([lat, long]);
+    const to = point([latitude, longitude]);
     const haversineDistance = distance(from, to);
     const haversineScore = 1 / (1 + haversineDistance); // normalizing the Haversine calculation
     const sorensenDiceScore = stringSimilarity(term, name);
 
     return {
       name: `${name}, ${state}, ${country}`,
-      lat,
-      long,
+      latitude,
+      longitude,
       score: parseFloat(((haversineScore + sorensenDiceScore) / 2).toFixed(1)), // both should be weighted equally
     };
   }, suggestions);

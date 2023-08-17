@@ -13,8 +13,8 @@ model Location {
   updatedAt DateTime @updatedAt
   name String @db.VarChar(255)
   ascii String @db.VarChar(255)
-  lat Float
-  long Float
+  latitude Float
+  longitude Float
   country String @db.VarChar(2)
   state String @db.VarChar(2)
   population Int

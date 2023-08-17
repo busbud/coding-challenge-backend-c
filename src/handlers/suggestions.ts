@@ -44,8 +44,8 @@ const getSuggestions = async (req: Request, res: Response) => {
     const suggestions = await prisma.location.findMany({
       select: {
         country: true,
-        lat: true,
-        long: true,
+        latitude: true,
+        longitude: true,
         name: true,
         state: true,
       },

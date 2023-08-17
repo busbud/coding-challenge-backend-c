@@ -47,15 +47,21 @@ const createLocation = (col: string[]): CSVLocation => {
     ascii: col[locationIndexes.ascii],
     country: col[locationIndexes.country],
     id: col[locationIndexes.id],
-    lat: parseFloat(col[locationIndexes.lat]),
-    long: parseFloat(col[locationIndexes.long]),
+    latitude: parseFloat(col[locationIndexes.lat]),
+    longitude: parseFloat(col[locationIndexes.long]),
     name: col[locationIndexes.name],
     population: parseInt(col[locationIndexes.population]),
     state: col[locationIndexes.admin1],
   };
 
-  if (isNaN(location.lat) || isNaN(location.long) || isNaN(location.population))
-    throw new Error('Invalid data format for lat, long, or population');
+  if (
+    isNaN(location.latitude) ||
+    isNaN(location.longitude) ||
+    isNaN(location.population)
+  )
+    throw new Error(
+      'Invalid data format for latitude, longitude, or population',
+    );
 
   if (location.state in provinces) location.state = provinces[location.state];
 
